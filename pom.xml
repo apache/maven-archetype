@@ -2,10 +2,10 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>maven</groupId>
-    <artifactId>maven-archetypes</artifactId>
+    <artifactId>maven-archetype</artifactId>
     <version>1.0-alpha-1-SNAPSHOT</version>
   </parent>
   <groupId>maven</groupId>
-  <artifactId>maven-archetype-quickstart</artifactId>
+  <artifactId>maven-archetypes</artifactId>
   <version>1.0-alpha-1-SNAPSHOT</version>
 </project>
