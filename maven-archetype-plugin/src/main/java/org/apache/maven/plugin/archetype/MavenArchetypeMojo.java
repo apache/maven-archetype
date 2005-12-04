@@ -192,6 +192,8 @@ public class MavenArchetypeMojo
         }
     }
 
+    //TODO: this should be put in John's artifact utils and used from there instead of being repeated here. Creating
+    // artifact repositories is someowhat cumbersome atm.
     public ArtifactRepository createRepository( String url, String repositoryId )
     {
         // snapshots vs releases
