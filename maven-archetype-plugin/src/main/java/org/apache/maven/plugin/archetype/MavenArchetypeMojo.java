@@ -21,13 +21,18 @@ import org.apache.maven.archetype.ArchetypeDescriptorException;
 import org.apache.maven.archetype.ArchetypeNotFoundException;
 import org.apache.maven.archetype.ArchetypeTemplateProcessingException;
 import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.artifact.repository.ArtifactRepositoryFactory;
+import org.apache.maven.artifact.repository.ArtifactRepositoryPolicy;
+import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
 
 /**
  * Builds archetype containers.
@@ -42,10 +47,20 @@ public class MavenArchetypeMojo
     extends AbstractMojo
 {
     /**
-     * @parameter expression="${component.org.apache.maven.archetype.Archetype}"
-     * @required
+     * @component
      */
     private Archetype archetype;
+
+    /**
+     * @component
+     */
+    private ArtifactRepositoryFactory artifactRepositoryFactory;
+
+    /**
+     * @component role="org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout" roleHint="default"
+     */
+    private ArtifactRepositoryLayout defaultArtifactRepositoryLayout;
+
 
     /**
      * @parameter expression="${localRepository}"
@@ -98,7 +113,12 @@ public class MavenArchetypeMojo
      * @parameter expression="${project.remoteArtifactRepositories}"
      * @required
      */
-    private List remoteRepositories;
+    private List pomRemoteRepositories;
+
+    /**
+     * @parameter expression="${remoteRepositories}"
+     */
+    private String remoteRepositories;
 
     public void execute()
         throws MojoExecutionException
@@ -140,9 +160,23 @@ public class MavenArchetypeMojo
 
         map.put( "version", version );
 
+        List archetypeRemoteRepositories = new ArrayList( pomRemoteRepositories );
+
+        if ( remoteRepositories != null )
+        {
+            archetypeRemoteRepositories = new ArrayList();
+
+            String[] s = StringUtils.split( remoteRepositories, "," );
+
+            for ( int i = 0; i < s.length; i++ )
+            {
+                archetypeRemoteRepositories.add( createRepository( s[i], "id" + i ));
+            }
+        }
+
         try
         {
-            archetype.createArchetype( archetypeGroupId, archetypeArtifactId, archetypeVersion, localRepository, remoteRepositories, map );
+            archetype.createArchetype( archetypeGroupId, archetypeArtifactId, archetypeVersion, localRepository, archetypeRemoteRepositories, map );
         }
         catch ( ArchetypeNotFoundException e )
         {
@@ -157,4 +191,23 @@ public class MavenArchetypeMojo
             throw new MojoExecutionException( "Error creating from archetype", e );
         }
     }
+
+    public ArtifactRepository createRepository( String url, String repositoryId )
+    {
+        // snapshots vs releases
+        // offline = to turning the update policy off
+
+        //TODO: we'll need to allow finer grained creation of repositories but this will do for now
+
+        String updatePolicyFlag = ArtifactRepositoryPolicy.UPDATE_POLICY_ALWAYS;
+
+        String checksumPolicyFlag = ArtifactRepositoryPolicy.CHECKSUM_POLICY_WARN;
+
+        ArtifactRepositoryPolicy snapshotsPolicy = new ArtifactRepositoryPolicy( true, updatePolicyFlag, checksumPolicyFlag );
+
+        ArtifactRepositoryPolicy releasesPolicy = new ArtifactRepositoryPolicy( true, updatePolicyFlag, checksumPolicyFlag );
+
+        return artifactRepositoryFactory.createArtifactRepository( repositoryId, url, defaultArtifactRepositoryLayout, snapshotsPolicy, releasesPolicy );
+    }
 }
+
