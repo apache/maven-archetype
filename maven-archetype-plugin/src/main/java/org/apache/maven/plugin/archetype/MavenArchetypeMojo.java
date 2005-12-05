@@ -164,6 +164,8 @@ public class MavenArchetypeMojo
 
         if ( remoteRepositories != null )
         {
+            getLog().info( "We are using command line specified remote repositories: " + remoteRepositories );            
+
             archetypeRemoteRepositories = new ArrayList();
 
             String[] s = StringUtils.split( remoteRepositories, "," );
