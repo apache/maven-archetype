@@ -13,5 +13,6 @@
     <module>maven-archetype-mojo</module>
     <module>maven-archetype-quickstart</module>
     <module>maven-archetype-webapp</module>
+    <module>maven-archetype-archetype</module>
   </modules>
 </project>
