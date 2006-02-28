@@ -1,15 +1,16 @@
 <project>
   <parent>
+    <groupId>org.apache.maven</groupId>  
     <artifactId>maven</artifactId>
-    <groupId>org.apache.maven</groupId>
     <version>2.0</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>maven-archetype</artifactId>
   <packaging>pom</packaging>
-  <version>1.0-alpha-4-SNAPSHOT</version>
+  <version>1</version>
   <modules>
     <module>maven-archetype-core</module>
+    <module>maven-archetype-creator</module>    
     <module>maven-archetype-plugin</module>
     <module>maven-archetypes</module>
   </modules>
