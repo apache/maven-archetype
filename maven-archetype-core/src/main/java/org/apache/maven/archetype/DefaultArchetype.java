@@ -85,8 +85,12 @@ public class DefaultArchetype
     // artifactId = maven-foo-archetype
     // version = latest
 
-    public void createArchetype( String archetypeGroupId, String archetypeArtifactId, String archetypeVersion,
-                                 ArtifactRepository localRepository, List remoteRepositories, Map parameters )
+    public void createArchetype( String archetypeGroupId,
+                                 String archetypeArtifactId,
+                                 String archetypeVersion,
+                                 ArtifactRepository localRepository,
+                                 List remoteRepositories,
+                                 Map parameters )
         throws ArchetypeNotFoundException, ArchetypeDescriptorException, ArchetypeTemplateProcessingException
     {
         // ----------------------------------------------------------------------
@@ -563,5 +567,4 @@ public class DefaultArchetype
 
         return loader.getResourceAsStream( name );
     }
-
 }
