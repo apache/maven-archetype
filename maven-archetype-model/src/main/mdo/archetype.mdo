@@ -9,12 +9,12 @@
   <defaults>
     <default>
       <key>package</key>
-      <value>org.apache.maven.archeytpe.model</value>
+      <value>org.apache.maven.archetype.model</value>
     </default>
   </defaults>
   <classes>
     <class rootElement="true" xml.tagName="archetype">
-      <name>Archetype</name>
+      <name>ArchetypeModel</name>
       <description>Describes the assembly layout and packaging.</description>
       <version>1.0.0</version>
       <fields>

@@ -1,0 +1,78 @@
+<project relativePaths="false" version="4">
+  <component assert-keyword="true" project-jdk-name="1.4" name="ProjectRootManager" jdk-15="false" version="2"></component>
+  <component name="CodeStyleManager">
+    <option value="true" name="USE_DEFAULT_CODE_STYLE_SCHEME"></option>
+    <option value="" name="CODE_STYLE_SCHEME"></option>
+  </component>
+  <component name="libraryTable"></component>
+  <component name="CompilerConfiguration">
+    <option value="Javac" name="DEFAULT_COMPILER"></option>
+    <option value="false" name="CLEAR_OUTPUT_DIRECTORY"></option>
+    <resourceExtensions>
+      <entry name=".+\.(properties|xml|html)"></entry>
+      <entry name=".+\.(gif|png|jpeg)"></entry>
+    </resourceExtensions>
+  </component>
+  <component name="JavacSettings">
+    <option value="true" name="DEBUGGING_INFO"></option>
+    <option value="false" name="GENERATE_NO_WARNINGS"></option>
+    <option value="true" name="DEPRECATION"></option>
+    <option value="" name="ADDITIONAL_OPTIONS_STRING"></option>
+    <option value="128" name="MAXIMUM_HEAP_SIZE"></option>
+    <option value="false" name="USE_GENERICS_COMPILER"></option>
+  </component>
+  <component name="JikesSettings">
+    <option value="true" name="DEBUGGING_INFO"></option>
+    <option value="true" name="DEPRECATION"></option>
+    <option value="false" name="GENERATE_NO_WARNINGS"></option>
+    <option value="false" name="GENERATE_MAKE_FILE_DEPENDENCIES"></option>
+    <option value="false" name="DO_FULL_DEPENDENCE_CHECK"></option>
+    <option value="false" name="IS_INCREMENTAL_MODE"></option>
+    <option value="true" name="IS_EMACS_ERRORS_MODE"></option>
+    <option value="" name="ADDITIONAL_OPTIONS_STRING"></option>
+    <option value="128" name="MAXIMUM_HEAP_SIZE"></option>
+  </component>
+  <component name="AntConfiguration">
+    <option value="false" name="IS_AUTOSCROLL_TO_SOURCE"></option>
+    <option value="false" name="FILTER_TARGETS"></option>
+  </component>
+  <component name="JavadocGenerationManager">
+    <option name="OUTPUT_DIRECTORY"></option>
+    <option value="protected" name="OPTION_SCOPE"></option>
+    <option value="false" name="OPTION_HIERARCHY"></option>
+    <option value="false" name="OPTION_NAVIGATOR"></option>
+    <option value="false" name="OPTION_INDEX"></option>
+    <option value="false" name="OPTION_SEPARATE_INDEX"></option>
+    <option value="false" name="OPTION_USE_1_1"></option>
+    <option value="false" name="OPTION_DOCUMENT_TAG_USE"></option>
+    <option value="false" name="OPTION_DOCUMENT_TAG_AUTHOR"></option>
+    <option value="false" name="OPTION_DOCUMENT_TAG_VERSION"></option>
+    <option value="false" name="OPTION_DOCUMENT_TAG_DEPRECATED"></option>
+    <option value="false" name="OPTION_DEPRECATED_LIST"></option>
+    <option name="OTHER_OPTIONS"></option>
+    <option name="HEAP_SIZE"></option>
+    <option value="false" name="OPEN_IN_BROWSER"></option>
+  </component>
+  <component name="JUnitProjectSettings">
+    <option value="UI" name="TEST_RUNNER"></option>
+  </component>
+  <component name="EntryPointsManager">
+    <entry_points></entry_points>
+  </component>
+  <component name="DataSourceManager"></component>
+  <component name="ExportToHTMLSettings">
+    <option value="false" name="PRINT_LINE_NUMBERS"></option>
+    <option value="false" name="OPEN_IN_BROWSER"></option>
+    <option name="OUTPUT_DIRECTORY"></option>
+  </component>
+  <component name="ImportConfiguration">
+    <option name="VENDOR"></option>
+    <option name="RELEASE_TAG"></option>
+    <option name="LOG_MESSAGE"></option>
+    <option value="true" name="CHECKOUT_AFTER_IMPORT"></option>
+  </component>
+  <component name="ProjectModuleManager">
+    <modules>
+      <module filepath="$PROJECT_DIR$/maven-archetype-creator.iml"/></modules>
+  </component>
+</project>

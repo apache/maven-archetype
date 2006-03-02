@@ -1,13 +1,23 @@
 <project>
-  <parent>
-    <groupId>org.apache.maven</groupId>  
-    <artifactId>maven</artifactId>
-    <version>2.0</version>
-  </parent>
   <modelVersion>4.0.0</modelVersion>
+  <groupId>org.apache.maven.archetype</groupId>
   <artifactId>maven-archetype</artifactId>
   <packaging>pom</packaging>
-  <version>1</version>
+  <version>0.7-SNAPSHOT</version>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.apache.maven.archetype</groupId>
+        <artifactId>maven-archetype-model</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven.archetype</groupId>
+        <artifactId>maven-archetype-core</artifactId>
+        <version>${project.version}</version>      
+      </dependency>      
+    </dependencies>
+  </dependencyManagement>
   <modules>
     <module>maven-archetype-core</module>
     <module>maven-archetype-creator</module>    
