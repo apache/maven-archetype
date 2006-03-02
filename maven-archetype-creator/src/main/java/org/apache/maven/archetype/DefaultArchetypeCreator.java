@@ -264,12 +264,10 @@ public class DefaultArchetypeCreator
             File filterDir = new File( basedir, "target/filtered-project" );
 
             // Use the model/project values to copy the sources
-            File sourceTarget = new File( filterDir, sourceDirectory );
-            FileUtils.copyDirectoryStructure( new File( basedir, sourceDirectory ), sourceTarget, new FilteringCopier( basePackage, "${package}" ) );
-
+            filterCopy( new File( basedir, sourceDirectory ), new File( filterDir, sourceDirectory ), properties );
+            
             // Use the model/project values to copy the test sources
-            File testSourceTarget = new File( filterDir, testSourceDirectory );
-            FileUtils.copyDirectoryStructure( new File( basedir, testSourceDirectory ), testSourceTarget, new FilteringCopier( basePackage, "${package}" ) );
+            filterCopy( new File( basedir, testSourceDirectory ), new File( filterDir, testSourceDirectory ), properties );
 
             // Now we need to remove the portion of the path that corresonds to package that was used in the
             // archetype master so that when a user generates from it they can specify their own package path
@@ -280,11 +278,9 @@ public class DefaultArchetypeCreator
             // [finalDir]/srcm/main/java/
 
             File finalSourceDir = new File( finalDir, sourceDirectory );
-
             FileUtils.copyDirectoryStructure( new File( sourceTarget, basePackage ), finalSourceDir );
 
             File finalTestSourceDir = new File( finalDir, testSourceDirectory );
-
             FileUtils.copyDirectoryStructure( new File( testSourceTarget, basePackage ), finalTestSourceDir );
         }
         catch ( IOException e )
@@ -339,6 +335,13 @@ public class DefaultArchetypeCreator
         }
 
         return FileUtils.getFileNames( f, "**/**", "**/.svn/**", true );
+    }
+
+    private void filterCopy( File source, File target, Properties properties )
+        throws IOException
+    {
+        String basePackage = properties.getProperty( "package" );
+        FileUtils.copyDirectoryStructure( source, target, new FilteringCopier( basePackage, "${package}" ) );
     }
 }
 
