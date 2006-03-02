@@ -45,10 +45,6 @@ public class FilteringCopier
 
         OutputStream output = null;
 
-        System.out.println( "find = " + find );
-
-        System.out.println( "replace = " + replace );
-
         try
         {
             /*

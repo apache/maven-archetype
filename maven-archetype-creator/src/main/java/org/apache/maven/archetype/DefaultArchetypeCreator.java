@@ -2,6 +2,7 @@ package org.apache.maven.archetype;
 
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.model.Model;
+import org.apache.maven.model.Resource;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
 import org.apache.maven.project.MavenProject;
@@ -27,6 +28,7 @@ import java.util.Properties;
  *
  * @author jason van zyl
  * @plexus.component
+ * @todo dealing adequately with multi module builds
  */
 public class DefaultArchetypeCreator
     implements ArchetypeCreator
@@ -134,6 +136,20 @@ public class DefaultArchetypeCreator
             // Resources
             // ----------------------------------------------------------------------
 
+            List resourceElements = project.getBuild().getResources();
+
+            for ( Iterator i = resourceElements.iterator(); i.hasNext(); )
+            {
+                Resource resource = (Resource) i.next();
+
+                List resources = getFiles( resource.getDirectory() );
+
+                for ( Iterator j = resources.iterator(); j.hasNext(); )
+                {
+                    archetypeModel.addResource( clipToBasedir( (String) j.next(), basedir ) );
+                }
+            }
+
             // ----------------------------------------------------------------------
             // Test Sources
             // ----------------------------------------------------------------------
@@ -151,6 +167,20 @@ public class DefaultArchetypeCreator
             // ----------------------------------------------------------------------
             // Test Resources
             // ----------------------------------------------------------------------
+
+            List testResourceElements = project.getBuild().getResources();
+
+            for ( Iterator i = testResourceElements.iterator(); i.hasNext(); )
+            {
+                Resource resource = (Resource) i.next();
+
+                List resources = getFiles( resource.getDirectory() );
+
+                for ( Iterator j = resources.iterator(); j.hasNext(); )
+                {
+                    archetypeModel.addTestResource( clipToBasedir( (String) j.next(), basedir ) );
+                }
+            }
         }
         catch ( IOException e )
         {
@@ -308,7 +338,7 @@ public class DefaultArchetypeCreator
             return Collections.EMPTY_LIST;
         }
 
-        return FileUtils.getFileNames( f, "**/**", "**/.svn", true );
+        return FileUtils.getFileNames( f, "**/**", "**/.svn/**", true );
     }
 }
 
