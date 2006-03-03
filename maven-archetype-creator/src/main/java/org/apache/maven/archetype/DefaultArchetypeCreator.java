@@ -278,10 +278,10 @@ public class DefaultArchetypeCreator
             // [finalDir]/srcm/main/java/
 
             File finalSourceDir = new File( finalDir, sourceDirectory );
-            FileUtils.copyDirectoryStructure( new File( sourceTarget, basePackage ), finalSourceDir );
+            FileUtils.copyDirectoryStructure( new File( sourceDirectory, basePackage ), finalSourceDir );
 
             File finalTestSourceDir = new File( finalDir, testSourceDirectory );
-            FileUtils.copyDirectoryStructure( new File( testSourceTarget, basePackage ), finalTestSourceDir );
+            FileUtils.copyDirectoryStructure( new File( testSourceDirectory, basePackage ), finalTestSourceDir );
         }
         catch ( IOException e )
         {

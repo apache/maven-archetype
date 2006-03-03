@@ -1,8 +1,8 @@
 <project>
   <parent>
     <artifactId>maven-archetype</artifactId>
-    <groupId>org.apache.maven</groupId>
-    <version>1.0-alpha-4-SNAPSHOT</version>
+    <groupId>org.apache.maven.archetype</groupId>
+    <version>0.7-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.maven.archetypes</groupId>
