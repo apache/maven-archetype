@@ -1,8 +1,8 @@
 <project>
   <parent>
-    <artifactId>maven-plugin-parent</artifactId>
+    <artifactId>maven-plugins</artifactId>
     <groupId>org.apache.maven.plugins</groupId>
-    <version>2.0</version>
+    <version>1</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.maven.plugins</groupId>
@@ -11,9 +11,9 @@
   <name>Maven Archetype Plugin</name>
   <version>0.7-SNAPSHOT</version>
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/components/trunk/maven-archetype/maven-archetype-plugin/</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/components/trunk/maven-archetype/maven-archetype-plugin/</developerConnection>
-    <url>http://svn.apache.org/viewcvs.cgi/maven/components/maven-archetype/maven-archetype-plugin/</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/archetype/trunk/maven-archetype-plugin/</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/trunk/maven-archetype-plugin/</developerConnection>
+    <url>http://svn.apache.org/viewcvs.cgi/maven/archetype/trunk/maven-archetype-plugin/</url>
   </scm>
   <dependencies>
     <dependency>
