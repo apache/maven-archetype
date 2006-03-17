@@ -1,5 +1,11 @@
 <project>
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.apache.maven</groupId>
+    <artifactId>maven-parent</artifactId>
+    <version>1</version>
+    <relativePath>../pom/maven/pom.xml</relativePath>
+  </parent>
   <groupId>org.apache.maven.archetype</groupId>
   <artifactId>maven-archetype</artifactId>
   <packaging>pom</packaging>
@@ -25,4 +31,9 @@
     <module>maven-archetype-model</module>
     <module>maven-archetypes</module>
   </modules>
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/archetype/trunk</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/trunk</developerConnection>
+    <url>http://svn.apache.org/viewcvs.cgi/maven/archetype/trunk</url>
+  </scm>
 </project>
