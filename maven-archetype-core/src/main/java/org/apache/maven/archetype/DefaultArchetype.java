@@ -26,8 +26,10 @@ import org.apache.maven.artifact.resolver.ArtifactResolutionException;
 import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
+import org.apache.maven.model.Parent;
 import org.apache.maven.model.Resource;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
+import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.context.Context;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -187,13 +189,17 @@ public class DefaultArchetype
 
         String artifactId = (String) parameters.get( "artifactId" );
 
-        File pomFile = new File( basedir, ARCHETYPE_POM );
+        File parentPomFile = new File( basedir, ARCHETYPE_POM );
 
         File outputDirectoryFile;
 
-        if ( pomFile.exists() && descriptor.isAllowPartial() && artifactId == null )
+        boolean creating;
+        File pomFile;
+        if ( parentPomFile.exists() && descriptor.isAllowPartial() && artifactId == null )
         {
             outputDirectoryFile = new File( basedir );
+            creating = false;
+            pomFile = parentPomFile;
         }
         else
         {
@@ -212,6 +218,7 @@ public class DefaultArchetype
             }
 
             pomFile = new File( outputDirectoryFile, ARCHETYPE_POM );
+            creating = true;
         }
 
         String outputDirectory = outputDirectoryFile.getAbsolutePath();
@@ -243,13 +250,65 @@ public class DefaultArchetype
 
         Thread.currentThread().setContextClassLoader( archetypeJarLoader );
 
+        Model parentModel = null;
+        if ( creating )
+        {
+            if ( parentPomFile.exists() )
+            {
+                FileReader fileReader = null;
+
+                try
+                {
+                    fileReader = new FileReader( parentPomFile );
+                    MavenXpp3Reader reader = new MavenXpp3Reader();
+                    parentModel = reader.read( fileReader );
+                }
+                catch ( IOException e )
+                {
+                    throw new ArchetypeTemplateProcessingException( "Unable to read parent POM", e );
+                }
+                catch ( XmlPullParserException e )
+                {
+                    throw new ArchetypeTemplateProcessingException( "Unable to read parent POM", e );
+                }
+                finally
+                {
+                    IOUtil.close( fileReader );
+                }
+
+                parentModel.getModules().add( artifactId );
+            }
+        }
+
         try
         {
-            processTemplates( pomFile, outputDirectory, context, descriptor, packageName );
+            processTemplates( pomFile, outputDirectory, context, descriptor, packageName, parentModel );
         }
         finally
         {
             Thread.currentThread().setContextClassLoader( old );
+        }
+
+        // TODO: Reprocessing the parent should retain structure
+        if ( parentModel != null )
+        {
+            FileWriter fileWriter = null;
+
+            try
+            {
+                fileWriter = new FileWriter( parentPomFile );
+
+                MavenXpp3Writer writer = new MavenXpp3Writer();
+                writer.write( fileWriter, parentModel );
+            }
+            catch ( IOException e )
+            {
+                throw new ArchetypeTemplateProcessingException( "Unable to rewrite parent POM", e );
+            }
+            finally
+            {
+                IOUtil.close( fileWriter );
+            }
         }
 
         // ----------------------------------------------------------------------
@@ -263,7 +322,7 @@ public class DefaultArchetype
     }
 
     private void processTemplates( File pomFile, String outputDirectory, Context context,
-                                   ArchetypeDescriptor descriptor, String packageName )
+                                   ArchetypeDescriptor descriptor, String packageName, Model parentModel )
         throws ArchetypeTemplateProcessingException
     {
         if ( !pomFile.exists() )
@@ -276,9 +335,10 @@ public class DefaultArchetype
         // ---------------------------------------------------------------------
 
         Model generatedModel;
+        FileReader pomReader = null;
         try
         {
-            FileReader pomReader = new FileReader( pomFile );
+            pomReader = new FileReader( pomFile );
 
             MavenXpp3Reader reader = new MavenXpp3Reader();
 
@@ -291,6 +351,36 @@ public class DefaultArchetype
         catch ( XmlPullParserException e )
         {
             throw new ArchetypeTemplateProcessingException( "Error reading POM", e );
+        }
+        finally
+        {
+            IOUtil.close( pomReader );
+        }
+
+        if ( parentModel != null )
+        {
+            Parent parent = new Parent();
+            parent.setGroupId( parentModel.getGroupId() );
+            parent.setArtifactId( parentModel.getArtifactId() );
+            parent.setVersion( parentModel.getVersion() );
+            generatedModel.setParent( parent );
+
+            FileWriter pomWriter = null;
+            try
+            {
+                pomWriter = new FileWriter( pomFile );
+
+                MavenXpp3Writer writer = new MavenXpp3Writer();
+                writer.write( pomWriter, generatedModel );
+            }
+            catch ( IOException e )
+            {
+                throw new ArchetypeTemplateProcessingException( "Error rewriting POM", e );
+            }
+            finally
+            {
+                IOUtil.close( pomWriter );
+            }
         }
 
         // XXX: Following POM processing block may be a candidate for
