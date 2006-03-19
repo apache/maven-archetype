@@ -1,7 +1,9 @@
  -----
- The Site
+ Title Here
  -----
- The Maven Team
+ Author Here
+ -----
+ Date Here
  -----
 
 Maven Site for your project
@@ -11,6 +13,6 @@ Maven Site for your project
   
 +-----+
 
-m2 site:site
+mvn site
 
 +-----+

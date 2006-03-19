@@ -4,23 +4,10 @@
   <groupId>${groupId}</groupId>
   <artifactId>${artifactId}</artifactId>
   <version>${version}</version>
-  <name>Maven</name>
-  <url>http://maven.apache.org/maven2</url>
-  <inceptionYear>2001</inceptionYear>
   <distributionManagement>
     <site>
       <id>website</id>
       <url>scp://webhost.company.com/www/website</url>
     </site>
   </distributionManagement>
-  <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-site-plugin</artifactId>
-        <configuration>
-          <locales>en,fr</locales>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
 </project>
