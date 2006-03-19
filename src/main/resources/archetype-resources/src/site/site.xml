@@ -2,7 +2,7 @@
 <project>
   <body>
     <links>
-      <item name="Maven" href="http://maven.apache.org/maven/"/>
+      <item name="Maven" href="http://maven.apache.org/"/>
     </links>
 
     <menu name="Documentation">
