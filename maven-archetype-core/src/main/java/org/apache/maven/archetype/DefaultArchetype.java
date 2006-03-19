@@ -85,12 +85,8 @@ public class DefaultArchetype
     // artifactId = maven-foo-archetype
     // version = latest
 
-    public void createArchetype( String archetypeGroupId,
-                                 String archetypeArtifactId,
-                                 String archetypeVersion,
-                                 ArtifactRepository localRepository,
-                                 List remoteRepositories,
-                                 Map parameters )
+    public void createArchetype( String archetypeGroupId, String archetypeArtifactId, String archetypeVersion,
+                                 ArtifactRepository localRepository, List remoteRepositories, Map parameters )
         throws ArchetypeNotFoundException, ArchetypeDescriptorException, ArchetypeTemplateProcessingException
     {
         // ----------------------------------------------------------------------
@@ -195,12 +191,18 @@ public class DefaultArchetype
 
         File outputDirectoryFile;
 
-        if ( pomFile.exists() && descriptor.isAllowPartial() )
+        if ( pomFile.exists() && descriptor.isAllowPartial() && artifactId == null )
         {
             outputDirectoryFile = new File( basedir );
         }
         else
         {
+            if ( artifactId == null )
+            {
+                throw new ArchetypeTemplateProcessingException(
+                    "Artifact ID must be specified when creating a new project from an archetype." );
+            }
+
             outputDirectoryFile = new File( basedir, artifactId );
 
             if ( outputDirectoryFile.exists() )

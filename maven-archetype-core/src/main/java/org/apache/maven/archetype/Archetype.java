@@ -16,10 +16,10 @@ package org.apache.maven.archetype;
  * limitations under the License.
  */
 
+import org.apache.maven.artifact.repository.ArtifactRepository;
+
 import java.util.List;
 import java.util.Map;
-
-import org.apache.maven.artifact.repository.ArtifactRepository;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -33,6 +33,7 @@ public interface Archetype
 
     String ARCHETYPE_RESOURCES = "archetype-resources";
 
+    // TODO: delete this, it probably should be project.getFile instead
     String ARCHETYPE_POM = "pom.xml";
 
     void createArchetype( String archetypeGroupId, String archetypeArtifactId, String archetypeVersion,

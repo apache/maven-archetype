@@ -26,22 +26,21 @@ import org.apache.maven.artifact.repository.ArtifactRepositoryPolicy;
 import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.StringUtils;
-import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.ArrayList;
 
 /**
- * Builds archetype containers.
- *
- * @goal create
- * @description The archetype creation goal looks for an archetype with a given groupId, artifactId, and
+ * The archetype creation goal looks for an archetype with a given groupId, artifactId, and
  * version and retrieves it from the remote repository. Once the archetype is retrieve it is process against
  * a set of user parameters to create a working Maven project.
+ *
  * @requiresProject false
+ * @goal create
  */
 public class MavenArchetypeMojo
     extends AbstractMojo
@@ -88,13 +87,11 @@ public class MavenArchetypeMojo
 
     /**
      * @parameter expression="${groupId}"
-     * @required
      */
     private String groupId;
 
     /**
      * @parameter expression="${artifactId}"
-     * @required
      */
     private String artifactId;
 
@@ -120,6 +117,11 @@ public class MavenArchetypeMojo
      */
     private String remoteRepositories;
 
+    /**
+     * @parameter expression="${project}"
+     */
+    private MavenProject project;
+
     public void execute()
         throws MojoExecutionException
     {
@@ -135,6 +137,11 @@ public class MavenArchetypeMojo
         // remoteRepository
         // parameters
         // ----------------------------------------------------------------------
+
+        if ( project.getFile() != null && groupId == null )
+        {
+            groupId = project.getGroupId();
+        }
 
         String basedir = System.getProperty( "user.dir" );
 
@@ -164,7 +171,7 @@ public class MavenArchetypeMojo
 
         if ( remoteRepositories != null )
         {
-            getLog().info( "We are using command line specified remote repositories: " + remoteRepositories );            
+            getLog().info( "We are using command line specified remote repositories: " + remoteRepositories );
 
             archetypeRemoteRepositories = new ArrayList();
 
@@ -172,13 +179,14 @@ public class MavenArchetypeMojo
 
             for ( int i = 0; i < s.length; i++ )
             {
-                archetypeRemoteRepositories.add( createRepository( s[i], "id" + i ));
+                archetypeRemoteRepositories.add( createRepository( s[i], "id" + i ) );
             }
         }
 
         try
         {
-            archetype.createArchetype( archetypeGroupId, archetypeArtifactId, archetypeVersion, localRepository, archetypeRemoteRepositories, map );
+            archetype.createArchetype( archetypeGroupId, archetypeArtifactId, archetypeVersion, localRepository,
+                                       archetypeRemoteRepositories, map );
         }
         catch ( ArchetypeNotFoundException e )
         {
@@ -207,11 +215,14 @@ public class MavenArchetypeMojo
 
         String checksumPolicyFlag = ArtifactRepositoryPolicy.CHECKSUM_POLICY_WARN;
 
-        ArtifactRepositoryPolicy snapshotsPolicy = new ArtifactRepositoryPolicy( true, updatePolicyFlag, checksumPolicyFlag );
+        ArtifactRepositoryPolicy snapshotsPolicy =
+            new ArtifactRepositoryPolicy( true, updatePolicyFlag, checksumPolicyFlag );
 
-        ArtifactRepositoryPolicy releasesPolicy = new ArtifactRepositoryPolicy( true, updatePolicyFlag, checksumPolicyFlag );
+        ArtifactRepositoryPolicy releasesPolicy =
+            new ArtifactRepositoryPolicy( true, updatePolicyFlag, checksumPolicyFlag );
 
-        return artifactRepositoryFactory.createArtifactRepository( repositoryId, url, defaultArtifactRepositoryLayout, snapshotsPolicy, releasesPolicy );
+        return artifactRepositoryFactory.createArtifactRepository( repositoryId, url, defaultArtifactRepositoryLayout,
+                                                                   snapshotsPolicy, releasesPolicy );
     }
 }
 
