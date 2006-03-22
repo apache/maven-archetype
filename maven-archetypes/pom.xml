@@ -9,6 +9,7 @@
   <artifactId>maven-archetypes</artifactId>
   <packaging>pom</packaging>
   <version>1.0-alpha-4-SNAPSHOT</version>
+  <name>Maven Archetypes</name>
   <modules>
     <module>maven-archetype-mojo</module>
     <module>maven-archetype-quickstart</module>

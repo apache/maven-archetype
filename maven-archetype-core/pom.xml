@@ -7,6 +7,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.maven.archetype</groupId>
   <artifactId>maven-archetype-core</artifactId>
+  <name>Maven Archetype Core</name>
   <dependencies>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>

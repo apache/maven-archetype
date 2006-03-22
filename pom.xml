@@ -10,6 +10,7 @@
   <artifactId>maven-archetype</artifactId>
   <packaging>pom</packaging>
   <version>0.7-SNAPSHOT</version>
+  <name>Maven Archetype</name>
   <dependencyManagement>
     <dependencies>
       <dependency>
