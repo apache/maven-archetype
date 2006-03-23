@@ -29,7 +29,9 @@ public interface Archetype
 {
     String ROLE = Archetype.class.getName();
 
-    String ARCHETYPE_DESCRIPTOR = "META-INF/archetype.xml";
+    String ARCHETYPE_DESCRIPTOR = "META-INF/maven/archetype.xml";
+
+    String ARCHETYPE_OLD_DESCRIPTOR = "META-INF/archetype.xml";
 
     String ARCHETYPE_RESOURCES = "archetype-resources";
 
