@@ -1,6 +1,0 @@
-<archetype>
-  <id>archetype</id>
-  <resources>
-    <resource>src/main/resources</resource>
-  </resources> 
-</archetype>
