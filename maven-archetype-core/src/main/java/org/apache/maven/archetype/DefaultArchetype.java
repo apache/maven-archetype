@@ -166,8 +166,13 @@ public class DefaultArchetype
 
             if ( is == null )
             {
-                throw new ArchetypeDescriptorException(
-                    "The " + ARCHETYPE_DESCRIPTOR + " descriptor cannot be found." );
+                is = getStream( ARCHETYPE_OLD_DESCRIPTOR, archetypeJarLoader );
+
+                if ( is == null )
+                {
+                    throw new ArchetypeDescriptorException(
+                        "The " + ARCHETYPE_DESCRIPTOR + " descriptor cannot be found." );
+                }
             }
 
             descriptor = builder.build( new InputStreamReader( is ) );
