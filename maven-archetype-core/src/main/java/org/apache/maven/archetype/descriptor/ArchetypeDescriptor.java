@@ -17,7 +17,9 @@ package org.apache.maven.archetype.descriptor;
  */
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ArchetypeDescriptor
 {
@@ -32,6 +34,41 @@ public class ArchetypeDescriptor
     private List testResources;
 
     private List siteResources;
+    
+    /**
+     * <code>Map</code> that associates the items in the <code>List</code>
+     * <code>sources</code> with their attributes (instances of
+     * <code>TemplateDescriptor</code>.
+     */
+    private Map sourcesDescriptors;
+    
+    /**
+     * <code>Map</code> that associates the items in the <code>List</code>
+     * <code>testSources</code> with their attributes (instances of
+     * <code>TemplateDescriptor</code>.
+     */
+    private Map testSourcesDescriptors;
+    
+    /**
+     * <code>Map</code> that associates the items in the <code>List</code>
+     * <code>resources</code> with their attributes (instances of
+     * <code>TemplateDescriptor</code>.
+     */
+    private Map resourcesDescriptors;
+    
+    /**
+     * <code>Map</code> that associates the items in the <code>List</code>
+     * <code>testResources</code> with their attributes (instances of
+     * <code>TemplateDescriptor</code>.
+     */
+    private Map testResourcesDescriptors;
+    
+    /**
+     * <code>Map</code> that associates the items in the <code>List</code>
+     * <code>siteResources</code> with their attributes (instances of
+     * <code>TemplateDescriptor</code>.
+     */
+    private Map siteResourcesDescriptors;
 
     /**
      * This indicates the archetype can be a whole project or can be part
@@ -44,14 +81,24 @@ public class ArchetypeDescriptor
     public ArchetypeDescriptor()
     {
         sources = new ArrayList();
-
+        
         resources = new ArrayList();
-
+        
         testSources = new ArrayList();
-
+        
         testResources = new ArrayList();
-
+        
         siteResources = new ArrayList();
+        
+        sourcesDescriptors = new HashMap();
+        
+        testSourcesDescriptors = new HashMap();
+        
+        resourcesDescriptors = new HashMap();
+        
+        testResourcesDescriptors = new HashMap();
+        
+        siteResourcesDescriptors = new HashMap();
     }
 
     // ----------------------------------------------------------------------
@@ -71,6 +118,8 @@ public class ArchetypeDescriptor
     public void addSource( String source )
     {
         sources.add( source );
+        
+        putSourceDescriptor( source, new TemplateDescriptor() );
     }
 
     public List getSources()
@@ -78,9 +127,26 @@ public class ArchetypeDescriptor
         return sources;
     }
 
+    public void putSourceDescriptor( String source, TemplateDescriptor descriptor ) 
+    {
+        sourcesDescriptors.put( source, descriptor );
+    }
+    
+    public TemplateDescriptor getSourceDescriptor( String source )
+    {
+        return (TemplateDescriptor)sourcesDescriptors.get(source);
+    }
+    
+    public Map getSourcesDescriptors()
+    {
+        return sourcesDescriptors;
+    }
+    
     public void addTestSource( String testSource )
     {
         testSources.add( testSource );
+        
+        putTestSourceDescriptor( testSource, new TemplateDescriptor() );
     }
 
     public List getTestSources()
@@ -88,9 +154,26 @@ public class ArchetypeDescriptor
         return testSources;
     }
 
+    public void putTestSourceDescriptor( String testSource, TemplateDescriptor descriptor )
+    {
+        testSourcesDescriptors.put(testSource, descriptor);
+    }
+    
+    public TemplateDescriptor getTestSourceDescriptor(String testSource)
+    {
+        return (TemplateDescriptor)testSourcesDescriptors.get(testSource);
+    }
+    
+    public Map getTestSourcesDescriptors()
+    {
+        return testSourcesDescriptors;
+    }
+    
     public void addResource( String resource )
     {
         resources.add( resource );
+        
+        putResourceDescriptor( resource, new TemplateDescriptor() );
     }
 
     public List getResources()
@@ -98,9 +181,24 @@ public class ArchetypeDescriptor
         return resources;
     }
 
+    public void putResourceDescriptor( String resource, TemplateDescriptor descriptor )
+    {
+        resourcesDescriptors.put( resource, descriptor );
+    }
+    
+    public TemplateDescriptor getResourceDescriptor( String resource )
+    {
+        return ( TemplateDescriptor ) resourcesDescriptors.get( resource );
+    }
+    
+    public Map getReourcesDescriptors() {
+        return resourcesDescriptors;
+    }
+    
     public void addTestResource( String testResource )
     {
         testResources.add( testResource );
+        putTestResourceDescriptor( testResource, new TemplateDescriptor() );
     }
 
     public List getTestResources()
@@ -108,9 +206,26 @@ public class ArchetypeDescriptor
         return testResources;
     }
 
+    public void putTestResourceDescriptor( String testResource, TemplateDescriptor descriptor )
+    {
+        testResourcesDescriptors.put( testResource, descriptor );
+    }
+    
+    public TemplateDescriptor getTestResourceDescriptor( String testResource )
+    {
+        return ( TemplateDescriptor ) testResourcesDescriptors.get(testResource);
+    }
+    
+    public Map getTestReourcesDescriptors()
+    {
+        return testResourcesDescriptors;
+    }
+    
     public void addSiteResource( String siteResource )
     {
         siteResources.add( siteResource );
+        
+        putSiteResourceDescriptor(siteResource, new TemplateDescriptor());
     }
 
     public List getSiteResources()
@@ -118,6 +233,21 @@ public class ArchetypeDescriptor
         return siteResources;
     }
 
+    public void putSiteResourceDescriptor(String siteResource, TemplateDescriptor descriptor)
+    {
+        siteResourcesDescriptors.put( siteResource, descriptor );
+    }
+    
+    public TemplateDescriptor getSiteResourceDescriptor( String siteResource )
+    {
+        return ( TemplateDescriptor ) siteResourcesDescriptors.get(siteResource);
+    }
+    
+    public Map getSiteReourcesDescriptors()
+    {
+        return siteResourcesDescriptors;
+    }
+    
     public boolean isAllowPartial()
     {
         return allowPartial;
@@ -128,4 +258,3 @@ public class ArchetypeDescriptor
         this.allowPartial = allowPartial;
     }
 }
-

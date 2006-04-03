@@ -16,8 +16,12 @@ package org.apache.maven.archetype;
  * limitations under the License.
  */
 
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import org.apache.maven.archetype.descriptor.ArchetypeDescriptor;
 import org.apache.maven.archetype.descriptor.ArchetypeDescriptorBuilder;
+import org.apache.maven.archetype.descriptor.TemplateDescriptor;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.repository.ArtifactRepository;
@@ -332,7 +336,7 @@ public class DefaultArchetype
     {
         if ( !pomFile.exists() )
         {
-            processTemplate( outputDirectory, context, ARCHETYPE_POM, false, null );
+            processTemplate( outputDirectory, context, ARCHETYPE_POM, new TemplateDescriptor(), false, null );
         }
 
         // ---------------------------------------------------------------------
@@ -523,7 +527,7 @@ public class DefaultArchetype
             {
                 FileUtils.mkdir( outputDirectory + DEFAULT_SOURCE_DIR );
             }
-            processSources( outputDirectory, context, descriptor.getSources(), packageName );
+            processSources( outputDirectory, context, descriptor, packageName );
         }
 
         if ( descriptor.getResources().size() > 0 )
@@ -532,7 +536,7 @@ public class DefaultArchetype
             {
                 FileUtils.mkdir( outputDirectory + DEFAULT_RESOURCE_DIR );
             }
-            processResources( outputDirectory, context, descriptor.getResources(), packageName );
+            processResources( outputDirectory, context, descriptor, packageName );
         }
 
         // ----------------------------------------------------------------------
@@ -546,7 +550,7 @@ public class DefaultArchetype
                 FileUtils.mkdir( outputDirectory + DEFAULT_TEST_SOURCE_DIR );
             }
 
-            processSources( outputDirectory, context, descriptor.getTestSources(), packageName );
+            processTestSources( outputDirectory, context, descriptor, packageName );
         }
 
         if ( descriptor.getTestResources().size() > 0 )
@@ -555,7 +559,7 @@ public class DefaultArchetype
             {
                 FileUtils.mkdir( outputDirectory + DEFAULT_TEST_RESOURCE_DIR );
             }
-            processResources( outputDirectory, context, descriptor.getTestResources(), packageName );
+            processTestResources( outputDirectory, context, descriptor, packageName );
         }
 
         // ----------------------------------------------------------------------
@@ -564,7 +568,7 @@ public class DefaultArchetype
 
         if ( descriptor.getSiteResources().size() > 0 )
         {
-            processResources( outputDirectory, context, descriptor.getSiteResources(), packageName );
+            processSiteResources( outputDirectory, context, descriptor, packageName );
         }
     }
 
@@ -578,30 +582,63 @@ public class DefaultArchetype
     //
     // ----------------------------------------------------------------------
 
-    protected void processSources( String outputDirectory, Context context, List sources, String packageName )
+    protected void processSources( String outputDirectory, Context context, ArchetypeDescriptor descriptor, String packageName )
         throws ArchetypeTemplateProcessingException
     {
-        for ( Iterator i = sources.iterator(); i.hasNext(); )
+        for ( Iterator i = descriptor.getSources().iterator(); i.hasNext(); )
         {
             String template = (String) i.next();
-
-            processTemplate( outputDirectory, context, template, true, packageName );
+            
+            processTemplate( outputDirectory, context, template, descriptor.getSourceDescriptor(template), true, packageName );
+        }
+    }
+    
+    protected void processTestSources( String outputDirectory, Context context, ArchetypeDescriptor descriptor, String packageName )
+        throws ArchetypeTemplateProcessingException
+    {
+        for ( Iterator i = descriptor.getTestSources().iterator(); i.hasNext(); )
+        {
+            String template = (String) i.next();
+            
+            processTemplate( outputDirectory, context, template, descriptor.getTestSourceDescriptor(template), true, packageName );
         }
     }
 
-    protected void processResources( String outputDirectory, Context context, List resources, String packageName )
+    protected void processResources( String outputDirectory, Context context, ArchetypeDescriptor descriptor, String packageName )
         throws ArchetypeTemplateProcessingException
     {
-        for ( Iterator i = resources.iterator(); i.hasNext(); )
+        for ( Iterator i = descriptor.getResources().iterator(); i.hasNext(); )
         {
             String template = (String) i.next();
-
-            processTemplate( outputDirectory, context, template, false, packageName );
+            
+            processTemplate( outputDirectory, context, template, descriptor.getResourceDescriptor(template), false, packageName );
+        }
+    }
+    
+    protected void processTestResources( String outputDirectory, Context context, ArchetypeDescriptor descriptor, String packageName )
+        throws ArchetypeTemplateProcessingException
+    {
+        for ( Iterator i = descriptor.getTestResources().iterator(); i.hasNext(); )
+        {
+            String template = (String) i.next();
+            
+            processTemplate( outputDirectory, context, template, descriptor.getTestResourceDescriptor(template), false, packageName );
+        }
+    }
+    
+    protected void processSiteResources( String outputDirectory, Context context, ArchetypeDescriptor descriptor, String packageName )
+        throws ArchetypeTemplateProcessingException
+    {
+        for ( Iterator i = descriptor.getSiteResources().iterator(); i.hasNext(); )
+        {
+            String template = (String) i.next();
+            
+            processTemplate( outputDirectory, context, template, descriptor.getSiteResourceDescriptor(template), false, packageName );
         }
     }
 
-    protected void processTemplate( String outputDirectory, Context context, String template, boolean packageInFileName,
-                                    String packageName )
+    protected void processTemplate( String outputDirectory, Context context, String template, TemplateDescriptor descriptor,
+            boolean packageInFileName, String packageName )
         throws ArchetypeTemplateProcessingException
     {
         File f;
@@ -630,24 +667,50 @@ public class DefaultArchetype
             f.getParentFile().mkdirs();
         }
 
-        Writer writer = null;
-        try
+        if ( descriptor.isFiltered() )
         {
-            writer = new FileWriter( f );
+            Writer writer = null;
+            try
+            {
+                writer = new OutputStreamWriter(new FileOutputStream(f), descriptor.getEncoding());
 
-            template = ARCHETYPE_RESOURCES + "/" + template;
+                template = ARCHETYPE_RESOURCES + "/" + template;
 
-            velocity.getEngine().mergeTemplate( template, context, writer );
+                velocity.getEngine().mergeTemplate( template, descriptor.getEncoding(), context, writer );
 
-            writer.flush();
+                writer.flush();
+            }
+            catch ( Exception e )
+            {
+                throw new ArchetypeTemplateProcessingException( "Error merging velocity templates", e );
+            }
+            finally
+            {
+                IOUtil.close( writer );
+            }
         }
-        catch ( Exception e )
+        else
         {
-            throw new ArchetypeTemplateProcessingException( "Error merging velocity templates", e );
-        }
-        finally
-        {
-            IOUtil.close( writer );
+            InputStream is = getStream( ARCHETYPE_RESOURCES + "/" + template, null );
+            
+            OutputStream fos = null;
+            
+            try
+            {
+                fos = new FileOutputStream(f);
+                
+                IOUtil.copy( is, fos );
+            }
+            catch ( Exception e )
+            {
+                throw new ArchetypeTemplateProcessingException( "Error copying file", e );
+            }
+            finally
+            {
+                IOUtil.close( fos );
+                
+                IOUtil.close( is );
+            }
         }
     }
 
@@ -661,7 +724,6 @@ public class DefaultArchetype
         {
             return Thread.currentThread().getContextClassLoader().getResourceAsStream( name );
         }
-
         return loader.getResourceAsStream( name );
     }
 }

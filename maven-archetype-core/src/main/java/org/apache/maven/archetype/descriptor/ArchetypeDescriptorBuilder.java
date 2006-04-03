@@ -16,6 +16,8 @@ package org.apache.maven.archetype.descriptor;
  * limitations under the License.
  */
 
+import java.nio.charset.IllegalCharsetNameException;
+import java.nio.charset.UnsupportedCharsetException;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.codehaus.plexus.util.xml.Xpp3DomBuilder;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
@@ -62,7 +64,7 @@ public class ArchetypeDescriptorBuilder
 
             for ( int i = 0; i < sourceList.length; i++ )
             {
-                descriptor.addSource( sourceList[i].getValue() );
+                addSourceToDescriptor(sourceList[i], descriptor);
             }
         }
 
@@ -74,7 +76,7 @@ public class ArchetypeDescriptorBuilder
 
             for ( int i = 0; i < resourceList.length; i++ )
             {
-                descriptor.addResource( resourceList[i].getValue() );
+                addResourceToDescriptor(resourceList[i], descriptor);
             }
         }
 
@@ -90,7 +92,7 @@ public class ArchetypeDescriptorBuilder
 
             for ( int i = 0; i < testSourceList.length; i++ )
             {
-                descriptor.addTestSource( testSourceList[i].getValue() );
+                addTestSourceToDescriptor(testSourceList[i], descriptor);
             }
         }
 
@@ -102,7 +104,7 @@ public class ArchetypeDescriptorBuilder
 
             for ( int i = 0; i < testResourceList.length; i++ )
             {
-                descriptor.addTestResource( testResourceList[i].getValue() );
+                addTestResourceToDescriptor(testResourceList[i], descriptor);
             }
         }
 
@@ -118,10 +120,282 @@ public class ArchetypeDescriptorBuilder
 
             for ( int i = 0; i < siteResourceList.length; i++ )
             {
-                descriptor.addSiteResource( siteResourceList[i].getValue() );
+                addSiteResourceToDescriptor(siteResourceList[i], descriptor);
             }
         }
 
         return descriptor;
+    }
+    
+    /**
+     * Adds the source element <code>source</code> to the list of sources in the
+     * <code>descriptor</code> and sets its <code>TemplateDescriptor</code> to
+     * <i>filtered</i> and with the encoding specified in the <code>encoding</code>
+     * attribute or the Java virtual machine's default if it is not defined.
+     *
+     * @param source a <code>&lt;source&gt;</code> element from the <code>&lt;sources&gt;</code>
+     * @param descriptor the <code>ArchetypeDescriptor</code> to add the source template to.
+     * @throws XmlPullParserException if the encoding specified is not valid or supported.
+     */
+    private static void addSourceToDescriptor( Xpp3Dom source, ArchetypeDescriptor descriptor )
+        throws XmlPullParserException
+    {
+        descriptor.addSource( source.getValue() );
+        
+        TemplateDescriptor sourceDesc = descriptor.getSourceDescriptor( source.getValue() );
+        
+        sourceDesc.setFiltered( true );
+        
+        if ( source.getAttribute( "encoding" ) != null)
+        {
+            try
+            {
+                sourceDesc.setEncoding( source.getAttribute( "encoding" ) );
+            }
+            catch ( IllegalCharsetNameException icne )
+            {
+                throw new XmlPullParserException( source.getAttribute( "encoding" )
+                        + " is not a valid encoding." );
+            }
+            catch ( UnsupportedCharsetException uce )
+            {
+                throw new XmlPullParserException(source.getAttribute( "encoding" )
+                        + " is not a supported encoding." );
+            }
+        }
+    }
+    
+    /**
+     * Adds the resource element <code>resource</code> to the list of resources in the
+     * <code>descriptor</code> and sets its <code>TemplateDescriptor</code> to
+     * <i>filtered</i> if the attribute <code>filtered</code> was not
+     * specified or its value is <code>&quot;true&quot;</code>, or <code>false</code>
+     * if its value is <code>&quot;false&quot;</code>, and the encoding specified
+     * in the <code>encoding</code> attribute or the Java virtual machine's default if
+     * it is not defined. If the <code>resource</code> is a property file (ends in
+     * <code>.properties</code>) its encoding will be set to <code>iso-8859-1</code>
+     * even if some other encoding is specified in the attribute.
+     *
+     * @param resource a <code>&lt;resource&gt;</code> element from the <code>&lt;resources&gt;</code>
+     * @param descriptor the <code>ArchetypeDescriptor</code> to add the resource template to.
+     * @throws XmlPullParserException if the encoding specified is not valid or supported or if the
+     *     value of the attribute <code>filtered</code> is no valid.
+     */
+    private static void addResourceToDescriptor( Xpp3Dom resource, ArchetypeDescriptor descriptor )
+        throws XmlPullParserException
+    {
+        descriptor.addResource( resource.getValue() );
+        
+        if ( resource.getAttribute("filtered") != null)
+        {
+            TemplateDescriptor resourceDesc = descriptor.getResourceDescriptor( resource.getValue() );
+            
+            try
+            {
+                resourceDesc.setFiltered( getValueFilteredAttribute( resource.getAttribute( "filtered" ) ) );
+            }
+            catch ( IllegalArgumentException iae ) {
+                throw new XmlPullParserException( iae.getMessage() );
+            }
+        }
+        
+        if ( resource.getAttribute( "encoding" ) != null)
+        {
+            TemplateDescriptor resourceDesc = descriptor.getResourceDescriptor( resource.getValue() );
+            
+            try
+            {
+                resourceDesc.setEncoding( resource.getAttribute( "encoding" ) );
+            }
+            catch ( IllegalCharsetNameException icne )
+            {
+                throw new XmlPullParserException( resource.getAttribute( "encoding" )
+                        + " is not a valid encoding." );
+            }
+            catch ( UnsupportedCharsetException uce )
+            {
+                throw new XmlPullParserException( resource.getAttribute( "encoding" )
+                        + " is not a supported encoding." );
+            }
+        }
+        
+        if ( resource.getValue().endsWith(".properties") )
+        {
+            TemplateDescriptor resourceDesc = descriptor.getResourceDescriptor( resource.getValue() );
+            
+            resourceDesc.setEncoding( "iso-8859-1" );
+        }
+    }
+    
+    /**
+     * Adds the test-source element <code>source</code> to the list of sources in the
+     * <code>descriptor</code> and sets its <code>TemplateDescriptor</code> to
+     * <i>filtered</i> and with the encoding specified in the <code>encoding</code>
+     * attribute or the Java virtual machine's default if it is not defined.
+     *
+     * @param testSource a <code>&lt;source&gt;</code> element from the <code>&lt;testSources&gt;</code>
+     * @param descriptor the <code>ArchetypeDescriptor</code> to add the test-source template to.
+     * @throws XmlPullParserException if the encoding specified is not valid or supported.
+     */
+    private static void addTestSourceToDescriptor( Xpp3Dom testSource, ArchetypeDescriptor descriptor ) throws XmlPullParserException {
+        descriptor.addTestSource( testSource.getValue() );
+        TemplateDescriptor testSourceDesc = descriptor.getTestSourceDescriptor(testSource.getValue());
+        testSourceDesc.setFiltered(true);
+        if ( testSource.getAttribute("encoding") != null) {
+            try {
+                testSourceDesc.setEncoding(testSource.getAttribute("encoding"));
+            } catch(IllegalCharsetNameException icne) {
+                throw new XmlPullParserException(testSource.getAttribute("encoding")
+                        + " is not a valid encoding.");
+            } catch(UnsupportedCharsetException uce) {
+                throw new XmlPullParserException(testSource.getAttribute("encoding")
+                        + " is not a supported encoding.");
+            }
+        }
+    }
+    
+    /**
+     * Adds the test-resource element <code>resource</code> to the list of test-resources in the
+     * <code>descriptor</code> and sets its <code>TemplateDescriptor</code> to
+     * <i>filtered</i> if the attribute <code>filtered</code> was not
+     * specified or its value is <code>&quot;true&quot;</code>, or <code>false</code>
+     * if its value is <code>&quot;false&quot;</code>, and the encoding specified
+     * in the <code>encoding</code> attribute or the Java virtual machine's default if
+     * it is not defined. If the <code>resource</code> is a property file (ends in
+     * <code>.properties</code>) its encoding will be set to <code>iso-8859-1</code>
+     * even if some other encoding is specified in the attribute.
+     *
+     * @param testResource a <code>&lt;resource&gt;</code> element from the <code>&lt;testResources&gt;</code>
+     * @param descriptor the <code>ArchetypeDescriptor</code> to add the test-resource template to.
+     * @throws XmlPullParserException if the encoding specified is not valid or supported or if the
+     *     value of the attribute <code>filtered</code> is no valid.
+     */
+    private static void addTestResourceToDescriptor( Xpp3Dom testResource, ArchetypeDescriptor descriptor )
+        throws XmlPullParserException
+    {
+        descriptor.addTestResource( testResource.getValue() );
+        
+        if ( testResource.getAttribute("filtered") != null) 
+        {
+            TemplateDescriptor testResourceDesc = descriptor.getTestResourceDescriptor(testResource.getValue());
+            
+            try
+            {
+                testResourceDesc.setFiltered(getValueFilteredAttribute(testResource.getAttribute("filtered")));
+            } 
+            catch (IllegalArgumentException iae)
+            {
+                throw new XmlPullParserException(iae.getMessage());
+            }
+        }
+        
+        if ( testResource.getAttribute("encoding") != null)
+        {
+            TemplateDescriptor testResourceDesc = descriptor.getTestResourceDescriptor(testResource.getValue());
+            
+            try
+            {
+                testResourceDesc.setEncoding(testResource.getAttribute("encoding"));
+                
+            }
+            catch(IllegalCharsetNameException icne) 
+            {
+                throw new XmlPullParserException(testResource.getAttribute("encoding")
+                        + " is not a valid encoding.");
+            }
+            catch(UnsupportedCharsetException uce)
+            {
+                throw new XmlPullParserException(testResource.getAttribute("encoding")
+                        + " is not a supported encoding.");
+            }
+        }
+        
+        if ( testResource.getValue().endsWith(".properties") ) 
+        {
+            TemplateDescriptor testResourceDesc = descriptor.getTestResourceDescriptor(testResource.getValue());
+            
+            testResourceDesc.setEncoding("iso-8859-1");
+        }
+    }
+    
+    /**
+     * Adds the site-resource element <code>resource</code> to the list of site-resources in the
+     * <code>descriptor</code> and sets its <code>TemplateDescriptor</code> to
+     * <i>filtered</i> if the attribute <code>filtered</code> was not
+     * specified or its value is <code>&quot;true&quot;</code>, or <code>false</code>
+     * if its value is <code>&quot;false&quot;</code>, and the encoding specified
+     * in the <code>encoding</code> attribute or the Java virtual machine's default if
+     * it is not defined. If the <code>resource</code> is a property file (ends in
+     * <code>.properties</code>) its encoding will be set to <code>iso-8859-1</code>
+     * even if some other encoding is specified in the attribute.
+     *
+     * @param siteResource a <code>&lt;resource&gt;</code> element from the <code>&lt;siteResources&gt;</code>
+     * @param descriptor the <code>ArchetypeDescriptor</code> to add the site-resource template to.
+     * @throws XmlPullParserException if the encoding specified is not valid or supported or if the
+     *     value of the attribute <code>filtered</code> is no valid.
+     */
+    private static void addSiteResourceToDescriptor( Xpp3Dom siteResource, ArchetypeDescriptor descriptor )
+        throws XmlPullParserException
+    {
+        descriptor.addSiteResource( siteResource.getValue() );
+        
+        if ( siteResource.getAttribute("filtered") != null ) 
+        {
+            TemplateDescriptor siteResourceDesc = descriptor.getSiteResourceDescriptor(siteResource.getValue());
+            
+            try
+            {
+                siteResourceDesc.setFiltered(getValueFilteredAttribute(siteResource.getAttribute("filtered")));
+            }
+            catch (IllegalArgumentException iae)
+            {
+                throw new XmlPullParserException(iae.getMessage());
+            }
+        }
+        if ( siteResource.getAttribute("encoding") != null )
+        {
+            TemplateDescriptor siteResourceDesc = descriptor.getSiteResourceDescriptor(siteResource.getValue());
+            
+            try
+            {
+                siteResourceDesc.setEncoding(siteResource.getAttribute("encoding"));
+            }
+            catch(IllegalCharsetNameException icne)
+            {
+                throw new XmlPullParserException(siteResource.getAttribute("encoding")
+                        + " is not a valid encoding.");
+            }
+            catch(UnsupportedCharsetException uce)
+            {
+                throw new XmlPullParserException(siteResource.getAttribute("encoding")
+                        + " is not a supported encoding.");
+            }
+        }
+        if ( siteResource.getValue().endsWith(".properties") )
+        {
+            TemplateDescriptor siteResourceDesc = descriptor.getSiteResourceDescriptor(siteResource.getValue());
+            
+            siteResourceDesc.setEncoding("iso-8859-1");
+        }
+    }
+    
+    private static boolean getValueFilteredAttribute( String str ) 
+        throws IllegalArgumentException 
+    {
+        boolean ret = false;
+        
+        if ( str.equals( "true" ) )
+        {
+            ret = true;
+        }
+        else if (str.equals("false"))
+        {
+            ret = false;
+        }
+        else
+        {
+            throw new IllegalArgumentException(str + " is not an accepted value for the attribute 'filtered'");
+        }
+        return ret;
     }
 }
