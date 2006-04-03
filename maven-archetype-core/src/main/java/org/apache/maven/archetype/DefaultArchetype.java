@@ -237,6 +237,21 @@ public class DefaultArchetype
             pomFile = new File( outputDirectoryFile, ARCHETYPE_POM );
         }
 
+        if ( creating )
+        {
+            if ( !parameters.containsKey( "groupId" ) )
+            {
+                throw new ArchetypeTemplateProcessingException(
+                    "Group ID must be specified when creating a new project from an archetype." );
+            }
+
+            if ( !parameters.containsKey( "version" ) )
+            {
+                throw new ArchetypeTemplateProcessingException(
+                    "Version must be specified when creating a new project from an archetype." );
+            }
+        }
+
         String outputDirectory = outputDirectoryFile.getAbsolutePath();
 
         String packageName = (String) parameters.get( "package" );
