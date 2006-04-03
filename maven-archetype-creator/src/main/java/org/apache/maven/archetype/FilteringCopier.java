@@ -1,5 +1,21 @@
 package org.apache.maven.archetype;
 
+/*
+ * Copyright 2004-2006 The Apache Software Foundation.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.PatternCompiler;
 import org.apache.oro.text.regex.PatternMatcher;
@@ -27,8 +43,11 @@ public class FilteringCopier
     private String replace;
 
     PatternMatcher matcher = new Perl5Matcher();
+
     Pattern pattern = null;
+
     PatternCompiler compiler = new Perl5Compiler();
+
     String regularExpression, input, sub, result;
 
     public FilteringCopier( String find, String replace )
@@ -64,7 +83,9 @@ public class FilteringCopier
             pattern = compiler.compile( find );
 
             // Perform substitution and print result.
-            result = Util.substitute( matcher, pattern, new Perl5Substitution( replace, Perl5Substitution.INTERPOLATE_ALL ), s, Util.SUBSTITUTE_ALL );
+            result = Util.substitute( matcher, pattern,
+                                      new Perl5Substitution( replace, Perl5Substitution.INTERPOLATE_ALL ), s,
+                                      Util.SUBSTITUTE_ALL );
 
             FileUtils.fileWrite( destination.getAbsolutePath(), result );
 
@@ -81,7 +102,8 @@ public class FilteringCopier
         }
     }
 
-    public static String streamToString( InputStream in ) throws IOException
+    public static String streamToString( InputStream in )
+        throws IOException
     {
         StringBuffer text = new StringBuffer();
         try
