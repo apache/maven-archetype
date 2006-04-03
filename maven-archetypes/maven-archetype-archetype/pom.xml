@@ -6,6 +6,5 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>maven-archetype-archetype</artifactId>
-  <version>1.0-alpha-4-SNAPSHOT</version>
   <name>Maven Archetype Archetype</name>
 </project>

@@ -20,6 +20,7 @@ import org.apache.maven.artifact.repository.DefaultArtifactRepository;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
 import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.util.FileUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -37,6 +38,8 @@ public class ArchetypeTest
     public void testArchetype()
         throws Exception
     {
+        FileUtils.deleteDirectory( getTestFile( "target/quickstart" ) );
+
         Archetype archetype = (Archetype) lookup( Archetype.ROLE );
 
         Map parameters = new HashMap();
