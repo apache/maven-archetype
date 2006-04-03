@@ -526,8 +526,12 @@ public class DefaultArchetype
             if ( !overrideSrcDir )
             {
                 FileUtils.mkdir( outputDirectory + DEFAULT_SOURCE_DIR );
+                processSources( outputDirectory, context, descriptor, packageName, DEFAULT_SOURCE_DIR );
             }
-            processSources( outputDirectory, context, descriptor, packageName );
+            else
+            {
+                processSources( outputDirectory, context, descriptor, packageName, build.getSourceDirectory() );
+            }
         }
 
         if ( descriptor.getResources().size() > 0 )
@@ -548,9 +552,12 @@ public class DefaultArchetype
             if ( !overrideTestSrcDir )
             {
                 FileUtils.mkdir( outputDirectory + DEFAULT_TEST_SOURCE_DIR );
+                processTestSources( outputDirectory, context, descriptor, packageName, DEFAULT_TEST_SOURCE_DIR );
             }
-
-            processTestSources( outputDirectory, context, descriptor, packageName );
+            else
+            {
+                processTestSources( outputDirectory, context, descriptor, packageName, build.getTestSourceDirectory() );
+            }
         }
 
         if ( descriptor.getTestResources().size() > 0 )
@@ -572,6 +579,13 @@ public class DefaultArchetype
         }
     }
 
+    private void processTemplate( String outputDirectory, Context context, String template,
+                                  TemplateDescriptor descriptor, boolean packageInFileName, String packageName )
+        throws ArchetypeTemplateProcessingException
+    {
+        processTemplate( outputDirectory, context, template, descriptor, packageInFileName, packageName, null );
+    }
+
     private String getOutputDirectory( String outputDirectory, String testResourceDirectory )
     {
         return outputDirectory +
@@ -583,7 +597,7 @@ public class DefaultArchetype
     // ----------------------------------------------------------------------
 
     protected void processSources( String outputDirectory, Context context, ArchetypeDescriptor descriptor,
-                                   String packageName )
+                                   String packageName, String sourceDirectory )
         throws ArchetypeTemplateProcessingException
     {
         for ( Iterator i = descriptor.getSources().iterator(); i.hasNext(); )
@@ -591,12 +605,12 @@ public class DefaultArchetype
             String template = (String) i.next();
 
             processTemplate( outputDirectory, context, template, descriptor.getSourceDescriptor( template ), true,
-                             packageName );
+                             packageName, sourceDirectory );
         }
     }
 
     protected void processTestSources( String outputDirectory, Context context, ArchetypeDescriptor descriptor,
-                                       String packageName )
+                                       String packageName, String testSourceDirectory )
         throws ArchetypeTemplateProcessingException
     {
         for ( Iterator i = descriptor.getTestSources().iterator(); i.hasNext(); )
@@ -604,7 +618,7 @@ public class DefaultArchetype
             String template = (String) i.next();
 
             processTemplate( outputDirectory, context, template, descriptor.getTestSourceDescriptor( template ), true,
-                             packageName );
+                             packageName, testSourceDirectory );
         }
     }
 
@@ -648,7 +662,8 @@ public class DefaultArchetype
     }
 
     protected void processTemplate( String outputDirectory, Context context, String template,
-                                    TemplateDescriptor descriptor, boolean packageInFileName, String packageName )
+                                    TemplateDescriptor descriptor, boolean packageInFileName, String packageName,
+                                    String sourceDirectory )
         throws ArchetypeTemplateProcessingException
     {
         File f;
@@ -663,9 +678,31 @@ public class DefaultArchetype
 
             String filename = FileUtils.filename( templateFileName );
 
-            String dirname = FileUtils.dirname( templateFileName );
+            String dirname = FileUtils.dirname( templateFileName ).replace( '\\', '/' );
 
-            f = new File( new File( new File( outputDirectory, dirname ), path ), filename );
+            sourceDirectory = sourceDirectory.replace( '\\', '/' );
+            if ( sourceDirectory.startsWith( "/" ) )
+            {
+                sourceDirectory = sourceDirectory.substring( 1 );
+            }
+
+            if ( !dirname.startsWith( sourceDirectory ) )
+            {
+                throw new ArchetypeTemplateProcessingException(
+                    "Template '" + template + "' not in directory '" + sourceDirectory + "'" );
+            }
+
+            String extraPackages = dirname.substring( sourceDirectory.length() );
+            if ( extraPackages.startsWith( "/" ) )
+            {
+                extraPackages = extraPackages.substring( 1 );
+            }
+            if ( extraPackages.length() > 0 )
+            {
+                path += "/" + extraPackages;
+            }
+
+            f = new File( new File( new File( outputDirectory, sourceDirectory ), path ), filename );
         }
         else
         {
