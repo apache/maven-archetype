@@ -1,5 +1,21 @@
 package org.apache.maven.archetype;
 
+/*
+ * Copyright 2004-2006 The Apache Software Foundation.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
@@ -159,8 +175,7 @@ public class FileUtils
     public static String basename( String filename, String suffix )
     {
         int i = filename.lastIndexOf( File.separator ) + 1;
-        int lastDot = ( ( suffix != null ) && ( suffix.length() > 0 ) )
-            ? filename.lastIndexOf( suffix ) : -1;
+        int lastDot = ( ( suffix != null ) && ( suffix.length() > 0 ) ) ? filename.lastIndexOf( suffix ) : -1;
 
         if ( lastDot >= 0 )
         {
@@ -428,7 +443,6 @@ public class FileUtils
     private static boolean isValidFile( String file, String[] extensions )
     {
 
-
         String extension = extension( file );
         if ( extension == null )
         {
@@ -441,7 +455,9 @@ public class FileUtils
         for ( int i = 0; i < extensions.length; ++i )
         {
             if ( extensions[i].equals( extension ) )
+            {
                 return true;
+            }
         }
 
         return false;
@@ -689,23 +705,17 @@ public class FileUtils
      * @throws IOException                   if <code>source</code> does not exist, the file in
      *                                       <code>destinationDirectory</code> cannot be written to, or an IO error occurs during copying.
      */
-    public static void copyFileToDirectory( final String source,
-                                            final String destinationDirectory )
+    public static void copyFileToDirectory( final String source, final String destinationDirectory )
         throws IOException
     {
-        copyFileToDirectory( new File( source ),
-                             new File( destinationDirectory ),
-                             standardCopier );
+        copyFileToDirectory( new File( source ), new File( destinationDirectory ), standardCopier );
     }
 
-    public static void copyFileToDirectory( final String source,
-                                            final String destinationDirectory,
+    public static void copyFileToDirectory( final String source, final String destinationDirectory,
                                             final Copier copier )
         throws IOException
     {
-        copyFileToDirectory( new File( source ),
-                             new File( destinationDirectory ),
-                             copier );
+        copyFileToDirectory( new File( source ), new File( destinationDirectory ), copier );
     }
 
     /**
@@ -721,17 +731,14 @@ public class FileUtils
      *                                       <code>destinationDirectory</code> cannot be written to, or an IO error occurs during copying.
      */
 
-    public static void copyFileToDirectory( final File source,
-                                            final File destinationDirectory )
+    public static void copyFileToDirectory( final File source, final File destinationDirectory )
         throws IOException
     {
         copyFileToDirectory( source, destinationDirectory, standardCopier );
     }
 
 
-    public static void copyFileToDirectory( final File source,
-                                            final File destinationDirectory,
-                                            final Copier copier )
+    public static void copyFileToDirectory( final File source, final File destinationDirectory, final Copier copier )
         throws IOException
     {
         if ( destinationDirectory.exists() && !destinationDirectory.isDirectory() )
@@ -775,8 +782,7 @@ public class FileUtils
         }
 
         //does destinations directory exist ?
-        if ( destination.getParentFile() != null &&
-            !destination.getParentFile().exists() )
+        if ( destination.getParentFile() != null && !destination.getParentFile().exists() )
         {
             destination.getParentFile().mkdirs();
         }
@@ -784,8 +790,7 @@ public class FileUtils
         //make sure we can write to destination
         if ( destination.exists() && !destination.canWrite() )
         {
-            final String message = "Unable to open file " +
-                destination + " for writing.";
+            final String message = "Unable to open file " + destination + " for writing.";
             throw new IOException( message );
         }
 
@@ -823,8 +828,7 @@ public class FileUtils
         throws IOException
     {
         //does destination directory exist ?
-        if ( destination.getParentFile() != null &&
-            !destination.getParentFile().exists() )
+        if ( destination.getParentFile() != null && !destination.getParentFile().exists() )
         {
             destination.getParentFile().mkdirs();
         }
@@ -832,8 +836,7 @@ public class FileUtils
         //make sure we can write to destination
         if ( destination.exists() && !destination.canWrite() )
         {
-            final String message = "Unable to open file " +
-                destination + " for writing.";
+            final String message = "Unable to open file " + destination + " for writing.";
             throw new IOException( message );
         }
 
@@ -878,9 +881,10 @@ public class FileUtils
         {
             int index = normalized.indexOf( "//" );
             if ( index < 0 )
+            {
                 break;
-            normalized = normalized.substring( 0, index ) +
-                normalized.substring( index + 1 );
+            }
+            normalized = normalized.substring( 0, index ) + normalized.substring( index + 1 );
         }
 
         // Resolve occurrences of "/./" in the normalized path
@@ -888,9 +892,10 @@ public class FileUtils
         {
             int index = normalized.indexOf( "/./" );
             if ( index < 0 )
+            {
                 break;
-            normalized = normalized.substring( 0, index ) +
-                normalized.substring( index + 2 );
+            }
+            normalized = normalized.substring( 0, index ) + normalized.substring( index + 2 );
         }
 
         // Resolve occurrences of "/../" in the normalized path
@@ -898,12 +903,15 @@ public class FileUtils
         {
             int index = normalized.indexOf( "/../" );
             if ( index < 0 )
+            {
                 break;
+            }
             if ( index == 0 )
+            {
                 return null;  // Trying to go outside our context
+            }
             int index2 = normalized.lastIndexOf( '/', index - 1 );
-            normalized = normalized.substring( 0, index2 ) +
-                normalized.substring( index + 3 );
+            normalized = normalized.substring( 0, index2 ) + normalized.substring( index + 3 );
         }
 
         // Return the normalized path that we have completed
@@ -1005,8 +1013,7 @@ public class FileUtils
 
         for ( int i = start; i < chars.length; i++ )
         {
-            final boolean doubleSeparator =
-                File.separatorChar == chars[i] && File.separatorChar == chars[i - 1];
+            final boolean doubleSeparator = File.separatorChar == chars[i] && File.separatorChar == chars[i - 1];
 
             if ( !doubleSeparator )
             {
@@ -1058,8 +1065,7 @@ public class FileUtils
         {
             if ( !file.delete() )
             {
-                final String message =
-                    "File " + file + " unable to be deleted.";
+                final String message = "File " + file + " unable to be deleted.";
                 throw new IOException( message );
             }
         }
@@ -1154,8 +1160,8 @@ public class FileUtils
         {
             if ( file.isFile() )
             {
-                final String message = "File " + file + " exists and is " +
-                    "not a directory. Unable to create directory.";
+                final String message =
+                    "File " + file + " exists and is " + "not a directory. Unable to create directory.";
                 throw new IOException( message );
             }
         }
@@ -1192,8 +1198,7 @@ public class FileUtils
         cleanDirectory( directory );
         if ( !directory.delete() )
         {
-            final String message =
-                "Directory " + directory + " unable to be deleted.";
+            final String message = "Directory " + directory + " unable to be deleted.";
             throw new IOException( message );
         }
     }
@@ -1394,13 +1399,15 @@ public class FileUtils
         copyDirectory( sourceDirectory, destinationDirectory, "**", null );
     }
 
-    public static void copyDirectory( File sourceDirectory, File destinationDirectory, String includes, String excludes )
+    public static void copyDirectory( File sourceDirectory, File destinationDirectory, String includes,
+                                      String excludes )
         throws IOException
     {
         copyDirectory( sourceDirectory, destinationDirectory, includes, excludes, standardCopier );
     }
 
-    public static void copyDirectory( File sourceDirectory, File destinationDirectory, String includes, String excludes, Copier copier )
+    public static void copyDirectory( File sourceDirectory, File destinationDirectory, String includes, String excludes,
+                                      Copier copier )
         throws IOException
     {
         if ( ! sourceDirectory.exists() )
@@ -1464,13 +1471,14 @@ public class FileUtils
             {
                 destination = destination.getParentFile();
 
-                FileUtils.copyFileToDirectory( file, destination, copier  );
+                FileUtils.copyFileToDirectory( file, destination, copier );
             }
             else if ( file.isDirectory() )
             {
                 if ( !destination.exists() && !destination.mkdirs() )
                 {
-                    throw new IOException( "Could not create destination directory '" + destination.getAbsolutePath() + "'." );
+                    throw new IOException(
+                        "Could not create destination directory '" + destination.getAbsolutePath() + "'." );
                 }
 
                 copyDirectoryStructure( file, destination, copier );
@@ -1497,19 +1505,18 @@ public class FileUtils
      *                     process.  Note that <code>to</code> may have been deleted
      *                     already when this happens.
      */
-    public static void rename( File from, File to ) throws IOException
+    public static void rename( File from, File to )
+        throws IOException
     {
         if ( to.exists() && !to.delete() )
         {
-            throw new IOException( "Failed to delete " + to
-                + " while trying to rename " + from );
+            throw new IOException( "Failed to delete " + to + " while trying to rename " + from );
         }
 
         File parent = to.getParentFile();
         if ( parent != null && !parent.exists() && !parent.mkdirs() )
         {
-            throw new IOException( "Failed to create directory " + parent
-                + " while trying to rename " + from );
+            throw new IOException( "Failed to create directory " + parent + " while trying to rename " + from );
         }
 
         if ( !from.renameTo( to ) )
@@ -1517,8 +1524,7 @@ public class FileUtils
             copyFile( from, to );
             if ( !from.delete() )
             {
-                throw new IOException( "Failed to delete " + from
-                    + " while trying to rename it." );
+                throw new IOException( "Failed to delete " + from + " while trying to rename it." );
             }
         }
     }
@@ -1554,15 +1560,12 @@ public class FileUtils
             parent = parentDir.getPath();
         }
         DecimalFormat fmt = new DecimalFormat( "#####" );
-        Random rand = new Random( System.currentTimeMillis()
-            + Runtime.getRuntime().freeMemory() );
+        Random rand = new Random( System.currentTimeMillis() + Runtime.getRuntime().freeMemory() );
         synchronized ( rand )
         {
             do
             {
-                result = new File( parent,
-                                   prefix + fmt.format( Math.abs( rand.nextInt() ) )
-                                       + suffix );
+                result = new File( parent, prefix + fmt.format( Math.abs( rand.nextInt() ) ) + suffix );
             }
             while ( result.exists() );
         }

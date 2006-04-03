@@ -1,5 +1,23 @@
 package org.apache.maven.archetype;
 
+/*
+ * Copyright 2004-2006 The Apache Software Foundation.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import org.apache.maven.archetype.model.ArchetypeModel;
+import org.apache.maven.archetype.model.io.xpp3.ArchetypeXpp3Writer;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Resource;
@@ -8,8 +26,6 @@ import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.project.ProjectBuildingException;
-import org.apache.maven.archetype.model.io.xpp3.ArchetypeXpp3Writer;
-import org.apache.maven.archetype.model.ArchetypeModel;
 import org.codehaus.plexus.archiver.Archiver;
 
 import java.io.File;
@@ -58,7 +74,8 @@ public class DefaultArchetypeCreator
         archetypeModelWriter = new ArchetypeXpp3Writer();
     }
 
-    public File createArchetype( File basedir, ArtifactRepository localRepository, File targetDirectory, Properties properties )
+    public File createArchetype( File basedir, ArtifactRepository localRepository, File targetDirectory,
+                                 Properties properties )
         throws ArchetypeCreationException
     {
         File pom = new File( basedir, "pom.xml" );
@@ -83,7 +100,8 @@ public class DefaultArchetypeCreator
         return new File( path ).getCanonicalPath().substring( basedir.getCanonicalPath().length() + 1 );
     }
 
-    public File createArchetype( MavenProject project, ArtifactRepository localRepository, File targetDirectory, Properties properties )
+    public File createArchetype( MavenProject project, ArtifactRepository localRepository, File targetDirectory,
+                                 Properties properties )
         throws ArchetypeCreationException
     {
         if ( !targetDirectory.exists() )
@@ -265,9 +283,10 @@ public class DefaultArchetypeCreator
 
             // Use the model/project values to copy the sources
             filterCopy( new File( basedir, sourceDirectory ), new File( filterDir, sourceDirectory ), properties );
-            
+
             // Use the model/project values to copy the test sources
-            filterCopy( new File( basedir, testSourceDirectory ), new File( filterDir, testSourceDirectory ), properties );
+            filterCopy( new File( basedir, testSourceDirectory ), new File( filterDir, testSourceDirectory ),
+                        properties );
 
             // Now we need to remove the portion of the path that corresonds to package that was used in the
             // archetype master so that when a user generates from it they can specify their own package path
