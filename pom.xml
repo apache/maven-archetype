@@ -2,18 +2,24 @@
   <parent>
     <artifactId>maven-archetype</artifactId>
     <groupId>org.apache.maven.archetype</groupId>
-    <version>0.7-SNAPSHOT</version>
+    <version>1.0-alpha-4-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.maven.archetypes</groupId>
   <artifactId>maven-archetypes</artifactId>
   <packaging>pom</packaging>
-  <version>1.0-alpha-4-SNAPSHOT</version>
   <name>Maven Archetypes</name>
   <modules>
-    <module>maven-archetype-mojo</module>
+    <!-- Left out for 1.0-alpha-4 ONLY as they aren't being rereleased to allow versions to sync
+    <module>maven-archetype-mojo</module> 
+    <module>maven-archetype-site</module> -->
     <module>maven-archetype-quickstart</module>
+    <module>maven-archetype-simple</module>
+    <module>maven-archetype-site-simple</module>
     <module>maven-archetype-webapp</module>
     <module>maven-archetype-archetype</module>
+    <module>maven-archetype-j2ee</module>
+    <module>maven-archetype-portlet</module>
+    <module>maven-archetype-profiles</module>
   </modules>
 </project>
