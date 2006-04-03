@@ -32,6 +32,7 @@ import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.codehaus.plexus.velocity.VelocityComponent;
+import org.dom4j.DocumentException;
 
 import java.io.File;
 import java.io.FileReader;
@@ -53,12 +54,12 @@ import java.util.Map;
 public class ArchetypeTest
     extends PlexusTestCase
 {
+    private Archetype archetype;
+
     public void testArchetype()
         throws Exception
     {
         FileUtils.deleteDirectory( getTestFile( "target/quickstart" ) );
-
-        Archetype archetype = (Archetype) lookup( Archetype.ROLE );
 
         Map parameters = new HashMap();
 
@@ -225,5 +226,61 @@ public class ArchetypeTest
         }
 
         return archetypeJarLoader;
+    }
+
+    public void testAddModuleToParentPOM()
+        throws DocumentException, IOException
+    {
+        String pom = "<project>\n</project>";
+
+        StringWriter out = new StringWriter();
+        assertTrue( DefaultArchetype.addModuleToParentPom( "myArtifactId1", new StringReader( pom ), out ) );
+
+        assertEquals( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + "<project>\n" + "  <modules>\n" +
+            "    <module>myArtifactId1</module>\n" + "  </modules>\n" + "</project>", out.toString() );
+
+        pom = "<project>\n  <modelVersion>4.0.0</modelVersion>\n</project>";
+
+        out = new StringWriter();
+        assertTrue( DefaultArchetype.addModuleToParentPom( "myArtifactId2", new StringReader( pom ), out ) );
+
+        assertEquals( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + "<project>\n" +
+            "  <modelVersion>4.0.0</modelVersion>\n" + "  <modules>\n" + "    <module>myArtifactId2</module>\n" +
+            "  </modules>\n" + "</project>", out.toString() );
+
+        pom = "<project><modelVersion>4.0.0</modelVersion>\n" + "  <modules>\n" + "  </modules>\n" + "</project>";
+
+        out = new StringWriter();
+        assertTrue( DefaultArchetype.addModuleToParentPom( "myArtifactId3", new StringReader( pom ), out ) );
+
+        assertEquals( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project><modelVersion>4.0.0</modelVersion>\n" +
+            "  <modules>\n" + "    <module>myArtifactId3</module>\n" + "  </modules>\n" + "</project>",
+                      out.toString() );
+
+        pom = "<project><modelVersion>4.0.0</modelVersion>\n" + "  <modules>\n" +
+            "    <module>myArtifactId3</module>\n" + "  </modules>\n" + "</project>";
+
+        out = new StringWriter();
+        assertTrue( DefaultArchetype.addModuleToParentPom( "myArtifactId4", new StringReader( pom ), out ) );
+
+        assertEquals( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project><modelVersion>4.0.0</modelVersion>\n" +
+            "  <modules>\n" + "    <module>myArtifactId3</module>\n" + "    <module>myArtifactId4</module>\n" +
+            "  </modules>\n" + "</project>", out.toString() );
+
+        pom = "<project><modelVersion>4.0.0</modelVersion>\n" + "  <modules>\n" +
+            "    <module>myArtifactId3</module>\n" + "  </modules>\n" + "</project>";
+
+        out = new StringWriter();
+        assertFalse( DefaultArchetype.addModuleToParentPom( "myArtifactId3", new StringReader( pom ), out ) );
+
+        // empty means unchanged
+        assertEquals( "", out.toString() );
+    }
+
+    protected void setUp()
+        throws Exception
+    {
+        super.setUp();
+        archetype = (Archetype) lookup( Archetype.ROLE );
     }
 }
