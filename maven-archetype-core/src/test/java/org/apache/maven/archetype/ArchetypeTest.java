@@ -1,7 +1,7 @@
 package org.apache.maven.archetype;
 
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2004-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,12 @@ package org.apache.maven.archetype;
  * limitations under the License.
  */
 
-import org.apache.maven.artifact.repository.DefaultArtifactRepository;
 import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.artifact.repository.DefaultArtifactRepository;
 import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,7 +59,8 @@ public class ArchetypeTest
         // This needs to be encapsulated in a maven test case.
         // ----------------------------------------------------------------------
 
-        ArtifactRepositoryLayout layout = (ArtifactRepositoryLayout) container.lookup( ArtifactRepositoryLayout.ROLE, "legacy" );
+        ArtifactRepositoryLayout layout =
+            (ArtifactRepositoryLayout) container.lookup( ArtifactRepositoryLayout.ROLE, "legacy" );
 
         String mavenRepoLocal = getTestFile( "target/local-repository" ).toURL().toString();
 
@@ -74,12 +74,8 @@ public class ArchetypeTest
 
         remoteRepositories.add( remoteRepository );
 
-        archetype.createArchetype( "org.apache.maven.archetypes",
-                                   "maven-archetype-quickstart",
-                                   "1.0-alpha-1-SNAPSHOT",
-                                   localRepository,
-                                   remoteRepositories,
-                                   parameters );
+        archetype.createArchetype( "org.apache.maven.archetypes", "maven-archetype-quickstart", "1.0-alpha-1-SNAPSHOT",
+                                   localRepository, remoteRepositories, parameters );
 
         // TODO: validate output
     }
