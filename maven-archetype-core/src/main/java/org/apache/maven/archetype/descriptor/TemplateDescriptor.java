@@ -1,9 +1,7 @@
+package org.apache.maven.archetype.descriptor;
+
 /*
- * TemplateDescriptor.java
- *
- * Created on March 30, 2006, 1:40 PM
- *
- * Copyright 2006 The Apache Software Foundation.
+ * Copyright 2004-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +16,6 @@
  * limitations under the License.
  */
 
-package org.apache.maven.archetype.descriptor;
-
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.nio.charset.IllegalCharsetNameException;
@@ -29,27 +25,30 @@ import java.nio.charset.UnsupportedCharsetException;
  * Contains the attributes of an archetype's template (either a source or resource file).
  * The attributes indicate if the template should be filtered and it's encoding.
  */
-public class TemplateDescriptor 
+public class TemplateDescriptor
 {
-    
+
     /**
-     * Determines if the template should be filtered or not.*/
+     * Determines if the template should be filtered or not.
+     */
     private boolean filtered = true;
-    
+
     /**
-     * Determines the template's encoding. */
+     * Determines the template's encoding.
+     */
     private String encoding;
-    
+
     /**
      * Creates a new instance of <code>TemplateDescriptor<code> that should be filtered
-     * and has the default encoding. */
+     * and has the default encoding.
+     */
     public TemplateDescriptor()
     {
         setFiltered( true );
-        
+
         setEncoding( getDefaultEncoding() );
     }
-    
+
     /**
      * Returns the canonical name of the default character encoding of this Java
      * virtual machine.
@@ -58,18 +57,18 @@ public class TemplateDescriptor
      */
     private static String getDefaultEncoding()
     {
-	String name = System.getProperty( "file.encoding" );
-        
-	if ( name == null )
+        String name = System.getProperty( "file.encoding" );
+
+        if ( name == null )
         {
-	    OutputStreamWriter out = new OutputStreamWriter( System.out );
-            
-	    name = out.getEncoding();
-	}
-        
-	name = Charset.forName(name).name();
-        
-	return name;
+            OutputStreamWriter out = new OutputStreamWriter( System.out );
+
+            name = out.getEncoding();
+        }
+
+        name = Charset.forName( name ).name();
+
+        return name;
     }
 
     /**
@@ -77,7 +76,7 @@ public class TemplateDescriptor
      * <code>false</code> otherwise.
      *
      * @return <code>true</code> if the template should be filtered and
-     *     <code>false</code> otherwise.
+     *         <code>false</code> otherwise.
      */
     public boolean isFiltered()
     {
@@ -85,11 +84,11 @@ public class TemplateDescriptor
     }
 
     /**
-     * Defines whether the template should be filtered (processed by Velocity) 
+     * Defines whether the template should be filtered (processed by Velocity)
      * or not.
      *
      * @param filtered <code>true</code> if it should be processed by Velocity and
-     *    <code>fales</code> otherwise.
+     *                 <code>fales</code> otherwise.
      */
     public void setFiltered( boolean filtered )
     {
@@ -97,7 +96,7 @@ public class TemplateDescriptor
     }
 
     /**
-     * Returns the name of the  encoding of the template file (e.g. 
+     * Returns the name of the  encoding of the template file (e.g.
      * <code>us-ascci</code>, <code>utf-8</code>, <code>iso-8859-1</code>).
      *
      * @return the name of the  encoding of the template file.
@@ -113,14 +112,14 @@ public class TemplateDescriptor
      * @param encoding New value of property encoding.
      * @throws IllegalCharsetNameException if the given charset name is illegal
      * @throws UnsupportedCharsetException if no support for the named encoding
-     *     is available in this instance of the Java virtual machine
+     *                                     is available in this instance of the Java virtual machine
      */
-    public void setEncoding( String encoding ) 
+    public void setEncoding( String encoding )
         throws IllegalCharsetNameException, UnsupportedCharsetException
     {
         Charset.forName( encoding );
-        
+
         this.encoding = encoding;
     }
-    
+
 }

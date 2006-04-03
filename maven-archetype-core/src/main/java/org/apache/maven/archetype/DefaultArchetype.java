@@ -1,7 +1,7 @@
 package org.apache.maven.archetype;
 
 /*
- * Copyright 2001-2004 The Apache Software Foundation.
+ * Copyright 2004-2006 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,6 @@ package org.apache.maven.archetype;
  * limitations under the License.
  */
 
-import java.io.FileOutputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import org.apache.maven.archetype.descriptor.ArchetypeDescriptor;
 import org.apache.maven.archetype.descriptor.ArchetypeDescriptorBuilder;
 import org.apache.maven.archetype.descriptor.TemplateDescriptor;
@@ -44,11 +41,14 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.codehaus.plexus.velocity.VelocityComponent;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -582,63 +582,73 @@ public class DefaultArchetype
     //
     // ----------------------------------------------------------------------
 
-    protected void processSources( String outputDirectory, Context context, ArchetypeDescriptor descriptor, String packageName )
+    protected void processSources( String outputDirectory, Context context, ArchetypeDescriptor descriptor,
+                                   String packageName )
         throws ArchetypeTemplateProcessingException
     {
         for ( Iterator i = descriptor.getSources().iterator(); i.hasNext(); )
         {
             String template = (String) i.next();
-            
-            processTemplate( outputDirectory, context, template, descriptor.getSourceDescriptor(template), true, packageName );
+
+            processTemplate( outputDirectory, context, template, descriptor.getSourceDescriptor( template ), true,
+                             packageName );
         }
     }
-    
-    protected void processTestSources( String outputDirectory, Context context, ArchetypeDescriptor descriptor, String packageName )
+
+    protected void processTestSources( String outputDirectory, Context context, ArchetypeDescriptor descriptor,
+                                       String packageName )
         throws ArchetypeTemplateProcessingException
     {
         for ( Iterator i = descriptor.getTestSources().iterator(); i.hasNext(); )
         {
             String template = (String) i.next();
-            
-            processTemplate( outputDirectory, context, template, descriptor.getTestSourceDescriptor(template), true, packageName );
+
+            processTemplate( outputDirectory, context, template, descriptor.getTestSourceDescriptor( template ), true,
+                             packageName );
         }
     }
 
-    protected void processResources( String outputDirectory, Context context, ArchetypeDescriptor descriptor, String packageName )
+    protected void processResources( String outputDirectory, Context context, ArchetypeDescriptor descriptor,
+                                     String packageName )
         throws ArchetypeTemplateProcessingException
     {
         for ( Iterator i = descriptor.getResources().iterator(); i.hasNext(); )
         {
             String template = (String) i.next();
-            
-            processTemplate( outputDirectory, context, template, descriptor.getResourceDescriptor(template), false, packageName );
+
+            processTemplate( outputDirectory, context, template, descriptor.getResourceDescriptor( template ), false,
+                             packageName );
         }
     }
-    
-    protected void processTestResources( String outputDirectory, Context context, ArchetypeDescriptor descriptor, String packageName )
+
+    protected void processTestResources( String outputDirectory, Context context, ArchetypeDescriptor descriptor,
+                                         String packageName )
         throws ArchetypeTemplateProcessingException
     {
         for ( Iterator i = descriptor.getTestResources().iterator(); i.hasNext(); )
         {
             String template = (String) i.next();
-            
-            processTemplate( outputDirectory, context, template, descriptor.getTestResourceDescriptor(template), false, packageName );
+
+            processTemplate( outputDirectory, context, template, descriptor.getTestResourceDescriptor( template ),
+                             false, packageName );
         }
     }
-    
-    protected void processSiteResources( String outputDirectory, Context context, ArchetypeDescriptor descriptor, String packageName )
+
+    protected void processSiteResources( String outputDirectory, Context context, ArchetypeDescriptor descriptor,
+                                         String packageName )
         throws ArchetypeTemplateProcessingException
     {
         for ( Iterator i = descriptor.getSiteResources().iterator(); i.hasNext(); )
         {
             String template = (String) i.next();
-            
-            processTemplate( outputDirectory, context, template, descriptor.getSiteResourceDescriptor(template), false, packageName );
+
+            processTemplate( outputDirectory, context, template, descriptor.getSiteResourceDescriptor( template ),
+                             false, packageName );
         }
     }
 
-    protected void processTemplate( String outputDirectory, Context context, String template, TemplateDescriptor descriptor,
-            boolean packageInFileName, String packageName )
+    protected void processTemplate( String outputDirectory, Context context, String template,
+                                    TemplateDescriptor descriptor, boolean packageInFileName, String packageName )
         throws ArchetypeTemplateProcessingException
     {
         File f;
@@ -672,7 +682,7 @@ public class DefaultArchetype
             Writer writer = null;
             try
             {
-                writer = new OutputStreamWriter(new FileOutputStream(f), descriptor.getEncoding());
+                writer = new OutputStreamWriter( new FileOutputStream( f ), descriptor.getEncoding() );
 
                 template = ARCHETYPE_RESOURCES + "/" + template;
 
@@ -692,13 +702,13 @@ public class DefaultArchetype
         else
         {
             InputStream is = getStream( ARCHETYPE_RESOURCES + "/" + template, null );
-            
+
             OutputStream fos = null;
-            
+
             try
             {
-                fos = new FileOutputStream(f);
-                
+                fos = new FileOutputStream( f );
+
                 IOUtil.copy( is, fos );
             }
             catch ( Exception e )
@@ -708,7 +718,7 @@ public class DefaultArchetype
             finally
             {
                 IOUtil.close( fos );
-                
+
                 IOUtil.close( is );
             }
         }
