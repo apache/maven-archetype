@@ -219,15 +219,22 @@ public class DefaultArchetype
             }
 
             outputDirectoryFile = new File( basedir, artifactId );
+            creating = true;
 
             if ( outputDirectoryFile.exists() )
             {
-                throw new ArchetypeTemplateProcessingException(
-                    outputDirectoryFile.getName() + " already exists - please run from a clean directory" );
+                if ( descriptor.isAllowPartial() )
+                {
+                    creating = false;
+                }
+                else
+                {
+                    throw new ArchetypeTemplateProcessingException(
+                        outputDirectoryFile.getName() + " already exists - please run from a clean directory" );
+                }
             }
 
             pomFile = new File( outputDirectoryFile, ARCHETYPE_POM );
-            creating = true;
         }
 
         String outputDirectory = outputDirectoryFile.getAbsolutePath();
