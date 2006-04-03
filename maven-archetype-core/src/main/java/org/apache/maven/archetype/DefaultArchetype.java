@@ -39,6 +39,12 @@ import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.codehaus.plexus.velocity.VelocityComponent;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.Node;
+import org.dom4j.io.SAXReader;
+import org.dom4j.io.XMLWriter;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -49,6 +55,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -116,7 +124,7 @@ public class DefaultArchetype
         }
 
         // ---------------------------------------------------------------------
-        // Get Logger and display all parameters used 
+        // Get Logger and display all parameters used
         // ---------------------------------------------------------------------
         if ( getLogger().isInfoEnabled() )
         {
@@ -320,9 +328,11 @@ public class DefaultArchetype
             Thread.currentThread().setContextClassLoader( old );
         }
 
-        // TODO: Reprocessing the parent should retain structure
         if ( parentModel != null )
         {
+/*
+        // TODO: would be nice to just write out with the xpp3 writer again, except that it loses a bunch of info and
+        // reformats, so the module is just baked in as a string instead.
             FileWriter fileWriter = null;
 
             try
@@ -340,6 +350,39 @@ public class DefaultArchetype
             {
                 IOUtil.close( fileWriter );
             }
+*/
+            FileReader fileReader = null;
+            boolean added;
+            StringWriter w = new StringWriter();
+            try
+            {
+                fileReader = new FileReader( parentPomFile );
+                added = addModuleToParentPom( artifactId, fileReader, w );
+            }
+            catch ( IOException e )
+            {
+                throw new ArchetypeTemplateProcessingException( "Unable to rewrite parent POM", e );
+            }
+            catch ( DocumentException e )
+            {
+                throw new ArchetypeTemplateProcessingException( "Unable to rewrite parent POM", e );
+            }
+            finally
+            {
+                IOUtil.close( fileReader );
+            }
+
+            if ( added )
+            {
+                try
+                {
+                    FileUtils.fileWrite( parentPomFile.getAbsolutePath(), w.toString() );
+                }
+                catch ( IOException e )
+                {
+                    throw new ArchetypeTemplateProcessingException( "Unable to rewrite parent POM", e );
+                }
+            }
         }
 
         // ----------------------------------------------------------------------
@@ -350,6 +393,59 @@ public class DefaultArchetype
             getLogger().info( "Archetype created in dir: " + outputDirectory );
         }
 
+    }
+
+    static boolean addModuleToParentPom( String artifactId, Reader fileReader, Writer fileWriter )
+        throws DocumentException, IOException
+    {
+        SAXReader reader = new SAXReader();
+        Document document = reader.read( fileReader );
+        Element project = document.getRootElement();
+        Element modules = project.element( "modules" );
+        if ( modules == null )
+        {
+            modules = project.addText( "  " ).addElement( "modules" );
+            modules.setText( "\n  " );
+            project.addText( "\n" );
+        }
+        boolean found = false;
+        for ( Iterator i = modules.elementIterator( "module" ); i.hasNext() && !found; )
+        {
+            Element module = (Element) i.next();
+            if ( module.getText().equals( artifactId ) )
+            {
+                found = true;
+            }
+        }
+        if ( !found )
+        {
+            Node lastTextNode = null;
+            for ( Iterator i = modules.nodeIterator(); i.hasNext(); )
+            {
+                Node node = (Node) i.next();
+                if ( node.getNodeType() == Node.ELEMENT_NODE )
+                {
+                    lastTextNode = null;
+                }
+                else if ( node.getNodeType() == Node.TEXT_NODE )
+                {
+                    lastTextNode = node;
+                }
+            }
+
+            if ( lastTextNode != null )
+            {
+                modules.remove( lastTextNode );
+            }
+
+            modules.addText( "\n    " );
+            modules.addElement( "module" ).setText( artifactId );
+            modules.addText( "\n  " );
+
+            XMLWriter writer = new XMLWriter( fileWriter );
+            writer.write( document );
+        }
+        return !found;
     }
 
     private void processTemplates( File pomFile, String outputDirectory, Context context,
