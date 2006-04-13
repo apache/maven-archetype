@@ -229,45 +229,47 @@ public class ArchetypeTest
     }
 
     public void testAddModuleToParentPOM()
-        throws DocumentException, IOException
+        throws DocumentException, IOException, ArchetypeTemplateProcessingException
     {
-        String pom = "<project>\n</project>";
+        String pom = "<project>\n  <packaging>pom</packaging>\n</project>";
 
         StringWriter out = new StringWriter();
         assertTrue( DefaultArchetype.addModuleToParentPom( "myArtifactId1", new StringReader( pom ), out ) );
 
-        assertEquals( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + "<project>\n" + "  <modules>\n" +
-            "    <module>myArtifactId1</module>\n" + "  </modules>\n" + "</project>", out.toString() );
+        assertEquals( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + "<project>\n" +
+            "  <packaging>pom</packaging>\n" + "  <modules>\n" + "    <module>myArtifactId1</module>\n" +
+            "  </modules>\n" + "</project>", out.toString() );
 
-        pom = "<project>\n  <modelVersion>4.0.0</modelVersion>\n</project>";
+        pom = "<project>\n  <modelVersion>4.0.0</modelVersion>\n" + "  <packaging>pom</packaging>\n" + "</project>";
 
         out = new StringWriter();
         assertTrue( DefaultArchetype.addModuleToParentPom( "myArtifactId2", new StringReader( pom ), out ) );
 
         assertEquals( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + "<project>\n" +
-            "  <modelVersion>4.0.0</modelVersion>\n" + "  <modules>\n" + "    <module>myArtifactId2</module>\n" +
-            "  </modules>\n" + "</project>", out.toString() );
+            "  <modelVersion>4.0.0</modelVersion>\n" + "  <packaging>pom</packaging>\n" + "  <modules>\n" +
+            "    <module>myArtifactId2</module>\n" + "  </modules>\n" + "</project>", out.toString() );
 
-        pom = "<project><modelVersion>4.0.0</modelVersion>\n" + "  <modules>\n" + "  </modules>\n" + "</project>";
+        pom = "<project><modelVersion>4.0.0</modelVersion>\n" + "  <packaging>pom</packaging>\n" + "  <modules>\n" +
+            "  </modules>\n" + "</project>";
 
         out = new StringWriter();
         assertTrue( DefaultArchetype.addModuleToParentPom( "myArtifactId3", new StringReader( pom ), out ) );
 
         assertEquals( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project><modelVersion>4.0.0</modelVersion>\n" +
-            "  <modules>\n" + "    <module>myArtifactId3</module>\n" + "  </modules>\n" + "</project>",
-                      out.toString() );
+            "  <packaging>pom</packaging>\n" + "  <modules>\n" + "    <module>myArtifactId3</module>\n" +
+            "  </modules>\n" + "</project>", out.toString() );
 
-        pom = "<project><modelVersion>4.0.0</modelVersion>\n" + "  <modules>\n" +
+        pom = "<project><modelVersion>4.0.0</modelVersion>\n" + "  <packaging>pom</packaging>\n" + "  <modules>\n" +
             "    <module>myArtifactId3</module>\n" + "  </modules>\n" + "</project>";
 
         out = new StringWriter();
         assertTrue( DefaultArchetype.addModuleToParentPom( "myArtifactId4", new StringReader( pom ), out ) );
 
         assertEquals( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project><modelVersion>4.0.0</modelVersion>\n" +
-            "  <modules>\n" + "    <module>myArtifactId3</module>\n" + "    <module>myArtifactId4</module>\n" +
-            "  </modules>\n" + "</project>", out.toString() );
+            "  <packaging>pom</packaging>\n" + "  <modules>\n" + "    <module>myArtifactId3</module>\n" +
+            "    <module>myArtifactId4</module>\n" + "  </modules>\n" + "</project>", out.toString() );
 
-        pom = "<project><modelVersion>4.0.0</modelVersion>\n" + "  <modules>\n" +
+        pom = "<project><modelVersion>4.0.0</modelVersion>\n" + "  <packaging>pom</packaging>\n" + "  <modules>\n" +
             "    <module>myArtifactId3</module>\n" + "  </modules>\n" + "</project>";
 
         out = new StringWriter();
@@ -275,6 +277,38 @@ public class ArchetypeTest
 
         // empty means unchanged
         assertEquals( "", out.toString() );
+    }
+
+    public void testAddModuleToParentPOMNoPackaging()
+        throws DocumentException, IOException
+    {
+        try
+        {
+            String pom = "<project>\n</project>";
+            DefaultArchetype.addModuleToParentPom( "myArtifactId1", new StringReader( pom ), new StringWriter() );
+            fail( "Should fail to add a module to a JAR packaged project" );
+        }
+        catch ( ArchetypeTemplateProcessingException e )
+        {
+            // great!
+            assertTrue( true );
+        }
+    }
+
+    public void testAddModuleToParentPOMJarPackaging()
+        throws DocumentException, IOException
+    {
+        try
+        {
+            String pom = "<project>\n  <packaging>jar</packaging>\n</project>";
+            DefaultArchetype.addModuleToParentPom( "myArtifactId1", new StringReader( pom ), new StringWriter() );
+            fail( "Should fail to add a module to a JAR packaged project" );
+        }
+        catch ( ArchetypeTemplateProcessingException e )
+        {
+            // great!
+            assertTrue( true );
+        }
     }
 
     protected void setUp()

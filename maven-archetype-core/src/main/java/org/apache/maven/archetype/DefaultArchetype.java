@@ -396,11 +396,24 @@ public class DefaultArchetype
     }
 
     static boolean addModuleToParentPom( String artifactId, Reader fileReader, Writer fileWriter )
-        throws DocumentException, IOException
+        throws DocumentException, IOException, ArchetypeTemplateProcessingException
     {
         SAXReader reader = new SAXReader();
         Document document = reader.read( fileReader );
         Element project = document.getRootElement();
+
+        String packaging = null;
+        Element packagingElement = project.element( "packaging" );
+        if ( packagingElement != null )
+        {
+            packaging = packagingElement.getStringValue();
+        }
+        if ( !"pom".equals( packaging ) )
+        {
+            throw new ArchetypeTemplateProcessingException(
+                "Unable to add module to the current project as it is not of packaging type 'pom'" );
+        }
+
         Element modules = project.element( "modules" );
         if ( modules == null )
         {
