@@ -247,13 +247,13 @@ public class DefaultArchetype
 
         if ( creating )
         {
-            if ( !parameters.containsKey( "groupId" ) )
+            if ( parameters.get( "groupId" ) == null )
             {
                 throw new ArchetypeTemplateProcessingException(
                     "Group ID must be specified when creating a new project from an archetype." );
             }
 
-            if ( !parameters.containsKey( "version" ) )
+            if ( parameters.get( "version" ) == null )
             {
                 throw new ArchetypeTemplateProcessingException(
                     "Version must be specified when creating a new project from an archetype." );
@@ -301,6 +301,11 @@ public class DefaultArchetype
                     fileReader = new FileReader( parentPomFile );
                     MavenXpp3Reader reader = new MavenXpp3Reader();
                     parentModel = reader.read( fileReader );
+                    if ( !"pom".equals( parentModel.getPackaging() ) )
+                    {
+                        throw new ArchetypeTemplateProcessingException(
+                            "Unable to add module to the current project as it is not of packaging type 'pom'" );
+                    }
                 }
                 catch ( IOException e )
                 {
@@ -501,8 +506,16 @@ public class DefaultArchetype
         {
             Parent parent = new Parent();
             parent.setGroupId( parentModel.getGroupId() );
+            if ( parent.getGroupId() == null )
+            {
+                parent.setGroupId( parentModel.getParent().getGroupId() );
+            }
             parent.setArtifactId( parentModel.getArtifactId() );
             parent.setVersion( parentModel.getVersion() );
+            if ( parent.getVersion() == null )
+            {
+                parent.setVersion( parentModel.getParent().getVersion() );
+            }
             generatedModel.setParent( parent );
 
             FileWriter pomWriter = null;
