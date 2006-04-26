@@ -13,22 +13,7 @@
       <dependency>
          <groupId>root.project.projects</groupId>
          <artifactId>logging</artifactId>
-      </dependency>
-      <dependency>
-         <groupId>fop</groupId>
-         <artifactId>fop</artifactId>
-         <scope>provided</scope>
-      </dependency>
-      <dependency>
-         <groupId>axis</groupId>
-         <artifactId>axis</artifactId>
-         <scope>provided</scope>
-      </dependency>
-      <dependency>
-         <groupId>axis</groupId>
-         <artifactId>axis-wsdl4j</artifactId>
-         <scope>provided</scope>
-      </dependency>
+      </dependency>                  
    </dependencies>
    <build>
       <plugins>
