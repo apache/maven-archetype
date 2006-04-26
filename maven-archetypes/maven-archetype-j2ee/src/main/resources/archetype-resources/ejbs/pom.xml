@@ -19,11 +19,6 @@
          <groupId>root.project.projects</groupId>
          <artifactId>logging</artifactId>
       </dependency>
-      <dependency>
-         <groupId>fop</groupId>
-         <artifactId>fop</artifactId>
-         <scope>provided</scope>
-      </dependency>
   </dependencies>
    <build>
       <plugins>

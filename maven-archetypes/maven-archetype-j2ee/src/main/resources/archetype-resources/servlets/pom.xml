@@ -10,12 +10,6 @@
       <artifactId>project</artifactId>
       <version>1.0</version>
    </parent>
-   <dependencies>
-      <dependency>
-         <groupId>fop</groupId>
-         <artifactId>fop</artifactId>
-      </dependency>
-   </dependencies>
    <modules>
       <module>servlet</module>
    </modules>
