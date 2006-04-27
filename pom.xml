@@ -18,7 +18,7 @@
     <module>maven-archetype-site-simple</module>
     <module>maven-archetype-webapp</module>
     <module>maven-archetype-archetype</module>
-    <module>maven-archetype-j2ee</module>
+    <module>maven-archetype-j2ee-simple</module>
     <module>maven-archetype-portlet</module>
     <module>maven-archetype-profiles</module>
   </modules>
