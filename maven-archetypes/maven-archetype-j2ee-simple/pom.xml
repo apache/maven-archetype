@@ -7,4 +7,5 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>maven-archetype-j2ee</artifactId>
   <name>Maven Archetype J2EE</name>
+  <version>1.0-SNAPSHOT</version>
 </project>
