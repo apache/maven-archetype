@@ -11,6 +11,10 @@
   <packaging>pom</packaging>
   <version>1.0-alpha-4-SNAPSHOT</version>
   <name>Maven Archetype</name>
+    <issueManagement>
+    <system>jira</system>
+    <url>http://jira.codehaus.org/browse/ARCHETYPE</url>
+  </issueManagement>  
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -35,11 +39,22 @@
     <module>maven-archetype-creator</module>    
     <module>maven-archetype-plugin</module>
     <module>maven-archetype-model</module>
-    <module>maven-archetypes</module>
   </modules>
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-release-plugin</artifactId>
+          <configuration>
+            <tagBase>https://svn.apache.org/repos/asf/maven/archetype/tags</tagBase>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/archetype/trunk</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/trunk</developerConnection>
-    <url>http://svn.apache.org/viewcvs.cgi/maven/archetype/trunk</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/archetype/branches</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/branches</developerConnection>
+    <url>http://svn.apache.org/viewcvs.cgi/maven/archetype/branches</url>
   </scm>
 </project>
