@@ -2,9 +2,9 @@
   <parent>
     <artifactId>maven-archetypes</artifactId>
     <groupId>org.apache.maven.archetypes</groupId>
-    <version>1.0</version>
+    <version>1.0-alpha-3-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>maven-archetype-j2ee</artifactId>
-  <name>Maven Archetype J2EE - Simple Layout</name>
+  <name>Maven Archetype J2EE</name>
 </project>
