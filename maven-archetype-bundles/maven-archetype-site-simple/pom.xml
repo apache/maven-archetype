@@ -1,6 +1,6 @@
 <project>
   <parent>
-    <artifactId>archetype-bundles</artifactId>
+    <artifactId>maven-archetype-bundles</artifactId>
     <groupId>org.apache.maven.archetype</groupId>
     <version>1</version>
   </parent>
