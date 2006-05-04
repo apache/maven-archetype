@@ -1,0 +1,45 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.apache.maven</groupId>
+    <artifactId>maven-parent</artifactId>
+    <version>1</version>
+    <relativePath>../pom/maven/pom.xml</relativePath>
+  </parent>
+  <groupId>org.apache.maven.archetype</groupId>
+  <artifactId>maven-archetype</artifactId>
+  <packaging>pom</packaging>
+  <version>1.0-alpha-4-SNAPSHOT</version>
+  <name>Maven Archetype</name>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.apache.maven.archetype</groupId>
+        <artifactId>maven-archetype-model</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven.archetype</groupId>
+        <artifactId>maven-archetype-core</artifactId>
+        <version>${project.version}</version>      
+      </dependency>      
+      <dependency>
+        <groupId>org.apache.maven.archetype</groupId>
+        <artifactId>maven-archetype-creator</artifactId>
+        <version>${project.version}</version>      
+      </dependency>      
+    </dependencies>
+  </dependencyManagement>
+  <modules>
+    <module>maven-archetype-core</module>
+    <module>maven-archetype-creator</module>    
+    <module>maven-archetype-plugin</module>
+    <module>maven-archetype-model</module>
+    <module>maven-archetypes</module>
+  </modules>
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/archetype/trunk</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/trunk</developerConnection>
+    <url>http://svn.apache.org/viewcvs.cgi/maven/archetype/trunk</url>
+  </scm>
+</project>
