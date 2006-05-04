@@ -11,6 +11,10 @@
   <packaging>pom</packaging>
   <version>1.0-alpha-4-SNAPSHOT</version>
   <name>Maven Archetype</name>
+    <issueManagement>
+    <system>jira</system>
+    <url>http://jira.codehaus.org/browse/MARCHETYPE</url>
+  </issueManagement>            
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -35,11 +39,10 @@
     <module>maven-archetype-creator</module>    
     <module>maven-archetype-plugin</module>
     <module>maven-archetype-model</module>
-    <module>maven-archetypes</module>
   </modules>
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/archetype/trunk</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/trunk</developerConnection>
-    <url>http://svn.apache.org/viewcvs.cgi/maven/archetype/trunk</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/archetype/trunk/maven-archetype</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/trunk/maven-archetype</developerConnection>
+    <url>http://svn.apache.org/viewcvs.cgi/maven/archetype/trunk/maven-archetype</url>
   </scm>
 </project>
