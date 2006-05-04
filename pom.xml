@@ -1,20 +1,15 @@
 <project>
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.apache.maven</groupId>
-    <artifactId>maven-parent</artifactId>
+    <groupId>org.apache.maven.archetype</groupId>
+    <artifactId>maven-archetype-parent</artifactId>
     <version>1</version>
-    <relativePath>../pom/maven/pom.xml</relativePath>
   </parent>
   <groupId>org.apache.maven.archetype</groupId>
   <artifactId>maven-archetype</artifactId>
   <packaging>pom</packaging>
   <version>1.0-alpha-4-SNAPSHOT</version>
   <name>Maven Archetype</name>
-    <issueManagement>
-    <system>jira</system>
-    <url>http://jira.codehaus.org/browse/MARCHETYPE</url>
-  </issueManagement>            
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -40,9 +35,4 @@
     <module>maven-archetype-plugin</module>
     <module>maven-archetype-model</module>
   </modules>
-  <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/archetype/trunk/maven-archetype</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/trunk/maven-archetype</developerConnection>
-    <url>http://svn.apache.org/viewcvs.cgi/maven/archetype/trunk/maven-archetype</url>
-  </scm>
 </project>
