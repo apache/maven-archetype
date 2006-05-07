@@ -39,6 +39,7 @@
     <module>maven-archetype-creator</module>    
     <module>maven-archetype-plugin</module>
     <module>maven-archetype-model</module>
+    <module>maven-archetypes</module>
   </modules>
   <build>
     <pluginManagement>
