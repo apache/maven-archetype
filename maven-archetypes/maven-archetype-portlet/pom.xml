@@ -2,7 +2,7 @@
   <parent>
     <artifactId>maven-archetypes</artifactId>
     <groupId>org.apache.maven.archetypes</groupId>
-    <version>1.0-alpha-4</version>
+    <version>1.0-alpha-5-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>maven-archetype-portlet</artifactId>

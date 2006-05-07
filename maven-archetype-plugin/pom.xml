@@ -2,7 +2,7 @@
   <parent>
     <artifactId>maven-archetype</artifactId>
     <groupId>org.apache.maven.archetype</groupId>
-    <version>1.0-alpha-4</version>
+    <version>1.0-alpha-5-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.maven.plugins</groupId>
@@ -10,9 +10,9 @@
   <packaging>maven-plugin</packaging>
   <name>Maven Archetype Plugin</name>
   <scm>
-    <connection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/tags/maven-archetype-1.0-alpha-4</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/tags/maven-archetype-1.0-alpha-4</developerConnection>
-    <url>https://svn.apache.org/repos/asf/maven/archetype/tags/maven-archetype-1.0-alpha-4</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/archetype/trunk/maven-archetype-plugin/</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/trunk/maven-archetype-plugin/</developerConnection>
+    <url>http://svn.apache.org/viewcvs.cgi/maven/archetype/trunk/maven-archetype-plugin/</url>
   </scm>
   <dependencies>
     <dependency>
