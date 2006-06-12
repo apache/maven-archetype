@@ -1,5 +1,5 @@
 <archetype>
-  <id>j2ee</id>
+  <id>j2ee-simple</id>
   <resources>
     <resource>pom.xml</resource>
     <resource>ear/pom.xml</resource>
@@ -12,8 +12,5 @@
     <resource>servlets/servlet/pom.xml</resource>
     <resource>servlets/servlet/src/main/webapp/index.jsp</resource>
     <resource>servlets/servlet/src/main/webapp/WEB-INF/web.xml</resource>
-    <resource>site/pom.xml</resource>
-    <resource>site/src/site/site.xml</resource>
-    <resource>site/src/site/apt/site.apt</resource>
   </resources>
 </archetype>
