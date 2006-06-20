@@ -42,6 +42,13 @@
     <module>maven-archetypes</module>
   </modules>
   <build>
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-webdav</artifactId>
+        <version>1.0-beta-1</version>
+      </extension>
+    </extensions>      
     <pluginManagement>
       <plugins>
         <plugin>
@@ -58,4 +65,14 @@
     <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/branches</developerConnection>
     <url>http://svn.apache.org/viewcvs.cgi/maven/archetype/branches</url>
   </scm>
+   <distributionManagement>
+    <snapshotRepository>
+      <id>maven-snapshots</id>
+      <name>Maven Central Development Repository</name>
+      <url>dav:https://dav.codehaus.org/snapshots.repository/mojo/</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases> 
+    </snapshotRepository>
+  </distributionManagement>  
 </project>
