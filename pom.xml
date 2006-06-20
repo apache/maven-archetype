@@ -65,11 +65,4 @@
     <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/branches</developerConnection>
     <url>http://svn.apache.org/viewcvs.cgi/maven/archetype/branches</url>
   </scm>
-   <distributionManagement>
-    <snapshotRepository>
-      <id>maven-snapshots</id>
-      <name>Maven Central Development Repository</name>
-      <url>dav:https://dav.codehaus.org/snapshots.repository/maven2</url>
-    </snapshotRepository>
-  </distributionManagement>  
 </project>
