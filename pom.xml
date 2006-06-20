@@ -69,7 +69,7 @@
     <snapshotRepository>
       <id>maven-snapshots</id>
       <name>Maven Central Development Repository</name>
-      <url>dav:https://dav.codehaus.org/snapshots.repository/mojo/</url>
+      <url>dav:https://dav.codehaus.org/snapshots.repository/maven2</url>
     </snapshotRepository>
   </distributionManagement>  
 </project>
