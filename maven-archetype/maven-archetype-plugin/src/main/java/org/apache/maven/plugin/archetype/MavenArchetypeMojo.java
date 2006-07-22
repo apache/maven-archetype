@@ -68,7 +68,7 @@ public class MavenArchetypeMojo
     private ArtifactRepository localRepository;
 
     /**
-     * @parameter expression="${archetypeGroupId}" default-value="org.apache.maven.archetype"
+     * @parameter expression="${archetypeGroupId}" default-value="org.apache.maven.archetypes"
      * @required
      */
     private String archetypeGroupId;
