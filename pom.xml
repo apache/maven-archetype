@@ -13,7 +13,7 @@
   <name>Maven Archetype Parent</name>
   <issueManagement>
     <system>jira</system>
-    <url>http://jira.codehaus.org/browse/MARCHETYPE</url>
+    <url>http://jira.codehaus.org/browse/ARCHETYPE</url>
   </issueManagement>            
   <modules>
      <module>maven-archetype</module>
