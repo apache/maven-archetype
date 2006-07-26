@@ -1,0 +1,182 @@
+ ------
+ Site
+ ------
+ Franz Allan Valencia See
+ ------
+ July 2006
+ ------
+ 
+Creating a site
+ 
+ You can create a site either by using maven-archetype-site-simple or 
+ maven-archetype-site. You just need to set your maven project's groupId and 
+ artifactId.
+ 
+ To jump start a simple site, choose maven-archetype-site-simple, 
+ 
++------+
+mvn archetype:create 
+  -DgroupId=[your project's group id]
+  -DartifactId=[your project's artifact id]
+  -DarchetypeArtifactId=maven-archetype-site-simple
++------+ 
+
+ and it will generate a maven projecct with the following contents.
+ 
++------+
+.
+ |-- src
+ |   `-- main
+ |       `-- site
+ |           |-- apt
+ |           |   `-- index.apt
+ |           `-- site.xml
+  `-- pom.xml
++------+ 
+
+ But to create a more complete version of a site, use maven-archetype-site.
+ 
++------+
+mvn archetype:create 
+  -DgroupId=[your project's group id]
+  -DartifactId=[your project's artifact id]
+  -DarchetypeArtifactId=maven-archetype-site
++------+
+
+ This would then create a maven proect.
+
++------+
+.
+ |-- src
+ |   `-- main
+ |       `-- site
+ |           |-- apt
+ |           |   |-- format.apt
+ |           |   `-- index.apt
+ |           |-- fml
+ |           |   `-- faq.fml
+ |           |-- fr
+ |           |   |-- apt
+ |           |   |   |-- format.apt
+ |           |   |   `-- index.apt
+ |           |   |-- fml
+ |           |   |   `-- faq.fml
+ |           |   `-- xdoc
+ |           |       `-- xdoc.xml
+ |           |-- xdoc
+ |           |   `-- xdoc.xml
+ |           |-- site.xml
+ |           `-- site_fr.xml
+  `-- pom.xml
++------+
+
+ Furthermore, both archetypes are capable of creating archetype containers over
+ an existing maven project. For example, if we first create a simple j2ee maven
+ project.
+ 
++------+
+mvn archetype:create 
+  -DgroupId=sample.gid
+  -DartifactId=sample-aid
+  -DarchetypeArtifactId=maven-archetype-j2ee-simple
++------+
+
+ We would have the following contents for our maven project.
+
++------+
+.
+ |-- ear
+ |   `-- pom.xml
+ |-- ejb
+ |   |-- src   
+ |   |   `-- main
+ |   |       `-- resources
+ |   |           `-- META-INF
+ |   |               `-- ejb-jar.xml
+ |   `-- pom.xml
+ |-- primary-source
+ |   `-- pom.xml
+ |-- projects
+ |   |-- logging
+ |   |   `-- pom.xml
+ |   `-- pom.xml
+ |-- servlets
+ |   |-- servlet
+ |   |   |-- src
+ |   |   |   `-- main
+ |   |   |       `-- webapp
+ |   |   |            |-- WEB-INF
+ |   |   |            |   `-- web.xml
+ |   |   |            `-- index.jsp
+ |   |   `-- pom.xml
+ |   `-- pom.xml
+ |-- src
+ |   `-- main
+ |       `-- resources
+  `-- pom.xml
++------+
+
+ And if we envoke the following commands from the same directory.
+ 
++------+
+mvn archetype:create 
+  -DgroupId=sample.gid
+  -DartifactId=sample-aid
+  -DarchetypeArtifactId=maven-archetype-site
++------+
+
+ The contents of the site archetype would then insert itself with that of the 
+ existing maven project.
+ 
++------+
+.
+ |-- ear
+ |   `-- pom.xml
+ |-- ejb
+ |   |-- src   
+ |   |   `-- main
+ |   |       `-- resources
+ |   |           `-- META-INF
+ |   |               `-- ejb-jar.xml
+ |   `-- pom.xml
+ |-- primary-source
+ |   `-- pom.xml
+ |-- projects
+ |   |-- logging
+ |   |   `-- pom.xml
+ |   `-- pom.xml
+ |-- servlets
+ |   |-- servlet
+ |   |   |-- src
+ |   |   |   `-- main
+ |   |   |       `-- webapp
+ |   |   |            |-- WEB-INF
+ |   |   |            |   `-- web.xml
+ |   |   |            `-- index.jsp
+ |   |   `-- pom.xml
+ |   `-- pom.xml
+ |-- src
+ |   `-- main
+ |       |-- resources
+ |       `-- site
+ |           |-- apt
+ |           |   |-- format.apt
+ |           |   `-- index.apt
+ |           |-- fml
+ |           |   `-- faq.fml
+ |           |-- fr
+ |           |   |-- apt
+ |           |   |   |-- format.apt
+ |           |   |   `-- index.apt
+ |           |   |-- fml
+ |           |   |   `-- faq.fml
+ |           |   `-- xdoc
+ |           |       `-- xdoc.xml
+ |           |-- xdoc
+ |           |   `-- xdoc.xml
+ |           |-- site.xml
+ |           `-- site_fr.xml
+  `-- pom.xml
++------+
+
+ while retaining the existing maven project's pom.

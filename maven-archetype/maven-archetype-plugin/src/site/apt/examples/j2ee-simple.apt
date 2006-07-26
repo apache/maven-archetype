@@ -1,0 +1,57 @@
+ ------
+ J2ee Simple
+ ------
+ Franz Allan Valencia See
+ ------
+ July 2006
+ ------
+ 
+Creating a simple j2ee Project
+ 
+ Creating the directory structure of a J2EE project can be tedious. However, if
+ you would use maven-archetype-j2ee-simple, the usual directories for a j2ee 
+ project would be provided for you.
+ 
++------+
+mvn archetype:create 
+  -DgroupId=[your project's group id]
+  -DartifactId=[your project's artifact id]
+  -DarchetypeArtifactId=maven-archetype-j2ee-simple
++------+
+
+ This would then create a maven proect.
+
++------+
+.
+ |-- ear
+ |   `-- pom.xml
+ |-- ejb
+ |   |-- src   
+ |   |   `-- main
+ |   |       `-- resources
+ |   |           `-- META-INF
+ |   |               `-- ejb-jar.xml
+ |   `-- pom.xml
+ |-- primary-source
+ |   `-- pom.xml
+ |-- projects
+ |   |-- logging
+ |   |   `-- pom.xml
+ |   `-- pom.xml
+ |-- servlets
+ |   |-- servlet
+ |   |   |-- src
+ |   |   |   `-- main
+ |   |   |       `-- webapp
+ |   |   |            |-- WEB-INF
+ |   |   |            |   `-- web.xml
+ |   |   |            `-- index.jsp
+ |   |   `-- pom.xml
+ |   `-- pom.xml
+ |-- src
+ |   `-- main
+ |       `-- resources
+  `-- pom.xml
++------+
+
+

@@ -1,0 +1,64 @@
+ ------
+ Simple
+ ------
+ Franz Allan Valencia See
+ ------
+ July 2006
+ ------
+ 
+Creating a simple java application
+ 
+ To start of with your java project, you can use maven-archetype-quickstart.
+ Simply, you'd just have to provide a groupId and an artifactId (at the least).
+ 
++------+
+mvn archetype:create 
+  -DgroupId=[your project's group id]
+  -DartifactId=[your project's artifact id]
++------+
+
+ This would then create a maven proect.
+
++------+
+.
+ |-- src
+ |   |-- main
+ |   |   `-- java
+ |   |       `-- [your project's package]   
+ |   |           `-- App.java
+ |   `-- test
+ |       `-- java
+ |           `-- [your project's package]   
+ |               `-- AppTest.java
+  `-- pom.xml
++------+
+
+ For example if we execute this command
+ 
++------+
+mvn archetype:create 
+  -DgroupId=your.simple.java.gid 
+  -DartifactId=your-simple-java-aid
++------+
+ 
+ We would get this
+ 
++------+
+.
+ |-- src
+ |   |-- main
+ |   |   `-- java
+ |   |       `-- your
+ |   |           `-- simple
+ |   |               `-- java
+ |   |                   `-- aid
+ |   |                       `-- App.java
+ |   `-- test
+ |       `-- java
+ |           `-- your
+ |               `-- simple
+ |                   `-- java
+ |                       `-- aid
+ |                           `-- AppTest.java
+  `-- pom.xml
++------+

@@ -27,7 +27,8 @@ import java.io.File;
 import java.io.FileInputStream;
 
 /**
- * Builds archetype containers.
+ * Builds archetype containers based from an existing Maven project (work in
+ * progress).
  *
  * @goal create-from-project
  * @description Create an archetype from an existing Maven project.
@@ -37,24 +38,32 @@ public class CreateArchetypeFromProjectMojo
     extends AbstractMojo
 {
     /**
+     * The Maven Project to be used as the basis for the creating of the archetype.
+     * 
      * @parameter expression="${project}"
      * @required
      */
     private MavenProject project;
 
     /**
+     * Maven's local repository.
+     * 
      * @parameter expression="${localRepository}"
      * @required
      */
     private ArtifactRepository localRepository;
 
     /**
+     * Output build directory.
+     *  
      * @parameter expression="${targetDirectory}" default-value="${project.build.directory}"
      * @required
      */
     private File targetDirectory;
 
     /**
+     * Maven ArchetypeCreator
+     * 
      * @component
      */
     private ArchetypeCreator archetypeCreator;
@@ -68,6 +77,8 @@ public class CreateArchetypeFromProjectMojo
 
 
     /**
+     * Contains Archetype Properties.
+     * 
      * @parameter expression="${archetypeProperties}" default-value="${basedir}/src/main/archetype/archetype.properties"
      * @required
      */

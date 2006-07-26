@@ -1,0 +1,31 @@
+ ------
+ Usage
+ ------
+ Franz Allan Valencia See
+ ------
+ 17 July 2006
+ ------
+
+Usage
+
+ The Archetype Plugin has two goals: create and create-from-project. 
+
+* Create
+ 
+ The create goal creates a pom, the default files (source, test, resources, 
+ test-resources, site-resources), in a specific directory structure. The most 
+ basic way of using this is by calling the goal with only two expressions: the
+ groupId and artifactId of the project to be build. For example, using
+ 
++-----+
+ mvn archetype:create -DgroupId=sample.group.id -DartifactId=sample-artifact-id
++-----+
+
+ this would create an App.java and an AppTest.java, both under the 
+ sample.group.id package. The App.java is a simple "Hello World" program while 
+ the AppTest is a subclass of TestCase that has one test which always passes.
+ 
+* Create From Project
+
+  <work in progress>
+ 
