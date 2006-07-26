@@ -1,0 +1,67 @@
+ ------
+ Remote Repositories
+ ------
+ Franz Allan Valencia See
+ ------
+ July 2006
+ ------
+
+
+Specifying the Remote Repositories
+
+ To use an archetype found in a remote repository, use the remoteRepositories 
+ -D expression. 
+ 
++------+
+mvn archetype:create 
+  -DgroupId=[your group id]
+  -DartifactId=[your artifact id]
+  -DarchetypeGroupId=[group id of the remote archetype]
+  -DarchetypeArtifactId=[artifact id of the remote archetype]
+  -DarchetypeVersion=[version of the remote archetype]
+  -DremoteRepositories=[urls of your remote repositories]
++------+
+
+ For example, if you want to use a remote.archetype.gid:remote-archetype-aid:1.0
+ to create a your.proj.gid:your-proj-aid project and that archetype is located
+ at http://remote.archetypes.url, then your maven command would be
+ 
++------+
+mvn archetype:create                                                    \
+  -DgroupId=your.proj.gid                                               \
+  -DartifactId=your-proj-aid                                            \
+  -DarchetypeGroupId=remote.archetype.gid                               \
+  -DarchetypeArtifactId=remote-archetype-aid                            \
+  -DarchetypeVersion=1.0                                                \
+  -DremoteRepositories=http://remote.archetypes.url                     
++------+
+
+ Moreover, you can specify several remote repositories by using a comma (,).
+ 
++------+
+mvn archetype:create                                                    \
+  -DgroupId=your.proj.gid                                               \
+  -DartifactId=your-proj-aid                                            \
+  -DarchetypeGroupId=remote.archetype.gid                               \
+  -DarchetypeArtifactId=remote-archetype-aid                            \
+  -DarchetypeVersion=1.0                                                \
+  -DremoteRepositories=http://remote.archetypes.url,http://another.url  
++------+
+
+ Furthermore, you can specify your remote repositories through a parent pom.
+ 
++------+
+<project>
+  [...]
+  <packaging>pom</packaging>
+  [...]
+  <repositories>
+    <repository>
+      [...]
+      <id> [remote repository id] </id>
+      <url> [remote repository's url] </url>
+      [...]
+    </repository>
+  </repositories>
+</project>
++------+

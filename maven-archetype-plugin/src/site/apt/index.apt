@@ -1,0 +1,81 @@
+ ------
+ Introduction
+ ------
+ Franz Allan Valencia See
+ ------
+ 17 July 2006
+ ------
+
+
+Maven 2 Archetype Plugin
+
+ The Archetype Plugin allows the user to build archetype containers. These 
+ archetype containers contains the pom, default source, test, resources,
+ test-resources, and site-resources files in a specific directory structure. The 
+ content of the pom, the default files, and the directory structure depends on 
+ the what archetype container was built. 
+ 
+ Upon writing this documentation, there are ten (10) available archetype 
+ containers provided by maven These are:
+ 
+   * maven-archetype-archetype
+   
+   * maven-archetype-j2ee-simple
+   
+   * maven-archetype-mojo
+   
+   * maven-archetype-portlet
+   
+   * maven-archetype-profiles (<work in progress>)
+   
+   * maven-archetype-quickstart
+   
+   * maven-archetype-simple (<work in progress>)
+   
+   * maven-archetype-site
+   
+   * maven-archetype-site-simple, and 
+   
+   * maven-archetype-webapp
+
+* Goals Overview
+
+   The Archetype Plugin has two goals:
+
+   * {{{create-mojo.html}archetype:create}} looks for an achetype with a given 
+     groupId, artifactId, and version and retrieves it from the remote 
+     repository. Once the archetype is retrieve it is process against a st of 
+     user parameters to create a working Maven project.
+
+   * {{{create-from-project-mojo.html}archetype:create-from-project}} creates an
+     archetype from an existing Maven projecct.
+
+* Usage
+
+   Instructions on how to use the Resources Plugin can be found 
+   {{{usage.html}here}}.
+
+* Examples
+
+   The following examples show how to use the Javadoc Plugin in more advanced 
+   usecases:
+
+   * {{{examples/remote-repositories.html}Specifying the Remote Repositories}}
+
+   * {{{examples/simple.html}Creating a Simple Java Application}}
+
+   * {{{examples/site.html}Creating a Site}}
+
+   * {{{examples/j2ee-simple.html}Creating a Simple J2ee Project}}
+
+   * {{{examples/webapp.html}Creating a Webapp}}
+
+   * {{{examples/portlet.html}Creating a Portlet}}
+
+   * {{{examples/mojo.html}Creating a Mojo}}
+
+   * {{{examples/archetype.html}Creating your own Archetype}}
+   
+   
+   
+

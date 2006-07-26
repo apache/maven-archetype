@@ -39,6 +39,7 @@ import java.util.Map;
  * version and retrieves it from the remote repository. Once the archetype is retrieve it is process against
  * a set of user parameters to create a working Maven project.
  *
+ * @description Creates archetype containers.
  * @requiresProject false
  * @goal create
  */
@@ -46,78 +47,109 @@ public class MavenArchetypeMojo
     extends AbstractMojo
 {
     /**
+     * Used to create the Archetype specified by the groupId, artifactId, and 
+     * version from the remote repository.
+     * 
      * @component
      */
     private Archetype archetype;
 
     /**
+     * Used to create ArtifactRepository objects given the urls of the remote
+     * repositories.
+     * 
      * @component
      */
     private ArtifactRepositoryFactory artifactRepositoryFactory;
 
     /**
+     * Determines whether the layout is legacy or not.
+     * 
      * @component role="org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout" roleHint="default"
      */
     private ArtifactRepositoryLayout defaultArtifactRepositoryLayout;
 
 
     /**
+     * Maven's local repository.
+     * 
      * @parameter expression="${localRepository}"
      * @required
      */
     private ArtifactRepository localRepository;
 
     /**
-     * @parameter expression="${archetypeGroupId}" default-value="org.apache.maven.archetypes"
+     * The Archetype Group Id to be used.
+     * 
+     * @parameter expression="${archetypeGroupId}" default-value="org.apache.maven.archetype"
      * @required
      */
     private String archetypeGroupId;
 
     /**
+     * The Archetype Artifact Id to be used.
+     * 
      * @parameter expression="${archetypeArtifactId}" default-value="maven-archetype-quickstart"
      * @required
      */
     private String archetypeArtifactId;
 
     /**
+     * The Archetype Version to be used.
+     * 
      * @parameter expression="${archetypeVersion}" default-value="RELEASE"
      * @required
      */
     private String archetypeVersion;
 
     /**
+     * The Group Id of the project to be build.
+     * 
      * @parameter expression="${groupId}"
      */
     private String groupId;
 
     /**
+     * The Artifact Id of the project to be build.
+     * 
      * @parameter expression="${artifactId}"
      */
     private String artifactId;
 
     /**
+     * The Version of the project to be build.
+     * 
      * @parameter expression="${version}" default-value="1.0-SNAPSHOT"
      * @required
      */
     private String version;
 
     /**
+     * The Package Name of the project to be build.
+     * 
      * @parameter expression="${packageName}" alias="package"
      */
     private String packageName;
 
     /**
+     * The remote repositories available for discovering dependencies and extensions as indicated
+     * by the POM.
+     * 
      * @parameter expression="${project.remoteArtifactRepositories}"
      * @required
      */
     private List pomRemoteRepositories;
 
     /**
+     * Other remote repositories available for discovering dependencies and extensions.
+     * 
      * @parameter expression="${remoteRepositories}"
      */
     private String remoteRepositories;
 
     /**
+     * The project to be created an archetype of.
+     * 
      * @parameter expression="${project}"
      */
     private MavenProject project;
