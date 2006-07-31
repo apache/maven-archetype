@@ -3,23 +3,27 @@
  ------
  Jason van Zyl, Alexander Hars, Franz Allan Valencia See
  ------
- 26 October 2005
+ 25 July 2006
  ------
 
 Guide to Creating Archetypes
 
- Creating an archetype is a pretty straight forward process. An archetype is a very simple plugin, that 
- contains the project prototype you wish to create. An archetype is made up of: 
+ Creating an archetype is a pretty straight forward process. An archetype is a 
+ very simple plugin, that contains the project prototype you wish to create. 
+ An archetype is made up of: 
  
- * an archetype descriptor (<archetype.xml> in directory: <src/main/resources/META-INF/>). It lists all the files 
-   that will be contained in the archetype and categorizes them so they can be processed correctly by the 
-   archetype generation mechanism.
+ * an archetype descriptor (<<<archetype.xml>>> in directory: 
+   <<<src/main/resources/META-INF/>>>). It lists all the files that will be 
+   contained in the archetype and categorizes them so they can be processed 
+   correctly by the archetype generation mechanism.
 
- * the prototype files that are copied by the archetype (directory: <src/main/resources/archetype-resources/>)
+ * the prototype files that are copied by the archetype (directory: 
+   <<<src/main/resources/archetype-resources/>>>)
 
- * the prototpye pom (<pom.xml> in: <src/main/resources/archetype-resources>)
+ * the prototpye pom (<<<pom.xml>>> in: 
+   <<<src/main/resources/archetype-resources>>>)
 
- * a pom for the archetype (<pom.xml> in the archetype's root directory).
+ * a pom for the archetype (<<<pom.xml>>> in the archetype's root directory).
 
  [] 
 
@@ -27,7 +31,7 @@ Guide to Creating Archetypes
 
 * 1. Create a new project and pom.xml for the archetype plugin
 
-  An example <pom.xml> for an archetype plugin looks as follows: 
+  An example <<<pom.xml>>> for an archetype plugin looks as follows: 
  
 +----+ 
 
@@ -41,13 +45,15 @@ Guide to Creating Archetypes
 
 +----+ 
 
-  All you need to specify is a <groupId>, <artifactId> and <version>. These three parameters will be needed later for 
-  invoking the archetype via <archetype:create> from the commandline.  
+  All you need to specify is a <<<groupId>>>, <<<artifactId>>> and 
+  <<<version>>>. These three parameters will be needed later for invoking the 
+  archetype via <<<archetype:create>>> from the commandline.  
 
 * 2. Create the archetype descriptor
 
- The archetype descriptor is a file called <archetype.xml> which must be located in <src/main/resources/META-INF/>
- An example for an archetype descriptor can be found in the quickstart archetype: 
+ The archetype descriptor is a file called <<<archetype.xml>>> which must be 
+ located in <<<src/main/resources/META-INF/>>> An example for an archetype 
+ descriptor can be found in the quickstart archetype: 
 
 +----+
 
@@ -63,33 +69,41 @@ Guide to Creating Archetypes
 
 +----+
 
- The \<id\> tag should be the same as the artifactId in the archetype <pom.xml>. 
+ The <<<\<id\>>>> tag should be the same as the <<<artifactId>>> in the 
+ archetype <<<pom.xml>>>. 
 
- An optional \<allowPartial\>true\</allowPartial\> tag makes it possible to run the archetype:create even on existing projects. 
+ An optional <<<\<allowPartial\>true\</allowPartial\>>>> tag makes it possible 
+ to run the <<<archetype:create>>> even on existing projects. 
 
- The \<sources\>, \<resources\>, \<test-resources\> and \<site-resources\> tags represent the different sections of the project: 
+ The <<<\<sources\>>>>, <<<\<resources\>>>>, <<<\<test-resources\>>>> and 
+ <<<\<site-resources\>>>> tags represent the different sections of the project: 
 
- * \<sources\> = src/main/java
+ * <<<\<sources\>>>> = <<<src/main/java>>>
 
- * \<resources\> = src/main/resources
+ * <<<\<resources\>>>> = <<<src/main/resources>>>
 
- * \<test-sources\> = src/test/java
+ * <<<\<test-sources\>>>> = <<<src/test/java>>>
 
- * \<test-resources\> = src/test/resources
+ * <<<\<test-resources\>>>> = <<<src/test/resources>>>
 
- * \<site-resources\> = src/site 
+ * <<<\<site-resources\>>>> = <<<src/site>>> 
 
  []
 
- \<sources\> and \<test-sources\> can contain \<source\> elements that specify a source file. 
+ <<<\<sources\>>>> and <<<\<test-sources\>>>> can contain <<<\<source\>>>> 
+ elements that specify a source file. 
 
- \<test-resources\> and \<site-resources\> can contain \<resource\> elements that specify a resource file. 
+ <<<\<test-resources\>>>> and <<<\<site-resources\>>>> can contain 
+ <<<\<resource\>>>> elements that specify a resource file. 
 
- Place other resources such as the ones in the <<<src/main/webapp>>> directory inside the \<resources\> tag.
+ Place other resources such as the ones in the <<<src/main/webapp>>> directory 
+ inside the <<<\<resources\>>>> tag.
 
- At this point one can only specify individual files to be created but not empty directories. 
+ At this point one can only specify individual files to be created but not empty
+ directories. 
 
- Thus the quickstart archetype shown above defines the following directory structure: 
+ Thus the quickstart archetype shown above defines the following directory 
+ structure: 
 
 +----+
 
@@ -114,11 +128,13 @@ archetype
 
 * 3. Create the prototype files and the prototype pom.xml
 
- The next component of the archetype to be created is the prototype <pom.xml>. Any <pom.xml> will do, just 
- don't forget to the set <artifactId> and <groupId> as variables  ( <$\{artifactId\}> / <$\{groupId\}> ). Both variables 
- will be initialized from the commandline when calling <archetype:create>.   
+ The next component of the archetype to be created is the prototype 
+ <<<pom.xml>>>. Any <<<pom.xml>>> will do, just don't forget to the set 
+ <<<artifactId>>> and <<<groupId>>> as variables  ( <<<$\{artifactId\}>>> / 
+ <<<$\{groupId\}>>> ). Both variables will be initialized from the commandline 
+ when calling <<<archetype:create>>>.   
 
- An example for a prototype <pom.xml> is: 
+ An example for a prototype <<<pom.xml>>> is: 
 
 +----+
 
@@ -152,20 +168,29 @@ mvn install
 
 +----+
 
- Now that you have created an archetype you can try it on your local system by using the following command:
- In this command, you need to specify the full information about the archetype you want to use (its groupId, its artifactId, its version) and the information about the new project you want to create (artifactId and groupId). 
- Don't forget to include the version of your archetype (if you don't include the version, you archetype creation may fail with a message that version:RELEASE was not found) 
+ Now that you have created an archetype you can try it on your local system by 
+ using the following command. In this command, you need to specify the full 
+ information about the archetype you want to use (its <<<groupId>>>, its 
+ <<<artifactId>>>, its <<<version>>>) and the information about the new project 
+ you want to create (<<<artifactId>>> and <<<groupId>>>). Don't forget to 
+ include the version of your archetype (if you don't include the version, you 
+ archetype creation may fail with a message that version:RELEASE was not found) 
 
 
 +----+
 
-mvn archetype:create -DarchetypeGroupId=<archetype-groupId> -DarchetypeArtifactId=<archetype-artifactId> \ 
-  -DarchetypeVersion=<archetype-version> -DgroupId=<my.groupid> -DartifactId=<my-artifactId>
+mvn archetype:create                                    \
+  -DarchetypeGroupId=<archetype-groupId>                \
+  -DarchetypeArtifactId=<archetype-artifactId>          \ 
+  -DarchetypeVersion=<archetype-version>                \
+  -DgroupId=<my.groupid>                                \
+  -DartifactId=<my-artifactId>   
 
 +----+
 
- Once you are happy with the state of your archetype you can deploy (or submit it to ibiblio) it as any other artifact and
- the archetype will then be available to any user of Maven.
+ Once you are happy with the state of your archetype you can deploy (or submit 
+ it to ibiblio) it as any other artifact and the archetype will then be 
+ available to any user of Maven.
  
 * Alternative way to start creating your Archetype
  
@@ -179,6 +204,6 @@ mvn archetype:create
   -DarchetypeArtifactId=maven-archetype-archetype
 +------+
 
- Afterwhich, you can now customize the contents of the archetyep-resources 
- directory, and archetype.xml, then, proceed to Step#4 (Install and run the 
- archetype).
+ Afterwhich, you can now customize the contents of the <<<archetype-resources>>>
+ directory, and <<<archetype.xml>>>, then, proceed to Step#4 (Install and run 
+ the archetype plugin).
