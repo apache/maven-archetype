@@ -8,11 +8,11 @@
  
 Creating a site
  
- You can create a site either by using maven-archetype-site-simple or 
- maven-archetype-site. You just need to set your maven project's groupId and 
- artifactId.
+ You can create a site either by using <<<maven-archetype-site-simple>>> or 
+ <<<maven-archetype-site>>>. You just need to set your maven project's 
+ <<<groupId>>> and <<<artifactId>>>.
  
- To jump start a simple site, choose maven-archetype-site-simple, 
+ To jump start a simple site, choose <<<maven-archetype-site-simple>>>, 
  
 +------+
 mvn archetype:create 
@@ -21,7 +21,7 @@ mvn archetype:create
   -DarchetypeArtifactId=maven-archetype-site-simple
 +------+ 
 
- and it will generate a maven projecct with the following contents.
+ and it will generate a maven project with the following contents.
  
 +------+
 .
@@ -34,7 +34,12 @@ mvn archetype:create
   `-- pom.xml
 +------+ 
 
- But to create a more complete version of a site, use maven-archetype-site.
+ The <<<index.apt>>> produced is of "Almost Plain Text" format which is used
+ for documentation (<To learn more about the APT Format, kindly refer to the 
+ {{{http://maven.apache.org/guides/mini/guide-apt-format.html}APT Format Guide}}>).
+
+ But to create a more complete version of a site, use 
+ <<<maven-archetype-site>>>.
  
 +------+
 mvn archetype:create 
@@ -43,7 +48,7 @@ mvn archetype:create
   -DarchetypeArtifactId=maven-archetype-site
 +------+
 
- This would then create a maven proect.
+ This would then create a maven project.
 
 +------+
 .

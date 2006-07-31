@@ -9,7 +9,7 @@
 Creating a mojo
  
  A maven plugin is composed of one or more mojos. And to start the creation of
- a maven plugin, you can ues maven-archetype-mojo to create a mojo.
+ a maven plugin, you can use <<<maven-archetype-mojo>>> to create a mojo.
  
 +------+
 mvn archetype:create 
@@ -18,7 +18,7 @@ mvn archetype:create
   -DarchetypeArtifactId=maven-archetype-mojo
 +------+
 
- This would then create a maven proect.
+ This would then create a maven project.
 
 +------+
 .

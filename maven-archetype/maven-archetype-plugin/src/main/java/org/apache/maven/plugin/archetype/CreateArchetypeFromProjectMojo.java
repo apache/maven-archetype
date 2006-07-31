@@ -27,8 +27,8 @@ import java.io.File;
 import java.io.FileInputStream;
 
 /**
- * Builds archetype containers based from an existing Maven project (work in
- * progress).
+ * Builds archetype containers based from an existing Maven project (currently
+ * under development).
  *
  * @goal create-from-project
  * @description Create an archetype from an existing Maven project.

@@ -8,16 +8,26 @@
  
 Creating a simple java application
  
- To start of with your java project, you can use maven-archetype-quickstart.
- Simply, you'd just have to provide a groupId and an artifactId (at the least).
+ To start of with your java project, you can use 
+ <<<maven-archetype-quickstart.>>> Simply, you'd just have to provide a 
+ <<<groupId>>> and an <<<artifactId>>> (at the least).
  
++------+
+mvn archetype:create 
+  -DgroupId=[your project's group id]
+  -DartifactId=[your project's artifact id]
+  -DarchetypeArtifactId=maven-archetype-quickstart
++------+
+
+ or simply,
+
 +------+
 mvn archetype:create 
   -DgroupId=[your project's group id]
   -DartifactId=[your project's artifact id]
 +------+
 
- This would then create a maven proect.
+ This would then create a maven project.
 
 +------+
 .

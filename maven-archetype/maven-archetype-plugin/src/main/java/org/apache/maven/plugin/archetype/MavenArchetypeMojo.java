@@ -35,9 +35,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The archetype creation goal looks for an archetype with a given groupId, artifactId, and
- * version and retrieves it from the remote repository. Once the archetype is retrieve it is process against
- * a set of user parameters to create a working Maven project.
+ * The archetype creation goal looks for an archetype with a given groupId, 
+ * artifactId, and version and retrieves it from the remote repository. Once the
+ * archetype is retrieved, it is then processed against a set of user parameters
+ * to create a working Maven project.
  *
  * @description Creates archetype containers.
  * @requiresProject false

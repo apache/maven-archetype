@@ -9,8 +9,8 @@
 
 Specifying the Remote Repositories
 
- To use an archetype found in a remote repository, use the remoteRepositories 
- -D expression. 
+ To use an archetype found in a remote repository, use the 
+ <<<remoteRepositories>>> property / parameter. 
  
 +------+
 mvn archetype:create 
@@ -22,9 +22,11 @@ mvn archetype:create
   -DremoteRepositories=[urls of your remote repositories]
 +------+
 
- For example, if you want to use a remote.archetype.gid:remote-archetype-aid:1.0
- to create a your.proj.gid:your-proj-aid project and that archetype is located
- at http://remote.archetypes.url, then your maven command would be
+ For example, if you want to use a 
+ <<<remote.archetype.gid:remote-archetype-aid:1.0>>>
+ to create a <<<your.proj.gid:your-proj-aid project>>> and that archetype 
+ is located at <<<http://remote.archetypes.url>>>, then your maven command 
+ would be
  
 +------+
 mvn archetype:create                                                    \
