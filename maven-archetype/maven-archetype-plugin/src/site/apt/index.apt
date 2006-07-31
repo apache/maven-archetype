@@ -18,46 +18,47 @@ Maven 2 Archetype Plugin
  Upon writing this documentation, there are ten (10) available archetype 
  containers provided by maven These are:
  
-   * maven-archetype-archetype
+   * <<<maven-archetype-archetype>>>
    
-   * maven-archetype-j2ee-simple
+   * <<<maven-archetype-j2ee-simple>>>
    
-   * maven-archetype-mojo
+   * <<<maven-archetype-mojo>>>
    
-   * maven-archetype-portlet
+   * <<<maven-archetype-portlet>>>
    
-   * maven-archetype-profiles (<work in progress>)
+   * <<<maven-archetype-profiles>>> (<currently under development>)
    
-   * maven-archetype-quickstart
+   * <<<maven-archetype-quickstart>>>
    
-   * maven-archetype-simple (<work in progress>)
+   * <<<maven-archetype-simple>>> (<currently under development>)
    
-   * maven-archetype-site
+   * <<<maven-archetype-site>>>
    
-   * maven-archetype-site-simple, and 
+   * <<<maven-archetype-site-simple>>>, and 
    
-   * maven-archetype-webapp
+   * <<<maven-archetype-webapp>>>
 
 * Goals Overview
 
    The Archetype Plugin has two goals:
 
    * {{{create-mojo.html}archetype:create}} looks for an achetype with a given 
-     groupId, artifactId, and version and retrieves it from the remote 
-     repository. Once the archetype is retrieve it is process against a st of 
-     user parameters to create a working Maven project.
+     <<<groupId>>>, <<<artifactId>>>, and <<<version>>> and retrieves it from 
+     the remote repository. Once the archetype is retrieved, it is then 
+     processed against a set of user parameters to create a working Maven 
+     project.
 
    * {{{create-from-project-mojo.html}archetype:create-from-project}} creates an
      archetype from an existing Maven projecct.
 
 * Usage
 
-   Instructions on how to use the Resources Plugin can be found 
+   Instructions on how to use the Archetype Plugin can be found 
    {{{usage.html}here}}.
 
 * Examples
 
-   The following examples show how to use the Javadoc Plugin in more advanced 
+   The following examples show how to use the Archetype Plugin in more advanced 
    usecases:
 
    * {{{examples/remote-repositories.html}Specifying the Remote Repositories}}

@@ -9,8 +9,8 @@
 Creating a simple j2ee Project
  
  Creating the directory structure of a J2EE project can be tedious. However, if
- you would use maven-archetype-j2ee-simple, the usual directories for a j2ee 
- project would be provided for you.
+ you would use <<<maven-archetype-j2ee-simple>>>, the usual directories for a 
+ j2ee project would be provided for you.
  
 +------+
 mvn archetype:create 
@@ -19,7 +19,7 @@ mvn archetype:create
   -DarchetypeArtifactId=maven-archetype-j2ee-simple
 +------+
 
- This would then create a maven proect.
+ This would then create a maven project.
 
 +------+
 .

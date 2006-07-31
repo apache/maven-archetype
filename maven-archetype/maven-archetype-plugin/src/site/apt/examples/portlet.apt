@@ -8,8 +8,8 @@
  
 Creating a portlet
  
- Use maven-archetype-webapp to start a simple webapp maven project. The command
- is as follows"
+ Use <<<maven-archetype-webapp>>> to start a simple webapp maven project. The 
+ command is as follows
  
 +------+
 mvn archetype:create 
@@ -18,7 +18,7 @@ mvn archetype:create
   -DarchetypeArtifactId=maven-archetype-portlet
 +------+
 
- This would then create a maven proect.
+ This would then create a maven project.
 
 +------+
 .
