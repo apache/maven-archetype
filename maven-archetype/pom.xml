@@ -29,6 +29,22 @@
       </dependency>      
     </dependencies>
   </dependencyManagement>
+  <build>                                                                                                                                            
+    <plugins>                                                                                                                                        
+      <plugin>                                                                                                                                       
+        <groupId>org.codehaus.plexus</groupId>                                                                                                       
+        <artifactId>plexus-maven-plugin</artifactId>                                                                                                 
+        <version>1.1</version>                                                                                                                       
+        <executions>                                                                                                                                 
+          <execution>                                                                                                                                
+            <goals>                                                                                                                                  
+              <goal>descriptor</goal>                                                                                                                
+            </goals>                                                                                                                                 
+          </execution>                                                                                                                               
+        </executions>                                                                                                                                
+      </plugin>                                                                                                                                      
+    </plugins>                                                                                                                                       
+  </build>       
   <modules>
     <module>maven-archetype-core</module>
     <module>maven-archetype-creator</module>    

@@ -19,18 +19,16 @@ package org.apache.maven.archetype;
 import org.apache.maven.archetype.descriptor.ArchetypeDescriptor;
 import org.apache.maven.archetype.descriptor.ArchetypeDescriptorBuilder;
 import org.apache.maven.archetype.descriptor.TemplateDescriptor;
-import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
-import org.apache.maven.artifact.resolver.ArtifactResolutionException;
-import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Parent;
 import org.apache.maven.model.Resource;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
+import org.apache.maven.shared.downloader.DownloadException;
+import org.apache.maven.shared.downloader.DownloadNotFoundException;
+import org.apache.maven.shared.downloader.Downloader;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.context.Context;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -66,6 +64,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * @plexus.component
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  * @version $Id$
  */
@@ -85,42 +84,50 @@ public class DefaultArchetype
     // Components
     // ----------------------------------------------------------------------
 
+    /**
+     * @plexus.requirement
+     */
     private VelocityComponent velocity;
 
-    private ArtifactResolver artifactResolver;
+    /**
+     * @plexus.requirement
+     */
+    private Downloader downloader;
 
     // ----------------------------------------------------------------------
     // Implementation
     // ----------------------------------------------------------------------
 
-    private ArtifactFactory artifactFactory;
-
     // groupId = maven
     // artifactId = maven-foo-archetype
     // version = latest
 
-    public void createArchetype( String archetypeGroupId, String archetypeArtifactId, String archetypeVersion,
-                                 ArtifactRepository localRepository, List remoteRepositories, Map parameters )
+    public void createArchetype( String archetypeGroupId,
+                                 String archetypeArtifactId,
+                                 String archetypeVersion,
+                                 ArtifactRepository localRepository,
+                                 List remoteRepositories,
+                                 Map parameters )
         throws ArchetypeNotFoundException, ArchetypeDescriptorException, ArchetypeTemplateProcessingException
     {
         // ----------------------------------------------------------------------
         // Download the archetype
         // ----------------------------------------------------------------------
 
-        Artifact archetypeArtifact = artifactFactory.createArtifact( archetypeGroupId, archetypeArtifactId,
-                                                                     archetypeVersion, Artifact.SCOPE_RUNTIME, "jar" );
+        File archetype;
 
         try
         {
-            artifactResolver.resolve( archetypeArtifact, remoteRepositories, localRepository );
+            archetype = downloader.download( archetypeGroupId, archetypeArtifactId, archetypeVersion, localRepository,
+                                             remoteRepositories );
         }
-        catch ( ArtifactResolutionException e )
+        catch ( DownloadException e )
         {
-            throw new ArchetypeDescriptorException( "Error attempting to download archetype: " + e.getMessage(), e );
+            throw new ArchetypeDescriptorException( "Error attempting to download archetype.", e );
         }
-        catch ( ArtifactNotFoundException e )
+        catch ( DownloadNotFoundException e )
         {
-            throw new ArchetypeNotFoundException( "Archetype does not exist: " + e.getMessage(), e );
+            throw new ArchetypeNotFoundException( "Archetype does not exist.", e );
         }
 
         // ---------------------------------------------------------------------
@@ -170,7 +177,7 @@ public class DefaultArchetype
         {
             URL[] urls = new URL[1];
 
-            urls[0] = archetypeArtifact.getFile().toURL();
+            urls[0] = archetype.toURL();
 
             archetypeJarLoader = new URLClassLoader( urls );
 
@@ -400,7 +407,9 @@ public class DefaultArchetype
 
     }
 
-    static boolean addModuleToParentPom( String artifactId, Reader fileReader, Writer fileWriter )
+    static boolean addModuleToParentPom( String artifactId,
+                                         Reader fileReader,
+                                         Writer fileWriter )
         throws DocumentException, IOException, ArchetypeTemplateProcessingException
     {
         SAXReader reader = new SAXReader();
@@ -466,8 +475,12 @@ public class DefaultArchetype
         return !found;
     }
 
-    private void processTemplates( File pomFile, String outputDirectory, Context context,
-                                   ArchetypeDescriptor descriptor, String packageName, Model parentModel )
+    private void processTemplates( File pomFile,
+                                   String outputDirectory,
+                                   Context context,
+                                   ArchetypeDescriptor descriptor,
+                                   String packageName,
+                                   Model parentModel )
         throws ArchetypeTemplateProcessingException
     {
         if ( !pomFile.exists() )
@@ -723,14 +736,19 @@ public class DefaultArchetype
         }
     }
 
-    private void processTemplate( String outputDirectory, Context context, String template,
-                                  TemplateDescriptor descriptor, boolean packageInFileName, String packageName )
+    private void processTemplate( String outputDirectory,
+                                  Context context,
+                                  String template,
+                                  TemplateDescriptor descriptor,
+                                  boolean packageInFileName,
+                                  String packageName )
         throws ArchetypeTemplateProcessingException
     {
         processTemplate( outputDirectory, context, template, descriptor, packageInFileName, packageName, null );
     }
 
-    private String getOutputDirectory( String outputDirectory, String testResourceDirectory )
+    private String getOutputDirectory( String outputDirectory,
+                                       String testResourceDirectory )
     {
         return outputDirectory +
             ( testResourceDirectory.startsWith( "/" ) ? testResourceDirectory : "/" + testResourceDirectory );
@@ -740,8 +758,11 @@ public class DefaultArchetype
     //
     // ----------------------------------------------------------------------
 
-    protected void processSources( String outputDirectory, Context context, ArchetypeDescriptor descriptor,
-                                   String packageName, String sourceDirectory )
+    protected void processSources( String outputDirectory,
+                                   Context context,
+                                   ArchetypeDescriptor descriptor,
+                                   String packageName,
+                                   String sourceDirectory )
         throws ArchetypeTemplateProcessingException
     {
         for ( Iterator i = descriptor.getSources().iterator(); i.hasNext(); )
@@ -753,8 +774,11 @@ public class DefaultArchetype
         }
     }
 
-    protected void processTestSources( String outputDirectory, Context context, ArchetypeDescriptor descriptor,
-                                       String packageName, String testSourceDirectory )
+    protected void processTestSources( String outputDirectory,
+                                       Context context,
+                                       ArchetypeDescriptor descriptor,
+                                       String packageName,
+                                       String testSourceDirectory )
         throws ArchetypeTemplateProcessingException
     {
         for ( Iterator i = descriptor.getTestSources().iterator(); i.hasNext(); )
@@ -766,7 +790,9 @@ public class DefaultArchetype
         }
     }
 
-    protected void processResources( String outputDirectory, Context context, ArchetypeDescriptor descriptor,
+    protected void processResources( String outputDirectory,
+                                     Context context,
+                                     ArchetypeDescriptor descriptor,
                                      String packageName )
         throws ArchetypeTemplateProcessingException
     {
@@ -779,7 +805,9 @@ public class DefaultArchetype
         }
     }
 
-    protected void processTestResources( String outputDirectory, Context context, ArchetypeDescriptor descriptor,
+    protected void processTestResources( String outputDirectory,
+                                         Context context,
+                                         ArchetypeDescriptor descriptor,
                                          String packageName )
         throws ArchetypeTemplateProcessingException
     {
@@ -792,7 +820,9 @@ public class DefaultArchetype
         }
     }
 
-    protected void processSiteResources( String outputDirectory, Context context, ArchetypeDescriptor descriptor,
+    protected void processSiteResources( String outputDirectory,
+                                         Context context,
+                                         ArchetypeDescriptor descriptor,
                                          String packageName )
         throws ArchetypeTemplateProcessingException
     {
@@ -805,8 +835,12 @@ public class DefaultArchetype
         }
     }
 
-    protected void processTemplate( String outputDirectory, Context context, String template,
-                                    TemplateDescriptor descriptor, boolean packageInFileName, String packageName,
+    protected void processTemplate( String outputDirectory,
+                                    Context context,
+                                    String template,
+                                    TemplateDescriptor descriptor,
+                                    boolean packageInFileName,
+                                    String packageName,
                                     String sourceDirectory )
         throws ArchetypeTemplateProcessingException
     {
@@ -909,7 +943,8 @@ public class DefaultArchetype
     {
     }
 
-    private InputStream getStream( String name, ClassLoader loader )
+    private InputStream getStream( String name,
+                                   ClassLoader loader )
     {
         if ( loader == null )
         {
