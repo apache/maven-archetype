@@ -19,7 +19,7 @@
   <parent>
     <artifactId>maven-archetype-bundles</artifactId>
     <groupId>org.apache.maven.archetypes</groupId>
-    <version>2</version>
+    <version>3-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <description>
@@ -27,5 +27,5 @@
   </description>  
   <artifactId>maven-archetype-j2ee-simple</artifactId>
   <name>Maven Simple J2EE Archetype</name>
-  <version>1.0</version>
+  <version>1.1-SNAPSHOT</version>
 </project>

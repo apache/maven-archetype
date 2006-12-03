@@ -7,7 +7,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.maven.archetypes</groupId>
   <artifactId>maven-archetype-bundles</artifactId>
-  <version>2</version>
+  <version>3-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Maven Archetypes</name>
   <modules>
@@ -23,10 +23,4 @@
     <module>maven-archetype-plugin</module>
     <module>maven-archetype-plugin-site</module>    
   </modules>
-
-  <scm>
-    <connection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/tags/maven-archetype-bundles-2</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/tags/maven-archetype-bundles-2</developerConnection>
-    <url>https://svn.apache.org/repos/asf/maven/archetype/tags/maven-archetype-bundles-2</url>
-  </scm>
 </project>
