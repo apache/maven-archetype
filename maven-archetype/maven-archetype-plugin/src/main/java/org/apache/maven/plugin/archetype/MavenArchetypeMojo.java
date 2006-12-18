@@ -155,6 +155,11 @@ public class MavenArchetypeMojo
      */
     private MavenProject project;
 
+    /**
+     * @parameter default-value="${user.dir}"
+     */
+    private String basedir = System.getProperty( "user.dir" );
+
     public void execute()
         throws MojoExecutionException
     {
@@ -175,8 +180,6 @@ public class MavenArchetypeMojo
         {
             groupId = project.getGroupId();
         }
-
-        String basedir = System.getProperty( "user.dir" );
 
         if ( packageName == null )
         {
