@@ -19,15 +19,29 @@
 <project name="Maven Archetype Plugin">
   <bannerLeft>
     <name>Maven Archetype Plugin</name>
-    <src>http://maven.apache.org/images/apache-maven-project.png</src>
+    <src>http://maven.apache.org/images/apache-maven-project-2.png</src>
     <href>http://maven.apache.org/</href>
   </bannerLeft>
   <bannerRight>
-    <src>http://maven.apache.org/images/maven-small.gif</src>
+    <src>http://maven.apache.org/images/maven-logo-2.gif</src>
   </bannerRight>
+  <skin>
+    <groupId>org.apache.maven.skins</groupId>
+    <artifactId>maven-stylus-skin</artifactId>
+  </skin>
+  <publishDate format="dd MMM yyyy" position="left" />
+  <version position="left" />
   <body>
     <links>
-      <item name="Maven 2" href="http://maven.apache.org/maven2/"/>
+      <item name="Apache" href="http://www.apache.org/"/>
+      <item name="Maven 1.x" href="http://maven.apache.org/maven-1.x"/>
+      <item name="Maven 2.x" href="http://maven.apache.org/"/>
+      <item name="Maven 2.x Plugins" href="http://maven.apache.org/plugins/"/>
+      <item name="Continuum" href="http://maven.apache.org/continuum"/>
+      <item name="SCM" href="http://maven.apache.org/scm"/>
+      <item name="Wagon" href="http://maven.apache.org/wagon"/>
+      <item name="JXR" href="http://maven.apache.org/jxr"/>
+      <item name="Doxia" href="http://maven.apache.org/doxia"/>
     </links>
 
     <menu name="Overview">
