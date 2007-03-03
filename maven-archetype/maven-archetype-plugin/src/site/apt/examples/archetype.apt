@@ -92,25 +92,25 @@ Guide to Creating Archetypes
  An optional <<<\<allowPartial\>true\</allowPartial\>>>> tag makes it possible 
  to run the <<<archetype:create>>> even on existing projects. 
 
- The <<<\<sources\>>>>, <<<\<resources\>>>>, <<<\<test-resources\>>>> and 
- <<<\<site-resources\>>>> tags represent the different sections of the project: 
+ The <<<\<sources\>>>>, <<<\<resources\>>>>, <<<\<testResources\>>>> and 
+ <<<\<siteResources\>>>> tags represent the different sections of the project: 
 
  * <<<\<sources\>>>> = <<<src/main/java>>>
 
  * <<<\<resources\>>>> = <<<src/main/resources>>>
 
- * <<<\<test-sources\>>>> = <<<src/test/java>>>
+ * <<<\<testSources\>>>> = <<<src/test/java>>>
 
- * <<<\<test-resources\>>>> = <<<src/test/resources>>>
+ * <<<\<testResources\>>>> = <<<src/test/resources>>>
 
- * <<<\<site-resources\>>>> = <<<src/site>>> 
+ * <<<\<siteResources\>>>> = <<<src/site>>> 
 
  []
 
- <<<\<sources\>>>> and <<<\<test-sources\>>>> can contain <<<\<source\>>>> 
+ <<<\<sources\>>>> and <<<\<testSources\>>>> can contain <<<\<source\>>>> 
  elements that specify a source file. 
 
- <<<\<test-resources\>>>> and <<<\<site-resources\>>>> can contain 
+ <<<\<testResources\>>>> and <<<\<siteResources\>>>> can contain 
  <<<\<resource\>>>> elements that specify a resource file. 
 
  Place other resources such as the ones in the <<<src/main/webapp>>> directory 
