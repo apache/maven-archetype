@@ -116,4 +116,10 @@
       </build>
     </profile>
   </profiles>
+  <distributionManagement>
+    <site>
+      <id>apache.website</id>
+      <url>scp://people.apache.org/www/maven.apache.org/plugins/maven-archetype-plugin</url>
+    </site>
+  </distributionManagement>
 </project>
