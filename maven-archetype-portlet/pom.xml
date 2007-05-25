@@ -31,11 +31,5 @@ under the License.
   </description>
   <artifactId>maven-archetype-portlet</artifactId>
   <name>Maven Portlet Archetype</name>
-  <version>1.0.1</version>
-
-  <scm>
-    <connection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/tags/maven-archetype-portlet-1.0.1</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/tags/maven-archetype-portlet-1.0.1</developerConnection>
-    <url>https://svn.apache.org/repos/asf/maven/archetype/tags/maven-archetype-portlet-1.0.1</url>
-  </scm>
+  <version>1.0.2-SNAPSHOT</version>
 </project>
