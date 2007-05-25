@@ -33,5 +33,5 @@ under the License.
   </description>
   <artifactId>maven-archetype-portlet</artifactId>
   <name>Maven Portlet Archetype</name>
-  <version>1.1-SNAPSHOT</version>
+  <version>1.0.1-SNAPSHOT</version>
 </project>
