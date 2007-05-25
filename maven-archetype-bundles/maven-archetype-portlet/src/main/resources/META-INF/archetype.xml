@@ -1,0 +1,15 @@
+<archetype>
+  <id>webapp</id>
+  <sources>
+    <source>src/main/java/MyPortlet.java</source>
+  </sources>
+  <resources>
+    <resource>src/main/jetspeed/web.xml</resource>
+    <resource>src/main/webapp/normal.jsp</resource>
+    <resource>src/main/webapp/maximized.jsp</resource>
+    <resource>src/main/webapp/help.jsp</resource>
+    <resource>src/main/webapp/WEB-INF/web.xml</resource>
+    <resource>src/main/webapp/WEB-INF/portlet.xml</resource>
+    <resource filtered="false">src/main/webapp/WEB-INF/tld/portlet.tld</resource>
+  </resources>
+</archetype>

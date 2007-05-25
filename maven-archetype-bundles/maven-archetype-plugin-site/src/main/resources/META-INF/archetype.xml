@@ -1,0 +1,10 @@
+<archetype>
+  <id>plugin</id>
+  <allowPartial>true</allowPartial>
+  <siteResources>
+    <resource>src/site/site.xml</resource>
+    <resource>src/site/apt/index.apt</resource>
+    <resource>src/site/apt/usage.apt</resource>
+    <resource>src/site/apt/examples/example.apt</resource>
+  </siteResources>
+</archetype>
