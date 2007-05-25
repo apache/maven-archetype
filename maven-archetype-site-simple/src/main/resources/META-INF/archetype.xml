@@ -1,8 +1,0 @@
-<archetype>
-  <id>plugin</id>
-  <allowPartial>true</allowPartial>
-  <siteResources>
-    <resource>src/site/site.xml</resource>
-    <resource>src/site/apt/index.apt</resource>
-  </siteResources>
-</archetype>
