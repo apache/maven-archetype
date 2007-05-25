@@ -28,7 +28,7 @@ under the License.
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.maven.archetypes</groupId>
   <artifactId>maven-archetype-bundles</artifactId>
-  <version>3</version>
+  <version>4-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Maven Archetypes</name>
   <modules>
@@ -44,10 +44,4 @@ under the License.
     <module>maven-archetype-plugin</module>
     <module>maven-archetype-plugin-site</module>    
   </modules>
-
-  <scm>
-    <connection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/tags/maven-archetype-bundles-3</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/tags/maven-archetype-bundles-3</developerConnection>
-    <url>https://svn.apache.org/repos/asf/maven/archetype/tags/maven-archetype-bundles-3</url>
-  </scm>
 </project>
