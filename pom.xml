@@ -47,6 +47,7 @@ under the License.
           <artifactId>maven-release-plugin</artifactId>
           <configuration>
             <tagBase>https://svn.apache.org/repos/asf/maven/archetype/tags</tagBase>
+            <arguments>-N -Prelease</arguments>
           </configuration>
         </plugin>
       </plugins>
