@@ -67,7 +67,17 @@ under the License.
         </executions>                                                                                                                                
       </plugin>                                                                                                                                      
     </plugins>                                                                                                                                       
-  </build>       
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-release-plugin</artifactId>
+          <configuration>
+            <arguments>-Prelease</arguments>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>               
   <modules>
     <module>maven-archetype-core</module>
     <module>maven-archetype-creator</module>    
