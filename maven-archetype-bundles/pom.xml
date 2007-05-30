@@ -42,6 +42,7 @@ under the License.
     <module>maven-archetype-j2ee-simple</module>
     <module>maven-archetype-portlet</module>
     <module>maven-archetype-plugin</module>
-    <module>maven-archetype-plugin-site</module>    
+    <module>maven-archetype-plugin-site</module> 
+    <module>maven-archetype-profiles</module>    
   </modules>
 </project>
