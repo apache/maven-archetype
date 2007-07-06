@@ -1,0 +1,1 @@
+package org.codehaus.mojo.archetypeng.subfolder2;

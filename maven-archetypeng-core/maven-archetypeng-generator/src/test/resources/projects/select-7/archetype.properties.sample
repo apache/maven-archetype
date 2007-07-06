@@ -1,0 +1,3 @@
+archetype.groupId=org.codehaus.mojo.archetypes
+archetype.artifactId=maven-archetype-test-dont-exist
+archetype.version=1.0

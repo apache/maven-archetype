@@ -1,0 +1,5 @@
+#
+#Tue Jan 23 23:34:16 CET 2007
+archetype.groupId=org.codehaus.mojo.archetypes
+archetype.artifactId=maven-archetype-test
+archetype.version=1.0

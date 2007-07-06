@@ -1,0 +1,129 @@
+ -----
+ Archetypeng - Design
+ -----
+ The Maven Team
+ -----
+
+Design
+
+    The archetypeng plugin is built upon a stack.
+
+    The top most elements are the {{{mojos.html}mojos}}, among them two are
+    mojos invoking a custom lifecycle on which are binded the inner mojos.
+
+    The inner mojos calls the top most components which perform the algorithm
+    of there task and delegate some task to inner components.
+
+Mojos
+
+    The generate mojo calls select-archetype, configure-generation and
+    generate-archetype in a lifecycle.
+
+    The create mojo calls configure-creation and create-project in a lifecycle.
+
+    The clean mojo performs his task without an inner mojo nor a plexus
+    component.
+
+    The select-archetype mojo is the inner mojo which delegates its task to the
+    ArchetypeSelector plexus component.
+
+    The configure-generation mojo is the inner mojo which delegates its task to
+    the ArchetypeGenerationConfigurator plexus component.
+
+    The generate-project mojo is the inner mojo which delegates its task to the
+    ArchetypeGenerator plexus component.
+
+    The configure-creation mojo is the inner mojo which delegates its task to
+    the ArchetypeCreationConfigurator plexus component.
+
+    The create-archetype mojo is the inner mojo which delegates its task to the
+    ArchetypeCreator plexus component.
+
+Main components
+
+    The main plexus components of the plugin are the components dirrectly called
+    by the mojos.
+
+    They are ArchetypeSelector, ArchetypeGenerationConfigurator,
+    ArchetypeGenerator, ArchetypeCreationConfigurator, ArchetypeCreator.
+
+    The ArchetypeSelector component perform the algorithm of the selection step
+    in the project generation.
+    To performs this task, it uses the ArchetypeArtifactManager,
+    ArchetypeFactory, ArchetypePropertiesManager, ArchetypeRegistryManager,
+    ArchetypeSelectionQueryer components.
+
+    The ArchetypeGenerationConfigurator component performs the algorithm of the
+    configuration step in the project generation.
+    To perform this task, it uses the ArchetypeArtifactManager,
+    ArchetypeFactory, ArchetypeGenerationQueryer, ArchetypePropertiesManager
+    components.
+
+    The ArchetypeGenerator component performs the algorithm of the generation
+    step in the project generation.
+    To perform this task, it uses the ArchetypeArtifactManager,
+    ArchetypeFactory, ArchetypePathResolver, ArchetypePropertiesManager,
+    PomManager, VelocityComponent components.
+
+    The ArchetypeCreationConfigurator component performs the algorithm of the
+    configuration step of the archetype creation.
+    To perfom this task, it uses the ArchetypeCreationQueryer, ArchetypeFactory,
+    ArchetypePropertiesManager, ArchetypeTemplateResolver components.
+
+    The ArchetypeCreator component performs the algorithm of the creation step
+    in the archetype creation.
+    to perfom this task, it uses the ArchetypeFactory, ArchetypePathResolver,
+    ArchetypePropertiesManager, ArchetypeTemplateResolver, PomManager
+    components.
+
+Queryer components
+
+    This kind of component is the one in charge with the interaction with the
+    user during the selection and configuration steps of the generation and
+    during the configuration step of the creation.
+
+    The ArchetypeSelectionQueryer component asks all the questions of the
+    selection step of the generation.
+    It asks to select the group, the archetype, the version and to confirm the
+    selection.
+
+    The ArchetypeGenerationQueryer component asks all the questions of the
+    configuration step of the selection.
+    It asks to provide a value for a property and to confirm the configuration.
+
+    The ArchetypeCreationQueryer component asks all the questions of the
+    configuration step of the creation.
+    Its asks to provide values for the archetype definition (3 questions), to
+    provide values for the common properties (4 questions), to provide the
+    keys and values for a specific property (2 question), if a new specific
+    property is desired and to confirm the configuration.
+
+Common components.
+
+    They are components which provides usefull method helping the main component
+    to perform their tasks.
+
+    The ArchetypeArtifactManager component performs all the interaction with the
+    repositories and gives the descriptor and classloader from which the
+    generation reads the templates.
+
+    ArchetypeFactory component construct the ArchetypeDefinition and the
+    ArchetypeConfiguration objects.
+
+    ArchetypePathResolver component resolves the pathes of the templates in the
+    archetype archive, the pathes of the generated project files.
+
+    ArchetypePropertiesManager component performs the actions which use the
+    archetype.properties file.
+
+    ArchetypeRegistryManager component performs the actions which interact with
+    the registry file (located in ~/.m2/archetype.xml). That file holds the
+    archetypeGroup list.
+
+    ArchetypeTemplateResolver component find the potential templates in a
+    directory, sort the templates in site sources or resources, resolve a common
+    package from a list of sources templates.
+
+    PomManager components perfroms the actions of reading and writing pom files
+    and modify the poms by adding modules, adding parent or merging two poms.
+

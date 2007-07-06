@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project>
+  <body>
+    <links>
+      <item name="Maven" href="http://maven.apache.org/"/>
+    </links>
+
+    <menu name="Documentation">
+      <!--<item name="Xdoc Example" href="xdoc.html"/>-->
+    </menu>
+  </body>
+</project>

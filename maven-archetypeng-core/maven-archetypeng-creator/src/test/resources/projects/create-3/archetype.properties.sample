@@ -1,0 +1,10 @@
+archetype.groupId=org.codehaus.mojo.archetypes
+archetype.artifactId=maven-archetype-test
+archetype.version=1.0
+
+groupId=org.codehaus.mojo.archetypeng.test
+artifactId=test-create-3
+version=1.0-SNAPSHOT
+package=org.apache.archetypeng
+
+someProperty=A String to search for

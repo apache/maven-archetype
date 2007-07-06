@@ -1,0 +1,4 @@
+archetype.groupId=org.codehaus.mojo.archetypes
+archetype.artifactId=maven-archetype-test
+archetype.version=1.0
+groupId=some.group.id
