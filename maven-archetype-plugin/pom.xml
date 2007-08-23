@@ -42,9 +42,9 @@
     </mailingList>
   </mailingLists>
   <scm>
-    <connection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/tags/maven-archetype-1.0-alpha-5/maven-archetype-plugin</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/tags/maven-archetype-1.0-alpha-5/maven-archetype-plugin</developerConnection>
-    <url>https://svn.apache.org/repos/asf/maven/archetype/tags/maven-archetype-1.0-alpha-5/maven-archetype-plugin</url>
+    <connection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/tags/maven-archetype-1.0-alpha-5</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/tags/maven-archetype-1.0-alpha-5</developerConnection>
+    <url>https://svn.apache.org/repos/asf/maven/archetype/tags/maven-archetype-1.0-alpha-5</url>
   </scm>
   <prerequisites>
     <maven>2.0</maven>
