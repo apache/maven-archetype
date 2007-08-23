@@ -8,24 +8,24 @@
   <groupId>org.apache.maven.archetype</groupId>
   <artifactId>maven-archetype</artifactId>
   <packaging>pom</packaging>
-  <version>1.0-alpha-5</version>
+  <version>1.0-SNAPSHOT</version>
   <name>Maven Archetype</name>
   <dependencyManagement>
     <dependencies>
       <dependency>
         <groupId>org.apache.maven.archetype</groupId>
         <artifactId>maven-archetype-model</artifactId>
-        <version>1.0-alpha-5</version>
+        <version>1.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.archetype</groupId>
         <artifactId>maven-archetype-core</artifactId>
-        <version>1.0-alpha-5</version>
+        <version>1.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.archetype</groupId>
         <artifactId>maven-archetype-creator</artifactId>
-        <version>1.0-alpha-5</version>
+        <version>1.0-SNAPSHOT</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -61,10 +61,4 @@
     <module>maven-archetype-plugin</module>
     <module>maven-archetype-model</module>
   </modules>
-
-  <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/archetype/tags/maven-archetype-1.0-alpha-5</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/tags/maven-archetype-1.0-alpha-5</developerConnection>
-    <url>http://svn.apache.org/viewcvs.cgi/maven/archetype/tags/maven-archetype-1.0-alpha-5</url>
-  </scm>
 </project>
