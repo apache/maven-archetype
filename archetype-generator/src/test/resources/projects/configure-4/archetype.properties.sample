@@ -1,0 +1,17 @@
+#
+#Tue Jan 23 23:34:16 CET 2007
+archetype.groupId=archetypes
+archetype.artifactId=basic
+archetype.version=1.0
+groupId=file-value
+artifactId=file-value
+version=file-value
+package=file-value
+property-without-default-4=file-value
+property-without-default-3=file-value
+property-without-default-2=file-value
+property-without-default-1=file-value
+property-with-default-4=file-value
+property-with-default-3=file-value
+property-with-default-2=file-value
+property-with-default-1=file-value

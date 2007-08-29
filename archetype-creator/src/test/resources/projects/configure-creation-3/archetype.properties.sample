@@ -1,0 +1,4 @@
+archetype.groupId=org.apache.maven.archetype
+archetype.artifactId=maven-archetype-test
+archetype.version=1.0
+groupId=some.group.id

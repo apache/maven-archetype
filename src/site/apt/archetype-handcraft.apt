@@ -1,0 +1,328 @@
+ -----
+ Archetypeng - Archetype handcraft
+ -----
+ The Maven Team
+ -----
+
+Handcrafting archetype
+
+* Archetype
+
+    An archetype is a kind of Maven 2 project which defines its packaging to
+    maven-plugin and which follow a particular directory convention.
+
++--
+|-- pom.xml
+`-- src
+    `-- main
+        `-- resources
+            |-- META-INF
+            |   `-- maven
+            |       `-- archetype.xml
+            `-- archetype-resources
+                |-- pom.xml
+                `-- src ...
++--
+
+    There is two kind of archetypes: partial or complete. Complete archetypes
+    are used to generate new Maven 2 project, a class library for example.
+    Partial archetypes are used to add a new functionality to a project's build,
+    the use of the modello plugin for example.
+
+    An archetype defines at least 3 files in its tree.
+
+    * The archetype pom is located at the root of the project.
+      It defines the archetype's groupId, artifactId, version and name.
+
+      The name and version of the archetype are used during the selection step
+      of the generation.
+
+      Here is an example of archetype pom.
+
++--
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <groupId>org.codehaus.mojo.archetypeng.test</groupId>
+  <artifactId>test-start-archetype</artifactId>
+  <packaging>maven-plugin</packaging>
+  <version>1.0-SNAPSHOT</version>
+</project>
++--
+
+    * The archetype descriptor is located in the src/main/resources/META-INF/maven
+      directory and named archetype.xml.
+
+      The descriptor defines the kind of archetype (complete or partial),
+      the archetype properties and the templates.
+
+      Here is an example of archetype descriptor.
+
++--
+<?xml version="1.0" encoding="UTF-8"?>
+<archetype>
+  <name>test-start-archetype</name>
+  <site-group />
+  <required-properties>
+    <required-property>
+      <key>aProperty</key>
+      <default-value>String searched in the sources</default-value>
+    </required-property>
+  </required-properties>
+  <sources-groups>
+    <sources-group>
+      <language>java</language>
+      <templates>
+        <template>App.java</template>
+      </templates>
+    </sources-group>
+  </sources-groups>
+  <test-sources-groups>
+    <test-sources-group>
+      <language>java</language>
+      <templates>
+        <template>AppTest.java</template>
+      </templates>
+    </test-sources-group>
+  </test-sources-groups>
+</archetype>
++--
+
+    * The templates are located in the src/main/resources/archetype-resources
+      directory which is the templates root directory.
+
+      There must be at least one template named pom.xml located at the root of
+      the template directory. This is the generated project's pom.
+
+      The other templates are the sources, resources and site templates.
+
+
+* The descriptor explained
+
+    The archetype descriptor leads the project generation by defining each of
+    the properties used for the template merge. It also defines each of the
+    templates which will be merged with the configured properties to generate
+    the sources of the generated project.
+
+    The archetype.xml file contains the following elements :
+
+    * name: The name of the archetype.
+
++--
+<archetype>
+...
+    <name>test-start-archetype</name>
+...
+</archetype>
++--
+
+    * partial: If the archetype is complete or partial. It is set to true if the
+      archetype is partial. It can be omited and defaults to a complete archetype.
+
++--
+<archetype>
+...
+    <partial>true</partial>
+...
+</archetype>
++--
+
+    * required-properties: The list of the required properties.
+
+      Here is a required property named propertyWithDefaultValue defining a
+      default value containing "the default value". During generation of the
+      archetype, when a template contains this property, it will be replaced by
+      the default value unless it is overrided.
+
++--
+<archetype>
+...
+    <required-properties>
+    ...
+        <required-property>
+            <key>propertyWithDefaultValue</key>
+            <default-value>the default value</default-value>
+        </required-property>
+    ...
+    </required-properties>
+...
+</archetype>
++--
+
+      The default-value element can be omited and that property must be set
+      during the configuration step of the generation.
+
+      The required-properties can be omited if the archetype defines no required
+      properties.
+
+      Archetypes always define four common required properties without defaut
+      values. These common properties are: groupId, artifactId, version and
+      package. The groupId, artifactId and version will be the ones of the
+      generated project. The package will be used in the sources templates.
+
+      All the properties (common and archetype specific) are velocity 
+      properties. The properties must be named without a dot, because velocity
+      uses the dot for getting inner properties. See in the 
+      {{{http://velocity.apache.org/engine/releases/velocity-1.5/vtl-reference-guide.html}VTL}} 
+      guide for more information.
+
+    * sources-groups: The list of the sources templates grouped by language.
+
+      The sources-groups can be omited if the archetype don't have sources.
+
+      Here the extract of the descriptor for a sources group for the c language.
+      The templates of this group uses the ISO-8859-1 encoding. And it also
+      contains one template file named App.c.
+
++--
+<archetype>
+...
+    <sources-groups>
+    ...
+        <sources-group>
+            <language>c</language>
+            <encoding>ISO-8859-1</encoding>
+            <templates>
+            ...
+                <template>App.c</template>
+            ...
+            </templates>
+        </sources-group>
+    ...
+    </sources-groups>
+...
+</archetype>
++--
+
+      A sources-group must define at least one template.
+
+      The language can be omited to default to java.
+
+      The encoding can be omited to default to UTF-8.
+
+      The sources templates files must be located in the directory
+      src/main/{language} from the templates directory.
+
+      A template can be defined in a subdirectory like subfolder/AlternateApp.c.
+
+      The sources files are generated in the with the same name of the template
+      file name. They are generated from the generated project's root directory
+      in the directory src/main/{language}/{package as subdirectories}/{template defined sudirectory}.
+
+      Having the same name as templates, allow to have some xml or properties 
+      files generated using the package as subdirectory replacement.
+
+    * test-sources-groups: The list of the test sources templates grouped by
+      language.
+
+      Test sources groups works the same as the sources groups but differ in
+      that the templates must be located in src/test/{language} from the
+      templates directory and the project's files are generated to
+      src/test/{language}/{package as subdirectories}/{template defined sudirectory}.
+
++--
+<archetype>
+...
+    <test-sources-groups>
+    ...
+        <test-sources-group>
+            <templates>
+            ...
+                <template>AppTest.java</template>
+            ...
+            </templates>
+        </test-sources-group>
+    ...
+    </test-sources-groups>
+...
+</archetype>
++--
+
+    * resources-groups: The list of resources templates grouped by directory.
+
+      The resources-groups can be omited if the archetype don't have resources.
+
+      Here the extract of the descriptor for a resources group for the mdo 
+      directory.
+      The templates of this group uses the default UTF-8 encoding. 
+
++--
+<archetype>
+...
+    <resources-groups>
+    ...
+        <resources-group>
+            <directory>mdo</directory>
+            <templates>
+            ...
+                <template>App.mdo</template>
+            ...
+            </templates>
+        </resources-group>
+    ...
+    </resources-groups>
+...
+</archetype>
++--
+
+      A resources-group must define at least one template.
+
+      The directory can be omited to default to <resources>.
+
+      The encoding can be omited to default to UTF-8.
+
+      The resources templates files must be located in the directory
+      src/main/{directory} from the templates directory.
+
+      A template can be defined in a subdirectory like subfolder/logging.properties.
+
+      The resources files are generated in the with the same name of the template
+      file name. They are generated from the generated project's root directory
+      in the directory src/main/{directory}/{template defined sudirectory}.
+
+    * test-resources-groups: The list of the test resources templates grouped by
+      directory.
+
+      Test resources groups works the same as the resources groups but differ in
+      that the templates must be located in src/test/{directory} from the
+      templates directory and the project's files are generated to
+      src/test/{directory}/{template defined sudirectory}.
+
++--
+<archetype>
+...
+    <test-resources-groups>
+    ...
+        <test-resources-group>
+            <templates>
+            ...
+                <template>AppTest.properties</template>
+            ...
+            </templates>
+        </test-resources-group>
+    ...
+    </test-resources-groups>
+...
+</archetype>
++--
+
+    * site-group: The list of site templates.
+
+      Site group works the same as the resources groups but differ in that the 
+      templates must be located in src/site from the templates directory, that 
+      they dont have a directory and the project's files are generated to 
+      src/site/{template defined sudirectory}.
+
++--
+<archetype>
+...
+    <site-group>
+        <templates>
+        ...
+            <template>site.xml</template>
+            <template>apt/test.apt</template>
+        ...
+        </templates>
+    </site-group>
+...
+</archetype>
++--

@@ -1,0 +1,87 @@
+ -----
+ Archetypeng - Mojos
+ -----
+ The Maven Team
+ -----
+
+Mojos
+
+    The two main mojos of the plugin are:
+
+    * generate which generates a Maven 2 project from an archetype. It wraps up
+      a lifecycle around the three mojos select-archetype, configure-generation
+      and generate-project.
+      For a complete example see {{{generation.html}generation}}.
+
+    * create which creates an archetype from a Maven 2 project. It wraps up a
+      lifecycle around the two mojos configure-creation and create-archetype.
+
+    []
+
+    The other mojos of the plugin are:
+
+    * clean which removes the archetype.properties file used by both the
+      generation of a project and the creation of an archetype.
+
+    * select-archetype performs the first step of the generation.
+
+      It first asks for a plugin group, looks up in the repository for
+      archetypes of that group.
+
+      Then it asks for an archetype, looks up in the repository for versions of
+      that archetype.
+
+      Then is asks for a version and asks for the confirmation of the selection.
+
+      At the end, it stores the selection in the archetype.properties file.
+
+    * configure-generation performs the second step of the generation.
+
+      It first asks values for each of the common properties.
+
+      It then asks values for each of the archtype's properties which don't
+      provide default values.
+
+      It then asks for the confirmation of the configuration.
+
+      At the end, it stores the configuration in the archetype.properties file.
+
+    * generate-project performs the third and last step of the generation.
+
+      It reads the configuration from the property file.
+
+      Then it generates all the project files from the choosen archetype's
+      templates and the configuration.
+
+      The project files are generated in a directory named from the artifactId
+      common property.
+
+    * configure-creation performs the first step of the creation.
+
+      It first asks for the archetype definition (groupId, artifactId, version).
+
+      It then asks for the values of the common properties. It provides 
+      meaningfull defaults.
+
+      It then ask for some specific properties in two questions: first the name 
+      of the property and second the value of that property.
+
+      It the asks for the confirmation of the configuration.
+
+      At the end, it stores the definition and configuration in the 
+      archetype.properties file.
+
+    * create-archetype performs the second and last step of the creation.
+
+      It reads the definition and the configuratino from the property file.
+
+      Then it creates all the templates of the archetype from the project 
+      sources files.
+
+      Then it creates the descriptor of the archetype from the configuration and 
+      the resolved templates.
+
+      The resulting archetype Maven 2 project is created in the 
+      target/generate-sources/archetypeng directory.
+
+    []

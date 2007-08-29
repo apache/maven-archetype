@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<model>
+    <id>archetype-common</id>
+    <name>ArchetypeCommon</name>
+
+    <defaults>
+        <default>
+            <key>package</key>
+            <value>org.apache.maven.archetype.common</value>
+        </default>
+    </defaults>
+
+    <classes>
+
+        <class rootElement="true">
+            <name>Archetype</name>
+            <fields>
+                <field>
+                    <name>GroupId</name>
+                    <type>String</type>
+                </field>
+                <field>
+                    <name>ArtifactId</name>
+                    <type>String</type>
+                </field>
+                <field>
+                    <name>Version</name>
+                    <type>String</type>
+                </field>
+                <field>
+                    <name>Name</name>
+                    <type>String</type>
+                </field>
+                <field>
+                    <name>Prefix</name>
+                    <type>String</type>
+                </field>
+            </fields>
+            <codeSegments>
+                <codeSegment>
+                    <code><![CDATA[
+    public boolean equals( Object o )
+    {
+        if ( this == o )
+        {
+            return true;
+        }
+
+        if ( !( o instanceof Archetype ) )
+        {
+            return false;
+        }
+
+        Archetype a = (Archetype) o;
+
+        if ( !a.getArtifactId().equals( getArtifactId() ) )
+        {
+            return false;
+        }
+        else if ( !a.getGroupId().equals( getGroupId() ) )
+        {
+            return false;
+        }
+        /*
+        else if ( !a.getPrefix().equals( getPrefix() ) )
+        {
+            return false;
+        }
+        else if ( !a.getName().equals( getName() ) )
+        {
+            return false;
+        }*/
+        return true;
+    }
+
+    public int hashCode()
+    {
+        int result = 17;
+        result = 37 * result + getArtifactId().hashCode();
+        result = 37 * result + getGroupId().hashCode();
+        return result;
+    }
+                    ]]></code>
+                </codeSegment>
+            </codeSegments>
+        </class>
+
+        <class>
+            <name>ArchetypeDefinition</name>
+            <fields>
+                <field>
+                    <name>GroupId</name>
+                    <type>String</type>
+                </field>
+                <field>
+                    <name>ArtifactId</name>
+                    <type>String</type>
+                </field>
+                <field>
+                    <name>Version</name>
+                    <type>String</type>
+                </field>
+                <field>
+                    <name>Name</name>
+                    <type>String</type>
+                </field>
+            </fields>
+            <codeSegments>
+                <codeSegment>
+                    <code><![CDATA[
+    public void reset ()
+    {
+        setGroupId ( null );
+        setArtifactId ( null );
+        setVersion ( null );
+    }
+
+    public java.util.Properties toProperties ()
+    {
+        java.util.Properties properties = new java.util.Properties ();
+        properties.setProperty (
+            Constants.ARCHETYPE_GROUP_ID,
+            (org.codehaus.plexus.util.StringUtils.isNotEmpty( getGroupId () ) ? getGroupId () : "" )
+        );
+        properties.setProperty (
+            Constants.ARCHETYPE_ARTIFACT_ID,
+            (org.codehaus.plexus.util.StringUtils.isNotEmpty( getArtifactId () ) ? getArtifactId () : "" )
+        );
+        properties.setProperty (
+            Constants.ARCHETYPE_VERSION,
+            (org.codehaus.plexus.util.StringUtils.isNotEmpty( getVersion () ) ? getVersion () : "" )
+        );
+        return properties;
+    }
+
+    public boolean isArtifactDefined ()
+    {
+        return org.codehaus.plexus.util.StringUtils.isNotEmpty( getArtifactId () );
+    }
+
+    public boolean isDefined ()
+    {
+        return isPartiallyDefined () && isVersionDefined ();
+    }
+
+    public boolean isGroupDefined ()
+    {
+        return org.codehaus.plexus.util.StringUtils.isNotEmpty( getGroupId () );
+    }
+
+    public boolean isPartiallyDefined ()
+    {
+        return isGroupDefined () && isArtifactDefined ();
+    }
+
+    public boolean isVersionDefined ()
+    {
+        return org.codehaus.plexus.util.StringUtils.isNotEmpty( getVersion () );
+    }
+                    ]]></code>
+                </codeSegment>
+            </codeSegments>
+        </class>
+
+        <class>
+            <name>ArchetypeConfiguration</name>
+            <fields>
+                <field>
+                    <name>GroupId</name>
+                    <type>String</type>
+                </field>
+                <field>
+                    <name>ArtifactId</name>
+                    <type>String</type>
+                </field>
+                <field>
+                    <name>Version</name>
+                    <type>String</type>
+                </field>
+                <field>
+                    <name>Name</name>
+                    <type>String</type>
+                </field>
+                <field>
+                    <name>RequiredProperties</name>
+                    <association>
+                        <type>String</type>
+                        <multiplicity>*</multiplicity>
+                    </association>
+                </field>
+            </fields>
+            <codeSegments>
+                <codeSegment>
+                    <code><![CDATA[
+    public void reset ()
+    {
+        properties.clear ();
+    }
+
+    private java.util.Properties properties = new java.util.Properties ();
+
+    public void setProperty ( String requiredProperty, String propertyValue )
+    {
+        properties.setProperty ( requiredProperty, propertyValue );
+    }
+
+    public String getProperty (String property)
+    {
+        return properties.getProperty ( property, null );
+    }
+
+    public java.util.Properties getProperties ()
+    {
+        return properties;
+    }
+
+    public java.util.Properties toProperties ()
+    {
+        java.util.Properties result = new java.util.Properties ();
+        result.putAll ( properties );
+        result.setProperty (
+            Constants.ARCHETYPE_GROUP_ID,
+            (org.codehaus.plexus.util.StringUtils.isNotEmpty( getGroupId () ) ? getGroupId () : "" )
+        );
+        result.setProperty (
+            Constants.ARCHETYPE_ARTIFACT_ID,
+            (org.codehaus.plexus.util.StringUtils.isNotEmpty( getArtifactId () ) ? getArtifactId () : "" )
+        );
+        result.setProperty (
+            Constants.ARCHETYPE_VERSION,
+            (org.codehaus.plexus.util.StringUtils.isNotEmpty( getVersion () ) ? getVersion () : "" )
+        );
+        return result;
+    }
+
+    public boolean isConfigured ()
+    {
+        boolean configured = true;
+
+        java.util.Iterator requiredProperties = getRequiredProperties().iterator();
+        while ( configured && requiredProperties.hasNext () )
+        {
+            String requiredProperty = (String) requiredProperties.next ();
+
+            configured = configured &&
+                org.codehaus.plexus.util.StringUtils.isNotEmpty(
+                    properties.getProperty ( requiredProperty )
+                );
+        }
+
+        return configured;
+    }
+
+    public boolean isConfigured ( String requiredProperties )
+    {
+        return org.codehaus.plexus.util.StringUtils.isNotEmpty (
+                    properties.getProperty ( requiredProperties )
+                );
+    }
+
+    private java.util.Properties defaultProperties = new java.util.Properties ();
+
+    public void setDefaultProperty ( String requiredProperty, String propertyValue )
+    {
+        defaultProperties.setProperty ( requiredProperty, propertyValue );
+    }
+
+    public String getDefaultValue (String requiredProperty)
+    {
+        return defaultProperties.getProperty ( requiredProperty, null );
+    }
+
+    public java.util.Properties getDefaultValues ()
+    {
+        return defaultProperties;
+    }
+                    ]]></code>
+                </codeSegment>
+            </codeSegments>
+        </class>
+        <!--
+        <class>
+            <name>Template</name>
+            <fields>
+                <field>
+                    <name>Directory</name>
+                    <type>String</type>
+                </field>
+                <field>
+                    <name>InnerPath</name>
+                    <type>String</type>
+                </field>
+                <field>
+                    <name>Language</name>
+                    <type>String</type>
+                </field>
+                <field>
+                    <name>Main</name>
+                    <type>boolean</type>
+                </field>
+                <field>
+                    <name>Pom</name>
+                    <type>boolean</type>
+                </field>
+                <field>
+                    <name>Resource</name>
+                    <type>boolean</type>
+                </field>
+                <field>
+                    <name>SiteResource</name>
+                    <type>boolean</type>
+                </field>
+                <field>
+                    <name>Source</name>
+                    <type>boolean</type>
+                </field>
+                <field>
+                    <name>TemplateName</name>
+                    <type>String</type>
+                </field>
+                <field>
+                    <name>TemplatePath</name>
+                    <type>String</type>
+                </field>
+                <field>
+                    <name>Test</name>
+                    <type>boolean</type>
+                </field>
+            </fields>
+            <codeSegments>
+                <codeSegment>
+                    <code><![CDATA[
+        public Template (  String relativePath )
+        throws org.codehaus.mojo.archetypeng.exception.TemplateCreationException
+        {
+            if ( relativePath.equals ( Constants.ARCHETYPE_POM ) )
+            {
+                setTemplatePath ( relativePath );
+                setPom ( true );
+            }
+            else
+            {
+                setTemplatePath ( relativePath );
+
+                String srcLevel =
+                    org.codehaus.plexus.util.StringUtils.prechomp (
+                        relativePath,
+                        Constants.SRC + "/"
+                    );
+
+                String firstLevel =
+                    org.codehaus.plexus.util.StringUtils.getPrechomp (
+                        srcLevel,
+                        "/"
+                    ).replace (
+                        "/",
+                        ""
+                    );
+                String afterFirstLevel = org.codehaus.plexus.util.StringUtils.prechomp (
+                    srcLevel,
+                    "/"
+                );
+                String secondLevel =
+                    org.codehaus.plexus.util.StringUtils.getPrechomp (
+                        afterFirstLevel,
+                        "/"
+                    ).replace (
+                        "/",
+                        ""
+                    );
+                String aftersecondLevel = org.codehaus.plexus.util.StringUtils.prechomp (
+                    afterFirstLevel,
+                    "/"
+                );
+                String afterLevel;
+
+                if ( Constants.MAIN.equals ( firstLevel ) )
+                {
+                    setMain ( true );
+                }
+                else if ( Constants.TEST.equals ( firstLevel ) )
+                {
+                    setTest ( true );
+                }
+                else if ( Constants.SITE.equals ( firstLevel ) )
+                {
+                    setSiteResource ( true );
+                }
+                else
+                {
+                    throw new org.codehaus.mojo.archetypeng.exception.TemplateCreationException (
+                        "Unknown directory " + firstLevel
+                    );
+                }
+
+                if ( isMain () || isTest () )
+                {
+                    if ( Constants.LANGUAGES.contains ( secondLevel ) )
+                    {
+                        setSource ( true );
+                        setLanguage ( secondLevel );
+                    }
+                    else
+                    {
+                        setResource ( true );
+                        setDirectory ( secondLevel );
+                    }
+                    afterLevel = aftersecondLevel;
+                }
+                else
+                { // isSiteResource
+                    afterLevel = afterFirstLevel;
+                }
+
+                if ( org.codehaus.plexus.util.StringUtils.countMatches ( afterLevel, "/" ) > 0 )
+                {
+                    setInnerPath (
+                        org.codehaus.plexus.util.StringUtils.chomp ( afterLevel, "/" )
+                    );
+                    setTemplateName (
+                        org.codehaus.plexus.util.StringUtils.getChomp (
+                            afterLevel,
+                            "/"
+                        ).replace (
+                            "/",
+                            ""
+                        )
+                    );
+                }
+                else
+                {
+                    setInnerPath ( "" );
+                    setTemplateName ( afterLevel );
+                }
+            } // end if
+        }
+
+        public String toString ()
+        {
+            return
+                ( isPom ()
+                    ? "POM"
+                    : ( isMain ()
+                        ? ( "MAIN"
+                            + ( isSource () ? ( "-SOURCE(" + getLanguage () + ")" )
+                                            : ( "-RESOURCE(" + getDirectory () + ")" ) )
+                            + ( "".equals ( getInnerPath () ) ? "" : ( "-" + getInnerPath () ) )
+                            + "-" + getTemplateName () )
+                        : ( isTest ()
+                            ? ( "TEST"
+                                + ( isSource () ? ( "-SOURCE(" + getLanguage () + ")" )
+                                                : ( "-RESOURCE(" + getDirectory () + ")" ) )
+                                + ( "".equals ( getInnerPath () ) ? "" : ( "-" + getInnerPath () ) )
+                                + "-" + getTemplateName () )
+                            : ( "SITE"
+                                + ( "".equals ( getInnerPath () ) ? "" : ( "-" + getInnerPath () ) )
+                                + "-" + getTemplateName () ) ) ) );
+        }
+                    ]]></code>
+                </codeSegment>
+            </codeSegments>
+        </class>
+-->
+    </classes>
+</model>

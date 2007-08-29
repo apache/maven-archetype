@@ -1,0 +1,281 @@
+ -----
+ Archetypeng - Generation
+ -----
+ The Maven Team
+ -----
+
+Generation
+
+    Generating a project from an archetype involves three steps:
+
+    * the selection of the archetype,
+
+    * the configuration of that archetype,
+
+    * the effective generation of the project based on the collected information.
+
+    []
+
+    At the end of these steps, you have a Maven 2 project generated in a
+    defined directory.
+
+    It is possible to use the generation plugin in {{{#Batch}batch}} mode.
+
+* Archetype selection
+
+    During this step, you are successivly prompted to:
+
+    * select the group the archetype belongs to,
+
+    * select the archetype you want to use,
+
+    * select the version of that archetype,
+
+    * confirm the selection.
+
+    []
+
+    A property file containing the archetype definition is written at the end of
+    this step.
+
+    The list of archetypes and versions are retrieved from the Maven
+    repositories. The list of groups is retrieved using default values and a
+    registry file.
+
+* Archetype configuration
+
+    During this step, you are successivly prompted to:
+
+    * define each of the common properties (project's groupId, artifactId,
+      version and packageName),
+
+    * define each of the archetype required properties,
+
+    * confirm the configuration.
+
+    []
+
+    The property file containing the archetype definition is enhanced with the
+    configuration at the end of this step.
+
+* Project generation
+
+    During this step, the plugin generates the project based on the archetype
+    choosen and the configuration defined.
+
+* Example of use
+
+    To generate a project, call <mvn archetypeng:create>.
+
++--
+[rafale@fixe test]$ tree
+.
+
+0 directories, 0 files
++--
+
+    Ensuring an empty directory.
+
++--
+[rafale@fixe test]$ mvn archetypeng:create
+[INFO] Scanning for projects...
+[INFO] Searching repository for plugin with prefix: 'archetypeng'.
+[INFO] artifact org.codehaus.mojo:maven-archetypeng-plugin: checking for updates from central
+[INFO] ----------------------------------------------------------------------------
+[INFO] Building Maven Default Project
+[INFO]    task-segment: [archetypeng:create] (aggregator-style)
+[INFO] ----------------------------------------------------------------------------
+[INFO] Preparing archetypeng:create
+[INFO] [archetypeng:select-archetype]
++--
+
+    The first step of the generation: <select-archetype>
+
++--
+Choose group:
+1: org.apache.maven.archetypes
+2: org.codehaus.mojo.archetypes
+Choose a number:  (1/2): 2
++--
+
+    The <org.codehaus.mojo.archetypes> group is choosen.
+
++--
+[INFO] org.codehaus.mojo.archetypes: checking for updates from central
+Choose archetype:
+1: Starting Archetype (org.codehaus.mojo.archetypes:maven-archetypeng-start)
+2: Archetype Archetype (org.codehaus.mojo.archetypes:maven-archetypeng-archetype)
+3: Plugin Archetype (org.codehaus.mojo.archetypes:maven-archetypeng-maven-plugin)
+4: Site Archetype (org.codehaus.mojo.archetypes:maven-archetypeng-site)
+Choose a number:  (1/2/3/4): 1
++--
+
+    The <Starting Archetype> is choosen
+
++--
+[INFO] org.codehaus.mojo.archetypes.maven-archetypeng-start: checking for updates from central
+Choose version:
+1: 1.0-SNAPSHOT
+Choose a number:  (1): 1
++--
+
+    The <1.0-SNAPSHOT> version is choosen.
+
++--
+Confirm archetype selection:
+org.codehaus.mojo.archetypes/Starting Archetype
+ (Y/N) Y: : Y
++--
+
+    The selection is confirmed.
+
++--
+[INFO] [archetypeng:configure-generation]
++--
+
+    The second step of the generation: <configure-generation>
+
++--
+Define value for groupId: : org.codehaus.mojo.archetypeng.test
+Define value for artifactId: : test-start
+Define value for version: : 1.0-SNAPSHOT
+Define value for package: : org.codehaus.mojo.archetypeng.test.start
++--
+
+    Each of the common properties are answered.
+
++--
+Confirm properties configuration:
+groupId: org.codehaus.mojo.archetypeng.test
+artifactId: test-start
+version: 1.0-SNAPSHOT
+package: org.codehaus.mojo.archetypeng.test.start
+ Y: : Y
++--
+
+    The archetype configuration is confirmed.
+
++--
+[INFO] Setting property: classpath.resource.loader.class => 'org.codehaus.plexus.velocity.ContextClassLoaderResourceLoader'.
+[INFO] Setting property: velocimacro.messages.on => 'false'.
+[INFO] Setting property: resource.loader => 'classpath'.
+[INFO] Setting property: resource.manager.logwhenfound => 'false'.
++--
+
+    The third step loads velocity.
+
++--
+[INFO] [archetypeng:generate-project]
++--
+
+    The third step do the work without any comment.
+
++--
+[INFO] [archetypeng:create]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESSFUL
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 2 minutes 8 seconds
+[INFO] Finished at: Sun Mar 11 22:11:28 CET 2007
+[INFO] Final Memory: 10M/25M
+[INFO] ------------------------------------------------------------------------
++--
+
+    The resuting project is generated in a directory named with the artifactId
+    property answered.
+
++--
+[rafale@fixe test]$ tree
+archetype.properties  test-start/
+[rafale@fixe test]$ tree test-start
+test-start
+|-- pom.xml
+`-- src
+    |-- main
+    |   `-- java
+    |       `-- org
+    |           `-- codehaus
+    |               `-- mojo
+    |                   `-- archetypeng
+    |                       `-- test
+    |                           `-- start
+    |                               `-- App.java
+    `-- test
+        `-- java
+            `-- org
+                `-- codehaus
+                    `-- mojo
+                        `-- archetypeng
+                            `-- test
+                                `-- start
+                                    `-- AppTest.java
+
+17 directories, 3 files
++--
+
+* {Batch} mode
+
+    To enable the batch mode and remove the prompts, just run
+    <mvn archetypeng:generate -B>.
+
+    The batch mode wiil need the same answers as the interactive mode. These
+    answers are provided in a property file named archetype.properties in the
+    execution directory or set using the command line property
+    <-Darchetype.properties=path/to/archetype.properties>.
+
+    Here is an example of archetype.properties file (the one generated by the
+    interactive generation :-)).
+
++--
+[rafale@fixe test]$ cat archetype.properties
+#
+#Sun Mar 11 22:11:28 CET 2007
+archetype.artifactId=maven-archetypeng-start
+archetype.groupId=org.codehaus.mojo.archetypes
+archetype.version=1.0-SNAPSHOT
+groupId=org.codehaus.mojo.archetypeng.test
+artifactId=test-start
+version=1.0-SNAPSHOT
+package=org.codehaus.mojo.archetypeng.test.start
++--
+
+    Here is the plugin execution.
+
++--
+[rafale@fixe test]$ tree
+.
+`-- archetype.properties
+
+0 directories, 1 file
++--
+
+    Ensure the property file exists.
+
++--
+[rafale@fixe test]$ mvn archetypeng:create -B
+[INFO] Scanning for projects...
+[INFO] Searching repository for plugin with prefix: 'archetypeng'.
+[INFO] ----------------------------------------------------------------------------
+[INFO] Building Maven Default Project
+[INFO]    task-segment: [archetypeng:create] (aggregator-style)
+[INFO] ----------------------------------------------------------------------------
+[INFO] Preparing archetypeng:create
+[INFO] [archetypeng:select-archetype]
+[INFO] Archetype selected (org.codehaus.mojo.archetypes:maven-archetypeng-start:1.0-SNAPSHOT)
+[INFO] [archetypeng:configure-generation]
+[INFO] Setting property: classpath.resource.loader.class => 'org.codehaus.plexus.velocity.ContextClassLoaderResourceLoader'.
+[INFO] Setting property: velocimacro.messages.on => 'false'.
+[INFO] Setting property: resource.loader => 'classpath'.
+[INFO] Setting property: resource.manager.logwhenfound => 'false'.
+[INFO] [archetypeng:generate-project]
+[INFO] [archetypeng:create]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESSFUL
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 5 seconds
+[INFO] Finished at: Sun Mar 11 23:07:53 CET 2007
+[INFO] Final Memory: 10M/27M
+[INFO] ------------------------------------------------------------------------
++--
+
+    The project tree is the same as in the interactive mode.

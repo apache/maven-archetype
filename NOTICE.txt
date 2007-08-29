@@ -1,0 +1,3 @@
+We use jchardet jchardet.sourceforge.net for file encoding recognition. 
+jchardet is using Mozilla 1.1 license
+
