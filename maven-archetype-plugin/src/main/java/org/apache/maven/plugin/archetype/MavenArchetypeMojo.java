@@ -156,9 +156,9 @@ public class MavenArchetypeMojo
     private MavenProject project;
 
     /**
-     * @parameter default-value="${user.dir}"
+     * @parameter expression="${basedir}" default-value="${user.dir}"
      */
-    private String basedir = System.getProperty( "user.dir" );
+    private String basedir;
 
     public void execute()
         throws MojoExecutionException
