@@ -36,6 +36,10 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
+ * Adds one or more language directories in the registry.
+ * The registered language directories are used to discriminate
+ * packaging directories from unpackaged ones based on their name
+ * during create-from-project.
  * @author           rafale
  * @requiresProject  false
  * @goal             add-languages
@@ -49,16 +53,23 @@ extends AbstractMojo
     ArchetypeRegistryManager archetypeRegistryManager;
 
     /**
+     * The language directory to add to the registry.
+     *
+     * This option is mutually exclusive with language directories.
      * @parameter  expression="${language}"
      */
     String language;
 
     /**
+     * The language directories to add to the registry: lang1,lang2,...
+     *
+     * This option is mutually exclusive with language directory.
      * @parameter  expression="${languages}"
      */
     String languages;
 
     /**
+     * The location of the registry file.
      * @parameter  expression="${user.home}/.m2/archetype.xml"
      */
     private File archetypeRegistryFile;

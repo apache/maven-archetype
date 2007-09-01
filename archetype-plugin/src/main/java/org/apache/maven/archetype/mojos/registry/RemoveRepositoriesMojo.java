@@ -37,6 +37,8 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
+ * Removes one or more repositories from the registry.
+ * The registered repositories are searched to find archetypes of registered groups.
  * @author           rafale
  * @requiresProject  false
  * @goal             remove-repositories
@@ -50,16 +52,23 @@ extends AbstractMojo
     ArchetypeRegistryManager archetypeRegistryManager;
 
     /**
+     * The repositories to remove from the registry: repo1Id=repo1Url,repo2Id=repo2Url,..
+     *
+     * This option is mutually exclusive with repositoryId.
      * @parameter  expression="${repositories}"
      */
     String repositories;
 
     /**
+     * The Id of the repository to remove from the registry.
+     *
+     * This option is mutually exclusive with repositories
      * @parameter  expression="${repositoryId}"
      */
     String repositoryId;
 
     /**
+     * The location of the registry file.
      * @parameter  expression="${user.home}/.m2/archetype.xml"
      */
     private File archetypeRegistryFile;

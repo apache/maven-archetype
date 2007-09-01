@@ -31,6 +31,10 @@ import java.util.Iterator;
 import org.apache.maven.archetype.registry.ArchetypeRegistry;
 
 /**
+ * Show the registered filtered extensions.
+ * The registered filtered extensions are used to discriminate
+ * text files from binary files based on their file extension
+ * during create-from-project.
  * @author           rafale
  * @requiresProject  false
  * @goal             show-extensions
@@ -44,6 +48,7 @@ extends AbstractMojo
     ArchetypeRegistryManager archetypeRegistryManager;
 
     /**
+     * The location of the registry file.
      * @parameter  expression="${user.home}/.m2/archetype.xml"
      */
     private File archetypeRegistryFile;

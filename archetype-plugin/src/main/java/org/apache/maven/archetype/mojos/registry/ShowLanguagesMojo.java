@@ -31,6 +31,10 @@ import java.util.Iterator;
 import org.apache.maven.archetype.registry.ArchetypeRegistry;
 
 /**
+ * Show the registered language directories.
+ * The registered language directories are used to discriminate
+ * packaging directories from unpackaged ones based on their name
+ * during create-from-project.
  * @author           rafale
  * @requiresProject  false
  * @goal             show-languages
@@ -44,6 +48,7 @@ extends AbstractMojo
     ArchetypeRegistryManager archetypeRegistryManager;
 
     /**
+     * The location of the registry file.
      * @parameter  expression="${user.home}/.m2/archetype.xml"
      */
     private File archetypeRegistryFile;

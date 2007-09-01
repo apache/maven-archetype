@@ -31,13 +31,15 @@ under the License.
     </parent>
 
     <groupId>org.apache.maven.plugins</groupId>
-    <!-- TODO: The purpose is to call mvn archetypeng:*
-               w/out the need to add a plugin group in settings -->
+    <!--  The purpose is to call mvn archetypeng:*
+          w/out the need to add a plugin group in settings -->
     <artifactId>maven-archetypeng-plugin</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <name>Maven ArchetypeNG Plugin</name>
     <packaging>maven-plugin</packaging>
+
+    <prerequisites><maven>2.0.7</maven></prerequisites>
 
     <dependencies>
         <dependency>

@@ -36,6 +36,10 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
+ * Adds one or more filtered extensions in the registry.
+ * The registered filtered extensions are used to discriminate
+ * text files from binary files based on their file extension
+ * during create-from-project.
  * @author           rafale
  * @requiresProject  false
  * @goal             add-extensions
@@ -49,16 +53,23 @@ extends AbstractMojo
     ArchetypeRegistryManager archetypeRegistryManager;
 
     /**
+     * The filtered extension to add to the registry.
+     *
+     * This option is mutually exclusive with extensions.
      * @parameter  expression="${extension}"
      */
     String extension;
 
     /**
+     * The filtered extensions to add to the registry: ext1,ext2,...
+     *
+     * This option is mutually exclusive with extension.
      * @parameter  expression="${extensions}"
      */
     String extensions;
 
     /**
+     * The location of the registry file.
      * @parameter  expression="${user.home}/.m2/archetype.xml"
      */
     private File archetypeRegistryFile;

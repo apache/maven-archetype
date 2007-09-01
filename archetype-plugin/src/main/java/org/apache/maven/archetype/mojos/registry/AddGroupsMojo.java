@@ -59,7 +59,7 @@ extends AbstractMojo
     String group;
 
     /**
-     * The groups to add to the registry: group1,group2,....
+     * The groups to add to the registry: group1,group2,...
      *
      * This option is mutually exclusive with group.
      * @parameter  expression="${groups}"

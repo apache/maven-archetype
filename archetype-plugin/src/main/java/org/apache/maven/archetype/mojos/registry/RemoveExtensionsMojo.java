@@ -36,6 +36,10 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
+ * Removes one or more filtered extensions from the registry.
+ * The registered filtered extensions are used to discriminate
+ * text files from binary files based on their file extension
+ * during create-from-project.
  * @author           rafale
  * @requiresProject  false
  * @goal             remove-extensions
@@ -49,16 +53,23 @@ extends AbstractMojo
     ArchetypeRegistryManager archetypeRegistryManager;
 
     /**
+     * The filtered extension to remove from the registry.
+     *
+     * This option is mutually exclusive with extensions.
      * @parameter  expression="${extension}"
      */
     String extension;
 
     /**
+     * The filtered extensions to remove from the registry: ext1,ext2,...
+     *
+     * This option is mutually exclusive with extension.
      * @parameter  expression="${extensions}"
      */
     String extensions;
 
     /**
+     * The location of the registry file.
      * @parameter  expression="${user.home}/.m2/archetype.xml"
      */
     private File archetypeRegistryFile;

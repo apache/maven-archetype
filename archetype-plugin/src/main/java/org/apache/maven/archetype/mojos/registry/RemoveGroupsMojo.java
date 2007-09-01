@@ -36,6 +36,8 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
+ * Removes one or more groups from the registry.
+ * The registered repositories are searched to find archetypes of registered groups.
  * @author           rafale
  * @requiresProject  false
  * @goal             remove-groups
@@ -49,16 +51,23 @@ extends AbstractMojo
     ArchetypeRegistryManager archetypeRegistryManager;
 
     /**
+     * The group to remove from the registry.
+     *
+     * This option is mutually exclusive with groups.
      * @parameter  expression="${group}"
      */
     String group;
 
     /**
+     * The groups to remove from the registry: group1,group2,...
+     *
+     * This option is mutually exclusive with group.
      * @parameter  expression="${groups}"
      */
     String groups;
 
     /**
+     * The location of the registry file.
      * @parameter  expression="${user.home}/.m2/archetype.xml"
      */
     private File archetypeRegistryFile;

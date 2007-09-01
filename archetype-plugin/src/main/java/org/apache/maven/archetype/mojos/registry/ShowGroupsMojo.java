@@ -32,6 +32,7 @@ import org.apache.maven.archetype.registry.ArchetypeRegistry;
 
 /**
  * Show the registered groups.
+ * The registered repositories are searched to find archetypes of registered groups.
  * @author           rafale
  * @requiresProject  false
  * @goal             show-groups

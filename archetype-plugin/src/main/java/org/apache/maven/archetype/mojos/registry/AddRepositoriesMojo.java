@@ -52,7 +52,7 @@ extends AbstractMojo
     ArchetypeRegistryManager archetypeRegistryManager;
 
     /**
-     * The repositories to add to the registry: repo1Id=repo1Url,repo2Id=repo2Url,...
+     * The repositories to add to the registry: repo1Id=repo1Url,repo2Id=repo2Url,..
      *
      * This option is mutually exclusive with repositoryId and repositoryUrl.
      * @parameter  expression="${repositories}"
