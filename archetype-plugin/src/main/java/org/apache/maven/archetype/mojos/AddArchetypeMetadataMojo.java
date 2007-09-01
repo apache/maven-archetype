@@ -102,8 +102,8 @@ extends AbstractMojo
     {
         if ( goalPrefix == null )
         {
-//            goalPrefix = PluginDescriptor.getGoalPrefixFromArtifactId( project.getArtifactId() );
-            goalPrefix = "archetypeng";
+//            goalPrefix = PluginDescriptor.getGoalPrefixFromArtifactId( project.getArtifactId () );
+            goalPrefix = project.getArtifactId ();
         }
 
         return goalPrefix;

@@ -145,6 +145,7 @@ implements ArchetypeCreator
         model.setArtifactId ( archetypeDefinition.getArtifactId () );
         model.setVersion ( archetypeDefinition.getVersion () );
         model.setPackaging ( "maven-archetype" );
+        model.setName( archetypeDefinition.getArtifactId () );
 
         Build build = new Build ();
         model.setBuild ( build );
@@ -325,7 +326,7 @@ implements ArchetypeCreator
             "Archetype " + archetypeDescriptor.getId () + " old descriptor written"
         );
 
-        archetypeRegistryManager.addGroup ( archetypeConfiguration.getProperty ( Constants.GROUP_ID ), archetypeRegistryFile );
+        archetypeRegistryManager.addGroup ( archetypeConfiguration.getGroupId(), archetypeRegistryFile );
     }
 
     private void addRequiredProperties (
