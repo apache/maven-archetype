@@ -109,6 +109,7 @@ implements ArchetypeCreator
         List filtereds,
         String defaultEncoding,
         boolean ignoreReplica,
+        boolean preserveCData,
         File archetypeRegistryFile
     )
     throws IOException,
@@ -285,7 +286,8 @@ implements ArchetypeCreator
                     languages,
                     filtereds,
                     defaultEncoding,
-                    ignoreReplica
+                    ignoreReplica,
+                    preserveCData
                 );
 
             archetypeDescriptor.addModule ( moduleDescriptor );
@@ -305,7 +307,8 @@ implements ArchetypeCreator
             pom,
             archetypeFilesDirectory,
             pomReversedProperties,
-            FileUtils.resolveFile ( basedir, Constants.ARCHETYPE_POM )
+            FileUtils.resolveFile ( basedir, Constants.ARCHETYPE_POM ),
+            preserveCData
         );
         getLogger ().debug ( "Created Archetype " + archetypeDescriptor.getId () + " pom" );
 
@@ -326,7 +329,7 @@ implements ArchetypeCreator
             "Archetype " + archetypeDescriptor.getId () + " old descriptor written"
         );
 
-        archetypeRegistryManager.addGroup ( archetypeConfiguration.getGroupId(), archetypeRegistryFile );
+        archetypeRegistryManager.addGroup ( archetypeDefinition.getGroupId (), archetypeRegistryFile );
     }
 
     private void addRequiredProperties (
@@ -558,35 +561,42 @@ implements ArchetypeCreator
         Model pom,
         File archetypeFilesDirectory,
         Properties pomReversedProperties,
-        File initialPomFile
+        File initialPomFile,
+        boolean preserveCData
     )
     throws IOException
     {
-//        pom.setParent ( null );
-//        pom.setModules ( null );
-//        pom.setGroupId ( "${" + Constants.GROUP_ID + "}" );
-//        pom.setArtifactId ( "${" + Constants.ARTIFACT_ID + "}" );
-//        pom.setVersion ( "${" + Constants.VERSION + "}" );
-
         File outputFile =
             FileUtils.resolveFile ( archetypeFilesDirectory, Constants.ARCHETYPE_POM );
 
-        File inputFile =
-            FileUtils.resolveFile ( archetypeFilesDirectory, Constants.ARCHETYPE_POM + ".tmp" );
+        if ( preserveCData )
+        {
+            getLogger().debug("Preserving CDATA parts of pom");
+            File inputFile =
+                FileUtils.resolveFile ( archetypeFilesDirectory, Constants.ARCHETYPE_POM + ".tmp" );
 
-        FileUtils.copyFile ( initialPomFile, inputFile );
+            FileUtils.copyFile ( initialPomFile, inputFile );
 
-//        pomManager.writePom ( pom, inputFile );
+            String initialcontent = FileUtils.fileRead ( inputFile );
 
-        String initialcontent = FileUtils.fileRead ( inputFile );
+            String content = getReversedContent ( initialcontent, pomReversedProperties );
 
-        String content = getReversedContent ( initialcontent, pomReversedProperties );
+            outputFile.getParentFile ().mkdirs ();
 
-        outputFile.getParentFile ().mkdirs ();
+            FileUtils.fileWrite ( outputFile.getAbsolutePath (), content );
 
-        FileUtils.fileWrite ( outputFile.getAbsolutePath (), content );
+            inputFile.delete ();
+        }
+        else
+        {
+            pom.setParent ( null );
+            pom.setModules ( null );
+            pom.setGroupId ( "${" + Constants.GROUP_ID + "}" );
+            pom.setArtifactId ( "${" + Constants.ARTIFACT_ID + "}" );
+            pom.setVersion ( "${" + Constants.VERSION + "}" );
 
-        inputFile.delete ();
+            pomManager.writePom ( pom, outputFile );
+        }
     }
 
     private FileSet createFileSet (
@@ -709,7 +719,8 @@ implements ArchetypeCreator
         List languages,
         List filtereds,
         String defaultEncoding,
-        boolean ignoreReplica
+        boolean ignoreReplica,
+        boolean preserveCData
     )
     throws IOException, XmlPullParserException
     {
@@ -771,7 +782,8 @@ implements ArchetypeCreator
                     languages,
                     filtereds,
                     defaultEncoding,
-                    ignoreReplica
+                    ignoreReplica,
+                    preserveCData
                 );
 
             archetypeDescriptor.addModule ( moduleDescriptor );
@@ -787,7 +799,8 @@ implements ArchetypeCreator
             pom,
             archetypeFilesDirectory,
             pomReversedProperties,
-            FileUtils.resolveFile ( basedir, Constants.ARCHETYPE_POM )
+            FileUtils.resolveFile ( basedir, Constants.ARCHETYPE_POM ),
+            preserveCData
         );
         getLogger ().debug ( "Created Module " + archetypeDescriptor.getId () + " pom" );
 
@@ -798,35 +811,42 @@ implements ArchetypeCreator
         Model pom,
         File archetypeFilesDirectory,
         Properties pomReversedProperties,
-        File initialPomFile
+        File initialPomFile,
+        boolean preserveCData
     )
     throws IOException
     {
-//        pom.setParent ( null );
-//        pom.setModules ( null );
-//        pom.setGroupId ( "${" + Constants.GROUP_ID + "}" );
-//        pom.setArtifactId ( "${" + Constants.ARTIFACT_ID + "}" );
-//        pom.setVersion ( "${" + Constants.VERSION + "}" );
-
         File outputFile =
             FileUtils.resolveFile ( archetypeFilesDirectory, Constants.ARCHETYPE_POM );
 
-        File inputFile =
-            FileUtils.resolveFile ( archetypeFilesDirectory, Constants.ARCHETYPE_POM + ".tmp" );
+        if ( preserveCData )
+        {
+            getLogger().debug("Preserving CDATA parts of pom");
+            File inputFile =
+                FileUtils.resolveFile ( archetypeFilesDirectory, Constants.ARCHETYPE_POM + ".tmp" );
 
-        FileUtils.copyFile ( initialPomFile, inputFile );
+            FileUtils.copyFile ( initialPomFile, inputFile );
+            String initialcontent = FileUtils.fileRead ( inputFile );
 
-//        pomManager.writePom ( pom, inputFile );
+            String content = getReversedContent ( initialcontent, pomReversedProperties );
 
-        String initialcontent = FileUtils.fileRead ( inputFile );
+            outputFile.getParentFile ().mkdirs ();
 
-        String content = getReversedContent ( initialcontent, pomReversedProperties );
+            FileUtils.fileWrite ( outputFile.getAbsolutePath (), content );
 
-        outputFile.getParentFile ().mkdirs ();
+            inputFile.delete ();
+        }
+        else
+        {
+            pom.setParent ( null );
+            pom.setModules ( null );
+            pom.setGroupId ( "${" + Constants.GROUP_ID + "}" );
+            pom.setArtifactId ( "${" + Constants.ARTIFACT_ID + "}" );
+            pom.setVersion ( "${" + Constants.VERSION + "}" );
 
-        FileUtils.fileWrite ( outputFile.getAbsolutePath (), content );
+            pomManager.writePom ( pom, outputFile );
+        }
 
-        inputFile.delete ();
     }
 
     private void createReplicaFiles ( List filesets, File basedir, File replicaFilesDirectory )

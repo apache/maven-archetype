@@ -74,6 +74,11 @@ extends AbstractMojo
     private boolean ignoreReplica = true;
 
     /**
+     * @parameter  expression="${archetype.preserveCData}"
+     */
+    private boolean preserveCData = false;
+
+    /**
      * @parameter  expression="${project}"
      * @required
      * @readonly
@@ -106,6 +111,7 @@ extends AbstractMojo
                 filtereds,
                 defaultEncoding,
                 ignoreReplica,
+                preserveCData,
                 archetypeRegistryFile
             );
         }

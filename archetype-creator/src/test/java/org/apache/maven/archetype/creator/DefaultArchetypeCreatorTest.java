@@ -105,6 +105,7 @@ extends AbstractMojoTestCase
             filtereds,
             "UTF-8",
             true,
+            false,
             getFile (project, "archetype-registry.xml") 
         );
 

@@ -42,6 +42,7 @@ public interface ArchetypeCreator
         List filtereds,
         String defaultEncoding,
         boolean ignoreReplica,
+        boolean preserveCData,
         File archetypeRegistryFile
     )
     throws IOException,
