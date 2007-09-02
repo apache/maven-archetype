@@ -110,6 +110,7 @@ implements ArchetypeCreator
         String defaultEncoding,
         boolean ignoreReplica,
         boolean preserveCData,
+        boolean partialArchetype,
         File archetypeRegistryFile
     )
     throws IOException,
@@ -204,7 +205,7 @@ implements ArchetypeCreator
         getLogger ().debug (
             "Starting archetype's descriptor " + archetypeDefinition.getArtifactId ()
         );
-        archetypeDescriptor.setPartial ( false );
+        archetypeDescriptor.setPartial ( partialArchetype );
 
         addRequiredProperties ( archetypeDescriptor, properties );
 

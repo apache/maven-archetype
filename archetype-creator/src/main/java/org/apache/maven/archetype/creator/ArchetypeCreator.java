@@ -43,6 +43,7 @@ public interface ArchetypeCreator
         String defaultEncoding,
         boolean ignoreReplica,
         boolean preserveCData,
+        boolean partialArchetype,
         File archetypeRegistryFile
     )
     throws IOException,

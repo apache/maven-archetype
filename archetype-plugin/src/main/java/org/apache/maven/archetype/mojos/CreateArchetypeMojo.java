@@ -79,6 +79,11 @@ extends AbstractMojo
     private boolean preserveCData = false;
 
     /**
+     * @parameter  expression="${archetype.partialArchetype}"
+     */
+    private boolean partialArchetype = false;
+
+    /**
      * @parameter  expression="${project}"
      * @required
      * @readonly
@@ -112,6 +117,7 @@ extends AbstractMojo
                 defaultEncoding,
                 ignoreReplica,
                 preserveCData,
+                partialArchetype,
                 archetypeRegistryFile
             );
         }
