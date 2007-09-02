@@ -598,6 +598,20 @@ implements ArchetypeCreator
 
             pomManager.writePom ( pom, outputFile );
         }
+
+        String initialcontent = FileUtils.fileRead ( initialPomFile );
+        Iterator properties = pomReversedProperties.keySet ().iterator ();
+        while ( properties.hasNext () )
+        {
+            String property = (String) properties.next ();
+
+            if ( initialcontent.indexOf ( "${" + property + "}" ) > 0 )
+            {
+                getLogger ().warn ( "Archetype uses ${" + property +
+                    "} for internal processing, but file " + initialPomFile +
+                    " contains this property already");
+            }
+        }
     }
 
     private FileSet createFileSet (
@@ -848,6 +862,19 @@ implements ArchetypeCreator
             pomManager.writePom ( pom, outputFile );
         }
 
+        String initialcontent = FileUtils.fileRead ( initialPomFile );
+        Iterator properties = pomReversedProperties.keySet ().iterator ();
+        while ( properties.hasNext () )
+        {
+            String property = (String) properties.next ();
+
+            if (initialcontent.indexOf ( "${" + property + "}") > 0 )
+            {
+                getLogger ().warn ( "Archetype uses ${" + property +
+                    "} for internal processing, but file " + initialPomFile +
+                    " contains this property already");
+            }
+        }
     }
 
     private void createReplicaFiles ( List filesets, File basedir, File replicaFilesDirectory )
@@ -1091,6 +1118,20 @@ implements ArchetypeCreator
                     fileEncoding
                 );
 //            String initialcontent = FileUtils.fileRead ( inputFile );
+
+            Iterator properties = reverseProperties.keySet ().iterator ();
+            while ( properties.hasNext () )
+            {
+                String property = (String) properties.next ();
+
+                if ( initialcontent.indexOf ( "${" + property + "}" ) > 0 )
+                {
+                    getLogger ().warn ( "Archetype uses ${" + property +
+                        "} for internal processing, but file " + inputFile +
+                        " contains this property already");
+                }
+            }
+
             String content = getReversedContent ( initialcontent, reverseProperties );
             outputFile.getParentFile ().mkdirs ();
             org.apache.commons.io.IOUtils.write (
