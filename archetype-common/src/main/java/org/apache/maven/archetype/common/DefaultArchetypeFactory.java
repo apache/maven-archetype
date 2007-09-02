@@ -369,6 +369,17 @@ implements ArchetypeFactory
                 + configuration.getProperty ( Constants.PACKAGE )
             );
         }
+        if ( null != properties.getProperty ( Constants.PACKAGE_NAME ) )
+        {
+            configuration.setProperty (
+                Constants.PACKAGE_NAME,
+                properties.getProperty ( Constants.PACKAGE_NAME )
+            );
+            getLogger ().debug (
+                "Setting property " + Constants.PACKAGE_NAME + "="
+                + configuration.getProperty ( Constants.PACKAGE_NAME )
+            );
+        }
 
         return configuration;
     }
