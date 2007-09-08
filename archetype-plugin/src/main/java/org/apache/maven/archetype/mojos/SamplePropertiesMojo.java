@@ -46,6 +46,9 @@ import java.util.List;
 import java.util.Properties;
 
 /**
+ * Creates a sample archetype.properties file using default values taken from the specified
+ * archetype.
+ *
  * @author           rafale
  * @requiresProject  false
  * @goal             sample-properties
@@ -72,7 +75,10 @@ extends AbstractMojo
      * @component
      */
     private ArchetypePropertiesManager archetypePropertiesManager;
+
     /**
+     * The location of the registry file.
+     *
      * @parameter  expression="${user.home}/.m2/archetype.xml"
      */
     private File archetypeRegistryFile;
@@ -87,6 +93,9 @@ extends AbstractMojo
     private ArtifactRepository localRepository;
 
     /**
+     * Remote repositories defined in the project's pom (used only when called from an existing
+     * project).
+     *
      * @parameter  expression="${project.remoteArtifactRepositories}"
      * @required
      * @readonly
@@ -94,6 +103,8 @@ extends AbstractMojo
     private List pomRemoteRepositories;
 
     /**
+     * The property file that holds the plugin configuration, which will be created.
+     *
      * @parameter  default-value="archetype.properties" expression="${archetype.properties}"
      */
     private File propertyFile = null;

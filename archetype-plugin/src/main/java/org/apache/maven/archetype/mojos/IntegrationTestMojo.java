@@ -48,8 +48,9 @@ import java.util.List;
 import java.util.Properties;
 
 /**
+ * Execute the archetype integration tests.
+ *
  * @author           rafale
- * @description
  * @requiresProject  true
  * @goal             integration-test
  */
@@ -62,6 +63,8 @@ extends AbstractMojo
     FilesetArchetypeGenerator filesetGenerator;
 
     /**
+     * The archetype project to execute the integration tests on.
+     *
      * @parameter  expression="${project}"
      * @required
      * @readonly
@@ -69,6 +72,8 @@ extends AbstractMojo
     private MavenProject project;
 
     /**
+     * Skip the integration test.
+     *
      * @parameter  expression="${archetype.test.skip}"
      * @readonly
      */

@@ -26,8 +26,9 @@ import org.apache.maven.plugin.MojoFailureException;
 import java.io.File;
 
 /**
+ * Clean archetype properties file.
+ *
  * @author           rafale
- * @description      Clean archetype properties file.
  * @requiresProject  false
  * @goal             clean
  */
@@ -35,6 +36,8 @@ public class CleanMojo
 extends AbstractMojo
 {
     /**
+     * The property file to delete.
+     *
      * @parameter  default-value="archetype.properties" expression="${archetype.properties}"
      */
     private File propertyFile;

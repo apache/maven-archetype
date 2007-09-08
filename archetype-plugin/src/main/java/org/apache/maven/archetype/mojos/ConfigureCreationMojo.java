@@ -32,8 +32,9 @@ import java.io.File;
 import java.util.List;
 
 /**
+ * Configure archetype's creation properties.
+ *
  * @author           rafale
- * @description      Configure archetype's creation properties.
  * @requiresProject  true
  * @goal             configure-creation
  */
@@ -44,27 +45,36 @@ extends AbstractMojo
      * @component
      */
     ArchetypeRegistryManager archetypeRegistryManager;
+
     /**
      * @component
      */
     ArchetypeCreationConfigurator configurator;
 
     /**
+     * Languages directories which are checked for project's sources main package.
+     *
      * @parameter  expression="${archetype.languages}"
      */
     private String archetypeLanguages;
 
     /**
+     * The location of the registry file.
+     *
      * @parameter  expression="${user.home}/.m2/archetype.xml"
      */
     private File archetypeRegistryFile;
 
     /**
+     * Enable the interactive mode to define the archetype from the project.
+     *
      * @parameter  expression="${interactive}" default-value="false"
      */
     private boolean interactive;
 
     /**
+     * The maven Project to create an archetype from.
+     *
      * @parameter  expression="${project}"
      * @required
      * @readonly
@@ -72,16 +82,18 @@ extends AbstractMojo
     private MavenProject project;
 
     /**
+     * The property file that holds the plugin configuration.
+     *
      * @parameter  default-value="archetype.properties" expression="${archetype.properties}"
      */
     private File propertyFile = null;
 
-    /**
-     * @parameter  expression="${settings}"
-     * @required
-     * @readonly
-     */
-    private Settings settings;
+//    /**
+//     * @parameter  expression="${settings}"
+//     * @required
+//     * @readonly
+//     */
+//    private Settings settings;
 
     public void execute ()
     throws MojoExecutionException, MojoFailureException

@@ -31,8 +31,9 @@ import java.io.File;
 import java.util.List;
 
 /**
+ * Create an archetype from a project.
+ *
  * @author           rafale
- * @description      Create archetype from project.
  * @requiresProject  true
  * @goal             create-archetype
  */
@@ -43,47 +44,65 @@ extends AbstractMojo
      * @component
      */
     ArchetypeRegistryManager archetypeRegistryManager;
+
     /**
      * @component  role-hint="fileset"
      */
     ArchetypeCreator creator;
 
     /**
+     * File extensions which are checked for project's text files (vs binary files).
+     *
      * @parameter  expression="${archetype.filteredExtentions}"
      */
     private String archetypeFilteredExtentions;
 
     /**
+     * Directory names which are checked for project's sources main package.
+     *
      * @parameter  expression="${archetype.languages}"
      */
     private String archetypeLanguages;
 
     /**
+     * The location of the registry file.
+     *
      * @parameter  expression="${user.home}/.m2/archetype.xml"
      */
     private File archetypeRegistryFile;
 
     /**
+     * Velocity templates encoding.
+     *
      * @parameter  default-value="UTF-8" expression="${archetype.encoding}"
      */
     private String defaultEncoding;
 
     /**
+     * Ignore the replica creation.
+     *
      * @parameter  expression="${archetype.ignoreReplica}"
      */
     private boolean ignoreReplica = true;
 
     /**
-     * @parameter  expression="${archetype.preserveCData}"
-     */
-    private boolean preserveCData = false;
-
-    /**
+     * Create a partial archetype.
+     *
      * @parameter  expression="${archetype.partialArchetype}"
      */
     private boolean partialArchetype = false;
 
     /**
+     * Create pom's velocity templates with CDATA preservasion. This uses the String replaceAll
+     * method and risk to have some overly replacement capabilities (beware of '1.0' value).
+     *
+     * @parameter  expression="${archetype.preserveCData}"
+     */
+    private boolean preserveCData = false;
+
+    /**
+     * The maven Project to create an archetype from.
+     *
      * @parameter  expression="${project}"
      * @required
      * @readonly
@@ -91,6 +110,8 @@ extends AbstractMojo
     private MavenProject project;
 
     /**
+     * The property file that holds the plugin configuration.
+     *
      * @parameter  default-value="archetype.properties" expression="${archetype.properties}"
      */
     private File propertyFile = null;

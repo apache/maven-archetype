@@ -31,8 +31,9 @@ import java.io.File;
 import java.util.List;
 
 /**
+ * Generate sample project.
+ *
  * @author           rafale
- * @description      Generate sample project.
  * @requiresProject  false
  * @goal             generate-project
  */
@@ -48,12 +49,17 @@ extends AbstractMojo
      * @component
      */
     ArchetypeGenerator generator;
+
     /**
+     * The location of the registry file.
+     *
      * @parameter  expression="${user.home}/.m2/archetype.xml"
      */
     private File archetypeRegistryFile;
 
     /**
+     * The directory to generate the project in.
+     *
      * @parameter  default-value="${user.dir}"
      */
     private String basedir = System.getProperty ( "user.dir" );
@@ -68,6 +74,9 @@ extends AbstractMojo
     private ArtifactRepository localRepository;
 
     /**
+     * Remote repositories defined in the project's pom (used only when called from an existing
+     * project).
+     *
      * @parameter  expression="${project.remoteArtifactRepositories}"
      * @required
      * @readonly
@@ -75,6 +84,8 @@ extends AbstractMojo
     private List pomRemoteRepositories;
 
     /**
+     * The property file that holds the plugin configuration.
+     *
      * @parameter  default-value="archetype.properties" expression="${archetype.properties}"
      */
     private File propertyFile = null;

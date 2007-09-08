@@ -31,6 +31,7 @@ import org.codehaus.plexus.archiver.jar.JarArchiver;
 import java.io.File;
 
 /**
+ * Create a jar archive from an archetype directory.
  * @author           rafale
  * @goal             jar
  * @phase            package

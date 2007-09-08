@@ -32,8 +32,9 @@ import java.io.File;
 import java.util.List;
 
 /**
+ * Select the archetype to be used.
+ *
  * @author           rafale
- * @description      Select archetype.
  * @requiresProject  false
  * @goal             select-archetype
  */
@@ -44,22 +45,31 @@ extends AbstractMojo
      * @component
      */
     ArchetypeRegistryManager archetypeRegistryManager;
+
     /**
+     * The archetype's artifactId.
+     *
      * @parameter  expression="${archetypeArtifactId}"
      */
     private String archetypeArtifactId;
 
     /**
+     * The archetype's groupId.
+     *
      * @parameter  expression="${archetypeGroupId}"
      */
     private String archetypeGroupId;
 
     /**
+     * The location of the registry file.
+     *
      * @parameter  expression="${user.home}/.m2/archetype.xml"
      */
     private File archetypeRegistryFile;
 
     /**
+     * The archetype's version.
+     *
      * @parameter  expression="${archetypeVersion}"
      */
     private String archetypeVersion;
@@ -74,6 +84,9 @@ extends AbstractMojo
     private ArtifactRepository localRepository;
 
     /**
+     * Remote repositories defined in the project's pom (used only when called from an existing
+     * project).
+     *
      * @parameter  expression="${project.remoteArtifactRepositories}"
      * @required
      * @readonly
@@ -81,6 +94,8 @@ extends AbstractMojo
     private List pomRemoteRepositories;
 
     /**
+     * The property file that holds the plugin configuration.
+     *
      * @parameter  default-value="archetype.properties" expression="${archetype.properties}"
      */
     private File propertyFile = null;
@@ -98,6 +113,8 @@ extends AbstractMojo
     private ArchetypeSelector selector;
 
     /**
+     * User settings use to check the interactiveMode.
+     *
      * @parameter  expression="${settings}"
      * @required
      * @readonly

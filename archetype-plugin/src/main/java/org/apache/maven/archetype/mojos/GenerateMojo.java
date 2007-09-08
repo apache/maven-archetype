@@ -24,8 +24,10 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
 /**
+ * Generates sample project from archetype.
+ * It delegates to the three mojos of the generate lifecycle: select-archetype, configure-generation, generate-project
+ *
  * @author           rafale
- * @description      Generates sample project from archetype.
  * @requiresProject  false
  * @goal             create
  * @execute          phase="generate-sources" lifecycle="generate"
@@ -34,6 +36,7 @@ public class GenerateMojo
 extends AbstractMojo
 {
     /**
+     * dummy parameter used to fulfill the maven-plugin-plugin
      * @parameter
      */
     private String dummy;

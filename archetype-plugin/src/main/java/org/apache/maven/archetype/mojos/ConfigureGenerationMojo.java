@@ -32,8 +32,9 @@ import java.io.File;
 import java.util.List;
 
 /**
+ * Configure archetype's properties.
+ *
  * @author           rafale
- * @description      Configure archetype's properties.
  * @requiresProject  false
  * @goal             configure-generation
  */
@@ -49,7 +50,10 @@ extends AbstractMojo
      * @component
      */
     ArchetypeGenerationConfigurator configurator;
+
     /**
+     * The location of the registry file.
+     *
      * @parameter  expression="${user.home}/.m2/archetype.xml"
      */
     private File archetypeRegistryFile;
@@ -64,6 +68,9 @@ extends AbstractMojo
     private ArtifactRepository localRepository;
 
     /**
+     * Remote repositories defined in the project's pom (used only when called from an existing
+     * project).
+     *
      * @parameter  expression="${project.remoteArtifactRepositories}"
      * @required
      * @readonly
@@ -71,6 +78,8 @@ extends AbstractMojo
     private List pomRemoteRepositories;
 
     /**
+     * The property file that holds the plugin configuration.
+     *
      * @parameter  default-value="archetype.properties" expression="${archetype.properties}"
      */
     private File propertyFile = null;
@@ -83,6 +92,8 @@ extends AbstractMojo
     private String remoteRepositories;
 
     /**
+     * User settings use to check the interactiveMode.
+     *
      * @parameter  expression="${settings}"
      * @required
      * @readonly
