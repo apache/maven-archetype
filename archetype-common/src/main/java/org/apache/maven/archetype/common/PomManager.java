@@ -60,6 +60,6 @@ public interface PomManager
 
     /**
      */
-    void writePom ( Model model, File pomFile )
+    void writePom ( Model model, File pomFile, File initialPomFile )
     throws IOException;
 }

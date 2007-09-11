@@ -27,6 +27,8 @@ package org.apache.maven.archetype.common;
 // - Imported classes and packages -/
 // ---------------------------------/
 
+import org.apache.maven.archetype.common.util.XMLOutputter;
+import org.apache.maven.archetype.common.util.Format;
 import org.apache.maven.model.Activation;
 import org.apache.maven.model.ActivationFile;
 import org.apache.maven.model.ActivationOS;
@@ -78,9 +80,6 @@ import org.jdom.DefaultJDOMFactory;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Text;
-
-import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
 
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;

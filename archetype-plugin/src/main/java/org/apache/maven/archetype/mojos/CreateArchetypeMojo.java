@@ -101,6 +101,14 @@ extends AbstractMojo
     private boolean preserveCData = false;
 
     /**
+     * Poms in archetype are created with their initial parent.
+     * This property is ignored when preserveCData is true.
+     *
+     * @parameter  expression="${archetype.keepParent}"
+     */
+    private boolean keepParent = true;
+
+    /**
      * The maven Project to create an archetype from.
      *
      * @parameter  expression="${project}"
@@ -138,6 +146,7 @@ extends AbstractMojo
                 defaultEncoding,
                 ignoreReplica,
                 preserveCData,
+                keepParent,
                 partialArchetype,
                 archetypeRegistryFile
             );

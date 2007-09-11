@@ -107,6 +107,7 @@ extends AbstractMojoTestCase
             true,
             false,
             false,
+            false,
             getFile (project, "archetype-registry.xml") 
         );
 

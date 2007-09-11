@@ -43,6 +43,7 @@ public interface ArchetypeCreator
         String defaultEncoding,
         boolean ignoreReplica,
         boolean preserveCData,
+        boolean keepParent,
         boolean partialArchetype,
         File archetypeRegistryFile
     )

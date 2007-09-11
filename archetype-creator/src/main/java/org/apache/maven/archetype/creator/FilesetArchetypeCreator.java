@@ -19,17 +19,17 @@
 
 package org.apache.maven.archetype.creator;
 
-import java.io.FileNotFoundException;
 import org.apache.maven.archetype.common.ArchetypeConfiguration;
 import org.apache.maven.archetype.common.ArchetypeDefinition;
 import org.apache.maven.archetype.common.ArchetypeFactory;
 import org.apache.maven.archetype.common.ArchetypeFilesResolver;
 import org.apache.maven.archetype.common.ArchetypePropertiesManager;
+import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 import org.apache.maven.archetype.common.Constants;
-import org.apache.maven.archetype.common.FileCharsetDetector;
-import org.apache.maven.archetype.common.ListScanner;
-import org.apache.maven.archetype.common.PathUtils;
 import org.apache.maven.archetype.common.PomManager;
+import org.apache.maven.archetype.common.util.FileCharsetDetector;
+import org.apache.maven.archetype.common.util.ListScanner;
+import org.apache.maven.archetype.common.util.PathUtils;
 import org.apache.maven.archetype.creator.olddescriptor.OldArchetypeDescriptor;
 import org.apache.maven.archetype.creator.olddescriptor.OldArchetypeDescriptorXpp3Writer;
 import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
@@ -67,8 +67,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import org.apache.maven.archetype.common.ArchetypeRegistryManager;
-import org.apache.maven.archetype.registry.ArchetypeRegistry;
 
 /**
  * @plexus.component  role-hint="fileset"
@@ -110,6 +108,7 @@ implements ArchetypeCreator
         String defaultEncoding,
         boolean ignoreReplica,
         boolean preserveCData,
+        boolean keepParent,
         boolean partialArchetype,
         File archetypeRegistryFile
     )
@@ -168,7 +167,7 @@ implements ArchetypeCreator
 
         File archetypePomFile = FileUtils.resolveFile ( basedir, getArchetypePom () );
         archetypePomFile.getParentFile ().mkdirs ();
-        pomManager.writePom ( model, archetypePomFile );
+        pomManager.writePom ( model, archetypePomFile, archetypePomFile );
 
         File archetypeResourcesDirectory =
             FileUtils.resolveFile ( generatedSourcesDirectory, getTemplateOutputDirectory () );
@@ -288,7 +287,8 @@ implements ArchetypeCreator
                     filtereds,
                     defaultEncoding,
                     ignoreReplica,
-                    preserveCData
+                    preserveCData,
+                    keepParent
                 );
 
             archetypeDescriptor.addModule ( moduleDescriptor );
@@ -309,7 +309,8 @@ implements ArchetypeCreator
             archetypeFilesDirectory,
             pomReversedProperties,
             FileUtils.resolveFile ( basedir, Constants.ARCHETYPE_POM ),
-            preserveCData
+            preserveCData,
+            keepParent
         );
         getLogger ().debug ( "Created Archetype " + archetypeDescriptor.getId () + " pom" );
 
@@ -563,7 +564,8 @@ implements ArchetypeCreator
         File archetypeFilesDirectory,
         Properties pomReversedProperties,
         File initialPomFile,
-        boolean preserveCData
+        boolean preserveCData,
+        boolean keepParent
     )
     throws IOException
     {
@@ -590,13 +592,18 @@ implements ArchetypeCreator
         }
         else
         {
-            pom.setParent ( null );
+            if (!keepParent)
+            {
+                pom.setParent ( null );
+            }
+//TODO: modules should be handled better
             pom.setModules ( null );
             pom.setGroupId ( "${" + Constants.GROUP_ID + "}" );
             pom.setArtifactId ( "${" + Constants.ARTIFACT_ID + "}" );
             pom.setVersion ( "${" + Constants.VERSION + "}" );
-
-            pomManager.writePom ( pom, outputFile );
+//TODO: other behaviour should be enforced -> usage of submodules references in deps and depMan or maybe plugins
+System.err.println("createArchetypePom "+outputFile);
+            pomManager.writePom ( pom, outputFile, initialPomFile );
         }
 
         String initialcontent = FileUtils.fileRead ( initialPomFile );
@@ -735,7 +742,8 @@ implements ArchetypeCreator
         List filtereds,
         String defaultEncoding,
         boolean ignoreReplica,
-        boolean preserveCData
+        boolean preserveCData,
+        boolean keepParent
     )
     throws IOException, XmlPullParserException
     {
@@ -798,7 +806,8 @@ implements ArchetypeCreator
                     filtereds,
                     defaultEncoding,
                     ignoreReplica,
-                    preserveCData
+                    preserveCData,
+                    keepParent
                 );
 
             archetypeDescriptor.addModule ( moduleDescriptor );
@@ -815,7 +824,8 @@ implements ArchetypeCreator
             archetypeFilesDirectory,
             pomReversedProperties,
             FileUtils.resolveFile ( basedir, Constants.ARCHETYPE_POM ),
-            preserveCData
+            preserveCData,
+            keepParent
         );
         getLogger ().debug ( "Created Module " + archetypeDescriptor.getId () + " pom" );
 
@@ -827,7 +837,8 @@ implements ArchetypeCreator
         File archetypeFilesDirectory,
         Properties pomReversedProperties,
         File initialPomFile,
-        boolean preserveCData
+        boolean preserveCData,
+        boolean keepParent
     )
     throws IOException
     {
@@ -853,13 +864,16 @@ implements ArchetypeCreator
         }
         else
         {
-            pom.setParent ( null );
+            if (!keepParent)
+            {
+                pom.setParent ( null );
+            }
             pom.setModules ( null );
             pom.setGroupId ( "${" + Constants.GROUP_ID + "}" );
             pom.setArtifactId ( "${" + Constants.ARTIFACT_ID + "}" );
             pom.setVersion ( "${" + Constants.VERSION + "}" );
 
-            pomManager.writePom ( pom, outputFile );
+            pomManager.writePom ( pom, outputFile, initialPomFile );
         }
 
         String initialcontent = FileUtils.fileRead ( initialPomFile );

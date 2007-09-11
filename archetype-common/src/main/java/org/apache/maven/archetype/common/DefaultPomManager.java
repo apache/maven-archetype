@@ -19,6 +19,7 @@
 
 package org.apache.maven.archetype.common;
 
+import org.apache.maven.archetype.common.util.Format;
 import org.apache.maven.archetype.exception.InvalidPackaging;
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Dependency;
@@ -65,6 +66,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import org.apache.maven.archetype.common.util.FileCharsetDetector;
 
 /**
  * @plexus.component
@@ -180,7 +182,7 @@ implements PomManager
         }
         generatedModel.setParent ( parent );
 
-        writePom ( generatedModel, pom );
+        writePom ( generatedModel, pom, pom );
     }
 
     public void mergePoms ( File pom, File temporaryPom )
@@ -253,7 +255,7 @@ implements PomManager
 ////        model.getReporting ().getReportPluginsAsMap (); // done
 //
 
-        writePom ( model, pom );
+        writePom ( model, pom, pom );
     }
 
     public Model readPom ( final File pomFile )
@@ -287,32 +289,32 @@ implements PomManager
         return model;
     }
 
-    public void writePom ( final Model model, final File pomFile )
+    public void writePom ( final Model model, final File pomFile, final File initialPomFile )
     throws IOException
     {
         InputStream inputStream = null;
         Writer outputStreamWriter = null;
 //        FileCharsetDetector detector = new FileCharsetDetector ( pomFile );
-
+        
         String fileEncoding =
             StringUtils.isEmpty ( model.getModelEncoding () ) ? model.getModelEncoding () : "UTF-8";
 
         try
         {
-            inputStream = new FileInputStream ( pomFile );
+            inputStream = new FileInputStream ( initialPomFile );
 
             SAXBuilder builder = new SAXBuilder ();
             org.jdom.Document doc = builder.build ( inputStream );
             inputStream.close ();
             inputStream = null;
 
+            // The cdata parts of the pom are not preserved from initial to target
             MavenJDOMWriter writer = new MavenJDOMWriter ();
 
             outputStreamWriter =
                 new OutputStreamWriter ( new FileOutputStream ( pomFile ), fileEncoding );
 
-            org.jdom.output.Format form =
-                org.jdom.output.Format.getRawFormat ().setEncoding ( fileEncoding );
+            Format form = Format.getRawFormat ().setEncoding ( fileEncoding );
             writer.write ( model, doc, outputStreamWriter, form );
             outputStreamWriter.close ();
             outputStreamWriter = null;
