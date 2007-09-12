@@ -270,8 +270,6 @@ implements ArchetypeCreator
         {
             String moduleId = (String) modules.next ();
 
-            setArtifactId ( reverseProperties, pomReversedProperties, moduleId );
-
             getLogger ().debug ( "Creating module " + moduleId );
 
             ModuleDescriptor moduleDescriptor =
@@ -757,6 +755,8 @@ System.err.println("createArchetypePom "+outputFile);
         Model pom =
             pomManager.readPom ( FileUtils.resolveFile ( basedir, Constants.ARCHETYPE_POM ) );
 
+        setArtifactId ( reverseProperties, pomReversedProperties, pom.getArtifactId() );
+
         List fileNames = resolveFileNames ( pom, basedir );
 
         List filesets =
@@ -782,14 +782,12 @@ System.err.println("createArchetypePom "+outputFile);
         }
 
         String parentArtifactId = reverseProperties.getProperty ( Constants.PARENT_ARTIFACT_ID );
-        setParentArtifactId ( reverseProperties, pomReversedProperties, moduleId );
+        setParentArtifactId ( reverseProperties, pomReversedProperties, pom.getArtifactId() );
 
         Iterator modules = pom.getModules ().iterator ();
         while ( modules.hasNext () )
         {
             String subModuleId = (String) modules.next ();
-
-            setArtifactId ( reverseProperties, pomReversedProperties, subModuleId );
 
             getLogger ().debug ( "Creating module " + subModuleId );
 
@@ -817,7 +815,7 @@ System.err.println("createArchetypePom "+outputFile);
             );
         }
         restoreParentArtifactId ( reverseProperties, pomReversedProperties, parentArtifactId );
-        restoreArtifactId ( reverseProperties, pomReversedProperties, moduleId );
+        restoreArtifactId ( reverseProperties, pomReversedProperties, pom.getArtifactId() );
 
         createModulePom (
             pom,
@@ -864,12 +862,27 @@ System.err.println("createArchetypePom "+outputFile);
         }
         else
         {
-            if (!keepParent)
+            if (pom.getParent() != null &&
+                pom.getParent().getArtifactId().equals(
+                    pomReversedProperties.getProperty (Constants.PARENT_ARTIFACT_ID))
+            )
             {
-                pom.setParent ( null );
+                pom.getParent().setGroupId (
+                    StringUtils.replace(
+                        pom.getParent ().getGroupId (),
+                        pomReversedProperties.getProperty (Constants.GROUP_ID),
+                        "${" + Constants.GROUP_ID + "}")
+                );
+                pom.getParent().setArtifactId ( "${" + Constants.PARENT_ARTIFACT_ID + "}" );
+                pom.getParent().setVersion ( "${" + Constants.VERSION + "}" );
             }
             pom.setModules ( null );
-            pom.setGroupId ( "${" + Constants.GROUP_ID + "}" );
+            pom.setGroupId (
+                StringUtils.replace(
+                    pom.getGroupId (),
+                    pomReversedProperties.getProperty (Constants.GROUP_ID),
+                    "${" + Constants.GROUP_ID + "}")
+            );
             pom.setArtifactId ( "${" + Constants.ARTIFACT_ID + "}" );
             pom.setVersion ( "${" + Constants.VERSION + "}" );
 
