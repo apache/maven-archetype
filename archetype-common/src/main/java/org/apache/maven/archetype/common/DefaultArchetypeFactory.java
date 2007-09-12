@@ -132,22 +132,22 @@ implements ArchetypeFactory
         getLogger ().debug ( "Adding requiredProperty " + Constants.PACKAGE );
         if ( null
             != properties.getProperty (
-                Constants.PACKAGE,
-                properties.getProperty ( Constants.PACKAGE_NAME, null )
+                Constants.PACKAGE/*,
+                properties.getProperty ( Constants.PACKAGE_NAME, null )*/
             )
         )
         {
             configuration.setProperty (
                 Constants.PACKAGE,
                 properties.getProperty (
-                    Constants.PACKAGE,
-                    properties.getProperty ( Constants.PACKAGE_NAME )
+                    Constants.PACKAGE/*,
+                    properties.getProperty ( Constants.PACKAGE_NAME )*/
                 )
-            );
+            );/*
             getLogger ().debug (
                 "Setting property " + Constants.PACKAGE_NAME + "="
                 + configuration.getProperty ( Constants.PACKAGE_NAME )
-            );
+            );*/
         }
 
         return configuration;
@@ -266,16 +266,16 @@ implements ArchetypeFactory
             getLogger ().debug ( "Adding requiredProperty " + Constants.PACKAGE );
             if ( null
                 != properties.getProperty (
-                    Constants.PACKAGE,
-                    properties.getProperty ( Constants.PACKAGE_NAME, configuration.getDefaultValue ( Constants.PACKAGE_NAME ) )
+                    Constants.PACKAGE, configuration.getDefaultValue ( Constants.PACKAGE ) /*,
+                    properties.getProperty ( Constants.PACKAGE_NAME, configuration.getDefaultValue ( Constants.PACKAGE_NAME ) )*/
                 )
             )
             {
                 configuration.setProperty (
                     Constants.PACKAGE,
                     properties.getProperty (
-                        Constants.PACKAGE,
-                        properties.getProperty ( Constants.PACKAGE_NAME, configuration.getDefaultValue ( Constants.PACKAGE_NAME ) )
+                        Constants.PACKAGE, configuration.getDefaultValue ( Constants.PACKAGE ) /*,
+                        properties.getProperty ( Constants.PACKAGE_NAME, configuration.getDefaultValue ( Constants.PACKAGE_NAME ) )*/
                     )
                 );
                 getLogger ().debug (
@@ -352,16 +352,16 @@ implements ArchetypeFactory
         getLogger ().debug ( "Adding requiredProperty " + Constants.PACKAGE );
         if ( null
             != properties.getProperty (
-                Constants.PACKAGE,
-                properties.getProperty ( Constants.PACKAGE_NAME, null )
+                Constants.PACKAGE/*,
+                properties.getProperty ( Constants.PACKAGE_NAME, null )*/
             )
         )
         {
             configuration.setProperty (
                 Constants.PACKAGE,
                 properties.getProperty (
-                    Constants.PACKAGE,
-                    properties.getProperty ( Constants.PACKAGE_NAME )
+                    Constants.PACKAGE/*,
+                    properties.getProperty ( Constants.PACKAGE_NAME )*/
                 )
             );
             getLogger ().debug (
@@ -369,7 +369,7 @@ implements ArchetypeFactory
                 + configuration.getProperty ( Constants.PACKAGE )
             );
         }
-        if ( null != properties.getProperty ( Constants.PACKAGE_NAME ) )
+        /*if ( null != properties.getProperty ( Constants.PACKAGE_NAME ) )
         {
             configuration.setProperty (
                 Constants.PACKAGE_NAME,
@@ -379,7 +379,7 @@ implements ArchetypeFactory
                 "Setting property " + Constants.PACKAGE_NAME + "="
                 + configuration.getProperty ( Constants.PACKAGE_NAME )
             );
-        }
+        }*/
 
         return configuration;
     }

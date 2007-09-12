@@ -314,8 +314,8 @@ implements ArchetypeCreationConfigurator
 
         if ( StringUtils.isEmpty (
                 properties.getProperty (
-                    Constants.PACKAGE,
-                    properties.getProperty ( Constants.PACKAGE_NAME )
+                    Constants.PACKAGE/*,
+                    properties.getProperty ( Constants.PACKAGE_NAME )*/
                 )
             )
         )
@@ -325,7 +325,7 @@ implements ArchetypeCreationConfigurator
                 resolvedPackage = project.getGroupId ();
             }
             getLogger ().info ( "Setting default package: " + resolvedPackage );
-            properties.setProperty ( Constants.PACKAGE_NAME, resolvedPackage );
+            /*properties.setProperty ( Constants.PACKAGE_NAME, resolvedPackage );*/
             properties.setProperty ( Constants.PACKAGE, resolvedPackage );
         }
 

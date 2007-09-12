@@ -62,7 +62,7 @@ public interface Constants
 
     String PACKAGE = "package";
 
-    String PACKAGE_NAME = "packageName";
+    /*String PACKAGE_NAME = "packageName";*/
 
     String PARENT_ARTIFACT_ID = "parentArtifactId";
 
