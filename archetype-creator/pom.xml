@@ -77,5 +77,11 @@ under the License.
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
         </dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 </project>

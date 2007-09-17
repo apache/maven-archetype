@@ -29,7 +29,7 @@ under the License.
     </defaults>
 
     <!--
-        <archetype id="archetype-artifact-id" partial="true|false" >
+        <archetype name="archetype-artifact-id" partial="true|false" >
            <requiredProperties>
                <requiredProperty key="propKey" >
                    <defaultValue>string to replace</defaultValue>
@@ -47,7 +47,7 @@ under the License.
                </fileSet>
            </fileSets>
            <modules>
-               <module id="module-artifact-id">
+               <module name="module-id" id="module-artifact-id" dir="module-dir">
                    <fileSets/>
                    <modules/>
                </module>
@@ -61,7 +61,7 @@ under the License.
             <superClass>AbstractArchetypeDescriptor</superClass>
             <fields>
                 <field xml.attribute="true" >
-                    <name>id</name>
+                    <name>name</name>
                     <type>String</type>
                     <required>true</required>
                 </field>
@@ -86,6 +86,16 @@ under the License.
             <fields>
                 <field xml.attribute="true" >
                     <name>id</name>
+                    <type>String</type>
+                    <required>true</required>
+                </field>
+                <field xml.attribute="true" >
+                    <name>dir</name>
+                    <type>String</type>
+                    <required>true</required>
+                </field>
+                <field xml.attribute="true" >
+                    <name>name</name>
                     <type>String</type>
                     <required>true</required>
                 </field>

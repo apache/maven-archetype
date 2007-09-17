@@ -277,7 +277,7 @@ implements ArchetypeArtifactManager
             org.apache.maven.archetype.metadata.ArchetypeDescriptor descriptor =
                 loadFileSetArchetypeDescriptor ( archetypeJarLoader );
 
-            return descriptor.getId () != null;
+            return descriptor.getName () != null;
         }
         catch ( XmlPullParserException e )
         {

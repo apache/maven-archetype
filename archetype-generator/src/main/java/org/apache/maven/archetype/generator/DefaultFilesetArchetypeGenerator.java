@@ -141,7 +141,7 @@ implements FilesetArchetypeGenerator
             if ( archetypeDescriptor.isPartial () )
             {
                 getLogger ().debug (
-                    "Procesing partial archetype " + archetypeDescriptor.getId ()
+                    "Procesing partial archetype " + archetypeDescriptor.getName ()
                 );
                 if ( outputDirectoryFile.exists () )
                 {
@@ -203,7 +203,7 @@ implements FilesetArchetypeGenerator
             else
             {
                 getLogger ().debug (
-                    "Processing complete archetype " + archetypeDescriptor.getId ()
+                    "Processing complete archetype " + archetypeDescriptor.getName ()
                 );
                 if ( outputDirectoryFile.exists () )
                 {
@@ -212,6 +212,7 @@ implements FilesetArchetypeGenerator
                 else
                 {
                     processFilesetModule (
+                        artifactId,
                         artifactId,
                         archetypeResources,
                         pom,
@@ -446,6 +447,7 @@ implements FilesetArchetypeGenerator
     }
 
     private void processFilesetModule (
+        String rootArtifactId,
         String artifactId,
         final List archetypeResources,
         File pom,
@@ -469,7 +471,7 @@ implements FilesetArchetypeGenerator
 
         processFilesetProject (
             archetypeDescriptor,
-            artifactId,
+            StringUtils.replace( artifactId, "${rootArtifactId}", rootArtifactId ),
             archetypeResources,
             pom,
             archetypeZipFile,
@@ -487,22 +489,23 @@ implements FilesetArchetypeGenerator
             getLogger ().debug (
                 artifactId + " has modules (" + archetypeDescriptor.getModules () + ")"
             );
-            setParentArtifactId ( context, artifactId );
+            setParentArtifactId ( context, StringUtils.replace( artifactId, "${rootArtifactId}", rootArtifactId ) );
         }
         while ( subprojects.hasNext () )
         {
             ModuleDescriptor project = (ModuleDescriptor) subprojects.next ();
 
-            artifactId = project.getId ();
+            artifactId = project.getId();
 
-            File moduleOutputDirectoryFile = new File ( outputDirectoryFile, artifactId );
-            context.put ( Constants.ARTIFACT_ID, artifactId );
+            File moduleOutputDirectoryFile = new File ( outputDirectoryFile, StringUtils.replace( project.getDir(), "${rootArtifactId}", rootArtifactId ) );
+            context.put ( Constants.ARTIFACT_ID, StringUtils.replace( project.getId(), "${rootArtifactId}", rootArtifactId ) );
             processFilesetModule (
+                rootArtifactId,
                 artifactId,
                 archetypeResources,
                 new File ( moduleOutputDirectoryFile, Constants.ARCHETYPE_POM ),
                 archetypeZipFile,
-                ( StringUtils.isEmpty ( moduleOffset ) ? "" : ( moduleOffset + "/" ) ) + artifactId,
+                ( StringUtils.isEmpty ( moduleOffset ) ? "" : ( moduleOffset + "/" ) ) + StringUtils.replace( project.getDir(), "${rootArtifactId}", rootArtifactId ),
                 pom,
                 moduleOutputDirectoryFile,
                 packageName,
@@ -537,7 +540,6 @@ implements FilesetArchetypeGenerator
         if ( basedirPom.exists () )
         {
             processPomWithParent (
-
                 context,
                 pom,
                 moduleOffset,
@@ -630,12 +632,13 @@ implements FilesetArchetypeGenerator
             true
         );
 
-        if ( StringUtils.isEmpty ( moduleOffset ) )
-        {
+        /*if ( StringUtils.isEmpty ( moduleOffset ) )
+        {*/
             getLogger ().debug ( "Adding module " + artifactId );
+System.err.println ( "Adding module " + artifactId );
             pomManager.addModule ( basedirPom, artifactId );
             pomManager.addParent ( pom, basedirPom );
-        }
+        //}
     }
 
     private void processTemplate (

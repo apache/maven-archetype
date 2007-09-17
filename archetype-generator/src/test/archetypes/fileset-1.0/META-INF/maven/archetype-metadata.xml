@@ -17,7 +17,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
-<archetype-descriptor id="fileset" partial="false" >
+<archetype-descriptor name="fileset" partial="false" >
 
     <requiredProperties>
         <requiredProperty key="property-with-default-1" >
@@ -80,7 +80,7 @@ under the License.
     </fileSets>
 
     <modules>
-        <module id="subproject">
+        <module name="subproject" id="subproject" dir="subproject">
             <fileSets>
                 <fileSet filtered="true" packaged="true" >
                     <directory>src/main/java</directory>
@@ -91,7 +91,7 @@ under the License.
             </fileSets>
 
             <modules>
-                <module id="subsubproject">
+                <module name="subsubproject" id="subsubproject" dir="subsubproject">
                     <fileSets>
                         <fileSet filtered="true" packaged="true" >
                             <directory>src/main/java</directory>

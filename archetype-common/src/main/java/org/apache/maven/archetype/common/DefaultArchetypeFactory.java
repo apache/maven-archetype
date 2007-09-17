@@ -169,7 +169,7 @@ implements ArchetypeFactory
         );
         configuration.setVersion ( properties.getProperty ( Constants.ARCHETYPE_VERSION, null ) );
 
-        configuration.setName ( archetypeDescriptor.getId () );
+        configuration.setName ( archetypeDescriptor.getName () );
 
         Iterator requiredProperties = archetypeDescriptor.getRequiredProperties ().iterator ();
         while ( requiredProperties.hasNext () )

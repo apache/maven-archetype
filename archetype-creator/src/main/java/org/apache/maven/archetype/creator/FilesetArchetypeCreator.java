@@ -19,6 +19,7 @@
 
 package org.apache.maven.archetype.creator;
 
+import java.io.FileNotFoundException;
 import org.apache.maven.archetype.common.ArchetypeConfiguration;
 import org.apache.maven.archetype.common.ArchetypeDefinition;
 import org.apache.maven.archetype.common.ArchetypeFactory;
@@ -67,6 +68,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import org.apache.commons.collections.BidiMap;
+import org.apache.commons.collections.bidimap.DualTreeBidiMap;
 
 /**
  * @plexus.component  role-hint="fileset"
@@ -200,7 +203,7 @@ implements ArchetypeCreator
         archetypeDescriptorFile.getParentFile ().mkdirs ();
 
         ArchetypeDescriptor archetypeDescriptor = new ArchetypeDescriptor ();
-        archetypeDescriptor.setId ( archetypeDefinition.getArtifactId () );
+        archetypeDescriptor.setName ( archetypeDefinition.getArtifactId () );
         getLogger ().debug (
             "Starting archetype's descriptor " + archetypeDefinition.getArtifactId ()
         );
@@ -222,6 +225,8 @@ implements ArchetypeCreator
         Model pom =
             pomManager.readPom ( FileUtils.resolveFile ( basedir, Constants.ARCHETYPE_POM ) );
 
+        registerProject(pom);
+
         List fileNames = resolveFileNames ( pom, basedir );
         getLogger ().debug ( "Scanned for files " + fileNames.size () );
 
@@ -233,7 +238,7 @@ implements ArchetypeCreator
 
         List filesets =
             resolveFileSets ( packageName, fileNames, languages, filtereds, defaultEncoding );
-        getLogger ().debug ( "Resolved filesets for " + archetypeDescriptor.getId () );
+        getLogger ().debug ( "Resolved filesets for " + archetypeDescriptor.getName () );
 
         archetypeDescriptor.setFileSets ( filesets );
 
@@ -245,12 +250,12 @@ implements ArchetypeCreator
             archetypeFilesDirectory,
             defaultEncoding
         );
-        getLogger ().debug ( "Created files for " + archetypeDescriptor.getId () );
+        getLogger ().debug ( "Created files for " + archetypeDescriptor.getName () );
 
         if ( !ignoreReplica )
         {
             createReplicaFiles ( filesets, basedir, replicaFilesDirectory );
-            getLogger ().debug ( "Created replica files for " + archetypeDescriptor.getId () );
+            getLogger ().debug ( "Created replica files for " + archetypeDescriptor.getName () );
 
             FileUtils.copyFile (
                 propertyFile,
@@ -261,7 +266,6 @@ implements ArchetypeCreator
 
         setParentArtifactId (
             reverseProperties,
-            pomReversedProperties,
             archetypeConfiguration.getProperty ( Constants.ARTIFACT_ID )
         );
 
@@ -275,7 +279,7 @@ implements ArchetypeCreator
             ModuleDescriptor moduleDescriptor =
                 createModule (
                     reverseProperties,
-                    pomReversedProperties,
+                    archetypeConfiguration.getProperty ( Constants.ARTIFACT_ID ),
                     moduleId,
                     packageName,
                     FileUtils.resolveFile ( basedir, moduleId ),
@@ -291,33 +295,38 @@ implements ArchetypeCreator
 
             archetypeDescriptor.addModule ( moduleDescriptor );
             getLogger ().debug (
-                "Added module " + moduleDescriptor.getId () + " in "
-                + archetypeDescriptor.getId ()
+                "Added module " + moduleDescriptor.getName () + " in "
+                + archetypeDescriptor.getName ()
             );
         }
-        restoreParentArtifactId ( reverseProperties, pomReversedProperties, null );
+        restoreParentArtifactId ( reverseProperties, null );
         restoreArtifactId (
             reverseProperties,
-            pomReversedProperties,
             archetypeConfiguration.getProperty ( Constants.ARTIFACT_ID )
         );
 
-        createArchetypePom (
-            pom,
-            archetypeFilesDirectory,
-            pomReversedProperties,
-            FileUtils.resolveFile ( basedir, Constants.ARCHETYPE_POM ),
-            preserveCData,
-            keepParent
-        );
-        getLogger ().debug ( "Created Archetype " + archetypeDescriptor.getId () + " pom" );
+        createPoms (pom, archetypeConfiguration.getProperty ( Constants.ARTIFACT_ID ),
+                archetypeFilesDirectory, basedir,
+                pomReversedProperties, preserveCData, keepParent);
+
+//        createArchetypePom (
+//            pom,
+//            archetypeFilesDirectory,
+//            pomReversedProperties,
+//            FileUtils.resolveFile ( basedir, Constants.ARCHETYPE_POM ),
+//            preserveCData,
+//            keepParent
+//        );
+        getLogger ().debug ( "Created Archetype " + archetypeDescriptor.getName () + " pom" );
+
+//getLogger().debug("registeredProjects"+registeredProjects);
 
         ArchetypeDescriptorXpp3Writer writer = new ArchetypeDescriptorXpp3Writer ();
         writer.write ( new FileWriter ( archetypeDescriptorFile ), archetypeDescriptor );
-        getLogger ().debug ( "Archetype " + archetypeDescriptor.getId () + " descriptor written" );
+        getLogger ().debug ( "Archetype " + archetypeDescriptor.getName () + " descriptor written" );
 
         OldArchetypeDescriptor oldDescriptor =
-            convertToOldDescriptor ( archetypeDescriptor.getId (), packageName, basedir );
+            convertToOldDescriptor ( archetypeDescriptor.getName(), packageName, basedir );
         File oldDescriptorFile =
             FileUtils.resolveFile (
                 archetypeResourcesDirectory,
@@ -326,7 +335,7 @@ implements ArchetypeCreator
         archetypeDescriptorFile.getParentFile ().mkdirs ();
         writeOldDescriptor ( oldDescriptor, oldDescriptorFile );
         getLogger ().debug (
-            "Archetype " + archetypeDescriptor.getId () + " old descriptor written"
+            "Archetype " + archetypeDescriptor.getName () + " old descriptor written"
         );
 
         archetypeRegistryManager.addGroup ( archetypeDefinition.getGroupId (), archetypeRegistryFile );
@@ -363,19 +372,99 @@ implements ArchetypeCreator
         }
     }
 
+    private void createModulePoms (
+        Properties pomReversedProperties,
+        String packageName,
+        File basedir,
+        File archetypeFilesDirectory,
+        boolean preserveCData,
+        boolean keepParent ) throws FileNotFoundException, IOException, XmlPullParserException
+    {
+        Model pom =
+            pomManager.readPom ( FileUtils.resolveFile ( basedir, Constants.ARCHETYPE_POM ) );
+
+        String parentArtifactId = pomReversedProperties.getProperty ( Constants.PARENT_ARTIFACT_ID );
+        String artifactId =  pom.getArtifactId();
+        setParentArtifactId ( pomReversedProperties, pomReversedProperties.getProperty ( Constants.ARTIFACT_ID ) );
+        setArtifactId ( pomReversedProperties, pom.getArtifactId() );
+
+        Iterator modules = pom.getModules ().iterator ();
+        while ( modules.hasNext () )
+        {
+            String subModuleId = (String) modules.next ();
+
+                createModulePoms (
+                    pomReversedProperties,
+                    packageName,
+                    FileUtils.resolveFile ( basedir, subModuleId ),
+                    FileUtils.resolveFile ( archetypeFilesDirectory, subModuleId ),
+                    preserveCData,
+                    keepParent
+                );
+        }
+        createModulePom (
+            pom,
+            archetypeFilesDirectory,
+            pomReversedProperties,
+            FileUtils.resolveFile ( basedir, Constants.ARCHETYPE_POM ),
+            preserveCData,
+            keepParent
+        );
+        restoreParentArtifactId ( pomReversedProperties, parentArtifactId );
+        restoreArtifactId ( pomReversedProperties, artifactId );
+    }
+
+    private void createPoms ( Model pom, String artifactId, File archetypeFilesDirectory,
+        File basedir, Properties pomReversedProperties, boolean preserveCData,
+        boolean keepParent ) throws IOException, FileNotFoundException, XmlPullParserException
+    {
+        setArtifactId ( pomReversedProperties, pom.getArtifactId() );
+
+        Iterator modules = pom.getModules().iterator();
+        while ( modules.hasNext () )
+        {
+            String moduleId = (String) modules.next ();
+
+                createModulePoms (
+                    pomReversedProperties,
+                    moduleId,
+                    FileUtils.resolveFile ( basedir, moduleId ),
+                    FileUtils.resolveFile ( archetypeFilesDirectory, moduleId ),
+                    preserveCData,
+                    keepParent
+                );
+        }
+        restoreParentArtifactId ( pomReversedProperties, null );
+        restoreArtifactId ( pomReversedProperties, artifactId );
+
+        createArchetypePom(
+            pom,
+            archetypeFilesDirectory,
+            pomReversedProperties,
+            FileUtils.resolveFile ( basedir, Constants.ARCHETYPE_POM ),
+            preserveCData,
+            keepParent
+        );
+    }
+
     private String getArchetypePom ()
     {
         return getGeneratedSourcesDirectory () + File.separator + Constants.ARCHETYPE_POM;
     }
 
+    private int id = 0;
+    private BidiMap registeredProjects = new DualTreeBidiMap();
+    private void registerProject ( Model pom )
+    {
+        registeredProjects.put(new Integer(id++), pom.getId());
+    }
+
     private void setArtifactId (
-        Properties reverseProperties,
-        Properties pomReversedProperties,
+        Properties properties,
         String artifactId
     )
     {
-        reverseProperties.setProperty ( Constants.ARTIFACT_ID, artifactId );
-        pomReversedProperties.setProperty ( Constants.ARTIFACT_ID, artifactId );
+        properties.setProperty ( Constants.ARTIFACT_ID, artifactId );
     }
 
     private List concatenateToList ( List toConcatenate, String with )
@@ -600,7 +689,6 @@ implements ArchetypeCreator
             pom.setArtifactId ( "${" + Constants.ARTIFACT_ID + "}" );
             pom.setVersion ( "${" + Constants.VERSION + "}" );
 //TODO: other behaviour should be enforced -> usage of submodules references in deps and depMan or maybe plugins
-System.err.println("createArchetypePom "+outputFile);
             pomManager.writePom ( pom, outputFile, initialPomFile );
         }
 
@@ -730,7 +818,7 @@ System.err.println("createArchetypePom "+outputFile);
 
     private ModuleDescriptor createModule (
         Properties reverseProperties,
-        Properties pomReversedProperties,
+        String rootArtifactId,
         String moduleId,
         String packageName,
         File basedir,
@@ -746,7 +834,6 @@ System.err.println("createArchetypePom "+outputFile);
     throws IOException, XmlPullParserException
     {
         ModuleDescriptor archetypeDescriptor = new ModuleDescriptor ();
-        archetypeDescriptor.setId ( moduleId );
         getLogger ().debug ( "Starting module's descriptor " + moduleId );
 
         archetypeFilesDirectory.mkdirs ();
@@ -754,14 +841,29 @@ System.err.println("createArchetypePom "+outputFile);
 
         Model pom =
             pomManager.readPom ( FileUtils.resolveFile ( basedir, Constants.ARCHETYPE_POM ) );
+        String replacementId = pom.getArtifactId();
+        if ( replacementId.indexOf(rootArtifactId) >= 0 )
+        {
+            replacementId = StringUtils.replace( replacementId, rootArtifactId, "${rootArtifactId}" );
+            moduleId = StringUtils.replace( moduleId, rootArtifactId, "${rootArtifactId}" );
+        }
+        if ( moduleId.indexOf(rootArtifactId) >= 0 )
+        {
+            moduleId = StringUtils.replace( moduleId, rootArtifactId, "${rootArtifactId}" );
+        }
+        archetypeDescriptor.setName( replacementId );
+        archetypeDescriptor.setId( replacementId );
+        archetypeDescriptor.setDir( moduleId );
 
-        setArtifactId ( reverseProperties, pomReversedProperties, pom.getArtifactId() );
+        registerProject(pom);
+
+        setArtifactId ( reverseProperties, pom.getArtifactId() );
 
         List fileNames = resolveFileNames ( pom, basedir );
 
         List filesets =
             resolveFileSets ( packageName, fileNames, languages, filtereds, defaultEncoding );
-        getLogger ().debug ( "Resolved filesets for module " + archetypeDescriptor.getId () );
+        getLogger ().debug ( "Resolved filesets for module " + archetypeDescriptor.getName () );
 
         archetypeDescriptor.setFileSets ( filesets );
 
@@ -773,16 +875,16 @@ System.err.println("createArchetypePom "+outputFile);
             archetypeFilesDirectory,
             defaultEncoding
         );
-        getLogger ().debug ( "Created files for module " + archetypeDescriptor.getId () );
+        getLogger ().debug ( "Created files for module " + archetypeDescriptor.getName () );
 
         if ( !ignoreReplica )
         {
             createReplicaFiles ( filesets, basedir, replicaFilesDirectory );
-            getLogger ().debug ( "Created replica files for " + archetypeDescriptor.getId () );
+            getLogger ().debug ( "Created replica files for " + archetypeDescriptor.getName () );
         }
 
         String parentArtifactId = reverseProperties.getProperty ( Constants.PARENT_ARTIFACT_ID );
-        setParentArtifactId ( reverseProperties, pomReversedProperties, pom.getArtifactId() );
+        setParentArtifactId ( reverseProperties, pom.getArtifactId() );
 
         Iterator modules = pom.getModules ().iterator ();
         while ( modules.hasNext () )
@@ -794,7 +896,7 @@ System.err.println("createArchetypePom "+outputFile);
             ModuleDescriptor moduleDescriptor =
                 createModule (
                     reverseProperties,
-                    pomReversedProperties,
+                    rootArtifactId,
                     subModuleId,
                     packageName,
                     FileUtils.resolveFile ( basedir, subModuleId ),
@@ -810,22 +912,22 @@ System.err.println("createArchetypePom "+outputFile);
 
             archetypeDescriptor.addModule ( moduleDescriptor );
             getLogger ().debug (
-                "Added module " + moduleDescriptor.getId () + " in "
-                + archetypeDescriptor.getId ()
+                "Added module " + moduleDescriptor.getName () + " in "
+                + archetypeDescriptor.getName ()
             );
         }
-        restoreParentArtifactId ( reverseProperties, pomReversedProperties, parentArtifactId );
-        restoreArtifactId ( reverseProperties, pomReversedProperties, pom.getArtifactId() );
+        restoreParentArtifactId ( reverseProperties, parentArtifactId );
+        restoreArtifactId ( reverseProperties, pom.getArtifactId() );
 
-        createModulePom (
-            pom,
-            archetypeFilesDirectory,
-            pomReversedProperties,
-            FileUtils.resolveFile ( basedir, Constants.ARCHETYPE_POM ),
-            preserveCData,
-            keepParent
-        );
-        getLogger ().debug ( "Created Module " + archetypeDescriptor.getId () + " pom" );
+//        createModulePom (
+//            pom,
+//            archetypeFilesDirectory,
+//            pomReversedProperties,
+//            FileUtils.resolveFile ( basedir, Constants.ARCHETYPE_POM ),
+//            preserveCData,
+//            keepParent
+//        );
+        getLogger ().debug ( "Created Module " + archetypeDescriptor.getName () + " pom" );
 
         return archetypeDescriptor;
     }
@@ -877,14 +979,21 @@ System.err.println("createArchetypePom "+outputFile);
                 pom.getParent().setVersion ( "${" + Constants.VERSION + "}" );
             }
             pom.setModules ( null );
-            pom.setGroupId (
-                StringUtils.replace(
-                    pom.getGroupId (),
-                    pomReversedProperties.getProperty (Constants.GROUP_ID),
-                    "${" + Constants.GROUP_ID + "}")
-            );
+
+            if (pom.getGroupId() != null)
+            {
+                pom.setGroupId (
+                    StringUtils.replace(
+                        pom.getGroupId (),
+                        pomReversedProperties.getProperty (Constants.GROUP_ID),
+                        "${" + Constants.GROUP_ID + "}")
+                );
+            }
             pom.setArtifactId ( "${" + Constants.ARTIFACT_ID + "}" );
-            pom.setVersion ( "${" + Constants.VERSION + "}" );
+            if (pom.getVersion() != null)
+            {
+                pom.setVersion ( "${" + Constants.VERSION + "}" );
+            }
 
             pomManager.writePom ( pom, outputFile, initialPomFile );
         }
@@ -1094,13 +1203,11 @@ System.err.println("createArchetypePom "+outputFile);
     }
 
     private void setParentArtifactId (
-        Properties reverseProperties,
-        Properties pomReversedProperties,
+        Properties properties,
         String parentArtifactId
     )
     {
-        reverseProperties.setProperty ( Constants.PARENT_ARTIFACT_ID, parentArtifactId );
-        pomReversedProperties.setProperty ( Constants.PARENT_ARTIFACT_ID, parentArtifactId );
+        properties.setProperty ( Constants.PARENT_ARTIFACT_ID, parentArtifactId );
     }
 
     private void processFileSet (
@@ -1617,38 +1724,32 @@ System.err.println("createArchetypePom "+outputFile);
     }
 
     private void restoreArtifactId (
-        Properties reverseProperties,
-        Properties pomReversedProperties,
+        Properties properties,
         String artifactId
     )
     {
         if ( StringUtils.isEmpty ( artifactId ) )
         {
-            reverseProperties.remove ( Constants.ARTIFACT_ID );
-            pomReversedProperties.remove ( Constants.ARTIFACT_ID );
+            properties.remove ( Constants.ARTIFACT_ID );
         }
         else
         {
-            reverseProperties.setProperty ( Constants.ARTIFACT_ID, artifactId );
-            pomReversedProperties.setProperty ( Constants.ARTIFACT_ID, artifactId );
+            properties.setProperty ( Constants.ARTIFACT_ID, artifactId );
         }
     }
 
     private void restoreParentArtifactId (
-        Properties reverseProperties,
-        Properties pomReversedProperties,
+        Properties properties,
         String parentArtifactId
     )
     {
         if ( StringUtils.isEmpty ( parentArtifactId ) )
         {
-            reverseProperties.remove ( Constants.PARENT_ARTIFACT_ID );
-            pomReversedProperties.remove ( Constants.PARENT_ARTIFACT_ID );
+            properties.remove ( Constants.PARENT_ARTIFACT_ID );
         }
         else
         {
-            reverseProperties.setProperty ( Constants.PARENT_ARTIFACT_ID, parentArtifactId );
-            pomReversedProperties.setProperty ( Constants.PARENT_ARTIFACT_ID, parentArtifactId );
+            properties.setProperty ( Constants.PARENT_ARTIFACT_ID, parentArtifactId );
         }
     }
 
