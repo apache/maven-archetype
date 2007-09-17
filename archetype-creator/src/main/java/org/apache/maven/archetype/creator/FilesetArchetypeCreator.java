@@ -306,6 +306,7 @@ implements ArchetypeCreator
         );
 
         createPoms (pom, archetypeConfiguration.getProperty ( Constants.ARTIFACT_ID ),
+                archetypeConfiguration.getProperty ( Constants.ARTIFACT_ID ),
                 archetypeFilesDirectory, basedir,
                 pomReversedProperties, preserveCData, keepParent);
 
@@ -374,6 +375,7 @@ implements ArchetypeCreator
 
     private void createModulePoms (
         Properties pomReversedProperties,
+        String rootArtifactId,
         String packageName,
         File basedir,
         File archetypeFilesDirectory,
@@ -395,6 +397,7 @@ implements ArchetypeCreator
 
                 createModulePoms (
                     pomReversedProperties,
+                    rootArtifactId,
                     packageName,
                     FileUtils.resolveFile ( basedir, subModuleId ),
                     FileUtils.resolveFile ( archetypeFilesDirectory, subModuleId ),
@@ -404,6 +407,7 @@ implements ArchetypeCreator
         }
         createModulePom (
             pom,
+            rootArtifactId,
             archetypeFilesDirectory,
             pomReversedProperties,
             FileUtils.resolveFile ( basedir, Constants.ARCHETYPE_POM ),
@@ -414,7 +418,8 @@ implements ArchetypeCreator
         restoreArtifactId ( pomReversedProperties, artifactId );
     }
 
-    private void createPoms ( Model pom, String artifactId, File archetypeFilesDirectory,
+    private void createPoms ( Model pom, String rootArtifactId,
+String artifactId, File archetypeFilesDirectory,
         File basedir, Properties pomReversedProperties, boolean preserveCData,
         boolean keepParent ) throws IOException, FileNotFoundException, XmlPullParserException
     {
@@ -427,6 +432,7 @@ implements ArchetypeCreator
 
                 createModulePoms (
                     pomReversedProperties,
+                    rootArtifactId,
                     moduleId,
                     FileUtils.resolveFile ( basedir, moduleId ),
                     FileUtils.resolveFile ( archetypeFilesDirectory, moduleId ),
@@ -689,6 +695,9 @@ implements ArchetypeCreator
             pom.setArtifactId ( "${" + Constants.ARTIFACT_ID + "}" );
             pom.setVersion ( "${" + Constants.VERSION + "}" );
 //TODO: other behaviour should be enforced -> usage of submodules references in deps and depMan or maybe plugins
+
+//            rewriteReferences(pom);
+
             pomManager.writePom ( pom, outputFile, initialPomFile );
         }
 
@@ -934,6 +943,7 @@ implements ArchetypeCreator
 
     private void createModulePom (
         Model pom,
+        String rootArtifactId,
         File archetypeFilesDirectory,
         Properties pomReversedProperties,
         File initialPomFile,
@@ -964,10 +974,7 @@ implements ArchetypeCreator
         }
         else
         {
-            if (pom.getParent() != null &&
-                pom.getParent().getArtifactId().equals(
-                    pomReversedProperties.getProperty (Constants.PARENT_ARTIFACT_ID))
-            )
+            if (pom.getParent() != null )
             {
                 pom.getParent().setGroupId (
                     StringUtils.replace(
@@ -975,7 +982,11 @@ implements ArchetypeCreator
                         pomReversedProperties.getProperty (Constants.GROUP_ID),
                         "${" + Constants.GROUP_ID + "}")
                 );
-                pom.getParent().setArtifactId ( "${" + Constants.PARENT_ARTIFACT_ID + "}" );
+                if ( pom.getParent().getArtifactId () != null &&
+                    pom.getParent().getArtifactId ().indexOf(rootArtifactId) >= 0 )
+                {
+                    pom.getParent().setArtifactId ( StringUtils.replace( pom.getParent().getArtifactId (), rootArtifactId, "${rootArtifactId}" ) );
+                }
                 pom.getParent().setVersion ( "${" + Constants.VERSION + "}" );
             }
             pom.setModules ( null );
@@ -994,6 +1005,8 @@ implements ArchetypeCreator
             {
                 pom.setVersion ( "${" + Constants.VERSION + "}" );
             }
+
+//            rewriteReferences(pom);
 
             pomManager.writePom ( pom, outputFile, initialPomFile );
         }

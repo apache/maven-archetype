@@ -211,6 +211,8 @@ implements FilesetArchetypeGenerator
                 }
                 else
                 {
+                    context.put("rootArtifactId", artifactId);
+
                     processFilesetModule (
                         artifactId,
                         artifactId,
@@ -501,7 +503,7 @@ implements FilesetArchetypeGenerator
             context.put ( Constants.ARTIFACT_ID, StringUtils.replace( project.getId(), "${rootArtifactId}", rootArtifactId ) );
             processFilesetModule (
                 rootArtifactId,
-                artifactId,
+                StringUtils.replace( project.getDir(), "${rootArtifactId}", rootArtifactId),
                 archetypeResources,
                 new File ( moduleOutputDirectoryFile, Constants.ARCHETYPE_POM ),
                 archetypeZipFile,
@@ -519,7 +521,7 @@ implements FilesetArchetypeGenerator
 
     private void processFilesetProject (
         final AbstractArchetypeDescriptor archetypeDescriptor,
-        final String artifactId,
+        final String moduleId,
         final List archetypeResources,
         final File pom,
         final ZipFile archetypeZipFile,
@@ -544,7 +546,7 @@ implements FilesetArchetypeGenerator
                 pom,
                 moduleOffset,
                 basedirPom,
-                artifactId
+                moduleId
             );
         }
         else
@@ -612,7 +614,7 @@ implements FilesetArchetypeGenerator
         File pom,
         String moduleOffset,
         File basedirPom,
-        String artifactId
+        String moduleId
     )
     throws OutputFileExists,
         FileNotFoundException,
@@ -634,9 +636,9 @@ implements FilesetArchetypeGenerator
 
         /*if ( StringUtils.isEmpty ( moduleOffset ) )
         {*/
-            getLogger ().debug ( "Adding module " + artifactId );
-System.err.println ( "Adding module " + artifactId );
-            pomManager.addModule ( basedirPom, artifactId );
+            getLogger ().debug ( "Adding module " + moduleId );
+System.err.println ( "Adding module " + moduleId );
+            pomManager.addModule ( basedirPom, moduleId );
             pomManager.addParent ( pom, basedirPom );
         //}
     }
