@@ -29,7 +29,7 @@
   <groupId>org.apache.maven.archetype.test</groupId>
   <artifactId>inheritence-test</artifactId>
   <packaging>pom</packaging>
-  <name>Inheritence Parent</name>
+  <name>Maven ArchetypeNG - Test - Simple Inheritence</name>
   <version>1-SNAPSHOT</version>
   <description>Enforcer is a build rule execution framework.</description>
   <url>http://maven.apache.org/enforcer</url>
