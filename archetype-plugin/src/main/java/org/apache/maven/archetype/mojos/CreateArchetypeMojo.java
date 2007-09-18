@@ -120,15 +120,20 @@ extends AbstractMojo
     /**
      * The property file that holds the plugin configuration.
      *
-     * @parameter  default-value="archetype.properties" expression="${archetype.properties}"
+     * @parameter  default-value="target/archetype.properties" expression="${archetype.properties}"
      */
-    private File propertyFile = null;
+    private File propertyFile;
 
     public void execute ()
     throws MojoExecutionException, MojoFailureException
     {
         try
         {
+            if (propertyFile != null)
+            {
+                propertyFile.getParentFile().mkdirs();
+            }
+
             List languages =
                 archetypeRegistryManager.getLanguages ( archetypeLanguages, archetypeRegistryFile );
 

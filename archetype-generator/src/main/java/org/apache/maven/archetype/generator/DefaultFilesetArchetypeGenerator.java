@@ -637,7 +637,7 @@ implements FilesetArchetypeGenerator
         /*if ( StringUtils.isEmpty ( moduleOffset ) )
         {*/
             getLogger ().debug ( "Adding module " + moduleId );
-System.err.println ( "Adding module " + moduleId );
+//System.err.println ( "Adding module " + moduleId );
             pomManager.addModule ( basedirPom, moduleId );
             pomManager.addParent ( pom, basedirPom );
         //}
