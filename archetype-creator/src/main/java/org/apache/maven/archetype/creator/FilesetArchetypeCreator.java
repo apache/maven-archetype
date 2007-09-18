@@ -19,7 +19,8 @@
 
 package org.apache.maven.archetype.creator;
 
-import java.io.FileNotFoundException;
+import org.apache.commons.collections.BidiMap;
+import org.apache.commons.collections.bidimap.DualTreeBidiMap;
 import org.apache.maven.archetype.common.ArchetypeConfiguration;
 import org.apache.maven.archetype.common.ArchetypeDefinition;
 import org.apache.maven.archetype.common.ArchetypeFactory;
@@ -45,6 +46,8 @@ import org.apache.maven.model.Build;
 import org.apache.maven.model.Extension;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
+import org.apache.maven.model.Dependency;
+import org.apache.maven.model.Profile;
 import org.apache.maven.project.MavenProject;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -57,6 +60,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import java.util.ArrayList;
@@ -68,8 +72,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import org.apache.commons.collections.BidiMap;
-import org.apache.commons.collections.bidimap.DualTreeBidiMap;
 
 /**
  * @plexus.component  role-hint="fileset"
@@ -419,7 +421,7 @@ implements ArchetypeCreator
     }
 
     private void createPoms ( Model pom, String rootArtifactId,
-String artifactId, File archetypeFilesDirectory,
+        String artifactId, File archetypeFilesDirectory,
         File basedir, Properties pomReversedProperties, boolean preserveCData,
         boolean keepParent ) throws IOException, FileNotFoundException, XmlPullParserException
     {
@@ -463,6 +465,290 @@ String artifactId, File archetypeFilesDirectory,
     private void registerProject ( Model pom )
     {
         registeredProjects.put(new Integer(id++), pom.getId());
+    }
+
+    private void rewriteReferences ( Model pom, String rootArtifactId,
+        String groupId )
+    {
+        // rewrite Dependencies
+        if ( pom.getDependencies (  ) != null && !pom.getDependencies (  ).
+            isEmpty (  ) )
+        {
+            Iterator dependencies = pom.getDependencies (  ).iterator (  );
+            while ( dependencies.hasNext (  ) )
+            {
+                Dependency dependency =
+                    (Dependency) dependencies.next();
+
+                if ( dependency.getArtifactId (  ) != null &&
+                    dependency.getArtifactId (  ).indexOf ( rootArtifactId ) >= 0 )
+                {
+                    if ( dependency.getGroupId (  ) != null )
+                    {
+                        dependency.setGroupId ( StringUtils.replace ( dependency.getGroupId (  ),
+                            groupId,
+                            "${" +
+                            Constants.GROUP_ID + "}" ) );
+                    }
+                    dependency.setArtifactId ( StringUtils.replace ( dependency.getArtifactId (  ),
+                        rootArtifactId, "${rootArtifactId}" ) );
+                    if ( dependency.getVersion (  ) != null )
+                    {
+                        dependency.setVersion ( "${" +
+                            Constants.VERSION + "}" );
+                    }
+                }
+            }
+        }
+
+        // rewrite DependencyManagement
+        if ( pom.getDependencyManagement (  ) != null &&
+            pom.getDependencyManagement (  ).getDependencies (  ) != null &&
+            !pom.getDependencyManagement (  ).getDependencies (  ).isEmpty (  ) )
+        {
+            Iterator dependencies =
+                pom.getDependencyManagement (  ).getDependencies (  ).iterator (  );
+            while ( dependencies.hasNext (  ) )
+            {
+                Dependency dependency =
+                    (Dependency) dependencies.next();
+
+                if ( dependency.getArtifactId (  ) != null &&
+                    dependency.getArtifactId (  ).indexOf ( rootArtifactId ) >= 0 )
+                {
+                    if ( dependency.getGroupId (  ) != null )
+                    {
+                        dependency.setGroupId ( StringUtils.replace ( dependency.getGroupId (  ),
+                            groupId,
+                            "${" +
+                            Constants.GROUP_ID + "}" ) );
+                    }
+                    dependency.setArtifactId ( StringUtils.replace ( dependency.getArtifactId (  ),
+                        rootArtifactId, "${rootArtifactId}" ) );
+                    if ( dependency.getVersion (  ) != null )
+                    {
+                        dependency.setVersion ( "${" +
+                            Constants.VERSION + "}" );
+                    }
+                }
+            }
+        }
+
+        // rewrite Plugins
+        if ( pom.getBuild (  ) != null && pom.getBuild (  ).getPlugins (  ) !=
+            null && !pom.getBuild (  ).getPlugins (  ).isEmpty (  ) )
+        {
+            Iterator plugins = pom.getBuild (  ).getPlugins (  ).iterator (  );
+            while ( plugins.hasNext (  ) )
+            {
+                Plugin plugin = (Plugin) plugins.next();
+
+                if ( plugin.getArtifactId (  ) != null &&
+                    plugin.getArtifactId (  ).indexOf ( rootArtifactId ) >= 0 )
+                {
+                    if ( plugin.getGroupId (  ) != null )
+                    {
+                        plugin.setGroupId ( StringUtils.replace ( plugin.getGroupId (  ),
+                            groupId,
+                            "${" +
+                            Constants.GROUP_ID + "}" ) );
+                    }
+                    plugin.setArtifactId ( StringUtils.replace ( plugin.getArtifactId (  ),
+                        rootArtifactId, "${rootArtifactId}" ) );
+                    if ( plugin.getVersion (  ) != null )
+                    {
+                        plugin.setVersion ( "${" +
+                            Constants.VERSION + "}" );
+                    }
+                }
+            }
+        }
+
+        // rewrite PluginManagement
+        if ( pom.getBuild (  ) != null &&
+            pom.getBuild (  ).getPluginManagement (  ) != null &&
+            pom.getBuild (  ).getPluginManagement (  ).getPlugins (  ) != null &&
+            !pom.getBuild (  ).getPluginManagement (  ).getPlugins (  ).
+            isEmpty (  ) )
+        {
+            Iterator plugins =
+                pom.getBuild (  ).getPluginManagement (  ).getPlugins (  ).
+                iterator (  );
+            while ( plugins.hasNext (  ) )
+            {
+                Plugin plugin = (Plugin) plugins.next();
+
+                if ( plugin.getArtifactId (  ) != null &&
+                    plugin.getArtifactId (  ).indexOf ( rootArtifactId ) >= 0 )
+                {
+                    if ( plugin.getGroupId (  ) != null )
+                    {
+                        plugin.setGroupId ( StringUtils.replace ( plugin.getGroupId (  ),
+                            groupId,
+                            "${" +
+                            Constants.GROUP_ID + "}" ) );
+                    }
+                    plugin.setArtifactId ( StringUtils.replace ( plugin.getArtifactId (  ),
+                        rootArtifactId, "${rootArtifactId}" ) );
+                    if ( plugin.getVersion (  ) != null )
+                    {
+                        plugin.setVersion ( "${" +
+                            Constants.VERSION + "}" );
+                    }
+                }
+            }
+        }
+        // rewrite Profiles
+        if ( pom.getProfiles (  ) != null )
+        {
+            Iterator profiles = pom.getProfiles (  ).iterator (  );
+            while ( profiles.hasNext (  ) )
+            {
+                Profile profile = (Profile) profiles.next();
+
+                // rewrite Dependencies
+                if ( profile.getDependencies (  ) != null &&
+                    !profile.getDependencies (  ).isEmpty (  ) )
+                {
+                    Iterator dependencies = profile.getDependencies (  ).
+                        iterator (  );
+                    while ( dependencies.hasNext (  ) )
+                    {
+                        Dependency dependency =
+                            (Dependency) dependencies.next();
+
+                        if ( dependency.getArtifactId (  ) != null &&
+                            dependency.getArtifactId (  ).
+                            indexOf ( rootArtifactId ) >= 0 )
+                        {
+                            if ( dependency.getGroupId (  ) != null )
+                            {
+                                dependency.setGroupId ( StringUtils.replace ( dependency.getGroupId (  ),
+                                    groupId,
+                                    "${" +
+                                    Constants.GROUP_ID + "}" ) );
+                            }
+                            dependency.setArtifactId ( StringUtils.replace ( dependency.getArtifactId (  ),
+                                rootArtifactId, "${rootArtifactId}" ) );
+                            if ( dependency.getVersion (  ) != null )
+                            {
+                                dependency.setVersion ( "${" +
+                                    Constants.VERSION + "}" );
+                            }
+                        }
+                    }
+                }
+
+                // rewrite DependencyManagement
+                if ( profile.getDependencyManagement (  ) != null &&
+                    profile.getDependencyManagement (  ).getDependencies (  ) !=
+                    null &&
+                    !profile.getDependencyManagement (  ).getDependencies (  ).
+                    isEmpty (  ) )
+                {
+                    Iterator dependencies =
+                        profile.getDependencyManagement (  ).getDependencies (  ).
+                        iterator (  );
+                    while ( dependencies.hasNext (  ) )
+                    {
+                        Dependency dependency =
+                            (Dependency) dependencies.next();
+
+                        if ( dependency.getArtifactId (  ) != null &&
+                            dependency.getArtifactId (  ).
+                            indexOf ( rootArtifactId ) >= 0 )
+                        {
+                            if ( dependency.getGroupId (  ) != null )
+                            {
+                                dependency.setGroupId ( StringUtils.replace ( dependency.getGroupId (  ),
+                                    groupId,
+                                    "${" +
+                                    Constants.GROUP_ID + "}" ) );
+                            }
+                            dependency.setArtifactId ( StringUtils.replace ( dependency.getArtifactId (  ),
+                                rootArtifactId, "${rootArtifactId}" ) );
+                            if ( dependency.getVersion (  ) != null )
+                            {
+                                dependency.setVersion ( "${" +
+                                    Constants.VERSION + "}" );
+                            }
+                        }
+                    }
+                }
+
+                // rewrite Plugins
+                if ( profile.getBuild (  ) != null &&
+                    profile.getBuild (  ).getPlugins (  ) != null &&
+                    !profile.getBuild (  ).getPlugins (  ).isEmpty (  ) )
+                {
+                    Iterator plugins = profile.getBuild (  ).getPlugins (  ).
+                        iterator (  );
+                    while ( plugins.hasNext (  ) )
+                    {
+                        Plugin plugin =
+                            (Plugin) plugins.next();
+
+                        if ( plugin.getArtifactId (  ) != null &&
+                            plugin.getArtifactId (  ).indexOf ( rootArtifactId ) >=
+                            0 )
+                        {
+                            if ( plugin.getGroupId (  ) != null )
+                            {
+                                plugin.setGroupId ( StringUtils.replace ( plugin.getGroupId (  ),
+                                    groupId,
+                                    "${" +
+                                    Constants.GROUP_ID + "}" ) );
+                            }
+                            plugin.setArtifactId ( StringUtils.replace ( plugin.getArtifactId (  ),
+                                rootArtifactId, "${rootArtifactId}" ) );
+                            if ( plugin.getVersion (  ) != null )
+                            {
+                                plugin.setVersion ( "${" +
+                                    Constants.VERSION + "}" );
+                            }
+                        }
+                    }
+                }
+
+                // rewrite PluginManagement
+                if ( profile.getBuild (  ) != null &&
+                    profile.getBuild (  ).getPluginManagement (  ) != null &&
+                    profile.getBuild (  ).getPluginManagement (  ).getPlugins (  ) !=
+                    null &&
+                    !profile.getBuild (  ).getPluginManagement (  ).getPlugins (  ).
+                    isEmpty (  ) )
+                {
+                    Iterator plugins =
+                        profile.getBuild (  ).getPluginManagement (  ).
+                        getPlugins (  ).iterator (  );
+                    while ( plugins.hasNext (  ) )
+                    {
+                        Plugin plugin =
+                            (Plugin) plugins.next();
+
+                        if ( plugin.getArtifactId (  ) != null &&
+                            plugin.getArtifactId (  ).indexOf ( rootArtifactId ) >=
+                            0 )
+                        {
+                            if ( plugin.getGroupId (  ) != null )
+                            {
+                                plugin.setGroupId ( StringUtils.replace ( plugin.getGroupId (  ),
+                                    groupId,
+                                    "${" +
+                                    Constants.GROUP_ID + "}" ) );
+                            }
+                            plugin.setArtifactId ( StringUtils.replace ( plugin.getArtifactId (  ),
+                                rootArtifactId, "${rootArtifactId}" ) );
+                            if ( plugin.getVersion (  ) != null )
+                            {
+                                plugin.setVersion ( "${" +
+                                    Constants.VERSION + "}" );
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void setArtifactId (
@@ -689,14 +975,16 @@ String artifactId, File archetypeFilesDirectory,
             {
                 pom.setParent ( null );
             }
-//TODO: modules should be handled better
+
             pom.setModules ( null );
             pom.setGroupId ( "${" + Constants.GROUP_ID + "}" );
             pom.setArtifactId ( "${" + Constants.ARTIFACT_ID + "}" );
-            pom.setVersion ( "${" + Constants.VERSION + "}" );
-//TODO: other behaviour should be enforced -> usage of submodules references in deps and depMan or maybe plugins
+            if ( pom.getVersion (  ) != null )
+            {
+                pom.setVersion ( "${" + Constants.VERSION + "}" );
+            }
 
-//            rewriteReferences(pom);
+            rewriteReferences(pom, pomReversedProperties.getProperty (Constants.ARTIFACT_ID), pomReversedProperties.getProperty (Constants.GROUP_ID));
 
             pomManager.writePom ( pom, outputFile, initialPomFile );
         }
@@ -987,7 +1275,10 @@ String artifactId, File archetypeFilesDirectory,
                 {
                     pom.getParent().setArtifactId ( StringUtils.replace( pom.getParent().getArtifactId (), rootArtifactId, "${rootArtifactId}" ) );
                 }
-                pom.getParent().setVersion ( "${" + Constants.VERSION + "}" );
+                if ( pom.getParent().getVersion (  ) != null )
+                {
+                    pom.getParent().setVersion ( "${" + Constants.VERSION + "}" );
+                }
             }
             pom.setModules ( null );
 
@@ -1006,7 +1297,7 @@ String artifactId, File archetypeFilesDirectory,
                 pom.setVersion ( "${" + Constants.VERSION + "}" );
             }
 
-//            rewriteReferences(pom);
+            rewriteReferences(pom, rootArtifactId, pomReversedProperties.getProperty (Constants.GROUP_ID));
 
             pomManager.writePom ( pom, outputFile, initialPomFile );
         }
