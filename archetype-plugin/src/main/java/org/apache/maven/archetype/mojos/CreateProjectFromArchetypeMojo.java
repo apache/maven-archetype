@@ -20,28 +20,73 @@
 package org.apache.maven.archetype.mojos;
 
 import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.ContextEnabled;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.shared.invoker.DefaultInvocationRequest;
+import org.apache.maven.shared.invoker.InvocationRequest;
+import org.apache.maven.shared.invoker.Invoker;
+import org.apache.maven.shared.invoker.MavenInvocationException;
+import org.codehaus.plexus.util.StringUtils;
+
+import java.io.File;
+import java.util.Arrays;
 
 /**
  * Generates sample project from archetype.
  * It delegates to the three mojos of the generate lifecycle: select-archetype, configure-generation, generate-project
  *
- * @author           rafale
- * @requiresProject  false
- * @goal             create
- * @execute          phase="generate-sources" lifecycle="generate"
+ * @author rafale
+ * @requiresProject false
+ * @goal create
+ * @execute phase="generate-sources" lifecycle="generate"
  */
 public class CreateProjectFromArchetypeMojo
-extends AbstractMojo
+    extends AbstractMojo
+    implements ContextEnabled
 {
     /**
-     * dummy parameter used to fulfill the maven-plugin-plugin
-     * @parameter
+     * Maven invoker used to execution additional goals after the archetype has been created.
+     *
+     * @component
      */
-    private String dummy;
+    private Invoker invoker;
 
-    public void execute ()
-    throws MojoExecutionException, MojoFailureException
-    { }
+    /** @parameter expression="${basedir}" */
+    private File basedir;
+
+    /** 
+     * Additional goals that can be specified by the user during the creation of the archetype.
+     *
+     * @parameter expression="${goals}"
+     */
+    private String goals;
+
+    public void execute()
+        throws
+        MojoExecutionException,
+        MojoFailureException
+    {
+        // At this point the archetype has been generated from the archetype and now we will
+        // run some goals that the archetype creator has requested to be run once the project
+        // has been created.
+
+        File projectBasedir = new File( basedir, (String) getPluginContext().get( "artifactId" ) );
+
+        if ( goals != null && projectBasedir.exists() )
+        {
+            InvocationRequest request = new DefaultInvocationRequest()
+                .setBaseDirectory( projectBasedir )
+                .setGoals( Arrays.asList( StringUtils.split( goals, "," ) ) );
+
+            try
+            {
+                invoker.execute( request );
+            }
+            catch ( MavenInvocationException e )
+            {
+                throw new MojoExecutionException( "Cannot run additions goals." );
+            }
+        }
+    }
 }

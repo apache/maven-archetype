@@ -25,6 +25,7 @@ import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugin.ContextEnabled;
 import org.apache.maven.settings.Settings;
 
 import java.io.File;
@@ -34,50 +35,48 @@ import java.util.List;
 /**
  * Select the archetype to be used.
  *
- * @author           rafale
- * @requiresProject  false
- * @goal             select-archetype
+ * @author rafale
+ * @requiresProject false
+ * @goal select-archetype
  */
 public class SelectArchetypeMojo
-extends AbstractMojo
+    extends AbstractMojo
 {
-    /**
-     * @component
-     */
+    /** @component */
     ArchetypeRegistryManager archetypeRegistryManager;
 
     /**
      * The archetype's artifactId.
      *
-     * @parameter  expression="${archetypeArtifactId}"
+     * @parameter expression="${archetypeArtifactId}"
      */
     private String archetypeArtifactId;
 
     /**
      * The archetype's groupId.
      *
-     * @parameter  expression="${archetypeGroupId}"
+     * @parameter expression="${archetypeGroupId}"
      */
     private String archetypeGroupId;
 
     /**
      * The location of the registry file.
      *
-     * @parameter  expression="${user.home}/.m2/archetype.xml"
+     * @parameter expression="${user.home}/.m2/archetype.xml"
      */
     private File archetypeRegistryFile;
 
     /**
      * The archetype's version.
      *
-     * @parameter  expression="${archetypeVersion}"
+     * @parameter expression="${archetypeVersion}"
      */
     private String archetypeVersion;
 
     /**
      * Local maven repository.
      *
-     * @parameter  expression="${localRepository}"
+     * @parameter expression="${localRepository}"
      * @required
      * @readonly
      */
@@ -87,7 +86,7 @@ extends AbstractMojo
      * Remote repositories defined in the project's pom (used only when called from an existing
      * project).
      *
-     * @parameter  expression="${project.remoteArtifactRepositories}"
+     * @parameter expression="${project.remoteArtifactRepositories}"
      * @required
      * @readonly
      */
@@ -96,48 +95,48 @@ extends AbstractMojo
     /**
      * The property file that holds the plugin configuration.
      *
-     * @parameter  default-value="archetype.properties" expression="${archetype.properties}"
+     * @parameter default-value="archetype.properties" expression="${archetype.properties}"
      */
     private File propertyFile = null;
 
     /**
      * Other remote repositories available for discovering dependencies and extensions.
      *
-     * @parameter  expression="${remoteRepositories}"
+     * @parameter expression="${remoteRepositories}"
      */
     private String remoteRepositories;
 
-    /**
-     * @component
-     */
+    /** @component */
     private ArchetypeSelector selector;
 
     /**
      * User settings use to check the interactiveMode.
      *
-     * @parameter  expression="${settings}"
+     * @parameter expression="${settings}"
      * @required
      * @readonly
      */
     private Settings settings;
 
-    public void execute ()
-    throws MojoExecutionException, MojoFailureException
+    public void execute()
+        throws
+        MojoExecutionException,
+        MojoFailureException
     {
         try
         {
             List repositories =
-                archetypeRegistryManager.getRepositories (
+                archetypeRegistryManager.getRepositories(
                     pomRemoteRepositories,
                     remoteRepositories,
                     archetypeRegistryFile
                 );
 
-            selector.selectArchetype (
+            selector.selectArchetype(
                 archetypeGroupId,
                 archetypeArtifactId,
                 archetypeVersion,
-                settings.getInteractiveMode (),
+                settings.getInteractiveMode(),
                 propertyFile,
                 archetypeRegistryFile,
                 localRepository,
@@ -146,7 +145,7 @@ extends AbstractMojo
         }
         catch ( Exception ex )
         {
-            throw new MojoExecutionException ( ex.getMessage (), ex );
+            throw new MojoExecutionException( ex.getMessage(), ex );
         }
     }
 }
