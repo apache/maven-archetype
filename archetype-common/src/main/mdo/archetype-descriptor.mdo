@@ -27,34 +27,6 @@ under the License.
       <value>org.apache.maven.archetype.metadata</value>
     </default>
   </defaults>
-
-  <!--
-      <archetype name="archetype-artifact-id" partial="true|false" >
-         <requiredProperties>
-             <requiredProperty key="propKey" >
-                 <defaultValue>string to replace</defaultValue>
-             </requiredProperty>
-         </requiredProperties>
-         <fileSets>
-             <fileSet filtered="true|false" packaged="true|false" >
-                 <directory>src/main/java</directory>
-                 <includes>
-                     <include>**/*.java</include>
-                 </includes>
-                 <excludes>
-                     <exclude>Main.java</exclude>
-                 </excludes>
-             </fileSet>
-         </fileSets>
-         <modules>
-             <module name="module-id" id="module-artifact-id" dir="module-dir">
-                 <fileSets/>
-                 <modules/>
-             </module>
-         </modules>
-      </archetype>
-  -->
-
   <classes>
     <class rootElement="true" xml.tagName="archetype-descriptor">
       <name>ArchetypeDescriptor</name>
