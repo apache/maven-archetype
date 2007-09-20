@@ -141,6 +141,28 @@ under the License.
           <type>String</type>
           <required>true</required>
         </field>
+        <field>
+          <name>goals</name>
+          <version>4.0.0</version>
+          <association>
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>properties</name>
+          <version>3.0.0</version>
+          <description>
+            <![CDATA[
+            Properties that will be used during the execution of addition goals after the creation of the archetype.
+            ]]>
+          </description>
+          <type>Properties</type>
+          <association xml.mapStyle="inline">
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
       </fields>
     </class>
   </classes>
