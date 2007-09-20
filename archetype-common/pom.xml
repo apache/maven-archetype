@@ -100,7 +100,6 @@ under the License.
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-maven-plugin</artifactId>
         <version>1.0-alpha-14</version>
-
         <executions>
           <execution>
             <id>archetype-common</id>
@@ -113,6 +112,28 @@ under the License.
               <model>src/main/mdo/archetype-common.mdo</model>
             </configuration>
           </execution>
+          <execution>
+            <id>archetype-registry</id>
+            <goals>
+              <goal>java</goal>
+              <goal>xsd</goal>
+            </goals>
+            <configuration>
+              <version>1.0.0</version>
+              <model>src/main/mdo/archetype-registry.mdo</model>
+            </configuration>
+          </execution>
+          <execution>
+            <id>archetype-descriptor</id>
+            <goals>
+              <goal>java</goal>
+              <goal>xsd</goal>
+            </goals>
+            <configuration>
+              <version>1.0.0</version>
+              <model>src/main/mdo/archetype-descriptor.mdo</model>
+            </configuration>
+          </execution>          
         </executions>
       </plugin>
     </plugins>
