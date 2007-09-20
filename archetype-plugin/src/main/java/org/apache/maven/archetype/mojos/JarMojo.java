@@ -37,6 +37,8 @@ import java.io.File;
  * @goal jar
  * @phase package
  * @requiresProject
+ * @todo if this is the only way to actually package up an archetype that's not good, we need to be able to do this
+ *       in an embedded environment.
  */
 public class JarMojo
     extends AbstractMojo
