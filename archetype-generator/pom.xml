@@ -41,10 +41,6 @@ under the License.
       <artifactId>archetype-common</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.maven.archetype</groupId>
-      <artifactId>archetype-descriptor</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-velocity</artifactId>
     </dependency>

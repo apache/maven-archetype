@@ -39,10 +39,6 @@ under the License.
       <artifactId>archetype-common</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.maven.archetype</groupId>
-      <artifactId>archetype-descriptor</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.apache.maven.shared</groupId>
       <artifactId>maven-plugin-testing-harness</artifactId>
       <scope>test</scope>
