@@ -54,6 +54,35 @@ public class DefaultArchetypeSelectionQueryer
         return "Y".equalsIgnoreCase( answer );
     }
 
+    public org.apache.maven.archetype.registry.Archetype selectArchetype( List archetypes )
+        throws
+        PrompterException
+    {
+        String query = "Choose archetype:\n";
+        Map answerMap = new HashMap();
+        List answers = new ArrayList();
+        Iterator archetypeIterator = archetypes.iterator();
+        int counter = 1;
+        while ( archetypeIterator.hasNext() )
+        {
+            org.apache.maven.archetype.registry.Archetype archetype = (org.apache.maven.archetype.registry.Archetype) archetypeIterator.next();
+
+            answerMap.put( "" + counter, archetype );
+            query +=
+                "" + counter + ": " + archetype.getArtifactId() + " (" + archetype.getDescription() + ":"
+                    + archetype.getArtifactId() + ")\n";
+            answers.add( "" + counter );
+
+            counter++;
+        }
+        query += "Choose a number: ";
+
+        String answer = prompter.prompt( query, answers );
+
+        return (org.apache.maven.archetype.registry.Archetype) answerMap.get( answer );
+    }
+
+
     public Archetype selectArtifact( List archetypes )
         throws
         PrompterException

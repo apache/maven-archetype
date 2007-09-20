@@ -30,26 +30,22 @@ public interface ArchetypeSelectionQueryer
 {
     String ROLE = ArchetypeSelectionQueryer.class.getName();
 
-    /**
-     */
     boolean confirmSelection( ArchetypeDefinition archetypeDefinition )
         throws
         PrompterException;
 
-    /**
-     */
+    org.apache.maven.archetype.registry.Archetype selectArchetype( List list )
+        throws
+        PrompterException;
+
     Archetype selectArtifact( List list )
         throws
         PrompterException;
 
-    /**
-     */
     String selectGroup( List list )
         throws
         PrompterException;
 
-    /**
-     */
     String selectVersion( List list )
         throws
         PrompterException;

@@ -29,6 +29,7 @@ import org.apache.maven.archetype.common.ArchetypeDefinition;
 import org.apache.maven.archetype.common.ArchetypeFactory;
 import org.apache.maven.archetype.common.ArchetypePropertiesManager;
 import org.apache.maven.archetype.common.Constants;
+import org.apache.maven.archetype.descriptor.ArchetypeDescriptor;
 import org.apache.maven.archetype.exception.ArchetypeGenerationFailure;
 import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
 import org.apache.maven.archetype.exception.ArchetypeNotDefined;
@@ -38,17 +39,14 @@ import org.apache.maven.archetype.exception.PomFileExists;
 import org.apache.maven.archetype.exception.ProjectDirectoryExists;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.artifact.repository.ArtifactRepository;
-
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-
 import org.dom4j.DocumentException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

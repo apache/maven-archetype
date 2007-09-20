@@ -19,6 +19,7 @@
 
 package org.apache.maven.archetype.common;
 
+import org.apache.maven.archetype.registry.Archetype;
 import org.apache.maven.archetype.registry.ArchetypeRegistry;
 import org.apache.maven.archetype.registry.ArchetypeRepository;
 import org.apache.maven.archetype.registry.io.xpp3.ArchetypeRegistryXpp3Reader;
@@ -27,22 +28,28 @@ import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.ArtifactRepositoryFactory;
 import org.apache.maven.artifact.repository.ArtifactRepositoryPolicy;
 import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
-
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /** @plexus.component */
 public class DefaultArchetypeRegistryManager
@@ -165,10 +172,17 @@ public class DefaultArchetypeRegistryManager
     public ArchetypeRegistry readArchetypeRegistry( File archetypeRegistryFile )
         throws
         IOException,
-        FileNotFoundException,
         XmlPullParserException
     {
+        if ( !archetypeRegistryFile.exists() )
+        {
+            ArchetypeRegistry registry = getDefaultArchetypeRegistry();
+
+            writeArchetypeRegistry( archetypeRegistryFile, registry );            
+        }
+
         ArchetypeRegistryXpp3Reader reader = new ArchetypeRegistryXpp3Reader();
+        
         FileReader fileReader = new FileReader( archetypeRegistryFile );
 
         try
@@ -309,17 +323,107 @@ public class DefaultArchetypeRegistryManager
         ArchetypeRegistry registry = new ArchetypeRegistry();
 
         registry.addArchetypeGroup( "org.apache.maven.archetypes" );
+
         registry.addArchetypeGroup( "org.codehaus.mojo.archetypes" );
 
         registry.getLanguages().addAll( Constants.DEFAULT_LANGUAGES );
+
         registry.getFilteredExtensions().addAll( Constants.DEFAULT_FILTERED_EXTENSIONS );
 
-        ArchetypeRepository archetypeRepository = new ArchetypeRepository();
-        archetypeRepository.setId( "central" );
-        archetypeRepository.setUrl( "http://repo1.maven.org/maven2" );
+        registry.addArchetypeRepository( addRepository( "central", "http://repo1.maven.org/maven2") );
 
-        registry.addArchetypeRepository( archetypeRepository );
+        try
+        {
+            Map archetypes = loadArchetypesFromWiki( DEFAULT_ARCHETYPE_INVENTORY_PAGE );
+
+            for ( Iterator i = archetypes.values().iterator(); i.hasNext(); )
+            {
+                Archetype archetype = (Archetype) i.next();
+
+                registry.addArchetype( archetype );
+
+                registry.addArchetypeRepository( addRepository( archetype.getRepository(), archetype.getRepository() ) );                
+            }
+        }
+        catch ( Exception e )
+        {
+            getLogger().warn( "Could not load archetypes listed at " + DEFAULT_ARCHETYPE_INVENTORY_PAGE );
+        }
 
         return registry;
+    }
+
+    private ArchetypeRepository addRepository( String id, String url )
+    {
+        ArchetypeRepository archetypeRepository = new ArchetypeRepository();
+
+        archetypeRepository.setId( id );
+
+        archetypeRepository.setUrl( url );
+
+        return archetypeRepository;
+    }
+
+    private String DEFAULT_ARCHETYPE_INVENTORY_PAGE="http://docs.codehaus.org/pages/viewpagesrc.action?pageId=48400";
+
+    static Map loadArchetypesFromWiki( String url )
+        throws Exception
+    {
+        Map archetypes = new LinkedHashMap();
+
+        StringBuffer sb = new StringBuffer();
+
+        InputStream in = new URL( cleanupUrl( url ) ).openStream();
+
+        BufferedReader reader = new BufferedReader( new InputStreamReader( in ) );
+
+        char[] buffer = new char[1024];
+
+        int len = 0;
+
+        while ( ( len = reader.read( buffer ) ) > -1 )
+        {
+            sb.append( buffer, 0, len );
+        }
+
+        Pattern ptn = Pattern.compile( "<br>\\|([-a-zA-Z0-9_. ]+)\\|([-a-zA-Z0-9_. ]+)\\|([-a-zA-Z0-9_. ]+)\\|([-a-zA-Z0-9_.:/ \\[\\],]+)\\|([^|]+)\\|" );
+
+        Matcher m = ptn.matcher( sb.toString() );
+
+        while ( m.find() )
+        {
+            org.apache.maven.archetype.registry.Archetype arch = new Archetype();
+
+            arch.setArtifactId( m.group( 1 ).trim() );
+
+            arch.setGroupId( m.group( 2 ).trim() );
+
+            String version = m.group( 3 ).trim();
+
+            if ( version.equals( "" ) )
+            {
+                version = "LATEST";
+            }
+
+            arch.setVersion( version );
+
+            arch.setRepository(cleanupUrl(m.group(4).trim()));
+
+            arch.setDescription( cleanup( m.group( 5 ).trim() ) );
+
+            archetypes.put( arch.getArtifactId(), arch );
+        }
+        return archetypes;
+    }
+
+    static String cleanup( String val )
+    {
+        val = val.replaceAll( "\\r|\\n|\\s{2,}", "" );
+        return val;
+    }
+
+    static String cleanupUrl( String val )
+    {
+        return val.replaceAll( "\\r|\\n|\\s{2,}|\\[|\\]|\\&nbsp;", "" );
     }
 }

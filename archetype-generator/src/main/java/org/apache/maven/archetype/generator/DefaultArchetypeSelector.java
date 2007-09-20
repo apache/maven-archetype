@@ -31,15 +31,14 @@ import org.apache.maven.archetype.exception.ArchetypeSelectionFailure;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.archetype.exception.UnknownGroup;
 import org.apache.maven.artifact.repository.ArtifactRepository;
-
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 /** @plexus.component */
@@ -77,7 +76,6 @@ public class DefaultArchetypeSelector
         UnknownArchetype,
         UnknownGroup,
         IOException,
-        FileNotFoundException,
         PrompterException,
         ArchetypeSelectionFailure
     {
@@ -109,6 +107,38 @@ public class DefaultArchetypeSelector
             else
             {
                 getLogger().debug( "Archetype is not defined" );
+            }
+
+            // We are going to let the user select from a list of available archetypes first
+
+            if ( !archetypeDefinition.isDefined() )
+            {
+                List availableArchetypeInRegistry = archetypeRegistryManager.getDefaultArchetypeRegistry().getArchetypes();
+
+                if ( availableArchetypeInRegistry != null )
+                {
+                    org.apache.maven.archetype.registry.Archetype archetype = archetypeSelectionQueryer.selectArchetype(
+                        availableArchetypeInRegistry );
+
+                    ArchetypeDefinition ad = new ArchetypeDefinition();
+
+                    ad.setArtifactId( archetype.getArtifactId() );
+
+                    ad.setName( archetype.getArtifactId() );
+
+                    ad.setGroupId( archetype.getGroupId() );
+
+                    ad.setVersion( archetype.getVersion() );
+
+                    ad.setRepository( archetype.getRepository() );
+
+                    archetypePropertiesManager.writeProperties(
+                        ad.toProperties(),
+                        propertyFile
+                    );
+
+                    return;
+                }
             }
 
             List groups = archetypeRegistryManager.getArchetypeGroups( archetypeRegistryFile );
@@ -256,6 +286,7 @@ public class DefaultArchetypeSelector
                     );
                 }
             }
+
             if ( !archetypeDefinition.isDefined() )
             {
                 throw new ArchetypeSelectionFailure( "The archetype must be selected here" );

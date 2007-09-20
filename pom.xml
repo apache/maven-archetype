@@ -44,7 +44,9 @@ under the License.
     <module>archetype-generator</module>
     <module>archetype-creator</module>
     <module>archetype-plugin</module>
+    <!--
     <module>archetype-packaging</module>
+    -->
   </modules>
 
   <licenses>

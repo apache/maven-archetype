@@ -33,6 +33,13 @@ under the License.
       <name>ArchetypeRegistry</name>
       <fields>
         <field>
+          <name>archetypes</name>
+          <association>
+            <type>Archetype</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
           <name>ArchetypeGroups</name>
           <association>
             <type>String</type>
@@ -104,6 +111,37 @@ under the License.
                     ]]></code>
         </codeSegment>
       </codeSegments>
+    </class>
+
+    <class>
+      <name>Archetype</name>
+      <fields>
+        <field>
+          <name>groupId</name>
+          <type>String</type>
+          <required>true</required>
+        </field>
+        <field>
+          <name>artifactId</name>
+          <type>String</type>
+          <required>true</required>
+        </field>
+        <field>
+          <name>version</name>
+          <type>String</type>
+          <required>true</required>
+        </field>
+        <field>
+          <name>repository</name>
+          <type>String</type>
+          <required>true</required>
+        </field>
+        <field>
+          <name>description</name>
+          <type>String</type>
+          <required>true</required>
+        </field>
+      </fields>
     </class>
   </classes>
 </model>

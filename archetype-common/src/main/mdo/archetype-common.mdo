@@ -122,6 +122,10 @@ under the License.
           <name>Name</name>
           <type>String</type>
         </field>
+        <field>
+          <name>repository</name>
+          <type>String</type>
+        </field>
       </fields>
       <codeSegments>
         <codeSegment>
