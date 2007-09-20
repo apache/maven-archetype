@@ -76,8 +76,12 @@ public class CreateProjectFromArchetypeMojo
         if ( goals != null && projectBasedir.exists() )
         {
             InvocationRequest request = new DefaultInvocationRequest()
-                .setBaseDirectory( projectBasedir )
-                .setGoals( Arrays.asList( StringUtils.split( goals, "," ) ) );
+                .setBaseDirectory( projectBasedir );
+
+            if ( goals != null )
+            {
+                request.setGoals( Arrays.asList( StringUtils.split( goals, "," ) ) );
+            }
 
             try
             {
