@@ -71,6 +71,10 @@ public class CreateProjectFromArchetypeMojo
         // run some goals that the archetype creator has requested to be run once the project
         // has been created.
 
+        //TODO update the archetype descriptor to save goals and properties
+        //TODO probably write out the properties to a file for now
+        //TODO remove the properties files when the execution is complete
+
         File projectBasedir = new File( basedir, (String) getPluginContext().get( "artifactId" ) );
 
         if ( goals != null && projectBasedir.exists() )
