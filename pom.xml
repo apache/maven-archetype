@@ -38,15 +38,10 @@ under the License.
   <packaging>pom</packaging>
 
   <modules>
-    <module>archetype-descriptor</module>
-    <module>archetype-registry</module>
     <module>archetype-common</module>
     <module>archetype-generator</module>
     <module>archetype-creator</module>
     <module>archetype-plugin</module>
-    <!--
-    <module>archetype-packaging</module>
-    -->
   </modules>
 
   <licenses>
