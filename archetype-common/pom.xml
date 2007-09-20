@@ -41,14 +41,6 @@ under the License.
       <artifactId>jchardet</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.maven.archetype</groupId>
-      <artifactId>archetype-descriptor</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.archetype</groupId>
-      <artifactId>archetype-registry</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.apache.maven.shared</groupId>
       <artifactId>maven-downloader</artifactId>
     </dependency>
@@ -106,6 +98,8 @@ under the License.
             <goals>
               <goal>java</goal>
               <goal>xsd</goal>
+              <goal>xpp3-reader</goal>
+              <goal>xpp3-writer</goal>
             </goals>
             <configuration>
               <version>1.0.0</version>
@@ -117,6 +111,8 @@ under the License.
             <goals>
               <goal>java</goal>
               <goal>xsd</goal>
+              <goal>xpp3-reader</goal>
+              <goal>xpp3-writer</goal>
             </goals>
             <configuration>
               <version>1.0.0</version>
@@ -128,6 +124,8 @@ under the License.
             <goals>
               <goal>java</goal>
               <goal>xsd</goal>
+              <goal>xpp3-reader</goal>
+              <goal>xpp3-writer</goal>
             </goals>
             <configuration>
               <version>1.0.0</version>

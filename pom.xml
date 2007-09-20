@@ -61,16 +61,6 @@ under the License.
     <dependencies>
       <dependency>
         <groupId>org.apache.maven.archetype</groupId>
-        <artifactId>archetype-descriptor</artifactId>
-        <version>1.0-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.maven.archetype</groupId>
-        <artifactId>archetype-registry</artifactId>
-        <version>1.0-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.maven.archetype</groupId>
         <artifactId>archetype-generator</artifactId>
         <version>1.0-SNAPSHOT</version>
       </dependency>
