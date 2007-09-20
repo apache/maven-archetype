@@ -20,23 +20,25 @@
 package org.apache.maven.archetype.exception;
 
 public class UnknownGroup
-extends Exception
+    extends Exception
 {
-    public UnknownGroup ()
-    { }
-
-    public UnknownGroup ( String msg )
+    public UnknownGroup()
     {
-        super ( msg );
     }
 
-    public UnknownGroup ( Throwable cause )
+    public UnknownGroup( String msg )
     {
-        super ( cause );
+        super( msg );
     }
 
-    public UnknownGroup ( String msg, Throwable cause )
+    public UnknownGroup( Throwable cause )
     {
-        super ( msg, cause );
+        super( cause );
+    }
+
+    public UnknownGroup( String msg,
+                         Throwable cause )
+    {
+        super( msg, cause );
     }
 }

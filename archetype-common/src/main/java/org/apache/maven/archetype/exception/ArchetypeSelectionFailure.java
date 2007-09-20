@@ -20,23 +20,25 @@
 package org.apache.maven.archetype.exception;
 
 public class ArchetypeSelectionFailure
-extends Exception
+    extends Exception
 {
-    public ArchetypeSelectionFailure ()
-    { }
-
-    public ArchetypeSelectionFailure ( String msg )
+    public ArchetypeSelectionFailure()
     {
-        super ( msg );
     }
 
-    public ArchetypeSelectionFailure ( Throwable cause )
+    public ArchetypeSelectionFailure( String msg )
     {
-        super ( cause );
+        super( msg );
     }
 
-    public ArchetypeSelectionFailure ( String msg, Throwable cause )
+    public ArchetypeSelectionFailure( Throwable cause )
     {
-        super ( msg, cause );
+        super( cause );
+    }
+
+    public ArchetypeSelectionFailure( String msg,
+                                      Throwable cause )
+    {
+        super( msg, cause );
     }
 }

@@ -20,23 +20,25 @@
 package org.apache.maven.archetype.exception;
 
 public class TemplateCreationException
-extends Exception
+    extends Exception
 {
-    public TemplateCreationException ()
-    { }
-
-    public TemplateCreationException ( String msg )
+    public TemplateCreationException()
     {
-        super ( msg );
     }
 
-    public TemplateCreationException ( Throwable cause )
+    public TemplateCreationException( String msg )
     {
-        super ( cause );
+        super( msg );
     }
 
-    public TemplateCreationException ( String msg, Throwable cause )
+    public TemplateCreationException( Throwable cause )
     {
-        super ( msg, cause );
+        super( cause );
+    }
+
+    public TemplateCreationException( String msg,
+                                      Throwable cause )
+    {
+        super( msg, cause );
     }
 }

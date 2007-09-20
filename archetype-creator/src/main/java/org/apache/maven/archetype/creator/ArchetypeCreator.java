@@ -33,9 +33,9 @@ import java.util.List;
 
 public interface ArchetypeCreator
 {
-    String ROLE = ArchetypeCreator.class.getName ();
+    String ROLE = ArchetypeCreator.class.getName();
 
-    void createArchetype (
+    void createArchetype(
         MavenProject project,
         File propertyFile,
         List languages,
@@ -47,7 +47,8 @@ public interface ArchetypeCreator
         boolean partialArchetype,
         File archetypeRegistryFile
     )
-    throws IOException,
+        throws
+        IOException,
         ArchetypeNotDefined,
         ArchetypeNotConfigured,
         TemplateCreationException,

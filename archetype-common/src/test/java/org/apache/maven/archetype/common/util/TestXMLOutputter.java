@@ -22,6 +22,7 @@ package org.apache.maven.archetype.common.util;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+
 import junit.framework.TestCase;
 
 
@@ -29,22 +30,22 @@ import org.jdom.Document;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
-/**
- * @author  <a href="mailto:jdcasey@apache.org">John Casey</a>
- */
+/** @author <a href="mailto:jdcasey@apache.org">John Casey</a> */
 public class TestXMLOutputter
-extends TestCase
+    extends TestCase
 {
     public void testOutput_Document_ShouldParseAndOutputCDATASection_NoMods()
-        throws JDOMException, IOException
+        throws
+        JDOMException,
+        IOException
     {
         String content =
             "<document>" +
-            "<element1>This is some text</element1>" +
-            "<description>And then," +
-            "<![CDATA[<more content goes here>]]>" +
-            "</description><!--somecomment-->" +
-            "</document>";
+                "<element1>This is some text</element1>" +
+                "<description>And then," +
+                "<![CDATA[<more content goes here>]]>" +
+                "</description><!--somecomment-->" +
+                "</document>";
 
         Document doc = new SAXBuilder().build( new StringReader( content ) );
 

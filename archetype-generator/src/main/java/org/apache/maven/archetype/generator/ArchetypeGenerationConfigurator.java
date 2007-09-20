@@ -35,16 +35,17 @@ import java.util.Properties;
 
 public interface ArchetypeGenerationConfigurator
 {
-    String ROLE = ArchetypeGenerationConfigurator.class.getName ();
+    String ROLE = ArchetypeGenerationConfigurator.class.getName();
 
-    void configureArchetype (
+    void configureArchetype(
         Boolean interactiveMode,
         File propertyFile,
         Properties commandLineProperties,
         ArtifactRepository localRepository,
         List repositories
     )
-    throws ArchetypeNotDefined,
+        throws
+        ArchetypeNotDefined,
         UnknownArchetype,
         ArchetypeNotConfigured,
         IOException,

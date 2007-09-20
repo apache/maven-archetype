@@ -28,121 +28,131 @@ import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 import java.util.Iterator;
 
-/**
- * @plexus.component
- */
+/** @plexus.component */
 public class DefaultArchetypeCreationQueryer
-extends AbstractLogEnabled
-implements ArchetypeCreationQueryer
+    extends AbstractLogEnabled
+    implements ArchetypeCreationQueryer
 {
-    /**
-     * @plexus.requirement
-     */
+    /** @plexus.requirement */
     private Prompter prompter;
 
-    public String getArchetypeArtifactId ( String defaultValue )
-    throws PrompterException
+    public String getArchetypeArtifactId( String defaultValue )
+        throws
+        PrompterException
     {
-        return getValue ( Constants.ARCHETYPE_ARTIFACT_ID, defaultValue );
+        return getValue( Constants.ARCHETYPE_ARTIFACT_ID, defaultValue );
     }
 
-    public String getArchetypeGroupId ( String defaultValue )
-    throws PrompterException
+    public String getArchetypeGroupId( String defaultValue )
+        throws
+        PrompterException
     {
-        return getValue ( Constants.ARCHETYPE_GROUP_ID, defaultValue );
+        return getValue( Constants.ARCHETYPE_GROUP_ID, defaultValue );
     }
 
-    public String getArchetypeVersion ( String defaultValue )
-    throws PrompterException
+    public String getArchetypeVersion( String defaultValue )
+        throws
+        PrompterException
     {
-        return getValue ( Constants.ARCHETYPE_VERSION, defaultValue );
+        return getValue( Constants.ARCHETYPE_VERSION, defaultValue );
     }
 
-    public String getArtifactId ( String defaultValue )
-    throws PrompterException
+    public String getArtifactId( String defaultValue )
+        throws
+        PrompterException
     {
-        return getValue ( Constants.ARTIFACT_ID, defaultValue );
+        return getValue( Constants.ARTIFACT_ID, defaultValue );
     }
 
-    public boolean askAddAnotherProperty ()
-    throws PrompterException
+    public boolean askAddAnotherProperty()
+        throws
+        PrompterException
     {
         String query = "Add a new custom property";
 
-        String answer = prompter.prompt ( query, "Y" );
+        String answer = prompter.prompt( query, "Y" );
 
-        return "Y".equalsIgnoreCase ( answer );
+        return "Y".equalsIgnoreCase( answer );
     }
 
-    public String askNewPropertyKey ()
-    throws PrompterException
+    public String askNewPropertyKey()
+        throws
+        PrompterException
     {
         String query = "Define property key";
 
-        String answer = prompter.prompt ( query );
+        String answer = prompter.prompt( query );
 
         return answer;
     }
 
-    public String askReplacementValue ( String propertyKey, String defaultValue )
-    throws PrompterException
+    public String askReplacementValue( String propertyKey,
+                                       String defaultValue )
+        throws
+        PrompterException
     {
-        return getValue ( propertyKey, defaultValue );
+        return getValue( propertyKey, defaultValue );
     }
 
-    public boolean confirmConfiguration ( ArchetypeConfiguration archetypeConfiguration )
-    throws PrompterException
+    public boolean confirmConfiguration( ArchetypeConfiguration archetypeConfiguration )
+        throws
+        PrompterException
     {
         String query = "Confirm archetype configuration:\n";
-        query += Constants.ARCHETYPE_GROUP_ID + "=" + archetypeConfiguration.getGroupId () + "\n";
+        query += Constants.ARCHETYPE_GROUP_ID + "=" + archetypeConfiguration.getGroupId() + "\n";
         query +=
-            Constants.ARCHETYPE_ARTIFACT_ID + "=" + archetypeConfiguration.getArtifactId () + "\n";
-        query += Constants.ARCHETYPE_VERSION + "=" + archetypeConfiguration.getVersion () + "\n";
+            Constants.ARCHETYPE_ARTIFACT_ID + "=" + archetypeConfiguration.getArtifactId() + "\n";
+        query += Constants.ARCHETYPE_VERSION + "=" + archetypeConfiguration.getVersion() + "\n";
 
-        Iterator propertiesIter = archetypeConfiguration.getProperties ().keySet ().iterator ();
+        Iterator propertiesIter = archetypeConfiguration.getProperties().keySet().iterator();
 
-        while ( propertiesIter.hasNext () )
+        while ( propertiesIter.hasNext() )
         {
-            String property = (String) propertiesIter.next ();
-            query += property + "=" + archetypeConfiguration.getProperty ( property ) + "\n";
+            String property = (String) propertiesIter.next();
+            query += property + "=" + archetypeConfiguration.getProperty( property ) + "\n";
         }
 
-        String answer = prompter.prompt ( query, "Y" );
+        String answer = prompter.prompt( query, "Y" );
 
-        return "Y".equalsIgnoreCase ( answer );
+        return "Y".equalsIgnoreCase( answer );
     }
 
-    public String getGroupId ( String defaultValue )
-    throws PrompterException
+    public String getGroupId( String defaultValue )
+        throws
+        PrompterException
     {
-        return getValue ( Constants.GROUP_ID, defaultValue );
+        return getValue( Constants.GROUP_ID, defaultValue );
     }
 
-    public String getPackage ( String defaultValue )
-    throws PrompterException
+    public String getPackage( String defaultValue )
+        throws
+        PrompterException
     {
-        return getValue ( Constants.PACKAGE, defaultValue );
+        return getValue( Constants.PACKAGE, defaultValue );
     }
 
-    public String getVersion ( String defaultValue )
-    throws PrompterException
+    public String getVersion( String defaultValue )
+        throws
+        PrompterException
     {
-        return getValue ( Constants.VERSION, defaultValue );
+        return getValue( Constants.VERSION, defaultValue );
     }
 
-    private String getValue ( String requiredProperty, String defaultValue )
-    throws PrompterException
+    private String getValue( String requiredProperty,
+                             String defaultValue )
+        throws
+        PrompterException
     {
         String query = "Define value for " + requiredProperty + ": ";
         String answer;
 
-        if ( ( defaultValue != null ) && !defaultValue.equals ( "null" ) )
+        if ( ( defaultValue != null ) && !defaultValue.equals( "null" ) )
         {
-            answer = prompter.prompt ( query, defaultValue );
+            answer = prompter.prompt( query, defaultValue );
         }
         else
         {
-            answer = prompter.prompt ( query );
+            answer = prompter.prompt( query );
         }
         return answer;
     }

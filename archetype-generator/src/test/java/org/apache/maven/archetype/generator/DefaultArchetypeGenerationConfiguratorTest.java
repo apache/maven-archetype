@@ -39,15 +39,16 @@ import java.util.List;
 import java.util.Properties;
 
 public class DefaultArchetypeGenerationConfiguratorTest
-extends AbstractMojoTestCase
+    extends AbstractMojoTestCase
 {
     ArtifactRepository localRepository;
     List repositories;
 
-    public void testBatchModeArchetypeNotDefined ()
-    throws Exception
+    public void testBatchModeArchetypeNotDefined()
+        throws
+        Exception
     {
-        System.out.println ( "testBatchModeArchetypeNotDefined" );
+        System.out.println( "testBatchModeArchetypeNotDefined" );
 
         String archetypeGroupId = null;
         String archetypeArtifactId = null;
@@ -56,39 +57,40 @@ extends AbstractMojoTestCase
         Boolean interactiveMode = Boolean.FALSE;
 
         String project = "configure-1";
-        File propertyFile = getPropertiesFile ( project );
-        assertTrue ( !propertyFile.exists () || propertyFile.delete () );
+        File propertyFile = getPropertiesFile( project );
+        assertTrue( !propertyFile.exists() || propertyFile.delete() );
 
         DefaultArchetypeGenerationConfigurator instance =
-            (DefaultArchetypeGenerationConfigurator) lookup (
+            (DefaultArchetypeGenerationConfigurator) lookup(
                 ArchetypeGenerationConfigurator.ROLE
             );
-        instanceDefined ( instance );
+        instanceDefined( instance );
 
-        assertFalse ( propertyFile.exists () );
+        assertFalse( propertyFile.exists() );
 
         try
         {
-            instance.configureArchetype (
+            instance.configureArchetype(
                 interactiveMode,
                 propertyFile,
-                System.getProperties (),
+                System.getProperties(),
                 localRepository,
                 repositories
             );
 
-            fail ( "Exception must be thrown" );
+            fail( "Exception must be thrown" );
         }
         catch ( FileNotFoundException e )
         {
-            assertFalse ( propertyFile.exists () );
+            assertFalse( propertyFile.exists() );
         }
     }
 
-    public void testBatchModeOldArchetype ()
-    throws Exception
+    public void testBatchModeOldArchetype()
+        throws
+        Exception
     {
-        System.out.println ( "testBatchModeOldArchetype" );
+        System.out.println( "testBatchModeOldArchetype" );
 
         String archetypeGroupId = null;
         String archetypeArtifactId = null;
@@ -97,25 +99,25 @@ extends AbstractMojoTestCase
         Boolean interactiveMode = Boolean.FALSE;
 
         String project = "configure-7";
-        File propertyFile = getPropertiesFile ( project );
-        File propertyFileSample = getPropertiesSampleFile ( project );
-        copy ( propertyFileSample, propertyFile );
+        File propertyFile = getPropertiesFile( project );
+        File propertyFileSample = getPropertiesSampleFile( project );
+        copy( propertyFileSample, propertyFile );
 
-        Properties systemProperties = new Properties ();
-        systemProperties.setProperty ( "groupId", "system-value" );
-        systemProperties.setProperty ( "artifactId", "system-value" );
-        systemProperties.setProperty ( "version", "system-value" );
-        systemProperties.setProperty ( "package", "system-value" );
+        Properties systemProperties = new Properties();
+        systemProperties.setProperty( "groupId", "system-value" );
+        systemProperties.setProperty( "artifactId", "system-value" );
+        systemProperties.setProperty( "version", "system-value" );
+        systemProperties.setProperty( "package", "system-value" );
 
         DefaultArchetypeGenerationConfigurator instance =
-            (DefaultArchetypeGenerationConfigurator) lookup (
+            (DefaultArchetypeGenerationConfigurator) lookup(
                 ArchetypeGenerationConfigurator.ROLE
             );
-        instanceDefined ( instance );
+        instanceDefined( instance );
 
-        assertTrue ( propertyFile.exists () );
+        assertTrue( propertyFile.exists() );
 
-        instance.configureArchetype (
+        instance.configureArchetype(
             interactiveMode,
             propertyFile,
             systemProperties,
@@ -123,23 +125,24 @@ extends AbstractMojoTestCase
             repositories
         );
 
-        assertTrue ( propertyFile.exists () );
+        assertTrue( propertyFile.exists() );
 
-        Properties properties = loadProperties ( propertyFile );
-        assertEquals ( "archetypes", properties.getProperty ( "archetype.groupId" ) );
-        assertEquals ( "old", properties.getProperty ( "archetype.artifactId" ) );
-        assertEquals ( "1.0", properties.getProperty ( "archetype.version" ) );
+        Properties properties = loadProperties( propertyFile );
+        assertEquals( "archetypes", properties.getProperty( "archetype.groupId" ) );
+        assertEquals( "old", properties.getProperty( "archetype.artifactId" ) );
+        assertEquals( "1.0", properties.getProperty( "archetype.version" ) );
 
-        assertEquals ( "system-value", properties.getProperty ( "groupId" ) );
-        assertEquals ( "system-value", properties.getProperty ( "artifactId" ) );
-        assertEquals ( "system-value", properties.getProperty ( "version" ) );
-        assertEquals ( "system-value", properties.getProperty ( "package" ) );
+        assertEquals( "system-value", properties.getProperty( "groupId" ) );
+        assertEquals( "system-value", properties.getProperty( "artifactId" ) );
+        assertEquals( "system-value", properties.getProperty( "version" ) );
+        assertEquals( "system-value", properties.getProperty( "package" ) );
     }
 
-    public void testBatchModePropertiesDefinedInFile ()
-    throws Exception
+    public void testBatchModePropertiesDefinedInFile()
+        throws
+        Exception
     {
-        System.out.println ( "testBatchModePropertiesDefinedInSytem" );
+        System.out.println( "testBatchModePropertiesDefinedInSytem" );
 
         String archetypeGroupId = null;
         String archetypeArtifactId = null;
@@ -148,51 +151,52 @@ extends AbstractMojoTestCase
         Boolean interactiveMode = Boolean.FALSE;
 
         String project = "configure-4";
-        File propertyFile = getPropertiesFile ( project );
-        File propertyFileSample = getPropertiesSampleFile ( project );
-        copy ( propertyFileSample, propertyFile );
+        File propertyFile = getPropertiesFile( project );
+        File propertyFileSample = getPropertiesSampleFile( project );
+        copy( propertyFileSample, propertyFile );
 
         DefaultArchetypeGenerationConfigurator instance =
-            (DefaultArchetypeGenerationConfigurator) lookup (
+            (DefaultArchetypeGenerationConfigurator) lookup(
                 ArchetypeGenerationConfigurator.ROLE
             );
-        instanceDefined ( instance );
+        instanceDefined( instance );
 
-        assertTrue ( propertyFile.exists () );
+        assertTrue( propertyFile.exists() );
 
-        instance.configureArchetype (
+        instance.configureArchetype(
             interactiveMode,
             propertyFile,
-            System.getProperties (),
+            System.getProperties(),
             localRepository,
             repositories
         );
 
-        assertTrue ( propertyFile.exists () );
+        assertTrue( propertyFile.exists() );
 
-        Properties properties = loadProperties ( propertyFile );
-        assertEquals ( "archetypes", properties.getProperty ( "archetype.groupId" ) );
-        assertEquals ( "basic", properties.getProperty ( "archetype.artifactId" ) );
-        assertEquals ( "1.0", properties.getProperty ( "archetype.version" ) );
+        Properties properties = loadProperties( propertyFile );
+        assertEquals( "archetypes", properties.getProperty( "archetype.groupId" ) );
+        assertEquals( "basic", properties.getProperty( "archetype.artifactId" ) );
+        assertEquals( "1.0", properties.getProperty( "archetype.version" ) );
 
-        assertEquals ( "file-value", properties.getProperty ( "groupId" ) );
-        assertEquals ( "file-value", properties.getProperty ( "artifactId" ) );
-        assertEquals ( "file-value", properties.getProperty ( "version" ) );
-        assertEquals ( "file-value", properties.getProperty ( "package" ) );
-        assertEquals ( "file-value", properties.getProperty ( "property-with-default-1" ) );
-        assertEquals ( "file-value", properties.getProperty ( "property-with-default-2" ) );
-        assertEquals ( "file-value", properties.getProperty ( "property-with-default-3" ) );
-        assertEquals ( "file-value", properties.getProperty ( "property-with-default-4" ) );
-        assertEquals ( "file-value", properties.getProperty ( "property-without-default-1" ) );
-        assertEquals ( "file-value", properties.getProperty ( "property-without-default-2" ) );
-        assertEquals ( "file-value", properties.getProperty ( "property-without-default-3" ) );
-        assertEquals ( "file-value", properties.getProperty ( "property-without-default-4" ) );
+        assertEquals( "file-value", properties.getProperty( "groupId" ) );
+        assertEquals( "file-value", properties.getProperty( "artifactId" ) );
+        assertEquals( "file-value", properties.getProperty( "version" ) );
+        assertEquals( "file-value", properties.getProperty( "package" ) );
+        assertEquals( "file-value", properties.getProperty( "property-with-default-1" ) );
+        assertEquals( "file-value", properties.getProperty( "property-with-default-2" ) );
+        assertEquals( "file-value", properties.getProperty( "property-with-default-3" ) );
+        assertEquals( "file-value", properties.getProperty( "property-with-default-4" ) );
+        assertEquals( "file-value", properties.getProperty( "property-without-default-1" ) );
+        assertEquals( "file-value", properties.getProperty( "property-without-default-2" ) );
+        assertEquals( "file-value", properties.getProperty( "property-without-default-3" ) );
+        assertEquals( "file-value", properties.getProperty( "property-without-default-4" ) );
     }
 
-    public void testBatchModePropertiesDefinedInSystem ()
-    throws Exception
+    public void testBatchModePropertiesDefinedInSystem()
+        throws
+        Exception
     {
-        System.out.println ( "testBatchModePropertiesDefinedInSystem" );
+        System.out.println( "testBatchModePropertiesDefinedInSystem" );
 
         String archetypeGroupId = null;
         String archetypeArtifactId = null;
@@ -201,33 +205,33 @@ extends AbstractMojoTestCase
         Boolean interactiveMode = Boolean.FALSE;
 
         String project = "configure-3";
-        File propertyFile = getPropertiesFile ( project );
-        File propertyFileSample = getPropertiesSampleFile ( project );
-        copy ( propertyFileSample, propertyFile );
+        File propertyFile = getPropertiesFile( project );
+        File propertyFileSample = getPropertiesSampleFile( project );
+        copy( propertyFileSample, propertyFile );
 
-        Properties systemProperties = new Properties ();
-        systemProperties.setProperty ( "groupId", "system-value" );
-        systemProperties.setProperty ( "artifactId", "system-value" );
-        systemProperties.setProperty ( "version", "system-value" );
-        systemProperties.setProperty ( "package", "system-value" );
-        systemProperties.setProperty ( "property-with-default-1", "system-value" );
-        systemProperties.setProperty ( "property-with-default-2", "system-value" );
-        systemProperties.setProperty ( "property-with-default-3", "system-value" );
-        systemProperties.setProperty ( "property-with-default-4", "system-value" );
-        systemProperties.setProperty ( "property-without-default-1", "system-value" );
-        systemProperties.setProperty ( "property-without-default-2", "system-value" );
-        systemProperties.setProperty ( "property-without-default-3", "system-value" );
-        systemProperties.setProperty ( "property-without-default-4", "system-value" );
+        Properties systemProperties = new Properties();
+        systemProperties.setProperty( "groupId", "system-value" );
+        systemProperties.setProperty( "artifactId", "system-value" );
+        systemProperties.setProperty( "version", "system-value" );
+        systemProperties.setProperty( "package", "system-value" );
+        systemProperties.setProperty( "property-with-default-1", "system-value" );
+        systemProperties.setProperty( "property-with-default-2", "system-value" );
+        systemProperties.setProperty( "property-with-default-3", "system-value" );
+        systemProperties.setProperty( "property-with-default-4", "system-value" );
+        systemProperties.setProperty( "property-without-default-1", "system-value" );
+        systemProperties.setProperty( "property-without-default-2", "system-value" );
+        systemProperties.setProperty( "property-without-default-3", "system-value" );
+        systemProperties.setProperty( "property-without-default-4", "system-value" );
 
         DefaultArchetypeGenerationConfigurator instance =
-            (DefaultArchetypeGenerationConfigurator) lookup (
+            (DefaultArchetypeGenerationConfigurator) lookup(
                 ArchetypeGenerationConfigurator.ROLE
             );
-        instanceDefined ( instance );
+        instanceDefined( instance );
 
-        assertTrue ( propertyFile.exists () );
+        assertTrue( propertyFile.exists() );
 
-        instance.configureArchetype (
+        instance.configureArchetype(
             interactiveMode,
             propertyFile,
             systemProperties,
@@ -235,31 +239,32 @@ extends AbstractMojoTestCase
             repositories
         );
 
-        assertTrue ( propertyFile.exists () );
+        assertTrue( propertyFile.exists() );
 
-        Properties properties = loadProperties ( propertyFile );
-        assertEquals ( "archetypes", properties.getProperty ( "archetype.groupId" ) );
-        assertEquals ( "basic", properties.getProperty ( "archetype.artifactId" ) );
-        assertEquals ( "1.0", properties.getProperty ( "archetype.version" ) );
+        Properties properties = loadProperties( propertyFile );
+        assertEquals( "archetypes", properties.getProperty( "archetype.groupId" ) );
+        assertEquals( "basic", properties.getProperty( "archetype.artifactId" ) );
+        assertEquals( "1.0", properties.getProperty( "archetype.version" ) );
 
-        assertEquals ( "system-value", properties.getProperty ( "groupId" ) );
-        assertEquals ( "system-value", properties.getProperty ( "artifactId" ) );
-        assertEquals ( "system-value", properties.getProperty ( "version" ) );
-        assertEquals ( "system-value", properties.getProperty ( "package" ) );
-        assertEquals ( "system-value", properties.getProperty ( "property-with-default-1" ) );
-        assertEquals ( "system-value", properties.getProperty ( "property-with-default-2" ) );
-        assertEquals ( "system-value", properties.getProperty ( "property-with-default-3" ) );
-        assertEquals ( "system-value", properties.getProperty ( "property-with-default-4" ) );
-        assertEquals ( "system-value", properties.getProperty ( "property-without-default-1" ) );
-        assertEquals ( "system-value", properties.getProperty ( "property-without-default-2" ) );
-        assertEquals ( "system-value", properties.getProperty ( "property-without-default-3" ) );
-        assertEquals ( "system-value", properties.getProperty ( "property-without-default-4" ) );
+        assertEquals( "system-value", properties.getProperty( "groupId" ) );
+        assertEquals( "system-value", properties.getProperty( "artifactId" ) );
+        assertEquals( "system-value", properties.getProperty( "version" ) );
+        assertEquals( "system-value", properties.getProperty( "package" ) );
+        assertEquals( "system-value", properties.getProperty( "property-with-default-1" ) );
+        assertEquals( "system-value", properties.getProperty( "property-with-default-2" ) );
+        assertEquals( "system-value", properties.getProperty( "property-with-default-3" ) );
+        assertEquals( "system-value", properties.getProperty( "property-with-default-4" ) );
+        assertEquals( "system-value", properties.getProperty( "property-without-default-1" ) );
+        assertEquals( "system-value", properties.getProperty( "property-without-default-2" ) );
+        assertEquals( "system-value", properties.getProperty( "property-without-default-3" ) );
+        assertEquals( "system-value", properties.getProperty( "property-without-default-4" ) );
     }
 
-    public void testBatchModePropertiesNotDefined ()
-    throws Exception
+    public void testBatchModePropertiesNotDefined()
+        throws
+        Exception
     {
-        System.out.println ( "testBatchModePropertiesNotDefined" );
+        System.out.println( "testBatchModePropertiesNotDefined" );
 
         String archetypeGroupId = "archetypes";
         String archetypeArtifactId = "basic";
@@ -268,44 +273,45 @@ extends AbstractMojoTestCase
         Boolean interactiveMode = Boolean.FALSE;
 
         String project = "configure-2";
-        File propertyFile = getPropertiesFile ( project );
-        File propertyFileSample = getPropertiesSampleFile ( project );
-        copy ( propertyFileSample, propertyFile );
+        File propertyFile = getPropertiesFile( project );
+        File propertyFileSample = getPropertiesSampleFile( project );
+        copy( propertyFileSample, propertyFile );
 
         DefaultArchetypeGenerationConfigurator instance =
-            (DefaultArchetypeGenerationConfigurator) lookup (
+            (DefaultArchetypeGenerationConfigurator) lookup(
                 ArchetypeGenerationConfigurator.ROLE
             );
-        instanceDefined ( instance );
+        instanceDefined( instance );
 
-        assertTrue ( propertyFile.exists () );
+        assertTrue( propertyFile.exists() );
 
         try
         {
-            instance.configureArchetype (
+            instance.configureArchetype(
                 interactiveMode,
                 propertyFile,
-                System.getProperties (),
+                System.getProperties(),
                 localRepository,
                 repositories
             );
 
-            fail ( "Exception must be thrown" );
+            fail( "Exception must be thrown" );
         }
         catch ( ArchetypeNotConfigured e )
         {
-            assertEquals (
+            assertEquals(
                 "Exception not correct",
                 "The archetype is not configurated",
-                e.getMessage ()
+                e.getMessage()
             );
         }
     }
 
-    public void testInteractiveModeFileSetArchetype ()
-    throws Exception
+    public void testInteractiveModeFileSetArchetype()
+        throws
+        Exception
     {
-        System.out.println ( "testInteractiveModeFileSetArchetype" );
+        System.out.println( "testInteractiveModeFileSetArchetype" );
 
         String archetypeGroupId = "archetypes";
         String archetypeArtifactId = "fileset";
@@ -314,80 +320,81 @@ extends AbstractMojoTestCase
         Boolean interactiveMode = Boolean.TRUE;
 
         String project = "configure-9";
-        File propertyFile = getPropertiesFile ( project );
-        File propertyFileSample = getPropertiesSampleFile ( project );
-        copy ( propertyFileSample, propertyFile );
+        File propertyFile = getPropertiesFile( project );
+        File propertyFileSample = getPropertiesSampleFile( project );
+        copy( propertyFileSample, propertyFile );
 
         DefaultArchetypeGenerationConfigurator instance =
-            (DefaultArchetypeGenerationConfigurator) lookup (
+            (DefaultArchetypeGenerationConfigurator) lookup(
                 ArchetypeGenerationConfigurator.ROLE
             );
-        instanceDefined ( instance );
+        instanceDefined( instance );
 
-        MockPrompter prompter = new MockPrompter ();
-        prompter.addAnswer ( "user-value" );
-        prompter.addAnswer ( "user-value" );
-        prompter.addAnswer ( "user-value" );
-        prompter.addAnswer ( "user-value" );
-        prompter.addAnswer ( "user-value" );
-        prompter.addAnswer ( "user-value" );
-        prompter.addAnswer ( "user-value" );
-        prompter.addAnswer ( "user-value" );
-        prompter.addAnswer ( "N" );
-        prompter.addAnswer ( "user-value2" );
-        prompter.addAnswer ( "user-value2" );
-        prompter.addAnswer ( "user-value2" );
-        prompter.addAnswer ( "user-value2" );
-        prompter.addAnswer ( "user-value2" );
-        prompter.addAnswer ( "user-value2" );
-        prompter.addAnswer ( "user-value2" );
-        prompter.addAnswer ( "user-value2" );
-        prompter.addAnswer ( "user-value2" );
-        prompter.addAnswer ( "user-value2" );
-        prompter.addAnswer ( "user-value2" );
-        prompter.addAnswer ( "user-value2" );
-        prompter.addAnswer ( "Y" );
-        setVariableValueToObject (
-            getVariableValueFromObject ( instance, "archetypeGenerationQueryer" ),
+        MockPrompter prompter = new MockPrompter();
+        prompter.addAnswer( "user-value" );
+        prompter.addAnswer( "user-value" );
+        prompter.addAnswer( "user-value" );
+        prompter.addAnswer( "user-value" );
+        prompter.addAnswer( "user-value" );
+        prompter.addAnswer( "user-value" );
+        prompter.addAnswer( "user-value" );
+        prompter.addAnswer( "user-value" );
+        prompter.addAnswer( "N" );
+        prompter.addAnswer( "user-value2" );
+        prompter.addAnswer( "user-value2" );
+        prompter.addAnswer( "user-value2" );
+        prompter.addAnswer( "user-value2" );
+        prompter.addAnswer( "user-value2" );
+        prompter.addAnswer( "user-value2" );
+        prompter.addAnswer( "user-value2" );
+        prompter.addAnswer( "user-value2" );
+        prompter.addAnswer( "user-value2" );
+        prompter.addAnswer( "user-value2" );
+        prompter.addAnswer( "user-value2" );
+        prompter.addAnswer( "user-value2" );
+        prompter.addAnswer( "Y" );
+        setVariableValueToObject(
+            getVariableValueFromObject( instance, "archetypeGenerationQueryer" ),
             "prompter",
             prompter
         );
 
-        assertTrue ( propertyFile.exists () );
+        assertTrue( propertyFile.exists() );
 
-        instance.configureArchetype (
+        instance.configureArchetype(
             interactiveMode,
             propertyFile,
-            System.getProperties (),
+            System.getProperties(),
             localRepository,
             repositories
         );
 
-        assertTrue ( propertyFile.exists () );
+        assertTrue( propertyFile.exists() );
 
-        Properties properties = loadProperties ( propertyFile );
-        assertEquals ( "archetypes", properties.getProperty ( "archetype.groupId" ) );
-        assertEquals ( "fileset", properties.getProperty ( "archetype.artifactId" ) );
-        assertEquals ( "1.0", properties.getProperty ( "archetype.version" ) );
+        Properties properties = loadProperties( propertyFile );
+        assertEquals( "archetypes", properties.getProperty( "archetype.groupId" ) );
+        assertEquals( "fileset", properties.getProperty( "archetype.artifactId" ) );
+        assertEquals( "1.0", properties.getProperty( "archetype.version" ) );
 
-        assertEquals ( "user-value2", properties.getProperty ( "groupId" ) );
-        assertEquals ( "user-value2", properties.getProperty ( "artifactId" ) );
-        assertEquals ( "user-value2", properties.getProperty ( "version" ) );
-        assertEquals ( "user-value2", properties.getProperty ( "package" ) );
-        assertEquals ( "user-value2", properties.getProperty ( "property-with-default-1" ) );
-        assertEquals ( "user-value2", properties.getProperty ( "property-with-default-2" ) );
-        assertEquals ( "user-value2", properties.getProperty ( "property-with-default-3" ) );
-        assertEquals ( "user-value2", properties.getProperty ( "property-with-default-4" ) );
-        assertEquals ( "user-value2", properties.getProperty ( "property-without-default-1" ) );
-        assertEquals ( "user-value2", properties.getProperty ( "property-without-default-2" ) );
-        assertEquals ( "user-value2", properties.getProperty ( "property-without-default-3" ) );
-        assertEquals ( "user-value2", properties.getProperty ( "property-without-default-4" ) );
+        assertEquals( "user-value2", properties.getProperty( "groupId" ) );
+        assertEquals( "user-value2", properties.getProperty( "artifactId" ) );
+        assertEquals( "user-value2", properties.getProperty( "version" ) );
+        assertEquals( "user-value2", properties.getProperty( "package" ) );
+        assertEquals( "user-value2", properties.getProperty( "property-with-default-1" ) );
+        assertEquals( "user-value2", properties.getProperty( "property-with-default-2" ) );
+        assertEquals( "user-value2", properties.getProperty( "property-with-default-3" ) );
+        assertEquals( "user-value2", properties.getProperty( "property-with-default-4" ) );
+        assertEquals( "user-value2", properties.getProperty( "property-without-default-1" ) );
+        assertEquals( "user-value2", properties.getProperty( "property-without-default-2" ) );
+        assertEquals( "user-value2", properties.getProperty( "property-without-default-3" ) );
+        assertEquals( "user-value2", properties.getProperty( "property-without-default-4" ) );
     }
 
-    public void testInteractiveModeOldArchetype ()
-    throws Exception
+    public void testInteractiveModeOldArchetype()
+        throws
+        Exception
     {
-        System.out.println ( "testInteractiveModePropertiesNotDefined" );
+        System.out.println( "testInteractiveModePropertiesNotDefined" );
 
         String archetypeGroupId = "archetypes";
         String archetypeArtifactId = "old";
@@ -396,55 +403,56 @@ extends AbstractMojoTestCase
         Boolean interactiveMode = Boolean.TRUE;
 
         String project = "configure-8";
-        File propertyFile = getPropertiesFile ( project );
-        File propertyFileSample = getPropertiesSampleFile ( project );
-        copy ( propertyFileSample, propertyFile );
+        File propertyFile = getPropertiesFile( project );
+        File propertyFileSample = getPropertiesSampleFile( project );
+        copy( propertyFileSample, propertyFile );
 
         DefaultArchetypeGenerationConfigurator instance =
-            (DefaultArchetypeGenerationConfigurator) lookup (
+            (DefaultArchetypeGenerationConfigurator) lookup(
                 ArchetypeGenerationConfigurator.ROLE
             );
-        instanceDefined ( instance );
+        instanceDefined( instance );
 
-        MockPrompter prompter = new MockPrompter ();
-        prompter.addAnswer ( "user-value" );
-        prompter.addAnswer ( "user-value" );
-        prompter.addAnswer ( "user-value" );
-        prompter.addAnswer ( "user-value" );
-        prompter.addAnswer ( "Y" );
-        setVariableValueToObject (
-            getVariableValueFromObject ( instance, "archetypeGenerationQueryer" ),
+        MockPrompter prompter = new MockPrompter();
+        prompter.addAnswer( "user-value" );
+        prompter.addAnswer( "user-value" );
+        prompter.addAnswer( "user-value" );
+        prompter.addAnswer( "user-value" );
+        prompter.addAnswer( "Y" );
+        setVariableValueToObject(
+            getVariableValueFromObject( instance, "archetypeGenerationQueryer" ),
             "prompter",
             prompter
         );
 
-        assertTrue ( propertyFile.exists () );
+        assertTrue( propertyFile.exists() );
 
-        instance.configureArchetype (
+        instance.configureArchetype(
             interactiveMode,
             propertyFile,
-            System.getProperties (),
+            System.getProperties(),
             localRepository,
             repositories
         );
 
-        assertTrue ( propertyFile.exists () );
+        assertTrue( propertyFile.exists() );
 
-        Properties properties = loadProperties ( propertyFile );
-        assertEquals ( "archetypes", properties.getProperty ( "archetype.groupId" ) );
-        assertEquals ( "old", properties.getProperty ( "archetype.artifactId" ) );
-        assertEquals ( "1.0", properties.getProperty ( "archetype.version" ) );
+        Properties properties = loadProperties( propertyFile );
+        assertEquals( "archetypes", properties.getProperty( "archetype.groupId" ) );
+        assertEquals( "old", properties.getProperty( "archetype.artifactId" ) );
+        assertEquals( "1.0", properties.getProperty( "archetype.version" ) );
 
-        assertEquals ( "user-value", properties.getProperty ( "groupId" ) );
-        assertEquals ( "user-value", properties.getProperty ( "artifactId" ) );
-        assertEquals ( "user-value", properties.getProperty ( "version" ) );
-        assertEquals ( "user-value", properties.getProperty ( "package" ) );
+        assertEquals( "user-value", properties.getProperty( "groupId" ) );
+        assertEquals( "user-value", properties.getProperty( "artifactId" ) );
+        assertEquals( "user-value", properties.getProperty( "version" ) );
+        assertEquals( "user-value", properties.getProperty( "package" ) );
     }
 
-    public void testInteractiveModePropertiesNotDefined ()
-    throws Exception
+    public void testInteractiveModePropertiesNotDefined()
+        throws
+        Exception
     {
-        System.out.println ( "testInteractiveModePropertiesNotDefined" );
+        System.out.println( "testInteractiveModePropertiesNotDefined" );
 
         String archetypeGroupId = "archetypes";
         String archetypeArtifactId = "basic";
@@ -453,80 +461,81 @@ extends AbstractMojoTestCase
         Boolean interactiveMode = Boolean.TRUE;
 
         String project = "configure-5";
-        File propertyFile = getPropertiesFile ( project );
-        File propertyFileSample = getPropertiesSampleFile ( project );
-        copy ( propertyFileSample, propertyFile );
+        File propertyFile = getPropertiesFile( project );
+        File propertyFileSample = getPropertiesSampleFile( project );
+        copy( propertyFileSample, propertyFile );
 
         DefaultArchetypeGenerationConfigurator instance =
-            (DefaultArchetypeGenerationConfigurator) lookup (
+            (DefaultArchetypeGenerationConfigurator) lookup(
                 ArchetypeGenerationConfigurator.ROLE
             );
-        instanceDefined ( instance );
+        instanceDefined( instance );
 
-        MockPrompter prompter = new MockPrompter ();
-        prompter.addAnswer ( "user-value" );
-        prompter.addAnswer ( "user-value" );
-        prompter.addAnswer ( "user-value" );
-        prompter.addAnswer ( "user-value" );
-        prompter.addAnswer ( "user-value" );
-        prompter.addAnswer ( "user-value" );
-        prompter.addAnswer ( "user-value" );
-        prompter.addAnswer ( "user-value" );
-        prompter.addAnswer ( "N" );
-        prompter.addAnswer ( "user-value2" );
-        prompter.addAnswer ( "user-value2" );
-        prompter.addAnswer ( "user-value2" );
-        prompter.addAnswer ( "user-value2" );
-        prompter.addAnswer ( "user-value2" );
-        prompter.addAnswer ( "user-value2" );
-        prompter.addAnswer ( "user-value2" );
-        prompter.addAnswer ( "user-value2" );
-        prompter.addAnswer ( "user-value2" );
-        prompter.addAnswer ( "user-value2" );
-        prompter.addAnswer ( "user-value2" );
-        prompter.addAnswer ( "user-value2" );
-        prompter.addAnswer ( "Y" );
-        setVariableValueToObject (
-            getVariableValueFromObject ( instance, "archetypeGenerationQueryer" ),
+        MockPrompter prompter = new MockPrompter();
+        prompter.addAnswer( "user-value" );
+        prompter.addAnswer( "user-value" );
+        prompter.addAnswer( "user-value" );
+        prompter.addAnswer( "user-value" );
+        prompter.addAnswer( "user-value" );
+        prompter.addAnswer( "user-value" );
+        prompter.addAnswer( "user-value" );
+        prompter.addAnswer( "user-value" );
+        prompter.addAnswer( "N" );
+        prompter.addAnswer( "user-value2" );
+        prompter.addAnswer( "user-value2" );
+        prompter.addAnswer( "user-value2" );
+        prompter.addAnswer( "user-value2" );
+        prompter.addAnswer( "user-value2" );
+        prompter.addAnswer( "user-value2" );
+        prompter.addAnswer( "user-value2" );
+        prompter.addAnswer( "user-value2" );
+        prompter.addAnswer( "user-value2" );
+        prompter.addAnswer( "user-value2" );
+        prompter.addAnswer( "user-value2" );
+        prompter.addAnswer( "user-value2" );
+        prompter.addAnswer( "Y" );
+        setVariableValueToObject(
+            getVariableValueFromObject( instance, "archetypeGenerationQueryer" ),
             "prompter",
             prompter
         );
 
-        assertTrue ( propertyFile.exists () );
+        assertTrue( propertyFile.exists() );
 
-        instance.configureArchetype (
+        instance.configureArchetype(
             interactiveMode,
             propertyFile,
-            System.getProperties (),
+            System.getProperties(),
             localRepository,
             repositories
         );
 
-        assertTrue ( propertyFile.exists () );
+        assertTrue( propertyFile.exists() );
 
-        Properties properties = loadProperties ( propertyFile );
-        assertEquals ( "archetypes", properties.getProperty ( "archetype.groupId" ) );
-        assertEquals ( "basic", properties.getProperty ( "archetype.artifactId" ) );
-        assertEquals ( "1.0", properties.getProperty ( "archetype.version" ) );
+        Properties properties = loadProperties( propertyFile );
+        assertEquals( "archetypes", properties.getProperty( "archetype.groupId" ) );
+        assertEquals( "basic", properties.getProperty( "archetype.artifactId" ) );
+        assertEquals( "1.0", properties.getProperty( "archetype.version" ) );
 
-        assertEquals ( "user-value2", properties.getProperty ( "groupId" ) );
-        assertEquals ( "user-value2", properties.getProperty ( "artifactId" ) );
-        assertEquals ( "user-value2", properties.getProperty ( "version" ) );
-        assertEquals ( "user-value2", properties.getProperty ( "package" ) );
-        assertEquals ( "user-value2", properties.getProperty ( "property-with-default-1" ) );
-        assertEquals ( "user-value2", properties.getProperty ( "property-with-default-2" ) );
-        assertEquals ( "user-value2", properties.getProperty ( "property-with-default-3" ) );
-        assertEquals ( "user-value2", properties.getProperty ( "property-with-default-4" ) );
-        assertEquals ( "user-value2", properties.getProperty ( "property-without-default-1" ) );
-        assertEquals ( "user-value2", properties.getProperty ( "property-without-default-2" ) );
-        assertEquals ( "user-value2", properties.getProperty ( "property-without-default-3" ) );
-        assertEquals ( "user-value2", properties.getProperty ( "property-without-default-4" ) );
+        assertEquals( "user-value2", properties.getProperty( "groupId" ) );
+        assertEquals( "user-value2", properties.getProperty( "artifactId" ) );
+        assertEquals( "user-value2", properties.getProperty( "version" ) );
+        assertEquals( "user-value2", properties.getProperty( "package" ) );
+        assertEquals( "user-value2", properties.getProperty( "property-with-default-1" ) );
+        assertEquals( "user-value2", properties.getProperty( "property-with-default-2" ) );
+        assertEquals( "user-value2", properties.getProperty( "property-with-default-3" ) );
+        assertEquals( "user-value2", properties.getProperty( "property-with-default-4" ) );
+        assertEquals( "user-value2", properties.getProperty( "property-without-default-1" ) );
+        assertEquals( "user-value2", properties.getProperty( "property-without-default-2" ) );
+        assertEquals( "user-value2", properties.getProperty( "property-without-default-3" ) );
+        assertEquals( "user-value2", properties.getProperty( "property-without-default-4" ) );
     }
 
-    public void testInteractiveModePropertiesOverrided ()
-    throws Exception
+    public void testInteractiveModePropertiesOverrided()
+        throws
+        Exception
     {
-        System.out.println ( "testInteractiveModePropertiesOverrided" );
+        System.out.println( "testInteractiveModePropertiesOverrided" );
 
         String archetypeGroupId = "archetypes";
         String archetypeArtifactId = "basic";
@@ -535,37 +544,37 @@ extends AbstractMojoTestCase
         Boolean interactiveMode = Boolean.TRUE;
 
         String project = "configure-6";
-        File propertyFile = getPropertiesFile ( project );
-        File propertyFileSample = getPropertiesSampleFile ( project );
-        copy ( propertyFileSample, propertyFile );
+        File propertyFile = getPropertiesFile( project );
+        File propertyFileSample = getPropertiesSampleFile( project );
+        copy( propertyFileSample, propertyFile );
 
         DefaultArchetypeGenerationConfigurator instance =
-            (DefaultArchetypeGenerationConfigurator) lookup (
+            (DefaultArchetypeGenerationConfigurator) lookup(
                 ArchetypeGenerationConfigurator.ROLE
             );
-        instanceDefined ( instance );
+        instanceDefined( instance );
 
-        MockPrompter prompter = new MockPrompter ();
-        prompter.addAnswer ( "user-value" );
-        prompter.addAnswer ( "user-value" );
-        prompter.addAnswer ( "Y" );
-        setVariableValueToObject (
-            getVariableValueFromObject ( instance, "archetypeGenerationQueryer" ),
+        MockPrompter prompter = new MockPrompter();
+        prompter.addAnswer( "user-value" );
+        prompter.addAnswer( "user-value" );
+        prompter.addAnswer( "Y" );
+        setVariableValueToObject(
+            getVariableValueFromObject( instance, "archetypeGenerationQueryer" ),
             "prompter",
             prompter
         );
 
-        Properties systemProperties = new Properties ();
-        systemProperties.setProperty ( "groupId", "system-value" );
-        systemProperties.setProperty ( "version", "system-value" );
-        systemProperties.setProperty ( "property-with-default-1", "system-value" );
-        systemProperties.setProperty ( "property-with-default-3", "system-value" );
-        systemProperties.setProperty ( "property-without-default-1", "system-value" );
-        systemProperties.setProperty ( "property-without-default-3", "system-value" );
+        Properties systemProperties = new Properties();
+        systemProperties.setProperty( "groupId", "system-value" );
+        systemProperties.setProperty( "version", "system-value" );
+        systemProperties.setProperty( "property-with-default-1", "system-value" );
+        systemProperties.setProperty( "property-with-default-3", "system-value" );
+        systemProperties.setProperty( "property-without-default-1", "system-value" );
+        systemProperties.setProperty( "property-without-default-3", "system-value" );
 
-        assertTrue ( propertyFile.exists () );
+        assertTrue( propertyFile.exists() );
 
-        instance.configureArchetype (
+        instance.configureArchetype(
             interactiveMode,
             propertyFile,
             systemProperties,
@@ -573,104 +582,112 @@ extends AbstractMojoTestCase
             repositories
         );
 
-        assertTrue ( propertyFile.exists () );
+        assertTrue( propertyFile.exists() );
 
-        Properties properties = loadProperties ( propertyFile );
-        assertEquals ( "archetypes", properties.getProperty ( "archetype.groupId" ) );
-        assertEquals ( "basic", properties.getProperty ( "archetype.artifactId" ) );
-        assertEquals ( "1.0", properties.getProperty ( "archetype.version" ) );
+        Properties properties = loadProperties( propertyFile );
+        assertEquals( "archetypes", properties.getProperty( "archetype.groupId" ) );
+        assertEquals( "basic", properties.getProperty( "archetype.artifactId" ) );
+        assertEquals( "1.0", properties.getProperty( "archetype.version" ) );
 
-        assertEquals ( "system-value", properties.getProperty ( "groupId" ) );
-        assertEquals ( "file-value", properties.getProperty ( "artifactId" ) );
-        assertEquals ( "system-value", properties.getProperty ( "version" ) );
-        assertEquals ( "user-value", properties.getProperty ( "package" ) );
+        assertEquals( "system-value", properties.getProperty( "groupId" ) );
+        assertEquals( "file-value", properties.getProperty( "artifactId" ) );
+        assertEquals( "system-value", properties.getProperty( "version" ) );
+        assertEquals( "user-value", properties.getProperty( "package" ) );
 
-        assertEquals ( "system-value", properties.getProperty ( "property-with-default-1" ) );
-        assertEquals ( "file-value", properties.getProperty ( "property-with-default-2" ) );
-        assertEquals ( "system-value", properties.getProperty ( "property-with-default-3" ) );
-        assertEquals ( "default-value", properties.getProperty ( "property-with-default-4" ) );
+        assertEquals( "system-value", properties.getProperty( "property-with-default-1" ) );
+        assertEquals( "file-value", properties.getProperty( "property-with-default-2" ) );
+        assertEquals( "system-value", properties.getProperty( "property-with-default-3" ) );
+        assertEquals( "default-value", properties.getProperty( "property-with-default-4" ) );
 
-        assertEquals ( "system-value", properties.getProperty ( "property-without-default-1" ) );
-        assertEquals ( "file-value", properties.getProperty ( "property-without-default-2" ) );
-        assertEquals ( "system-value", properties.getProperty ( "property-without-default-3" ) );
-        assertEquals ( "user-value", properties.getProperty ( "property-without-default-4" ) );
+        assertEquals( "system-value", properties.getProperty( "property-without-default-1" ) );
+        assertEquals( "file-value", properties.getProperty( "property-without-default-2" ) );
+        assertEquals( "system-value", properties.getProperty( "property-without-default-3" ) );
+        assertEquals( "user-value", properties.getProperty( "property-without-default-4" ) );
     }
 
-    protected void tearDown ()
-    throws Exception
+    protected void tearDown()
+        throws
+        Exception
     {
-        super.tearDown ();
+        super.tearDown();
     }
 
-    protected void setUp ()
-    throws Exception
+    protected void setUp()
+        throws
+        Exception
     {
-        super.setUp ();
+        super.setUp();
 
         localRepository =
-            new DefaultArtifactRepository (
+            new DefaultArtifactRepository(
                 "local",
-                new File ( getBasedir (), "target/test-classes/repositories/local" ).toURI ()
-                .toString (),
-                new DefaultRepositoryLayout ()
+                new File( getBasedir(), "target/test-classes/repositories/local" ).toURI()
+                    .toString(),
+                new DefaultRepositoryLayout()
             );
 
         repositories =
-            Arrays.asList (
+            Arrays.asList(
                 new ArtifactRepository[]
-                {
-                    new DefaultArtifactRepository (
-                        "central",
-                        new File ( getBasedir (), "target/test-classes/repositories/central" )
-                        .toURI ().toString (),
-                        new DefaultRepositoryLayout ()
-                    )
-                }
+                    {
+                        new DefaultArtifactRepository(
+                            "central",
+                            new File( getBasedir(), "target/test-classes/repositories/central" )
+                                .toURI().toString(),
+                            new DefaultRepositoryLayout()
+                        )
+                    }
             );
     }
 
-    private void copy ( final File in, final File out )
-    throws IOException, FileNotFoundException
+    private void copy( final File in,
+                       final File out )
+        throws
+        IOException,
+        FileNotFoundException
     {
-        assertTrue ( !out.exists () || out.delete () );
-        assertFalse ( out.exists () );
-        IOUtil.copy ( new FileReader ( in ), new FileWriter ( out ) );
-        assertTrue ( out.exists () );
-        assertTrue ( in.exists () );
+        assertTrue( !out.exists() || out.delete() );
+        assertFalse( out.exists() );
+        IOUtil.copy( new FileReader( in ), new FileWriter( out ) );
+        assertTrue( out.exists() );
+        assertTrue( in.exists() );
     }
 
-    private void instanceDefined ( DefaultArchetypeGenerationConfigurator instance )
-    throws IllegalAccessException
+    private void instanceDefined( DefaultArchetypeGenerationConfigurator instance )
+        throws
+        IllegalAccessException
     {
-        assertNotNull ( instance );
-        assertNotNull ( getVariableValueFromObject ( instance, "archetypeArtifactManager" ) );
-        assertNotNull ( getVariableValueFromObject ( instance, "archetypeFactory" ) );
-        assertNotNull ( getVariableValueFromObject ( instance, "archetypeGenerationQueryer" ) );
-        assertNotNull ( getVariableValueFromObject ( instance, "archetypePropertiesManager" ) );
+        assertNotNull( instance );
+        assertNotNull( getVariableValueFromObject( instance, "archetypeArtifactManager" ) );
+        assertNotNull( getVariableValueFromObject( instance, "archetypeFactory" ) );
+        assertNotNull( getVariableValueFromObject( instance, "archetypeGenerationQueryer" ) );
+        assertNotNull( getVariableValueFromObject( instance, "archetypePropertiesManager" ) );
     }
 
-    private Properties loadProperties ( File propertyFile )
-    throws IOException, FileNotFoundException
+    private Properties loadProperties( File propertyFile )
+        throws
+        IOException,
+        FileNotFoundException
     {
-        Properties properties = new Properties ();
-        properties.load ( new FileInputStream ( propertyFile ) );
+        Properties properties = new Properties();
+        properties.load( new FileInputStream( propertyFile ) );
         return properties;
     }
 
-    private File getPropertiesFile ( String project )
+    private File getPropertiesFile( String project )
     {
         return
-            new File (
-                getBasedir (),
+            new File(
+                getBasedir(),
                 "target/test-classes/projects/" + project + "/archetype.properties"
             );
     }
 
-    private File getPropertiesSampleFile ( final String project )
+    private File getPropertiesSampleFile( final String project )
     {
         File propertyFileSample =
-            new File (
-                getBasedir (),
+            new File(
+                getBasedir(),
                 "target/test-classes/projects/" + project + "/archetype.properties.sample"
             );
         return propertyFileSample;

@@ -17,39 +17,39 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
-<archetype-descriptor name="site" >
+<archetype-descriptor name="site">
 
-    <requiredProperties>
-        <requiredProperty key="property-with-default-1" >
-            <defaultValue>default-value</defaultValue>
-        </requiredProperty>
-        <requiredProperty key="property-with-default-2" >
-            <defaultValue>default-value</defaultValue>
-        </requiredProperty>
-        <requiredProperty key="property-with-default-3" >
-            <defaultValue>default-value</defaultValue>
-        </requiredProperty>
-        <requiredProperty key="property-with-default-4" >
-            <defaultValue>default-value</defaultValue>
-        </requiredProperty>
-        <requiredProperty key="property-without-default-1" >
-        </requiredProperty>
-        <requiredProperty key="property-without-default-2" >
-        </requiredProperty>
-        <requiredProperty key="property-without-default-3" >
-        </requiredProperty>
-        <requiredProperty key="property-without-default-4" >
-        </requiredProperty>
-    </requiredProperties>
+  <requiredProperties>
+    <requiredProperty key="property-with-default-1">
+      <defaultValue>default-value</defaultValue>
+    </requiredProperty>
+    <requiredProperty key="property-with-default-2">
+      <defaultValue>default-value</defaultValue>
+    </requiredProperty>
+    <requiredProperty key="property-with-default-3">
+      <defaultValue>default-value</defaultValue>
+    </requiredProperty>
+    <requiredProperty key="property-with-default-4">
+      <defaultValue>default-value</defaultValue>
+    </requiredProperty>
+    <requiredProperty key="property-without-default-1">
+    </requiredProperty>
+    <requiredProperty key="property-without-default-2">
+    </requiredProperty>
+    <requiredProperty key="property-without-default-3">
+    </requiredProperty>
+    <requiredProperty key="property-without-default-4">
+    </requiredProperty>
+  </requiredProperties>
 
-    <fileSets>
-        <fileSet filtered="true" packaged="false" >
-            <directory>src/site</directory>
-            <includes>
-                <include>**/*.xml</include>
-                <include>**/*.apt</include>
-            </includes>
-        </fileSet>
-    </fileSets>
+  <fileSets>
+    <fileSet filtered="true" packaged="false">
+      <directory>src/site</directory>
+      <includes>
+        <include>**/*.xml</include>
+        <include>**/*.apt</include>
+      </includes>
+    </fileSet>
+  </fileSets>
 
 </archetype-descriptor>

@@ -66,17 +66,18 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.maven.archetype.common.util.FileCharsetDetector;
 
-/**
- * @plexus.component
- */
+/** @plexus.component */
 public class DefaultPomManager
-extends AbstractLogEnabled
-implements PomManager
+    extends AbstractLogEnabled
+    implements PomManager
 {
-    public void addModule ( File pom, String artifactId )
-    throws FileNotFoundException,
+    public void addModule( File pom,
+                           String artifactId )
+        throws
+        FileNotFoundException,
         IOException,
         XmlPullParserException,
         DocumentException,
@@ -84,42 +85,42 @@ implements PomManager
     {
         boolean found = false;
 
-        StringWriter writer = new StringWriter ();
-        Reader fileReader = new FileReader ( pom );
+        StringWriter writer = new StringWriter();
+        Reader fileReader = new FileReader( pom );
 
         try
         {
-            fileReader = new FileReader ( pom );
+            fileReader = new FileReader( pom );
 
-            SAXReader reader = new SAXReader ();
-            Document document = reader.read ( fileReader );
-            Element project = document.getRootElement ();
+            SAXReader reader = new SAXReader();
+            Document document = reader.read( fileReader );
+            Element project = document.getRootElement();
 
             String packaging = null;
-            Element packagingElement = project.element ( "packaging" );
+            Element packagingElement = project.element( "packaging" );
             if ( packagingElement != null )
             {
-                packaging = packagingElement.getStringValue ();
+                packaging = packagingElement.getStringValue();
             }
-            if ( !"pom".equals ( packaging ) )
+            if ( !"pom".equals( packaging ) )
             {
-                throw new InvalidPackaging (
+                throw new InvalidPackaging(
                     "Unable to add module to the current project as it is not of packaging type 'pom'"
                 );
             }
 
-            Element modules = project.element ( "modules" );
+            Element modules = project.element( "modules" );
             if ( modules == null )
             {
-                modules = project.addText ( "  " ).addElement ( "modules" );
-                modules.setText ( "\n  " );
-                project.addText ( "\n" );
+                modules = project.addText( "  " ).addElement( "modules" );
+                modules.setText( "\n  " );
+                project.addText( "\n" );
             }
             // TODO: change to while loop
-            for ( Iterator i = modules.elementIterator ( "module" ); i.hasNext () && !found; )
+            for ( Iterator i = modules.elementIterator( "module" ); i.hasNext() && !found; )
             {
-                Element module = (Element) i.next ();
-                if ( module.getText ().equals ( artifactId ) )
+                Element module = (Element) i.next();
+                if ( module.getText().equals( artifactId ) )
                 {
                     found = true;
                 }
@@ -127,14 +128,14 @@ implements PomManager
             if ( !found )
             {
                 Node lastTextNode = null;
-                for ( Iterator i = modules.nodeIterator (); i.hasNext (); )
+                for ( Iterator i = modules.nodeIterator(); i.hasNext(); )
                 {
-                    Node node = (Node) i.next ();
-                    if ( node.getNodeType () == Node.ELEMENT_NODE )
+                    Node node = (Node) i.next();
+                    if ( node.getNodeType() == Node.ELEMENT_NODE )
                     {
                         lastTextNode = null;
                     }
-                    else if ( node.getNodeType () == Node.TEXT_NODE )
+                    else if ( node.getNodeType() == Node.TEXT_NODE )
                     {
                         lastTextNode = node;
                     }
@@ -142,57 +143,65 @@ implements PomManager
 
                 if ( lastTextNode != null )
                 {
-                    modules.remove ( lastTextNode );
+                    modules.remove( lastTextNode );
                 }
 
-                modules.addText ( "\n    " );
-                modules.addElement ( "module" ).setText ( artifactId );
-                modules.addText ( "\n  " );
+                modules.addText( "\n    " );
+                modules.addElement( "module" ).setText( artifactId );
+                modules.addText( "\n  " );
 
-                XMLWriter xmlWriter = new XMLWriter ( writer );
-                xmlWriter.write ( document );
+                XMLWriter xmlWriter = new XMLWriter( writer );
+                xmlWriter.write( document );
 
-                FileUtils.fileWrite ( pom.getAbsolutePath (), writer.toString () );
+                FileUtils.fileWrite( pom.getAbsolutePath(), writer.toString() );
             } // end if
         }
         finally
         {
-            IOUtil.close ( fileReader );
+            IOUtil.close( fileReader );
         }
     }
 
-    public void addParent ( File pom, File parentPom )
-    throws FileNotFoundException, IOException, XmlPullParserException
+    public void addParent( File pom,
+                           File parentPom )
+        throws
+        FileNotFoundException,
+        IOException,
+        XmlPullParserException
     {
-        Model generatedModel = readPom ( pom );
+        Model generatedModel = readPom( pom );
 
-        Model parentModel = readPom ( parentPom );
+        Model parentModel = readPom( parentPom );
 
-        Parent parent = new Parent ();
-        parent.setGroupId ( parentModel.getGroupId () );
-        if ( parent.getGroupId () == null )
+        Parent parent = new Parent();
+        parent.setGroupId( parentModel.getGroupId() );
+        if ( parent.getGroupId() == null )
         {
-            parent.setGroupId ( parentModel.getParent ().getGroupId () );
+            parent.setGroupId( parentModel.getParent().getGroupId() );
         }
-        parent.setArtifactId ( parentModel.getArtifactId () );
-        parent.setVersion ( parentModel.getVersion () );
-        if ( parent.getVersion () == null )
+        parent.setArtifactId( parentModel.getArtifactId() );
+        parent.setVersion( parentModel.getVersion() );
+        if ( parent.getVersion() == null )
         {
-            parent.setVersion ( parentModel.getParent ().getVersion () );
+            parent.setVersion( parentModel.getParent().getVersion() );
         }
-        generatedModel.setParent ( parent );
+        generatedModel.setParent( parent );
 
-        writePom ( generatedModel, pom, pom );
+        writePom( generatedModel, pom, pom );
     }
 
-    public void mergePoms ( File pom, File temporaryPom )
-    throws FileNotFoundException, IOException, XmlPullParserException
+    public void mergePoms( File pom,
+                           File temporaryPom )
+        throws
+        FileNotFoundException,
+        IOException,
+        XmlPullParserException
     {
-        Model model = readPom ( pom );
-        Model generatedModel = readPom ( temporaryPom );
-        mergeDependencies ( model, generatedModel );
-        mergeBuildPlugins ( model, generatedModel );
-        mergeReportPlugins ( model, generatedModel );
+        Model model = readPom( pom );
+        Model generatedModel = readPom( temporaryPom );
+        mergeDependencies( model, generatedModel );
+        mergeBuildPlugins( model, generatedModel );
+        mergeReportPlugins( model, generatedModel );
 
 //
 //        // Potential merging
@@ -255,77 +264,83 @@ implements PomManager
 ////        model.getReporting ().getReportPluginsAsMap (); // done
 //
 
-        writePom ( model, pom, pom );
+        writePom( model, pom, pom );
     }
 
-    public Model readPom ( final File pomFile )
-    throws FileNotFoundException, IOException, XmlPullParserException
+    public Model readPom( final File pomFile )
+        throws
+        FileNotFoundException,
+        IOException,
+        XmlPullParserException
     { // TODO ensure correct encoding by using default one from method argument !!!
 
         Model model;
         Reader pomReader = null;
         try
         {
-            FileCharsetDetector detector = new FileCharsetDetector ( pomFile );
+            FileCharsetDetector detector = new FileCharsetDetector( pomFile );
 
-            String fileEncoding = detector.isFound () ? detector.getCharset () : "UTF-8";
+            String fileEncoding = detector.isFound() ? detector.getCharset() : "UTF-8";
 
-            pomReader = new InputStreamReader ( new FileInputStream ( pomFile ), fileEncoding );
+            pomReader = new InputStreamReader( new FileInputStream( pomFile ), fileEncoding );
 
-            MavenXpp3Reader reader = new MavenXpp3Reader ();
+            MavenXpp3Reader reader = new MavenXpp3Reader();
 
-            model = reader.read ( pomReader );
+            model = reader.read( pomReader );
 
-            if ( StringUtils.isEmpty ( model.getModelEncoding () ) )
+            if ( StringUtils.isEmpty( model.getModelEncoding() ) )
             {
-                model.setModelEncoding ( fileEncoding );
+                model.setModelEncoding( fileEncoding );
             }
         }
         finally
         {
-            IOUtil.close ( pomReader );
+            IOUtil.close( pomReader );
             pomReader = null;
         }
         return model;
     }
 
-    public void writePom ( final Model model, final File pomFile, final File initialPomFile )
-    throws IOException
+    public void writePom( final Model model,
+                          final File pomFile,
+                          final File initialPomFile )
+        throws
+        IOException
     {
         InputStream inputStream = null;
         Writer outputStreamWriter = null;
 //        FileCharsetDetector detector = new FileCharsetDetector ( pomFile );
-        
+
         String fileEncoding =
-            StringUtils.isEmpty ( model.getModelEncoding () ) ? model.getModelEncoding () : "UTF-8";
+            StringUtils.isEmpty( model.getModelEncoding() ) ? model.getModelEncoding() : "UTF-8";
 
         try
         {
-            inputStream = new FileInputStream ( initialPomFile );
+            inputStream = new FileInputStream( initialPomFile );
 
-            SAXBuilder builder = new SAXBuilder ();
-            org.jdom.Document doc = builder.build ( inputStream );
-            inputStream.close ();
+            SAXBuilder builder = new SAXBuilder();
+            org.jdom.Document doc = builder.build( inputStream );
+            inputStream.close();
             inputStream = null;
 
             // The cdata parts of the pom are not preserved from initial to target
-            MavenJDOMWriter writer = new MavenJDOMWriter ();
+            MavenJDOMWriter writer = new MavenJDOMWriter();
 
             outputStreamWriter =
-                new OutputStreamWriter ( new FileOutputStream ( pomFile ), fileEncoding );
+                new OutputStreamWriter( new FileOutputStream( pomFile ), fileEncoding );
 
-            Format form = Format.getRawFormat ().setEncoding ( fileEncoding );
-            writer.write ( model, doc, outputStreamWriter, form );
-            outputStreamWriter.close ();
+            Format form = Format.getRawFormat().setEncoding( fileEncoding );
+            writer.write( model, doc, outputStreamWriter, form );
+            outputStreamWriter.close();
             outputStreamWriter = null;
         }
         catch ( JDOMException exc )
         {
-            throw (IOException) new IOException ( "Cannot parse the POM by JDOM." );
+            throw (IOException) new IOException( "Cannot parse the POM by JDOM." );
         }
         catch ( FileNotFoundException e )
         {
-            getLogger ().debug ( "Creating pom file " + pomFile );
+            getLogger().debug( "Creating pom file " + pomFile );
 
             Writer pomWriter = null;
 
@@ -333,35 +348,35 @@ implements PomManager
             {
 //                pomWriter = new FileWriter ( pomFile );
                 pomWriter =
-                    new OutputStreamWriter ( new FileOutputStream ( pomFile ), fileEncoding );
+                    new OutputStreamWriter( new FileOutputStream( pomFile ), fileEncoding );
 
-                MavenXpp3Writer writer = new MavenXpp3Writer ();
-                writer.write ( pomWriter, model );
-                pomWriter.close ();
+                MavenXpp3Writer writer = new MavenXpp3Writer();
+                writer.write( pomWriter, model );
+                pomWriter.close();
                 pomWriter = null;
             }
             finally
             {
-                IOUtil.close ( pomWriter );
+                IOUtil.close( pomWriter );
             }
         }
         finally
         {
-            IOUtil.close ( inputStream );
-            IOUtil.close ( outputStreamWriter );
+            IOUtil.close( inputStream );
+            IOUtil.close( outputStreamWriter );
         }
     }
 
-    private Map createDependencyMap ( List dependencies )
+    private Map createDependencyMap( List dependencies )
     {
-        Map dependencyMap = new HashMap ();
-        Iterator dependenciesIterator = dependencies.iterator ();
-        while ( dependenciesIterator.hasNext () )
+        Map dependencyMap = new HashMap();
+        Iterator dependenciesIterator = dependencies.iterator();
+        while ( dependenciesIterator.hasNext() )
         {
-            Dependency dependency = (Dependency) dependenciesIterator.next ();
+            Dependency dependency = (Dependency) dependenciesIterator.next();
 
-            dependencyMap.put (
-                dependency.getGroupId () + ":" + dependency.getArtifactId (),
+            dependencyMap.put(
+                dependency.getGroupId() + ":" + dependency.getArtifactId(),
                 dependency
             );
         }
@@ -369,87 +384,90 @@ implements PomManager
         return dependencyMap;
     }
 
-    private void mergeBuildPlugins ( Model model, Model generatedModel )
+    private void mergeBuildPlugins( Model model,
+                                    Model generatedModel )
     {
-        if ( generatedModel.getBuild () != null )
+        if ( generatedModel.getBuild() != null )
         {
-            if ( model.getBuild () == null )
+            if ( model.getBuild() == null )
             {
-                model.setBuild ( new Build () );
+                model.setBuild( new Build() );
             }
 
-            Map pluginsByIds = model.getBuild ().getPluginsAsMap ();
-            Map generatedPluginsByIds = generatedModel.getBuild ().getPluginsAsMap ();
+            Map pluginsByIds = model.getBuild().getPluginsAsMap();
+            Map generatedPluginsByIds = generatedModel.getBuild().getPluginsAsMap();
 
-            Iterator generatedPluginsIds = generatedPluginsByIds.keySet ().iterator ();
-            while ( generatedPluginsIds.hasNext () )
+            Iterator generatedPluginsIds = generatedPluginsByIds.keySet().iterator();
+            while ( generatedPluginsIds.hasNext() )
             {
-                String generatedPluginsId = (String) generatedPluginsIds.next ();
+                String generatedPluginsId = (String) generatedPluginsIds.next();
 
-                if ( !pluginsByIds.containsKey ( generatedPluginsId ) )
+                if ( !pluginsByIds.containsKey( generatedPluginsId ) )
                 {
-                    model.getBuild ().addPlugin (
-                        (Plugin) generatedPluginsByIds.get ( generatedPluginsId )
+                    model.getBuild().addPlugin(
+                        (Plugin) generatedPluginsByIds.get( generatedPluginsId )
                     );
                 }
                 else
                 {
-                    getLogger ().warn ( "Can not override plugin: " + generatedPluginsId );
+                    getLogger().warn( "Can not override plugin: " + generatedPluginsId );
                 }
             }
         }
     }
 
-    private void mergeDependencies ( Model model, Model generatedModel )
+    private void mergeDependencies( Model model,
+                                    Model generatedModel )
     {
-        Map dependenciesByIds = createDependencyMap ( model.getDependencies () );
-        Map generatedDependenciesByIds = createDependencyMap ( generatedModel.getDependencies () );
+        Map dependenciesByIds = createDependencyMap( model.getDependencies() );
+        Map generatedDependenciesByIds = createDependencyMap( generatedModel.getDependencies() );
 
-        Iterator generatedDependencyIds = generatedDependenciesByIds.keySet ().iterator ();
-        while ( generatedDependencyIds.hasNext () )
+        Iterator generatedDependencyIds = generatedDependenciesByIds.keySet().iterator();
+        while ( generatedDependencyIds.hasNext() )
         {
-            String generatedDependencyId = (String) generatedDependencyIds.next ();
+            String generatedDependencyId = (String) generatedDependencyIds.next();
 
-            if ( !dependenciesByIds.containsKey ( generatedDependencyId ) )
+            if ( !dependenciesByIds.containsKey( generatedDependencyId ) )
             {
-                model.addDependency (
-                    (Dependency) generatedDependenciesByIds.get ( generatedDependencyId )
+                model.addDependency(
+                    (Dependency) generatedDependenciesByIds.get( generatedDependencyId )
                 );
             }
             else
             {
-                getLogger ().warn ( "Can not override property: " + generatedDependencyId );
+                getLogger().warn( "Can not override property: " + generatedDependencyId );
             }
         }
     }
 
-    private void mergeReportPlugins ( Model model, Model generatedModel )
+    private void mergeReportPlugins( Model model,
+                                     Model generatedModel )
     {
-        if ( generatedModel.getReporting () != null )
+        if ( generatedModel.getReporting() != null )
         {
-            if ( model.getReporting () == null )
+            if ( model.getReporting() == null )
             {
-                model.setReporting ( new Reporting () );
+                model.setReporting( new Reporting() );
             }
 
-            Map reportPluginsByIds = model.getReporting ().getReportPluginsAsMap ();
+            Map reportPluginsByIds = model.getReporting().getReportPluginsAsMap();
             Map generatedReportPluginsByIds =
-                generatedModel.getReporting ().getReportPluginsAsMap ();
+                generatedModel.getReporting().getReportPluginsAsMap();
 
-            Iterator generatedReportPluginsIds = generatedReportPluginsByIds.keySet ().iterator ();
-            while ( generatedReportPluginsIds.hasNext () )
+            Iterator generatedReportPluginsIds = generatedReportPluginsByIds.keySet().iterator();
+            while ( generatedReportPluginsIds.hasNext() )
             {
-                String generatedReportPluginsId = (String) generatedReportPluginsIds.next ();
+                String generatedReportPluginsId = (String) generatedReportPluginsIds.next();
 
-                if ( !reportPluginsByIds.containsKey ( generatedReportPluginsId ) )
+                if ( !reportPluginsByIds.containsKey( generatedReportPluginsId ) )
                 {
-                    model.getReporting ().addPlugin (
-                        (ReportPlugin) generatedReportPluginsByIds.get ( generatedReportPluginsId )
+                    model.getReporting().addPlugin(
+                        (ReportPlugin) generatedReportPluginsByIds.get( generatedReportPluginsId )
                     );
                 }
                 else
                 {
-                    getLogger ().warn ( "Can not override report: " + generatedReportPluginsId );
+                    getLogger().warn( "Can not override report: " + generatedReportPluginsId );
                 }
             }
         }

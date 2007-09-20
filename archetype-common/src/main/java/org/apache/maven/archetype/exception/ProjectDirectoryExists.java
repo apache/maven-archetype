@@ -20,23 +20,25 @@
 package org.apache.maven.archetype.exception;
 
 public class ProjectDirectoryExists
-extends Exception
+    extends Exception
 {
-    public ProjectDirectoryExists ()
-    { }
-
-    public ProjectDirectoryExists ( String msg )
+    public ProjectDirectoryExists()
     {
-        super ( msg );
     }
 
-    public ProjectDirectoryExists ( Throwable cause )
+    public ProjectDirectoryExists( String msg )
     {
-        super ( cause );
+        super( msg );
     }
 
-    public ProjectDirectoryExists ( String msg, Throwable cause )
+    public ProjectDirectoryExists( Throwable cause )
     {
-        super ( msg, cause );
+        super( cause );
+    }
+
+    public ProjectDirectoryExists( String msg,
+                                   Throwable cause )
+    {
+        super( msg, cause );
     }
 }

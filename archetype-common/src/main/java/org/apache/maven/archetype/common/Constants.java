@@ -41,16 +41,16 @@ public interface Constants
     String ARTIFACT_ID = "artifactId";
 
     List DEFAULT_FILTERED_EXTENSIONS =
-        Arrays.asList (
+        Arrays.asList(
             new String[]
-            {
-                "java", "xml", "txt", "groovy", "cs", "mdo", "aj", "jsp", "gsp", "vm", "html",
-                "xhtml", "properties", ".classpath", ".project"
-            }
+                {
+                    "java", "xml", "txt", "groovy", "cs", "mdo", "aj", "jsp", "gsp", "vm", "html",
+                    "xhtml", "properties", ".classpath", ".project"
+                }
         );
 
     List DEFAULT_LANGUAGES =
-        Arrays.asList ( new String[] { "java", "groovy", "csharp", "aspectj" } );
+        Arrays.asList( new String[]{"java", "groovy", "csharp", "aspectj"} );
 
     String GROUP_ID = "groupId";
 

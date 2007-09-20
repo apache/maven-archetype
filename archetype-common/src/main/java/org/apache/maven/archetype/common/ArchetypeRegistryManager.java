@@ -31,43 +31,57 @@ import java.util.List;
 
 public interface ArchetypeRegistryManager
 {
-    String ROLE = ArchetypeRegistryManager.class.getName ();
+    String ROLE = ArchetypeRegistryManager.class.getName();
 
-    public void addGroup ( String group, File archetypeRegistryFile )
-    throws IOException, XmlPullParserException;
-
-    /**
-     */
-    List getArchetypeGroups ( File archetypeRegistryFile );
-
-    /**
-     */
-    List getFilteredExtensions ( String archetypeFilteredExtentions, File archetypeRegistryFile )
-    throws IOException;
+    public void addGroup( String group,
+                          File archetypeRegistryFile )
+        throws
+        IOException,
+        XmlPullParserException;
 
     /**
      */
-    List getLanguages ( String archetypeLanguages, File archetypeRegistryFile )
-    throws IOException;
+    List getArchetypeGroups( File archetypeRegistryFile );
 
     /**
      */
-    ArchetypeRegistry readArchetypeRegistry ( File archetypeRegistryFile )
-    throws IOException, FileNotFoundException, XmlPullParserException;
+    List getFilteredExtensions( String archetypeFilteredExtentions,
+                                File archetypeRegistryFile )
+        throws
+        IOException;
 
     /**
      */
-    List getRepositories (
+    List getLanguages( String archetypeLanguages,
+                       File archetypeRegistryFile )
+        throws
+        IOException;
+
+    /**
+     */
+    ArchetypeRegistry readArchetypeRegistry( File archetypeRegistryFile )
+        throws
+        IOException,
+        FileNotFoundException,
+        XmlPullParserException;
+
+    /**
+     */
+    List getRepositories(
         List pomRemoteRepositories,
         String remoteRepositories,
         File archetypeRegistryFile
     )
-    throws IOException, XmlPullParserException;
+        throws
+        IOException,
+        XmlPullParserException;
 
     /**
      */
-    void writeArchetypeRegistry ( File archetypeRegistryFile, ArchetypeRegistry archetypeRegistry )
-    throws IOException;
+    void writeArchetypeRegistry( File archetypeRegistryFile,
+                                 ArchetypeRegistry archetypeRegistry )
+        throws
+        IOException;
 
     public ArchetypeRegistry getDefaultArchetypeRegistry();
 }

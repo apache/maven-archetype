@@ -31,59 +31,67 @@ import java.util.zip.ZipFile;
 
 public interface ArchetypeArtifactManager
 {
-    String ROLE = ArchetypeArtifactManager.class.getName ();
+    String ROLE = ArchetypeArtifactManager.class.getName();
 
     /**
      */
-    File getArchetypeFile (
+    File getArchetypeFile(
         final String groupId,
         final String artifactId,
         final String version,
         final ArtifactRepository localRepository,
         final List repositories
     )
-    throws UnknownArchetype;
+        throws
+        UnknownArchetype;
 
     /**
      */
-    ClassLoader getArchetypeJarLoader ( File archetypeFile )
-    throws UnknownArchetype;
+    ClassLoader getArchetypeJarLoader( File archetypeFile )
+        throws
+        UnknownArchetype;
 
     /**
      */
-    ClassLoader getArchetypeJarLoader (
+    ClassLoader getArchetypeJarLoader(
         String groupId,
         String artifactId,
         String version,
         ArtifactRepository localRepository,
         List repositories
     )
-    throws UnknownArchetype;
+        throws
+        UnknownArchetype;
 
     /**
      */
-    List getArchetypes ( String groupId, ArtifactRepository localRepository, List repositories )
-    throws UnknownGroup;
+    List getArchetypes( String groupId,
+                        ArtifactRepository localRepository,
+                        List repositories )
+        throws
+        UnknownGroup;
 
     /**
      */
-    ZipFile getArchetypeZipFile ( File archetypeFile )
-    throws UnknownArchetype;
+    ZipFile getArchetypeZipFile( File archetypeFile )
+        throws
+        UnknownArchetype;
 
     /**
      */
-    ZipFile getArchetypeZipFile (
+    ZipFile getArchetypeZipFile(
         String groupId,
         String artifactId,
         String version,
         ArtifactRepository localRepository,
         List repositories
     )
-    throws UnknownArchetype;
+        throws
+        UnknownArchetype;
 
     /**
      */
-    boolean exists (
+    boolean exists(
         String groupId,
         String artifactId,
         String version,
@@ -93,7 +101,7 @@ public interface ArchetypeArtifactManager
 
     /**
      */
-    boolean isFileSetArchetype (
+    boolean isFileSetArchetype(
         String groupId,
         String artifactId,
         String version,
@@ -103,39 +111,43 @@ public interface ArchetypeArtifactManager
 
     /**
      */
-    ArchetypeDescriptor getFileSetArchetypeDescriptor ( File archetypeFile )
-    throws UnknownArchetype;
+    ArchetypeDescriptor getFileSetArchetypeDescriptor( File archetypeFile )
+        throws
+        UnknownArchetype;
 
     /**
      */
-    org.apache.maven.archetype.metadata.ArchetypeDescriptor getFileSetArchetypeDescriptor (
+    org.apache.maven.archetype.metadata.ArchetypeDescriptor getFileSetArchetypeDescriptor(
         String groupId,
         String artifactId,
         String version,
         ArtifactRepository localRepository,
         List repositories
     )
-    throws UnknownArchetype;
+        throws
+        UnknownArchetype;
 
     /**
      */
-    List getFilesetArchetypeResources ( File archetypeFile )
-    throws UnknownArchetype;
+    List getFilesetArchetypeResources( File archetypeFile )
+        throws
+        UnknownArchetype;
 
     /**
      */
-    List getFilesetArchetypeResources (
+    List getFilesetArchetypeResources(
         String groupId,
         String artifactId,
         String version,
         ArtifactRepository localRepository,
         List repositories
     )
-    throws UnknownArchetype;
+        throws
+        UnknownArchetype;
 
     /**
      */
-    boolean isOldArchetype (
+    boolean isOldArchetype(
         String groupId,
         String artifactId,
         String version,
@@ -145,32 +157,35 @@ public interface ArchetypeArtifactManager
 
     /**
      */
-    org.apache.maven.archetype.descriptor.ArchetypeDescriptor getOldArchetypeDescriptor (
+    org.apache.maven.archetype.descriptor.ArchetypeDescriptor getOldArchetypeDescriptor(
         String groupId,
         String artifactId,
         String version,
         ArtifactRepository localRepository,
         List repositories
     )
-    throws UnknownArchetype;
+        throws
+        UnknownArchetype;
 
     /**
      */
-    String getReleaseVersion (
+    String getReleaseVersion(
         String groupId,
         String artifactId,
         ArtifactRepository localRepository,
         List repositories
     )
-    throws UnknownArchetype;
+        throws
+        UnknownArchetype;
 
     /**
      */
-    List getVersions (
+    List getVersions(
         String groupId,
         String artifactId,
         ArtifactRepository localRepository,
         List repositories
     )
-    throws UnknownArchetype;
+        throws
+        UnknownArchetype;
 }

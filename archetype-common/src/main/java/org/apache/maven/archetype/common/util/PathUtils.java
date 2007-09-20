@@ -26,39 +26,37 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author  rafale
- */
+/** @author rafale */
 public class PathUtils
 {
     /**
      * This method converts all \ or / chars to File.separatorChar.
      *
-     * @param   path
-     *
+     * @param path
      * @return
      */
-    public static String convertPathForOS ( String path )
+    public static String convertPathForOS( String path )
     {
-        path = StringUtils.replace ( path, "/", File.separator );
-        return StringUtils.replace ( path, "\\", File.separator );
+        path = StringUtils.replace( path, "/", File.separator );
+        return StringUtils.replace( path, "\\", File.separator );
     }
 
-    public static String getDirectory ( String file, int level )
+    public static String getDirectory( String file,
+                                       int level )
     {
-        file = convertPathForOS ( file );
+        file = convertPathForOS( file );
 
-        String[] fileAsArray = StringUtils.split ( file, File.separator );
-        List directoryAsArray = new ArrayList ();
+        String[] fileAsArray = StringUtils.split( file, File.separator );
+        List directoryAsArray = new ArrayList();
 
         for ( int i = 0; ( i < level ) && ( i < ( fileAsArray.length - 1 ) ); i++ )
         {
-            directoryAsArray.add ( fileAsArray[i] );
+            directoryAsArray.add( fileAsArray[i] );
         }
 
         return
-            StringUtils.join (
-                directoryAsArray.toArray ( new String[directoryAsArray.size ()] ),
+            StringUtils.join(
+                directoryAsArray.toArray( new String[directoryAsArray.size()] ),
                 File.separator
             );
     }

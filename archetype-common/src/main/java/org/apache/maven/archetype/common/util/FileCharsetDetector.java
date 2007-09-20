@@ -31,25 +31,25 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-/**
- * @author  rafale
- */
+/** @author rafale */
 public class FileCharsetDetector
-extends AbstractLogEnabled
+    extends AbstractLogEnabled
 {
     private String charset = null;
 
     private boolean found = false;
 
-    public FileCharsetDetector ( File detectedFile )
-    throws FileNotFoundException, IOException
+    public FileCharsetDetector( File detectedFile )
+        throws
+        FileNotFoundException,
+        IOException
     {
-        nsDetector det = new nsDetector ( nsPSMDetector.ALL );
+        nsDetector det = new nsDetector( nsPSMDetector.ALL );
 
-        det.Init (
-            new nsICharsetDetectionObserver ()
+        det.Init(
+            new nsICharsetDetectionObserver()
             {
-                public void Notify ( String charset )
+                public void Notify( String charset )
                 {
                     FileCharsetDetector.this.charset = charset;
                     FileCharsetDetector.this.found = true;
@@ -57,33 +57,33 @@ extends AbstractLogEnabled
             }
         );
 
-        BufferedInputStream imp = new BufferedInputStream ( new FileInputStream ( detectedFile ) );
+        BufferedInputStream imp = new BufferedInputStream( new FileInputStream( detectedFile ) );
 
         byte[] buf = new byte[1024];
         int len;
         boolean done = false;
         boolean isAscii = true;
 
-        while ( ( len = imp.read ( buf, 0, buf.length ) ) != -1 )
+        while ( ( len = imp.read( buf, 0, buf.length ) ) != -1 )
         {
             // Check if the stream is only ascii.
             if ( isAscii )
             {
-                isAscii = det.isAscii ( buf, len );
+                isAscii = det.isAscii( buf, len );
             }
 
             // DoIt if non-ascii and not done yet.
             if ( !isAscii && !done )
             {
-                done = det.DoIt ( buf, len, false );
+                done = det.DoIt( buf, len, false );
                 found = done;
             }
         }
-        det.DataEnd ();
+        det.DataEnd();
 
-        if ( !isFound () )
+        if ( !isFound() )
         {
-            String[] prob = det.getProbableCharsets ();
+            String[] prob = det.getProbableCharsets();
 
 //            if ( Arrays.asList ( prob ).contains ( "windows-1252" ) )
 //            {
@@ -102,12 +102,12 @@ extends AbstractLogEnabled
         }
     }
 
-    public String getCharset ()
+    public String getCharset()
     {
         return charset;
     }
 
-    public boolean isFound ()
+    public boolean isFound()
     {
         return found;
     }

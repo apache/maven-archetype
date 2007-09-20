@@ -26,77 +26,97 @@ import java.io.IOException;
 
 import java.util.List;
 
-/**
- * @author  rafale
- */
+/** @author rafale */
 public interface ArchetypeFilesResolver
 {
-    String ROLE = ArchetypeFilesResolver.class.getName ();
+    String ROLE = ArchetypeFilesResolver.class.getName();
 
     /**
      */
-    List getFilesWithExtension ( List files, String extension );
+    List getFilesWithExtension( List files,
+                                String extension );
 
     /**
      */
-    List getFilteredFiles ( List files, String filtered );
+    List getFilteredFiles( List files,
+                           String filtered );
 
     /**
      */
-    List filterFiles ( FileSet fileSet, List archetypeResources );
+    List filterFiles( FileSet fileSet,
+                      List archetypeResources );
 
     /**
      */
-    List filterFiles ( String moduleOffset, FileSet fileSet, List archetypeResources );
+    List filterFiles( String moduleOffset,
+                      FileSet fileSet,
+                      List archetypeResources );
 
     /**
      */
-    List findOtherResources ( int level, List files, String languages );
+    List findOtherResources( int level,
+                             List files,
+                             String languages );
 
     /**
      */
-    List findOtherResources ( int level, List files, List sourcesFiles, String languages );
+    List findOtherResources( int level,
+                             List files,
+                             List sourcesFiles,
+                             String languages );
 
     /**
      */
-    List findOtherSources ( int level, List files, String languages );
+    List findOtherSources( int level,
+                           List files,
+                           String languages );
 
     /**
      */
-    List findResourcesMainFiles ( List files, String languages );
+    List findResourcesMainFiles( List files,
+                                 String languages );
 
     /**
      */
-    List findResourcesTestFiles ( List files, String languages );
+    List findResourcesTestFiles( List files,
+                                 String languages );
 
     /**
      */
-    List findSiteFiles ( List files, String languages );
+    List findSiteFiles( List files,
+                        String languages );
 
     /**
      */
-    List findSourcesMainFiles ( List files, String languages );
+    List findSourcesMainFiles( List files,
+                               String languages );
 
     /**
      */
-    List findSourcesTestFiles ( List files, String languages );
+    List findSourcesTestFiles( List files,
+                               String languages );
 
     /**
      */
-    List getPackagedFiles ( List files, String packageName );
+    List getPackagedFiles( List files,
+                           String packageName );
 
     /**
      */
-    String resolvePackage ( File file, List languages )
-    throws IOException;
+    String resolvePackage( File file,
+                           List languages )
+        throws
+        IOException;
 
     /**
      */
-    List getUnfilteredFiles ( List files, String filtered );
+    List getUnfilteredFiles( List files,
+                             String filtered );
 
     /**
      */
-    List getUnpackagedFiles ( List files, String packageName );
+    List getUnpackagedFiles( List files,
+                             String packageName );
 
     /**
      */

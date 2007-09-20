@@ -18,14 +18,14 @@ specific language governing permissions and limitations
 under the License.
 -->
 <archetype>
-    <id>old</id>
-    <sources>
-        <source>src/main/java/App.java</source>
-    </sources>
-    <resources>
-        <resource>src/main/resources/App.properties</resource>
-    </resources>
-    <siteResources>
-        <resource>src/site/site.xml</resource>
-    </siteResources>
+  <id>old</id>
+  <sources>
+    <source>src/main/java/App.java</source>
+  </sources>
+  <resources>
+    <resource>src/main/resources/App.properties</resource>
+  </resources>
+  <siteResources>
+    <resource>src/site/site.xml</resource>
+  </siteResources>
 </archetype>

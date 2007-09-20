@@ -18,53 +18,53 @@ specific language governing permissions and limitations
 under the License.
 -->
 <project
-    xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-    <modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.apache.maven.archetype</groupId>
-        <artifactId>maven-archetype</artifactId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>
+  <parent>
+    <groupId>org.apache.maven.archetype</groupId>
+    <artifactId>maven-archetype</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
 
-    <artifactId>archetype-descriptor</artifactId>
+  <artifactId>archetype-descriptor</artifactId>
 
-    <name>Maven ArchetypeNG Archetype Descriptor</name>
-    <packaging>jar</packaging>
+  <name>Maven ArchetypeNG Archetype Descriptor</name>
+  <packaging>jar</packaging>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.codehaus.plexus</groupId>
-            <artifactId>plexus-utils</artifactId>
-        </dependency>
-    </dependencies>
+  <dependencies>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+    </dependency>
+  </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.modello</groupId>
-                <artifactId>modello-maven-plugin</artifactId>
-                <version>1.0-alpha-14</version>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.modello</groupId>
+        <artifactId>modello-maven-plugin</artifactId>
+        <version>1.0-alpha-14</version>
 
-                <executions>
-                    <execution>
-                        <id>archetype-descriptor</id>
-                        <goals>
-                            <goal>xpp3-writer</goal>
-                            <goal>java</goal>
-                            <goal>xpp3-reader</goal>
-                            <goal>xsd</goal>
-                        </goals>
-                        <configuration>
-                            <version>1.0.0</version>
-                            <model>src/main/mdo/archetype-descriptor.mdo</model>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+        <executions>
+          <execution>
+            <id>archetype-descriptor</id>
+            <goals>
+              <goal>xpp3-writer</goal>
+              <goal>java</goal>
+              <goal>xpp3-reader</goal>
+              <goal>xsd</goal>
+            </goals>
+            <configuration>
+              <version>1.0.0</version>
+              <model>src/main/mdo/archetype-descriptor.mdo</model>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>

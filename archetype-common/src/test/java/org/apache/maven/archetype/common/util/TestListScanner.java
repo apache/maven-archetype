@@ -24,67 +24,65 @@ import junit.framework.TestCase;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author  <a href="mailto:brianf@apache.org">Brian Fox</a>
- */
+/** @author <a href="mailto:brianf@apache.org">Brian Fox</a> */
 public class TestListScanner
-extends TestCase
+    extends TestCase
 {
-    public void testUnixPaths ()
+    public void testUnixPaths()
     {
-        List archetypeResources = new ArrayList ();
+        List archetypeResources = new ArrayList();
 
-        archetypeResources.add ( "pom.xml" );
-        archetypeResources.add ( "App.java" );
-        archetypeResources.add ( "src/main/c/App.c" );
-        archetypeResources.add ( "src/main/java/App.java" );
-        archetypeResources.add ( "src/main/java/inner/package/App2.java" );
-        archetypeResources.add ( "src/main/mdo/App.mdo" );
-        archetypeResources.add ( "src/main/resources/App.properties" );
-        archetypeResources.add ( "src/main/resources/inner/dir/App2.properties" );
-        archetypeResources.add ( "src/test/c/AppTest.c" );
-        archetypeResources.add ( "src/test/java/AppTest.java" );
-        archetypeResources.add ( "src/test/mdo/AppTest.mdo" );
-        archetypeResources.add ( "src/test/resources/AppTest.properties" );
+        archetypeResources.add( "pom.xml" );
+        archetypeResources.add( "App.java" );
+        archetypeResources.add( "src/main/c/App.c" );
+        archetypeResources.add( "src/main/java/App.java" );
+        archetypeResources.add( "src/main/java/inner/package/App2.java" );
+        archetypeResources.add( "src/main/mdo/App.mdo" );
+        archetypeResources.add( "src/main/resources/App.properties" );
+        archetypeResources.add( "src/main/resources/inner/dir/App2.properties" );
+        archetypeResources.add( "src/test/c/AppTest.c" );
+        archetypeResources.add( "src/test/java/AppTest.java" );
+        archetypeResources.add( "src/test/mdo/AppTest.mdo" );
+        archetypeResources.add( "src/test/resources/AppTest.properties" );
 
-        ListScanner scanner = new ListScanner ();
-        scanner.setBasedir ( "src/main/java" );
-        scanner.setIncludes ( "**/*.java" );
-        scanner.setCaseSensitive ( true );
+        ListScanner scanner = new ListScanner();
+        scanner.setBasedir( "src/main/java" );
+        scanner.setIncludes( "**/*.java" );
+        scanner.setCaseSensitive( true );
 
-        List result = scanner.scan ( archetypeResources );
+        List result = scanner.scan( archetypeResources );
 
-        assertEquals ( 2, result.size () );
-        assertTrue ( result.contains ( "src/main/java/App.java" ) );
-        assertTrue ( result.contains ( "src/main/java/inner/package/App2.java" ) );
+        assertEquals( 2, result.size() );
+        assertTrue( result.contains( "src/main/java/App.java" ) );
+        assertTrue( result.contains( "src/main/java/inner/package/App2.java" ) );
     }
 
-    public void testWindowsPaths ()
+    public void testWindowsPaths()
     {
-        List archetypeResources = new ArrayList ();
+        List archetypeResources = new ArrayList();
 
-        archetypeResources.add ( "pom.xml" );
-        archetypeResources.add ( "App.java" );
-        archetypeResources.add ( "src\\main\\c\\App.c" );
-        archetypeResources.add ( "src\\main\\java\\App.java" );
-        archetypeResources.add ( "src\\main\\java\\inner\\package\\App2.java" );
-        archetypeResources.add ( "src\\main\\mdo\\App.mdo" );
-        archetypeResources.add ( "src\\main\\resources\\App.properties" );
-        archetypeResources.add ( "src\\main\\resources\\inner\\dir\\App2.properties" );
-        archetypeResources.add ( "src\\test\\c\\AppTest.c" );
-        archetypeResources.add ( "src\\test\\java\\AppTest.java" );
-        archetypeResources.add ( "src\\test\\mdo\\AppTest.mdo" );
-        archetypeResources.add ( "src\\test\\resources\\AppTest.properties" );
+        archetypeResources.add( "pom.xml" );
+        archetypeResources.add( "App.java" );
+        archetypeResources.add( "src\\main\\c\\App.c" );
+        archetypeResources.add( "src\\main\\java\\App.java" );
+        archetypeResources.add( "src\\main\\java\\inner\\package\\App2.java" );
+        archetypeResources.add( "src\\main\\mdo\\App.mdo" );
+        archetypeResources.add( "src\\main\\resources\\App.properties" );
+        archetypeResources.add( "src\\main\\resources\\inner\\dir\\App2.properties" );
+        archetypeResources.add( "src\\test\\c\\AppTest.c" );
+        archetypeResources.add( "src\\test\\java\\AppTest.java" );
+        archetypeResources.add( "src\\test\\mdo\\AppTest.mdo" );
+        archetypeResources.add( "src\\test\\resources\\AppTest.properties" );
 
-        ListScanner scanner = new ListScanner ();
-        scanner.setBasedir ( "src\\main\\java" );
-        scanner.setIncludes ( "**\\*.java" );
-        scanner.setCaseSensitive ( true );
+        ListScanner scanner = new ListScanner();
+        scanner.setBasedir( "src\\main\\java" );
+        scanner.setIncludes( "**\\*.java" );
+        scanner.setCaseSensitive( true );
 
-        List result = scanner.scan ( archetypeResources );
+        List result = scanner.scan( archetypeResources );
 
-        assertEquals ( 2, result.size () );
-        assertTrue ( result.contains ( "src\\main\\java\\App.java" ) );
-        assertTrue ( result.contains ( "src\\main\\java\\inner\\package\\App2.java" ) );
-    }    
+        assertEquals( 2, result.size() );
+        assertTrue( result.contains( "src\\main\\java\\App.java" ) );
+        assertTrue( result.contains( "src\\main\\java\\inner\\package\\App2.java" ) );
+    }
 }

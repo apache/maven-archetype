@@ -22,9 +22,7 @@ package org.apache.maven.archetype.creator.olddescriptor;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author  rafale
- */
+/** @author rafale */
 public class OldArchetypeDescriptor
 {
     private String id;
@@ -34,121 +32,121 @@ public class OldArchetypeDescriptor
     private List testResources;
     private List testSources;
 
-    public void addResources ( String resource )
+    public void addResources( String resource )
     {
         if ( resources == null )
         {
-            resources = new ArrayList ();
+            resources = new ArrayList();
         }
-        resources.add ( resource );
+        resources.add( resource );
     }
 
-    public void addSiteResources ( String resource )
+    public void addSiteResources( String resource )
     {
         if ( siteResources == null )
         {
-            siteResources = new ArrayList ();
+            siteResources = new ArrayList();
         }
-        siteResources.add ( resource );
+        siteResources.add( resource );
     }
 
-    public void addSource ( String source )
+    public void addSource( String source )
     {
         if ( sources == null )
         {
-            sources = new ArrayList ();
+            sources = new ArrayList();
         }
-        sources.add ( source );
+        sources.add( source );
     }
 
-    public void addTestResources ( String resource )
+    public void addTestResources( String resource )
     {
         if ( testResources == null )
         {
-            testResources = new ArrayList ();
+            testResources = new ArrayList();
         }
-        testResources.add ( resource );
+        testResources.add( resource );
     }
 
-    public void addTestSources ( String source )
+    public void addTestSources( String source )
     {
         if ( testSources == null )
         {
-            testSources = new ArrayList ();
+            testSources = new ArrayList();
         }
-        testSources.add ( source );
+        testSources.add( source );
     }
 
-    public String getId ()
+    public String getId()
     {
         return id;
     }
 
-    public void setId ( String id )
+    public void setId( String id )
     {
         this.id = id;
     }
 
-    public List getResources ()
+    public List getResources()
     {
         return resources;
     }
 
-    public void setResources ( List resources )
+    public void setResources( List resources )
     {
         this.resources = resources;
     }
 
-    public List getSiteResources ()
+    public List getSiteResources()
     {
         return siteResources;
     }
 
-    public void setSiteResources ( List siteResources )
+    public void setSiteResources( List siteResources )
     {
         this.siteResources = siteResources;
     }
 
-    public List getSources ()
+    public List getSources()
     {
         return sources;
     }
 
-    public void setSources ( List sources )
+    public void setSources( List sources )
     {
         this.sources = sources;
     }
 
-    public List getTestResources ()
+    public List getTestResources()
     {
         return testResources;
     }
 
-    public void setTestResources ( List testResources )
+    public void setTestResources( List testResources )
     {
         this.testResources = testResources;
     }
 
-    public List getTestSources ()
+    public List getTestSources()
     {
         return testSources;
     }
 
-    public void setTestSources ( List testSources )
+    public void setTestSources( List testSources )
     {
         this.testSources = testSources;
     }
 
-    public String toString ()
+    public String toString()
     {
         return
             "(OldArchetypeDescriptor"
-            + " id=" + id
-            + " sources=" + sources
-            + " testSources" + testSources
-            + " resources" + resources
-            + " testResources" + testResources
-            + " siteResources" + siteResources
-            + ")";
+                + " id=" + id
+                + " sources=" + sources
+                + " testSources" + testSources
+                + " resources" + resources
+                + " testResources" + testResources
+                + " siteResources" + siteResources
+                + ")";
     }
 }

@@ -18,68 +18,68 @@ specific language governing permissions and limitations
 under the License.
 -->
 <model>
-    <id>archetype-registry</id>
-    <name>ArchetypeRegistry</name>
+  <id>archetype-registry</id>
+  <name>ArchetypeRegistry</name>
 
-    <defaults>
-        <default>
-            <key>package</key>
-            <value>org.apache.maven.archetype.registry</value>
-        </default>
-    </defaults>
+  <defaults>
+    <default>
+      <key>package</key>
+      <value>org.apache.maven.archetype.registry</value>
+    </default>
+  </defaults>
 
-    <classes>
-        <class rootElement="true" xml.tagName="archetype-registry" >
-            <name>ArchetypeRegistry</name>
-            <fields>
-                <field>
-                    <name>ArchetypeGroups</name>
-                    <association>
-                        <type>String</type>
-                        <multiplicity>*</multiplicity>
-                    </association>
-                </field>
-                <field>
-                    <name>ArchetypeRepositories</name>
-                    <association>
-                        <type>ArchetypeRepository</type>
-                        <multiplicity>*</multiplicity>
-                    </association>
-                </field>
-                <field>
-                    <name>Languages</name>
-                    <association>
-                        <type>String</type>
-                        <multiplicity>*</multiplicity>
-                    </association>
-                </field>
-                <field>
-                    <name>FilteredExtensions</name>
-                    <association>
-                        <type>String</type>
-                        <multiplicity>*</multiplicity>
-                    </association>
-                </field>
-            </fields>
-        </class>
+  <classes>
+    <class rootElement="true" xml.tagName="archetype-registry">
+      <name>ArchetypeRegistry</name>
+      <fields>
+        <field>
+          <name>ArchetypeGroups</name>
+          <association>
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>ArchetypeRepositories</name>
+          <association>
+            <type>ArchetypeRepository</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>Languages</name>
+          <association>
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+        <field>
+          <name>FilteredExtensions</name>
+          <association>
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+      </fields>
+    </class>
 
-        <class>
-            <name>ArchetypeRepository</name>
-            <fields>
-                <field xml.attribute="true" >
-                    <name>id</name>
-                    <type>String</type>
-                    <required>true</required>
-                </field>
-                <field>
-                    <name>url</name>
-                    <type>String</type>
-                    <required>true</required>
-                </field>
-            </fields>
-            <codeSegments>
-                <codeSegment>
-                    <code><![CDATA[
+    <class>
+      <name>ArchetypeRepository</name>
+      <fields>
+        <field xml.attribute="true">
+          <name>id</name>
+          <type>String</type>
+          <required>true</required>
+        </field>
+        <field>
+          <name>url</name>
+          <type>String</type>
+          <required>true</required>
+        </field>
+      </fields>
+      <codeSegments>
+        <codeSegment>
+          <code><![CDATA[
     public String toString ()
     {
         return getId () + " (" + getUrl () + ")";
@@ -102,8 +102,8 @@ under the License.
         return getId ().equals ( ((ArchetypeRepository) other).getId () );
     }
                     ]]></code>
-                </codeSegment>
-            </codeSegments>
-        </class>
-    </classes>
+        </codeSegment>
+      </codeSegments>
+    </class>
+  </classes>
 </model>

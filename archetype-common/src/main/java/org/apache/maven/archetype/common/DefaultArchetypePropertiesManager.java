@@ -33,65 +33,68 @@ import java.io.OutputStream;
 import java.util.Iterator;
 import java.util.Properties;
 
-/**
- * @plexus.component
- */
+/** @plexus.component */
 public class DefaultArchetypePropertiesManager
-extends AbstractLogEnabled
-implements ArchetypePropertiesManager
+    extends AbstractLogEnabled
+    implements ArchetypePropertiesManager
 {
-    public void readProperties ( Properties properties, File propertyFile )
-    throws FileNotFoundException, IOException
+    public void readProperties( Properties properties,
+                                File propertyFile )
+        throws
+        FileNotFoundException,
+        IOException
     {
-        getLogger ().debug ( "Reading property file " + propertyFile );
+        getLogger().debug( "Reading property file " + propertyFile );
 
-        InputStream is = new FileInputStream ( propertyFile );
+        InputStream is = new FileInputStream( propertyFile );
 
         try
         {
-            properties.load ( is );
+            properties.load( is );
 
-            getLogger ().debug ( "Read " + properties.size () + " properties" );
+            getLogger().debug( "Read " + properties.size() + " properties" );
         }
         finally
         {
-            IOUtil.close ( is );
+            IOUtil.close( is );
         }
     }
 
-    public void writeProperties ( Properties properties, File propertyFile )
-    throws IOException
+    public void writeProperties( Properties properties,
+                                 File propertyFile )
+        throws
+        IOException
     {
-        Properties storedProperties = new Properties ();
+        Properties storedProperties = new Properties();
         try
         {
-            readProperties ( storedProperties, propertyFile );
+            readProperties( storedProperties, propertyFile );
         }
         catch ( FileNotFoundException ex )
         {
-            getLogger ().debug ( "Property file not found. Creating a new one" );
+            getLogger().debug( "Property file not found. Creating a new one" );
         }
 
-        getLogger ().debug ( "Adding " + properties.size () + " properties" );
+        getLogger().debug( "Adding " + properties.size() + " properties" );
 
-        Iterator propertiesIterator = properties.keySet ().iterator ();
-        while ( propertiesIterator.hasNext () )
+        Iterator propertiesIterator = properties.keySet().iterator();
+        while ( propertiesIterator.hasNext() )
         {
-            String propertyKey = (String) propertiesIterator.next ();
-            storedProperties.setProperty ( propertyKey, properties.getProperty ( propertyKey ) );
+            String propertyKey = (String) propertiesIterator.next();
+            storedProperties.setProperty( propertyKey, properties.getProperty( propertyKey ) );
         }
 
-        OutputStream os = new FileOutputStream ( propertyFile );
+        OutputStream os = new FileOutputStream( propertyFile );
 
         try
         {
-            storedProperties.store ( os, "" );
+            storedProperties.store( os, "" );
 
-            getLogger ().debug ( "Stored " + storedProperties.size () + " properties" );
+            getLogger().debug( "Stored " + storedProperties.size() + " properties" );
         }
         finally
         {
-            IOUtil.close ( os );
+            IOUtil.close( os );
         }
     }
 }

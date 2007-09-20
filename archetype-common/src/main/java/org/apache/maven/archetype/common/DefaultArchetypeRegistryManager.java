@@ -44,12 +44,10 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- * @plexus.component
- */
+/** @plexus.component */
 public class DefaultArchetypeRegistryManager
-extends AbstractLogEnabled
-implements ArchetypeRegistryManager
+    extends AbstractLogEnabled
+    implements ArchetypeRegistryManager
 {
     /**
      * Used to create ArtifactRepository objects given the urls of the remote repositories.
@@ -61,178 +59,187 @@ implements ArchetypeRegistryManager
     /**
      * Determines whether the layout is legacy or not.
      *
-     * @plexus.requirement  roleHint="default"
+     * @plexus.requirement roleHint="default"
      */
     private ArtifactRepositoryLayout defaultArtifactRepositoryLayout;
 
-    public List getArchetypeGroups ( File archetypeRegistryFile )
+    public List getArchetypeGroups( File archetypeRegistryFile )
     {
         try
         {
-            ArchetypeRegistry registry = readArchetypeRegistry ( archetypeRegistryFile );
-            return registry.getArchetypeGroups ();
+            ArchetypeRegistry registry = readArchetypeRegistry( archetypeRegistryFile );
+            return registry.getArchetypeGroups();
         }
         catch ( IOException e )
         {
-            getLogger ().warn ( "Can not read ~/m2/archetype.xml" );
+            getLogger().warn( "Can not read ~/m2/archetype.xml" );
             return
-                Arrays.asList (
-                    new String[] { "org.apache.maven.archetypes", "org.codehaus.mojo.archetypes" }
+                Arrays.asList(
+                    new String[]{"org.apache.maven.archetypes", "org.codehaus.mojo.archetypes"}
                 );
         }
         catch ( XmlPullParserException e )
         {
-            getLogger ().warn ( "Can not read ~/m2/archetype.xml" );
+            getLogger().warn( "Can not read ~/m2/archetype.xml" );
             return
-                Arrays.asList (
-                    new String[] { "org.apache.maven.archetypes", "org.codehaus.mojo.archetypes" }
+                Arrays.asList(
+                    new String[]{"org.apache.maven.archetypes", "org.codehaus.mojo.archetypes"}
                 );
         }
     }
 
-    public List getFilteredExtensions (
+    public List getFilteredExtensions(
         String archetypeFilteredExtentions,
         File archetypeRegistryFile
     )
-    throws IOException
+        throws
+        IOException
     {
-        List filteredExtensions = new ArrayList ();
+        List filteredExtensions = new ArrayList();
 
-        if ( StringUtils.isNotEmpty ( archetypeFilteredExtentions ) )
+        if ( StringUtils.isNotEmpty( archetypeFilteredExtentions ) )
         {
-            filteredExtensions.addAll (
-                Arrays.asList ( StringUtils.split ( archetypeFilteredExtentions, "," ) )
+            filteredExtensions.addAll(
+                Arrays.asList( StringUtils.split( archetypeFilteredExtentions, "," ) )
             );
         }
 
         try
         {
-            ArchetypeRegistry registry = readArchetypeRegistry ( archetypeRegistryFile );
+            ArchetypeRegistry registry = readArchetypeRegistry( archetypeRegistryFile );
 
-            filteredExtensions.addAll ( registry.getFilteredExtensions () );
+            filteredExtensions.addAll( registry.getFilteredExtensions() );
         }
         catch ( IOException e )
         {
-            getLogger ().warn ( "Can not read ~/m2/archetype.xml" );
+            getLogger().warn( "Can not read ~/m2/archetype.xml" );
         }
         catch ( XmlPullParserException e )
         {
-            getLogger ().warn ( "Can not read ~/m2/archetype.xml" );
+            getLogger().warn( "Can not read ~/m2/archetype.xml" );
         }
 
-        if ( filteredExtensions.isEmpty () )
+        if ( filteredExtensions.isEmpty() )
         {
-            filteredExtensions.addAll ( Constants.DEFAULT_FILTERED_EXTENSIONS );
+            filteredExtensions.addAll( Constants.DEFAULT_FILTERED_EXTENSIONS );
         }
 
         return filteredExtensions;
     }
 
-    public List getLanguages ( String archetypeLanguages, File archetypeRegistryFile )
-    throws IOException
+    public List getLanguages( String archetypeLanguages,
+                              File archetypeRegistryFile )
+        throws
+        IOException
     {
-        List languages = new ArrayList ();
+        List languages = new ArrayList();
 
-        if ( StringUtils.isNotEmpty ( archetypeLanguages ) )
+        if ( StringUtils.isNotEmpty( archetypeLanguages ) )
         {
-            languages.addAll ( Arrays.asList ( StringUtils.split ( archetypeLanguages, "," ) ) );
+            languages.addAll( Arrays.asList( StringUtils.split( archetypeLanguages, "," ) ) );
         }
 
         try
         {
-            ArchetypeRegistry registry = readArchetypeRegistry ( archetypeRegistryFile );
+            ArchetypeRegistry registry = readArchetypeRegistry( archetypeRegistryFile );
 
-            languages.addAll ( registry.getLanguages () );
+            languages.addAll( registry.getLanguages() );
         }
         catch ( IOException e )
         {
-            getLogger ().warn ( "Can not read ~/m2/archetype.xml" );
+            getLogger().warn( "Can not read ~/m2/archetype.xml" );
         }
         catch ( XmlPullParserException e )
         {
-            getLogger ().warn ( "Can not read ~/m2/archetype.xml" );
+            getLogger().warn( "Can not read ~/m2/archetype.xml" );
         }
 
-        if ( languages.isEmpty () )
+        if ( languages.isEmpty() )
         {
-            languages.addAll ( Constants.DEFAULT_LANGUAGES );
+            languages.addAll( Constants.DEFAULT_LANGUAGES );
         }
 
         return languages;
     }
 
-    public ArchetypeRegistry readArchetypeRegistry ( File archetypeRegistryFile )
-    throws IOException, FileNotFoundException, XmlPullParserException
+    public ArchetypeRegistry readArchetypeRegistry( File archetypeRegistryFile )
+        throws
+        IOException,
+        FileNotFoundException,
+        XmlPullParserException
     {
-        ArchetypeRegistryXpp3Reader reader = new ArchetypeRegistryXpp3Reader ();
-        FileReader fileReader = new FileReader ( archetypeRegistryFile );
+        ArchetypeRegistryXpp3Reader reader = new ArchetypeRegistryXpp3Reader();
+        FileReader fileReader = new FileReader( archetypeRegistryFile );
 
         try
         {
-            return reader.read ( fileReader );
+            return reader.read( fileReader );
         }
         finally
         {
-            IOUtil.close ( fileReader );
+            IOUtil.close( fileReader );
         }
     }
 
-    public List getRepositories (
+    public List getRepositories(
         List pomRemoteRepositories,
         String remoteRepositories,
         File archetypeRegistryFile
     )
-    throws IOException, XmlPullParserException
+        throws
+        IOException,
+        XmlPullParserException
     {
-        List archetypeRemoteRepositories = new ArrayList ( pomRemoteRepositories );
+        List archetypeRemoteRepositories = new ArrayList( pomRemoteRepositories );
 
-        ArchetypeRegistry registry = readArchetypeRegistry ( archetypeRegistryFile );
-        if ( !registry.getArchetypeRepositories ().isEmpty () )
+        ArchetypeRegistry registry = readArchetypeRegistry( archetypeRegistryFile );
+        if ( !registry.getArchetypeRepositories().isEmpty() )
         {
-            archetypeRemoteRepositories = new ArrayList ();
+            archetypeRemoteRepositories = new ArrayList();
 
-            Iterator repositories = registry.getArchetypeRepositories ().iterator ();
-            while ( repositories.hasNext () )
+            Iterator repositories = registry.getArchetypeRepositories().iterator();
+            while ( repositories.hasNext() )
             {
-                ArchetypeRepository repository = (ArchetypeRepository) repositories.next ();
+                ArchetypeRepository repository = (ArchetypeRepository) repositories.next();
 
-                archetypeRemoteRepositories.add (
-                    createRepository ( repository.getUrl (), repository.getId () )
+                archetypeRemoteRepositories.add(
+                    createRepository( repository.getUrl(), repository.getId() )
                 );
             }
         }
 
         if ( remoteRepositories != null )
         {
-            archetypeRemoteRepositories = new ArrayList ();
+            archetypeRemoteRepositories = new ArrayList();
 
-            String[] s = StringUtils.split ( remoteRepositories, "," );
+            String[] s = StringUtils.split( remoteRepositories, "," );
 
             for ( int i = 0; i < s.length; i++ )
             {
-                archetypeRemoteRepositories.add ( createRepository ( s[i], "id" + i ) );
+                archetypeRemoteRepositories.add( createRepository( s[i], "id" + i ) );
             }
         }
 
         return archetypeRemoteRepositories;
     }
 
-    public void writeArchetypeRegistry (
+    public void writeArchetypeRegistry(
         File archetypeRegistryFile,
         ArchetypeRegistry archetypeRegistry
     )
-    throws IOException
+        throws
+        IOException
     {
-        ArchetypeRegistryXpp3Writer writer = new ArchetypeRegistryXpp3Writer ();
-        FileWriter fileWriter = new FileWriter ( archetypeRegistryFile );
+        ArchetypeRegistryXpp3Writer writer = new ArchetypeRegistryXpp3Writer();
+        FileWriter fileWriter = new FileWriter( archetypeRegistryFile );
 
         try
         {
-            writer.write ( fileWriter, archetypeRegistry );
+            writer.write( fileWriter, archetypeRegistry );
         }
         finally
         {
-            IOUtil.close ( fileWriter );
+            IOUtil.close( fileWriter );
         }
     }
 
@@ -240,7 +247,8 @@ implements ArchetypeRegistryManager
      * Code stealed from MavenArchetypeMojo
      * (org.apache.maven.plugins:maven-archetype-plugin:1.0-alpha4).
      */
-    private ArtifactRepository createRepository ( String url, String repositoryId )
+    private ArtifactRepository createRepository( String url,
+                                                 String repositoryId )
     {
         // snapshots vs releases
         // offline = to turning the update policy off
@@ -252,13 +260,13 @@ implements ArchetypeRegistryManager
         String checksumPolicyFlag = ArtifactRepositoryPolicy.CHECKSUM_POLICY_WARN;
 
         ArtifactRepositoryPolicy snapshotsPolicy =
-            new ArtifactRepositoryPolicy ( true, updatePolicyFlag, checksumPolicyFlag );
+            new ArtifactRepositoryPolicy( true, updatePolicyFlag, checksumPolicyFlag );
 
         ArtifactRepositoryPolicy releasesPolicy =
-            new ArtifactRepositoryPolicy ( true, updatePolicyFlag, checksumPolicyFlag );
+            new ArtifactRepositoryPolicy( true, updatePolicyFlag, checksumPolicyFlag );
 
         return
-            artifactRepositoryFactory.createArtifactRepository (
+            artifactRepositoryFactory.createArtifactRepository(
                 repositoryId,
                 url,
                 defaultArtifactRepositoryLayout,
@@ -267,47 +275,50 @@ implements ArchetypeRegistryManager
             );
     }
 
-    public void addGroup(String group, File archetypeRegistryFile)
-    throws IOException, XmlPullParserException
+    public void addGroup( String group,
+                          File archetypeRegistryFile )
+        throws
+        IOException,
+        XmlPullParserException
     {
         ArchetypeRegistry registry;
         try
         {
-            registry = readArchetypeRegistry(archetypeRegistryFile);
+            registry = readArchetypeRegistry( archetypeRegistryFile );
         }
-        catch (FileNotFoundException ex)
+        catch ( FileNotFoundException ex )
         {
             registry = getDefaultArchetypeRegistry();
         }
 
-        if (registry.getArchetypeGroups().contains(group))
+        if ( registry.getArchetypeGroups().contains( group ) )
         {
-            getLogger().debug("Group " + group + " already exists");
+            getLogger().debug( "Group " + group + " already exists" );
         }
         else
         {
-            registry.addArchetypeGroup(group.trim());
-            getLogger().info("New group " + group + " added to registry");
+            registry.addArchetypeGroup( group.trim() );
+            getLogger().info( "New group " + group + " added to registry" );
         }
 
-        writeArchetypeRegistry(archetypeRegistryFile, registry);
+        writeArchetypeRegistry( archetypeRegistryFile, registry );
     }
 
     public ArchetypeRegistry getDefaultArchetypeRegistry()
     {
-        ArchetypeRegistry registry = new ArchetypeRegistry ();
+        ArchetypeRegistry registry = new ArchetypeRegistry();
 
-        registry.addArchetypeGroup ( "org.apache.maven.archetypes" );
-        registry.addArchetypeGroup ( "org.codehaus.mojo.archetypes" );
+        registry.addArchetypeGroup( "org.apache.maven.archetypes" );
+        registry.addArchetypeGroup( "org.codehaus.mojo.archetypes" );
 
-        registry.getLanguages ().addAll ( Constants.DEFAULT_LANGUAGES );
-        registry.getFilteredExtensions ().addAll ( Constants.DEFAULT_FILTERED_EXTENSIONS );
+        registry.getLanguages().addAll( Constants.DEFAULT_LANGUAGES );
+        registry.getFilteredExtensions().addAll( Constants.DEFAULT_FILTERED_EXTENSIONS );
 
-        ArchetypeRepository archetypeRepository = new ArchetypeRepository ();
-        archetypeRepository.setId ( "central" );
-        archetypeRepository.setUrl ( "http://repo1.maven.org/maven2" );
+        ArchetypeRepository archetypeRepository = new ArchetypeRepository();
+        archetypeRepository.setId( "central" );
+        archetypeRepository.setUrl( "http://repo1.maven.org/maven2" );
 
-        registry.addArchetypeRepository(archetypeRepository);
+        registry.addArchetypeRepository( archetypeRepository );
 
         return registry;
     }

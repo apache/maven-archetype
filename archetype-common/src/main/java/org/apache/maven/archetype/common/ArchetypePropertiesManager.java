@@ -27,15 +27,20 @@ import java.util.Properties;
 
 public interface ArchetypePropertiesManager
 {
-    String ROLE = ArchetypePropertiesManager.class.getName ();
+    String ROLE = ArchetypePropertiesManager.class.getName();
 
     /**
      */
-    void readProperties ( Properties properties, File propertyFile )
-    throws FileNotFoundException, IOException;
+    void readProperties( Properties properties,
+                         File propertyFile )
+        throws
+        FileNotFoundException,
+        IOException;
 
     /**
      */
-    void writeProperties ( Properties properties, File propertyFile )
-    throws IOException;
+    void writeProperties( Properties properties,
+                          File propertyFile )
+        throws
+        IOException;
 }

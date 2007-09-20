@@ -1,4 +1,4 @@
 groupId=${groupId}
-artifactId=${artifactId}
-version=${version}
-package=${package}
+  artifactId=${artifactId}
+  version=${version}
+  package=${package}

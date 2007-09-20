@@ -35,16 +35,17 @@ import java.util.Properties;
 
 public interface ArchetypeCreationConfigurator
 {
-    String ROLE = ArchetypeCreationConfigurator.class.getName ();
+    String ROLE = ArchetypeCreationConfigurator.class.getName();
 
-    void configureArchetypeCreation (
+    void configureArchetypeCreation(
         MavenProject project,
         Boolean interactiveMode,
         Properties commandLineProperties,
         File propertyFile,
         List languages
     )
-    throws FileNotFoundException,
+        throws
+        FileNotFoundException,
         IOException,
         ArchetypeNotDefined,
         ArchetypeNotConfigured,

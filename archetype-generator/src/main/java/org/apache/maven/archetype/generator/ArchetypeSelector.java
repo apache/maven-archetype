@@ -35,9 +35,9 @@ import java.util.List;
 
 public interface ArchetypeSelector
 {
-    String ROLE = ArchetypeSelector.class.getName ();
+    String ROLE = ArchetypeSelector.class.getName();
 
-    void selectArchetype (
+    void selectArchetype(
         String archetypeGroupId,
         String archetypeArtifactId,
         String archetypeVersion,
@@ -47,7 +47,8 @@ public interface ArchetypeSelector
         ArtifactRepository localRepository,
         List repositories
     )
-    throws ArchetypeNotDefined,
+        throws
+        ArchetypeNotDefined,
         UnknownArchetype,
         UnknownGroup,
         IOException,

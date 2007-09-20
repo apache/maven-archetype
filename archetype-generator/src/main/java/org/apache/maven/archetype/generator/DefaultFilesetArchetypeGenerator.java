@@ -63,98 +63,89 @@ import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-/**
- * @plexus.component
- */
+/** @plexus.component */
 public class DefaultFilesetArchetypeGenerator
-extends AbstractLogEnabled
-implements FilesetArchetypeGenerator
+    extends AbstractLogEnabled
+    implements FilesetArchetypeGenerator
 {
-    /**
-     * @plexus.requirement
-     */
+    /** @plexus.requirement */
     private ArchetypeArtifactManager archetypeArtifactManager;
 
-    /**
-     * @plexus.requirement
-     */
+    /** @plexus.requirement */
     private ArchetypeFactory archetypeFactory;
 
-    /**
-     * @plexus.requirement
-     */
+    /** @plexus.requirement */
     private ArchetypeFilesResolver archetypeFilesResolver;
 
-    /**
-     * @plexus.requirement
-     */
+    /** @plexus.requirement */
     private PomManager pomManager;
 
-    /**
-     * @plexus.requirement
-     */
+    /** @plexus.requirement */
     private VelocityComponent velocity;
 
-    public void generateArchetype ( Properties properties, File archetypeFile, String basedir )
-    throws UnknownArchetype,
+    public void generateArchetype( Properties properties,
+                                   File archetypeFile,
+                                   String basedir )
+        throws
+        UnknownArchetype,
         ArchetypeNotConfigured,
         ProjectDirectoryExists,
         PomFileExists,
         OutputFileExists,
         ArchetypeGenerationFailure
     {
-        ClassLoader old = Thread.currentThread ().getContextClassLoader ();
+        ClassLoader old = Thread.currentThread().getContextClassLoader();
 
         try
         {
             ArchetypeDescriptor archetypeDescriptor =
-                archetypeArtifactManager.getFileSetArchetypeDescriptor ( archetypeFile );
+                archetypeArtifactManager.getFileSetArchetypeDescriptor( archetypeFile );
             ArchetypeConfiguration archetypeConfiguration =
-                archetypeFactory.createArchetypeConfiguration ( archetypeDescriptor, properties );
+                archetypeFactory.createArchetypeConfiguration( archetypeDescriptor, properties );
 
-            if ( !archetypeConfiguration.isConfigured () )
+            if ( !archetypeConfiguration.isConfigured() )
             {
-                throw new ArchetypeNotConfigured ( "The archetype is not configured" );
+                throw new ArchetypeNotConfigured( "The archetype is not configured" );
             }
 
-            Context context = prepareVelocityContext ( archetypeConfiguration );
+            Context context = prepareVelocityContext( archetypeConfiguration );
             String packageName =
-                archetypeConfiguration.getProperties ().getProperty ( Constants.PACKAGE );
+                archetypeConfiguration.getProperties().getProperty( Constants.PACKAGE );
 
             String artifactId =
-                archetypeConfiguration.getProperties ().getProperty ( Constants.ARTIFACT_ID );
-            File outputDirectoryFile = new File ( basedir, artifactId );
-            File basedirPom = new File ( basedir, Constants.ARCHETYPE_POM );
-            File pom = new File ( outputDirectoryFile, Constants.ARCHETYPE_POM );
+                archetypeConfiguration.getProperties().getProperty( Constants.ARTIFACT_ID );
+            File outputDirectoryFile = new File( basedir, artifactId );
+            File basedirPom = new File( basedir, Constants.ARCHETYPE_POM );
+            File pom = new File( outputDirectoryFile, Constants.ARCHETYPE_POM );
 
             List archetypeResources =
-                archetypeArtifactManager.getFilesetArchetypeResources ( archetypeFile );
+                archetypeArtifactManager.getFilesetArchetypeResources( archetypeFile );
 
             ZipFile archetypeZipFile =
-                archetypeArtifactManager.getArchetypeZipFile ( archetypeFile );
+                archetypeArtifactManager.getArchetypeZipFile( archetypeFile );
 
             ClassLoader archetypeJarLoader =
-                archetypeArtifactManager.getArchetypeJarLoader ( archetypeFile );
+                archetypeArtifactManager.getArchetypeJarLoader( archetypeFile );
 
-            Thread.currentThread ().setContextClassLoader ( archetypeJarLoader );
+            Thread.currentThread().setContextClassLoader( archetypeJarLoader );
 
-            if ( archetypeDescriptor.isPartial () )
+            if ( archetypeDescriptor.isPartial() )
             {
-                getLogger ().debug (
-                    "Procesing partial archetype " + archetypeDescriptor.getName ()
+                getLogger().debug(
+                    "Procesing partial archetype " + archetypeDescriptor.getName()
                 );
-                if ( outputDirectoryFile.exists () )
+                if ( outputDirectoryFile.exists() )
                 {
-                    if ( !pom.exists () )
+                    if ( !pom.exists() )
                     {
-                        throw new PomFileExists (
+                        throw new PomFileExists(
                             "This is a partial archetype and the pom.xml file doesn't exist."
                         );
                     }
                     else
                     {
-                        processPomWithMerge ( context, pom, "" );
-                        processArchetypeTemplatesWithWarning (
+                        processPomWithMerge( context, pom, "" );
+                        processArchetypeTemplatesWithWarning(
                             archetypeDescriptor,
                             archetypeResources,
                             archetypeZipFile,
@@ -167,23 +158,23 @@ implements FilesetArchetypeGenerator
                 }
                 else
                 {
-                    if ( basedirPom.exists () )
+                    if ( basedirPom.exists() )
                     {
-                        processPomWithMerge ( context, basedirPom, "" );
-                        processArchetypeTemplatesWithWarning (
+                        processPomWithMerge( context, basedirPom, "" );
+                        processArchetypeTemplatesWithWarning(
                             archetypeDescriptor,
                             archetypeResources,
                             archetypeZipFile,
                             "",
                             context,
                             packageName,
-                            new File ( basedir )
+                            new File( basedir )
                         );
                     }
                     else
                     {
-                        processPom ( context, pom, "" );
-                        processArchetypeTemplates (
+                        processPom( context, pom, "" );
+                        processArchetypeTemplates(
                             archetypeDescriptor,
                             archetypeResources,
                             archetypeZipFile,
@@ -195,25 +186,25 @@ implements FilesetArchetypeGenerator
                     }
                 }
 
-                if ( archetypeDescriptor.getModules ().size () > 0 )
+                if ( archetypeDescriptor.getModules().size() > 0 )
                 {
-                    getLogger ().info ( "Modules ignored in partial mode" );
+                    getLogger().info( "Modules ignored in partial mode" );
                 }
             }
             else
             {
-                getLogger ().debug (
-                    "Processing complete archetype " + archetypeDescriptor.getName ()
+                getLogger().debug(
+                    "Processing complete archetype " + archetypeDescriptor.getName()
                 );
-                if ( outputDirectoryFile.exists () )
+                if ( outputDirectoryFile.exists() )
                 {
-                    throw new ProjectDirectoryExists ( "The project directory already exists" );
+                    throw new ProjectDirectoryExists( "The project directory already exists" );
                 }
                 else
                 {
-                    context.put("rootArtifactId", artifactId);
+                    context.put( "rootArtifactId", artifactId );
 
-                    processFilesetModule (
+                    processFilesetModule(
                         artifactId,
                         artifactId,
                         archetypeResources,
@@ -231,71 +222,74 @@ implements FilesetArchetypeGenerator
         }
         catch ( FileNotFoundException ex )
         {
-            throw new ArchetypeGenerationFailure ( ex );
+            throw new ArchetypeGenerationFailure( ex );
         }
         catch ( IOException ex )
         {
-            throw new ArchetypeGenerationFailure ( ex );
+            throw new ArchetypeGenerationFailure( ex );
         }
         catch ( XmlPullParserException ex )
         {
-            throw new ArchetypeGenerationFailure ( ex );
+            throw new ArchetypeGenerationFailure( ex );
         }
         catch ( DocumentException ex )
         {
-            throw new ArchetypeGenerationFailure ( ex );
+            throw new ArchetypeGenerationFailure( ex );
         }
         catch ( ArchetypeGenerationFailure ex )
         {
-            throw new ArchetypeGenerationFailure ( ex );
+            throw new ArchetypeGenerationFailure( ex );
         }
         catch ( InvalidPackaging ex )
         {
-            throw new ArchetypeGenerationFailure ( ex );
+            throw new ArchetypeGenerationFailure( ex );
         }
         finally
         {
-            Thread.currentThread ().setContextClassLoader ( old );
+            Thread.currentThread().setContextClassLoader( old );
         }
     }
 
-    public String getPackageAsDirectory ( String packageName )
+    public String getPackageAsDirectory( String packageName )
     {
-        return StringUtils.replace ( packageName, ".", "/" );
+        return StringUtils.replace( packageName, ".", "/" );
     }
 
-    private void copyFile (
+    private void copyFile(
         final File outFile,
         final String template,
         final boolean failIfExists,
         final ZipFile archetypeZipFile
     )
-    throws FileNotFoundException, OutputFileExists, IOException
+        throws
+        FileNotFoundException,
+        OutputFileExists,
+        IOException
     {
-        getLogger ().debug ( "Copying file " + template );
+        getLogger().debug( "Copying file " + template );
 
-        if ( failIfExists && outFile.exists () )
+        if ( failIfExists && outFile.exists() )
         {
-            throw new OutputFileExists ( "Don't rewrite file " + outFile.getName () );
+            throw new OutputFileExists( "Don't rewrite file " + outFile.getName() );
         }
-        else if ( outFile.exists () )
+        else if ( outFile.exists() )
         {
-            getLogger ().warn ( "CP Don't override file " + outFile );
+            getLogger().warn( "CP Don't override file " + outFile );
         }
         else
         {
             ZipEntry input =
-                archetypeZipFile.getEntry ( Constants.ARCHETYPE_RESOURCES + "/" + template );
+                archetypeZipFile.getEntry( Constants.ARCHETYPE_RESOURCES + "/" + template );
 
-            InputStream inputStream = archetypeZipFile.getInputStream ( input );
+            InputStream inputStream = archetypeZipFile.getInputStream( input );
 
-            outFile.getParentFile ().mkdirs ();
+            outFile.getParentFile().mkdirs();
 
-            IOUtil.copy ( inputStream, new FileOutputStream ( outFile ) );
+            IOUtil.copy( inputStream, new FileOutputStream( outFile ) );
         }
     }
 
-    private void copyFiles (
+    private void copyFiles(
         String directory,
         List fileSetResources,
         boolean packaged,
@@ -305,68 +299,72 @@ implements FilesetArchetypeGenerator
         String moduleOffset,
         boolean failIfExists
     )
-    throws OutputFileExists, FileNotFoundException, IOException
+        throws
+        OutputFileExists,
+        FileNotFoundException,
+        IOException
     {
-        Iterator iterator = fileSetResources.iterator ();
+        Iterator iterator = fileSetResources.iterator();
 
-        while ( iterator.hasNext () )
+        while ( iterator.hasNext() )
         {
-            String template = (String) iterator.next ();
+            String template = (String) iterator.next();
 
-            String templateName = StringUtils.replaceOnce ( template, directory + "/", "" );
+            String templateName = StringUtils.replaceOnce( template, directory + "/", "" );
 
-            if ( !StringUtils.isEmpty ( moduleOffset ) )
+            if ( !StringUtils.isEmpty( moduleOffset ) )
             {
-                templateName = StringUtils.replaceOnce ( templateName, moduleOffset + "/", "" );
+                templateName = StringUtils.replaceOnce( templateName, moduleOffset + "/", "" );
             }
-            templateName = StringUtils.replace ( templateName, File.separator, "/" );
+            templateName = StringUtils.replace( templateName, File.separator, "/" );
 
             File outFile =
-                new File (
+                new File(
                     outputDirectoryFile, /*(StringUtils.isEmpty
                                           * (moduleOffset)?"":moduleOffset+"/")+*/
-                    directory + "/" + ( packaged ? getPackageAsDirectory ( packageName ) : "" )
-                    + "/" + templateName
+                    directory + "/" + ( packaged ? getPackageAsDirectory( packageName ) : "" )
+                        + "/" + templateName
                 );
 
-            copyFile ( outFile, template, failIfExists, archetypeZipFile );
+            copyFile( outFile, template, failIfExists, archetypeZipFile );
         } // end while
     }
 
-    private String getEncoding ( String archetypeEncoding )
+    private String getEncoding( String archetypeEncoding )
     {
         return
-            ( ( null == archetypeEncoding ) || "".equals ( archetypeEncoding ) )
-            ? "UTF-8"
-            : archetypeEncoding;
+            ( ( null == archetypeEncoding ) || "".equals( archetypeEncoding ) )
+                ? "UTF-8"
+                : archetypeEncoding;
     }
 
-    private String getOffsetSeparator ( String moduleOffset )
+    private String getOffsetSeparator( String moduleOffset )
     {
-        return ( StringUtils.isEmpty ( moduleOffset ) ? "/" : ( "/" + moduleOffset + "/" ) );
+        return ( StringUtils.isEmpty( moduleOffset ) ? "/" : ( "/" + moduleOffset + "/" ) );
     }
 
-    private void setParentArtifactId ( Context context, String artifactId )
+    private void setParentArtifactId( Context context,
+                                      String artifactId )
     {
-        context.put ( Constants.PARENT_ARTIFACT_ID, artifactId );
+        context.put( Constants.PARENT_ARTIFACT_ID, artifactId );
     }
 
-    private Context prepareVelocityContext ( ArchetypeConfiguration archetypeConfiguration )
+    private Context prepareVelocityContext( ArchetypeConfiguration archetypeConfiguration )
     {
-        Context context = new VelocityContext ();
-        Iterator iterator = archetypeConfiguration.getProperties ().keySet ().iterator ();
-        while ( iterator.hasNext () )
+        Context context = new VelocityContext();
+        Iterator iterator = archetypeConfiguration.getProperties().keySet().iterator();
+        while ( iterator.hasNext() )
         {
-            String key = (String) iterator.next ();
+            String key = (String) iterator.next();
 
-            Object value = archetypeConfiguration.getProperties ().getProperty ( key );
+            Object value = archetypeConfiguration.getProperties().getProperty( key );
 
-            context.put ( key, value );
+            context.put( key, value );
         }
         return context;
     }
 
-    private void processArchetypeTemplates (
+    private void processArchetypeTemplates(
         AbstractArchetypeDescriptor archetypeDescriptor,
         List archetypeResources,
         ZipFile archetypeZipFile,
@@ -375,9 +373,13 @@ implements FilesetArchetypeGenerator
         String packageName,
         File outputDirectoryFile
     )
-    throws OutputFileExists, ArchetypeGenerationFailure, FileNotFoundException, IOException
+        throws
+        OutputFileExists,
+        ArchetypeGenerationFailure,
+        FileNotFoundException,
+        IOException
     {
-        processTemplates (
+        processTemplates(
             packageName,
             outputDirectoryFile,
             context,
@@ -389,7 +391,7 @@ implements FilesetArchetypeGenerator
         );
     }
 
-    private void processArchetypeTemplatesWithWarning (
+    private void processArchetypeTemplatesWithWarning(
         org.apache.maven.archetype.metadata.ArchetypeDescriptor archetypeDescriptor,
         List archetypeResources,
         ZipFile archetypeZipFile,
@@ -398,9 +400,13 @@ implements FilesetArchetypeGenerator
         String packageName,
         File outputDirectoryFile
     )
-    throws OutputFileExists, ArchetypeGenerationFailure, FileNotFoundException, IOException
+        throws
+        OutputFileExists,
+        ArchetypeGenerationFailure,
+        FileNotFoundException,
+        IOException
     {
-        processTemplates (
+        processTemplates(
             packageName,
             outputDirectoryFile,
             context,
@@ -412,7 +418,7 @@ implements FilesetArchetypeGenerator
         );
     }
 
-    private void processFileSet (
+    private void processFileSet(
         String directory,
         List fileSetResources,
         boolean packaged,
@@ -423,21 +429,23 @@ implements FilesetArchetypeGenerator
         String archetypeEncoding,
         boolean failIfExists
     )
-    throws OutputFileExists, ArchetypeGenerationFailure
+        throws
+        OutputFileExists,
+        ArchetypeGenerationFailure
     {
-        Iterator iterator = fileSetResources.iterator ();
+        Iterator iterator = fileSetResources.iterator();
 
-        while ( iterator.hasNext () )
+        while ( iterator.hasNext() )
         {
-            String template = (String) iterator.next ();
+            String template = (String) iterator.next();
 
-            String templateName = StringUtils.replaceOnce ( template, directory, "" );
+            String templateName = StringUtils.replaceOnce( template, directory, "" );
 
-            processTemplate (
-                new File (
+            processTemplate(
+                new File(
                     outputDirectoryFile,
-                    directory + "/" + ( packaged ? getPackageAsDirectory ( packageName ) : "" )
-                    + "/" + templateName.substring ( moduleOffset.length () )
+                    directory + "/" + ( packaged ? getPackageAsDirectory( packageName ) : "" )
+                        + "/" + templateName.substring( moduleOffset.length() )
                 ),
                 context,
                 Constants.ARCHETYPE_RESOURCES + "/" /*+
@@ -448,7 +456,7 @@ implements FilesetArchetypeGenerator
         } // end while
     }
 
-    private void processFilesetModule (
+    private void processFilesetModule(
         String rootArtifactId,
         String artifactId,
         final List archetypeResources,
@@ -461,17 +469,18 @@ implements FilesetArchetypeGenerator
         final AbstractArchetypeDescriptor archetypeDescriptor,
         final Context context
     )
-    throws DocumentException,
+        throws
+        DocumentException,
         XmlPullParserException,
         ArchetypeGenerationFailure,
         InvalidPackaging,
         IOException,
         OutputFileExists
     {
-        outputDirectoryFile.mkdirs ();
-        getLogger ().debug ( "Processing " + artifactId );
+        outputDirectoryFile.mkdirs();
+        getLogger().debug( "Processing " + artifactId );
 
-        processFilesetProject (
+        processFilesetProject(
             archetypeDescriptor,
             StringUtils.replace( artifactId, "${rootArtifactId}", rootArtifactId ),
             archetypeResources,
@@ -484,30 +493,32 @@ implements FilesetArchetypeGenerator
             basedirPom
         );
 
-        String parentArtifactId = (String) context.get ( Constants.PARENT_ARTIFACT_ID );
-        Iterator subprojects = archetypeDescriptor.getModules ().iterator ();
-        if ( subprojects.hasNext () )
+        String parentArtifactId = (String) context.get( Constants.PARENT_ARTIFACT_ID );
+        Iterator subprojects = archetypeDescriptor.getModules().iterator();
+        if ( subprojects.hasNext() )
         {
-            getLogger ().debug (
-                artifactId + " has modules (" + archetypeDescriptor.getModules () + ")"
+            getLogger().debug(
+                artifactId + " has modules (" + archetypeDescriptor.getModules() + ")"
             );
-            setParentArtifactId ( context, StringUtils.replace( artifactId, "${rootArtifactId}", rootArtifactId ) );
+            setParentArtifactId( context, StringUtils.replace( artifactId, "${rootArtifactId}", rootArtifactId ) );
         }
-        while ( subprojects.hasNext () )
+        while ( subprojects.hasNext() )
         {
-            ModuleDescriptor project = (ModuleDescriptor) subprojects.next ();
+            ModuleDescriptor project = (ModuleDescriptor) subprojects.next();
 
             artifactId = project.getId();
 
-            File moduleOutputDirectoryFile = new File ( outputDirectoryFile, StringUtils.replace( project.getDir(), "${rootArtifactId}", rootArtifactId ) );
-            context.put ( Constants.ARTIFACT_ID, StringUtils.replace( project.getId(), "${rootArtifactId}", rootArtifactId ) );
-            processFilesetModule (
+            File moduleOutputDirectoryFile = new File( outputDirectoryFile,
+                StringUtils.replace( project.getDir(), "${rootArtifactId}", rootArtifactId ) );
+            context.put( Constants.ARTIFACT_ID, StringUtils.replace( project.getId(), "${rootArtifactId}", rootArtifactId ) );
+            processFilesetModule(
                 rootArtifactId,
-                StringUtils.replace( project.getDir(), "${rootArtifactId}", rootArtifactId),
+                StringUtils.replace( project.getDir(), "${rootArtifactId}", rootArtifactId ),
                 archetypeResources,
-                new File ( moduleOutputDirectoryFile, Constants.ARCHETYPE_POM ),
+                new File( moduleOutputDirectoryFile, Constants.ARCHETYPE_POM ),
                 archetypeZipFile,
-                ( StringUtils.isEmpty ( moduleOffset ) ? "" : ( moduleOffset + "/" ) ) + StringUtils.replace( project.getDir(), "${rootArtifactId}", rootArtifactId ),
+                ( StringUtils.isEmpty( moduleOffset ) ? "" : ( moduleOffset + "/" ) ) + StringUtils.replace( project.getDir(), "${rootArtifactId}",
+                    rootArtifactId ),
                 pom,
                 moduleOutputDirectoryFile,
                 packageName,
@@ -515,11 +526,11 @@ implements FilesetArchetypeGenerator
                 context
             );
         }
-        restoreParentArtifactId ( context, parentArtifactId );
-        getLogger ().debug ( "Processed " + artifactId );
+        restoreParentArtifactId( context, parentArtifactId );
+        getLogger().debug( "Processed " + artifactId );
     }
 
-    private void processFilesetProject (
+    private void processFilesetProject(
         final AbstractArchetypeDescriptor archetypeDescriptor,
         final String moduleId,
         final List archetypeResources,
@@ -531,7 +542,8 @@ implements FilesetArchetypeGenerator
         final File outputDirectoryFile,
         final File basedirPom
     )
-    throws DocumentException,
+        throws
+        DocumentException,
         XmlPullParserException,
         ArchetypeGenerationFailure,
         InvalidPackaging,
@@ -539,9 +551,9 @@ implements FilesetArchetypeGenerator
         FileNotFoundException,
         OutputFileExists
     {
-        if ( basedirPom.exists () )
+        if ( basedirPom.exists() )
         {
-            processPomWithParent (
+            processPomWithParent(
                 context,
                 pom,
                 moduleOffset,
@@ -551,10 +563,10 @@ implements FilesetArchetypeGenerator
         }
         else
         {
-            processPom ( context, pom, moduleOffset );
+            processPom( context, pom, moduleOffset );
         }
 
-        processArchetypeTemplates (
+        processArchetypeTemplates(
             archetypeDescriptor,
             archetypeResources,
             archetypeZipFile,
@@ -565,58 +577,69 @@ implements FilesetArchetypeGenerator
         );
     }
 
-    private void processPom ( Context context, File pom, String moduleOffset )
-    throws OutputFileExists, ArchetypeGenerationFailure
+    private void processPom( Context context,
+                             File pom,
+                             String moduleOffset )
+        throws
+        OutputFileExists,
+        ArchetypeGenerationFailure
     {
-        getLogger ().debug ( "Processing pom " + pom );
-        processTemplate (
+        getLogger().debug( "Processing pom " + pom );
+        processTemplate(
             pom,
             context,
-            Constants.ARCHETYPE_RESOURCES + getOffsetSeparator ( moduleOffset )
-            + Constants.ARCHETYPE_POM,
-            getEncoding ( null ),
+            Constants.ARCHETYPE_RESOURCES + getOffsetSeparator( moduleOffset )
+                + Constants.ARCHETYPE_POM,
+            getEncoding( null ),
             true
         );
     }
 
-    private void processPomWithMerge ( Context context, File pom, String moduleOffset )
-    throws OutputFileExists, IOException, XmlPullParserException, ArchetypeGenerationFailure
+    private void processPomWithMerge( Context context,
+                                      File pom,
+                                      String moduleOffset )
+        throws
+        OutputFileExists,
+        IOException,
+        XmlPullParserException,
+        ArchetypeGenerationFailure
     {
-        getLogger ().debug ( "Processing pom " + pom + " with merge" );
+        getLogger().debug( "Processing pom " + pom + " with merge" );
 
-        File temporaryPom = getTemporaryFile ( pom );
+        File temporaryPom = getTemporaryFile( pom );
 
-        processTemplate (
+        processTemplate(
             temporaryPom,
             context,
-            Constants.ARCHETYPE_RESOURCES + getOffsetSeparator ( moduleOffset )
-            + Constants.ARCHETYPE_POM,
-            getEncoding ( null ),
+            Constants.ARCHETYPE_RESOURCES + getOffsetSeparator( moduleOffset )
+                + Constants.ARCHETYPE_POM,
+            getEncoding( null ),
             true
         );
 
-        pomManager.mergePoms ( pom, temporaryPom );
+        pomManager.mergePoms( pom, temporaryPom );
 
         // getTemporaryFile sets deleteOnExit. Lets try to delete and then make sure deleteOnExit is
         // still set. Windows has issues deleting files with certain JDKs.
         try
         {
-            FileUtils.forceDelete ( temporaryPom );
+            FileUtils.forceDelete( temporaryPom );
         }
         catch ( IOException e )
         {
-            temporaryPom.deleteOnExit ();
+            temporaryPom.deleteOnExit();
         }
     }
 
-    private void processPomWithParent (
+    private void processPomWithParent(
         Context context,
         File pom,
         String moduleOffset,
         File basedirPom,
         String moduleId
     )
-    throws OutputFileExists,
+        throws
+        OutputFileExists,
         FileNotFoundException,
         XmlPullParserException,
         DocumentException,
@@ -624,81 +647,83 @@ implements FilesetArchetypeGenerator
         InvalidPackaging,
         ArchetypeGenerationFailure
     {
-        getLogger ().debug ( "Processing pom " + pom + " with parent " + basedirPom );
-        processTemplate (
+        getLogger().debug( "Processing pom " + pom + " with parent " + basedirPom );
+        processTemplate(
             pom,
             context,
-            Constants.ARCHETYPE_RESOURCES + getOffsetSeparator ( moduleOffset )
-            + Constants.ARCHETYPE_POM,
-            getEncoding ( null ),
+            Constants.ARCHETYPE_RESOURCES + getOffsetSeparator( moduleOffset )
+                + Constants.ARCHETYPE_POM,
+            getEncoding( null ),
             true
         );
 
         /*if ( StringUtils.isEmpty ( moduleOffset ) )
         {*/
-            getLogger ().debug ( "Adding module " + moduleId );
+        getLogger().debug( "Adding module " + moduleId );
 //System.err.println ( "Adding module " + moduleId );
-            pomManager.addModule ( basedirPom, moduleId );
-            pomManager.addParent ( pom, basedirPom );
+        pomManager.addModule( basedirPom, moduleId );
+        pomManager.addParent( pom, basedirPom );
         //}
     }
 
-    private void processTemplate (
+    private void processTemplate(
         File outFile,
         Context context,
         String templateFileName,
         String encoding,
         boolean failIfExists
     )
-    throws OutputFileExists, ArchetypeGenerationFailure
+        throws
+        OutputFileExists,
+        ArchetypeGenerationFailure
     {
-        templateFileName = templateFileName.replace ( File.separatorChar, '/' );
+        templateFileName = templateFileName.replace( File.separatorChar, '/' );
 
-        getLogger ().debug ( "Prosessing template " + templateFileName );
+        getLogger().debug( "Prosessing template " + templateFileName );
 
-        if ( failIfExists && outFile.exists () )
+        if ( failIfExists && outFile.exists() )
         {
-            throw new OutputFileExists ( "Don't rewrite file " + outFile.getAbsolutePath () );
+            throw new OutputFileExists( "Don't rewrite file " + outFile.getAbsolutePath() );
         }
-        else if ( outFile.exists () )
+        else if ( outFile.exists() )
         {
-            getLogger ().warn ( "PT Don't override file " + outFile );
+            getLogger().warn( "PT Don't override file " + outFile );
         }
         else
         {
-            if ( !outFile.getParentFile ().exists () )
+            if ( !outFile.getParentFile().exists() )
             {
-                outFile.getParentFile ().mkdirs ();
+                outFile.getParentFile().mkdirs();
             }
 
-            getLogger ().debug ( "Merging into " + outFile );
+            getLogger().debug( "Merging into " + outFile );
 
             Writer writer = null;
 
             try
             {
-                writer = new OutputStreamWriter ( new FileOutputStream ( outFile ), encoding );
+                writer = new OutputStreamWriter( new FileOutputStream( outFile ), encoding );
 
-                velocity.getEngine ().mergeTemplate ( templateFileName, encoding, context, writer );
+                velocity.getEngine().mergeTemplate( templateFileName, encoding, context, writer );
 
-                writer.flush ();
+                writer.flush();
             }
             catch ( Exception e )
             {
-                throw new ArchetypeGenerationFailure (
-                    "Error merging velocity templates: " + e.getMessage (),
+                throw new ArchetypeGenerationFailure(
+                    "Error merging velocity templates: " + e.getMessage(),
                     e
                 );
             }
             finally
             {
-                IOUtil.close ( writer );
+                IOUtil.close( writer );
                 writer = null;
             }
         }
     }
 
-    private void processTemplates (
+    private void processTemplates(
         String packageName,
         File outputDirectoryFile,
         Context context,
@@ -708,74 +733,79 @@ implements FilesetArchetypeGenerator
         String moduleOffset,
         boolean failIfExists
     )
-    throws OutputFileExists, ArchetypeGenerationFailure, FileNotFoundException, IOException
+        throws
+        OutputFileExists,
+        ArchetypeGenerationFailure,
+        FileNotFoundException,
+        IOException
     {
-        Iterator iterator = archetypeDescriptor.getFileSets ().iterator ();
-        if ( iterator.hasNext () )
+        Iterator iterator = archetypeDescriptor.getFileSets().iterator();
+        if ( iterator.hasNext() )
         {
-            getLogger ().debug ( "Processing filesets" );
+            getLogger().debug( "Processing filesets" );
         }
-        while ( iterator.hasNext () )
+        while ( iterator.hasNext() )
         {
-            FileSet fileSet = (FileSet) iterator.next ();
+            FileSet fileSet = (FileSet) iterator.next();
 
             List fileSetResources =
-                archetypeFilesResolver.filterFiles ( moduleOffset, fileSet, archetypeResources );
+                archetypeFilesResolver.filterFiles( moduleOffset, fileSet, archetypeResources );
 
-            if ( fileSet.isFiltered () )
+            if ( fileSet.isFiltered() )
             {
-                getLogger ().debug (
+                getLogger().debug(
                     "Processing fileset " + fileSet + "\n\n\n\n" + fileSetResources + "\n\n"
-                    + archetypeResources + "\n\n"
+                        + archetypeResources + "\n\n"
                 );
-                processFileSet (
-                    fileSet.getDirectory (),
+                processFileSet(
+                    fileSet.getDirectory(),
                     fileSetResources,
-                    fileSet.isPackaged (),
+                    fileSet.isPackaged(),
                     packageName,
                     context,
                     outputDirectoryFile,
                     moduleOffset,
-                    getEncoding ( fileSet.getEncoding () ),
+                    getEncoding( fileSet.getEncoding() ),
                     failIfExists
                 );
-                getLogger ().debug ( "Processed " + fileSetResources.size () + " files" );
+                getLogger().debug( "Processed " + fileSetResources.size() + " files" );
             }
             else
             {
-                getLogger ().debug ( "Copying fileset " + fileSet );
-                copyFiles (
-                    fileSet.getDirectory (),
+                getLogger().debug( "Copying fileset " + fileSet );
+                copyFiles(
+                    fileSet.getDirectory(),
                     fileSetResources,
-                    fileSet.isPackaged (),
+                    fileSet.isPackaged(),
                     packageName,
                     outputDirectoryFile,
                     archetypeZipFile,
                     moduleOffset,
                     failIfExists
                 );
-                getLogger ().debug ( "Copied " + fileSetResources.size () + " files" );
+                getLogger().debug( "Copied " + fileSetResources.size() + " files" );
             }
         } // end while
     }
 
-    private void restoreParentArtifactId ( Context context, String parentArtifactId )
+    private void restoreParentArtifactId( Context context,
+                                          String parentArtifactId )
     {
-        if ( StringUtils.isEmpty ( parentArtifactId ) )
+        if ( StringUtils.isEmpty( parentArtifactId ) )
         {
-            context.remove ( Constants.PARENT_ARTIFACT_ID );
+            context.remove( Constants.PARENT_ARTIFACT_ID );
         }
         else
         {
-            context.put ( Constants.PARENT_ARTIFACT_ID, parentArtifactId );
+            context.put( Constants.PARENT_ARTIFACT_ID, parentArtifactId );
         }
     }
 
-    private File getTemporaryFile ( File file )
+    private File getTemporaryFile( File file )
     {
         File tmp =
-            FileUtils.createTempFile ( file.getName (), Constants.TMP, file.getParentFile () );
-        tmp.deleteOnExit ();
+            FileUtils.createTempFile( file.getName(), Constants.TMP, file.getParentFile() );
+        tmp.deleteOnExit();
         return tmp;
     }
 }

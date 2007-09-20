@@ -20,23 +20,25 @@
 package org.apache.maven.archetype.exception;
 
 public class ArchetypeNotDefined
-extends Exception
+    extends Exception
 {
-    public ArchetypeNotDefined ()
-    { }
-
-    public ArchetypeNotDefined ( String msg )
+    public ArchetypeNotDefined()
     {
-        super ( msg );
     }
 
-    public ArchetypeNotDefined ( Throwable cause )
+    public ArchetypeNotDefined( String msg )
     {
-        super ( cause );
+        super( msg );
     }
 
-    public ArchetypeNotDefined ( String msg, Throwable cause )
+    public ArchetypeNotDefined( Throwable cause )
     {
-        super ( msg, cause );
+        super( cause );
+    }
+
+    public ArchetypeNotDefined( String msg,
+                                Throwable cause )
+    {
+        super( msg, cause );
     }
 }

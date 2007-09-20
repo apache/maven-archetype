@@ -20,23 +20,25 @@
 package org.apache.maven.archetype.exception;
 
 public class ArchetypeNotConfigured
-extends Exception
+    extends Exception
 {
-    public ArchetypeNotConfigured ()
-    { }
-
-    public ArchetypeNotConfigured ( String msg )
+    public ArchetypeNotConfigured()
     {
-        super ( msg );
     }
 
-    public ArchetypeNotConfigured ( Throwable cause )
+    public ArchetypeNotConfigured( String msg )
     {
-        super ( cause );
+        super( msg );
     }
 
-    public ArchetypeNotConfigured ( String msg, Throwable cause )
+    public ArchetypeNotConfigured( Throwable cause )
     {
-        super ( msg, cause );
+        super( cause );
+    }
+
+    public ArchetypeNotConfigured( String msg,
+                                   Throwable cause )
+    {
+        super( msg, cause );
     }
 }

@@ -41,7 +41,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class DefaultArchetypeCreatorTest
-extends AbstractMojoTestCase
+    extends AbstractMojoTestCase
 {
     private List filtereds;
 
@@ -50,55 +50,56 @@ extends AbstractMojoTestCase
 
     private List repositories;
 
-    public void testCreateFilesetArchetype ()
-    throws Exception
+    public void testCreateFilesetArchetype()
+        throws
+        Exception
     {
-        System.out.println ( "testCreateFilesetArchetype" );
+        System.out.println( "testCreateFilesetArchetype" );
 
-        MavenProjectBuilder builder = (MavenProjectBuilder) lookup ( MavenProjectBuilder.ROLE );
+        MavenProjectBuilder builder = (MavenProjectBuilder) lookup( MavenProjectBuilder.ROLE );
 
         String project = "create-3";
 
-        File projectFile = getProjectFile ( project );
-        File projectFileSample = getProjectSampleFile ( project );
-        copy ( projectFileSample, projectFile );
+        File projectFile = getProjectFile( project );
+        File projectFileSample = getProjectSampleFile( project );
+        copy( projectFileSample, projectFile );
 
-        FileUtils.deleteDirectory ( new File ( projectFile.getParentFile (), "target" ) );
+        FileUtils.deleteDirectory( new File( projectFile.getParentFile(), "target" ) );
 
-        File propertyFile = getPropertiesFile ( project );
-        File propertyFileSample = getPropertiesSampleFile ( project );
-        copy ( propertyFileSample, propertyFile );
+        File propertyFile = getPropertiesFile( project );
+        File propertyFileSample = getPropertiesSampleFile( project );
+        copy( propertyFileSample, propertyFile );
 
         MavenProject mavenProject =
-            builder.buildWithDependencies ( projectFile, localRepository, null );
+            builder.buildWithDependencies( projectFile, localRepository, null );
         FilesetArchetypeCreator instance =
-            (FilesetArchetypeCreator) lookup ( ArchetypeCreator.class.getName (), "fileset" );
+            (FilesetArchetypeCreator) lookup( ArchetypeCreator.class.getName(), "fileset" );
 
-        languages = new ArrayList ();
-        languages.add ( "java" );
-        languages.add ( "aspectj" );
-        languages.add ( "csharp" );
-        languages.add ( "groovy" );
-        languages.add ( "resources" );
+        languages = new ArrayList();
+        languages.add( "java" );
+        languages.add( "aspectj" );
+        languages.add( "csharp" );
+        languages.add( "groovy" );
+        languages.add( "resources" );
 
-        filtereds = new ArrayList ();
-        filtereds.add ( "java" );
-        filtereds.add ( "xml" );
-        filtereds.add ( "txt" );
-        filtereds.add ( "groovy" );
-        filtereds.add ( "cs" );
-        filtereds.add ( "mdo" );
-        filtereds.add ( "aj" );
-        filtereds.add ( "jsp" );
-        filtereds.add ( "js" );
-        filtereds.add ( "gsp" );
-        filtereds.add ( "vm" );
-        filtereds.add ( "html" );
-        filtereds.add ( "xhtml" );
-        filtereds.add ( "properties" );
-        filtereds.add ( ".classpath" );
-        filtereds.add ( ".project" );
-        instance.createArchetype (
+        filtereds = new ArrayList();
+        filtereds.add( "java" );
+        filtereds.add( "xml" );
+        filtereds.add( "txt" );
+        filtereds.add( "groovy" );
+        filtereds.add( "cs" );
+        filtereds.add( "mdo" );
+        filtereds.add( "aj" );
+        filtereds.add( "jsp" );
+        filtereds.add( "js" );
+        filtereds.add( "gsp" );
+        filtereds.add( "vm" );
+        filtereds.add( "html" );
+        filtereds.add( "xhtml" );
+        filtereds.add( "properties" );
+        filtereds.add( ".classpath" );
+        filtereds.add( ".project" );
+        instance.createArchetype(
             mavenProject,
             propertyFile,
             languages,
@@ -108,284 +109,298 @@ extends AbstractMojoTestCase
             false,
             false,
             false,
-            getFile (project, "archetype-registry.xml") 
+            getFile( project, "archetype-registry.xml" )
         );
 
         File template;
 
-        template = getTemplateFile ( project, "pom.xml" );
-        assertExists ( template );
-        assertContent ( template, "${groupId}" );
-        assertContent ( template, "${artifactId}" );
-        assertContent ( template, "${version}" );
-        assertContent ( template, "Maven ArchetypeNG Test create-3" );
-        assertContent ( template, "<packaging>pom</packaging>" );
-        assertNotContent ( template, "<parent>" );
+        template = getTemplateFile( project, "pom.xml" );
+        assertExists( template );
+        assertContent( template, "${groupId}" );
+        assertContent( template, "${artifactId}" );
+        assertContent( template, "${version}" );
+        assertContent( template, "Maven ArchetypeNG Test create-3" );
+        assertContent( template, "<packaging>pom</packaging>" );
+        assertNotContent( template, "<parent>" );
 
-        template = getTemplateFile ( project, "src/site/site.xml" );
-        assertExists ( template );
-        assertContent ( template, "<!-- ${someProperty} -->" );
+        template = getTemplateFile( project, "src/site/site.xml" );
+        assertExists( template );
+        assertContent( template, "<!-- ${someProperty} -->" );
 
-        template = getTemplateFile ( project, "src/site/resources/site.png" );
-        assertExists ( template );
-        assertNotContent ( template, "${someProperty}" );
+        template = getTemplateFile( project, "src/site/resources/site.png" );
+        assertExists( template );
+        assertNotContent( template, "${someProperty}" );
 
-        template = getTemplateFile ( project, ".classpath" );
-        assertExists ( template );
-        assertNotContent ( template, "${someProperty}" );
+        template = getTemplateFile( project, ".classpath" );
+        assertExists( template );
+        assertNotContent( template, "${someProperty}" );
 
-        template = getTemplateFile ( project, "profiles.xml" );
-        assertExists ( template );
-        assertContent ( template, "<!-- ${someProperty} -->" );
+        template = getTemplateFile( project, "profiles.xml" );
+        assertExists( template );
+        assertContent( template, "<!-- ${someProperty} -->" );
 
-        template = getTemplateFile ( project, "libs/pom.xml" );
-        assertExists ( template );
-        assertContent ( template, "${groupId}" );
-        assertContent ( template, "${artifactId}" );
-        assertContent ( template, "${version}" );
-        assertContent ( template, "Maven ArchetypeNG Test create-3-libraries" );
-        assertContent ( template, "<packaging>pom</packaging>" );
-        assertNotContent ( template, "<parent>" );
+        template = getTemplateFile( project, "libs/pom.xml" );
+        assertExists( template );
+        assertContent( template, "${groupId}" );
+        assertContent( template, "${artifactId}" );
+        assertContent( template, "${version}" );
+        assertContent( template, "Maven ArchetypeNG Test create-3-libraries" );
+        assertContent( template, "<packaging>pom</packaging>" );
+        assertNotContent( template, "<parent>" );
 
-        template = getTemplateFile ( project, "libs/prj-a/pom.xml" );
-        assertExists ( template );
-        assertContent ( template, "${groupId}" );
-        assertContent ( template, "${artifactId}" );
-        assertContent ( template, "${version}" );
-        assertContent ( template, "Maven ArchetypeNG Test create-3-libraries-project-a" );
-        assertNotContent ( template, "<packaging>pom</packaging>" );
-        assertNotContent ( template, "<parent>" );
+        template = getTemplateFile( project, "libs/prj-a/pom.xml" );
+        assertExists( template );
+        assertContent( template, "${groupId}" );
+        assertContent( template, "${artifactId}" );
+        assertContent( template, "${version}" );
+        assertContent( template, "Maven ArchetypeNG Test create-3-libraries-project-a" );
+        assertNotContent( template, "<packaging>pom</packaging>" );
+        assertNotContent( template, "<parent>" );
 
-        template = getTemplateFile ( project, "libs/prj-a/src/main/mdo/descriptor.xml" );
-        assertExists ( template );
-        assertContent ( template, "<!-- ${someProperty} -->" );
+        template = getTemplateFile( project, "libs/prj-a/src/main/mdo/descriptor.xml" );
+        assertExists( template );
+        assertContent( template, "<!-- ${someProperty} -->" );
 
-        template = getTemplateFile ( project, "libs/prj-b/pom.xml" );
-        assertExists ( template );
-        assertContent ( template, "${groupId}" );
-        assertContent ( template, "${artifactId}" );
-        assertContent ( template, "${version}" );
-        assertContent ( template, "Maven ArchetypeNG Test create-3-libraries-project-b" );
-        assertNotContent ( template, "<packaging>pom</packaging>" );
-        assertNotContent ( template, "<parent>" );
+        template = getTemplateFile( project, "libs/prj-b/pom.xml" );
+        assertExists( template );
+        assertContent( template, "${groupId}" );
+        assertContent( template, "${artifactId}" );
+        assertContent( template, "${version}" );
+        assertContent( template, "Maven ArchetypeNG Test create-3-libraries-project-b" );
+        assertNotContent( template, "<packaging>pom</packaging>" );
+        assertNotContent( template, "<parent>" );
 
-        template = getTemplateFile ( project, "libs/prj-b/src/main/java/test/com/Component.java" );
-        assertExists ( template );
-        assertContent ( template, "${someProperty}" );
+        template = getTemplateFile( project, "libs/prj-b/src/main/java/test/com/Component.java" );
+        assertExists( template );
+        assertContent( template, "${someProperty}" );
 
-        template = getTemplateFile ( project, "libs/prj-b/src/main/java/test/com/package.html" );
-        assertExists ( template );
-        assertContent ( template, "<!-- ${someProperty} -->" );
-
-        template =
-            getTemplateFile ( project, "libs/prj-b/src/test/java/test/common/ComponentTest.java" );
-        assertExists ( template );
-        assertContent ( template, "${someProperty}" );
-
-        template = getTemplateFile ( project, "application/pom.xml" );
-        assertExists ( template );
-        assertContent ( template, "${groupId}" );
-        assertContent ( template, "${artifactId}" );
-        assertContent ( template, "${version}" );
-        assertContent ( template, "Maven ArchetypeNG Test create-3-application" );
-        assertNotContent ( template, "<packaging>pom</packaging>" );
-        assertNotContent ( template, "<parent>" );
-
-        template = getTemplateFile ( project, "application/src/main/java/Main.java" );
-        assertExists ( template );
-        assertContent ( template, "${someProperty}" );
+        template = getTemplateFile( project, "libs/prj-b/src/main/java/test/com/package.html" );
+        assertExists( template );
+        assertContent( template, "<!-- ${someProperty} -->" );
 
         template =
-            getTemplateFile (
+            getTemplateFile( project, "libs/prj-b/src/test/java/test/common/ComponentTest.java" );
+        assertExists( template );
+        assertContent( template, "${someProperty}" );
+
+        template = getTemplateFile( project, "application/pom.xml" );
+        assertExists( template );
+        assertContent( template, "${groupId}" );
+        assertContent( template, "${artifactId}" );
+        assertContent( template, "${version}" );
+        assertContent( template, "Maven ArchetypeNG Test create-3-application" );
+        assertNotContent( template, "<packaging>pom</packaging>" );
+        assertNotContent( template, "<parent>" );
+
+        template = getTemplateFile( project, "application/src/main/java/Main.java" );
+        assertExists( template );
+        assertContent( template, "${someProperty}" );
+
+        template =
+            getTemplateFile(
                 project,
                 "application/src/main/java/test/application/Application.java"
             );
-        assertExists ( template );
-        assertContent ( template, "${someProperty}" );
+        assertExists( template );
+        assertContent( template, "${someProperty}" );
 
         template =
-            getTemplateFile (
+            getTemplateFile(
                 project,
                 "application/src/main/java/test/application/audios/Application.ogg"
             );
-        assertExists ( template );
-        assertNotContent ( template, "${someProperty}" );
+        assertExists( template );
+        assertNotContent( template, "${someProperty}" );
 
         template =
-            getTemplateFile (
+            getTemplateFile(
                 project,
                 "application/src/main/java/test/application/images/Application.png"
             );
-        assertExists ( template );
-        assertNotContent ( template, "${someProperty}" );
+        assertExists( template );
+        assertNotContent( template, "${someProperty}" );
 
-        template = getTemplateFile ( project, "application/src/main/resources/log4j.properties" );
-        assertExists ( template );
-        assertContent ( template, "${someProperty}" );
-
-        template =
-            getTemplateFile ( project, "application/src/main/resources/META-INF/MANIFEST.MF" );
-        assertExists ( template );
-        assertContent ( template, "${someProperty}" );
+        template = getTemplateFile( project, "application/src/main/resources/log4j.properties" );
+        assertExists( template );
+        assertContent( template, "${someProperty}" );
 
         template =
-            getTemplateFile ( project, "application/src/main/resources/test/application/some/Gro.groovy" );
-        assertExists ( template );
-        assertContent ( template, "${someProperty}" );
-
-        template = getTemplateFile ( project, "application/src/main/resources/splash.png" );
-        assertExists ( template );
-        assertNotContent ( template, "${someProperty}" );
-
-        template = getTemplateFile ( project, "application/src/test/java/TestAll.java" );
-        assertExists ( template );
-        assertContent ( template, "${someProperty}" );
+            getTemplateFile( project, "application/src/main/resources/META-INF/MANIFEST.MF" );
+        assertExists( template );
+        assertContent( template, "${someProperty}" );
 
         template =
-            getTemplateFile (
+            getTemplateFile( project, "application/src/main/resources/test/application/some/Gro.groovy" );
+        assertExists( template );
+        assertContent( template, "${someProperty}" );
+
+        template = getTemplateFile( project, "application/src/main/resources/splash.png" );
+        assertExists( template );
+        assertNotContent( template, "${someProperty}" );
+
+        template = getTemplateFile( project, "application/src/test/java/TestAll.java" );
+        assertExists( template );
+        assertContent( template, "${someProperty}" );
+
+        template =
+            getTemplateFile(
                 project,
                 "application/src/test/java/test/application/ApplicationTest.java"
             );
-        assertExists ( template );
-        assertContent ( template, "${someProperty}" );
+        assertExists( template );
+        assertContent( template, "${someProperty}" );
 
-        template = getTemplateFile ( project, "application/src/it-test/java/test/ItTest1.java" );
-        assertExists ( template );
-        assertContent ( template, "${someProperty}" );
+        template = getTemplateFile( project, "application/src/it-test/java/test/ItTest1.java" );
+        assertExists( template );
+        assertContent( template, "${someProperty}" );
 
-        template = getTemplateFile ( project, "application/src/it-test/java/ItTestAll.java" );
-        assertExists ( template );
-        assertContent ( template, "${someProperty}" );
+        template = getTemplateFile( project, "application/src/it-test/java/ItTestAll.java" );
+        assertExists( template );
+        assertContent( template, "${someProperty}" );
 
         template =
-            getTemplateFile ( project, "application/src/it-test/resources/ItTest1Result.txt" );
-        assertExists ( template );
-        assertContent ( template, "${someProperty}" );
+            getTemplateFile( project, "application/src/it-test/resources/ItTest1Result.txt" );
+        assertExists( template );
+        assertContent( template, "${someProperty}" );
     }
 
-    protected void tearDown ()
-    throws Exception
+    protected void tearDown()
+        throws
+        Exception
     {
-        super.tearDown ();
+        super.tearDown();
     }
 
-    protected void setUp ()
-    throws Exception
+    protected void setUp()
+        throws
+        Exception
     {
-        super.setUp ();
+        super.setUp();
 
         localRepository =
-            new DefaultArtifactRepository (
+            new DefaultArtifactRepository(
                 "local",
-                new File ( getBasedir (), "target/test-classes/repositories/local" ).toURI ()
-                .toString (),
-                new DefaultRepositoryLayout ()
+                new File( getBasedir(), "target/test-classes/repositories/local" ).toURI()
+                    .toString(),
+                new DefaultRepositoryLayout()
             );
 
         repositories =
-            Arrays.asList (
+            Arrays.asList(
                 new ArtifactRepository[]
-                {
-                    new DefaultArtifactRepository (
-                        "central",
-                        new File ( getBasedir (), "target/test-classes/repositories/central" )
-                        .toURI ().toString (),
-                        new DefaultRepositoryLayout ()
-                    )
-                }
+                    {
+                        new DefaultArtifactRepository(
+                            "central",
+                            new File( getBasedir(), "target/test-classes/repositories/central" )
+                                .toURI().toString(),
+                            new DefaultRepositoryLayout()
+                        )
+                    }
             );
     }
 
-    private boolean assertContent ( File template, String content )
-    throws FileNotFoundException, IOException
+    private boolean assertContent( File template,
+                                   String content )
+        throws
+        FileNotFoundException,
+        IOException
     {
-        String templateContent = IOUtil.toString ( new FileReader ( template ) );
-        return StringUtils.countMatches ( templateContent, content ) > 0;
+        String templateContent = IOUtil.toString( new FileReader( template ) );
+        return StringUtils.countMatches( templateContent, content ) > 0;
     }
 
-    private void assertExists ( File file )
+    private void assertExists( File file )
     {
-        assertTrue ( "File doesn't exist:" + file.getAbsolutePath (), file.exists () );
+        assertTrue( "File doesn't exist:" + file.getAbsolutePath(), file.exists() );
     }
 
-    private boolean assertNotContent ( File template, String content )
-    throws FileNotFoundException, IOException
+    private boolean assertNotContent( File template,
+                                      String content )
+        throws
+        FileNotFoundException,
+        IOException
     {
-        return !assertContent ( template, content );
+        return !assertContent( template, content );
     }
 
-    private void copy ( File in, File out )
-    throws IOException, FileNotFoundException
+    private void copy( File in,
+                       File out )
+        throws
+        IOException,
+        FileNotFoundException
     {
-        assertTrue ( !out.exists () || out.delete () );
-        assertFalse ( out.exists () );
-        IOUtil.copy ( new FileReader ( in ), new FileWriter ( out ) );
-        assertTrue ( out.exists () );
-        assertTrue ( in.exists () );
+        assertTrue( !out.exists() || out.delete() );
+        assertFalse( out.exists() );
+        IOUtil.copy( new FileReader( in ), new FileWriter( out ) );
+        assertTrue( out.exists() );
+        assertTrue( in.exists() );
     }
 
-    private File getDescriptorFile ( String project )
+    private File getDescriptorFile( String project )
     {
         return
-            new File (
-                getBasedir (),
+            new File(
+                getBasedir(),
                 "target/test-classes/projects/" + project + "/target/generated-sources/archetypeng/"
-                + "src/main/resources/"
-                + "META-INF/maven/archetype.xml"
+                    + "src/main/resources/"
+                    + "META-INF/maven/archetype.xml"
             );
     }
 
-    private String getPath ( String basedir, String child )
+    private String getPath( String basedir,
+                            String child )
     {
-        return new File ( basedir, child ).getPath ();
+        return new File( basedir, child ).getPath();
     }
 
-    private File getFile ( String project, String file )
+    private File getFile( String project,
+                          String file )
     {
-        return new File ( getBasedir (), "target/test-classes/projects/" + project + "/" + file);
+        return new File( getBasedir(), "target/test-classes/projects/" + project + "/" + file );
     }
 
-    private File getProjectFile ( String project )
+    private File getProjectFile( String project )
     {
-        return new File ( getBasedir (), "target/test-classes/projects/" + project + "/pom.xml" );
+        return new File( getBasedir(), "target/test-classes/projects/" + project + "/pom.xml" );
     }
 
-    private File getProjectSampleFile ( String project )
+    private File getProjectSampleFile( String project )
     {
         return
-            new File (
-                getBasedir (),
+            new File(
+                getBasedir(),
                 "target/test-classes/projects/" + project + "/pom.xml.sample"
             );
     }
 
-    private File getPropertiesFile ( String project )
+    private File getPropertiesFile( String project )
     {
         return
-            new File (
-                getBasedir (),
+            new File(
+                getBasedir(),
                 "target/test-classes/projects/" + project + "/archetype.properties"
             );
     }
 
-    private File getPropertiesSampleFile ( final String project )
+    private File getPropertiesSampleFile( final String project )
     {
         File propertyFileSample =
-            new File (
-                getBasedir (),
+            new File(
+                getBasedir(),
                 "target/test-classes/projects/" + project + "/archetype.properties.sample"
             );
         return propertyFileSample;
     }
 
-    private File getTemplateFile ( String project, String template )
+    private File getTemplateFile( String project,
+                                  String template )
     {
         return
-            new File (
-                getBasedir (),
+            new File(
+                getBasedir(),
                 "target/test-classes/projects/" + project + "/target/generated-sources/archetypeng/"
-                + "src/main/resources/"
-                + "archetype-resources/" + template
+                    + "src/main/resources/"
+                    + "archetype-resources/" + template
             );
     }
 }

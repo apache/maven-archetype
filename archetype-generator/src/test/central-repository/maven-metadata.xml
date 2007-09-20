@@ -18,21 +18,21 @@ specific language governing permissions and limitations
 under the License.
 -->
 <metadata>
-    <plugins>
-        <plugin>
-            <name>Maven TEST Complete Plugin</name>
-            <prefix>archetypes</prefix>
-            <artifactId>basic</artifactId>
-        </plugin>
-        <plugin>
-            <name>Maven TEST Partial Plugin</name>
-            <prefix>archetypes</prefix>
-            <artifactId>partial</artifactId>
-        </plugin>
-        <plugin>
-            <name>Maven TEST Site Plugin</name>
-            <prefix>archetypes</prefix>
-            <artifactId>site</artifactId>
-        </plugin>
-    </plugins>
+  <plugins>
+    <plugin>
+      <name>Maven TEST Complete Plugin</name>
+      <prefix>archetypes</prefix>
+      <artifactId>basic</artifactId>
+    </plugin>
+    <plugin>
+      <name>Maven TEST Partial Plugin</name>
+      <prefix>archetypes</prefix>
+      <artifactId>partial</artifactId>
+    </plugin>
+    <plugin>
+      <name>Maven TEST Site Plugin</name>
+      <prefix>archetypes</prefix>
+      <artifactId>site</artifactId>
+    </plugin>
+  </plugins>
 </metadata>

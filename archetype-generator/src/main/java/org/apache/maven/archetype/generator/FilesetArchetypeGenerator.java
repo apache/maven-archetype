@@ -30,15 +30,16 @@ import java.io.File;
 
 import java.util.Properties;
 
-/**
- * @author  rafale
- */
+/** @author rafale */
 public interface FilesetArchetypeGenerator
 {
-    String ROLE = FilesetArchetypeGenerator.class.getName ();
+    String ROLE = FilesetArchetypeGenerator.class.getName();
 
-    void generateArchetype ( Properties properties, File archetypeFile, String basedir )
-    throws UnknownArchetype,
+    void generateArchetype( Properties properties,
+                            File archetypeFile,
+                            String basedir )
+        throws
+        UnknownArchetype,
         ArchetypeNotConfigured,
         ProjectDirectoryExists,
         PomFileExists,

@@ -32,12 +32,14 @@ import java.io.IOException;
 
 public interface PomManager
 {
-    String ROLE = PomManager.class.getName ();
+    String ROLE = PomManager.class.getName();
 
     /**
      */
-    void addModule ( File basedirPom, String artifactId )
-    throws FileNotFoundException,
+    void addModule( File basedirPom,
+                    String artifactId )
+        throws
+        FileNotFoundException,
         IOException,
         XmlPullParserException,
         DocumentException,
@@ -45,21 +47,35 @@ public interface PomManager
 
     /**
      */
-    void addParent ( File pom, File basedirPom )
-    throws FileNotFoundException, IOException, XmlPullParserException;
+    void addParent( File pom,
+                    File basedirPom )
+        throws
+        FileNotFoundException,
+        IOException,
+        XmlPullParserException;
 
     /**
      */
-    void mergePoms ( File pom, File temporaryPom )
-    throws FileNotFoundException, IOException, XmlPullParserException;
+    void mergePoms( File pom,
+                    File temporaryPom )
+        throws
+        FileNotFoundException,
+        IOException,
+        XmlPullParserException;
 
     /**
      */
-    Model readPom ( File pomFile )
-    throws FileNotFoundException, IOException, XmlPullParserException;
+    Model readPom( File pomFile )
+        throws
+        FileNotFoundException,
+        IOException,
+        XmlPullParserException;
 
     /**
      */
-    void writePom ( Model model, File pomFile, File initialPomFile )
-    throws IOException;
+    void writePom( Model model,
+                   File pomFile,
+                   File initialPomFile )
+        throws
+        IOException;
 }

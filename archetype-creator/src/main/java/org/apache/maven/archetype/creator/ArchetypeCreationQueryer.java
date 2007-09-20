@@ -25,60 +25,72 @@ import org.codehaus.plexus.components.interactivity.PrompterException;
 
 public interface ArchetypeCreationQueryer
 {
-    String ROLE = ArchetypeCreationQueryer.class.getName ();
+    String ROLE = ArchetypeCreationQueryer.class.getName();
 
     /**
      */
-    String getArchetypeArtifactId ( String defaultValue )
-    throws PrompterException;
+    String getArchetypeArtifactId( String defaultValue )
+        throws
+        PrompterException;
 
     /**
      */
-    String getArchetypeGroupId ( String defaultValue )
-    throws PrompterException;
+    String getArchetypeGroupId( String defaultValue )
+        throws
+        PrompterException;
 
     /**
      */
-    String getArchetypeVersion ( String defaultValue )
-    throws PrompterException;
+    String getArchetypeVersion( String defaultValue )
+        throws
+        PrompterException;
 
     /**
      */
-    String getArtifactId ( String defaultValue )
-    throws PrompterException;
+    String getArtifactId( String defaultValue )
+        throws
+        PrompterException;
 
     /**
      */
-    boolean askAddAnotherProperty ()
-    throws PrompterException;
+    boolean askAddAnotherProperty()
+        throws
+        PrompterException;
 
     /**
      */
-    String askNewPropertyKey ()
-    throws PrompterException;
+    String askNewPropertyKey()
+        throws
+        PrompterException;
 
     /**
      */
-    String askReplacementValue ( String propertyKey, String defaultValue )
-    throws PrompterException;
+    String askReplacementValue( String propertyKey,
+                                String defaultValue )
+        throws
+        PrompterException;
 
     /**
      */
-    boolean confirmConfiguration ( ArchetypeConfiguration archetypeConfiguration )
-    throws PrompterException;
+    boolean confirmConfiguration( ArchetypeConfiguration archetypeConfiguration )
+        throws
+        PrompterException;
 
     /**
      */
-    String getGroupId ( String defaultValue )
-    throws PrompterException;
+    String getGroupId( String defaultValue )
+        throws
+        PrompterException;
 
     /**
      */
-    String getPackage ( String defaultValue )
-    throws PrompterException;
+    String getPackage( String defaultValue )
+        throws
+        PrompterException;
 
     /**
      */
-    String getVersion ( String defaultValue )
-    throws PrompterException;
+    String getVersion( String defaultValue )
+        throws
+        PrompterException;
 }

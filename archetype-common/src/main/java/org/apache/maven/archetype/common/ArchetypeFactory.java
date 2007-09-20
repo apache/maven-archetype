@@ -25,32 +25,32 @@ import java.util.Properties;
 
 public interface ArchetypeFactory
 {
-    String ROLE = ArchetypeFactory.class.getName ();
+    String ROLE = ArchetypeFactory.class.getName();
 
     /**
      */
-    ArchetypeConfiguration createArchetypeConfiguration (
+    ArchetypeConfiguration createArchetypeConfiguration(
         ArchetypeDefinition archetypeDefinition,
         Properties properties
     );
 
     /**
      */
-    ArchetypeConfiguration createArchetypeConfiguration (
+    ArchetypeConfiguration createArchetypeConfiguration(
         org.apache.maven.archetype.descriptor.ArchetypeDescriptor archetypeDescriptor,
         Properties properties
     );
 
     /**
      */
-    ArchetypeConfiguration createArchetypeConfiguration (
+    ArchetypeConfiguration createArchetypeConfiguration(
         org.apache.maven.archetype.metadata.ArchetypeDescriptor archetypeDescriptor,
         Properties properties
     );
 
     /**
      */
-    ArchetypeConfiguration createArchetypeConfiguration (
+    ArchetypeConfiguration createArchetypeConfiguration(
         MavenProject project,
         ArchetypeDefinition archetypeDefinition,
         Properties properties
@@ -58,8 +58,9 @@ public interface ArchetypeFactory
 
     /**
      */
-    ArchetypeDefinition createArchetypeDefinition ( Properties properties );
-    void updateArchetypeConfiguration (
+    ArchetypeDefinition createArchetypeDefinition( Properties properties );
+
+    void updateArchetypeConfiguration(
         ArchetypeConfiguration archetypeConfiguration,
         ArchetypeDefinition archetypeDefinition
     );

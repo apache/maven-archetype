@@ -26,77 +26,87 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MockPrompter
-implements Prompter
+    implements Prompter
 {
-    List prompts = new ArrayList ();
+    List prompts = new ArrayList();
 
-    public void addAnswer ( String prompt )
+    public void addAnswer( String prompt )
     {
-        prompts.add ( prompt );
+        prompts.add( prompt );
     }
 
-    public String prompt ( String string )
-    throws PrompterException
+    public String prompt( String string )
+        throws
+        PrompterException
     {
-        System.err.println ( string );
+        System.err.println( string );
 
-        String answer = (String) prompts.remove ( 0 );
+        String answer = (String) prompts.remove( 0 );
 
-        System.err.println ( "> " + answer );
+        System.err.println( "> " + answer );
         return answer;
     }
 
-    public String prompt ( String string, String string0 )
-    throws PrompterException
+    public String prompt( String string,
+                          String string0 )
+        throws
+        PrompterException
     {
-        System.err.println ( string );
-        System.err.println ( string0 );
+        System.err.println( string );
+        System.err.println( string0 );
 
-        String answer = (String) prompts.remove ( 0 );
+        String answer = (String) prompts.remove( 0 );
 
-        System.err.println ( "> " + answer );
+        System.err.println( "> " + answer );
         return answer;
     }
 
-    public String prompt ( String string, List list )
-    throws PrompterException
+    public String prompt( String string,
+                          List list )
+        throws
+        PrompterException
     {
-        System.err.println ( string );
-        System.err.println ( list );
+        System.err.println( string );
+        System.err.println( list );
 
-        String answer = (String) prompts.remove ( 0 );
+        String answer = (String) prompts.remove( 0 );
 
-        System.err.println ( "> " + answer );
+        System.err.println( "> " + answer );
         return answer;
     }
 
-    public String prompt ( String string, List list, String string0 )
-    throws PrompterException
+    public String prompt( String string,
+                          List list,
+                          String string0 )
+        throws
+        PrompterException
     {
-        System.err.println ( string );
-        System.err.println ( list );
-        System.err.println ( string0 );
+        System.err.println( string );
+        System.err.println( list );
+        System.err.println( string0 );
 
-        String answer = (String) prompts.remove ( 0 );
+        String answer = (String) prompts.remove( 0 );
 
-        System.err.println ( "> " + answer );
+        System.err.println( "> " + answer );
         return answer;
     }
 
-    public String promptForPassword ( String string )
-    throws PrompterException
+    public String promptForPassword( String string )
+        throws
+        PrompterException
     {
-        System.err.println ( string );
+        System.err.println( string );
 
-        String answer = (String) prompts.remove ( 0 );
+        String answer = (String) prompts.remove( 0 );
 
-        System.err.println ( "> " + answer );
+        System.err.println( "> " + answer );
         return answer;
     }
 
-    public void showMessage ( String string )
-    throws PrompterException
+    public void showMessage( String string )
+        throws
+        PrompterException
     {
-        System.err.println ( string );
+        System.err.println( string );
     }
 }

@@ -20,23 +20,25 @@
 package org.apache.maven.archetype.exception;
 
 public class InvalidPackaging
-extends Exception
+    extends Exception
 {
-    public InvalidPackaging ()
-    { }
-
-    public InvalidPackaging ( String msg )
+    public InvalidPackaging()
     {
-        super ( msg );
     }
 
-    public InvalidPackaging ( Throwable cause )
+    public InvalidPackaging( String msg )
     {
-        super ( cause );
+        super( msg );
     }
 
-    public InvalidPackaging ( String msg, Throwable cause )
+    public InvalidPackaging( Throwable cause )
     {
-        super ( msg, cause );
+        super( cause );
+    }
+
+    public InvalidPackaging( String msg,
+                             Throwable cause )
+    {
+        super( msg, cause );
     }
 }

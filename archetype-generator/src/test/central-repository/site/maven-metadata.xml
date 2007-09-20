@@ -18,14 +18,14 @@ specific language governing permissions and limitations
 under the License.
 -->
 <metadata>
-    <groupId>archetypes</groupId>
-    <artifactId>site</artifactId>
-    <versioning>
-        <latest>1.0</latest>
-        <release>1.0</release>
-        <versions>
-            <version>1.0</version>
-        </versions>
-        <lastUpdated>20060220044115</lastUpdated>
-    </versioning>
+  <groupId>archetypes</groupId>
+  <artifactId>site</artifactId>
+  <versioning>
+    <latest>1.0</latest>
+    <release>1.0</release>
+    <versions>
+      <version>1.0</version>
+    </versions>
+    <lastUpdated>20060220044115</lastUpdated>
+  </versioning>
 </metadata>

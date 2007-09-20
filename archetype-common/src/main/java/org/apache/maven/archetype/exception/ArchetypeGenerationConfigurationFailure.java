@@ -20,23 +20,25 @@
 package org.apache.maven.archetype.exception;
 
 public class ArchetypeGenerationConfigurationFailure
-extends Exception
+    extends Exception
 {
-    public ArchetypeGenerationConfigurationFailure ()
-    { }
-
-    public ArchetypeGenerationConfigurationFailure ( String msg )
+    public ArchetypeGenerationConfigurationFailure()
     {
-        super ( msg );
     }
 
-    public ArchetypeGenerationConfigurationFailure ( Throwable cause )
+    public ArchetypeGenerationConfigurationFailure( String msg )
     {
-        super ( cause );
+        super( msg );
     }
 
-    public ArchetypeGenerationConfigurationFailure ( String msg, Throwable cause )
+    public ArchetypeGenerationConfigurationFailure( Throwable cause )
     {
-        super ( msg, cause );
+        super( cause );
+    }
+
+    public ArchetypeGenerationConfigurationFailure( String msg,
+                                                    Throwable cause )
+    {
+        super( msg, cause );
     }
 }

@@ -28,25 +28,29 @@ import java.util.List;
 
 public interface ArchetypeSelectionQueryer
 {
-    String ROLE = ArchetypeSelectionQueryer.class.getName ();
+    String ROLE = ArchetypeSelectionQueryer.class.getName();
 
     /**
      */
-    boolean confirmSelection ( ArchetypeDefinition archetypeDefinition )
-    throws PrompterException;
+    boolean confirmSelection( ArchetypeDefinition archetypeDefinition )
+        throws
+        PrompterException;
 
     /**
      */
-    Archetype selectArtifact ( List list )
-    throws PrompterException;
+    Archetype selectArtifact( List list )
+        throws
+        PrompterException;
 
     /**
      */
-    String selectGroup ( List list )
-    throws PrompterException;
+    String selectGroup( List list )
+        throws
+        PrompterException;
 
     /**
      */
-    String selectVersion ( List list )
-    throws PrompterException;
+    String selectVersion( List list )
+        throws
+        PrompterException;
 }

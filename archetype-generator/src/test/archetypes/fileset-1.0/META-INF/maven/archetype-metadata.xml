@@ -17,92 +17,92 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
-<archetype-descriptor name="fileset" partial="false" >
+<archetype-descriptor name="fileset" partial="false">
 
-    <requiredProperties>
-        <requiredProperty key="property-with-default-1" >
-            <defaultValue>default-value</defaultValue>
-        </requiredProperty>
-        <requiredProperty key="property-with-default-2" >
-            <defaultValue>default-value</defaultValue>
-        </requiredProperty>
-        <requiredProperty key="property-with-default-3" >
-            <defaultValue>default-value</defaultValue>
-        </requiredProperty>
-        <requiredProperty key="property-with-default-4" >
-            <defaultValue>default-value</defaultValue>
-        </requiredProperty>
-        <requiredProperty key="property-without-default-1" />
-        <requiredProperty key="property-without-default-2" />
-        <requiredProperty key="property-without-default-3" />
-        <requiredProperty key="property-without-default-4" />
-    </requiredProperties>
+  <requiredProperties>
+    <requiredProperty key="property-with-default-1">
+      <defaultValue>default-value</defaultValue>
+    </requiredProperty>
+    <requiredProperty key="property-with-default-2">
+      <defaultValue>default-value</defaultValue>
+    </requiredProperty>
+    <requiredProperty key="property-with-default-3">
+      <defaultValue>default-value</defaultValue>
+    </requiredProperty>
+    <requiredProperty key="property-with-default-4">
+      <defaultValue>default-value</defaultValue>
+    </requiredProperty>
+    <requiredProperty key="property-without-default-1"/>
+    <requiredProperty key="property-without-default-2"/>
+    <requiredProperty key="property-without-default-3"/>
+    <requiredProperty key="property-without-default-4"/>
+  </requiredProperties>
 
-    <fileSets>
-        <fileSet filtered="true" packaged="true" >
-            <directory>src/main/java</directory>
-            <includes>
+  <fileSets>
+    <fileSet filtered="true" packaged="true">
+      <directory>src/main/java</directory>
+      <includes>
+        <include>**/*.java</include>
+      </includes>
+    </fileSet>
+    <fileSet filtered="false" packaged="true">
+      <directory>src/main/java</directory>
+      <includes>
+        <include>**/*.ogg</include>
+      </includes>
+    </fileSet>
+    <fileSet filtered="true" packaged="false">
+      <directory>src/main/resources</directory>
+      <includes>
+        <include>**/*.properties</include>
+      </includes>
+    </fileSet>
+    <fileSet filtered="false" packaged="false">
+      <directory>src/main/resources</directory>
+      <includes>
+        <include>**/*.png</include>
+      </includes>
+    </fileSet>
+    <fileSet filtered="true" packaged="false">
+      <directory>src/site</directory>
+      <includes>
+        <include>**/*.xml</include>
+        <include>**/*.apt</include>
+      </includes>
+    </fileSet>
+    <fileSet filtered="true">
+      <directory></directory>
+      <includes>
+        <include>.classpath</include>
+        <include>*.xml</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+
+  <modules>
+    <module name="subproject" id="subproject" dir="subproject">
+      <fileSets>
+        <fileSet filtered="true" packaged="true">
+          <directory>src/main/java</directory>
+          <includes>
+            <include>**/*.java</include>
+          </includes>
+        </fileSet>
+      </fileSets>
+
+      <modules>
+        <module name="subsubproject" id="subsubproject" dir="subsubproject">
+          <fileSets>
+            <fileSet filtered="true" packaged="true">
+              <directory>src/main/java</directory>
+              <includes>
                 <include>**/*.java</include>
-            </includes>
-        </fileSet>
-        <fileSet filtered="false" packaged="true" >
-            <directory>src/main/java</directory>
-            <includes>
-                <include>**/*.ogg</include>
-            </includes>
-        </fileSet>
-        <fileSet filtered="true" packaged="false" >
-            <directory>src/main/resources</directory>
-            <includes>
-                <include>**/*.properties</include>
-            </includes>
-        </fileSet>
-        <fileSet filtered="false" packaged="false" >
-            <directory>src/main/resources</directory>
-            <includes>
-                <include>**/*.png</include>
-            </includes>
-        </fileSet>
-        <fileSet filtered="true" packaged="false" >
-            <directory>src/site</directory>
-            <includes>
-                <include>**/*.xml</include>
-                <include>**/*.apt</include>
-            </includes>
-        </fileSet>
-        <fileSet filtered="true">
-            <directory></directory>
-            <includes>
-                <include>.classpath</include>
-                <include>*.xml</include>
-            </includes>
-        </fileSet>
-    </fileSets>
-
-    <modules>
-        <module name="subproject" id="subproject" dir="subproject">
-            <fileSets>
-                <fileSet filtered="true" packaged="true" >
-                    <directory>src/main/java</directory>
-                    <includes>
-                        <include>**/*.java</include>
-                    </includes>
-                </fileSet>
-            </fileSets>
-
-            <modules>
-                <module name="subsubproject" id="subsubproject" dir="subsubproject">
-                    <fileSets>
-                        <fileSet filtered="true" packaged="true" >
-                            <directory>src/main/java</directory>
-                            <includes>
-                                <include>**/*.java</include>
-                            </includes>
-                        </fileSet>
-                    </fileSets>
-                </module>
-            </modules>
+              </includes>
+            </fileSet>
+          </fileSets>
         </module>
-    </modules>
+      </modules>
+    </module>
+  </modules>
 
 </archetype-descriptor>

@@ -43,41 +43,32 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
-/**
- * @plexus.component
- */
+/** @plexus.component */
 public class DefaultArchetypeCreationConfigurator
-extends AbstractLogEnabled
-implements ArchetypeCreationConfigurator
+    extends AbstractLogEnabled
+    implements ArchetypeCreationConfigurator
 {
-    /**
-     * @plexus.requirement
-     */
+    /** @plexus.requirement */
     private ArchetypeCreationQueryer archetypeCreationQueryer;
 
-    /**
-     * @plexus.requirement
-     */
+    /** @plexus.requirement */
     private ArchetypeFactory archetypeFactory;
 
-    /**
-     * @plexus.requirement
-     */
+    /** @plexus.requirement */
     private ArchetypeFilesResolver archetypeFilesResolver;
 
-    /**
-     * @plexus.requirement
-     */
+    /** @plexus.requirement */
     private ArchetypePropertiesManager archetypePropertiesManager;
 
-    public void configureArchetypeCreation (
+    public void configureArchetypeCreation(
         MavenProject project,
         Boolean interactiveMode,
         Properties commandLineProperties,
         File propertyFile,
         List languages
     )
-    throws FileNotFoundException,
+        throws
+        FileNotFoundException,
         IOException,
         ArchetypeNotDefined,
         ArchetypeNotConfigured,
@@ -85,30 +76,30 @@ implements ArchetypeCreationConfigurator
         TemplateCreationException
     {
         Properties properties =
-            initialiseArchetypeProperties ( commandLineProperties, propertyFile );
+            initialiseArchetypeProperties( commandLineProperties, propertyFile );
 
         ArchetypeDefinition archetypeDefinition =
-            archetypeFactory.createArchetypeDefinition ( properties );
+            archetypeFactory.createArchetypeDefinition( properties );
 
-        if ( !archetypeDefinition.isDefined () )
+        if ( !archetypeDefinition.isDefined() )
         {
-            archetypeDefinition = defineDefaultArchetype ( project, properties );
+            archetypeDefinition = defineDefaultArchetype( project, properties );
         }
 
         ArchetypeConfiguration archetypeConfiguration =
-            archetypeFactory.createArchetypeConfiguration (
+            archetypeFactory.createArchetypeConfiguration(
                 project,
                 archetypeDefinition,
                 properties
             );
 
         String resolvedPackage =
-            archetypeFilesResolver.resolvePackage ( project.getBasedir (), languages );
+            archetypeFilesResolver.resolvePackage( project.getBasedir(), languages );
 
-        if ( !archetypeConfiguration.isConfigured () )
+        if ( !archetypeConfiguration.isConfigured() )
         {
             archetypeConfiguration =
-                defineDefaultConfiguration (
+                defineDefaultConfiguration(
                     project,
                     archetypeDefinition,
                     resolvedPackage,
@@ -116,88 +107,88 @@ implements ArchetypeCreationConfigurator
                 );
         }
 
-        if ( interactiveMode.booleanValue () )
+        if ( interactiveMode.booleanValue() )
         {
-            getLogger ().debug ( "Entering interactive mode" );
+            getLogger().debug( "Entering interactive mode" );
 
             boolean confirmed = false;
             while ( !confirmed )
             {
-                if ( !archetypeDefinition.isDefined () )
+                if ( !archetypeDefinition.isDefined() )
                 {
-                    getLogger ().debug ( "Archetype is not defined" );
-                    if ( !archetypeDefinition.isGroupDefined () )
+                    getLogger().debug( "Archetype is not defined" );
+                    if ( !archetypeDefinition.isGroupDefined() )
                     {
-                        getLogger ().debug ( "Asking for archetype's groupId" );
-                        archetypeDefinition.setGroupId (
-                            archetypeCreationQueryer.getArchetypeGroupId ( project.getGroupId () )
+                        getLogger().debug( "Asking for archetype's groupId" );
+                        archetypeDefinition.setGroupId(
+                            archetypeCreationQueryer.getArchetypeGroupId( project.getGroupId() )
                         );
                     }
-                    if ( !archetypeDefinition.isArtifactDefined () )
+                    if ( !archetypeDefinition.isArtifactDefined() )
                     {
-                        getLogger ().debug ( "Asking for archetype's artifactId" );
-                        archetypeDefinition.setArtifactId (
-                            archetypeCreationQueryer.getArchetypeArtifactId (
-                                project.getArtifactId () + Constants.ARCHETYPE_SUFFIX
+                        getLogger().debug( "Asking for archetype's artifactId" );
+                        archetypeDefinition.setArtifactId(
+                            archetypeCreationQueryer.getArchetypeArtifactId(
+                                project.getArtifactId() + Constants.ARCHETYPE_SUFFIX
                             )
                         );
                     }
-                    if ( !archetypeDefinition.isVersionDefined () )
+                    if ( !archetypeDefinition.isVersionDefined() )
                     {
-                        getLogger ().debug ( "Asking for archetype's version" );
-                        archetypeDefinition.setVersion (
-                            archetypeCreationQueryer.getArchetypeVersion ( project.getVersion () )
+                        getLogger().debug( "Asking for archetype's version" );
+                        archetypeDefinition.setVersion(
+                            archetypeCreationQueryer.getArchetypeVersion( project.getVersion() )
                         );
                     }
 
-                    archetypeFactory.updateArchetypeConfiguration (
+                    archetypeFactory.updateArchetypeConfiguration(
                         archetypeConfiguration,
                         archetypeDefinition
                     );
                 }
 
-                if ( !archetypeConfiguration.isConfigured () )
+                if ( !archetypeConfiguration.isConfigured() )
                 {
-                    getLogger ().debug ( "Archetype is not configured" );
-                    if ( !archetypeConfiguration.isConfigured ( Constants.GROUP_ID ) )
+                    getLogger().debug( "Archetype is not configured" );
+                    if ( !archetypeConfiguration.isConfigured( Constants.GROUP_ID ) )
                     {
-                        getLogger ().debug ( "Asking for project's groupId" );
-                        archetypeConfiguration.setProperty (
+                        getLogger().debug( "Asking for project's groupId" );
+                        archetypeConfiguration.setProperty(
                             Constants.GROUP_ID,
-                            archetypeCreationQueryer.getGroupId (
-                                archetypeConfiguration.getDefaultValue ( Constants.GROUP_ID )
+                            archetypeCreationQueryer.getGroupId(
+                                archetypeConfiguration.getDefaultValue( Constants.GROUP_ID )
                             )
                         );
                     }
-                    if ( !archetypeConfiguration.isConfigured ( Constants.ARTIFACT_ID ) )
+                    if ( !archetypeConfiguration.isConfigured( Constants.ARTIFACT_ID ) )
                     {
-                        getLogger ().debug ( "Asking for project's artifactId" );
-                        archetypeConfiguration.setProperty (
+                        getLogger().debug( "Asking for project's artifactId" );
+                        archetypeConfiguration.setProperty(
                             Constants.ARTIFACT_ID,
-                            archetypeCreationQueryer.getArtifactId (
-                                archetypeConfiguration.getDefaultValue ( Constants.ARTIFACT_ID )
+                            archetypeCreationQueryer.getArtifactId(
+                                archetypeConfiguration.getDefaultValue( Constants.ARTIFACT_ID )
                             )
                         );
                     }
-                    if ( !archetypeConfiguration.isConfigured ( Constants.VERSION ) )
+                    if ( !archetypeConfiguration.isConfigured( Constants.VERSION ) )
                     {
-                        getLogger ().debug ( "Asking for project's version" );
-                        archetypeConfiguration.setProperty (
+                        getLogger().debug( "Asking for project's version" );
+                        archetypeConfiguration.setProperty(
                             Constants.VERSION,
-                            archetypeCreationQueryer.getVersion (
-                                archetypeConfiguration.getDefaultValue ( Constants.VERSION )
+                            archetypeCreationQueryer.getVersion(
+                                archetypeConfiguration.getDefaultValue( Constants.VERSION )
                             )
                         );
                     }
-                    if ( !archetypeConfiguration.isConfigured ( Constants.PACKAGE ) )
+                    if ( !archetypeConfiguration.isConfigured( Constants.PACKAGE ) )
                     {
-                        getLogger ().debug ( "Asking for project's package" );
-                        archetypeConfiguration.setProperty (
+                        getLogger().debug( "Asking for project's package" );
+                        archetypeConfiguration.setProperty(
                             Constants.PACKAGE,
-                            archetypeCreationQueryer.getPackage (
-                                StringUtils.isEmpty ( resolvedPackage )
-                                ? archetypeConfiguration.getDefaultValue ( Constants.PACKAGE )
-                                : resolvedPackage
+                            archetypeCreationQueryer.getPackage(
+                                StringUtils.isEmpty( resolvedPackage )
+                                    ? archetypeConfiguration.getDefaultValue( Constants.PACKAGE )
+                                    : resolvedPackage
                             )
                         );
                     }
@@ -206,163 +197,164 @@ implements ArchetypeCreationConfigurator
                 boolean stopAddingProperties = false;
                 while ( !stopAddingProperties )
                 {
-                    getLogger ().debug ( "Asking for another required property" );
-                    stopAddingProperties = !archetypeCreationQueryer.askAddAnotherProperty ();
+                    getLogger().debug( "Asking for another required property" );
+                    stopAddingProperties = !archetypeCreationQueryer.askAddAnotherProperty();
 
                     if ( !stopAddingProperties )
                     {
-                        getLogger ().debug ( "Asking for required property key" );
+                        getLogger().debug( "Asking for required property key" );
 
-                        String propertyKey = archetypeCreationQueryer.askNewPropertyKey ();
-                        getLogger ().debug ( "Asking for required property value" );
+                        String propertyKey = archetypeCreationQueryer.askNewPropertyKey();
+                        getLogger().debug( "Asking for required property value" );
 
                         String replacementValue =
-                            archetypeCreationQueryer.askReplacementValue (
+                            archetypeCreationQueryer.askReplacementValue(
                                 propertyKey,
-                                archetypeConfiguration.getDefaultValue ( propertyKey )
+                                archetypeConfiguration.getDefaultValue( propertyKey )
                             );
-                        archetypeConfiguration.setDefaultProperty ( propertyKey, replacementValue );
-                        archetypeConfiguration.setProperty ( propertyKey, replacementValue );
+                        archetypeConfiguration.setDefaultProperty( propertyKey, replacementValue );
+                        archetypeConfiguration.setProperty( propertyKey, replacementValue );
                     }
                 }
 
-                getLogger ().debug ( "Asking for configuration confirmation" );
-                if ( archetypeCreationQueryer.confirmConfiguration ( archetypeConfiguration ) )
+                getLogger().debug( "Asking for configuration confirmation" );
+                if ( archetypeCreationQueryer.confirmConfiguration( archetypeConfiguration ) )
                 {
                     confirmed = true;
                 }
                 else
                 {
-                    getLogger ().debug ( "Reseting archetype's definition and configuration" );
-                    archetypeConfiguration.reset ();
-                    archetypeDefinition.reset ();
+                    getLogger().debug( "Reseting archetype's definition and configuration" );
+                    archetypeConfiguration.reset();
+                    archetypeDefinition.reset();
                 }
             } // end while
         }
         else
         {
-            getLogger ().debug ( "Entering batch mode" );
-            if ( !archetypeDefinition.isDefined () )
+            getLogger().debug( "Entering batch mode" );
+            if ( !archetypeDefinition.isDefined() )
             {
-                throw new ArchetypeNotDefined ( "The archetype is not defined" );
+                throw new ArchetypeNotDefined( "The archetype is not defined" );
             }
-            else if ( !archetypeConfiguration.isConfigured () )
+            else if ( !archetypeConfiguration.isConfigured() )
             {
-                throw new ArchetypeNotConfigured ( "The archetype is not configured" );
+                throw new ArchetypeNotConfigured( "The archetype is not configured" );
             }
         } // end if
 
-        archetypePropertiesManager.writeProperties (
-            archetypeConfiguration.toProperties (),
+        archetypePropertiesManager.writeProperties(
+            archetypeConfiguration.toProperties(),
             propertyFile
         );
     }
 
-    private ArchetypeDefinition defineDefaultArchetype (
+    private ArchetypeDefinition defineDefaultArchetype(
         MavenProject project,
         Properties properties
     )
     {
-        if ( StringUtils.isEmpty ( properties.getProperty ( Constants.ARCHETYPE_GROUP_ID ) ) )
+        if ( StringUtils.isEmpty( properties.getProperty( Constants.ARCHETYPE_GROUP_ID ) ) )
         {
-            getLogger ().info ( "Setting default archetype's groupId: " + project.getGroupId () );
-            properties.setProperty ( Constants.ARCHETYPE_GROUP_ID, project.getGroupId () );
+            getLogger().info( "Setting default archetype's groupId: " + project.getGroupId() );
+            properties.setProperty( Constants.ARCHETYPE_GROUP_ID, project.getGroupId() );
         }
-        if ( StringUtils.isEmpty ( properties.getProperty ( Constants.ARCHETYPE_ARTIFACT_ID ) ) )
+        if ( StringUtils.isEmpty( properties.getProperty( Constants.ARCHETYPE_ARTIFACT_ID ) ) )
         {
-            getLogger ().info (
-                "Setting default archetype's artifactId: " + project.getArtifactId ()
+            getLogger().info(
+                "Setting default archetype's artifactId: " + project.getArtifactId()
             );
-            properties.setProperty (
+            properties.setProperty(
                 Constants.ARCHETYPE_ARTIFACT_ID,
-                project.getArtifactId () + "-archetype"
+                project.getArtifactId() + "-archetype"
             );
         }
-        if ( StringUtils.isEmpty ( properties.getProperty ( Constants.ARCHETYPE_VERSION ) ) )
+        if ( StringUtils.isEmpty( properties.getProperty( Constants.ARCHETYPE_VERSION ) ) )
         {
-            getLogger ().info ( "Setting default archetype's version: " + project.getVersion () );
-            properties.setProperty ( Constants.ARCHETYPE_VERSION, project.getVersion () );
+            getLogger().info( "Setting default archetype's version: " + project.getVersion() );
+            properties.setProperty( Constants.ARCHETYPE_VERSION, project.getVersion() );
         }
 
-        return archetypeFactory.createArchetypeDefinition ( properties );
+        return archetypeFactory.createArchetypeDefinition( properties );
     }
 
-    private ArchetypeConfiguration defineDefaultConfiguration (
+    private ArchetypeConfiguration defineDefaultConfiguration(
         MavenProject project,
         ArchetypeDefinition archetypeDefinition,
         String resolvedPackage,
         Properties properties
     )
     {
-        if ( StringUtils.isEmpty ( properties.getProperty ( Constants.GROUP_ID ) ) )
+        if ( StringUtils.isEmpty( properties.getProperty( Constants.GROUP_ID ) ) )
         {
-            getLogger ().info ( "Setting default groupId: " + project.getGroupId () );
-            properties.setProperty ( Constants.GROUP_ID, project.getGroupId () );
+            getLogger().info( "Setting default groupId: " + project.getGroupId() );
+            properties.setProperty( Constants.GROUP_ID, project.getGroupId() );
         }
 
-        if ( StringUtils.isEmpty ( properties.getProperty ( Constants.ARTIFACT_ID ) ) )
+        if ( StringUtils.isEmpty( properties.getProperty( Constants.ARTIFACT_ID ) ) )
         {
-            getLogger ().info ( "Setting default artifactId: " + project.getArtifactId () );
-            properties.setProperty ( Constants.ARTIFACT_ID, project.getArtifactId () );
+            getLogger().info( "Setting default artifactId: " + project.getArtifactId() );
+            properties.setProperty( Constants.ARTIFACT_ID, project.getArtifactId() );
         }
 
-        if ( StringUtils.isEmpty ( properties.getProperty ( Constants.VERSION ) ) )
+        if ( StringUtils.isEmpty( properties.getProperty( Constants.VERSION ) ) )
         {
-            getLogger ().info ( "Setting default version: " + project.getVersion () );
-            properties.setProperty ( Constants.VERSION, project.getVersion () );
+            getLogger().info( "Setting default version: " + project.getVersion() );
+            properties.setProperty( Constants.VERSION, project.getVersion() );
         }
 
-        if ( StringUtils.isEmpty (
-                properties.getProperty (
-                    Constants.PACKAGE/*,
+        if ( StringUtils.isEmpty(
+            properties.getProperty(
+                Constants.PACKAGE/*,
                     properties.getProperty ( Constants.PACKAGE_NAME )*/
-                )
             )
         )
+            )
         {
-            if ( StringUtils.isEmpty ( resolvedPackage ) )
+            if ( StringUtils.isEmpty( resolvedPackage ) )
             {
-                resolvedPackage = project.getGroupId ();
+                resolvedPackage = project.getGroupId();
             }
-            getLogger ().info ( "Setting default package: " + resolvedPackage );
+            getLogger().info( "Setting default package: " + resolvedPackage );
             /*properties.setProperty ( Constants.PACKAGE_NAME, resolvedPackage );*/
-            properties.setProperty ( Constants.PACKAGE, resolvedPackage );
+            properties.setProperty( Constants.PACKAGE, resolvedPackage );
         }
 
         return
-            archetypeFactory.createArchetypeConfiguration (
+            archetypeFactory.createArchetypeConfiguration(
                 project,
                 archetypeDefinition,
                 properties
             );
     }
 
-    private Properties initialiseArchetypeProperties (
+    private Properties initialiseArchetypeProperties(
         Properties commandLineProperties,
         File propertyFile
     )
-    throws IOException
+        throws
+        IOException
     {
-        Properties properties = new Properties ();
+        Properties properties = new Properties();
 
         try
         {
-            archetypePropertiesManager.readProperties ( properties, propertyFile );
+            archetypePropertiesManager.readProperties( properties, propertyFile );
         }
         catch ( FileNotFoundException ex )
         {
-            getLogger ().debug ( "archetype.properties does not exist" );
+            getLogger().debug( "archetype.properties does not exist" );
         }
 
         Iterator commandLinePropertiesIterator =
-            new ArrayList ( commandLineProperties.keySet () ).iterator ();
-        while ( commandLinePropertiesIterator.hasNext () )
+            new ArrayList( commandLineProperties.keySet() ).iterator();
+        while ( commandLinePropertiesIterator.hasNext() )
         {
-            String propertyKey = (String) commandLinePropertiesIterator.next ();
+            String propertyKey = (String) commandLinePropertiesIterator.next();
 
-            properties.setProperty (
+            properties.setProperty(
                 propertyKey,
-                commandLineProperties.getProperty ( propertyKey )
+                commandLineProperties.getProperty( propertyKey )
             );
         }
 

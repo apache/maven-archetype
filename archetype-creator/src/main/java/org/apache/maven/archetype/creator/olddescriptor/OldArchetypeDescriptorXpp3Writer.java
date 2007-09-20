@@ -26,122 +26,123 @@ import java.io.Writer;
 
 import java.util.Iterator;
 
-/**
- * @author  rafale
- */
+/** @author rafale */
 public class OldArchetypeDescriptorXpp3Writer
 {
     private String NAMESPACE;
 
-    public void write ( Writer writer, OldArchetypeDescriptor descriptor )
-    throws java.io.IOException
+    public void write( Writer writer,
+                       OldArchetypeDescriptor descriptor )
+        throws
+        java.io.IOException
     {
-        XmlSerializer serializer = new MXSerializer ();
-        serializer.setProperty (
+        XmlSerializer serializer = new MXSerializer();
+        serializer.setProperty(
             "http://xmlpull.org/v1/doc/properties.html#serializer-indentation",
             "  "
         );
-        serializer.setProperty (
+        serializer.setProperty(
             "http://xmlpull.org/v1/doc/properties.html#serializer-line-separator",
             "\n"
         );
-        serializer.setOutput ( writer );
-        serializer.startDocument ( "UTF-8", null );
-        writeArchetypeDescriptor ( descriptor, "archetype", serializer );
-        serializer.endDocument ();
+        serializer.setOutput( writer );
+        serializer.startDocument( "UTF-8", null );
+        writeArchetypeDescriptor( descriptor, "archetype", serializer );
+        serializer.endDocument();
     }
 
-    private void writeArchetypeDescriptor (
+    private void writeArchetypeDescriptor(
         OldArchetypeDescriptor descriptor,
         String tagName,
         XmlSerializer serializer
     )
-    throws java.io.IOException
+        throws
+        java.io.IOException
     {
         if ( descriptor != null )
         {
-            serializer.startTag ( NAMESPACE, tagName );
-            if ( descriptor.getId () != null )
+            serializer.startTag( NAMESPACE, tagName );
+            if ( descriptor.getId() != null )
             {
-                serializer.startTag ( NAMESPACE, "id" ).text ( descriptor.getId () ).endTag (
+                serializer.startTag( NAMESPACE, "id" ).text( descriptor.getId() ).endTag(
                     NAMESPACE,
                     "id"
                 );
             }
-            if ( ( descriptor.getSources () != null ) && ( descriptor.getSources ().size () > 0 ) )
+            if ( ( descriptor.getSources() != null ) && ( descriptor.getSources().size() > 0 ) )
             {
-                serializer.startTag ( NAMESPACE, "sources" );
-                for ( Iterator iter = descriptor.getSources ().iterator (); iter.hasNext (); )
+                serializer.startTag( NAMESPACE, "sources" );
+                for ( Iterator iter = descriptor.getSources().iterator(); iter.hasNext(); )
                 {
-                    String source = (String) iter.next ();
-                    serializer.startTag ( NAMESPACE, "source" ).text ( source ).endTag (
+                    String source = (String) iter.next();
+                    serializer.startTag( NAMESPACE, "source" ).text( source ).endTag(
                         NAMESPACE,
                         "source"
                     );
                 }
-                serializer.endTag ( NAMESPACE, "sources" );
+                serializer.endTag( NAMESPACE, "sources" );
             }
-            if ( ( descriptor.getTestSources () != null )
-                && ( descriptor.getTestSources ().size () > 0 )
-            )
+            if ( ( descriptor.getTestSources() != null )
+                && ( descriptor.getTestSources().size() > 0 )
+                )
             {
-                serializer.startTag ( NAMESPACE, "testSources" );
-                for ( Iterator iter = descriptor.getTestSources ().iterator (); iter.hasNext (); )
+                serializer.startTag( NAMESPACE, "testSources" );
+                for ( Iterator iter = descriptor.getTestSources().iterator(); iter.hasNext(); )
                 {
-                    String source = (String) iter.next ();
-                    serializer.startTag ( NAMESPACE, "source" ).text ( source ).endTag (
+                    String source = (String) iter.next();
+                    serializer.startTag( NAMESPACE, "source" ).text( source ).endTag(
                         NAMESPACE,
                         "source"
                     );
                 }
-                serializer.endTag ( NAMESPACE, "testSources" );
+                serializer.endTag( NAMESPACE, "testSources" );
             }
-            if ( ( descriptor.getResources () != null )
-                && ( descriptor.getResources ().size () > 0 )
-            )
+            if ( ( descriptor.getResources() != null )
+                && ( descriptor.getResources().size() > 0 )
+                )
             {
-                serializer.startTag ( NAMESPACE, "resources" );
-                for ( Iterator iter = descriptor.getResources ().iterator (); iter.hasNext (); )
+                serializer.startTag( NAMESPACE, "resources" );
+                for ( Iterator iter = descriptor.getResources().iterator(); iter.hasNext(); )
                 {
-                    String source = (String) iter.next ();
-                    serializer.startTag ( NAMESPACE, "resource" ).text ( source ).endTag (
+                    String source = (String) iter.next();
+                    serializer.startTag( NAMESPACE, "resource" ).text( source ).endTag(
                         NAMESPACE,
                         "resource"
                     );
                 }
-                serializer.endTag ( NAMESPACE, "resources" );
+                serializer.endTag( NAMESPACE, "resources" );
             }
-            if ( ( descriptor.getTestResources () != null )
-                && ( descriptor.getTestResources ().size () > 0 )
-            )
+            if ( ( descriptor.getTestResources() != null )
+                && ( descriptor.getTestResources().size() > 0 )
+                )
             {
-                serializer.startTag ( NAMESPACE, "testResources" );
-                for ( Iterator iter = descriptor.getTestResources ().iterator (); iter.hasNext (); )
+                serializer.startTag( NAMESPACE, "testResources" );
+                for ( Iterator iter = descriptor.getTestResources().iterator(); iter.hasNext(); )
                 {
-                    String source = (String) iter.next ();
-                    serializer.startTag ( NAMESPACE, "resource" ).text ( source ).endTag (
+                    String source = (String) iter.next();
+                    serializer.startTag( NAMESPACE, "resource" ).text( source ).endTag(
                         NAMESPACE,
                         "resource"
                     );
                 }
-                serializer.endTag ( NAMESPACE, "testResources" );
+                serializer.endTag( NAMESPACE, "testResources" );
             }
-            if ( ( descriptor.getSiteResources () != null )
-                && ( descriptor.getSiteResources ().size () > 0 )
-            )
+            if ( ( descriptor.getSiteResources() != null )
+                && ( descriptor.getSiteResources().size() > 0 )
+                )
             {
-                serializer.startTag ( NAMESPACE, "siteResources" );
-                for ( Iterator iter = descriptor.getSiteResources ().iterator (); iter.hasNext (); )
+                serializer.startTag( NAMESPACE, "siteResources" );
+                for ( Iterator iter = descriptor.getSiteResources().iterator(); iter.hasNext(); )
                 {
-                    String source = (String) iter.next ();
-                    serializer.startTag ( NAMESPACE, "resource" ).text ( source ).endTag (
+                    String source = (String) iter.next();
+                    serializer.startTag( NAMESPACE, "resource" ).text( source ).endTag(
                         NAMESPACE,
                         "resource"
                     );
                 }
-                serializer.endTag ( NAMESPACE, "siteResources" );
+                serializer.endTag( NAMESPACE, "siteResources" );
             }
-            serializer.endTag ( NAMESPACE, tagName );
+            serializer.endTag( NAMESPACE, tagName );
         } // end if
     }
 }

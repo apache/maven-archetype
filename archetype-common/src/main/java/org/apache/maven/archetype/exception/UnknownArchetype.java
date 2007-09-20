@@ -20,23 +20,25 @@
 package org.apache.maven.archetype.exception;
 
 public class UnknownArchetype
-extends Exception
+    extends Exception
 {
-    public UnknownArchetype ()
-    { }
-
-    public UnknownArchetype ( String msg )
+    public UnknownArchetype()
     {
-        super ( msg );
     }
 
-    public UnknownArchetype ( Throwable cause )
+    public UnknownArchetype( String msg )
     {
-        super ( cause );
+        super( msg );
     }
 
-    public UnknownArchetype ( String msg, Throwable cause )
+    public UnknownArchetype( Throwable cause )
     {
-        super ( msg, cause );
+        super( cause );
+    }
+
+    public UnknownArchetype( String msg,
+                             Throwable cause )
+    {
+        super( msg, cause );
     }
 }

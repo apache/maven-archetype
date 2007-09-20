@@ -27,11 +27,14 @@ public interface ArchetypeGenerationQueryer
 {
     /**
      */
-    boolean confirmConfiguration ( ArchetypeConfiguration archetypeConfiguration )
-    throws PrompterException;
+    boolean confirmConfiguration( ArchetypeConfiguration archetypeConfiguration )
+        throws
+        PrompterException;
 
     /**
      */
-    String getPropertyValue ( String requiredProperty, String defaultValue )
-    throws PrompterException;
+    String getPropertyValue( String requiredProperty,
+                             String defaultValue )
+        throws
+        PrompterException;
 }

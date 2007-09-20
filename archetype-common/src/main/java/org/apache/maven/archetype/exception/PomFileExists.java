@@ -20,23 +20,25 @@
 package org.apache.maven.archetype.exception;
 
 public class PomFileExists
-extends Exception
+    extends Exception
 {
-    public PomFileExists ()
-    { }
-
-    public PomFileExists ( String msg )
+    public PomFileExists()
     {
-        super ( msg );
     }
 
-    public PomFileExists ( Throwable cause )
+    public PomFileExists( String msg )
     {
-        super ( cause );
+        super( msg );
     }
 
-    public PomFileExists ( String msg, Throwable cause )
+    public PomFileExists( Throwable cause )
     {
-        super ( msg, cause );
+        super( cause );
+    }
+
+    public PomFileExists( String msg,
+                          Throwable cause )
+    {
+        super( msg, cause );
     }
 }

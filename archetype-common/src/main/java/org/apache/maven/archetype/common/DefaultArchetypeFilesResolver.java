@@ -34,67 +34,73 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
 import org.apache.maven.archetype.common.util.ListScanner;
 import org.apache.maven.archetype.common.util.PathUtils;
 
-/**
- * @plexus.component
- */
+/** @plexus.component */
 public class DefaultArchetypeFilesResolver
-extends AbstractLogEnabled
-implements ArchetypeFilesResolver
+    extends AbstractLogEnabled
+    implements ArchetypeFilesResolver
 {
-    public List getFilesWithExtension ( List files, String extension )
+    public List getFilesWithExtension( List files,
+                                       String extension )
     {
-        ListScanner scanner = new ListScanner ();
-        scanner.setBasedir ( "" );
+        ListScanner scanner = new ListScanner();
+        scanner.setBasedir( "" );
 
-        scanner.setIncludes ( "**/*." + extension );
-        scanner.setExcludes ( "" );
+        scanner.setIncludes( "**/*." + extension );
+        scanner.setExcludes( "" );
 
-        return scanner.scan ( files );
+        return scanner.scan( files );
     }
 
-    public List getFilteredFiles ( List files, String filtered )
+    public List getFilteredFiles( List files,
+                                  String filtered )
     {
-        ListScanner scanner = new ListScanner ();
-        scanner.setBasedir ( "" );
+        ListScanner scanner = new ListScanner();
+        scanner.setBasedir( "" );
 
-        scanner.setIncludes ( filtered );
-        scanner.setExcludes ( "" );
+        scanner.setIncludes( filtered );
+        scanner.setExcludes( "" );
 
-        List result = scanner.scan ( files );
-        getLogger ().debug (
-            "Scanned " + result.size () + " filtered files in " + files.size () + " files"
+        List result = scanner.scan( files );
+        getLogger().debug(
+            "Scanned " + result.size() + " filtered files in " + files.size() + " files"
         );
 
         return result;
     }
 
-    public List filterFiles ( FileSet fileSet, List archetypeResources )
+    public List filterFiles( FileSet fileSet,
+                             List archetypeResources )
     {
-        return filterFiles ( "", fileSet, archetypeResources );
+        return filterFiles( "", fileSet, archetypeResources );
     }
 
-    public List filterFiles ( String moduleOffset, FileSet fileSet, List archetypeResources )
+    public List filterFiles( String moduleOffset,
+                             FileSet fileSet,
+                             List archetypeResources )
     {
-        ListScanner scanner = new ListScanner ();
-        scanner.setBasedir (
-            ( StringUtils.isEmpty ( moduleOffset ) ? "" : ( moduleOffset + File.separatorChar ) )
-            + fileSet.getDirectory ()
+        ListScanner scanner = new ListScanner();
+        scanner.setBasedir(
+            ( StringUtils.isEmpty( moduleOffset ) ? "" : ( moduleOffset + File.separatorChar ) )
+                + fileSet.getDirectory()
         );
-        scanner.setIncludes ( fileSet.getIncludes () );
-        scanner.setExcludes ( fileSet.getExcludes () );
-        scanner.setCaseSensitive ( true );
+        scanner.setIncludes( fileSet.getIncludes() );
+        scanner.setExcludes( fileSet.getExcludes() );
+        scanner.setCaseSensitive( true );
 
-        return scanner.scan ( archetypeResources );
+        return scanner.scan( archetypeResources );
     }
 
-    public List findOtherResources ( int level, List files, String languages )
+    public List findOtherResources( int level,
+                                    List files,
+                                    String languages )
     {
-        ListScanner scanner = new ListScanner ();
+        ListScanner scanner = new ListScanner();
 
-        scanner.setBasedir ( "" );
+        scanner.setBasedir( "" );
 
         String includes = "";
         for ( int i = 0; i < level; i++ )
@@ -102,57 +108,62 @@ implements ArchetypeFilesResolver
             includes += "*/";
         }
 
-        scanner.setIncludes ( includes + "**" );
-        scanner.setExcludes ( languages );
+        scanner.setIncludes( includes + "**" );
+        scanner.setExcludes( languages );
 
-        List result = scanner.scan ( files );
-        getLogger ().debug (
-            "Scanned " + result.size () + " other resources in " + files.size ()
-            + " files at level " + level
+        List result = scanner.scan( files );
+        getLogger().debug(
+            "Scanned " + result.size() + " other resources in " + files.size()
+                + " files at level " + level
         );
 
         return result;
     }
 
-    public List findOtherResources ( int level, List files, List sourcesFiles, String languages )
+    public List findOtherResources( int level,
+                                    List files,
+                                    List sourcesFiles,
+                                    String languages )
     {
-        ListScanner scanner = new ListScanner ();
+        ListScanner scanner = new ListScanner();
 
-        scanner.setBasedir ( "" );
+        scanner.setBasedir( "" );
 
-        Set selectedDirectories = new HashSet ();
+        Set selectedDirectories = new HashSet();
 
-        List includes = new ArrayList ();
+        List includes = new ArrayList();
 
-        Iterator sourcesFilesIterator = sourcesFiles.iterator ();
-        while ( sourcesFilesIterator.hasNext () )
+        Iterator sourcesFilesIterator = sourcesFiles.iterator();
+        while ( sourcesFilesIterator.hasNext() )
         {
-            String sourcesFile = (String) sourcesFilesIterator.next ();
+            String sourcesFile = (String) sourcesFilesIterator.next();
 
-            String directory = PathUtils.getDirectory ( sourcesFile, level - 1 );
-            if ( !selectedDirectories.contains ( directory ) )
+            String directory = PathUtils.getDirectory( sourcesFile, level - 1 );
+            if ( !selectedDirectories.contains( directory ) )
             {
-                includes.add ( directory + "/**" );
+                includes.add( directory + "/**" );
             }
 
-            selectedDirectories.add ( directory );
+            selectedDirectories.add( directory );
         }
 
-        scanner.setExcludes ( languages );
+        scanner.setExcludes( languages );
 
-        List result = scanner.scan ( files );
-        getLogger ().debug (
-            "Scanned " + result.size () + " other resources in " + files.size ()
-            + " files at level " + level
+        List result = scanner.scan( files );
+        getLogger().debug(
+            "Scanned " + result.size() + " other resources in " + files.size()
+                + " files at level " + level
         );
 
         return result;
     }
 
-    public List findOtherSources ( int level, List files, String languages )
+    public List findOtherSources( int level,
+                                  List files,
+                                  String languages )
     {
-        ListScanner scanner = new ListScanner ();
-        scanner.setBasedir ( "" );
+        ListScanner scanner = new ListScanner();
+        scanner.setBasedir( "" );
 
         String levelDirectory = "";
         for ( int i = 0; i < ( level - 1 ); i++ )
@@ -161,186 +172,197 @@ implements ArchetypeFilesResolver
         }
 
         String includes = "";
-        String[] languagesAsArray = StringUtils.split ( languages );
+        String[] languagesAsArray = StringUtils.split( languages );
         for ( int i = 0; i < languagesAsArray.length; i++ )
         {
             includes += levelDirectory + languagesAsArray[i];
         }
 
-        scanner.setIncludes ( includes );
+        scanner.setIncludes( includes );
 
-        List result = scanner.scan ( files );
-        getLogger ().debug (
-            "Scanned " + result.size () + " other sources in " + files.size () + " files at level "
-            + level
+        List result = scanner.scan( files );
+        getLogger().debug(
+            "Scanned " + result.size() + " other sources in " + files.size() + " files at level "
+                + level
         );
 
         return result;
     }
 
-    public List findResourcesMainFiles ( List files, String languages )
+    public List findResourcesMainFiles( List files,
+                                        String languages )
     {
-        ListScanner scanner = new ListScanner ();
-        scanner.setBasedir ( "src/main" );
+        ListScanner scanner = new ListScanner();
+        scanner.setBasedir( "src/main" );
 
-        scanner.setIncludes ( "**" );
-        scanner.setExcludes ( languages );
+        scanner.setIncludes( "**" );
+        scanner.setExcludes( languages );
 
-        List result = scanner.scan ( files );
-        getLogger ().debug (
-            "Scanned " + result.size () + " resources in " + files.size () + " files"
+        List result = scanner.scan( files );
+        getLogger().debug(
+            "Scanned " + result.size() + " resources in " + files.size() + " files"
         );
 
         return result;
     }
 
-    public List findResourcesTestFiles ( List files, String languages )
+    public List findResourcesTestFiles( List files,
+                                        String languages )
     {
-        ListScanner scanner = new ListScanner ();
-        scanner.setBasedir ( "src/test" );
+        ListScanner scanner = new ListScanner();
+        scanner.setBasedir( "src/test" );
 
-        scanner.setIncludes ( "**" );
-        scanner.setExcludes ( languages );
+        scanner.setIncludes( "**" );
+        scanner.setExcludes( languages );
 
-        List result = scanner.scan ( files );
-        getLogger ().debug (
-            "Scanned " + result.size () + " test resources in " + files.size () + " files"
+        List result = scanner.scan( files );
+        getLogger().debug(
+            "Scanned " + result.size() + " test resources in " + files.size() + " files"
         );
 
         return result;
     }
 
-    public List findSiteFiles ( List files, String languages )
+    public List findSiteFiles( List files,
+                               String languages )
     {
-        ListScanner scanner = new ListScanner ();
-        scanner.setBasedir ( "src/site" );
+        ListScanner scanner = new ListScanner();
+        scanner.setBasedir( "src/site" );
 
-        scanner.setIncludes ( "**" );
-        scanner.setExcludes ( languages );
+        scanner.setIncludes( "**" );
+        scanner.setExcludes( languages );
 
-        List result = scanner.scan ( files );
-        getLogger ().debug (
-            "Scanned " + result.size () + " site resources in " + files.size () + " files"
+        List result = scanner.scan( files );
+        getLogger().debug(
+            "Scanned " + result.size() + " site resources in " + files.size() + " files"
         );
 
         return result;
     }
 
-    public List findSourcesMainFiles ( List files, String languages )
+    public List findSourcesMainFiles( List files,
+                                      String languages )
     {
-        ListScanner scanner = new ListScanner ();
-        scanner.setBasedir ( "src/main" );
+        ListScanner scanner = new ListScanner();
+        scanner.setBasedir( "src/main" );
 
-        scanner.setIncludes ( languages );
+        scanner.setIncludes( languages );
 
-        List result = scanner.scan ( files );
-        getLogger ().debug (
-            "Scanned " + result.size () + " sources in " + files.size () + " files"
+        List result = scanner.scan( files );
+        getLogger().debug(
+            "Scanned " + result.size() + " sources in " + files.size() + " files"
         );
 
         return result;
     }
 
-    public List findSourcesTestFiles ( List files, String languages )
+    public List findSourcesTestFiles( List files,
+                                      String languages )
     {
-        ListScanner scanner = new ListScanner ();
-        scanner.setBasedir ( "src/test" );
+        ListScanner scanner = new ListScanner();
+        scanner.setBasedir( "src/test" );
 
-        scanner.setIncludes ( languages );
+        scanner.setIncludes( languages );
 
-        List result = scanner.scan ( files );
-        getLogger ().debug (
-            "Scanned " + result.size () + " test sources in " + files.size () + " files"
+        List result = scanner.scan( files );
+        getLogger().debug(
+            "Scanned " + result.size() + " test sources in " + files.size() + " files"
         );
 
         return result;
     }
 
-    public List getPackagedFiles ( List files, String packageName )
+    public List getPackagedFiles( List files,
+                                  String packageName )
     {
-        List packagedFiles = new ArrayList ();
-        Iterator filesIterator = files.iterator ();
-        while ( filesIterator.hasNext () )
+        List packagedFiles = new ArrayList();
+        Iterator filesIterator = files.iterator();
+        while ( filesIterator.hasNext() )
         {
-            String file = (String) filesIterator.next ();
+            String file = (String) filesIterator.next();
 
-            if ( file.startsWith ( packageName ) )
+            if ( file.startsWith( packageName ) )
             {
-                packagedFiles.add ( file.substring ( packageName.length () + 1 ) );
+                packagedFiles.add( file.substring( packageName.length() + 1 ) );
             }
         }
-        getLogger ().debug (
-            "Scanned " + packagedFiles.size () + " packaged files in " + files.size () + " files"
+        getLogger().debug(
+            "Scanned " + packagedFiles.size() + " packaged files in " + files.size() + " files"
         );
         return packagedFiles;
     }
 
-    public String resolvePackage ( File basedir, List languages )
-    throws IOException
+    public String resolvePackage( File basedir,
+                                  List languages )
+        throws
+        IOException
     {
-        getLogger ().debug ( "Resolving package in " + basedir + " using languages " + languages );
+        getLogger().debug( "Resolving package in " + basedir + " using languages " + languages );
 
-        List files = resolveFiles ( basedir, languages );
+        List files = resolveFiles( basedir, languages );
 
-        return resolvePackage ( files );
+        return resolvePackage( files );
     }
 
-    public List getUnfilteredFiles ( List files, String filtered )
+    public List getUnfilteredFiles( List files,
+                                    String filtered )
     {
-        ListScanner scanner = new ListScanner ();
-        scanner.setBasedir ( "" );
+        ListScanner scanner = new ListScanner();
+        scanner.setBasedir( "" );
 
-        scanner.setIncludes ( "**" );
-        scanner.setExcludes ( filtered );
+        scanner.setIncludes( "**" );
+        scanner.setExcludes( filtered );
 
-        List result = scanner.scan ( files );
-        getLogger ().debug (
-            "Scanned " + result.size () + " unfiltered files in " + files.size () + " files"
+        List result = scanner.scan( files );
+        getLogger().debug(
+            "Scanned " + result.size() + " unfiltered files in " + files.size() + " files"
         );
 
         return result;
     }
 
-    public List getUnpackagedFiles ( List files, String packageName )
+    public List getUnpackagedFiles( List files,
+                                    String packageName )
     {
-        List unpackagedFiles = new ArrayList ();
-        Iterator filesIterator = files.iterator ();
-        while ( filesIterator.hasNext () )
+        List unpackagedFiles = new ArrayList();
+        Iterator filesIterator = files.iterator();
+        while ( filesIterator.hasNext() )
         {
-            String file = (String) filesIterator.next ();
+            String file = (String) filesIterator.next();
 
-            if ( !file.startsWith ( packageName ) )
+            if ( !file.startsWith( packageName ) )
             {
-                unpackagedFiles.add ( file );
+                unpackagedFiles.add( file );
             }
         }
-        getLogger ().debug (
-            "Scanned " + unpackagedFiles.size () + " unpackaged files in " + files.size ()
-            + " files"
+        getLogger().debug(
+            "Scanned " + unpackagedFiles.size() + " unpackaged files in " + files.size()
+                + " files"
         );
         return unpackagedFiles;
     }
 
-    private String getCommonPackage ( String packageName, String templatePackage )
+    private String getCommonPackage( String packageName,
+                                     String templatePackage )
     {
         String common = "";
 
-        String difference = StringUtils.difference ( packageName, templatePackage );
-        if ( StringUtils.isNotEmpty ( difference ) )
+        String difference = StringUtils.difference( packageName, templatePackage );
+        if ( StringUtils.isNotEmpty( difference ) )
         {
             String temporaryCommon =
-                StringUtils.substring (
+                StringUtils.substring(
                     templatePackage,
                     0,
-                    templatePackage.lastIndexOf ( difference )
+                    templatePackage.lastIndexOf( difference )
                 );
-            if ( !difference.startsWith ( "." ) )
+            if ( !difference.startsWith( "." ) )
             {
                 common =
-                    StringUtils.substring (
+                    StringUtils.substring(
                         temporaryCommon,
                         0,
-                        temporaryCommon.lastIndexOf ( "." )
+                        temporaryCommon.lastIndexOf( "." )
                     );
             }
             else
@@ -356,10 +378,12 @@ implements ArchetypeFilesResolver
         return common;
     }
 
-    private List resolveFiles ( File basedir, List languages )
-    throws IOException
+    private List resolveFiles( File basedir,
+                               List languages )
+        throws
+        IOException
     {
-        String[] languagesArray = (String[]) languages.toArray ( new String[languages.size ()] );
+        String[] languagesArray = (String[]) languages.toArray( new String[languages.size()] );
         String[] languagesPathesArray = new String[languagesArray.length];
         for ( int i = 0; i < languagesArray.length; i++ )
         {
@@ -367,75 +391,75 @@ implements ArchetypeFilesResolver
         }
 
         String excludes = "target";
-        Iterator defaultExcludes = Arrays.asList ( ListScanner.DEFAULTEXCLUDES ).iterator ();
-        while ( defaultExcludes.hasNext () )
+        Iterator defaultExcludes = Arrays.asList( ListScanner.DEFAULTEXCLUDES ).iterator();
+        while ( defaultExcludes.hasNext() )
         {
-            excludes += "," + (String) defaultExcludes.next () + "/**";
+            excludes += "," + (String) defaultExcludes.next() + "/**";
         }
 
         List absoluteFiles =
-            FileUtils.getFiles (
+            FileUtils.getFiles(
                 basedir,
-                StringUtils.join ( languagesPathesArray, "," ),
+                StringUtils.join( languagesPathesArray, "," ),
                 excludes
             );
 
-        getLogger ().debug ( "Found " + absoluteFiles.size () + " potential archetype files" );
+        getLogger().debug( "Found " + absoluteFiles.size() + " potential archetype files" );
 
-        List files = new ArrayList ( absoluteFiles.size () );
+        List files = new ArrayList( absoluteFiles.size() );
 
-        Iterator filesIterator = absoluteFiles.iterator ();
-        while ( filesIterator.hasNext () )
+        Iterator filesIterator = absoluteFiles.iterator();
+        while ( filesIterator.hasNext() )
         {
-            File file = (File) filesIterator.next ();
+            File file = (File) filesIterator.next();
             String filePath =
-                StringUtils.prechomp (
-                    file.getAbsolutePath (),
-                    basedir.getAbsolutePath () + File.separator
+                StringUtils.prechomp(
+                    file.getAbsolutePath(),
+                    basedir.getAbsolutePath() + File.separator
                 );
 
-            String minusSrc = StringUtils.prechomp ( filePath, "src" + File.separator );
+            String minusSrc = StringUtils.prechomp( filePath, "src" + File.separator );
 
             for ( int i = 0; i < languagesArray.length; i++ )
             {
                 String language = languagesArray[i];
 
-                if ( StringUtils.countMatches (
-                        minusSrc,
-                        File.separator + language + File.separator
-                    )
-                    > 0
+                if ( StringUtils.countMatches(
+                    minusSrc,
+                    File.separator + language + File.separator
                 )
+                    > 0
+                    )
                 {
                     String minusLanguage =
-                        StringUtils.prechomp ( minusSrc, language + File.separator );
+                        StringUtils.prechomp( minusSrc, language + File.separator );
 
-                    files.add ( toUnixPath ( minusLanguage ) );
+                    files.add( toUnixPath( minusLanguage ) );
                 }
             }
         }
 
-        getLogger ().debug (
-            "Found " + files.size () + " archetype files for package resolution "
+        getLogger().debug(
+            "Found " + files.size() + " archetype files for package resolution "
         );
 
         return files;
     }
 
-    private String resolvePackage ( List files )
+    private String resolvePackage( List files )
     {
         String packageName = null;
-        Iterator minusLanguageIterator = files.iterator ();
-        while ( minusLanguageIterator.hasNext () )
+        Iterator minusLanguageIterator = files.iterator();
+        while ( minusLanguageIterator.hasNext() )
         {
-            String minusLanguage = (String) minusLanguageIterator.next ();
+            String minusLanguage = (String) minusLanguageIterator.next();
 
             String filePackage;
-            if ( minusLanguage.indexOf ( "/" ) >= 0 )
+            if ( minusLanguage.indexOf( "/" ) >= 0 )
             {
                 filePackage =
-                    StringUtils.replace (
-                        minusLanguage.substring ( 0, minusLanguage.lastIndexOf ( "/" ) ),
+                    StringUtils.replace(
+                        minusLanguage.substring( 0, minusLanguage.lastIndexOf( "/" ) ),
                         "/",
                         "."
                     );
@@ -451,17 +475,17 @@ implements ArchetypeFilesResolver
             }
             else
             {
-                packageName = getCommonPackage ( packageName, filePackage );
+                packageName = getCommonPackage( packageName, filePackage );
             }
         }
 
-        getLogger ().debug ( "Package resolved to " + packageName );
+        getLogger().debug( "Package resolved to " + packageName );
 
         return packageName;
     }
 
-    private String toUnixPath ( String path )
+    private String toUnixPath( String path )
     {
-        return path.replace ( File.separatorChar, '/' );
+        return path.replace( File.separatorChar, '/' );
     }
 }

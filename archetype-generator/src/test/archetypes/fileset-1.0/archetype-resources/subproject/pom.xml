@@ -18,27 +18,27 @@ specific language governing permissions and limitations
 under the License.
 -->
 <project
-    xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-    <modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>${groupId}</groupId>
-        <artifactId>${parentArtifactId}</artifactId>
-        <version>${version}</version>
-    </parent>
-
+  <parent>
     <groupId>${groupId}</groupId>
-    <artifactId>${artifactId}</artifactId>
+    <artifactId>${parentArtifactId}</artifactId>
     <version>${version}</version>
+  </parent>
 
-    <name>Maven ArchetypeNG Test Subfolder</name>
-    <packaging>pom</packaging>
+  <groupId>${groupId}</groupId>
+  <artifactId>${artifactId}</artifactId>
+  <version>${version}</version>
 
-    <modules>
-        <module>subsubproject</module>
-    </modules>
+  <name>Maven ArchetypeNG Test Subfolder</name>
+  <packaging>pom</packaging>
+
+  <modules>
+    <module>subsubproject</module>
+  </modules>
 
 </project>

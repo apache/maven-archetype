@@ -19,6 +19,7 @@
 package org.apache.maven.archetype.common.util;
 
 import java.lang.reflect.Method;
+
 import org.jdom.output.EscapeStrategy;
 
 /**
@@ -27,17 +28,19 @@ import org.jdom.output.EscapeStrategy;
  * {@link #getRawFormat} (no whitespace changes),
  * {@link #getPrettyFormat} (whitespace beautification), and
  * {@link #getCompactFormat} (whitespace normalization).
- * <p>
+ * <p/>
  * Several modes are available to effect the way textual content is printed.
  * See the documentation for {@link TextMode} for details.
  *
- * @version $Revision: 1.10 $, $Date: 2004/09/07 06:37:20 $
  * @author Jason Hunter
+ * @version $Revision: 1.10 $, $Date: 2004/09/07 06:37:20 $
  */
-public class Format implements Cloneable {
+public class Format
+    implements Cloneable
+{
 
     private static final String CVS_ID =
-            "@(#) $RCSfile: Format.java,v $ $Revision: 1.10 $ $Date: 2004/09/07 06:37:20 $ $Name: jdom_1_0 $";
+        "@(#) $RCSfile: Format.java,v $ $Revision: 1.10 $ $Date: 2004/09/07 06:37:20 $ $Name: jdom_1_0 $";
 
     /**
      * Returns a new Format object that performs no whitespace changes, uses
@@ -45,10 +48,11 @@ public class Format implements Cloneable {
      * declaration and encoding, and uses the default entity escape strategy.
      * Tweaks can be made to the returned Format instance without affecting
      * other instances.
-
-     * @return                     a Format with no whitespace changes
+     *
+     * @return a Format with no whitespace changes
      */
-    public static Format getRawFormat() {
+    public static Format getRawFormat()
+    {
         return new Format();
     }
 
@@ -60,12 +64,13 @@ public class Format implements Cloneable {
      * Tweaks can be made to the returned Format instance without affecting
      * other instances.
      *
-     * @return                     a Format with whitespace beautification
+     * @return a Format with whitespace beautification
      */
-    public static Format getPrettyFormat() {
+    public static Format getPrettyFormat()
+    {
         Format f = new Format();
-        f.setIndent(STANDARD_INDENT);
-        f.setTextMode(TextMode.TRIM);
+        f.setIndent( STANDARD_INDENT );
+        f.setTextMode( TextMode.TRIM );
         return f;
     }
 
@@ -76,11 +81,12 @@ public class Format implements Cloneable {
      * Tweaks can be made to the returned Format instance without affecting
      * other instances.
      *
-     * @return                     a Format with whitespace normalization
+     * @return a Format with whitespace normalization
      */
-    public static Format getCompactFormat() {
+    public static Format getCompactFormat()
+    {
         Format f = new Format();
-        f.setTextMode(TextMode.NORMALIZE);
+        f.setTextMode( TextMode.NORMALIZE );
         return f;
     }
 
@@ -103,32 +109,40 @@ public class Format implements Cloneable {
     /** The encoding format */
     String encoding = STANDARD_ENCODING;
 
-    /** Whether or not to output the XML declaration
-     * - default is <code>false</code> */
+    /**
+     * Whether or not to output the XML declaration
+     * - default is <code>false</code>
+     */
     boolean omitDeclaration = false;
 
-    /** Whether or not to output the encoding in the XML declaration
-     * - default is <code>false</code> */
+    /**
+     * Whether or not to output the encoding in the XML declaration
+     * - default is <code>false</code>
+     */
     boolean omitEncoding = false;
 
-    /** Whether or not to expand empty elements to
-     * &lt;tagName&gt;&lt;/tagName&gt; - default is <code>false</code> */
+    /**
+     * Whether or not to expand empty elements to
+     * &lt;tagName&gt;&lt;/tagName&gt; - default is <code>false</code>
+     */
     boolean expandEmptyElements = false;
 
-    /** Whether TrAX output escaping disabling/enabling PIs are ignored
-      * or processed - default is <code>false</code> */
+    /**
+     * Whether TrAX output escaping disabling/enabling PIs are ignored
+     * or processed - default is <code>false</code>
+     */
     boolean ignoreTrAXEscapingPIs = false;
 
     /** text handling mode */
     TextMode mode = TextMode.PRESERVE;
 
     /** entity escape logic */
-    EscapeStrategy escapeStrategy = new DefaultEscapeStrategy(encoding);
+    EscapeStrategy escapeStrategy = new DefaultEscapeStrategy( encoding );
 
-    /**
-     * Creates a new Format instance with default (raw) behavior.
-     */
-    private Format() { }
+    /** Creates a new Format instance with default (raw) behavior. */
+    private Format()
+    {
+    }
 
     /**
      * Sets the {@link EscapeStrategy} to use for character escaping.
@@ -136,7 +150,8 @@ public class Format implements Cloneable {
      * @param strategy the EscapeStrategy to use
      * @return a pointer to this Format for chaining
      */
-    public Format setEscapeStrategy(EscapeStrategy strategy) {
+    public Format setEscapeStrategy( EscapeStrategy strategy )
+    {
         escapeStrategy = strategy;
         return this;
     }
@@ -146,7 +161,8 @@ public class Format implements Cloneable {
      *
      * @return the current escape strategy
      */
-    public EscapeStrategy getEscapeStrategy() {
+    public EscapeStrategy getEscapeStrategy()
+    {
         return escapeStrategy;
     }
 
@@ -156,15 +172,15 @@ public class Format implements Cloneable {
      * property is false, this value is irrelevant.  To make it output
      * the system default line ending string, call
      * <code>setLineSeparator(System.getProperty("line.separator"))</code>
-     *
-     * <p>
+     * <p/>
+     * <p/>
      * To output "UNIX-style" documents, call
      * <code>setLineSeparator("\n")</code>.  To output "Mac-style"
      * documents, call <code>setLineSeparator("\r")</code>.  DOS-style
      * documents use CR-LF ("\r\n"), which is the default.
      * </p>
-     *
-     * <p>
+     * <p/>
+     * <p/>
      * Note that this only applies to newlines generated by the
      * outputter.  If you parse an XML document that contains newlines
      * embedded inside a text node, and you do not set TextMode.NORMALIZE,
@@ -172,12 +188,12 @@ public class Format implements Cloneable {
      * verbatim, as "\n" which is how parsers normalize them.
      * </p>
      *
-     * @see #setTextMode
-     *
      * @param separator <code>String</code> line separator to use.
      * @return a pointer to this Format for chaining
+     * @see #setTextMode
      */
-    public Format setLineSeparator(String separator) {
+    public Format setLineSeparator( String separator )
+    {
         this.lineSeparator = separator;
         return this;
     }
@@ -187,7 +203,8 @@ public class Format implements Cloneable {
      *
      * @return the current line separator
      */
-    public String getLineSeparator() {
+    public String getLineSeparator()
+    {
         return lineSeparator;
     }
 
@@ -199,10 +216,11 @@ public class Format implements Cloneable {
      * this in uses such as WML and other wireless device protocols.
      *
      * @param omitEncoding <code>boolean</code> indicating whether or not
-     *        the XML declaration should indicate the document encoding.
+     *                     the XML declaration should indicate the document encoding.
      * @return a pointer to this Format for chaining
      */
-    public Format setOmitEncoding(boolean omitEncoding) {
+    public Format setOmitEncoding( boolean omitEncoding )
+    {
         this.omitEncoding = omitEncoding;
         return this;
     }
@@ -212,7 +230,8 @@ public class Format implements Cloneable {
      *
      * @return whether the XML declaration encoding will be omitted
      */
-    public boolean getOmitEncoding() {
+    public boolean getOmitEncoding()
+    {
         return omitEncoding;
     }
 
@@ -223,10 +242,11 @@ public class Format implements Cloneable {
      * as SOAP and XML-RPC calls.
      *
      * @param omitDeclaration <code>boolean</code> indicating whether or not
-     *        the XML declaration should be omitted.
+     *                        the XML declaration should be omitted.
      * @return a pointer to this Format for chaining
      */
-    public Format setOmitDeclaration(boolean omitDeclaration) {
+    public Format setOmitDeclaration( boolean omitDeclaration )
+    {
         this.omitDeclaration = omitDeclaration;
         return this;
     }
@@ -236,7 +256,8 @@ public class Format implements Cloneable {
      *
      * @return whether the XML declaration will be omitted
      */
-    public boolean getOmitDeclaration() {
+    public boolean getOmitDeclaration()
+    {
         return omitDeclaration;
     }
 
@@ -246,10 +267,11 @@ public class Format implements Cloneable {
      * <code>&lt;tagName&gt;&lt;/tagName&gt;</code>.
      *
      * @param expandEmptyElements <code>boolean</code> indicating whether or not
-     *        empty elements should be expanded.
+     *                            empty elements should be expanded.
      * @return a pointer to this Format for chaining
      */
-    public Format setExpandEmptyElements(boolean expandEmptyElements) {
+    public Format setExpandEmptyElements( boolean expandEmptyElements )
+    {
         this.expandEmptyElements = expandEmptyElements;
         return this;
     }
@@ -259,7 +281,8 @@ public class Format implements Cloneable {
      *
      * @return whether empty elements are expanded
      */
-    public boolean getExpandEmptyElements() {
+    public boolean getExpandEmptyElements()
+    {
         return expandEmptyElements;
     }
 
@@ -268,7 +291,7 @@ public class Format implements Cloneable {
      * disabling/enabling output escaping are ignored.  Disabling
      * output escaping allows using XML text as element content and
      * outputing it verbatim, i&#46;e&#46; as element children would be.
-     * <p>
+     * <p/>
      * When processed, these processing instructions are removed from
      * the generated XML text and control whether the element text
      * content is output verbatim or with escaping of the pre-defined
@@ -277,20 +300,20 @@ public class Format implements Cloneable {
      * <code>&lt;?javax.xml.transform.disable-output-escaping ?&gt;</code>
      * and <code>&lt;?javax.xml.transform.enable-output-escaping ?&gt;</code>
      * PIs.</p>
-     * <p>
+     * <p/>
      * When ignored, the processing instructions are present in the
      * generated XML text and the pre-defined entities in XML 1.0 are
      * escaped.
-     * <p>
+     * <p/>
      * Default: <code>false</code>.</p>
      *
      * @param ignoreTrAXEscapingPIs <code>boolean</code> indicating
-     *        whether or not TrAX ouput escaping PIs are ignored.
-     *
+     *                              whether or not TrAX ouput escaping PIs are ignored.
      * @see javax.xml.transform.Result#PI_ENABLE_OUTPUT_ESCAPING
      * @see javax.xml.transform.Result#PI_DISABLE_OUTPUT_ESCAPING
      */
-    public void setIgnoreTrAXEscapingPIs(boolean ignoreTrAXEscapingPIs) {
+    public void setIgnoreTrAXEscapingPIs( boolean ignoreTrAXEscapingPIs )
+    {
         this.ignoreTrAXEscapingPIs = ignoreTrAXEscapingPIs;
     }
 
@@ -300,7 +323,8 @@ public class Format implements Cloneable {
      *
      * @return whether or not TrAX ouput escaping PIs are ignored.
      */
-    public boolean getIgnoreTrAXEscapingPIs() {
+    public boolean getIgnoreTrAXEscapingPIs()
+    {
         return ignoreTrAXEscapingPIs;
     }
 
@@ -310,7 +334,8 @@ public class Format implements Cloneable {
      *
      * @return a pointer to this Format for chaining
      */
-    public Format setTextMode(Format.TextMode mode) {
+    public Format setTextMode( Format.TextMode mode )
+    {
         this.mode = mode;
         return this;
     }
@@ -320,7 +345,8 @@ public class Format implements Cloneable {
      *
      * @return the current text output style
      */
-    public Format.TextMode getTextMode() {
+    public Format.TextMode getTextMode()
+    {
         return mode;
     }
 
@@ -333,11 +359,13 @@ public class Format implements Cloneable {
      * @param indent <code>String</code> to use for indentation.
      * @return a pointer to this Format for chaining
      */
-    public Format setIndent(String indent) {
+    public Format setIndent( String indent )
+    {
         // if passed the empty string, change it to null, for marginal
         // performance gains later (can compare to null first instead
         // of calling equals())
-        if ("".equals(indent)) {
+        if ( "".equals( indent ) )
+        {
             indent = null;
         }
         this.indent = indent;
@@ -349,7 +377,8 @@ public class Format implements Cloneable {
      *
      * @return the indent string in use
      */
-    public String getIndent() {
+    public String getIndent()
+    {
         return indent;
     }
 
@@ -361,9 +390,10 @@ public class Format implements Cloneable {
      *                 "UTF-8" or "ISO-8859-1" or "US-ASCII"
      * @return a pointer to this Format for chaining
      */
-    public Format setEncoding(String encoding) {
+    public Format setEncoding( String encoding )
+    {
         this.encoding = encoding;
-        escapeStrategy = new DefaultEscapeStrategy(encoding);
+        escapeStrategy = new DefaultEscapeStrategy( encoding );
         return this;
     }
 
@@ -372,17 +402,21 @@ public class Format implements Cloneable {
      *
      * @return the output encoding
      */
-    public String getEncoding() {
+    public String getEncoding()
+    {
         return encoding;
     }
 
-    protected Object clone() {
+    protected Object clone()
+    {
         Format format = null;
 
-        try {
+        try
+        {
             format = (Format) super.clone();
         }
-        catch (CloneNotSupportedException ce) {
+        catch ( CloneNotSupportedException ce )
+        {
         }
 
         return format;
@@ -394,64 +428,81 @@ public class Format implements Cloneable {
      * to query the JDK 1.4 CharsetEncoder class for unknown charsets.
      * If JDK 1.4 isn't around, default to no special encoding.
      */
-    class DefaultEscapeStrategy implements EscapeStrategy {
+    class DefaultEscapeStrategy
+        implements EscapeStrategy
+    {
         private int bits;
         Object encoder;
         Method canEncode;
 
-        public DefaultEscapeStrategy(String encoding) {
-            if ("UTF-8".equalsIgnoreCase(encoding) ||
-                    "UTF-16".equalsIgnoreCase(encoding)) {
+        public DefaultEscapeStrategy( String encoding )
+        {
+            if ( "UTF-8".equalsIgnoreCase( encoding ) ||
+                "UTF-16".equalsIgnoreCase( encoding ) )
+            {
                 bits = 16;
             }
-            else if ("ISO-8859-1".equalsIgnoreCase(encoding) ||
-                    "Latin1".equalsIgnoreCase(encoding)) {
+            else if ( "ISO-8859-1".equalsIgnoreCase( encoding ) ||
+                "Latin1".equalsIgnoreCase( encoding ) )
+            {
                 bits = 8;
             }
-            else if ("US-ASCII".equalsIgnoreCase(encoding) ||
-                    "ASCII".equalsIgnoreCase(encoding)) {
+            else if ( "US-ASCII".equalsIgnoreCase( encoding ) ||
+                "ASCII".equalsIgnoreCase( encoding ) )
+            {
                 bits = 7;
             }
-            else {
+            else
+            {
                 bits = 0;
                 //encoder = Charset.forName(encoding).newEncoder();
-                try {
-                    Class charsetClass = Class.forName("java.nio.charset.Charset");
-                    Class encoderClass = Class.forName("java.nio.charset.CharsetEncoder");
-                    Method forName = charsetClass.getMethod("forName", new Class[]{String.class});
-                    Object charsetObj = forName.invoke(null, new Object[]{encoding});
-                    Method newEncoder = charsetClass.getMethod("newEncoder", null);
-                    encoder = newEncoder.invoke(charsetObj, null);
-                    canEncode = encoderClass.getMethod("canEncode", new Class[]{char.class});
+                try
+                {
+                    Class charsetClass = Class.forName( "java.nio.charset.Charset" );
+                    Class encoderClass = Class.forName( "java.nio.charset.CharsetEncoder" );
+                    Method forName = charsetClass.getMethod( "forName", new Class[]{String.class} );
+                    Object charsetObj = forName.invoke( null, new Object[]{encoding} );
+                    Method newEncoder = charsetClass.getMethod( "newEncoder", null );
+                    encoder = newEncoder.invoke( charsetObj, null );
+                    canEncode = encoderClass.getMethod( "canEncode", new Class[]{char.class} );
                 }
-                catch (Exception ignored) {
+                catch ( Exception ignored )
+                {
                 }
             }
         }
 
-        public boolean shouldEscape(char ch) {
-            if (bits == 16) {
+        public boolean shouldEscape( char ch )
+        {
+            if ( bits == 16 )
+            {
                 return false;
             }
-            if (bits == 8) {
-                if ((int) ch > 255)
+            if ( bits == 8 )
+            {
+                if ( (int) ch > 255 )
                     return true;
                 else
                     return false;
             }
-            if (bits == 7) {
-                if ((int) ch > 127)
+            if ( bits == 7 )
+            {
+                if ( (int) ch > 127 )
                     return true;
                 else
                     return false;
             }
-            else {
-                if (canEncode != null && encoder != null) {
-                    try {
-                        Boolean val = (Boolean) canEncode.invoke(encoder, new Object[]{new Character(ch)});
+            else
+            {
+                if ( canEncode != null && encoder != null )
+                {
+                    try
+                    {
+                        Boolean val = (Boolean) canEncode.invoke( encoder, new Object[]{new Character( ch )} );
                         return !val.booleanValue();
                     }
-                    catch (Exception ignored) {
+                    catch ( Exception ignored )
+                    {
                     }
                 }
                 // Return false if we don't know.  This risks not escaping
@@ -466,66 +517,66 @@ public class Format implements Cloneable {
     /**
      * Class to signify how text should be handled on output.  The following
      * table provides details.
-     *
+     * <p/>
      * <table>
-     *   <tr>
-     *     <th align="left">
-     *       Text Mode
-     *     </th>
-     *     <th>
-     *       Resulting behavior.
-     *     </th>
-     *   </tr>
-     *
-     *   <tr valign="top">
-     *     <td>
-     *       <i>PRESERVE (Default)</i>
-     *     </td>
-     *     <td>
-     *       All content is printed in the format it was created, no whitespace
-     *       or line separators are are added or removed.
-     *     </td>
-     *   </tr>
-     *
-     *   <tr valign="top">
-     *     <td>
-     *       TRIM_FULL_WHITE
-     *     </td>
-     *     <td>
-     *       Content between tags consisting of all whitespace is not printed.
-     *       If the content contains even one non-whitespace character, it is
-     *       printed verbatim, whitespace and all.
-     *     </td>
-     *   </tr>
-     *
-     *   <tr valign="top">
-     *     <td>
-     *       TRIM
-     *     </td>
-     *     <td>
-     *       Same as TrimAllWhite, plus leading/trailing whitespace are
-     *       trimmed.
-     *     </td>
-     *   </tr>
-     *
-     *   <tr valign="top">
-     *     <td>
-     *       NORMALIZE
-     *     </td>
-     *     <td>
-     *       Same as TextTrim, plus addition interior whitespace is compressed
-     *       to a single space.
-     *     </td>
-     *   </tr>
+     * <tr>
+     * <th align="left">
+     * Text Mode
+     * </th>
+     * <th>
+     * Resulting behavior.
+     * </th>
+     * </tr>
+     * <p/>
+     * <tr valign="top">
+     * <td>
+     * <i>PRESERVE (Default)</i>
+     * </td>
+     * <td>
+     * All content is printed in the format it was created, no whitespace
+     * or line separators are are added or removed.
+     * </td>
+     * </tr>
+     * <p/>
+     * <tr valign="top">
+     * <td>
+     * TRIM_FULL_WHITE
+     * </td>
+     * <td>
+     * Content between tags consisting of all whitespace is not printed.
+     * If the content contains even one non-whitespace character, it is
+     * printed verbatim, whitespace and all.
+     * </td>
+     * </tr>
+     * <p/>
+     * <tr valign="top">
+     * <td>
+     * TRIM
+     * </td>
+     * <td>
+     * Same as TrimAllWhite, plus leading/trailing whitespace are
+     * trimmed.
+     * </td>
+     * </tr>
+     * <p/>
+     * <tr valign="top">
+     * <td>
+     * NORMALIZE
+     * </td>
+     * <td>
+     * Same as TextTrim, plus addition interior whitespace is compressed
+     * to a single space.
+     * </td>
+     * </tr>
      * </table>
-     *
+     * <p/>
      * In most cases textual content is aligned with the surrounding tags
      * (after the appropriate text mode is applied). In the case where the only
      * content between the start and end tags is textual, the start tag, text,
      * and end tag are all printed on the same line. If the document being
      * output already has whitespace, it's wise to turn on TRIM mode so the
      * pre-existing whitespace can be trimmed before adding new whitespace.
-     * <p>
+     * <p/>
      * When a element has a xml:space attribute with the value of "preserve",
      * all formating is turned off and reverts back to the default until the
      * element and its contents have been printed. If a nested element contains
@@ -533,38 +584,38 @@ public class Format implements Cloneable {
      * for the child element and then off for the remainder of the parent
      * element.
      */
-    public static class TextMode {
-        /**
-         * Mode for literal text preservation.
-         */
-        public static final TextMode PRESERVE = new TextMode("PRESERVE");
+    public static class TextMode
+    {
+        /** Mode for literal text preservation. */
+        public static final TextMode PRESERVE = new TextMode( "PRESERVE" );
 
-        /**
-         * Mode for text trimming (left and right trim).
-         */
-        public static final TextMode TRIM = new TextMode("TRIM");
+        /** Mode for text trimming (left and right trim). */
+        public static final TextMode TRIM = new TextMode( "TRIM" );
 
         /**
          * Mode for text normalization (left and right trim plus internal
          * whitespace is normalized to a single space.
+         *
          * @see org.jdom.Element#getTextNormalize
          */
-        public static final TextMode NORMALIZE = new TextMode("NORMALIZE");
+        public static final TextMode NORMALIZE = new TextMode( "NORMALIZE" );
 
         /**
          * Mode for text trimming of content consisting of nothing but
          * whitespace but otherwise not changing output.
          */
         public static final TextMode TRIM_FULL_WHITE =
-                new TextMode("TRIM_FULL_WHITE");
+            new TextMode( "TRIM_FULL_WHITE" );
 
         private final String name;
 
-        private TextMode(String name) {
+        private TextMode( String name )
+        {
             this.name = name;
         }
 
-        public String toString() {
+        public String toString()
+        {
             return name;
         }
     }

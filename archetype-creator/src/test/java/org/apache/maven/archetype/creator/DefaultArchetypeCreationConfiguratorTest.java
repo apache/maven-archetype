@@ -46,7 +46,7 @@ import java.util.List;
 import java.util.Properties;
 
 public class DefaultArchetypeCreationConfiguratorTest
-extends AbstractMojoTestCase
+    extends AbstractMojoTestCase
 {
     private List languages;
     private DefaultArtifactRepository localRepository;
@@ -153,35 +153,36 @@ extends AbstractMojoTestCase
 //        }
 //    }
 
-    public void testBatchModeDefinedAndConfigured ()
-    throws Exception
+    public void testBatchModeDefinedAndConfigured()
+        throws
+        Exception
     {
-        System.out.println ( "testBatchModePackageDefault" );
+        System.out.println( "testBatchModePackageDefault" );
 
         String project = "configure-creation-6";
-        File projectFile = getProjectFile ( project );
-        File projectFileSample = getProjectSampleFile ( project );
-        copy ( projectFileSample, projectFile );
-        FileUtils.deleteDirectory ( new File ( projectFile.getParentFile (), "target" ) );
+        File projectFile = getProjectFile( project );
+        File projectFileSample = getProjectSampleFile( project );
+        copy( projectFileSample, projectFile );
+        FileUtils.deleteDirectory( new File( projectFile.getParentFile(), "target" ) );
 
-        MavenProject mavenProject = loadProject ( projectFile );
+        MavenProject mavenProject = loadProject( projectFile );
 
         DefaultArchetypeCreationConfigurator instance =
-            (DefaultArchetypeCreationConfigurator) lookup ( ArchetypeCreationConfigurator.ROLE );
-        instanceDefined ( instance );
+            (DefaultArchetypeCreationConfigurator) lookup( ArchetypeCreationConfigurator.ROLE );
+        instanceDefined( instance );
 
-        Properties commandLineProperties = new Properties ();
+        Properties commandLineProperties = new Properties();
 
-        File propertyFile = getPropertiesFile ( project );
-        File propertyFileSample = getPropertiesSampleFile ( project );
-        copy ( propertyFileSample, propertyFile );
+        File propertyFile = getPropertiesFile( project );
+        File propertyFileSample = getPropertiesSampleFile( project );
+        copy( propertyFileSample, propertyFile );
 
-        languages = new ArrayList ();
-        languages.add ( "java" );
-        languages.add ( "aspectj" );
-        languages.add ( "csharp" );
-        languages.add ( "groovy" );
-        instance.configureArchetypeCreation (
+        languages = new ArrayList();
+        languages.add( "java" );
+        languages.add( "aspectj" );
+        languages.add( "csharp" );
+        languages.add( "groovy" );
+        instance.configureArchetypeCreation(
             mavenProject,
             Boolean.FALSE,
             commandLineProperties,
@@ -189,52 +190,53 @@ extends AbstractMojoTestCase
             languages
         );
 
-        Properties properties = loadProperties ( propertyFile );
+        Properties properties = loadProperties( propertyFile );
 
-        assertEquals (
+        assertEquals(
             "org.apache.maven.archetype",
-            properties.getProperty ( Constants.ARCHETYPE_GROUP_ID )
+            properties.getProperty( Constants.ARCHETYPE_GROUP_ID )
         );
-        assertEquals (
+        assertEquals(
             "maven-archetype-test",
-            properties.getProperty ( Constants.ARCHETYPE_ARTIFACT_ID )
+            properties.getProperty( Constants.ARCHETYPE_ARTIFACT_ID )
         );
-        assertEquals ( "1.0", properties.getProperty ( Constants.ARCHETYPE_VERSION ) );
-        assertEquals ( "some.group.id", properties.getProperty ( Constants.GROUP_ID ) );
-        assertEquals ( "some-artifact-id", properties.getProperty ( Constants.ARTIFACT_ID ) );
-        assertEquals ( "1.0", properties.getProperty ( Constants.VERSION ) );
-        assertEquals ( "org.codehaus.mojo", properties.getProperty ( Constants.PACKAGE ) );
+        assertEquals( "1.0", properties.getProperty( Constants.ARCHETYPE_VERSION ) );
+        assertEquals( "some.group.id", properties.getProperty( Constants.GROUP_ID ) );
+        assertEquals( "some-artifact-id", properties.getProperty( Constants.ARTIFACT_ID ) );
+        assertEquals( "1.0", properties.getProperty( Constants.VERSION ) );
+        assertEquals( "org.codehaus.mojo", properties.getProperty( Constants.PACKAGE ) );
     }
 
-    public void testBatchModePackageDefault ()
-    throws Exception
+    public void testBatchModePackageDefault()
+        throws
+        Exception
     {
-        System.out.println ( "testBatchModePackageDefault" );
+        System.out.println( "testBatchModePackageDefault" );
 
         String project = "configure-creation-5";
-        File projectFile = getProjectFile ( project );
-        File projectFileSample = getProjectSampleFile ( project );
-        copy ( projectFileSample, projectFile );
-        FileUtils.deleteDirectory ( new File ( projectFile.getParentFile (), "target" ) );
+        File projectFile = getProjectFile( project );
+        File projectFileSample = getProjectSampleFile( project );
+        copy( projectFileSample, projectFile );
+        FileUtils.deleteDirectory( new File( projectFile.getParentFile(), "target" ) );
 
-        MavenProject mavenProject = loadProject ( projectFile );
+        MavenProject mavenProject = loadProject( projectFile );
 
         DefaultArchetypeCreationConfigurator instance =
-            (DefaultArchetypeCreationConfigurator) lookup ( ArchetypeCreationConfigurator.ROLE );
-        instanceDefined ( instance );
+            (DefaultArchetypeCreationConfigurator) lookup( ArchetypeCreationConfigurator.ROLE );
+        instanceDefined( instance );
 
-        Properties commandLineProperties = new Properties ();
+        Properties commandLineProperties = new Properties();
 
-        File propertyFile = getPropertiesFile ( project );
-        File propertyFileSample = getPropertiesSampleFile ( project );
-        copy ( propertyFileSample, propertyFile );
+        File propertyFile = getPropertiesFile( project );
+        File propertyFileSample = getPropertiesSampleFile( project );
+        copy( propertyFileSample, propertyFile );
 
-        languages = new ArrayList ();
-        languages.add ( "java" );
-        languages.add ( "aspectj" );
-        languages.add ( "csharp" );
-        languages.add ( "groovy" );
-        instance.configureArchetypeCreation (
+        languages = new ArrayList();
+        languages.add( "java" );
+        languages.add( "aspectj" );
+        languages.add( "csharp" );
+        languages.add( "groovy" );
+        instance.configureArchetypeCreation(
             mavenProject,
             Boolean.FALSE,
             commandLineProperties,
@@ -242,21 +244,21 @@ extends AbstractMojoTestCase
             languages
         );
 
-        Properties properties = loadProperties ( propertyFile );
+        Properties properties = loadProperties( propertyFile );
 
-        assertEquals (
+        assertEquals(
             "org.apache.maven.archetype",
-            properties.getProperty ( Constants.ARCHETYPE_GROUP_ID )
+            properties.getProperty( Constants.ARCHETYPE_GROUP_ID )
         );
-        assertEquals (
+        assertEquals(
             "maven-archetype-test",
-            properties.getProperty ( Constants.ARCHETYPE_ARTIFACT_ID )
+            properties.getProperty( Constants.ARCHETYPE_ARTIFACT_ID )
         );
-        assertEquals ( "1.0", properties.getProperty ( Constants.ARCHETYPE_VERSION ) );
-        assertEquals ( "some.group.id", properties.getProperty ( Constants.GROUP_ID ) );
-        assertEquals ( "some-artifact-id", properties.getProperty ( Constants.ARTIFACT_ID ) );
-        assertEquals ( "1.0", properties.getProperty ( Constants.VERSION ) );
-        assertEquals ( "org.apache.maven.archetype", properties.getProperty ( Constants.PACKAGE ) );
+        assertEquals( "1.0", properties.getProperty( Constants.ARCHETYPE_VERSION ) );
+        assertEquals( "some.group.id", properties.getProperty( Constants.GROUP_ID ) );
+        assertEquals( "some-artifact-id", properties.getProperty( Constants.ARTIFACT_ID ) );
+        assertEquals( "1.0", properties.getProperty( Constants.VERSION ) );
+        assertEquals( "org.apache.maven.archetype", properties.getProperty( Constants.PACKAGE ) );
     }
 // Commented out since no exception are thrown if using defaults to all values
 //    public void testBatchModePackageDefaultToEmpty ()
@@ -358,56 +360,57 @@ extends AbstractMojoTestCase
 //        }
 //    }
 
-    public void testInteractiveModeNotConfirm ()
-    throws Exception
+    public void testInteractiveModeNotConfirm()
+        throws
+        Exception
     {
-        System.out.println ( "testInteractiveModeNotConfirm" );
+        System.out.println( "testInteractiveModeNotConfirm" );
 
         String project = "configure-creation-8";
-        File projectFile = getProjectFile ( project );
-        File projectFileSample = getProjectSampleFile ( project );
-        copy ( projectFileSample, projectFile );
-        FileUtils.deleteDirectory ( new File ( projectFile.getParentFile (), "target" ) );
+        File projectFile = getProjectFile( project );
+        File projectFileSample = getProjectSampleFile( project );
+        copy( projectFileSample, projectFile );
+        FileUtils.deleteDirectory( new File( projectFile.getParentFile(), "target" ) );
 
-        MavenProject mavenProject = loadProject ( projectFile );
+        MavenProject mavenProject = loadProject( projectFile );
 
         DefaultArchetypeCreationConfigurator instance =
-            (DefaultArchetypeCreationConfigurator) lookup ( ArchetypeCreationConfigurator.ROLE );
-        instanceDefined ( instance );
+            (DefaultArchetypeCreationConfigurator) lookup( ArchetypeCreationConfigurator.ROLE );
+        instanceDefined( instance );
 
-        Properties commandLineProperties = new Properties ();
+        Properties commandLineProperties = new Properties();
 
-        File propertyFile = getPropertiesFile ( project );
-        File propertyFileSample = getPropertiesSampleFile ( project );
-        copy ( propertyFileSample, propertyFile );
+        File propertyFile = getPropertiesFile( project );
+        File propertyFileSample = getPropertiesSampleFile( project );
+        copy( propertyFileSample, propertyFile );
 
-        MockPrompter prompter = new MockPrompter ();
-        prompter.addAnswer ( "N" );
-        prompter.addAnswer ( "N" );
-        prompter.addAnswer ( "org.apache.maven.archetypes2" );
-        prompter.addAnswer ( "maven-archetype-test2" );
-        prompter.addAnswer ( "1.0.2" );
-        prompter.addAnswer ( "some.group.id2" );
-        prompter.addAnswer ( "some-artifact-id2" );
-        prompter.addAnswer ( "1.0.2" );
-        prompter.addAnswer ( "org.codehaus" );
-        prompter.addAnswer ( "Y" );
-        prompter.addAnswer ( "aProperty" );
-        prompter.addAnswer ( "some.value" );
-        prompter.addAnswer ( "N" );
-        prompter.addAnswer ( "Y" );
-        setVariableValueToObject (
-            getVariableValueFromObject ( instance, "archetypeCreationQueryer" ),
+        MockPrompter prompter = new MockPrompter();
+        prompter.addAnswer( "N" );
+        prompter.addAnswer( "N" );
+        prompter.addAnswer( "org.apache.maven.archetypes2" );
+        prompter.addAnswer( "maven-archetype-test2" );
+        prompter.addAnswer( "1.0.2" );
+        prompter.addAnswer( "some.group.id2" );
+        prompter.addAnswer( "some-artifact-id2" );
+        prompter.addAnswer( "1.0.2" );
+        prompter.addAnswer( "org.codehaus" );
+        prompter.addAnswer( "Y" );
+        prompter.addAnswer( "aProperty" );
+        prompter.addAnswer( "some.value" );
+        prompter.addAnswer( "N" );
+        prompter.addAnswer( "Y" );
+        setVariableValueToObject(
+            getVariableValueFromObject( instance, "archetypeCreationQueryer" ),
             "prompter",
             prompter
         );
 
-        languages = new ArrayList ();
-        languages.add ( "java" );
-        languages.add ( "aspectj" );
-        languages.add ( "csharp" );
-        languages.add ( "groovy" );
-        instance.configureArchetypeCreation (
+        languages = new ArrayList();
+        languages.add( "java" );
+        languages.add( "aspectj" );
+        languages.add( "csharp" );
+        languages.add( "groovy" );
+        instance.configureArchetypeCreation(
             mavenProject,
             Boolean.TRUE,
             commandLineProperties,
@@ -415,24 +418,24 @@ extends AbstractMojoTestCase
             languages
         );
 
-        Properties properties = loadProperties ( propertyFile );
+        Properties properties = loadProperties( propertyFile );
 
-        assertEquals (
+        assertEquals(
             "org.apache.maven.archetypes2",
-            properties.getProperty ( Constants.ARCHETYPE_GROUP_ID )
+            properties.getProperty( Constants.ARCHETYPE_GROUP_ID )
         );
-        assertEquals (
+        assertEquals(
             "maven-archetype-test2",
-            properties.getProperty ( Constants.ARCHETYPE_ARTIFACT_ID )
+            properties.getProperty( Constants.ARCHETYPE_ARTIFACT_ID )
         );
-        assertEquals ( "1.0.2", properties.getProperty ( Constants.ARCHETYPE_VERSION ) );
-        assertEquals ( "some.group.id2", properties.getProperty ( Constants.GROUP_ID ) );
-        assertEquals ( "some-artifact-id2", properties.getProperty ( Constants.ARTIFACT_ID ) );
-        assertEquals ( "1.0.2", properties.getProperty ( Constants.VERSION ) );
-        assertEquals ( "org.codehaus", properties.getProperty ( Constants.PACKAGE ) );
-        assertEquals ( "some.value", properties.getProperty ( "aProperty" ) );
+        assertEquals( "1.0.2", properties.getProperty( Constants.ARCHETYPE_VERSION ) );
+        assertEquals( "some.group.id2", properties.getProperty( Constants.GROUP_ID ) );
+        assertEquals( "some-artifact-id2", properties.getProperty( Constants.ARTIFACT_ID ) );
+        assertEquals( "1.0.2", properties.getProperty( Constants.VERSION ) );
+        assertEquals( "org.codehaus", properties.getProperty( Constants.PACKAGE ) );
+        assertEquals( "some.value", properties.getProperty( "aProperty" ) );
 
-        assertEquals ( 8, properties.size () );
+        assertEquals( 8, properties.size() );
     }
 // Commented out if using defaults to all values => change the prompt question order
 //    public void testInteractiveModePropertyFileMissing ()
@@ -507,105 +510,113 @@ extends AbstractMojoTestCase
 //        assertEquals ( 7, properties.size () );
 //    }
 
-    protected void tearDown ()
-    throws Exception
+    protected void tearDown()
+        throws
+        Exception
     {
-        super.tearDown ();
+        super.tearDown();
     }
 
-    protected void setUp ()
-    throws Exception
+    protected void setUp()
+        throws
+        Exception
     {
-        super.setUp ();
+        super.setUp();
 
         localRepository =
-            new DefaultArtifactRepository (
+            new DefaultArtifactRepository(
                 "local",
-                new File ( getBasedir (), "target/test-classes/repositories/local" ).toURI ()
-                .toString (),
-                new DefaultRepositoryLayout ()
+                new File( getBasedir(), "target/test-classes/repositories/local" ).toURI()
+                    .toString(),
+                new DefaultRepositoryLayout()
             );
 
         repositories =
-            Arrays.asList (
+            Arrays.asList(
                 new ArtifactRepository[]
-                {
-                    new DefaultArtifactRepository (
-                        "central",
-                        new File ( getBasedir (), "target/test-classes/repositories/central" )
-                        .toURI ().toString (),
-                        new DefaultRepositoryLayout ()
-                    )
-                }
+                    {
+                        new DefaultArtifactRepository(
+                            "central",
+                            new File( getBasedir(), "target/test-classes/repositories/central" )
+                                .toURI().toString(),
+                            new DefaultRepositoryLayout()
+                        )
+                    }
             );
     }
 
-    private void copy ( final File in, final File out )
-    throws IOException
+    private void copy( final File in,
+                       final File out )
+        throws
+        IOException
     {
-        assertTrue ( !out.exists () || out.delete () );
-        assertFalse ( out.exists () );
-        IOUtil.copy ( new FileReader ( in ), new FileWriter ( out ) );
-        assertTrue ( out.exists () );
-        assertTrue ( in.exists () );
+        assertTrue( !out.exists() || out.delete() );
+        assertFalse( out.exists() );
+        IOUtil.copy( new FileReader( in ), new FileWriter( out ) );
+        assertTrue( out.exists() );
+        assertTrue( in.exists() );
     }
 
-    private void instanceDefined ( DefaultArchetypeCreationConfigurator instance )
-    throws IllegalAccessException
+    private void instanceDefined( DefaultArchetypeCreationConfigurator instance )
+        throws
+        IllegalAccessException
     {
-        assertNotNull ( instance );
-        assertNotNull ( getVariableValueFromObject ( instance, "archetypeCreationQueryer" ) );
-        assertNotNull ( getVariableValueFromObject ( instance, "archetypeFactory" ) );
-        assertNotNull ( getVariableValueFromObject ( instance, "archetypePropertiesManager" ) );
-        assertNotNull ( getVariableValueFromObject ( instance, "archetypeFilesResolver" ) );
+        assertNotNull( instance );
+        assertNotNull( getVariableValueFromObject( instance, "archetypeCreationQueryer" ) );
+        assertNotNull( getVariableValueFromObject( instance, "archetypeFactory" ) );
+        assertNotNull( getVariableValueFromObject( instance, "archetypePropertiesManager" ) );
+        assertNotNull( getVariableValueFromObject( instance, "archetypeFilesResolver" ) );
     }
 
-    private MavenProject loadProject ( final File projectFile )
-    throws ArtifactNotFoundException,
+    private MavenProject loadProject( final File projectFile )
+        throws
+        ArtifactNotFoundException,
         Exception,
         ArtifactResolutionException,
         ProjectBuildingException
     {
-        MavenProjectBuilder builder = (MavenProjectBuilder) lookup ( MavenProjectBuilder.ROLE );
-        return builder.buildWithDependencies ( projectFile, localRepository, null );
+        MavenProjectBuilder builder = (MavenProjectBuilder) lookup( MavenProjectBuilder.ROLE );
+        return builder.buildWithDependencies( projectFile, localRepository, null );
     }
 
-    private Properties loadProperties ( File propertyFile )
-    throws IOException, FileNotFoundException
+    private Properties loadProperties( File propertyFile )
+        throws
+        IOException,
+        FileNotFoundException
     {
-        Properties properties = new Properties ();
-        properties.load ( new FileInputStream ( propertyFile ) );
+        Properties properties = new Properties();
+        properties.load( new FileInputStream( propertyFile ) );
         return properties;
     }
 
-    private File getProjectFile ( String project )
+    private File getProjectFile( String project )
     {
-        return new File ( getBasedir (), "target/test-classes/projects/" + project + "/pom.xml" );
+        return new File( getBasedir(), "target/test-classes/projects/" + project + "/pom.xml" );
     }
 
-    private File getProjectSampleFile ( String project )
+    private File getProjectSampleFile( String project )
     {
         return
-            new File (
-                getBasedir (),
+            new File(
+                getBasedir(),
                 "target/test-classes/projects/" + project + "/pom.xml.sample"
             );
     }
 
-    private File getPropertiesFile ( String project )
+    private File getPropertiesFile( String project )
     {
         return
-            new File (
-                getBasedir (),
+            new File(
+                getBasedir(),
                 "target/test-classes/projects/" + project + "/archetype.properties"
             );
     }
 
-    private File getPropertiesSampleFile ( final String project )
+    private File getPropertiesSampleFile( final String project )
     {
         File propertyFileSample =
-            new File (
-                getBasedir (),
+            new File(
+                getBasedir(),
                 "target/test-classes/projects/" + project + "/archetype.properties.sample"
             );
         return propertyFileSample;

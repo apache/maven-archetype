@@ -41,15 +41,16 @@ import java.util.List;
 
 public interface ArchetypeGenerator
 {
-    String ROLE = ArchetypeGenerator.class.getName ();
+    String ROLE = ArchetypeGenerator.class.getName();
 
-    void generateArchetype (
+    void generateArchetype(
         File propertyFile,
         ArtifactRepository localRepository,
         List repositories,
         String basedir
     )
-    throws IOException,
+        throws
+        IOException,
         ArchetypeNotDefined,
         UnknownArchetype,
         ArchetypeNotConfigured,

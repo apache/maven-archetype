@@ -20,23 +20,25 @@
 package org.apache.maven.archetype.exception;
 
 public class OutputFileExists
-extends Exception
+    extends Exception
 {
-    public OutputFileExists ()
-    { }
-
-    public OutputFileExists ( String msg )
+    public OutputFileExists()
     {
-        super ( msg );
     }
 
-    public OutputFileExists ( Throwable cause )
+    public OutputFileExists( String msg )
     {
-        super ( cause );
+        super( msg );
     }
 
-    public OutputFileExists ( String msg, Throwable cause )
+    public OutputFileExists( Throwable cause )
     {
-        super ( msg, cause );
+        super( cause );
+    }
+
+    public OutputFileExists( String msg,
+                             Throwable cause )
+    {
+        super( msg, cause );
     }
 }
