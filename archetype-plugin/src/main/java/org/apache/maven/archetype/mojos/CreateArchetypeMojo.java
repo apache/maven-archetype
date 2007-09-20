@@ -33,62 +33,58 @@ import java.util.List;
 /**
  * Create an archetype from a project.
  *
- * @author           rafale
- * @requiresProject  true
- * @goal             create-archetype
+ * @author rafale
+ * @requiresProject true
+ * @goal create-archetype
  */
 public class CreateArchetypeMojo
-extends AbstractMojo
+    extends AbstractMojo
 {
-    /**
-     * @component
-     */
+    /** @component */
     ArchetypeRegistryManager archetypeRegistryManager;
 
-    /**
-     * @component  role-hint="fileset"
-     */
+    /** @component role-hint="fileset" */
     ArchetypeCreator creator;
 
     /**
      * File extensions which are checked for project's text files (vs binary files).
      *
-     * @parameter  expression="${archetype.filteredExtentions}"
+     * @parameter expression="${archetype.filteredExtentions}"
      */
     private String archetypeFilteredExtentions;
 
     /**
      * Directory names which are checked for project's sources main package.
      *
-     * @parameter  expression="${archetype.languages}"
+     * @parameter expression="${archetype.languages}"
      */
     private String archetypeLanguages;
 
     /**
      * The location of the registry file.
      *
-     * @parameter  expression="${user.home}/.m2/archetype.xml"
+     * @parameter expression="${user.home}/.m2/archetype.xml"
      */
     private File archetypeRegistryFile;
 
     /**
      * Velocity templates encoding.
      *
-     * @parameter  default-value="UTF-8" expression="${archetype.encoding}"
+     * @parameter default-value="UTF-8" expression="${archetype.encoding}"
      */
     private String defaultEncoding;
 
     /**
      * Ignore the replica creation.
      *
-     * @parameter  expression="${archetype.ignoreReplica}"
+     * @parameter expression="${archetype.ignoreReplica}"
      */
     private boolean ignoreReplica = true;
 
     /**
      * Create a partial archetype.
      *
-     * @parameter  expression="${archetype.partialArchetype}"
+     * @parameter expression="${archetype.partialArchetype}"
      */
     private boolean partialArchetype = false;
 
@@ -96,7 +92,7 @@ extends AbstractMojo
      * Create pom's velocity templates with CDATA preservasion. This uses the String replaceAll
      * method and risk to have some overly replacement capabilities (beware of '1.0' value).
      *
-     * @parameter  expression="${archetype.preserveCData}"
+     * @parameter expression="${archetype.preserveCData}"
      */
     private boolean preserveCData = false;
 
@@ -104,14 +100,14 @@ extends AbstractMojo
      * Poms in archetype are created with their initial parent.
      * This property is ignored when preserveCData is true.
      *
-     * @parameter  expression="${archetype.keepParent}"
+     * @parameter expression="${archetype.keepParent}"
      */
     private boolean keepParent = true;
 
     /**
      * The maven Project to create an archetype from.
      *
-     * @parameter  expression="${project}"
+     * @parameter expression="${project}"
      * @required
      * @readonly
      */
@@ -120,30 +116,32 @@ extends AbstractMojo
     /**
      * The property file that holds the plugin configuration.
      *
-     * @parameter  default-value="target/archetype.properties" expression="${archetype.properties}"
+     * @parameter default-value="target/archetype.properties" expression="${archetype.properties}"
      */
     private File propertyFile;
 
-    public void execute ()
-    throws MojoExecutionException, MojoFailureException
+    public void execute()
+        throws
+        MojoExecutionException,
+        MojoFailureException
     {
         try
         {
-            if (propertyFile != null)
+            if ( propertyFile != null )
             {
                 propertyFile.getParentFile().mkdirs();
             }
 
             List languages =
-                archetypeRegistryManager.getLanguages ( archetypeLanguages, archetypeRegistryFile );
+                archetypeRegistryManager.getLanguages( archetypeLanguages, archetypeRegistryFile );
 
             List filtereds =
-                archetypeRegistryManager.getFilteredExtensions (
+                archetypeRegistryManager.getFilteredExtensions(
                     archetypeFilteredExtentions,
                     archetypeRegistryFile
                 );
 
-            creator.createArchetype (
+            creator.createArchetype(
                 project,
                 propertyFile,
                 languages,
@@ -158,7 +156,7 @@ extends AbstractMojo
         }
         catch ( Exception ex )
         {
-            throw new MojoExecutionException ( ex.getMessage (), ex );
+            throw new MojoExecutionException( ex.getMessage(), ex );
         }
     }
 }

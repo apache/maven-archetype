@@ -26,21 +26,26 @@ import org.apache.maven.plugin.MojoFailureException;
 /**
  * Creates sample archetype from current project.
  * It delegates to the two mojos of the create lifecycle: configure-creation, create-archetype
- * @author           rafale
- * @requiresProject  true
- * @goal             create-from-project
- * @execute          phase="generate-sources" lifecycle="create"
+ *
+ * @author rafale
+ * @requiresProject true
+ * @goal create-from-project
+ * @execute phase="generate-sources" lifecycle="create"
  */
 public class CreateArchetypeFromProjectMojo
-extends AbstractMojo
+    extends AbstractMojo
 {
     /**
      * dummy parameter used to fulfill the maven-plugin-plugin
+     *
      * @parameter
      */
     private String dummy;
 
-    public void execute ()
-    throws MojoExecutionException, MojoFailureException
-    { }
+    public void execute()
+        throws
+        MojoExecutionException,
+        MojoFailureException
+    {
+    }
 }

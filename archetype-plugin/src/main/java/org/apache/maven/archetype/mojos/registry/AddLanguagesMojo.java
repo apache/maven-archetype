@@ -40,93 +40,97 @@ import java.util.List;
  * The registered language directories are used to discriminate
  * packaging directories from unpackaged ones based on their name
  * during create-from-project.
- * @author           rafale
- * @requiresProject  false
- * @goal             add-languages
+ *
+ * @author rafale
+ * @requiresProject false
+ * @goal add-languages
  */
 public class AddLanguagesMojo
-extends AbstractMojo
+    extends AbstractMojo
 {
-    /**
-     * @component
-     */
+    /** @component */
     ArchetypeRegistryManager archetypeRegistryManager;
 
     /**
      * The language directory to add to the registry.
-     *
+     * <p/>
      * This option is mutually exclusive with language directories.
-     * @parameter  expression="${language}"
+     *
+     * @parameter expression="${language}"
      */
     String language;
 
     /**
      * The language directories to add to the registry: lang1,lang2,...
-     *
+     * <p/>
      * This option is mutually exclusive with language directory.
-     * @parameter  expression="${languages}"
+     *
+     * @parameter expression="${languages}"
      */
     String languages;
 
     /**
      * The location of the registry file.
-     * @parameter  expression="${user.home}/.m2/archetype.xml"
+     *
+     * @parameter expression="${user.home}/.m2/archetype.xml"
      */
     private File archetypeRegistryFile;
 
-    public void execute ()
-    throws MojoExecutionException, MojoFailureException
+    public void execute()
+        throws
+        MojoExecutionException,
+        MojoFailureException
     {
-        if ( StringUtils.isEmpty ( language ) && StringUtils.isEmpty ( languages ) )
+        if ( StringUtils.isEmpty( language ) && StringUtils.isEmpty( languages ) )
         {
-            throw new MojoFailureException ( "-Dlanguage or -Dlanguages must be set" );
+            throw new MojoFailureException( "-Dlanguage or -Dlanguages must be set" );
         }
-        else if ( StringUtils.isNotEmpty ( language ) && StringUtils.isNotEmpty ( languages ) )
+        else if ( StringUtils.isNotEmpty( language ) && StringUtils.isNotEmpty( languages ) )
         {
-            throw new MojoFailureException ( "Only one of -Dlanguage or -Dlanguages can be set" );
+            throw new MojoFailureException( "Only one of -Dlanguage or -Dlanguages can be set" );
         }
 
         try
         {
-            List languagesToAdd = new ArrayList ();
-            if ( StringUtils.isNotEmpty ( language ) )
+            List languagesToAdd = new ArrayList();
+            if ( StringUtils.isNotEmpty( language ) )
             {
-                languagesToAdd.add ( language );
+                languagesToAdd.add( language );
             }
             else
             {
-                languagesToAdd.addAll ( Arrays.asList ( StringUtils.split ( languages, "," ) ) );
+                languagesToAdd.addAll( Arrays.asList( StringUtils.split( languages, "," ) ) );
             }
 
             ArchetypeRegistry registry;
             try
             {
-                registry = archetypeRegistryManager.readArchetypeRegistry(archetypeRegistryFile);
+                registry = archetypeRegistryManager.readArchetypeRegistry( archetypeRegistryFile );
             }
-            catch (FileNotFoundException ex)
+            catch ( FileNotFoundException ex )
             {
                 registry = archetypeRegistryManager.getDefaultArchetypeRegistry();
             }
 
-            Iterator languagesToAddIterator = languagesToAdd.iterator ();
-            while ( languagesToAddIterator.hasNext () )
+            Iterator languagesToAddIterator = languagesToAdd.iterator();
+            while ( languagesToAddIterator.hasNext() )
             {
-                String languageToAdd = (String) languagesToAddIterator.next ();
-                if ( registry.getLanguages ().contains ( languageToAdd ) )
+                String languageToAdd = (String) languagesToAddIterator.next();
+                if ( registry.getLanguages().contains( languageToAdd ) )
                 {
-                    getLog ().debug ( "Language " + languageToAdd + " already exists" );
+                    getLog().debug( "Language " + languageToAdd + " already exists" );
                 }
                 else
                 {
-                    registry.addLanguage ( languageToAdd.trim () );
-                    getLog ().debug ( "Language " + languageToAdd + " added" );
+                    registry.addLanguage( languageToAdd.trim() );
+                    getLog().debug( "Language " + languageToAdd + " added" );
                 }
             }
-            archetypeRegistryManager.writeArchetypeRegistry ( archetypeRegistryFile, registry );
+            archetypeRegistryManager.writeArchetypeRegistry( archetypeRegistryFile, registry );
         }
         catch ( Exception ex )
         {
-            throw new MojoExecutionException ( ex.getMessage (), ex );
+            throw new MojoExecutionException( ex.getMessage(), ex );
         }
     }
 }

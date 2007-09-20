@@ -32,37 +32,38 @@ import java.io.File;
 
 /**
  * Create a jar archive from an archetype directory.
- * @author           rafale
- * @goal             jar
- * @phase            package
+ *
+ * @author rafale
+ * @goal jar
+ * @phase package
  * @requiresProject
  */
 public class JarMojo
-extends AbstractMojo
+    extends AbstractMojo
 {
     /**
      * Directory containing the classes.
      *
-     * @parameter  expression="${project.build.outputDirectory}"
+     * @parameter expression="${project.build.outputDirectory}"
      * @required
      */
     private File archetypeDirectory;
 
     /**
      * The maven archive configuration to use.
-     *
+     * <p/>
      * <p>See <a
      * href="http://maven.apache.org/ref/current/maven-archiver/apidocs/org/apache/maven/archiver/MavenArchiveConfiguration.html">
      * the Javadocs for MavenArchiveConfiguration</a>.</p>
      *
      * @parameter
      */
-    private MavenArchiveConfiguration archive = new MavenArchiveConfiguration ();
+    private MavenArchiveConfiguration archive = new MavenArchiveConfiguration();
 
     /**
      * Name of the generated JAR.
      *
-     * @parameter  alias="jarName" expression="${project.build.finalName}"
+     * @parameter alias="jarName" expression="${project.build.finalName}"
      * @required
      */
     private String finalName;
@@ -70,7 +71,7 @@ extends AbstractMojo
     /**
      * The Jar archiver.
      *
-     * @parameter  expression="${component.org.codehaus.plexus.archiver.Archiver#jar}"
+     * @parameter expression="${component.org.codehaus.plexus.archiver.Archiver#jar}"
      * @required
      */
     private JarArchiver jarArchiver;
@@ -78,7 +79,7 @@ extends AbstractMojo
     /**
      * Directory containing the generated JAR.
      *
-     * @parameter  expression="${project.build.directory}"
+     * @parameter expression="${project.build.directory}"
      * @required
      */
     private File outputDirectory;
@@ -86,55 +87,59 @@ extends AbstractMojo
     /**
      * The maven project.
      *
-     * @parameter  expression="${project}"
+     * @parameter expression="${project}"
      * @required
      * @readonly
      */
     private MavenProject project;
 
-    protected static File getJarFile ( File basedir, String finalName )
+    protected static File getJarFile( File basedir,
+                                      String finalName )
     {
-        return new File ( basedir, finalName + ".jar" );
+        return new File( basedir, finalName + ".jar" );
     }
 
-    public void execute ()
-    throws MojoExecutionException, MojoFailureException
+    public void execute()
+        throws
+        MojoExecutionException,
+        MojoFailureException
     {
-        File jarFile = createArchive ();
-        project.getArtifact ().setFile ( jarFile );
+        File jarFile = createArchive();
+        project.getArtifact().setFile( jarFile );
     }
 
-    private File createArchive ()
-    throws MojoExecutionException
+    private File createArchive()
+        throws
+        MojoExecutionException
     {
-        File jarFile = getJarFile ( outputDirectory, finalName );
+        File jarFile = getJarFile( outputDirectory, finalName );
 
-        MavenArchiver archiver = new MavenArchiver ();
+        MavenArchiver archiver = new MavenArchiver();
 
-        archiver.setArchiver ( jarArchiver );
+        archiver.setArchiver( jarArchiver );
 
-        archiver.setOutputFile ( jarFile );
+        archiver.setOutputFile( jarFile );
 
-        archive.setForced ( true );
+        archive.setForced( true );
 
         try
         {
-            if ( !archetypeDirectory.exists () )
+            if ( !archetypeDirectory.exists() )
             {
-                getLog ().warn ( "JAR will be empty - no content was marked for inclusion!" );
+                getLog().warn( "JAR will be empty - no content was marked for inclusion!" );
             }
             else
             {
-                archiver.getArchiver ().addDirectory ( archetypeDirectory );
+                archiver.getArchiver().addDirectory( archetypeDirectory );
             }
 
-            archiver.createArchive ( project, archive );
+            archiver.createArchive( project, archive );
 
             return jarFile;
         }
         catch ( Exception e )
         {
-            throw new MojoExecutionException ( "Error assembling JAR", e );
+            throw new MojoExecutionException( "Error assembling JAR", e );
         }
     }
 }

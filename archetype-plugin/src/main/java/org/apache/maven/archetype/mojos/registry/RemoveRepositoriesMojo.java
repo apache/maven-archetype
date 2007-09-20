@@ -39,118 +39,122 @@ import java.util.List;
 /**
  * Removes one or more repositories from the registry.
  * The registered repositories are searched to find archetypes of registered groups.
- * @author           rafale
- * @requiresProject  false
- * @goal             remove-repositories
+ *
+ * @author rafale
+ * @requiresProject false
+ * @goal remove-repositories
  */
 public class RemoveRepositoriesMojo
-extends AbstractMojo
+    extends AbstractMojo
 {
-    /**
-     * @component
-     */
+    /** @component */
     ArchetypeRegistryManager archetypeRegistryManager;
 
     /**
      * The repositories to remove from the registry: repo1Id=repo1Url,repo2Id=repo2Url,..
-     *
+     * <p/>
      * This option is mutually exclusive with repositoryId.
-     * @parameter  expression="${repositories}"
+     *
+     * @parameter expression="${repositories}"
      */
     String repositories;
 
     /**
      * The Id of the repository to remove from the registry.
-     *
+     * <p/>
      * This option is mutually exclusive with repositories
-     * @parameter  expression="${repositoryId}"
+     *
+     * @parameter expression="${repositoryId}"
      */
     String repositoryId;
 
     /**
      * The location of the registry file.
-     * @parameter  expression="${user.home}/.m2/archetype.xml"
+     *
+     * @parameter expression="${user.home}/.m2/archetype.xml"
      */
     private File archetypeRegistryFile;
 
-    public void execute ()
-    throws MojoExecutionException, MojoFailureException
+    public void execute()
+        throws
+        MojoExecutionException,
+        MojoFailureException
     {
-        if ( StringUtils.isEmpty ( repositoryId ) && StringUtils.isEmpty ( repositories ) )
+        if ( StringUtils.isEmpty( repositoryId ) && StringUtils.isEmpty( repositories ) )
         {
-            throw new MojoFailureException ( " -DrepositoryId or -Drepositories must be set" );
+            throw new MojoFailureException( " -DrepositoryId or -Drepositories must be set" );
         }
         else if (
-            StringUtils.isNotEmpty ( repositoryId )
-            && StringUtils.isNotEmpty ( repositories )
-        )
+            StringUtils.isNotEmpty( repositoryId )
+                && StringUtils.isNotEmpty( repositories )
+            )
         {
-            throw new MojoFailureException (
+            throw new MojoFailureException(
                 "Only one of -DrepositoryId or -Drepositories can be set"
             );
         }
 
         try
         {
-            List repositoriesToRemove = new ArrayList ();
-            if ( StringUtils.isNotEmpty ( repositoryId ) )
+            List repositoriesToRemove = new ArrayList();
+            if ( StringUtils.isNotEmpty( repositoryId ) )
             {
-                ArchetypeRepository repository = new ArchetypeRepository ();
+                ArchetypeRepository repository = new ArchetypeRepository();
 
-                repository.setId ( repositoryId );
-                repository.setUrl ( "EMPTY" );
+                repository.setId( repositoryId );
+                repository.setUrl( "EMPTY" );
 
-                repositoriesToRemove.add ( repository );
+                repositoriesToRemove.add( repository );
             }
             else
             {
                 Iterator repositoriesDefinitions =
-                    Arrays.asList ( StringUtils.split ( repositories, "," ) ).iterator ();
-                while ( repositoriesDefinitions.hasNext () )
+                    Arrays.asList( StringUtils.split( repositories, "," ) ).iterator();
+                while ( repositoriesDefinitions.hasNext() )
                 {
-                    String repositoryDefinition = (String) repositoriesDefinitions.next ();
+                    String repositoryDefinition = (String) repositoriesDefinitions.next();
 
-                    ArchetypeRepository repository = new ArchetypeRepository ();
+                    ArchetypeRepository repository = new ArchetypeRepository();
 
-                    repository.setId ( repositoryDefinition );
-                    repository.setUrl ( "EMPTY" );
+                    repository.setId( repositoryDefinition );
+                    repository.setUrl( "EMPTY" );
 
-                    repositoriesToRemove.add ( repository );
+                    repositoriesToRemove.add( repository );
                 }
             }
 
             ArchetypeRegistry registry;
             try
             {
-                registry = archetypeRegistryManager.readArchetypeRegistry(archetypeRegistryFile);
+                registry = archetypeRegistryManager.readArchetypeRegistry( archetypeRegistryFile );
             }
-            catch (FileNotFoundException ex)
+            catch ( FileNotFoundException ex )
             {
                 registry = archetypeRegistryManager.getDefaultArchetypeRegistry();
             }
 
-            Iterator repositoriesToRemoveIterator = repositoriesToRemove.iterator ();
-            while ( repositoriesToRemoveIterator.hasNext () )
+            Iterator repositoriesToRemoveIterator = repositoriesToRemove.iterator();
+            while ( repositoriesToRemoveIterator.hasNext() )
             {
                 ArchetypeRepository repositoryToRemove =
-                    (ArchetypeRepository) repositoriesToRemoveIterator.next ();
-                if ( registry.getArchetypeRepositories ().contains ( repositoryToRemove ) )
+                    (ArchetypeRepository) repositoriesToRemoveIterator.next();
+                if ( registry.getArchetypeRepositories().contains( repositoryToRemove ) )
                 {
-                    registry.removeArchetypeRepository ( repositoryToRemove );
-                    getLog ().debug ( "Repository " + repositoryToRemove.getId () + " removed" );
+                    registry.removeArchetypeRepository( repositoryToRemove );
+                    getLog().debug( "Repository " + repositoryToRemove.getId() + " removed" );
                 }
                 else
                 {
-                    getLog ().debug (
-                        "Repository " + repositoryToRemove.getId () + " doesn't exist"
+                    getLog().debug(
+                        "Repository " + repositoryToRemove.getId() + " doesn't exist"
                     );
                 }
             }
-            archetypeRegistryManager.writeArchetypeRegistry ( archetypeRegistryFile, registry );
+            archetypeRegistryManager.writeArchetypeRegistry( archetypeRegistryFile, registry );
         }
         catch ( Exception ex )
         {
-            throw new MojoExecutionException ( ex.getMessage (), ex );
+            throw new MojoExecutionException( ex.getMessage(), ex );
         }
     }
 }

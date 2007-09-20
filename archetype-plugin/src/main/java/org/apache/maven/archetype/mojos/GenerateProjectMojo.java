@@ -43,7 +43,7 @@ import java.util.Properties;
 public class GenerateProjectMojo
     extends AbstractMojo
     implements ContextEnabled
-    
+
 {
     /** @component */
     ArchetypeRegistryManager archetypeRegistryManager;

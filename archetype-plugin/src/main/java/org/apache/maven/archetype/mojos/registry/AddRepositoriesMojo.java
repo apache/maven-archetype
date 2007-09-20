@@ -39,131 +39,136 @@ import java.util.List;
 /**
  * Adds one or more repositories in the registry.
  * The registered repositories are searched to find archetypes of registered groups.
- * @author           rafale
- * @requiresProject  false
- * @goal             add-repositories
+ *
+ * @author rafale
+ * @requiresProject false
+ * @goal add-repositories
  */
 public class AddRepositoriesMojo
-extends AbstractMojo
+    extends AbstractMojo
 {
-    /**
-     * @component
-     */
+    /** @component */
     ArchetypeRegistryManager archetypeRegistryManager;
 
     /**
      * The repositories to add to the registry: repo1Id=repo1Url,repo2Id=repo2Url,..
-     *
+     * <p/>
      * This option is mutually exclusive with repositoryId and repositoryUrl.
-     * @parameter  expression="${repositories}"
+     *
+     * @parameter expression="${repositories}"
      */
     String repositories;
 
     /**
      * The Id of the repository to add to the registry.
-     *
+     * <p/>
      * This option is mutually exclusive with repositories
-     * @parameter  expression="${repositoryId}"
+     *
+     * @parameter expression="${repositoryId}"
      */
     String repositoryId;
 
     /**
      * The URL of the repository to add to the registry.
-     *
+     * <p/>
      * This option is mutually exclusive with repositories
-     * @parameter  expression="${repositoryUrl}"
+     *
+     * @parameter expression="${repositoryUrl}"
      */
     String repositoryUrl;
 
     /**
      * The location of the registry file.
-     * @parameter  expression="${user.home}/.m2/archetype.xml"
+     *
+     * @parameter expression="${user.home}/.m2/archetype.xml"
      */
     private File archetypeRegistryFile;
 
-    public void execute ()
-    throws MojoExecutionException, MojoFailureException
+    public void execute()
+        throws
+        MojoExecutionException,
+        MojoFailureException
     {
-        if ( StringUtils.isEmpty ( repositoryId ) && StringUtils.isEmpty ( repositories ) )
+        if ( StringUtils.isEmpty( repositoryId ) && StringUtils.isEmpty( repositories ) )
         {
-            throw new MojoFailureException (
+            throw new MojoFailureException(
                 " (-DrepositoryId and -DrepositoryUrl) or -Drepositories must be set"
             );
         }
         else if (
-            StringUtils.isNotEmpty ( repositoryId )
-            && StringUtils.isNotEmpty ( repositories )
-        )
+            StringUtils.isNotEmpty( repositoryId )
+                && StringUtils.isNotEmpty( repositories )
+            )
         {
-            throw new MojoFailureException (
+            throw new MojoFailureException(
                 "Only one of (-DrepositoryId and -DrepositoryUrl) or -Drepositories can be set"
             );
         }
 
         try
         {
-            List repositoriesToAdd = new ArrayList ();
-            if ( StringUtils.isNotEmpty ( repositoryId )
-                && StringUtils.isNotEmpty ( repositoryUrl )
-            )
+            List repositoriesToAdd = new ArrayList();
+            if ( StringUtils.isNotEmpty( repositoryId )
+                && StringUtils.isNotEmpty( repositoryUrl )
+                )
             {
-                ArchetypeRepository repository = new ArchetypeRepository ();
+                ArchetypeRepository repository = new ArchetypeRepository();
 
-                repository.setId ( repositoryId );
-                repository.setUrl ( repositoryUrl );
+                repository.setId( repositoryId );
+                repository.setUrl( repositoryUrl );
 
-                repositoriesToAdd.add ( repository );
+                repositoriesToAdd.add( repository );
             }
             else
             {
                 Iterator repositoriesDefinitions =
-                    Arrays.asList ( StringUtils.split ( repositories, "," ) ).iterator ();
-                while ( repositoriesDefinitions.hasNext () )
+                    Arrays.asList( StringUtils.split( repositories, "," ) ).iterator();
+                while ( repositoriesDefinitions.hasNext() )
                 {
-                    String repositoryDefinition = (String) repositoriesDefinitions.next ();
+                    String repositoryDefinition = (String) repositoriesDefinitions.next();
 
                     String[] repositoryDefinitionParts =
-                        StringUtils.split ( repositoryDefinition, "=" );
+                        StringUtils.split( repositoryDefinition, "=" );
 
-                    ArchetypeRepository repository = new ArchetypeRepository ();
+                    ArchetypeRepository repository = new ArchetypeRepository();
 
-                    repository.setId ( repositoryDefinitionParts[0] );
-                    repository.setUrl ( repositoryDefinitionParts[1] );
+                    repository.setId( repositoryDefinitionParts[0] );
+                    repository.setUrl( repositoryDefinitionParts[1] );
 
-                    repositoriesToAdd.add ( repository );
+                    repositoriesToAdd.add( repository );
                 }
             }
 
             ArchetypeRegistry registry;
             try
             {
-                registry = archetypeRegistryManager.readArchetypeRegistry(archetypeRegistryFile);
+                registry = archetypeRegistryManager.readArchetypeRegistry( archetypeRegistryFile );
             }
-            catch (FileNotFoundException ex)
+            catch ( FileNotFoundException ex )
             {
                 registry = archetypeRegistryManager.getDefaultArchetypeRegistry();
             }
 
-            Iterator repositoriesToAddIterator = repositoriesToAdd.iterator ();
-            while ( repositoriesToAddIterator.hasNext () )
+            Iterator repositoriesToAddIterator = repositoriesToAdd.iterator();
+            while ( repositoriesToAddIterator.hasNext() )
             {
                 ArchetypeRepository repositoryToAdd =
-                    (ArchetypeRepository) repositoriesToAddIterator.next ();
-                if ( registry.getArchetypeRepositories ().contains ( repositoryToAdd ) )
+                    (ArchetypeRepository) repositoriesToAddIterator.next();
+                if ( registry.getArchetypeRepositories().contains( repositoryToAdd ) )
                 {
-                    getLog ().debug ( "Repository " + repositoryToAdd + " already exists" );
+                    getLog().debug( "Repository " + repositoryToAdd + " already exists" );
                 }
                 else
                 {
-                    registry.addArchetypeRepository ( repositoryToAdd );
-                    getLog ().debug ( "Repository " + repositoryToAdd + " added" );
+                    registry.addArchetypeRepository( repositoryToAdd );
+                    getLog().debug( "Repository " + repositoryToAdd + " added" );
                 }
             }
-            archetypeRegistryManager.writeArchetypeRegistry ( archetypeRegistryFile, registry );
+            archetypeRegistryManager.writeArchetypeRegistry( archetypeRegistryFile, registry );
         }
         catch ( Exception ex )
         {
-            throw new MojoExecutionException ( ex.getMessage (), ex );
+            throw new MojoExecutionException( ex.getMessage(), ex );
         }
     }
 }

@@ -40,93 +40,97 @@ import java.util.List;
  * The registered filtered extensions are used to discriminate
  * text files from binary files based on their file extension
  * during create-from-project.
- * @author           rafale
- * @requiresProject  false
- * @goal             add-extensions
+ *
+ * @author rafale
+ * @requiresProject false
+ * @goal add-extensions
  */
 public class AddExtensionsMojo
-extends AbstractMojo
+    extends AbstractMojo
 {
-    /**
-     * @component
-     */
+    /** @component */
     ArchetypeRegistryManager archetypeRegistryManager;
 
     /**
      * The filtered extension to add to the registry.
-     *
+     * <p/>
      * This option is mutually exclusive with extensions.
-     * @parameter  expression="${extension}"
+     *
+     * @parameter expression="${extension}"
      */
     String extension;
 
     /**
      * The filtered extensions to add to the registry: ext1,ext2,...
-     *
+     * <p/>
      * This option is mutually exclusive with extension.
-     * @parameter  expression="${extensions}"
+     *
+     * @parameter expression="${extensions}"
      */
     String extensions;
 
     /**
      * The location of the registry file.
-     * @parameter  expression="${user.home}/.m2/archetype.xml"
+     *
+     * @parameter expression="${user.home}/.m2/archetype.xml"
      */
     private File archetypeRegistryFile;
 
-    public void execute ()
-    throws MojoExecutionException, MojoFailureException
+    public void execute()
+        throws
+        MojoExecutionException,
+        MojoFailureException
     {
-        if ( StringUtils.isEmpty ( extension ) && StringUtils.isEmpty ( extensions ) )
+        if ( StringUtils.isEmpty( extension ) && StringUtils.isEmpty( extensions ) )
         {
-            throw new MojoFailureException ( "-Dextension or -Dextensions must be set" );
+            throw new MojoFailureException( "-Dextension or -Dextensions must be set" );
         }
-        else if ( StringUtils.isNotEmpty ( extension ) && StringUtils.isNotEmpty ( extensions ) )
+        else if ( StringUtils.isNotEmpty( extension ) && StringUtils.isNotEmpty( extensions ) )
         {
-            throw new MojoFailureException ( "Only one of -Dextension or -Dextensions can be set" );
+            throw new MojoFailureException( "Only one of -Dextension or -Dextensions can be set" );
         }
 
         try
         {
-            List extensionsToAdd = new ArrayList ();
-            if ( StringUtils.isNotEmpty ( extension ) )
+            List extensionsToAdd = new ArrayList();
+            if ( StringUtils.isNotEmpty( extension ) )
             {
-                extensionsToAdd.add ( extension );
+                extensionsToAdd.add( extension );
             }
             else
             {
-                extensionsToAdd.addAll ( Arrays.asList ( StringUtils.split ( extensions, "," ) ) );
+                extensionsToAdd.addAll( Arrays.asList( StringUtils.split( extensions, "," ) ) );
             }
 
             ArchetypeRegistry registry;
             try
             {
-                registry = archetypeRegistryManager.readArchetypeRegistry(archetypeRegistryFile);
+                registry = archetypeRegistryManager.readArchetypeRegistry( archetypeRegistryFile );
             }
-            catch (FileNotFoundException ex)
+            catch ( FileNotFoundException ex )
             {
                 registry = archetypeRegistryManager.getDefaultArchetypeRegistry();
             }
 
-            Iterator extensionsToAddIterator = extensionsToAdd.iterator ();
-            while ( extensionsToAddIterator.hasNext () )
+            Iterator extensionsToAddIterator = extensionsToAdd.iterator();
+            while ( extensionsToAddIterator.hasNext() )
             {
-                String extensionToAdd = (String) extensionsToAddIterator.next ();
-                if ( registry.getFilteredExtensions ().contains ( extensionToAdd ) )
+                String extensionToAdd = (String) extensionsToAddIterator.next();
+                if ( registry.getFilteredExtensions().contains( extensionToAdd ) )
                 {
-                    getLog ().debug ( "Extension " + extensionToAdd + " already exists" );
+                    getLog().debug( "Extension " + extensionToAdd + " already exists" );
                 }
                 else
                 {
-                    registry.addFilteredExtension ( extensionToAdd.trim () );
-                    getLog ().debug ( "Extension " + extensionToAdd + " added" );
+                    registry.addFilteredExtension( extensionToAdd.trim() );
+                    getLog().debug( "Extension " + extensionToAdd + " added" );
                 }
             }
-            archetypeRegistryManager.writeArchetypeRegistry ( archetypeRegistryFile, registry );
+            archetypeRegistryManager.writeArchetypeRegistry( archetypeRegistryFile, registry );
         }
         catch ( Exception ex )
         {
-            throw new MojoExecutionException ( ex.getMessage (), ex );
+            throw new MojoExecutionException( ex.getMessage(), ex );
         }
     }
 }

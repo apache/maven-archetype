@@ -31,11 +31,11 @@
   <packaging>pom</packaging>
   <name>Maven ArchetypeNG - Test - Sibling Dependencies</name>
   <version>1-SNAPSHOT</version>
-  
-  
-    <modules>
-		<module>a</module>
-		<module>b</module>
-   </modules>
-  
+
+
+  <modules>
+    <module>a</module>
+    <module>b</module>
+  </modules>
+
 </project>

@@ -40,93 +40,97 @@ import java.util.List;
  * The registered language directories are used to discriminate
  * packaging directories from unpackaged ones based on their name
  * during create-from-project.
- * @author           rafale
- * @requiresProject  false
- * @goal             remove-languages
+ *
+ * @author rafale
+ * @requiresProject false
+ * @goal remove-languages
  */
 public class RemoveLanguagesMojo
-extends AbstractMojo
+    extends AbstractMojo
 {
-    /**
-     * @component
-     */
+    /** @component */
     ArchetypeRegistryManager archetypeRegistryManager;
 
     /**
      * The language directory to remove from the registry.
-     *
+     * <p/>
      * This option is mutually exclusive with language directories.
-     * @parameter  expression="${language}"
+     *
+     * @parameter expression="${language}"
      */
     String language;
 
     /**
      * The language directories to remove from the registry: lang1,lang2,...
-     *
+     * <p/>
      * This option is mutually exclusive with language directory.
-     * @parameter  expression="${languages}"
+     *
+     * @parameter expression="${languages}"
      */
     String languages;
 
     /**
      * The location of the registry file.
-     * @parameter  expression="${user.home}/.m2/archetype.xml"
+     *
+     * @parameter expression="${user.home}/.m2/archetype.xml"
      */
     private File archetypeRegistryFile;
 
-    public void execute ()
-    throws MojoExecutionException, MojoFailureException
+    public void execute()
+        throws
+        MojoExecutionException,
+        MojoFailureException
     {
-        if ( StringUtils.isEmpty ( language ) && StringUtils.isEmpty ( languages ) )
+        if ( StringUtils.isEmpty( language ) && StringUtils.isEmpty( languages ) )
         {
-            throw new MojoFailureException ( "-Dlanguage or -Dlanguages must be set" );
+            throw new MojoFailureException( "-Dlanguage or -Dlanguages must be set" );
         }
-        else if ( StringUtils.isNotEmpty ( language ) && StringUtils.isNotEmpty ( languages ) )
+        else if ( StringUtils.isNotEmpty( language ) && StringUtils.isNotEmpty( languages ) )
         {
-            throw new MojoFailureException ( "Only one of -Dlanguage or -Dlanguages can be set" );
+            throw new MojoFailureException( "Only one of -Dlanguage or -Dlanguages can be set" );
         }
 
         try
         {
-            List languagesToRemove = new ArrayList ();
-            if ( StringUtils.isNotEmpty ( language ) )
+            List languagesToRemove = new ArrayList();
+            if ( StringUtils.isNotEmpty( language ) )
             {
-                languagesToRemove.add ( language );
+                languagesToRemove.add( language );
             }
             else
             {
-                languagesToRemove.addAll ( Arrays.asList ( StringUtils.split ( languages, "," ) ) );
+                languagesToRemove.addAll( Arrays.asList( StringUtils.split( languages, "," ) ) );
             }
 
             ArchetypeRegistry registry;
             try
             {
-                registry = archetypeRegistryManager.readArchetypeRegistry(archetypeRegistryFile);
+                registry = archetypeRegistryManager.readArchetypeRegistry( archetypeRegistryFile );
             }
-            catch (FileNotFoundException ex)
+            catch ( FileNotFoundException ex )
             {
                 registry = archetypeRegistryManager.getDefaultArchetypeRegistry();
             }
 
-            Iterator languagesToRemoveIterator = languagesToRemove.iterator ();
-            while ( languagesToRemoveIterator.hasNext () )
+            Iterator languagesToRemoveIterator = languagesToRemove.iterator();
+            while ( languagesToRemoveIterator.hasNext() )
             {
-                String languageToRemove = (String) languagesToRemoveIterator.next ();
-                if ( registry.getLanguages ().contains ( languageToRemove ) )
+                String languageToRemove = (String) languagesToRemoveIterator.next();
+                if ( registry.getLanguages().contains( languageToRemove ) )
                 {
-                    registry.removeLanguage ( languageToRemove );
-                    getLog ().debug ( "Language " + languageToRemove + " removed" );
+                    registry.removeLanguage( languageToRemove );
+                    getLog().debug( "Language " + languageToRemove + " removed" );
                 }
                 else
                 {
-                    getLog ().debug ( "Language " + languageToRemove + " doesn't exist" );
+                    getLog().debug( "Language " + languageToRemove + " doesn't exist" );
                 }
             }
-            archetypeRegistryManager.writeArchetypeRegistry ( archetypeRegistryFile, registry );
+            archetypeRegistryManager.writeArchetypeRegistry( archetypeRegistryFile, registry );
         }
         catch ( Exception ex )
         {
-            throw new MojoExecutionException ( ex.getMessage (), ex );
+            throw new MojoExecutionException( ex.getMessage(), ex );
         }
     }
 }

@@ -34,48 +34,44 @@ import java.util.List;
 /**
  * Configure archetype's creation properties.
  *
- * @author           rafale
- * @requiresProject  true
- * @goal             configure-creation
+ * @author rafale
+ * @requiresProject true
+ * @goal configure-creation
  */
 public class ConfigureCreationMojo
-extends AbstractMojo
+    extends AbstractMojo
 {
-    /**
-     * @component
-     */
+    /** @component */
     ArchetypeRegistryManager archetypeRegistryManager;
 
-    /**
-     * @component
-     */
+    /** @component */
     ArchetypeCreationConfigurator configurator;
 
     /**
      * Languages directories which are checked for project's sources main package.
      *
-     * @parameter  expression="${archetype.languages}"
+     * @parameter expression="${archetype.languages}"
      */
     private String archetypeLanguages;
 
     /**
      * The location of the registry file.
      *
-     * @parameter  expression="${user.home}/.m2/archetype.xml"
+     * @parameter expression="${user.home}/.m2/archetype.xml"
      */
     private File archetypeRegistryFile;
 
     /**
      * Enable the interactive mode to define the archetype from the project.
      *
-     * @parameter  expression="${interactive}" default-value="false"
+     * @parameter expression="${interactive}" default-value="false"
      */
     private boolean interactive;
 
     /**
      * The maven Project to create an archetype from.
      *
-     * @parameter  expression="${project}"
+     * @parameter expression="${project}"
      * @required
      * @readonly
      */
@@ -84,7 +80,7 @@ extends AbstractMojo
     /**
      * The property file that holds the plugin configuration.
      *
-     * @parameter  default-value="target/archetype.properties" expression="${archetype.properties}"
+     * @parameter default-value="target/archetype.properties" expression="${archetype.properties}"
      */
     private File propertyFile;
 
@@ -95,32 +91,34 @@ extends AbstractMojo
 //     */
 //    private Settings settings;
 
-    public void execute ()
-    throws MojoExecutionException, MojoFailureException
+    public void execute()
+        throws
+        MojoExecutionException,
+        MojoFailureException
     {
         try
         {
-            if (propertyFile != null)
+            if ( propertyFile != null )
             {
                 propertyFile.getParentFile().mkdirs();
             }
 
             List languages =
-                archetypeRegistryManager.getLanguages ( archetypeLanguages, archetypeRegistryFile );
+                archetypeRegistryManager.getLanguages( archetypeLanguages, archetypeRegistryFile );
 
-            configurator.configureArchetypeCreation (
+            configurator.configureArchetypeCreation(
                 project,
-                new Boolean ( interactive ),
+                new Boolean( interactive ),
 //                settings.getInteractiveMode (),
-                System.getProperties (),
+                System.getProperties(),
                 propertyFile,
                 languages
             );
-            getLog ().info ( "Archetype created in target/generated-sources/archetypeng" );
+            getLog().info( "Archetype created in target/generated-sources/archetypeng" );
         }
         catch ( Exception ex )
         {
-            throw new MojoExecutionException ( ex.getMessage (), ex );
+            throw new MojoExecutionException( ex.getMessage(), ex );
         }
     }
 }

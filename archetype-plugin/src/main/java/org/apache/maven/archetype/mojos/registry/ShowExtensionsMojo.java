@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import java.util.Iterator;
+
 import org.apache.maven.archetype.registry.ArchetypeRegistry;
 
 /**
@@ -35,50 +36,52 @@ import org.apache.maven.archetype.registry.ArchetypeRegistry;
  * The registered filtered extensions are used to discriminate
  * text files from binary files based on their file extension
  * during create-from-project.
- * @author           rafale
- * @requiresProject  false
- * @goal             show-extensions
+ *
+ * @author rafale
+ * @requiresProject false
+ * @goal show-extensions
  */
 public class ShowExtensionsMojo
-extends AbstractMojo
+    extends AbstractMojo
 {
-    /**
-     * @component
-     */
+    /** @component */
     ArchetypeRegistryManager archetypeRegistryManager;
 
     /**
      * The location of the registry file.
-     * @parameter  expression="${user.home}/.m2/archetype.xml"
+     *
+     * @parameter expression="${user.home}/.m2/archetype.xml"
      */
     private File archetypeRegistryFile;
 
-    public void execute ()
-    throws MojoExecutionException, MojoFailureException
+    public void execute()
+        throws
+        MojoExecutionException,
+        MojoFailureException
     {
         try
         {
             ArchetypeRegistry registry;
             try
             {
-                registry = archetypeRegistryManager.readArchetypeRegistry(archetypeRegistryFile);
+                registry = archetypeRegistryManager.readArchetypeRegistry( archetypeRegistryFile );
             }
-            catch (FileNotFoundException ex)
+            catch ( FileNotFoundException ex )
             {
                 registry = archetypeRegistryManager.getDefaultArchetypeRegistry();
             }
 
-            Iterator extensions = registry.getFilteredExtensions ().iterator ();
+            Iterator extensions = registry.getFilteredExtensions().iterator();
 
-            getLog ().info ( "Filtered extensions defined in " + archetypeRegistryFile );
-            while ( extensions.hasNext () )
+            getLog().info( "Filtered extensions defined in " + archetypeRegistryFile );
+            while ( extensions.hasNext() )
             {
-                getLog ().info ( " - " + extensions.next () );
+                getLog().info( " - " + extensions.next() );
             }
         }
         catch ( Exception ex )
         {
-            throw new MojoExecutionException ( ex.getMessage (), ex );
+            throw new MojoExecutionException( ex.getMessage(), ex );
         }
     }
 }

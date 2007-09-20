@@ -38,93 +38,97 @@ import java.util.List;
 /**
  * Removes one or more groups from the registry.
  * The registered repositories are searched to find archetypes of registered groups.
- * @author           rafale
- * @requiresProject  false
- * @goal             remove-groups
+ *
+ * @author rafale
+ * @requiresProject false
+ * @goal remove-groups
  */
 public class RemoveGroupsMojo
-extends AbstractMojo
+    extends AbstractMojo
 {
-    /**
-     * @component
-     */
+    /** @component */
     ArchetypeRegistryManager archetypeRegistryManager;
 
     /**
      * The group to remove from the registry.
-     *
+     * <p/>
      * This option is mutually exclusive with groups.
-     * @parameter  expression="${group}"
+     *
+     * @parameter expression="${group}"
      */
     String group;
 
     /**
      * The groups to remove from the registry: group1,group2,...
-     *
+     * <p/>
      * This option is mutually exclusive with group.
-     * @parameter  expression="${groups}"
+     *
+     * @parameter expression="${groups}"
      */
     String groups;
 
     /**
      * The location of the registry file.
-     * @parameter  expression="${user.home}/.m2/archetype.xml"
+     *
+     * @parameter expression="${user.home}/.m2/archetype.xml"
      */
     private File archetypeRegistryFile;
 
-    public void execute ()
-    throws MojoExecutionException, MojoFailureException
+    public void execute()
+        throws
+        MojoExecutionException,
+        MojoFailureException
     {
-        if ( StringUtils.isEmpty ( group ) && StringUtils.isEmpty ( groups ) )
+        if ( StringUtils.isEmpty( group ) && StringUtils.isEmpty( groups ) )
         {
-            throw new MojoFailureException ( "-Dgroup or -Dgroups must be set" );
+            throw new MojoFailureException( "-Dgroup or -Dgroups must be set" );
         }
-        else if ( StringUtils.isNotEmpty ( group ) && StringUtils.isNotEmpty ( groups ) )
+        else if ( StringUtils.isNotEmpty( group ) && StringUtils.isNotEmpty( groups ) )
         {
-            throw new MojoFailureException ( "Only one of -Dgroup or -Dgroups can be set" );
+            throw new MojoFailureException( "Only one of -Dgroup or -Dgroups can be set" );
         }
 
         try
         {
-            List groupsToRemove = new ArrayList ();
-            if ( StringUtils.isNotEmpty ( group ) )
+            List groupsToRemove = new ArrayList();
+            if ( StringUtils.isNotEmpty( group ) )
             {
-                groupsToRemove.add ( group );
+                groupsToRemove.add( group );
             }
             else
             {
-                groupsToRemove.addAll ( Arrays.asList ( StringUtils.split ( groups, "," ) ) );
+                groupsToRemove.addAll( Arrays.asList( StringUtils.split( groups, "," ) ) );
             }
 
             ArchetypeRegistry registry;
             try
             {
-                registry = archetypeRegistryManager.readArchetypeRegistry(archetypeRegistryFile);
+                registry = archetypeRegistryManager.readArchetypeRegistry( archetypeRegistryFile );
             }
-            catch (FileNotFoundException ex)
+            catch ( FileNotFoundException ex )
             {
                 registry = archetypeRegistryManager.getDefaultArchetypeRegistry();
             }
 
-            Iterator groupsToRemoveIterator = groupsToRemove.iterator ();
-            while ( groupsToRemoveIterator.hasNext () )
+            Iterator groupsToRemoveIterator = groupsToRemove.iterator();
+            while ( groupsToRemoveIterator.hasNext() )
             {
-                String groupToRemove = (String) groupsToRemoveIterator.next ();
-                if ( registry.getArchetypeGroups ().contains ( groupToRemove ) )
+                String groupToRemove = (String) groupsToRemoveIterator.next();
+                if ( registry.getArchetypeGroups().contains( groupToRemove ) )
                 {
-                    registry.removeArchetypeGroup ( groupToRemove );
-                    getLog ().debug ( "Group " + groupToRemove + " removed" );
+                    registry.removeArchetypeGroup( groupToRemove );
+                    getLog().debug( "Group " + groupToRemove + " removed" );
                 }
                 else
                 {
-                    getLog ().debug ( "Group " + groupToRemove + " doesn't exist" );
+                    getLog().debug( "Group " + groupToRemove + " doesn't exist" );
                 }
             }
-            archetypeRegistryManager.writeArchetypeRegistry ( archetypeRegistryFile, registry );
+            archetypeRegistryManager.writeArchetypeRegistry( archetypeRegistryFile, registry );
         }
         catch ( Exception ex )
         {
-            throw new MojoExecutionException ( ex.getMessage (), ex );
+            throw new MojoExecutionException( ex.getMessage(), ex );
         }
     }
 }

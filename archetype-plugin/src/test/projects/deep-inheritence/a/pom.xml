@@ -29,9 +29,9 @@
   <artifactId>deep-inheritence-test-a</artifactId>
   <packaging>pom</packaging>
   <name>Inheritence A</name>
- 
-    <modules>
-		<module>b</module>
-   </modules>
-  
+
+  <modules>
+    <module>b</module>
+  </modules>
+
 </project>

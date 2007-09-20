@@ -29,13 +29,13 @@
   <artifactId>sibling-dependency-test-b</artifactId>
   <packaging>jar</packaging>
   <name>Sibling Dependency B</name>
-  
+
 
   <dependencies>
-  <dependency>
-  <groupId>org.apache.maven.archetype.test</groupId>
-  <artifactId>sibling-dependency-test-a</artifactId>
-  <version>1-SNAPSHOT</version>
-  </dependency>
+    <dependency>
+      <groupId>org.apache.maven.archetype.test</groupId>
+      <artifactId>sibling-dependency-test-a</artifactId>
+      <version>1-SNAPSHOT</version>
+    </dependency>
   </dependencies>
 </project>

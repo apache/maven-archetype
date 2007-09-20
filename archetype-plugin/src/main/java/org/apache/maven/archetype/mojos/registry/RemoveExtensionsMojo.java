@@ -40,95 +40,99 @@ import java.util.List;
  * The registered filtered extensions are used to discriminate
  * text files from binary files based on their file extension
  * during create-from-project.
- * @author           rafale
- * @requiresProject  false
- * @goal             remove-extensions
+ *
+ * @author rafale
+ * @requiresProject false
+ * @goal remove-extensions
  */
 public class RemoveExtensionsMojo
-extends AbstractMojo
+    extends AbstractMojo
 {
-    /**
-     * @component
-     */
+    /** @component */
     ArchetypeRegistryManager archetypeRegistryManager;
 
     /**
      * The filtered extension to remove from the registry.
-     *
+     * <p/>
      * This option is mutually exclusive with extensions.
-     * @parameter  expression="${extension}"
+     *
+     * @parameter expression="${extension}"
      */
     String extension;
 
     /**
      * The filtered extensions to remove from the registry: ext1,ext2,...
-     *
+     * <p/>
      * This option is mutually exclusive with extension.
-     * @parameter  expression="${extensions}"
+     *
+     * @parameter expression="${extensions}"
      */
     String extensions;
 
     /**
      * The location of the registry file.
-     * @parameter  expression="${user.home}/.m2/archetype.xml"
+     *
+     * @parameter expression="${user.home}/.m2/archetype.xml"
      */
     private File archetypeRegistryFile;
 
-    public void execute ()
-    throws MojoExecutionException, MojoFailureException
+    public void execute()
+        throws
+        MojoExecutionException,
+        MojoFailureException
     {
-        if ( StringUtils.isEmpty ( extension ) && StringUtils.isEmpty ( extensions ) )
+        if ( StringUtils.isEmpty( extension ) && StringUtils.isEmpty( extensions ) )
         {
-            throw new MojoFailureException ( "-Dextension or -Dextensions must be set" );
+            throw new MojoFailureException( "-Dextension or -Dextensions must be set" );
         }
-        else if ( StringUtils.isNotEmpty ( extension ) && StringUtils.isNotEmpty ( extensions ) )
+        else if ( StringUtils.isNotEmpty( extension ) && StringUtils.isNotEmpty( extensions ) )
         {
-            throw new MojoFailureException ( "Only one of -Dextension or -Dextensions can be set" );
+            throw new MojoFailureException( "Only one of -Dextension or -Dextensions can be set" );
         }
 
         try
         {
-            List extensionsToRemove = new ArrayList ();
-            if ( StringUtils.isNotEmpty ( extension ) )
+            List extensionsToRemove = new ArrayList();
+            if ( StringUtils.isNotEmpty( extension ) )
             {
-                extensionsToRemove.add ( extension );
+                extensionsToRemove.add( extension );
             }
             else
             {
-                extensionsToRemove.addAll (
-                    Arrays.asList ( StringUtils.split ( extensions, "," ) )
+                extensionsToRemove.addAll(
+                    Arrays.asList( StringUtils.split( extensions, "," ) )
                 );
             }
 
             ArchetypeRegistry registry;
             try
             {
-                registry = archetypeRegistryManager.readArchetypeRegistry(archetypeRegistryFile);
+                registry = archetypeRegistryManager.readArchetypeRegistry( archetypeRegistryFile );
             }
-            catch (FileNotFoundException ex)
+            catch ( FileNotFoundException ex )
             {
                 registry = archetypeRegistryManager.getDefaultArchetypeRegistry();
             }
 
-            Iterator extensionsToRemoveIterator = extensionsToRemove.iterator ();
-            while ( extensionsToRemoveIterator.hasNext () )
+            Iterator extensionsToRemoveIterator = extensionsToRemove.iterator();
+            while ( extensionsToRemoveIterator.hasNext() )
             {
-                String extensionToRemove = (String) extensionsToRemoveIterator.next ();
-                if ( registry.getFilteredExtensions ().contains ( extensionToRemove ) )
+                String extensionToRemove = (String) extensionsToRemoveIterator.next();
+                if ( registry.getFilteredExtensions().contains( extensionToRemove ) )
                 {
-                    registry.removeFilteredExtension ( extensionToRemove );
-                    getLog ().debug ( "Extension " + extensionToRemove + " removed" );
+                    registry.removeFilteredExtension( extensionToRemove );
+                    getLog().debug( "Extension " + extensionToRemove + " removed" );
                 }
                 else
                 {
-                    getLog ().debug ( "Extension " + extensionToRemove + " doesn't exist" );
+                    getLog().debug( "Extension " + extensionToRemove + " doesn't exist" );
                 }
             }
-            archetypeRegistryManager.writeArchetypeRegistry ( archetypeRegistryFile, registry );
+            archetypeRegistryManager.writeArchetypeRegistry( archetypeRegistryFile, registry );
         }
         catch ( Exception ex )
         {
-            throw new MojoExecutionException ( ex.getMessage (), ex );
+            throw new MojoExecutionException( ex.getMessage(), ex );
         }
     }
 }

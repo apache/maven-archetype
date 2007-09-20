@@ -28,23 +28,25 @@ import java.io.File;
 /**
  * Clean archetype properties file.
  *
- * @author           rafale
- * @requiresProject  false
- * @goal             clean
+ * @author rafale
+ * @requiresProject false
+ * @goal clean
  */
 public class CleanMojo
-extends AbstractMojo
+    extends AbstractMojo
 {
     /**
      * The property file to delete.
      *
-     * @parameter  default-value="archetype.properties" expression="${archetype.properties}"
+     * @parameter default-value="archetype.properties" expression="${archetype.properties}"
      */
     private File propertyFile;
 
-    public void execute ()
-    throws MojoExecutionException, MojoFailureException
+    public void execute()
+        throws
+        MojoExecutionException,
+        MojoFailureException
     {
-        propertyFile.delete ();
+        propertyFile.delete();
     }
 }

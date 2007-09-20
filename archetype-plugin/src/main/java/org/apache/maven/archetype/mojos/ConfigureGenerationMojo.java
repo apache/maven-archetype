@@ -34,34 +34,30 @@ import java.util.List;
 /**
  * Configure archetype's properties.
  *
- * @author           rafale
- * @requiresProject  false
- * @goal             configure-generation
+ * @author rafale
+ * @requiresProject false
+ * @goal configure-generation
  */
 public class ConfigureGenerationMojo
-extends AbstractMojo
+    extends AbstractMojo
 {
-    /**
-     * @component
-     */
+    /** @component */
     ArchetypeRegistryManager archetypeRegistryManager;
 
-    /**
-     * @component
-     */
+    /** @component */
     ArchetypeGenerationConfigurator configurator;
 
     /**
      * The location of the registry file.
      *
-     * @parameter  expression="${user.home}/.m2/archetype.xml"
+     * @parameter expression="${user.home}/.m2/archetype.xml"
      */
     private File archetypeRegistryFile;
 
     /**
      * Local maven repository.
      *
-     * @parameter  expression="${localRepository}"
+     * @parameter expression="${localRepository}"
      * @required
      * @readonly
      */
@@ -71,7 +67,7 @@ extends AbstractMojo
      * Remote repositories defined in the project's pom (used only when called from an existing
      * project).
      *
-     * @parameter  expression="${project.remoteArtifactRepositories}"
+     * @parameter expression="${project.remoteArtifactRepositories}"
      * @required
      * @readonly
      */
@@ -80,49 +76,51 @@ extends AbstractMojo
     /**
      * The property file that holds the plugin configuration.
      *
-     * @parameter  default-value="archetype.properties" expression="${archetype.properties}"
+     * @parameter default-value="archetype.properties" expression="${archetype.properties}"
      */
     private File propertyFile = null;
 
     /**
      * Other remote repositories available for discovering dependencies and extensions.
      *
-     * @parameter  expression="${remoteRepositories}"
+     * @parameter expression="${remoteRepositories}"
      */
     private String remoteRepositories;
 
     /**
      * User settings use to check the interactiveMode.
      *
-     * @parameter  expression="${settings}"
+     * @parameter expression="${settings}"
      * @required
      * @readonly
      */
     private Settings settings;
 
-    public void execute ()
-    throws MojoExecutionException, MojoFailureException
+    public void execute()
+        throws
+        MojoExecutionException,
+        MojoFailureException
     {
         try
         {
             List repositories =
-                archetypeRegistryManager.getRepositories (
+                archetypeRegistryManager.getRepositories(
                     pomRemoteRepositories,
                     remoteRepositories,
                     archetypeRegistryFile
                 );
 
-            configurator.configureArchetype (
-                settings.getInteractiveMode (),
+            configurator.configureArchetype(
+                settings.getInteractiveMode(),
                 propertyFile,
-                System.getProperties (),
+                System.getProperties(),
                 localRepository,
                 repositories
             );
         }
         catch ( Exception ex )
         {
-            throw new MojoExecutionException ( ex.getMessage (), ex );
+            throw new MojoExecutionException( ex.getMessage(), ex );
         }
     }
 }

@@ -55,7 +55,7 @@ public class CreateProjectFromArchetypeMojo
     /** @parameter expression="${basedir}" */
     private File basedir;
 
-    /** 
+    /**
      * Additional goals that can be specified by the user during the creation of the archetype.
      *
      * @parameter expression="${goals}"

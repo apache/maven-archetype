@@ -25,9 +25,9 @@
     <groupId>org.apache.maven.archetype.test</groupId>
     <version>1-SNAPSHOT</version>
   </parent>
-  
+
   <artifactId>sibling-dependency-test-a</artifactId>
   <packaging>jar</packaging>
   <name>Sibling Dependency A</name>
-  
+
 </project>

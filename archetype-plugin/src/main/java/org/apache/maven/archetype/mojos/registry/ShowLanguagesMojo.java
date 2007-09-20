@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import java.util.Iterator;
+
 import org.apache.maven.archetype.registry.ArchetypeRegistry;
 
 /**
@@ -35,50 +36,52 @@ import org.apache.maven.archetype.registry.ArchetypeRegistry;
  * The registered language directories are used to discriminate
  * packaging directories from unpackaged ones based on their name
  * during create-from-project.
- * @author           rafale
- * @requiresProject  false
- * @goal             show-languages
+ *
+ * @author rafale
+ * @requiresProject false
+ * @goal show-languages
  */
 public class ShowLanguagesMojo
-extends AbstractMojo
+    extends AbstractMojo
 {
-    /**
-     * @component
-     */
+    /** @component */
     ArchetypeRegistryManager archetypeRegistryManager;
 
     /**
      * The location of the registry file.
-     * @parameter  expression="${user.home}/.m2/archetype.xml"
+     *
+     * @parameter expression="${user.home}/.m2/archetype.xml"
      */
     private File archetypeRegistryFile;
 
-    public void execute ()
-    throws MojoExecutionException, MojoFailureException
+    public void execute()
+        throws
+        MojoExecutionException,
+        MojoFailureException
     {
         try
         {
             ArchetypeRegistry registry;
             try
             {
-                registry = archetypeRegistryManager.readArchetypeRegistry(archetypeRegistryFile);
+                registry = archetypeRegistryManager.readArchetypeRegistry( archetypeRegistryFile );
             }
-            catch (FileNotFoundException ex)
+            catch ( FileNotFoundException ex )
             {
                 registry = archetypeRegistryManager.getDefaultArchetypeRegistry();
             }
 
-            Iterator languages = registry.getLanguages ().iterator ();
+            Iterator languages = registry.getLanguages().iterator();
 
-            getLog ().info ( "Languages defined in " + archetypeRegistryFile );
-            while ( languages.hasNext () )
+            getLog().info( "Languages defined in " + archetypeRegistryFile );
+            while ( languages.hasNext() )
             {
-                getLog ().info ( " - " + languages.next () );
+                getLog().info( " - " + languages.next() );
             }
         }
         catch ( Exception ex )
         {
-            throw new MojoExecutionException ( ex.getMessage (), ex );
+            throw new MojoExecutionException( ex.getMessage(), ex );
         }
     }
 }

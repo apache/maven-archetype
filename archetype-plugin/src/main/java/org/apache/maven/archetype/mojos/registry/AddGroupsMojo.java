@@ -38,93 +38,97 @@ import java.util.List;
 /**
  * Adds one or more groups in the registry.
  * The registered repositories are searched to find archetypes of registered groups.
- * @author           rafale
- * @requiresProject  false
- * @goal             add-groups
+ *
+ * @author rafale
+ * @requiresProject false
+ * @goal add-groups
  */
 public class AddGroupsMojo
-extends AbstractMojo
+    extends AbstractMojo
 {
-    /**
-     * @component
-     */
+    /** @component */
     ArchetypeRegistryManager archetypeRegistryManager;
 
     /**
      * The group to add to the registry.
-     *
+     * <p/>
      * This option is mutually exclusive with groups.
-     * @parameter  expression="${group}"
+     *
+     * @parameter expression="${group}"
      */
     String group;
 
     /**
      * The groups to add to the registry: group1,group2,...
-     *
+     * <p/>
      * This option is mutually exclusive with group.
-     * @parameter  expression="${groups}"
+     *
+     * @parameter expression="${groups}"
      */
     String groups;
 
     /**
      * The location of the registry file.
-     * @parameter  expression="${user.home}/.m2/archetype.xml"
+     *
+     * @parameter expression="${user.home}/.m2/archetype.xml"
      */
     private File archetypeRegistryFile;
 
-    public void execute ()
-    throws MojoExecutionException, MojoFailureException
+    public void execute()
+        throws
+        MojoExecutionException,
+        MojoFailureException
     {
-        if ( StringUtils.isEmpty ( group ) && StringUtils.isEmpty ( groups ) )
+        if ( StringUtils.isEmpty( group ) && StringUtils.isEmpty( groups ) )
         {
-            throw new MojoFailureException ( "-Dgroup or -Dgroups must be set" );
+            throw new MojoFailureException( "-Dgroup or -Dgroups must be set" );
         }
-        else if ( StringUtils.isNotEmpty ( group ) && StringUtils.isNotEmpty ( groups ) )
+        else if ( StringUtils.isNotEmpty( group ) && StringUtils.isNotEmpty( groups ) )
         {
-            throw new MojoFailureException ( "Only one of -Dgroup or -Dgroups can be set" );
+            throw new MojoFailureException( "Only one of -Dgroup or -Dgroups can be set" );
         }
 
         try
         {
-            List groupsToAdd = new ArrayList ();
-            if ( StringUtils.isNotEmpty ( group ) )
+            List groupsToAdd = new ArrayList();
+            if ( StringUtils.isNotEmpty( group ) )
             {
-                groupsToAdd.add ( group );
+                groupsToAdd.add( group );
             }
             else
             {
-                groupsToAdd.addAll ( Arrays.asList ( StringUtils.split ( groups, "," ) ) );
+                groupsToAdd.addAll( Arrays.asList( StringUtils.split( groups, "," ) ) );
             }
 
             ArchetypeRegistry registry;
             try
             {
-                registry = archetypeRegistryManager.readArchetypeRegistry(archetypeRegistryFile);
+                registry = archetypeRegistryManager.readArchetypeRegistry( archetypeRegistryFile );
             }
-            catch (FileNotFoundException ex)
+            catch ( FileNotFoundException ex )
             {
                 registry = archetypeRegistryManager.getDefaultArchetypeRegistry();
             }
 
-            Iterator groupsToAddIterator = groupsToAdd.iterator ();
-            while ( groupsToAddIterator.hasNext () )
+            Iterator groupsToAddIterator = groupsToAdd.iterator();
+            while ( groupsToAddIterator.hasNext() )
             {
-                String groupToAdd = (String) groupsToAddIterator.next ();
-                if ( registry.getArchetypeGroups ().contains ( groupToAdd ) )
+                String groupToAdd = (String) groupsToAddIterator.next();
+                if ( registry.getArchetypeGroups().contains( groupToAdd ) )
                 {
-                    getLog ().debug ( "Group " + groupToAdd + " already exists" );
+                    getLog().debug( "Group " + groupToAdd + " already exists" );
                 }
                 else
                 {
-                    registry.addArchetypeGroup ( groupToAdd.trim () );
-                    getLog ().debug ( "Group " + groupToAdd + " added" );
+                    registry.addArchetypeGroup( groupToAdd.trim() );
+                    getLog().debug( "Group " + groupToAdd + " added" );
                 }
             }
-            archetypeRegistryManager.writeArchetypeRegistry ( archetypeRegistryFile, registry );
+            archetypeRegistryManager.writeArchetypeRegistry( archetypeRegistryFile, registry );
         }
         catch ( Exception ex )
         {
-            throw new MojoExecutionException ( ex.getMessage (), ex );
+            throw new MojoExecutionException( ex.getMessage(), ex );
         }
     }
 }

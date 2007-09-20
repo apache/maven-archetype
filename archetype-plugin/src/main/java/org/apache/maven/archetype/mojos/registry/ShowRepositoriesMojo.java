@@ -28,55 +28,58 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import java.util.Iterator;
+
 import org.apache.maven.archetype.registry.ArchetypeRegistry;
 
 /**
  * Show the registered repositories.
  * The registered repositories are searched to find archetypes of registered groups.
- * @author           rafale
- * @requiresProject  false
- * @goal             show-repositories
+ *
+ * @author rafale
+ * @requiresProject false
+ * @goal show-repositories
  */
 public class ShowRepositoriesMojo
-extends AbstractMojo
+    extends AbstractMojo
 {
-    /**
-     * @component
-     */
+    /** @component */
     ArchetypeRegistryManager archetypeRegistryManager;
 
     /**
      * The location of the registry file.
-     * @parameter  expression="${user.home}/.m2/archetype.xml"
+     *
+     * @parameter expression="${user.home}/.m2/archetype.xml"
      */
     private File archetypeRegistryFile;
 
-    public void execute ()
-    throws MojoExecutionException, MojoFailureException
+    public void execute()
+        throws
+        MojoExecutionException,
+        MojoFailureException
     {
         try
         {
             ArchetypeRegistry registry;
             try
             {
-                registry = archetypeRegistryManager.readArchetypeRegistry(archetypeRegistryFile);
+                registry = archetypeRegistryManager.readArchetypeRegistry( archetypeRegistryFile );
             }
-            catch (FileNotFoundException ex)
+            catch ( FileNotFoundException ex )
             {
                 registry = archetypeRegistryManager.getDefaultArchetypeRegistry();
             }
 
-            Iterator repositories = registry.getArchetypeRepositories ().iterator ();
+            Iterator repositories = registry.getArchetypeRepositories().iterator();
 
-            getLog ().info ( "Archetype repositories defined in " + archetypeRegistryFile );
-            while ( repositories.hasNext () )
+            getLog().info( "Archetype repositories defined in " + archetypeRegistryFile );
+            while ( repositories.hasNext() )
             {
-                getLog ().info ( " - " + repositories.next () );
+                getLog().info( " - " + repositories.next() );
             }
         }
         catch ( Exception ex )
         {
-            throw new MojoExecutionException ( ex.getMessage (), ex );
+            throw new MojoExecutionException( ex.getMessage(), ex );
         }
     }
 }

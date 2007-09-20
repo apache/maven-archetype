@@ -28,5 +28,5 @@
   <artifactId>deep-inheritence-test-b</artifactId>
   <packaging>pom</packaging>
   <name>Inheritence B</name>
-  
+
 </project>

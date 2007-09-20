@@ -28,55 +28,58 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import java.util.Iterator;
+
 import org.apache.maven.archetype.registry.ArchetypeRegistry;
 
 /**
  * Show the registered groups.
  * The registered repositories are searched to find archetypes of registered groups.
- * @author           rafale
- * @requiresProject  false
- * @goal             show-groups
+ *
+ * @author rafale
+ * @requiresProject false
+ * @goal show-groups
  */
 public class ShowGroupsMojo
-extends AbstractMojo
+    extends AbstractMojo
 {
-    /**
-     * @component
-     */
+    /** @component */
     ArchetypeRegistryManager archetypeRegistryManager;
 
     /**
      * The location of the registry file.
-     * @parameter  expression="${user.home}/.m2/archetype.xml"
+     *
+     * @parameter expression="${user.home}/.m2/archetype.xml"
      */
     private File archetypeRegistryFile;
 
-    public void execute ()
-    throws MojoExecutionException, MojoFailureException
+    public void execute()
+        throws
+        MojoExecutionException,
+        MojoFailureException
     {
         try
         {
             ArchetypeRegistry registry;
             try
             {
-                registry = archetypeRegistryManager.readArchetypeRegistry(archetypeRegistryFile);
+                registry = archetypeRegistryManager.readArchetypeRegistry( archetypeRegistryFile );
             }
-            catch (FileNotFoundException ex)
+            catch ( FileNotFoundException ex )
             {
                 registry = archetypeRegistryManager.getDefaultArchetypeRegistry();
             }
 
-            Iterator groups = registry.getArchetypeGroups ().iterator ();
+            Iterator groups = registry.getArchetypeGroups().iterator();
 
-            getLog ().info ( "Archetype groups defined in " + archetypeRegistryFile );
-            while ( groups.hasNext () )
+            getLog().info( "Archetype groups defined in " + archetypeRegistryFile );
+            while ( groups.hasNext() )
             {
-                getLog ().info ( " - " + groups.next () );
+                getLog().info( " - " + groups.next() );
             }
         }
         catch ( Exception ex )
         {
-            throw new MojoExecutionException ( ex.getMessage (), ex );
+            throw new MojoExecutionException( ex.getMessage(), ex );
         }
     }
 }
