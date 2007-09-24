@@ -84,7 +84,6 @@ public class AddArchetypeMetadataMojo
     {
         if ( goalPrefix == null )
         {
-//            goalPrefix = PluginDescriptor.getGoalPrefixFromArtifactId( project.getArtifactId () );
             goalPrefix = project.getArtifactId();
         }
 
