@@ -33,14 +33,6 @@ public interface ArchetypeRegistryManager
 {
     String ROLE = ArchetypeRegistryManager.class.getName();
 
-    public void addGroup( String group,
-                          File archetypeRegistryFile )
-        throws
-        IOException,
-        XmlPullParserException;
-
-    List getArchetypeGroups( File archetypeRegistryFile );
-
     List getFilteredExtensions( String archetypeFilteredExtentions,
                                 File archetypeRegistryFile )
         throws

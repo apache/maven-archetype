@@ -319,8 +319,6 @@ public class FilesetArchetypeCreator
         getLogger().debug(
             "Archetype " + archetypeDescriptor.getName() + " old descriptor written"
         );
-
-        archetypeRegistryManager.addGroup( archetypeDefinition.getGroupId(), archetypeRegistryFile );
     }
 
     private void addRequiredProperties(

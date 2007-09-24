@@ -19,6 +19,7 @@
 
 package org.apache.maven.archetype.mojos;
 
+import org.apache.maven.archetype.common.ArchetypeDefinition;
 import org.apache.maven.archetype.common.ArchetypePropertiesManager;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 import org.apache.maven.archetype.common.Constants;
@@ -55,7 +56,20 @@ public class CreateProjectFromArchetypeMojo
     extends AbstractMojo
     implements ContextEnabled
 {
-    // Select
+    /** @component */
+    private ArchetypeSelector selector;
+
+    /** @component */
+    ArchetypeRegistryManager archetypeRegistryManager;
+
+    /** @component */
+    ArchetypeGenerationConfigurator configurator;
+
+    /** @component */
+    ArchetypeGenerator generator;
+
+    /** @component */
+    private Invoker invoker;
 
     /**
      * The archetype's artifactId.
@@ -77,18 +91,6 @@ public class CreateProjectFromArchetypeMojo
      * @parameter expression="${archetypeVersion}"
      */
     private String archetypeVersion;
-
-
-    /** @component */
-    private ArchetypeSelector selector;
-
-    //! Select
-
-    /** @component */
-    ArchetypeRegistryManager archetypeRegistryManager;
-
-    /** @component */
-    ArchetypeGenerationConfigurator configurator;
 
     /**
      * The location of the registry file.
@@ -139,16 +141,6 @@ public class CreateProjectFromArchetypeMojo
      */
     private Settings settings;
 
-    /** @component */
-    ArchetypeGenerator generator;
-
-    /**
-     * Maven invoker used to execution additional goals after the archetype has been created.
-     *
-     * @component
-     */
-    private Invoker invoker;
-
     /** @parameter expression="${basedir}" */
     private File basedir;
 
@@ -163,14 +155,26 @@ public class CreateProjectFromArchetypeMojo
     private ArchetypePropertiesManager propertiesManager;
 
     public void execute()
-        throws
-        MojoExecutionException,
-        MojoFailureException
+        throws MojoExecutionException, MojoFailureException
     {
-        // Select Archetype
+        // This is what we need here:
+        //
+        // - determine what archetype to use
+        // - configure it
+        // - populate the request
+        //
+        // then:
+        //
+        // result = archetype.generateProjectFromArchteype( request );
+        //
+        // look at the result and respond accordingly.
 
         try
         {
+            // This is not really necessary as we will use the central repository or the repository that
+            // is specified with the archetype. There is no point in searching N repositories when we
+            // know exactly where the archetype is.
+
             List repositories =
                 archetypeRegistryManager.getRepositories(
                     pomRemoteRepositories,
@@ -213,7 +217,6 @@ public class CreateProjectFromArchetypeMojo
 
         // Configure Generation
 
-
         // At this point the archetype has been generated from the archetype and now we will
         // run some goals that the archetype creator has requested to be run once the project
         // has been created.
@@ -228,7 +231,7 @@ public class CreateProjectFromArchetypeMojo
 
             postArchetypeGenerationGoals = p.getProperty( Constants.ARCHETYPE_POST_GENERATION_GOALS );
         }
-        catch( Exception e )
+        catch ( Exception e )
         {
             postArchetypeGenerationGoals = goals;
         }
@@ -236,7 +239,7 @@ public class CreateProjectFromArchetypeMojo
         if ( StringUtils.isNotEmpty( postArchetypeGenerationGoals ) )
         {
             invokePostArchetypeGenerationGoals( postArchetypeGenerationGoals );
-        }        
+        }
     }
 
 

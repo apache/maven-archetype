@@ -19,7 +19,6 @@
 
 package org.apache.maven.archetype.generator;
 
-import org.apache.maven.archetype.common.Archetype;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
 import org.apache.maven.archetype.common.ArchetypeDefinition;
 import org.apache.maven.archetype.common.ArchetypeFactory;
@@ -41,7 +40,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
-import java.util.Iterator;
 
 /** @plexus.component */
 public class DefaultArchetypeSelector
@@ -63,7 +61,7 @@ public class DefaultArchetypeSelector
     /** @plexus.requirement */
     private ArchetypeSelectionQueryer archetypeSelectionQueryer;
 
-    public void selectArchetype(
+    public ArchetypeDefinition selectArchetype(
         String archetypeGroupId,
         String archetypeArtifactId,
         String archetypeVersion,
@@ -152,129 +150,8 @@ public class DefaultArchetypeSelector
                         propertyFile
                     );
 
-                    return;
+                    return ad;
                 }
-            }
-
-            List groups = archetypeRegistryManager.getArchetypeGroups( archetypeRegistryFile );
-
-            while ( !archetypeDefinition.isDefined() && !groups.isEmpty() )
-            {
-                try
-                {
-                    if ( !archetypeDefinition.isGroupDefined() )
-                    {
-                        getLogger().debug( "Archetype group not defined" );
-
-                        getLogger().debug( "Groups=" + groups );
-
-                        archetypeDefinition.setGroupId(
-                            archetypeSelectionQueryer.selectGroup( groups )
-                        );
-                    }
-                    else
-                    {
-                        getLogger().debug(
-                            "Archetype group: " + archetypeDefinition.getGroupId()
-                        );
-                    }
-
-                    if ( !archetypeDefinition.isArtifactDefined() )
-                    {
-                        getLogger().debug( "Archetype artifact not defined" );
-
-                        List archetypes =
-                            archetypeArtifactManager.getArchetypes(
-                                archetypeDefinition.getGroupId(),
-                                localRepository,
-                                repositories
-                            );
-                        getLogger().debug( "Archetypes=" + archetypes );
-
-                        if ( !archetypes.isEmpty() )
-                        {
-                            Archetype archetype =
-                                archetypeSelectionQueryer.selectArtifact( archetypes );
-
-                            archetypeDefinition.setArtifactId( archetype.getArtifactId() );
-                            archetypeDefinition.setName( archetype.getName() );
-                        }
-                        else
-                        {
-                            getLogger().info(
-                                "The group " + archetypeDefinition.getGroupId() + " defines no archetype"
-                            );
-
-                            groups.remove( archetypeDefinition.getGroupId() );
-                            archetypeDefinition.setGroupId( null );
-                        }
-                    }
-                    else
-                    {
-                        getLogger().debug(
-                            "Archetype artifact: " + archetypeDefinition.getArtifactId()
-                        );
-                    }
-
-                    if ( archetypeDefinition.isPartiallyDefined() )
-                    {
-                        getLogger().debug( "Archetype version not defined" );
-
-                        List versions =
-                            archetypeArtifactManager.getVersions(
-                                archetypeDefinition.getGroupId(),
-                                archetypeDefinition.getArtifactId(),
-                                localRepository,
-                                repositories
-                            );
-                        getLogger().debug( "Versions=" + versions );
-
-                        archetypeDefinition.setVersion(
-                            archetypeSelectionQueryer.selectVersion( versions )
-                        );
-                    }
-                    else
-                    {
-                        getLogger().debug(
-                            "Archetype version: " + archetypeDefinition.getVersion()
-                        );
-                    }
-
-                    if ( !archetypeDefinition.isGroupDefined() )
-                    {
-                        getLogger().debug( "Archetype group problem" );
-                    }
-                    else if ( !archetypeDefinition.isDefined() )
-                    {
-                        throw new ArchetypeSelectionFailure(
-                            "The archetype must be selected here"
-                        );
-                    }
-                    else if ( !archetypeSelectionQueryer.confirmSelection( archetypeDefinition ) )
-                    {
-                        getLogger().debug( "Archetype selection not confirmed" );
-                        archetypeDefinition.reset();
-                    }
-                    else
-                    {
-                        getLogger().debug( "Archetype selection confirmed" );
-                    }
-                }
-                catch ( UnknownGroup e )
-                {
-                    getLogger().warn( "Unknown group" );
-                    archetypeDefinition.reset();
-                }
-                catch ( UnknownArchetype e )
-                {
-                    getLogger().warn( "Unknown archetype" );
-                    archetypeDefinition.reset();
-                }
-            } // end while
-
-            if ( groups.isEmpty() )
-            {
-                throw new UnknownGroup( "No registered group contain an archetype" );
             }
         }
         else
@@ -337,6 +214,8 @@ public class DefaultArchetypeSelector
                 toProperties( archetypeDefinition ),
                 propertyFile
             );
+                        
+            return archetypeDefinition;
         }
     }
 

@@ -40,20 +40,6 @@ under the License.
           </association>
         </field>
         <field>
-          <name>ArchetypeGroups</name>
-          <association>
-            <type>String</type>
-            <multiplicity>*</multiplicity>
-          </association>
-        </field>
-        <field>
-          <name>ArchetypeRepositories</name>
-          <association>
-            <type>ArchetypeRepository</type>
-            <multiplicity>*</multiplicity>
-          </association>
-        </field>
-        <field>
           <name>Languages</name>
           <association>
             <type>String</type>
@@ -69,50 +55,6 @@ under the License.
         </field>
       </fields>
     </class>
-
-    <class>
-      <name>ArchetypeRepository</name>
-      <fields>
-        <field xml.attribute="true">
-          <name>id</name>
-          <type>String</type>
-          <required>true</required>
-        </field>
-        <field>
-          <name>url</name>
-          <type>String</type>
-          <required>true</required>
-        </field>
-      </fields>
-      <codeSegments>
-        <codeSegment>
-          <code><![CDATA[
-    public String toString ()
-    {
-        return getId () + " (" + getUrl () + ")";
-
-    }
-
-    public int hashCode ()
-    {
-        return getId ().hashCode ();
-    }
-
-    public boolean equals (Object other)
-    {
-        if ( other == null ||
-           !(other instanceof ArchetypeRepository ) )
-        {
-            return false;
-        }
-
-        return getId ().equals ( ((ArchetypeRepository) other).getId () );
-    }
-                    ]]></code>
-        </codeSegment>
-      </codeSegments>
-    </class>
-
     <class>
       <name>Archetype</name>
       <fields>

@@ -19,32 +19,31 @@
 
 package org.apache.maven.archetype.generator;
 
+import org.apache.maven.archetype.common.ArchetypeDefinition;
 import org.apache.maven.archetype.exception.ArchetypeNotDefined;
 import org.apache.maven.archetype.exception.ArchetypeSelectionFailure;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.archetype.exception.UnknownGroup;
 import org.apache.maven.artifact.repository.ArtifactRepository;
-
 import org.codehaus.plexus.components.interactivity.PrompterException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
 import java.util.List;
 
 public interface ArchetypeSelector
 {
     String ROLE = ArchetypeSelector.class.getName();
 
-    void selectArchetype( String archetypeGroupId,
-                          String archetypeArtifactId,
-                          String archetypeVersion,
-                          Boolean interactiveMode,
-                          File propertyFile,
-                          File archetypeRegistryFile,
-                          ArtifactRepository localRepository,
-                          List repositories
+    ArchetypeDefinition selectArchetype( String archetypeGroupId,
+                                         String archetypeArtifactId,
+                                         String archetypeVersion,
+                                         Boolean interactiveMode,
+                                         File propertyFile,
+                                         File archetypeRegistryFile,
+                                         ArtifactRepository localRepository,
+                                         List repositories
     )
         throws
         ArchetypeNotDefined,

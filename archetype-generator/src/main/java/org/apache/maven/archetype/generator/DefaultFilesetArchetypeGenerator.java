@@ -100,6 +100,7 @@ public class DefaultFilesetArchetypeGenerator
         {
             ArchetypeDescriptor archetypeDescriptor =
                 archetypeArtifactManager.getFileSetArchetypeDescriptor( archetypeFile );
+
             ArchetypeConfiguration archetypeConfiguration =
                 archetypeFactory.createArchetypeConfiguration( archetypeDescriptor, properties );
 

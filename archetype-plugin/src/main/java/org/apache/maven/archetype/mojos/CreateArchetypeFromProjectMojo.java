@@ -137,6 +137,17 @@ public class CreateArchetypeFromProjectMojo
         MojoExecutionException,
         MojoFailureException
     {
+        // This is what we need here:
+        //
+        // - determine what groupId, artifactId, version to use: we default to the POM we're using
+        // - configure it: this will probably get pretty sophisticated eventually
+        // - populate the request
+        //
+        // then:
+        //
+        // result = archetype.createArchetypeFromProject( request );
+        //
+        // look at the result and respond accordingly.
 
         try
         {
@@ -145,8 +156,7 @@ public class CreateArchetypeFromProjectMojo
                 propertyFile.getParentFile().mkdirs();
             }
 
-            List languages =
-                archetypeRegistryManager.getLanguages( archetypeLanguages, archetypeRegistryFile );
+            List languages = archetypeRegistryManager.getLanguages( archetypeLanguages, archetypeRegistryFile );
 
             configurator.configureArchetypeCreation(
                 project,

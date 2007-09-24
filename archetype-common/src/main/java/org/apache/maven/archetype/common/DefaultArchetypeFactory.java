@@ -164,6 +164,7 @@ public class DefaultArchetypeFactory
         configuration.setName( archetypeDescriptor.getName() );
 
         Iterator requiredProperties = archetypeDescriptor.getRequiredProperties().iterator();
+
         while ( requiredProperties.hasNext() )
         {
             org.apache.maven.archetype.metadata.RequiredProperty requiredProperty =
@@ -258,16 +259,14 @@ public class DefaultArchetypeFactory
             getLogger().debug( "Adding requiredProperty " + Constants.PACKAGE );
             if ( null
                 != properties.getProperty(
-                Constants.PACKAGE, configuration.getDefaultValue( Constants.PACKAGE ) /*,
-                    properties.getProperty ( Constants.PACKAGE_NAME, configuration.getDefaultValue ( Constants.PACKAGE_NAME ) )*/
+                Constants.PACKAGE, configuration.getDefaultValue( Constants.PACKAGE )
             )
                 )
             {
                 configuration.setProperty(
                     Constants.PACKAGE,
                     properties.getProperty(
-                        Constants.PACKAGE, configuration.getDefaultValue( Constants.PACKAGE ) /*,
-                        properties.getProperty ( Constants.PACKAGE_NAME, configuration.getDefaultValue ( Constants.PACKAGE_NAME ) )*/
+                        Constants.PACKAGE, configuration.getDefaultValue( Constants.PACKAGE )
                     )
                 );
                 getLogger().debug(
@@ -284,10 +283,6 @@ public class DefaultArchetypeFactory
                 properties.getProperty(
                     Constants.ARCHETYPE_POST_GENERATION_GOALS ) );
         }
-
-        System.out.println( "requiredProperties = " + requiredProperties );
-
-        System.out.println( "configuration = " + configuration );
 
         return configuration;
     }
