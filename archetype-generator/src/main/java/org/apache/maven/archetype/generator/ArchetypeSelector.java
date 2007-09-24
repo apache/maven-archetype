@@ -37,15 +37,14 @@ public interface ArchetypeSelector
 {
     String ROLE = ArchetypeSelector.class.getName();
 
-    void selectArchetype(
-        String archetypeGroupId,
-        String archetypeArtifactId,
-        String archetypeVersion,
-        Boolean interactiveMode,
-        File propertyFile,
-        File archetypeRegistryFile,
-        ArtifactRepository localRepository,
-        List repositories
+    void selectArchetype( String archetypeGroupId,
+                          String archetypeArtifactId,
+                          String archetypeVersion,
+                          Boolean interactiveMode,
+                          File propertyFile,
+                          File archetypeRegistryFile,
+                          ArtifactRepository localRepository,
+                          List repositories
     )
         throws
         ArchetypeNotDefined,

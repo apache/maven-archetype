@@ -26,17 +26,19 @@ public interface Constants
 {
     String ARCHETYPE_ARTIFACT_ID = "archetype.artifactId";
 
+    String ARCHETYPE_GROUP_ID = "archetype.groupId";
+
+    String ARCHETYPE_VERSION = "archetype.version";
+
     String ARCHETYPE_DESCRIPTOR = "META-INF/maven/archetype-metadata.xml";
 
-    String ARCHETYPE_GROUP_ID = "archetype.groupId";
+    String ARCHETYPE_POST_GENERATION_GOALS = "archetype.goals";
 
     String ARCHETYPE_POM = "pom.xml";
 
     String ARCHETYPE_RESOURCES = "archetype-resources";
 
     String ARCHETYPE_SUFFIX = "-archetype";
-
-    String ARCHETYPE_VERSION = "archetype.version";
 
     String ARTIFACT_ID = "artifactId";
 

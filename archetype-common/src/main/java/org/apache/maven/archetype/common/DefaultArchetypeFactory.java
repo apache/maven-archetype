@@ -130,22 +130,16 @@ public class DefaultArchetypeFactory
         getLogger().debug( "Adding requiredProperty " + Constants.PACKAGE );
         if ( null
             != properties.getProperty(
-            Constants.PACKAGE/*,
-                properties.getProperty ( Constants.PACKAGE_NAME, null )*/
+            Constants.PACKAGE
         )
             )
         {
             configuration.setProperty(
                 Constants.PACKAGE,
                 properties.getProperty(
-                    Constants.PACKAGE/*,
-                    properties.getProperty ( Constants.PACKAGE_NAME )*/
+                    Constants.PACKAGE
                 )
-            );/*
-            getLogger ().debug (
-                "Setting property " + Constants.PACKAGE_NAME + "="
-                + configuration.getProperty ( Constants.PACKAGE_NAME )
-            );*/
+            );
         }
 
         return configuration;
@@ -283,6 +277,18 @@ public class DefaultArchetypeFactory
             }
         }
 
+        if ( null != properties.getProperty( Constants.ARCHETYPE_POST_GENERATION_GOALS ) )
+        {
+            configuration.setProperty(
+                Constants.ARCHETYPE_POST_GENERATION_GOALS,
+                properties.getProperty(
+                    Constants.ARCHETYPE_POST_GENERATION_GOALS ) );
+        }
+
+        System.out.println( "requiredProperties = " + requiredProperties );
+
+        System.out.println( "configuration = " + configuration );
+
         return configuration;
     }
 
@@ -348,36 +354,15 @@ public class DefaultArchetypeFactory
 
         configuration.addRequiredProperty( Constants.PACKAGE );
         getLogger().debug( "Adding requiredProperty " + Constants.PACKAGE );
-        if ( null
-            != properties.getProperty(
-            Constants.PACKAGE/*,
-                properties.getProperty ( Constants.PACKAGE_NAME, null )*/
-        )
-            )
+        if ( null != properties.getProperty( Constants.PACKAGE ) )
         {
-            configuration.setProperty(
-                Constants.PACKAGE,
-                properties.getProperty(
-                    Constants.PACKAGE/*,
-                    properties.getProperty ( Constants.PACKAGE_NAME )*/
-                )
-            );
+            configuration.setProperty( Constants.PACKAGE, properties.getProperty( Constants.PACKAGE ) );
+            
             getLogger().debug(
                 "Setting property " + Constants.PACKAGE + "="
                     + configuration.getProperty( Constants.PACKAGE )
             );
         }
-        /*if ( null != properties.getProperty ( Constants.PACKAGE_NAME ) )
-        {
-            configuration.setProperty (
-                Constants.PACKAGE_NAME,
-                properties.getProperty ( Constants.PACKAGE_NAME )
-            );
-            getLogger ().debug (
-                "Setting property " + Constants.PACKAGE_NAME + "="
-                + configuration.getProperty ( Constants.PACKAGE_NAME )
-            );
-        }*/
 
         return configuration;
     }

@@ -48,6 +48,8 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -336,13 +338,20 @@ public class DefaultArchetypeRegistryManager
         {
             Map archetypes = loadArchetypesFromWiki( DEFAULT_ARCHETYPE_INVENTORY_PAGE );
 
+            Set repos = new HashSet();
+
             for ( Iterator i = archetypes.values().iterator(); i.hasNext(); )
             {
                 Archetype archetype = (Archetype) i.next();
 
                 registry.addArchetype( archetype );
 
-                registry.addArchetypeRepository( addRepository( archetype.getRepository(), archetype.getRepository() ) );                
+                if ( !repos.contains( archetype.getRepository() ) )
+                {
+                    registry.addArchetypeRepository( addRepository( archetype.getRepository(), archetype.getRepository() ) );
+
+                    repos.add( archetype.getRepository() );
+                }
             }
         }
         catch ( Exception e )
@@ -402,7 +411,7 @@ public class DefaultArchetypeRegistryManager
 
             if ( version.equals( "" ) )
             {
-                version = "LATEST";
+                version = "RELEASE";
             }
 
             arch.setVersion( version );

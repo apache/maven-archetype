@@ -34,8 +34,6 @@ public interface PomManager
 {
     String ROLE = PomManager.class.getName();
 
-    /**
-     */
     void addModule( File basedirPom,
                     String artifactId )
         throws
@@ -45,8 +43,6 @@ public interface PomManager
         DocumentException,
         InvalidPackaging;
 
-    /**
-     */
     void addParent( File pom,
                     File basedirPom )
         throws
@@ -54,8 +50,6 @@ public interface PomManager
         IOException,
         XmlPullParserException;
 
-    /**
-     */
     void mergePoms( File pom,
                     File temporaryPom )
         throws
@@ -63,16 +57,12 @@ public interface PomManager
         IOException,
         XmlPullParserException;
 
-    /**
-     */
     Model readPom( File pomFile )
         throws
         FileNotFoundException,
         IOException,
         XmlPullParserException;
 
-    /**
-     */
     void writePom( Model model,
                    File pomFile,
                    File initialPomFile )

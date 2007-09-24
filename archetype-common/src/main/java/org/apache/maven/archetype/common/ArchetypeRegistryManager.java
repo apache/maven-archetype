@@ -39,34 +39,24 @@ public interface ArchetypeRegistryManager
         IOException,
         XmlPullParserException;
 
-    /**
-     */
     List getArchetypeGroups( File archetypeRegistryFile );
 
-    /**
-     */
     List getFilteredExtensions( String archetypeFilteredExtentions,
                                 File archetypeRegistryFile )
         throws
         IOException;
 
-    /**
-     */
     List getLanguages( String archetypeLanguages,
                        File archetypeRegistryFile )
         throws
         IOException;
 
-    /**
-     */
     ArchetypeRegistry readArchetypeRegistry( File archetypeRegistryFile )
         throws
         IOException,
         FileNotFoundException,
         XmlPullParserException;
 
-    /**
-     */
     List getRepositories(
         List pomRemoteRepositories,
         String remoteRepositories,
@@ -76,8 +66,6 @@ public interface ArchetypeRegistryManager
         IOException,
         XmlPullParserException;
 
-    /**
-     */
     void writeArchetypeRegistry( File archetypeRegistryFile,
                                  ArchetypeRegistry archetypeRegistry )
         throws

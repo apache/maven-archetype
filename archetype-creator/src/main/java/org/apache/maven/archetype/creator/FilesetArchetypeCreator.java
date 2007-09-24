@@ -301,17 +301,7 @@ public class FilesetArchetypeCreator
             archetypeFilesDirectory, basedir,
             pomReversedProperties, preserveCData, keepParent );
 
-//        createArchetypePom (
-//            pom,
-//            archetypeFilesDirectory,
-//            pomReversedProperties,
-//            FileUtils.resolveFile ( basedir, Constants.ARCHETYPE_POM ),
-//            preserveCData,
-//            keepParent
-//        );
         getLogger().debug( "Created Archetype " + archetypeDescriptor.getName() + " pom" );
-
-//getLogger().debug("registeredProjects"+registeredProjects);
 
         ArchetypeDescriptorXpp3Writer writer = new ArchetypeDescriptorXpp3Writer();
         writer.write( new FileWriter( archetypeDescriptorFile ), archetypeDescriptor );
@@ -1229,14 +1219,6 @@ public class FilesetArchetypeCreator
         restoreParentArtifactId( reverseProperties, parentArtifactId );
         restoreArtifactId( reverseProperties, pom.getArtifactId() );
 
-//        createModulePom (
-//            pom,
-//            archetypeFilesDirectory,
-//            pomReversedProperties,
-//            FileUtils.resolveFile ( basedir, Constants.ARCHETYPE_POM ),
-//            preserveCData,
-//            keepParent
-//        );
         getLogger().debug( "Created Module " + archetypeDescriptor.getName() + " pom" );
 
         return archetypeDescriptor;
@@ -1575,7 +1557,6 @@ public class FilesetArchetypeCreator
                     new FileInputStream( inputFile ),
                     fileEncoding
                 );
-//            String initialcontent = FileUtils.fileRead ( inputFile );
 
             Iterator properties = reverseProperties.keySet().iterator();
             while ( properties.hasNext() )
@@ -1639,9 +1620,6 @@ public class FilesetArchetypeCreator
         reversedProperties.remove( Constants.ARCHETYPE_GROUP_ID );
         reversedProperties.remove( Constants.ARCHETYPE_ARTIFACT_ID );
         reversedProperties.remove( Constants.ARCHETYPE_VERSION );
-//        reversedProperties.remove ( Constants.GROUP_ID );
-//        reversedProperties.remove ( Constants.ARTIFACT_ID );
-//        reversedProperties.remove ( Constants.VERSION );
 
         return reversedProperties;
     }

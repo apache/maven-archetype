@@ -33,12 +33,12 @@ import org.apache.maven.archetype.exception.UnknownGroup;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 /** @plexus.component */
@@ -132,8 +132,14 @@ public class DefaultArchetypeSelector
 
                     ad.setRepository( archetype.getRepository() );
 
+                    String goals = StringUtils.join( archetype.getGoals().iterator(), "," );
+
+                    System.out.println( "goals = " + goals );
+
+                    ad.setGoals( goals );
+
                     archetypePropertiesManager.writeProperties(
-                        ad.toProperties(),
+                        toProperties( ad ),
                         propertyFile
                     );
 
@@ -319,10 +325,37 @@ public class DefaultArchetypeSelector
         else
         {
             archetypePropertiesManager.writeProperties(
-                archetypeDefinition.toProperties(),
+                toProperties( archetypeDefinition ),
                 propertyFile
             );
         }
+    }
+
+    public static Properties toProperties( ArchetypeDefinition ad )
+    {
+        java.util.Properties properties = new java.util.Properties ();
+
+        properties.setProperty (
+            Constants.ARCHETYPE_GROUP_ID,
+            (org.codehaus.plexus.util.StringUtils.isNotEmpty( ad.getGroupId () ) ? ad.getGroupId () : "" )
+        );
+
+        properties.setProperty (
+            Constants.ARCHETYPE_ARTIFACT_ID,
+            (org.codehaus.plexus.util.StringUtils.isNotEmpty( ad.getArtifactId () ) ? ad.getArtifactId () : "" )
+        );
+
+        properties.setProperty (
+            Constants.ARCHETYPE_VERSION,
+            (org.codehaus.plexus.util.StringUtils.isNotEmpty( ad.getVersion () ) ? ad.getVersion () : "" )
+        );
+
+        properties.setProperty (
+            Constants.ARCHETYPE_POST_GENERATION_GOALS,
+            (org.codehaus.plexus.util.StringUtils.isNotEmpty( ad.getGoals() ) ? ad.getGoals() : "" )
+        );
+
+        return properties;
     }
 
     private Properties initialiseArchetypeId(

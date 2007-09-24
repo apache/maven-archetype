@@ -19,6 +19,8 @@
 
 package org.apache.maven.archetype.mojos;
 
+import org.apache.maven.archetype.common.ArchetypePropertiesManager;
+import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.ContextEnabled;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -31,6 +33,7 @@ import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Properties;
 
 /**
  * Generates sample project from archetype.
@@ -62,6 +65,9 @@ public class CreateProjectFromArchetypeMojo
      */
     private String goals;
 
+    /** @component */
+    private ArchetypePropertiesManager propertiesManager;
+
     public void execute()
         throws
         MojoExecutionException,
@@ -71,13 +77,40 @@ public class CreateProjectFromArchetypeMojo
         // run some goals that the archetype creator has requested to be run once the project
         // has been created.
 
+        String postArchetypeGenerationGoals;
+
+        Properties p = new Properties();
+
+        try
+        {
+            propertiesManager.readProperties( p, new File( basedir, "archetype.properties" ) );
+
+            postArchetypeGenerationGoals = p.getProperty( Constants.ARCHETYPE_POST_GENERATION_GOALS );
+        }
+        catch( Exception e )
+        {
+            postArchetypeGenerationGoals = goals;
+        }
+
+        if ( StringUtils.isNotEmpty( postArchetypeGenerationGoals ) )
+        {
+            invokePostArchetypeGenerationGoals( postArchetypeGenerationGoals );
+        }        
+    }
+
+
+    private void invokePostArchetypeGenerationGoals( String goals )
+        throws
+        MojoExecutionException,
+        MojoFailureException
+    {
         //TODO update the archetype descriptor to save goals and properties
         //TODO probably write out the properties to a file for now
         //TODO remove the properties files when the execution is complete
 
         File projectBasedir = new File( basedir, (String) getPluginContext().get( "artifactId" ) );
 
-        if ( goals != null && projectBasedir.exists() )
+        if ( projectBasedir.exists() )
         {
             InvocationRequest request = new DefaultInvocationRequest()
                 .setBaseDirectory( projectBasedir )

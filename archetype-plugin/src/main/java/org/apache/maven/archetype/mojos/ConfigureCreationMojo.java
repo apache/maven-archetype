@@ -84,13 +84,6 @@ public class ConfigureCreationMojo
      */
     private File propertyFile;
 
-//    /**
-//     * @parameter  expression="${settings}"
-//     * @required
-//     * @readonly
-//     */
-//    private Settings settings;
-
     public void execute()
         throws
         MojoExecutionException,
@@ -109,7 +102,6 @@ public class ConfigureCreationMojo
             configurator.configureArchetypeCreation(
                 project,
                 new Boolean( interactive ),
-//                settings.getInteractiveMode (),
                 System.getProperties(),
                 propertyFile,
                 languages

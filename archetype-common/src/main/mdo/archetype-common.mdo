@@ -126,6 +126,10 @@ under the License.
           <name>repository</name>
           <type>String</type>
         </field>
+        <field>
+          <name>goals</name>
+          <type>String</type>
+        </field>
       </fields>
       <codeSegments>
         <codeSegment>
@@ -135,24 +139,6 @@ under the License.
         setGroupId ( null );
         setArtifactId ( null );
         setVersion ( null );
-    }
-
-    public java.util.Properties toProperties ()
-    {
-        java.util.Properties properties = new java.util.Properties ();
-        properties.setProperty (
-            Constants.ARCHETYPE_GROUP_ID,
-            (org.codehaus.plexus.util.StringUtils.isNotEmpty( getGroupId () ) ? getGroupId () : "" )
-        );
-        properties.setProperty (
-            Constants.ARCHETYPE_ARTIFACT_ID,
-            (org.codehaus.plexus.util.StringUtils.isNotEmpty( getArtifactId () ) ? getArtifactId () : "" )
-        );
-        properties.setProperty (
-            Constants.ARCHETYPE_VERSION,
-            (org.codehaus.plexus.util.StringUtils.isNotEmpty( getVersion () ) ? getVersion () : "" )
-        );
-        return properties;
     }
 
     public boolean isArtifactDefined ()
@@ -204,6 +190,10 @@ under the License.
           <type>String</type>
         </field>
         <field>
+          <name>goals</name>
+          <type>String</type>
+        </field>
+        <field>
           <name>RequiredProperties</name>
           <association>
             <type>String</type>
@@ -252,6 +242,12 @@ under the License.
             Constants.ARCHETYPE_VERSION,
             (org.codehaus.plexus.util.StringUtils.isNotEmpty( getVersion () ) ? getVersion () : "" )
         );
+
+        properties.setProperty (
+            Constants.ARCHETYPE_POST_GENERATION_GOALS,
+            (org.codehaus.plexus.util.StringUtils.isNotEmpty( getGoals() ) ? getGoals() : "" )
+        );
+
         return result;
     }
 
@@ -300,188 +296,5 @@ under the License.
         </codeSegment>
       </codeSegments>
     </class>
-    <!--
-            <class>
-                <name>Template</name>
-                <fields>
-                    <field>
-                        <name>Directory</name>
-                        <type>String</type>
-                    </field>
-                    <field>
-                        <name>InnerPath</name>
-                        <type>String</type>
-                    </field>
-                    <field>
-                        <name>Language</name>
-                        <type>String</type>
-                    </field>
-                    <field>
-                        <name>Main</name>
-                        <type>boolean</type>
-                    </field>
-                    <field>
-                        <name>Pom</name>
-                        <type>boolean</type>
-                    </field>
-                    <field>
-                        <name>Resource</name>
-                        <type>boolean</type>
-                    </field>
-                    <field>
-                        <name>SiteResource</name>
-                        <type>boolean</type>
-                    </field>
-                    <field>
-                        <name>Source</name>
-                        <type>boolean</type>
-                    </field>
-                    <field>
-                        <name>TemplateName</name>
-                        <type>String</type>
-                    </field>
-                    <field>
-                        <name>TemplatePath</name>
-                        <type>String</type>
-                    </field>
-                    <field>
-                        <name>Test</name>
-                        <type>boolean</type>
-                    </field>
-                </fields>
-                <codeSegments>
-                    <codeSegment>
-                        <code><![CDATA[
-            public Template (  String relativePath )
-            throws org.codehaus.mojo.archetypeng.exception.TemplateCreationException
-            {
-                if ( relativePath.equals ( Constants.ARCHETYPE_POM ) )
-                {
-                    setTemplatePath ( relativePath );
-                    setPom ( true );
-                }
-                else
-                {
-                    setTemplatePath ( relativePath );
-
-                    String srcLevel =
-                        org.codehaus.plexus.util.StringUtils.prechomp (
-                            relativePath,
-                            Constants.SRC + "/"
-                        );
-
-                    String firstLevel =
-                        org.codehaus.plexus.util.StringUtils.getPrechomp (
-                            srcLevel,
-                            "/"
-                        ).replace (
-                            "/",
-                            ""
-                        );
-                    String afterFirstLevel = org.codehaus.plexus.util.StringUtils.prechomp (
-                        srcLevel,
-                        "/"
-                    );
-                    String secondLevel =
-                        org.codehaus.plexus.util.StringUtils.getPrechomp (
-                            afterFirstLevel,
-                            "/"
-                        ).replace (
-                            "/",
-                            ""
-                        );
-                    String aftersecondLevel = org.codehaus.plexus.util.StringUtils.prechomp (
-                        afterFirstLevel,
-                        "/"
-                    );
-                    String afterLevel;
-
-                    if ( Constants.MAIN.equals ( firstLevel ) )
-                    {
-                        setMain ( true );
-                    }
-                    else if ( Constants.TEST.equals ( firstLevel ) )
-                    {
-                        setTest ( true );
-                    }
-                    else if ( Constants.SITE.equals ( firstLevel ) )
-                    {
-                        setSiteResource ( true );
-                    }
-                    else
-                    {
-                        throw new org.codehaus.mojo.archetypeng.exception.TemplateCreationException (
-                            "Unknown directory " + firstLevel
-                        );
-                    }
-
-                    if ( isMain () || isTest () )
-                    {
-                        if ( Constants.LANGUAGES.contains ( secondLevel ) )
-                        {
-                            setSource ( true );
-                            setLanguage ( secondLevel );
-                        }
-                        else
-                        {
-                            setResource ( true );
-                            setDirectory ( secondLevel );
-                        }
-                        afterLevel = aftersecondLevel;
-                    }
-                    else
-                    { // isSiteResource
-                        afterLevel = afterFirstLevel;
-                    }
-
-                    if ( org.codehaus.plexus.util.StringUtils.countMatches ( afterLevel, "/" ) > 0 )
-                    {
-                        setInnerPath (
-                            org.codehaus.plexus.util.StringUtils.chomp ( afterLevel, "/" )
-                        );
-                        setTemplateName (
-                            org.codehaus.plexus.util.StringUtils.getChomp (
-                                afterLevel,
-                                "/"
-                            ).replace (
-                                "/",
-                                ""
-                            )
-                        );
-                    }
-                    else
-                    {
-                        setInnerPath ( "" );
-                        setTemplateName ( afterLevel );
-                    }
-                } // end if
-            }
-
-            public String toString ()
-            {
-                return
-                    ( isPom ()
-                        ? "POM"
-                        : ( isMain ()
-                            ? ( "MAIN"
-                                + ( isSource () ? ( "-SOURCE(" + getLanguage () + ")" )
-                                                : ( "-RESOURCE(" + getDirectory () + ")" ) )
-                                + ( "".equals ( getInnerPath () ) ? "" : ( "-" + getInnerPath () ) )
-                                + "-" + getTemplateName () )
-                            : ( isTest ()
-                                ? ( "TEST"
-                                    + ( isSource () ? ( "-SOURCE(" + getLanguage () + ")" )
-                                                    : ( "-RESOURCE(" + getDirectory () + ")" ) )
-                                    + ( "".equals ( getInnerPath () ) ? "" : ( "-" + getInnerPath () ) )
-                                    + "-" + getTemplateName () )
-                                : ( "SITE"
-                                    + ( "".equals ( getInnerPath () ) ? "" : ( "-" + getInnerPath () ) )
-                                    + "-" + getTemplateName () ) ) ) );
-            }
-                        ]]></code>
-                    </codeSegment>
-                </codeSegments>
-            </class>
-    -->
   </classes>
 </model>
