@@ -20,34 +20,129 @@
 package org.apache.maven.archetype.mojos;
 
 import org.apache.maven.archetype.common.ArchetypePropertiesManager;
+import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 import org.apache.maven.archetype.common.Constants;
+import org.apache.maven.archetype.generator.ArchetypeGenerationConfigurator;
+import org.apache.maven.archetype.generator.ArchetypeGenerator;
+import org.apache.maven.archetype.generator.ArchetypeSelector;
+import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.ContextEnabled;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.settings.Settings;
 import org.apache.maven.shared.invoker.DefaultInvocationRequest;
 import org.apache.maven.shared.invoker.InvocationRequest;
 import org.apache.maven.shared.invoker.Invoker;
 import org.apache.maven.shared.invoker.MavenInvocationException;
+import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.PropertyUtils;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 /**
  * Generates sample project from archetype.
- * It delegates to the three mojos of the generate lifecycle: select-archetype, configure-generation, generate-project
  *
  * @author rafale
  * @requiresProject false
  * @goal create
- * @execute phase="generate-sources" lifecycle="generate"
+ * @execute phase="generate-sources"
  */
 public class CreateProjectFromArchetypeMojo
     extends AbstractMojo
     implements ContextEnabled
 {
+    // Select
+
+    /**
+     * The archetype's artifactId.
+     *
+     * @parameter expression="${archetypeArtifactId}"
+     */
+    private String archetypeArtifactId;
+
+    /**
+     * The archetype's groupId.
+     *
+     * @parameter expression="${archetypeGroupId}"
+     */
+    private String archetypeGroupId;
+
+    /**
+     * The archetype's version.
+     *
+     * @parameter expression="${archetypeVersion}"
+     */
+    private String archetypeVersion;
+
+
+    /** @component */
+    private ArchetypeSelector selector;
+
+    //! Select
+
+    /** @component */
+    ArchetypeRegistryManager archetypeRegistryManager;
+
+    /** @component */
+    ArchetypeGenerationConfigurator configurator;
+
+    /**
+     * The location of the registry file.
+     *
+     * @parameter expression="${user.home}/.m2/archetype.xml"
+     */
+    private File archetypeRegistryFile;
+
+    /**
+     * Local maven repository.
+     *
+     * @parameter expression="${localRepository}"
+     * @required
+     * @readonly
+     */
+    private ArtifactRepository localRepository;
+
+    /**
+     * Remote repositories defined in the project's pom (used only when called from an existing
+     * project).
+     *
+     * @parameter expression="${project.remoteArtifactRepositories}"
+     * @required
+     * @readonly
+     */
+    private List pomRemoteRepositories;
+
+    /**
+     * The property file that holds the plugin configuration.
+     *
+     * @parameter default-value="archetype.properties" expression="${archetype.properties}"
+     */
+    private File propertyFile = null;
+
+    /**
+     * Other remote repositories available for discovering dependencies and extensions.
+     *
+     * @parameter expression="${remoteRepositories}"
+     */
+    private String remoteRepositories;
+
+    /**
+     * User settings use to check the interactiveMode.
+     *
+     * @parameter expression="${settings}"
+     * @required
+     * @readonly
+     */
+    private Settings settings;
+
+    /** @component */
+    ArchetypeGenerator generator;
+
     /**
      * Maven invoker used to execution additional goals after the archetype has been created.
      *
@@ -73,6 +168,53 @@ public class CreateProjectFromArchetypeMojo
         MojoExecutionException,
         MojoFailureException
     {
+        // Select Archetype
+
+        try
+        {
+            List repositories =
+                archetypeRegistryManager.getRepositories(
+                    pomRemoteRepositories,
+                    remoteRepositories,
+                    archetypeRegistryFile
+                );
+
+            selector.selectArchetype(
+                archetypeGroupId,
+                archetypeArtifactId,
+                archetypeVersion,
+                settings.getInteractiveMode(),
+                propertyFile,
+                archetypeRegistryFile,
+                localRepository,
+                repositories
+            );
+
+            configurator.configureArchetype(
+                settings.getInteractiveMode(),
+                propertyFile,
+                System.getProperties(),
+                localRepository,
+                repositories
+            );
+
+            generator.generateArchetype( propertyFile, localRepository, repositories, basedir.getAbsolutePath() );
+
+            Properties archetypeProperties = PropertyUtils.loadProperties( propertyFile );
+
+            if ( archetypeProperties != null )
+            {
+                getPluginContext().put( "artifactId", archetypeProperties.getProperty( "artifactId" ) );
+            }
+        }
+        catch ( Exception ex )
+        {
+            throw new MojoExecutionException( ex.getMessage(), ex );
+        }
+
+        // Configure Generation
+
+
         // At this point the archetype has been generated from the archetype and now we will
         // run some goals that the archetype creator has requested to be run once the project
         // has been created.

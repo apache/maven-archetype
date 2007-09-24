@@ -34,12 +34,14 @@ import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
+import java.util.Iterator;
 
 /** @plexus.component */
 public class DefaultArchetypeSelector
@@ -113,7 +115,16 @@ public class DefaultArchetypeSelector
 
             if ( !archetypeDefinition.isDefined() )
             {
-                List availableArchetypeInRegistry = archetypeRegistryManager.getDefaultArchetypeRegistry().getArchetypes();
+                List availableArchetypeInRegistry;
+                
+                try
+                {
+                    availableArchetypeInRegistry = archetypeRegistryManager.readArchetypeRegistry( archetypeRegistryFile ).getArchetypes();
+                }
+                catch ( XmlPullParserException e )
+                {
+                    availableArchetypeInRegistry = archetypeRegistryManager.getDefaultArchetypeRegistry().getArchetypes();
+                }
 
                 if ( availableArchetypeInRegistry != null )
                 {
@@ -133,8 +144,6 @@ public class DefaultArchetypeSelector
                     ad.setRepository( archetype.getRepository() );
 
                     String goals = StringUtils.join( archetype.getGoals().iterator(), "," );
-
-                    System.out.println( "goals = " + goals );
 
                     ad.setGoals( goals );
 
