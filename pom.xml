@@ -34,12 +34,13 @@ under the License.
   <artifactId>maven-archetype</artifactId>
   <version>1.0-SNAPSHOT</version>
 
-  <name>Maven ArchetypeNG</name>
+  <name>Maven Archetype</name>
   <packaging>pom</packaging>
 
   <modules>
     <module>archetype-common</module>
     <module>archetype-plugin</module>
+    <module>archetype-packaging</module>
   </modules>
 
   <licenses>

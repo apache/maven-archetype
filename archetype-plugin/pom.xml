@@ -33,10 +33,10 @@ under the License.
   <groupId>org.apache.maven.plugins</groupId>
   <!--  The purpose is to call mvn archetypeng:*
 w/out the need to add a plugin group in settings -->
-  <artifactId>maven-archetypeng-plugin</artifactId>
+  <artifactId>maven-archetype-plugin</artifactId>
   <version>1.0-SNAPSHOT</version>
 
-  <name>Maven ArchetypeNG Plugin</name>
+  <name>Maven Archetype Plugin</name>
   <packaging>maven-plugin</packaging>
 
   <prerequisites>

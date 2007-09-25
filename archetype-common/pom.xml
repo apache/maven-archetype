@@ -32,7 +32,7 @@ under the License.
 
   <artifactId>archetype-common</artifactId>
 
-  <name>Maven ArchetypeNG Common</name>
+  <name>Maven Archetype Common</name>
   <packaging>jar</packaging>
 
   <dependencies>

@@ -1,0 +1,32 @@
+<component-set>
+    <components>
+        <component>
+            <role>org.apache.maven.lifecycle.mapping.LifecycleMapping</role>
+            <role-hint>maven-archetype</role-hint>
+            <implementation>org.apache.maven.lifecycle.mapping.DefaultLifecycleMapping</implementation>
+            <configuration>
+                <phases>
+                    <process-resources>org.apache.maven.plugins:maven-resources-plugin:resources</process-resources>
+                    <process-test-resources>org.apache.maven.plugins:maven-resources-plugin:testResources</process-test-resources>
+                    <package>org.apache.maven.plugins:maven-archetypeng-plugin:jar,
+                             org.apache.maven.plugins:maven-archetypeng-plugin:add-archetype-metadata</package><!--, AND METADATA LIKE MAVEN PLUGIN-->
+                    <integration-test>org.apache.maven.plugins:maven-archetypeng-plugin:integration-test</integration-test>
+                    <install>org.apache.maven.plugins:maven-install-plugin:install</install>
+                    <deploy>org.apache.maven.plugins:maven-deploy-plugin:deploy</deploy>
+                </phases>
+            </configuration>
+        </component>
+
+        <component>
+            <role>org.apache.maven.artifact.handler.ArtifactHandler</role>
+            <role-hint>maven-archetype</role-hint>
+            <implementation>org.apache.maven.artifact.handler.DefaultArtifactHandler</implementation>
+            <configuration>
+                <type>maven-archetype</type>
+                <extension>jar</extension>
+                <packaging>maven-archetype</packaging>
+            </configuration>
+        </component>
+
+    </components>
+</component-set>
