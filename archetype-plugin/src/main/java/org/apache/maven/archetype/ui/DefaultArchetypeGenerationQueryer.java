@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.maven.archetype.generator;
+package org.apache.maven.archetype.ui;
 
 import org.apache.maven.archetype.common.ArchetypeConfiguration;
 

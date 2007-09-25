@@ -19,7 +19,8 @@
 
 package org.apache.maven.archetype.creator;
 
-import org.apache.maven.archetype.common.Constants;
+//import org.apache.maven.archetype.ui.DefaultArchetypeCreationConfigurator;
+//import org.apache.maven.archetype.ui.ArchetypeCreationConfigurator;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.DefaultArtifactRepository;
 import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
@@ -30,7 +31,6 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.project.ProjectBuildingException;
 
-import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
 
 import java.io.File;
@@ -40,7 +40,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -52,6 +51,12 @@ public class DefaultArchetypeCreationConfiguratorTest
     private DefaultArtifactRepository localRepository;
 
     private List repositories;
+    
+    public void testNothing()
+    {
+        //TODO: All the tests were commented out Because the tested classes are beeing moved for now and will be removed soon
+    }
+    
 // Commented out since no exception are thrown if using defaults to all values
 //    public void testBatchModeArchetypeNotConfigured ()
 //    throws Exception
@@ -152,114 +157,115 @@ public class DefaultArchetypeCreationConfiguratorTest
 //            );
 //        }
 //    }
-
-    public void testBatchModeDefinedAndConfigured()
-        throws
-        Exception
-    {
-        System.out.println( "testBatchModePackageDefault" );
-
-        String project = "configure-creation-6";
-        File projectFile = getProjectFile( project );
-        File projectFileSample = getProjectSampleFile( project );
-        copy( projectFileSample, projectFile );
-        FileUtils.deleteDirectory( new File( projectFile.getParentFile(), "target" ) );
-
-        MavenProject mavenProject = loadProject( projectFile );
-
-        DefaultArchetypeCreationConfigurator instance =
-            (DefaultArchetypeCreationConfigurator) lookup( ArchetypeCreationConfigurator.ROLE );
-        instanceDefined( instance );
-
-        Properties commandLineProperties = new Properties();
-
-        File propertyFile = getPropertiesFile( project );
-        File propertyFileSample = getPropertiesSampleFile( project );
-        copy( propertyFileSample, propertyFile );
-
-        languages = new ArrayList();
-        languages.add( "java" );
-        languages.add( "aspectj" );
-        languages.add( "csharp" );
-        languages.add( "groovy" );
-        instance.configureArchetypeCreation(
-            mavenProject,
-            Boolean.FALSE,
-            commandLineProperties,
-            propertyFile,
-            languages
-        );
-
-        Properties properties = loadProperties( propertyFile );
-
-        assertEquals(
-            "org.apache.maven.archetype",
-            properties.getProperty( Constants.ARCHETYPE_GROUP_ID )
-        );
-        assertEquals(
-            "maven-archetype-test",
-            properties.getProperty( Constants.ARCHETYPE_ARTIFACT_ID )
-        );
-        assertEquals( "1.0", properties.getProperty( Constants.ARCHETYPE_VERSION ) );
-        assertEquals( "some.group.id", properties.getProperty( Constants.GROUP_ID ) );
-        assertEquals( "some-artifact-id", properties.getProperty( Constants.ARTIFACT_ID ) );
-        assertEquals( "1.0", properties.getProperty( Constants.VERSION ) );
-        assertEquals( "org.codehaus.mojo", properties.getProperty( Constants.PACKAGE ) );
-    }
-
-    public void testBatchModePackageDefault()
-        throws
-        Exception
-    {
-        System.out.println( "testBatchModePackageDefault" );
-
-        String project = "configure-creation-5";
-        File projectFile = getProjectFile( project );
-        File projectFileSample = getProjectSampleFile( project );
-        copy( projectFileSample, projectFile );
-        FileUtils.deleteDirectory( new File( projectFile.getParentFile(), "target" ) );
-
-        MavenProject mavenProject = loadProject( projectFile );
-
-        DefaultArchetypeCreationConfigurator instance =
-            (DefaultArchetypeCreationConfigurator) lookup( ArchetypeCreationConfigurator.ROLE );
-        instanceDefined( instance );
-
-        Properties commandLineProperties = new Properties();
-
-        File propertyFile = getPropertiesFile( project );
-        File propertyFileSample = getPropertiesSampleFile( project );
-        copy( propertyFileSample, propertyFile );
-
-        languages = new ArrayList();
-        languages.add( "java" );
-        languages.add( "aspectj" );
-        languages.add( "csharp" );
-        languages.add( "groovy" );
-        instance.configureArchetypeCreation(
-            mavenProject,
-            Boolean.FALSE,
-            commandLineProperties,
-            propertyFile,
-            languages
-        );
-
-        Properties properties = loadProperties( propertyFile );
-
-        assertEquals(
-            "org.apache.maven.archetype",
-            properties.getProperty( Constants.ARCHETYPE_GROUP_ID )
-        );
-        assertEquals(
-            "maven-archetype-test",
-            properties.getProperty( Constants.ARCHETYPE_ARTIFACT_ID )
-        );
-        assertEquals( "1.0", properties.getProperty( Constants.ARCHETYPE_VERSION ) );
-        assertEquals( "some.group.id", properties.getProperty( Constants.GROUP_ID ) );
-        assertEquals( "some-artifact-id", properties.getProperty( Constants.ARTIFACT_ID ) );
-        assertEquals( "1.0", properties.getProperty( Constants.VERSION ) );
-        assertEquals( "org.apache.maven.archetype", properties.getProperty( Constants.PACKAGE ) );
-    }
+// /*Commented on 2007 09 25
+//    public void testBatchModeDefinedAndConfigured()
+//        throws
+//        Exception
+//    {
+//        System.out.println( "testBatchModePackageDefault" );
+//
+//        String project = "configure-creation-6";
+//        File projectFile = getProjectFile( project );
+//        File projectFileSample = getProjectSampleFile( project );
+//        copy( projectFileSample, projectFile );
+//        FileUtils.deleteDirectory( new File( projectFile.getParentFile(), "target" ) );
+//
+//        MavenProject mavenProject = loadProject( projectFile );
+//
+//        DefaultArchetypeCreationConfigurator instance =
+//            (DefaultArchetypeCreationConfigurator) lookup( ArchetypeCreationConfigurator.ROLE );
+//        instanceDefined( instance );
+//
+//        Properties commandLineProperties = new Properties();
+//
+//        File propertyFile = getPropertiesFile( project );
+//        File propertyFileSample = getPropertiesSampleFile( project );
+//        copy( propertyFileSample, propertyFile );
+//
+//        languages = new ArrayList();
+//        languages.add( "java" );
+//        languages.add( "aspectj" );
+//        languages.add( "csharp" );
+//        languages.add( "groovy" );
+//        instance.configureArchetypeCreation(
+//            mavenProject,
+//            Boolean.FALSE,
+//            commandLineProperties,
+//            propertyFile,
+//            languages
+//        );
+//
+//        Properties properties = loadProperties( propertyFile );
+//
+//        assertEquals(
+//            "org.apache.maven.archetype",
+//            properties.getProperty( Constants.ARCHETYPE_GROUP_ID )
+//        );
+//        assertEquals(
+//            "maven-archetype-test",
+//            properties.getProperty( Constants.ARCHETYPE_ARTIFACT_ID )
+//        );
+//        assertEquals( "1.0", properties.getProperty( Constants.ARCHETYPE_VERSION ) );
+//        assertEquals( "some.group.id", properties.getProperty( Constants.GROUP_ID ) );
+//        assertEquals( "some-artifact-id", properties.getProperty( Constants.ARTIFACT_ID ) );
+//        assertEquals( "1.0", properties.getProperty( Constants.VERSION ) );
+//        assertEquals( "org.codehaus.mojo", properties.getProperty( Constants.PACKAGE ) );
+//    }
+//
+//    public void testBatchModePackageDefault()
+//        throws
+//        Exception
+//    {
+//        System.out.println( "testBatchModePackageDefault" );
+//
+//        String project = "configure-creation-5";
+//        File projectFile = getProjectFile( project );
+//        File projectFileSample = getProjectSampleFile( project );
+//        copy( projectFileSample, projectFile );
+//        FileUtils.deleteDirectory( new File( projectFile.getParentFile(), "target" ) );
+//
+//        MavenProject mavenProject = loadProject( projectFile );
+//
+//        DefaultArchetypeCreationConfigurator instance =
+//            (DefaultArchetypeCreationConfigurator) lookup( ArchetypeCreationConfigurator.ROLE );
+//        instanceDefined( instance );
+//
+//        Properties commandLineProperties = new Properties();
+//
+//        File propertyFile = getPropertiesFile( project );
+//        File propertyFileSample = getPropertiesSampleFile( project );
+//        copy( propertyFileSample, propertyFile );
+//
+//        languages = new ArrayList();
+//        languages.add( "java" );
+//        languages.add( "aspectj" );
+//        languages.add( "csharp" );
+//        languages.add( "groovy" );
+//        instance.configureArchetypeCreation(
+//            mavenProject,
+//            Boolean.FALSE,
+//            commandLineProperties,
+//            propertyFile,
+//            languages
+//        );
+//
+//        Properties properties = loadProperties( propertyFile );
+//
+//        assertEquals(
+//            "org.apache.maven.archetype",
+//            properties.getProperty( Constants.ARCHETYPE_GROUP_ID )
+//        );
+//        assertEquals(
+//            "maven-archetype-test",
+//            properties.getProperty( Constants.ARCHETYPE_ARTIFACT_ID )
+//        );
+//        assertEquals( "1.0", properties.getProperty( Constants.ARCHETYPE_VERSION ) );
+//        assertEquals( "some.group.id", properties.getProperty( Constants.GROUP_ID ) );
+//        assertEquals( "some-artifact-id", properties.getProperty( Constants.ARTIFACT_ID ) );
+//        assertEquals( "1.0", properties.getProperty( Constants.VERSION ) );
+//        assertEquals( "org.apache.maven.archetype", properties.getProperty( Constants.PACKAGE ) );
+//    }
+// Commented on 2007 09 25*/
 // Commented out since no exception are thrown if using defaults to all values
 //    public void testBatchModePackageDefaultToEmpty ()
 //    throws Exception
@@ -359,84 +365,86 @@ public class DefaultArchetypeCreationConfiguratorTest
 //            );
 //        }
 //    }
-
-    public void testInteractiveModeNotConfirm()
-        throws
-        Exception
-    {
-        System.out.println( "testInteractiveModeNotConfirm" );
-
-        String project = "configure-creation-8";
-        File projectFile = getProjectFile( project );
-        File projectFileSample = getProjectSampleFile( project );
-        copy( projectFileSample, projectFile );
-        FileUtils.deleteDirectory( new File( projectFile.getParentFile(), "target" ) );
-
-        MavenProject mavenProject = loadProject( projectFile );
-
-        DefaultArchetypeCreationConfigurator instance =
-            (DefaultArchetypeCreationConfigurator) lookup( ArchetypeCreationConfigurator.ROLE );
-        instanceDefined( instance );
-
-        Properties commandLineProperties = new Properties();
-
-        File propertyFile = getPropertiesFile( project );
-        File propertyFileSample = getPropertiesSampleFile( project );
-        copy( propertyFileSample, propertyFile );
-
-        MockPrompter prompter = new MockPrompter();
-        prompter.addAnswer( "N" );
-        prompter.addAnswer( "N" );
-        prompter.addAnswer( "org.apache.maven.archetypes2" );
-        prompter.addAnswer( "maven-archetype-test2" );
-        prompter.addAnswer( "1.0.2" );
-        prompter.addAnswer( "some.group.id2" );
-        prompter.addAnswer( "some-artifact-id2" );
-        prompter.addAnswer( "1.0.2" );
-        prompter.addAnswer( "org.codehaus" );
-        prompter.addAnswer( "Y" );
-        prompter.addAnswer( "aProperty" );
-        prompter.addAnswer( "some.value" );
-        prompter.addAnswer( "N" );
-        prompter.addAnswer( "Y" );
-        setVariableValueToObject(
-            getVariableValueFromObject( instance, "archetypeCreationQueryer" ),
-            "prompter",
-            prompter
-        );
-
-        languages = new ArrayList();
-        languages.add( "java" );
-        languages.add( "aspectj" );
-        languages.add( "csharp" );
-        languages.add( "groovy" );
-        instance.configureArchetypeCreation(
-            mavenProject,
-            Boolean.TRUE,
-            commandLineProperties,
-            propertyFile,
-            languages
-        );
-
-        Properties properties = loadProperties( propertyFile );
-
-        assertEquals(
-            "org.apache.maven.archetypes2",
-            properties.getProperty( Constants.ARCHETYPE_GROUP_ID )
-        );
-        assertEquals(
-            "maven-archetype-test2",
-            properties.getProperty( Constants.ARCHETYPE_ARTIFACT_ID )
-        );
-        assertEquals( "1.0.2", properties.getProperty( Constants.ARCHETYPE_VERSION ) );
-        assertEquals( "some.group.id2", properties.getProperty( Constants.GROUP_ID ) );
-        assertEquals( "some-artifact-id2", properties.getProperty( Constants.ARTIFACT_ID ) );
-        assertEquals( "1.0.2", properties.getProperty( Constants.VERSION ) );
-        assertEquals( "org.codehaus", properties.getProperty( Constants.PACKAGE ) );
-        assertEquals( "some.value", properties.getProperty( "aProperty" ) );
-
-        assertEquals( 8, properties.size() );
-    }
+//
+// /*Commented on 2007 09 25
+//    public void testInteractiveModeNotConfirm()
+//        throws
+//        Exception
+//    {
+//        System.out.println( "testInteractiveModeNotConfirm" );
+//
+//        String project = "configure-creation-8";
+//        File projectFile = getProjectFile( project );
+//        File projectFileSample = getProjectSampleFile( project );
+//        copy( projectFileSample, projectFile );
+//        FileUtils.deleteDirectory( new File( projectFile.getParentFile(), "target" ) );
+//
+//        MavenProject mavenProject = loadProject( projectFile );
+//
+//        DefaultArchetypeCreationConfigurator instance =
+//            (DefaultArchetypeCreationConfigurator) lookup( ArchetypeCreationConfigurator.ROLE );
+//        instanceDefined( instance );
+//
+//        Properties commandLineProperties = new Properties();
+//
+//        File propertyFile = getPropertiesFile( project );
+//        File propertyFileSample = getPropertiesSampleFile( project );
+//        copy( propertyFileSample, propertyFile );
+//
+//        MockPrompter prompter = new MockPrompter();
+//        prompter.addAnswer( "N" );
+//        prompter.addAnswer( "N" );
+//        prompter.addAnswer( "org.apache.maven.archetypes2" );
+//        prompter.addAnswer( "maven-archetype-test2" );
+//        prompter.addAnswer( "1.0.2" );
+//        prompter.addAnswer( "some.group.id2" );
+//        prompter.addAnswer( "some-artifact-id2" );
+//        prompter.addAnswer( "1.0.2" );
+//        prompter.addAnswer( "org.codehaus" );
+//        prompter.addAnswer( "Y" );
+//        prompter.addAnswer( "aProperty" );
+//        prompter.addAnswer( "some.value" );
+//        prompter.addAnswer( "N" );
+//        prompter.addAnswer( "Y" );
+//        setVariableValueToObject(
+//            getVariableValueFromObject( instance, "archetypeCreationQueryer" ),
+//            "prompter",
+//            prompter
+//        );
+//
+//        languages = new ArrayList();
+//        languages.add( "java" );
+//        languages.add( "aspectj" );
+//        languages.add( "csharp" );
+//        languages.add( "groovy" );
+//        instance.configureArchetypeCreation(
+//            mavenProject,
+//            Boolean.TRUE,
+//            commandLineProperties,
+//            propertyFile,
+//            languages
+//        );
+//
+//        Properties properties = loadProperties( propertyFile );
+//
+//        assertEquals(
+//            "org.apache.maven.archetypes2",
+//            properties.getProperty( Constants.ARCHETYPE_GROUP_ID )
+//        );
+//        assertEquals(
+//            "maven-archetype-test2",
+//            properties.getProperty( Constants.ARCHETYPE_ARTIFACT_ID )
+//        );
+//        assertEquals( "1.0.2", properties.getProperty( Constants.ARCHETYPE_VERSION ) );
+//        assertEquals( "some.group.id2", properties.getProperty( Constants.GROUP_ID ) );
+//        assertEquals( "some-artifact-id2", properties.getProperty( Constants.ARTIFACT_ID ) );
+//        assertEquals( "1.0.2", properties.getProperty( Constants.VERSION ) );
+//        assertEquals( "org.codehaus", properties.getProperty( Constants.PACKAGE ) );
+//        assertEquals( "some.value", properties.getProperty( "aProperty" ) );
+//
+//        assertEquals( 8, properties.size() );
+//    }
+// Commented on 2007 09 25*/
 // Commented out if using defaults to all values => change the prompt question order
 //    public void testInteractiveModePropertyFileMissing ()
 //    throws Exception
@@ -557,16 +565,18 @@ public class DefaultArchetypeCreationConfiguratorTest
         assertTrue( in.exists() );
     }
 
-    private void instanceDefined( DefaultArchetypeCreationConfigurator instance )
-        throws
-        IllegalAccessException
-    {
-        assertNotNull( instance );
-        assertNotNull( getVariableValueFromObject( instance, "archetypeCreationQueryer" ) );
-        assertNotNull( getVariableValueFromObject( instance, "archetypeFactory" ) );
-        assertNotNull( getVariableValueFromObject( instance, "archetypePropertiesManager" ) );
-        assertNotNull( getVariableValueFromObject( instance, "archetypeFilesResolver" ) );
-    }
+// /*Commented on 2007 09 25
+//    private void instanceDefined( DefaultArchetypeCreationConfigurator instance )
+//        throws
+//        IllegalAccessException
+//    {
+//        assertNotNull( instance );
+//        assertNotNull( getVariableValueFromObject( instance, "archetypeCreationQueryer" ) );
+//        assertNotNull( getVariableValueFromObject( instance, "archetypeFactory" ) );
+//        assertNotNull( getVariableValueFromObject( instance, "archetypePropertiesManager" ) );
+//        assertNotNull( getVariableValueFromObject( instance, "archetypeFilesResolver" ) );
+//    }
+// Commented on 2007 09 25*/
 
     private MavenProject loadProject( final File projectFile )
         throws

@@ -23,7 +23,7 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
-import org.apache.maven.archetype.creator.ArchetypeCreationConfigurator;
+import org.apache.maven.archetype.ui.ArchetypeCreationConfigurator;
 import org.apache.maven.archetype.creator.ArchetypeCreator;
 import org.apache.maven.project.MavenProject;
 

@@ -19,6 +19,8 @@
 
 package org.apache.maven.archetype.generator;
 
+//import org.apache.maven.archetype.ui.ArchetypeSelector;
+//import org.apache.maven.archetype.ui.DefaultArchetypeSelector;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.DefaultArtifactRepository;
 import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
@@ -43,542 +45,549 @@ public class DefaultArchetypeSelectorTest
     ArtifactRepository localRepository;
     List repositories;
 
-    public void testBatchModeNoPropertyDefined()
-        throws
-        Exception
+    public void testNothing()
     {
-        System.out.println( "testBatchModeNoPropertyDefined" );
-
-        String archetypeGroupId = null;
-        String archetypeArtifactId = null;
-        String archetypeVersion = null;
-
-        Boolean interactiveMode = Boolean.FALSE;
-        String project = "select-1";
-        File propertyFile = getPropertiesFile( project );
-        assertTrue( !propertyFile.exists() || propertyFile.delete() );
-
-        File archetypeRegistryFile = getRegistryFile( project );
-
-        DefaultArchetypeSelector instance =
-            (DefaultArchetypeSelector) lookup( ArchetypeSelector.ROLE );
-        instanceDefined( instance );
-
-        assertFalse( propertyFile.exists() );
-
-        try
-        {
-            instance.selectArchetype(
-                archetypeGroupId,
-                archetypeArtifactId,
-                archetypeVersion,
-                interactiveMode,
-                propertyFile,
-                archetypeRegistryFile,
-                localRepository,
-                repositories
-            );
-
-            fail( "Exception must be thrown" );
-        }
-        catch ( Exception e )
-        {
-            assertEquals(
-                "Exception not correct",
-                "The archetype is not defined",
-                e.getMessage()
-            );
-            assertFalse( propertyFile.exists() );
-        }
+        //TODO: All the tests were commented out Because the tested classes are beeing moved for now and will be removed soon
     }
-
-    public void testBatchModePropertiesDefinedInFile()
-        throws
-        Exception
-    {
-        System.out.println( "testBatchModePropertiesDefinedInFile" );
-
-        String archetypeGroupId = null;
-        String archetypeArtifactId = null;
-        String archetypeVersion = null;
-
-        Boolean interactiveMode = Boolean.FALSE;
-
-        String project = "select-2";
-        File propertyFile = getPropertiesFile( project );
-        File propertyFileSample = getPropertiesSampleFile( project );
-        copy( propertyFileSample, propertyFile );
-
-        File archetypeRegistryFile = getRegistryFile( project );
-
-        DefaultArchetypeSelector instance =
-            (DefaultArchetypeSelector) lookup( ArchetypeSelector.ROLE );
-
-        instanceDefined( instance );
-
-        assertTrue( propertyFile.exists() );
-
-        instance.selectArchetype(
-            archetypeGroupId,
-            archetypeArtifactId,
-            archetypeVersion,
-            interactiveMode,
-            propertyFile,
-            archetypeRegistryFile,
-            localRepository,
-            repositories
-        );
-
-        assertTrue( propertyFile.exists() );
-
-        Properties properties = loadProperties( propertyFile );
-        assertEquals( "archetypes", properties.getProperty( "archetype.groupId" ) );
-        assertEquals( "basic", properties.getProperty( "archetype.artifactId" ) );
-        assertEquals( "1.0", properties.getProperty( "archetype.version" ) );
-    }
-
-    public void testBatchModePropertiesDefinedInSystem()
-        throws
-        Exception
-    {
-        System.out.println( "testBatchModePropertiesDefinedInSystem" );
-
-        String archetypeGroupId = "archetypes";
-        String archetypeArtifactId = "basic";
-        String archetypeVersion = "1.0";
-
-        Boolean interactiveMode = Boolean.FALSE;
-
-        String project = "select-3";
-        File propertyFile = getPropertiesFile( project );
-        assertTrue( !propertyFile.exists() || propertyFile.delete() );
-
-        File archetypeRegistryFile = getRegistryFile( project );
-
-        DefaultArchetypeSelector instance =
-            (DefaultArchetypeSelector) lookup( ArchetypeSelector.ROLE );
-
-        instanceDefined( instance );
-
-        assertFalse( propertyFile.exists() );
-
-        instance.selectArchetype(
-            archetypeGroupId,
-            archetypeArtifactId,
-            archetypeVersion,
-            interactiveMode,
-            propertyFile,
-            archetypeRegistryFile,
-            localRepository,
-            repositories
-        );
-
-        assertTrue( propertyFile.exists() );
-
-        Properties properties = loadProperties( propertyFile );
-        assertEquals( "archetypes", properties.getProperty( "archetype.groupId" ) );
-        assertEquals( "basic", properties.getProperty( "archetype.artifactId" ) );
-        assertEquals( "1.0", properties.getProperty( "archetype.version" ) );
-    }
-
-    public void testBatchModePropertiesOverrided()
-        throws
-        Exception
-    {
-        System.out.println( "testBatchModePropertiesOverrided" );
-
-        String archetypeGroupId = "archetypes";
-        String archetypeArtifactId = "dont-exist";
-        String archetypeVersion = "1.0";
-
-        Boolean interactiveMode = Boolean.FALSE;
-
-        String project = "select-4";
-        File propertyFile = getPropertiesFile( project );
-        File propertyFileSample = getPropertiesSampleFile( project );
-        copy( propertyFileSample, propertyFile );
-
-        File archetypeRegistryFile = getRegistryFile( project );
-
-        DefaultArchetypeSelector instance =
-            (DefaultArchetypeSelector) lookup( ArchetypeSelector.ROLE );
-
-        instanceDefined( instance );
-
-        assertTrue( propertyFile.exists() );
-
-        try
-        {
-            instance.selectArchetype(
-                archetypeGroupId,
-                archetypeArtifactId,
-                archetypeVersion,
-                interactiveMode,
-                propertyFile,
-                archetypeRegistryFile,
-                localRepository,
-                repositories
-            );
-
-            fail( "Exception must be thrown" );
-        }
-        catch ( Exception e )
-        {
-            assertEquals(
-                "Exception not correct",
-                "The desired archetype does not exist (" + archetypeGroupId + ":"
-                    + archetypeArtifactId + ":" + archetypeVersion + ")",
-                e.getMessage()
-            );
-            assertTrue( propertyFile.exists() );
-
-            Properties properties = loadProperties( propertyFile );
-            assertEquals( "archetypes", properties.getProperty( "archetype.groupId" ) );
-            assertEquals( "basic", properties.getProperty( "archetype.artifactId" ) );
-            assertEquals( "1.0", properties.getProperty( "archetype.version" ) );
-        }
-    }
-
-    public void testInteractiveModePropertiesDefinedInFileAndAskedWithoutConfirmation()
-        throws
-        Exception
-    {
-        System.out.println(
-            "testInteractiveModePropertiesDefinedInFileAndAskedWithoutConfirmation"
-        );
-
-        String archetypeGroupId = null;
-        String archetypeArtifactId = null;
-        String archetypeVersion = null;
-
-        Boolean interactiveMode = Boolean.TRUE;
-
-        String project = "select-8";
-        File propertyFile = getPropertiesFile( project );
-        File propertyFileSample = getPropertiesSampleFile( project );
-        copy( propertyFileSample, propertyFile );
-
-        File archetypeRegistryFile = getRegistryFile( project );
-
-        DefaultArchetypeSelector instance =
-            (DefaultArchetypeSelector) lookup( ArchetypeSelector.ROLE );
-
-        instanceDefined( instance );
-
-        assertTrue( propertyFile.exists() );
-
-        MockPrompter prompter = new MockPrompter();
-        prompter.addAnswer( "1" );
-        prompter.addAnswer( "N" );
-        prompter.addAnswer( "1" );
-        prompter.addAnswer( "1" );
-        prompter.addAnswer( "Y" );
-        setVariableValueToObject(
-            getVariableValueFromObject( instance, "archetypeSelectionQueryer" ),
-            "prompter",
-            prompter
-        );
-
-        instance.selectArchetype(
-            archetypeGroupId,
-            archetypeArtifactId,
-            archetypeVersion,
-            interactiveMode,
-            propertyFile,
-            archetypeRegistryFile,
-            localRepository,
-            repositories
-        );
-
-        assertTrue( propertyFile.exists() );
-
-        Properties properties = loadProperties( propertyFile );
-        assertEquals( "archetypes", properties.getProperty( "archetype.groupId" ) );
-        assertEquals( "basic", properties.getProperty( "archetype.artifactId" ) );
-        assertEquals( "1.0", properties.getProperty( "archetype.version" ) );
-    }
-
-    public void testInteractiveModePropertiesDefinedInFileWithoutConfirmation()
-        throws
-        Exception
-    {
-        System.out.println( "testInteractiveModePropertiesDefinedInFileWithoutConfirmation" );
-
-        String archetypeGroupId = "archetypes";
-        String archetypeArtifactId = "basic";
-        String archetypeVersion = "1.0";
-
-        Boolean interactiveMode = Boolean.TRUE;
-
-        String project = "select-7";
-        File propertyFile = getPropertiesFile( project );
-        File propertyFileSample = getPropertiesSampleFile( project );
-        copy( propertyFileSample, propertyFile );
-
-        File archetypeRegistryFile = getRegistryFile( project );
-
-        DefaultArchetypeSelector instance =
-            (DefaultArchetypeSelector) lookup( ArchetypeSelector.ROLE );
-
-        instanceDefined( instance );
-
-        assertTrue( propertyFile.exists() );
-
-        MockPrompter prompter = new MockPrompter();
-        prompter.addAnswer( "N" );
-        prompter.addAnswer( "1" );
-        prompter.addAnswer( "1" );
-        prompter.addAnswer( "Y" );
-        setVariableValueToObject(
-            getVariableValueFromObject( instance, "archetypeSelectionQueryer" ),
-            "prompter",
-            prompter
-        );
-
-        instance.selectArchetype(
-            archetypeGroupId,
-            archetypeArtifactId,
-            archetypeVersion,
-            interactiveMode,
-            propertyFile,
-            archetypeRegistryFile,
-            localRepository,
-            repositories
-        );
-
-        assertTrue( propertyFile.exists() );
-
-        Properties properties = loadProperties( propertyFile );
-        assertEquals( "archetypes", properties.getProperty( "archetype.groupId" ) );
-        assertEquals( "basic", properties.getProperty( "archetype.artifactId" ) );
-        assertEquals( "1.0", properties.getProperty( "archetype.version" ) );
-    }
-
-    public void testInteractiveModePropertiesDefinedInSystemAndAskedMissing()
-        throws
-        Exception
-    {
-        System.out.println( "testInteractiveModePropertiesDefinedInSystemAndAskedMissing" );
-
-        String archetypeGroupId = "archetypes";
-        String archetypeArtifactId = "basic";
-        String archetypeVersion = null;
-
-        Boolean interactiveMode = Boolean.TRUE;
-
-        String project = "select-6";
-        File propertyFile = getPropertiesFile( project );
-        assertTrue( !propertyFile.exists() || propertyFile.delete() );
-
-        File archetypeRegistryFile = getRegistryFile( project );
-
-        DefaultArchetypeSelector instance =
-            (DefaultArchetypeSelector) lookup( ArchetypeSelector.ROLE );
-
-        instanceDefined( instance );
-
-        assertFalse( propertyFile.exists() );
-
-        MockPrompter prompter = new MockPrompter();
-        prompter.addAnswer( "1" );
-        prompter.addAnswer( "Y" );
-        setVariableValueToObject(
-            getVariableValueFromObject( instance, "archetypeSelectionQueryer" ),
-            "prompter",
-            prompter
-        );
-
-        instance.selectArchetype(
-            archetypeGroupId,
-            archetypeArtifactId,
-            archetypeVersion,
-            interactiveMode,
-            propertyFile,
-            archetypeRegistryFile,
-            localRepository,
-            repositories
-        );
-
-        assertTrue( propertyFile.exists() );
-
-        Properties properties = loadProperties( propertyFile );
-        assertEquals( "archetypes", properties.getProperty( "archetype.groupId" ) );
-        assertEquals( "basic", properties.getProperty( "archetype.artifactId" ) );
-        assertEquals( "1.0", properties.getProperty( "archetype.version" ) );
-    }
-
-    public void XXtestInteractiveModePropertiesNotDefined()
-        throws
-        Exception
-    {
-        System.out.println( "testInteractiveModePropertiesNotDefined" );
-
-        String archetypeGroupId = null;
-        String archetypeArtifactId = null;
-        String archetypeVersion = null;
-
-        Boolean interactiveMode = Boolean.TRUE;
-
-        String project = "select-5";
-        File propertyFile = getPropertiesFile( project );
-        assertTrue( !propertyFile.exists() || propertyFile.delete() );
-
-        File archetypeRegistryFile = getRegistryFile( project );
-
-        DefaultArchetypeSelector instance =
-            (DefaultArchetypeSelector) lookup( ArchetypeSelector.ROLE );
-
-        instanceDefined( instance );
-
-        assertFalse( propertyFile.exists() );
-
-        MockPrompter prompter = new MockPrompter();
-        prompter.addAnswer( "2" );
-        prompter.addAnswer( "1" );
-        prompter.addAnswer( "1" );
-        prompter.addAnswer( "Y" );
-        setVariableValueToObject(
-            getVariableValueFromObject( instance, "archetypeSelectionQueryer" ),
-            "prompter",
-            prompter
-        );
-
-        instance.selectArchetype(
-            archetypeGroupId,
-            archetypeArtifactId,
-            archetypeVersion,
-            interactiveMode,
-            propertyFile,
-            archetypeRegistryFile,
-            localRepository,
-            repositories
-        );
-
-        assertTrue( propertyFile.exists() );
-
-        Properties properties = loadProperties( propertyFile );
-        assertEquals( "archetypes", properties.getProperty( "archetype.groupId" ) );
-        assertEquals( "basic", properties.getProperty( "archetype.artifactId" ) );
-        assertEquals( "1.0", properties.getProperty( "archetype.version" ) );
-    }
-
-
-    public void XXtestInteractiveModeUnknownGroup()
-        throws
-        Exception
-    {
-        System.out.println( "testInteractiveModeUnknownGroup" );
-
-        String archetypeGroupId = null;
-        String archetypeArtifactId = null;
-        String archetypeVersion = null;
-
-        Boolean interactiveMode = Boolean.TRUE;
-
-        String project = "select-9";
-        File propertyFile = getPropertiesFile( project );
-        assertTrue( !propertyFile.exists() || propertyFile.delete() );
-
-        File archetypeRegistryFile = getRegistryFile( project );
-
-        DefaultArchetypeSelector instance =
-            (DefaultArchetypeSelector) lookup( ArchetypeSelector.ROLE );
-
-        instanceDefined( instance );
-
-        assertFalse( propertyFile.exists() );
-
-        MockPrompter prompter = new MockPrompter();
-        prompter.addAnswer( "1" );
-        prompter.addAnswer( "1" );
-        prompter.addAnswer( "1" );
-        prompter.addAnswer( "1" );
-        prompter.addAnswer( "Y" );
-        setVariableValueToObject(
-            getVariableValueFromObject( instance, "archetypeSelectionQueryer" ),
-            "prompter",
-            prompter
-        );
-
-        instance.selectArchetype(
-            archetypeGroupId,
-            archetypeArtifactId,
-            archetypeVersion,
-            interactiveMode,
-            propertyFile,
-            archetypeRegistryFile,
-            localRepository,
-            repositories
-        );
-
-        assertTrue( propertyFile.exists() );
-
-        Properties properties = loadProperties( propertyFile );
-        assertEquals( "archetypes", properties.getProperty( "archetype.groupId" ) );
-        assertEquals( "basic", properties.getProperty( "archetype.artifactId" ) );
-        assertEquals( "1.0", properties.getProperty( "archetype.version" ) );
-    }
-
-    public void XXtestInteractiveModeUnknownGroups()
-        throws
-        Exception
-    {
-        System.out.println( "testInteractiveModeUnknownGroups" );
-
-        String archetypeGroupId = null;
-        String archetypeArtifactId = null;
-        String archetypeVersion = null;
-
-        Boolean interactiveMode = Boolean.TRUE;
-
-        String project = "select-10";
-        File propertyFile = getPropertiesFile( project );
-        assertTrue( !propertyFile.exists() || propertyFile.delete() );
-
-        File archetypeRegistryFile = getRegistryFile( project );
-
-        DefaultArchetypeSelector instance =
-            (DefaultArchetypeSelector) lookup( ArchetypeSelector.ROLE );
-
-        instanceDefined( instance );
-
-        assertFalse( propertyFile.exists() );
-
-        MockPrompter prompter = new MockPrompter();
-        prompter.addAnswer( "1" );
-        prompter.addAnswer( "1" );
-        prompter.addAnswer( "1" );
-        setVariableValueToObject(
-            getVariableValueFromObject( instance, "archetypeSelectionQueryer" ),
-            "prompter",
-            prompter
-        );
-
-        try
-        {
-            instance.selectArchetype(
-                archetypeGroupId,
-                archetypeArtifactId,
-                archetypeVersion,
-                interactiveMode,
-                propertyFile,
-                archetypeRegistryFile,
-                localRepository,
-                repositories
-            );
-
-            fail( "Exception must be thrown" );
-        }
-        catch ( Exception e )
-        {
-            assertEquals(
-                "Exception not correct",
-                "No registered group contain an archetype",
-                e.getMessage()
-            );
-            assertFalse( propertyFile.exists() );
-        }
-    }
+    
+// /*Commented on 2007 09 25
+//    public void testBatchModeNoPropertyDefined()
+//        throws
+//        Exception
+//    {
+//        System.out.println( "testBatchModeNoPropertyDefined" );
+//
+//        String archetypeGroupId = null;
+//        String archetypeArtifactId = null;
+//        String archetypeVersion = null;
+//
+//        Boolean interactiveMode = Boolean.FALSE;
+//        String project = "select-1";
+//        File propertyFile = getPropertiesFile( project );
+//        assertTrue( !propertyFile.exists() || propertyFile.delete() );
+//
+//        File archetypeRegistryFile = getRegistryFile( project );
+//
+//        DefaultArchetypeSelector instance =
+//            (DefaultArchetypeSelector) lookup( ArchetypeSelector.ROLE );
+//        instanceDefined( instance );
+//
+//        assertFalse( propertyFile.exists() );
+//
+//        try
+//        {
+//            instance.selectArchetype(
+//                archetypeGroupId,
+//                archetypeArtifactId,
+//                archetypeVersion,
+//                interactiveMode,
+//                propertyFile,
+//                archetypeRegistryFile,
+//                localRepository,
+//                repositories
+//            );
+//
+//            fail( "Exception must be thrown" );
+//        }
+//        catch ( Exception e )
+//        {
+//            assertEquals(
+//                "Exception not correct",
+//                "The archetype is not defined",
+//                e.getMessage()
+//            );
+//            assertFalse( propertyFile.exists() );
+//        }
+//    }
+//
+//    public void testBatchModePropertiesDefinedInFile()
+//        throws
+//        Exception
+//    {
+//        System.out.println( "testBatchModePropertiesDefinedInFile" );
+//
+//        String archetypeGroupId = null;
+//        String archetypeArtifactId = null;
+//        String archetypeVersion = null;
+//
+//        Boolean interactiveMode = Boolean.FALSE;
+//
+//        String project = "select-2";
+//        File propertyFile = getPropertiesFile( project );
+//        File propertyFileSample = getPropertiesSampleFile( project );
+//        copy( propertyFileSample, propertyFile );
+//
+//        File archetypeRegistryFile = getRegistryFile( project );
+//
+//        DefaultArchetypeSelector instance =
+//            (DefaultArchetypeSelector) lookup( ArchetypeSelector.ROLE );
+//
+//        instanceDefined( instance );
+//
+//        assertTrue( propertyFile.exists() );
+//
+//        instance.selectArchetype(
+//            archetypeGroupId,
+//            archetypeArtifactId,
+//            archetypeVersion,
+//            interactiveMode,
+//            propertyFile,
+//            archetypeRegistryFile,
+//            localRepository,
+//            repositories
+//        );
+//
+//        assertTrue( propertyFile.exists() );
+//
+//        Properties properties = loadProperties( propertyFile );
+//        assertEquals( "archetypes", properties.getProperty( "archetype.groupId" ) );
+//        assertEquals( "basic", properties.getProperty( "archetype.artifactId" ) );
+//        assertEquals( "1.0", properties.getProperty( "archetype.version" ) );
+//    }
+//
+//    public void testBatchModePropertiesDefinedInSystem()
+//        throws
+//        Exception
+//    {
+//        System.out.println( "testBatchModePropertiesDefinedInSystem" );
+//
+//        String archetypeGroupId = "archetypes";
+//        String archetypeArtifactId = "basic";
+//        String archetypeVersion = "1.0";
+//
+//        Boolean interactiveMode = Boolean.FALSE;
+//
+//        String project = "select-3";
+//        File propertyFile = getPropertiesFile( project );
+//        assertTrue( !propertyFile.exists() || propertyFile.delete() );
+//
+//        File archetypeRegistryFile = getRegistryFile( project );
+//
+//        DefaultArchetypeSelector instance =
+//            (DefaultArchetypeSelector) lookup( ArchetypeSelector.ROLE );
+//
+//        instanceDefined( instance );
+//
+//        assertFalse( propertyFile.exists() );
+//
+//        instance.selectArchetype(
+//            archetypeGroupId,
+//            archetypeArtifactId,
+//            archetypeVersion,
+//            interactiveMode,
+//            propertyFile,
+//            archetypeRegistryFile,
+//            localRepository,
+//            repositories
+//        );
+//
+//        assertTrue( propertyFile.exists() );
+//
+//        Properties properties = loadProperties( propertyFile );
+//        assertEquals( "archetypes", properties.getProperty( "archetype.groupId" ) );
+//        assertEquals( "basic", properties.getProperty( "archetype.artifactId" ) );
+//        assertEquals( "1.0", properties.getProperty( "archetype.version" ) );
+//    }
+//
+//    public void testBatchModePropertiesOverrided()
+//        throws
+//        Exception
+//    {
+//        System.out.println( "testBatchModePropertiesOverrided" );
+//
+//        String archetypeGroupId = "archetypes";
+//        String archetypeArtifactId = "dont-exist";
+//        String archetypeVersion = "1.0";
+//
+//        Boolean interactiveMode = Boolean.FALSE;
+//
+//        String project = "select-4";
+//        File propertyFile = getPropertiesFile( project );
+//        File propertyFileSample = getPropertiesSampleFile( project );
+//        copy( propertyFileSample, propertyFile );
+//
+//        File archetypeRegistryFile = getRegistryFile( project );
+//
+//        DefaultArchetypeSelector instance =
+//            (DefaultArchetypeSelector) lookup( ArchetypeSelector.ROLE );
+//
+//        instanceDefined( instance );
+//
+//        assertTrue( propertyFile.exists() );
+//
+//        try
+//        {
+//            instance.selectArchetype(
+//                archetypeGroupId,
+//                archetypeArtifactId,
+//                archetypeVersion,
+//                interactiveMode,
+//                propertyFile,
+//                archetypeRegistryFile,
+//                localRepository,
+//                repositories
+//            );
+//
+//            fail( "Exception must be thrown" );
+//        }
+//        catch ( Exception e )
+//        {
+//            assertEquals(
+//                "Exception not correct",
+//                "The desired archetype does not exist (" + archetypeGroupId + ":"
+//                    + archetypeArtifactId + ":" + archetypeVersion + ")",
+//                e.getMessage()
+//            );
+//            assertTrue( propertyFile.exists() );
+//
+//            Properties properties = loadProperties( propertyFile );
+//            assertEquals( "archetypes", properties.getProperty( "archetype.groupId" ) );
+//            assertEquals( "basic", properties.getProperty( "archetype.artifactId" ) );
+//            assertEquals( "1.0", properties.getProperty( "archetype.version" ) );
+//        }
+//    }
+//
+//    public void testInteractiveModePropertiesDefinedInFileAndAskedWithoutConfirmation()
+//        throws
+//        Exception
+//    {
+//        System.out.println(
+//            "testInteractiveModePropertiesDefinedInFileAndAskedWithoutConfirmation"
+//        );
+//
+//        String archetypeGroupId = null;
+//        String archetypeArtifactId = null;
+//        String archetypeVersion = null;
+//
+//        Boolean interactiveMode = Boolean.TRUE;
+//
+//        String project = "select-8";
+//        File propertyFile = getPropertiesFile( project );
+//        File propertyFileSample = getPropertiesSampleFile( project );
+//        copy( propertyFileSample, propertyFile );
+//
+//        File archetypeRegistryFile = getRegistryFile( project );
+//
+//        DefaultArchetypeSelector instance =
+//            (DefaultArchetypeSelector) lookup( ArchetypeSelector.ROLE );
+//
+//        instanceDefined( instance );
+//
+//        assertTrue( propertyFile.exists() );
+//
+//        MockPrompter prompter = new MockPrompter();
+//        prompter.addAnswer( "1" );
+//        prompter.addAnswer( "N" );
+//        prompter.addAnswer( "1" );
+//        prompter.addAnswer( "1" );
+//        prompter.addAnswer( "Y" );
+//        setVariableValueToObject(
+//            getVariableValueFromObject( instance, "archetypeSelectionQueryer" ),
+//            "prompter",
+//            prompter
+//        );
+//
+//        instance.selectArchetype(
+//            archetypeGroupId,
+//            archetypeArtifactId,
+//            archetypeVersion,
+//            interactiveMode,
+//            propertyFile,
+//            archetypeRegistryFile,
+//            localRepository,
+//            repositories
+//        );
+//
+//        assertTrue( propertyFile.exists() );
+//
+//        Properties properties = loadProperties( propertyFile );
+//        assertEquals( "archetypes", properties.getProperty( "archetype.groupId" ) );
+//        assertEquals( "basic", properties.getProperty( "archetype.artifactId" ) );
+//        assertEquals( "1.0", properties.getProperty( "archetype.version" ) );
+//    }
+//
+//    public void testInteractiveModePropertiesDefinedInFileWithoutConfirmation()
+//        throws
+//        Exception
+//    {
+//        System.out.println( "testInteractiveModePropertiesDefinedInFileWithoutConfirmation" );
+//
+//        String archetypeGroupId = "archetypes";
+//        String archetypeArtifactId = "basic";
+//        String archetypeVersion = "1.0";
+//
+//        Boolean interactiveMode = Boolean.TRUE;
+//
+//        String project = "select-7";
+//        File propertyFile = getPropertiesFile( project );
+//        File propertyFileSample = getPropertiesSampleFile( project );
+//        copy( propertyFileSample, propertyFile );
+//
+//        File archetypeRegistryFile = getRegistryFile( project );
+//
+//        DefaultArchetypeSelector instance =
+//            (DefaultArchetypeSelector) lookup( ArchetypeSelector.ROLE );
+//
+//        instanceDefined( instance );
+//
+//        assertTrue( propertyFile.exists() );
+//
+//        MockPrompter prompter = new MockPrompter();
+//        prompter.addAnswer( "N" );
+//        prompter.addAnswer( "1" );
+//        prompter.addAnswer( "1" );
+//        prompter.addAnswer( "Y" );
+//        setVariableValueToObject(
+//            getVariableValueFromObject( instance, "archetypeSelectionQueryer" ),
+//            "prompter",
+//            prompter
+//        );
+//
+//        instance.selectArchetype(
+//            archetypeGroupId,
+//            archetypeArtifactId,
+//            archetypeVersion,
+//            interactiveMode,
+//            propertyFile,
+//            archetypeRegistryFile,
+//            localRepository,
+//            repositories
+//        );
+//
+//        assertTrue( propertyFile.exists() );
+//
+//        Properties properties = loadProperties( propertyFile );
+//        assertEquals( "archetypes", properties.getProperty( "archetype.groupId" ) );
+//        assertEquals( "basic", properties.getProperty( "archetype.artifactId" ) );
+//        assertEquals( "1.0", properties.getProperty( "archetype.version" ) );
+//    }
+//
+//    public void testInteractiveModePropertiesDefinedInSystemAndAskedMissing()
+//        throws
+//        Exception
+//    {
+//        System.out.println( "testInteractiveModePropertiesDefinedInSystemAndAskedMissing" );
+//
+//        String archetypeGroupId = "archetypes";
+//        String archetypeArtifactId = "basic";
+//        String archetypeVersion = null;
+//
+//        Boolean interactiveMode = Boolean.TRUE;
+//
+//        String project = "select-6";
+//        File propertyFile = getPropertiesFile( project );
+//        assertTrue( !propertyFile.exists() || propertyFile.delete() );
+//
+//        File archetypeRegistryFile = getRegistryFile( project );
+//
+//        DefaultArchetypeSelector instance =
+//            (DefaultArchetypeSelector) lookup( ArchetypeSelector.ROLE );
+//
+//        instanceDefined( instance );
+//
+//        assertFalse( propertyFile.exists() );
+//
+//        MockPrompter prompter = new MockPrompter();
+//        prompter.addAnswer( "1" );
+//        prompter.addAnswer( "Y" );
+//        setVariableValueToObject(
+//            getVariableValueFromObject( instance, "archetypeSelectionQueryer" ),
+//            "prompter",
+//            prompter
+//        );
+//
+//        instance.selectArchetype(
+//            archetypeGroupId,
+//            archetypeArtifactId,
+//            archetypeVersion,
+//            interactiveMode,
+//            propertyFile,
+//            archetypeRegistryFile,
+//            localRepository,
+//            repositories
+//        );
+//
+//        assertTrue( propertyFile.exists() );
+//
+//        Properties properties = loadProperties( propertyFile );
+//        assertEquals( "archetypes", properties.getProperty( "archetype.groupId" ) );
+//        assertEquals( "basic", properties.getProperty( "archetype.artifactId" ) );
+//        assertEquals( "1.0", properties.getProperty( "archetype.version" ) );
+//    }
+//
+//    public void XXtestInteractiveModePropertiesNotDefined()
+//        throws
+//        Exception
+//    {
+//        System.out.println( "testInteractiveModePropertiesNotDefined" );
+//
+//        String archetypeGroupId = null;
+//        String archetypeArtifactId = null;
+//        String archetypeVersion = null;
+//
+//        Boolean interactiveMode = Boolean.TRUE;
+//
+//        String project = "select-5";
+//        File propertyFile = getPropertiesFile( project );
+//        assertTrue( !propertyFile.exists() || propertyFile.delete() );
+//
+//        File archetypeRegistryFile = getRegistryFile( project );
+//
+//        DefaultArchetypeSelector instance =
+//            (DefaultArchetypeSelector) lookup( ArchetypeSelector.ROLE );
+//
+//        instanceDefined( instance );
+//
+//        assertFalse( propertyFile.exists() );
+//
+//        MockPrompter prompter = new MockPrompter();
+//        prompter.addAnswer( "2" );
+//        prompter.addAnswer( "1" );
+//        prompter.addAnswer( "1" );
+//        prompter.addAnswer( "Y" );
+//        setVariableValueToObject(
+//            getVariableValueFromObject( instance, "archetypeSelectionQueryer" ),
+//            "prompter",
+//            prompter
+//        );
+//
+//        instance.selectArchetype(
+//            archetypeGroupId,
+//            archetypeArtifactId,
+//            archetypeVersion,
+//            interactiveMode,
+//            propertyFile,
+//            archetypeRegistryFile,
+//            localRepository,
+//            repositories
+//        );
+//
+//        assertTrue( propertyFile.exists() );
+//
+//        Properties properties = loadProperties( propertyFile );
+//        assertEquals( "archetypes", properties.getProperty( "archetype.groupId" ) );
+//        assertEquals( "basic", properties.getProperty( "archetype.artifactId" ) );
+//        assertEquals( "1.0", properties.getProperty( "archetype.version" ) );
+//    }
+//
+//
+//    public void XXtestInteractiveModeUnknownGroup()
+//        throws
+//        Exception
+//    {
+//        System.out.println( "testInteractiveModeUnknownGroup" );
+//
+//        String archetypeGroupId = null;
+//        String archetypeArtifactId = null;
+//        String archetypeVersion = null;
+//
+//        Boolean interactiveMode = Boolean.TRUE;
+//
+//        String project = "select-9";
+//        File propertyFile = getPropertiesFile( project );
+//        assertTrue( !propertyFile.exists() || propertyFile.delete() );
+//
+//        File archetypeRegistryFile = getRegistryFile( project );
+//
+//        DefaultArchetypeSelector instance =
+//            (DefaultArchetypeSelector) lookup( ArchetypeSelector.ROLE );
+//
+//        instanceDefined( instance );
+//
+//        assertFalse( propertyFile.exists() );
+//
+//        MockPrompter prompter = new MockPrompter();
+//        prompter.addAnswer( "1" );
+//        prompter.addAnswer( "1" );
+//        prompter.addAnswer( "1" );
+//        prompter.addAnswer( "1" );
+//        prompter.addAnswer( "Y" );
+//        setVariableValueToObject(
+//            getVariableValueFromObject( instance, "archetypeSelectionQueryer" ),
+//            "prompter",
+//            prompter
+//        );
+//
+//        instance.selectArchetype(
+//            archetypeGroupId,
+//            archetypeArtifactId,
+//            archetypeVersion,
+//            interactiveMode,
+//            propertyFile,
+//            archetypeRegistryFile,
+//            localRepository,
+//            repositories
+//        );
+//
+//        assertTrue( propertyFile.exists() );
+//
+//        Properties properties = loadProperties( propertyFile );
+//        assertEquals( "archetypes", properties.getProperty( "archetype.groupId" ) );
+//        assertEquals( "basic", properties.getProperty( "archetype.artifactId" ) );
+//        assertEquals( "1.0", properties.getProperty( "archetype.version" ) );
+//    }
+//
+//    public void XXtestInteractiveModeUnknownGroups()
+//        throws
+//        Exception
+//    {
+//        System.out.println( "testInteractiveModeUnknownGroups" );
+//
+//        String archetypeGroupId = null;
+//        String archetypeArtifactId = null;
+//        String archetypeVersion = null;
+//
+//        Boolean interactiveMode = Boolean.TRUE;
+//
+//        String project = "select-10";
+//        File propertyFile = getPropertiesFile( project );
+//        assertTrue( !propertyFile.exists() || propertyFile.delete() );
+//
+//        File archetypeRegistryFile = getRegistryFile( project );
+//
+//        DefaultArchetypeSelector instance =
+//            (DefaultArchetypeSelector) lookup( ArchetypeSelector.ROLE );
+//
+//        instanceDefined( instance );
+//
+//        assertFalse( propertyFile.exists() );
+//
+//        MockPrompter prompter = new MockPrompter();
+//        prompter.addAnswer( "1" );
+//        prompter.addAnswer( "1" );
+//        prompter.addAnswer( "1" );
+//        setVariableValueToObject(
+//            getVariableValueFromObject( instance, "archetypeSelectionQueryer" ),
+//            "prompter",
+//            prompter
+//        );
+//
+//        try
+//        {
+//            instance.selectArchetype(
+//                archetypeGroupId,
+//                archetypeArtifactId,
+//                archetypeVersion,
+//                interactiveMode,
+//                propertyFile,
+//                archetypeRegistryFile,
+//                localRepository,
+//                repositories
+//            );
+//
+//            fail( "Exception must be thrown" );
+//        }
+//        catch ( Exception e )
+//        {
+//            assertEquals(
+//                "Exception not correct",
+//                "No registered group contain an archetype",
+//                e.getMessage()
+//            );
+//            assertFalse( propertyFile.exists() );
+//        }
+//    }
+// Commented on 2007 09 25*/
 
     protected void tearDown()
         throws
@@ -628,17 +637,19 @@ public class DefaultArchetypeSelectorTest
         assertTrue( in.exists() );
     }
 
-    private void instanceDefined( final DefaultArchetypeSelector instance )
-        throws
-        IllegalAccessException
-    {
-        assertNotNull( instance );
-        assertNotNull( getVariableValueFromObject( instance, "archetypeArtifactManager" ) );
-        assertNotNull( getVariableValueFromObject( instance, "archetypeFactory" ) );
-        assertNotNull( getVariableValueFromObject( instance, "archetypePropertiesManager" ) );
-        assertNotNull( getVariableValueFromObject( instance, "archetypeRegistryManager" ) );
-        assertNotNull( getVariableValueFromObject( instance, "archetypeSelectionQueryer" ) );
-    }
+// /*Commented on 2007 09 25
+//    private void instanceDefined( final DefaultArchetypeSelector instance )
+//        throws
+//        IllegalAccessException
+//    {
+//        assertNotNull( instance );
+//        assertNotNull( getVariableValueFromObject( instance, "archetypeArtifactManager" ) );
+//        assertNotNull( getVariableValueFromObject( instance, "archetypeFactory" ) );
+//        assertNotNull( getVariableValueFromObject( instance, "archetypePropertiesManager" ) );
+//        assertNotNull( getVariableValueFromObject( instance, "archetypeRegistryManager" ) );
+//        assertNotNull( getVariableValueFromObject( instance, "archetypeSelectionQueryer" ) );
+//    }
+// Commented on 2007 09 25*/
 
     private Properties loadProperties( File propertyFile )
         throws

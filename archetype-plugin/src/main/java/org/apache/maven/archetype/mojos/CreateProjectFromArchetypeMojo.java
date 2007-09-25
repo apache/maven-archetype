@@ -23,9 +23,9 @@ import org.apache.maven.archetype.common.ArchetypeDefinition;
 import org.apache.maven.archetype.common.ArchetypePropertiesManager;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 import org.apache.maven.archetype.common.Constants;
-import org.apache.maven.archetype.generator.ArchetypeGenerationConfigurator;
+import org.apache.maven.archetype.ui.ArchetypeGenerationConfigurator;
 import org.apache.maven.archetype.generator.ArchetypeGenerator;
-import org.apache.maven.archetype.generator.ArchetypeSelector;
+import org.apache.maven.archetype.ui.ArchetypeSelector;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.ContextEnabled;
@@ -217,7 +217,7 @@ public class CreateProjectFromArchetypeMojo
 
         // Configure Generation
 
-        // At this point the archetype has been generated from the archetype and now we will
+        // At this point the project has been generated from the archetype and now we will
         // run some goals that the archetype creator has requested to be run once the project
         // has been created.
 

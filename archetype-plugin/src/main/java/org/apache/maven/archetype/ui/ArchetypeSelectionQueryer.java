@@ -17,38 +17,36 @@
  * under the License.
  */
 
-package org.apache.maven.archetype.creator;
+package org.apache.maven.archetype.ui;
 
-import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
-import org.apache.maven.archetype.exception.ArchetypeNotDefined;
-import org.apache.maven.archetype.exception.TemplateCreationException;
-import org.apache.maven.project.MavenProject;
+import org.apache.maven.archetype.common.Archetype;
+import org.apache.maven.archetype.common.ArchetypeDefinition;
 
 import org.codehaus.plexus.components.interactivity.PrompterException;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 import java.util.List;
-import java.util.Properties;
 
-public interface ArchetypeCreationConfigurator
+public interface ArchetypeSelectionQueryer
 {
-    String ROLE = ArchetypeCreationConfigurator.class.getName();
+    String ROLE = ArchetypeSelectionQueryer.class.getName();
 
-    void configureArchetypeCreation(
-        MavenProject project,
-        Boolean interactiveMode,
-        Properties commandLineProperties,
-        File propertyFile,
-        List languages
-    )
+    boolean confirmSelection( ArchetypeDefinition archetypeDefinition )
         throws
-        FileNotFoundException,
-        IOException,
-        ArchetypeNotDefined,
-        ArchetypeNotConfigured,
-        PrompterException,
-        TemplateCreationException;
+        PrompterException;
+
+    org.apache.maven.archetype.registry.Archetype selectArchetype( List list )
+        throws
+        PrompterException;
+
+    Archetype selectArtifact( List list )
+        throws
+        PrompterException;
+
+    String selectGroup( List list )
+        throws
+        PrompterException;
+
+    String selectVersion( List list )
+        throws
+        PrompterException;
 }

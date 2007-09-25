@@ -17,40 +17,38 @@
  * under the License.
  */
 
-package org.apache.maven.archetype.generator;
+package org.apache.maven.archetype.ui;
 
-import org.apache.maven.archetype.common.ArchetypeDefinition;
+import org.apache.maven.archetype.exception.ArchetypeGenerationConfigurationFailure;
+import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
 import org.apache.maven.archetype.exception.ArchetypeNotDefined;
-import org.apache.maven.archetype.exception.ArchetypeSelectionFailure;
 import org.apache.maven.archetype.exception.UnknownArchetype;
-import org.apache.maven.archetype.exception.UnknownGroup;
 import org.apache.maven.artifact.repository.ArtifactRepository;
+
 import org.codehaus.plexus.components.interactivity.PrompterException;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+
 import java.util.List;
+import java.util.Properties;
 
-public interface ArchetypeSelector
+public interface ArchetypeGenerationConfigurator
 {
-    String ROLE = ArchetypeSelector.class.getName();
+    String ROLE = ArchetypeGenerationConfigurator.class.getName();
 
-    ArchetypeDefinition selectArchetype( String archetypeGroupId,
-                                         String archetypeArtifactId,
-                                         String archetypeVersion,
-                                         Boolean interactiveMode,
-                                         File propertyFile,
-                                         File archetypeRegistryFile,
-                                         ArtifactRepository localRepository,
-                                         List repositories
+    void configureArchetype(
+        Boolean interactiveMode,
+        File propertyFile,
+        Properties commandLineProperties,
+        ArtifactRepository localRepository,
+        List repositories
     )
         throws
         ArchetypeNotDefined,
         UnknownArchetype,
-        UnknownGroup,
+        ArchetypeNotConfigured,
         IOException,
-        FileNotFoundException,
         PrompterException,
-        ArchetypeSelectionFailure;
+        ArchetypeGenerationConfigurationFailure;
 }
