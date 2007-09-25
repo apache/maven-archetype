@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>CUSTOM-create-from-project</actionName>
+            <displayName>create-from-project</displayName>
+            <goals>
+                <goal>archetypeng:create-from-project</goal>
+            </goals>
+        </action>
+    </actions>
