@@ -29,15 +29,18 @@ import org.apache.maven.archetype.exception.ArchetypeNotDefined;
 import org.apache.maven.archetype.exception.ArchetypeSelectionFailure;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.archetype.exception.UnknownGroup;
+import org.apache.maven.archetype.source.ArchetypeDataSource;
+import org.apache.maven.archetype.source.ArchetypeDataSourceException;
+import org.apache.maven.archetype.source.WikiArchetypeDataSource;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 
@@ -113,21 +116,23 @@ public class DefaultArchetypeSelector
 
             if ( !archetypeDefinition.isDefined() )
             {
-                List availableArchetypeInRegistry;
-                
+                Collection archetypes;
+
                 try
                 {
-                    availableArchetypeInRegistry = archetypeRegistryManager.readArchetypeRegistry( archetypeRegistryFile ).getArchetypes();
+                    ArchetypeDataSource source = new WikiArchetypeDataSource();
+
+                    archetypes = source.getArchetypes().values();
                 }
-                catch ( XmlPullParserException e )
+                catch ( ArchetypeDataSourceException e )
                 {
-                    availableArchetypeInRegistry = archetypeRegistryManager.getDefaultArchetypeRegistry().getArchetypes();
+                    throw new ArchetypeSelectionFailure( "Error loading archetypes from data source.", e );
                 }
 
-                if ( availableArchetypeInRegistry != null )
+                if ( archetypes != null )
                 {
                     org.apache.maven.archetype.registry.Archetype archetype = archetypeSelectionQueryer.selectArchetype(
-                        availableArchetypeInRegistry );
+                        archetypes );
 
                     ArchetypeDefinition ad = new ArchetypeDefinition();
 

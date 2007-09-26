@@ -1,6 +1,6 @@
-package org.apache.maven.archetype;
+package org.apache.maven.archetype.source;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * Sources we can get Archetypes from. This may be the local registry, a Wiki, or,
@@ -11,7 +11,8 @@ import java.util.List;
  *
  * @author Jason van Zyl
  */
-public interface ArchetypeSource
+public interface ArchetypeDataSource
 {
-    List getArchetypes( ArchetypeCriteria criteria );
+    Map getArchetypes()
+        throws ArchetypeDataSourceException;
 }

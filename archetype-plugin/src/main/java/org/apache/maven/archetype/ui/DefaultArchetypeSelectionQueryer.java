@@ -21,13 +21,13 @@ package org.apache.maven.archetype.ui;
 
 import org.apache.maven.archetype.common.Archetype;
 import org.apache.maven.archetype.common.ArchetypeDefinition;
-
 import org.codehaus.plexus.components.interactivity.Prompter;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -54,7 +54,7 @@ public class DefaultArchetypeSelectionQueryer
         return "Y".equalsIgnoreCase( answer );
     }
 
-    public org.apache.maven.archetype.registry.Archetype selectArchetype( List archetypes )
+    public org.apache.maven.archetype.registry.Archetype selectArchetype( Collection archetypes )
         throws
         PrompterException
     {

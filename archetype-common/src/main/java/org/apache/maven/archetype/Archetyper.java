@@ -1,9 +1,9 @@
 package org.apache.maven.archetype;
 
 /** @author Jason van Zyl */
-public interface ArchetypeFacade
+public interface Archetyper
 {
-    String ROLE = ArchetypeFacade.class.getName();
+    String ROLE = Archetyper.class.getName();
 
     ArchetypeCreationResult createArchetypeFromProject( ArchetypeCreationRequest request );
 

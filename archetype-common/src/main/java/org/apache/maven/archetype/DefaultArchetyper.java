@@ -1,8 +1,8 @@
 package org.apache.maven.archetype;
 
 /** @author Jason van Zyl */
-public class DefaultArchetypeFacade
-    implements ArchetypeFacade
+public class DefaultArchetyper
+    implements Archetyper
 {
     public ArchetypeCreationResult createArchetypeFromProject( ArchetypeCreationRequest request )
     {

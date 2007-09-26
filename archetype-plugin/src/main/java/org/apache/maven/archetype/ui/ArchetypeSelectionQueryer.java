@@ -21,9 +21,9 @@ package org.apache.maven.archetype.ui;
 
 import org.apache.maven.archetype.common.Archetype;
 import org.apache.maven.archetype.common.ArchetypeDefinition;
-
 import org.codehaus.plexus.components.interactivity.PrompterException;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface ArchetypeSelectionQueryer
@@ -34,7 +34,7 @@ public interface ArchetypeSelectionQueryer
         throws
         PrompterException;
 
-    org.apache.maven.archetype.registry.Archetype selectArchetype( List list )
+    org.apache.maven.archetype.registry.Archetype selectArchetype( Collection collection )
         throws
         PrompterException;
 
