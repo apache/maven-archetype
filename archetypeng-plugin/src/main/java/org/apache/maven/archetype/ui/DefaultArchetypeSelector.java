@@ -31,7 +31,7 @@ import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.archetype.exception.UnknownGroup;
 import org.apache.maven.archetype.source.ArchetypeDataSource;
 import org.apache.maven.archetype.source.ArchetypeDataSourceException;
-import org.apache.maven.archetype.source.WikiArchetypeDataSource;
+import org.apache.maven.archetype.source.RegistryArchetypeDataSource;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -120,7 +120,7 @@ public class DefaultArchetypeSelector
 
                 try
                 {
-                    ArchetypeDataSource source = new WikiArchetypeDataSource();
+                    ArchetypeDataSource source = new RegistryArchetypeDataSource( archetypeRegistryManager );
 
                     archetypes = source.getArchetypes().values();
                 }

@@ -49,6 +49,12 @@ public interface ArchetypeRegistryManager
         FileNotFoundException,
         XmlPullParserException;
 
+    ArchetypeRegistry readArchetypeRegistry()
+        throws
+        IOException,
+        FileNotFoundException,
+        XmlPullParserException;
+
     List getRepositories(
         List pomRemoteRepositories,
         String remoteRepositories,
