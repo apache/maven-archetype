@@ -147,13 +147,13 @@ public class FilesetArchetypeCreator
 
         Extension extension = new Extension();
         extension.setGroupId( "org.apache.maven.archetype" );
-        extension.setArtifactId( "archetype-packaging" );
+        extension.setArtifactId( "archetypeng-packaging" );
         extension.setVersion( "2.0-SNAPSHOT" );
         model.getBuild().addExtension( extension );
 
         Plugin plugin = new Plugin();
         plugin.setGroupId( "org.apache.maven.plugins" );
-        plugin.setArtifactId( "maven-archetype-plugin" );
+        plugin.setArtifactId( "maven-archetypeng-plugin" );
         plugin.setVersion( "2.0-SNAPSHOT" );
         plugin.setExtensions( true );
         model.getBuild().addPlugin( plugin );
