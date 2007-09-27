@@ -38,9 +38,9 @@ under the License.
   <packaging>pom</packaging>
 
   <modules>
-    <module>archetype-common</module>
-    <module>archetype-plugin</module>
-    <module>archetype-packaging</module>
+    <module>archetypeng-common</module>
+    <module>archetypeng-plugin</module>
+    <module>archetypeng-packaging</module>
   </modules>
 
   <licenses>
