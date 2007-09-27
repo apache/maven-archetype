@@ -123,6 +123,8 @@ public class DefaultArchetypeSelector
                     ArchetypeDataSource source = new RegistryArchetypeDataSource( archetypeRegistryManager );
 
                     archetypes = source.getArchetypes().values();
+
+                    System.out.println( "archetypes = " + archetypes );
                 }
                 catch ( ArchetypeDataSourceException e )
                 {

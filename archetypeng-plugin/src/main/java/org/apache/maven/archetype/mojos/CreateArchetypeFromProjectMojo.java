@@ -19,16 +19,21 @@
 
 package org.apache.maven.archetype.mojos;
 
+import org.apache.maven.archetype.common.ArchetypePropertiesManager;
+import org.apache.maven.archetype.common.ArchetypeRegistryManager;
+import org.apache.maven.archetype.common.Constants;
+import org.apache.maven.archetype.creator.ArchetypeCreator;
+import org.apache.maven.archetype.registry.Archetype;
+import org.apache.maven.archetype.registry.ArchetypeRegistry;
+import org.apache.maven.archetype.ui.ArchetypeCreationConfigurator;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.archetype.common.ArchetypeRegistryManager;
-import org.apache.maven.archetype.ui.ArchetypeCreationConfigurator;
-import org.apache.maven.archetype.creator.ArchetypeCreator;
 import org.apache.maven.project.MavenProject;
 
-import java.util.List;
 import java.io.File;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * Creates sample archetype from current project.
@@ -56,6 +61,9 @@ public class CreateArchetypeFromProjectMojo
 
     /** @component role-hint="fileset" */
     ArchetypeCreator creator;
+
+    /** @component */
+    private ArchetypePropertiesManager propertiesManager;
 
     /**
      * File extensions which are checked for project's text files (vs binary files).
@@ -131,6 +139,8 @@ public class CreateArchetypeFromProjectMojo
      */
     private File propertyFile;
 
+    /** @parameter expression="${basedir}/target" */
+    private File outputDirectory;
 
     public void execute()
         throws
@@ -186,6 +196,26 @@ public class CreateArchetypeFromProjectMojo
             );
 
             getLog().info( "Archetype created in target/generated-sources/archetypeng" );
+
+            Properties p = new Properties();
+
+            propertiesManager.readProperties( p, new File( outputDirectory, "archetype.properties" ) );
+
+            Archetype archetype = new Archetype();
+
+            archetype.setGroupId( p.getProperty( Constants.ARCHETYPE_GROUP_ID ) );
+
+            archetype.setArtifactId( p.getProperty( Constants.ARCHETYPE_ARTIFACT_ID ) );
+
+            archetype.setVersion( p.getProperty( Constants.ARCHETYPE_VERSION ) );
+
+            archetype.setDescription( "This is the Archetype");
+
+            ArchetypeRegistry archetypeRegistry = archetypeRegistryManager.getDefaultArchetypeRegistry();
+
+            archetypeRegistry.addArchetype( archetype );
+
+            archetypeRegistryManager.writeArchetypeRegistry( archetypeRegistryFile, archetypeRegistry );
         }
         catch ( Exception ex )
         {

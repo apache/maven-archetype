@@ -2,10 +2,13 @@ package org.apache.maven.archetype.source;
 
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 import org.apache.maven.archetype.registry.Archetype;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.io.IOException;
 
 /** @author Jason van Zyl */
 public class RegistryArchetypeDataSource
@@ -23,7 +26,18 @@ public class RegistryArchetypeDataSource
     {
         Map archetypes = new HashMap();
 
-        for ( Iterator i = archetypeRegistryManager.getDefaultArchetypeRegistry().getArchetypes().iterator(); i.hasNext(); )
+        List list;
+
+        try
+        {
+            list = archetypeRegistryManager.readArchetypeRegistry().getArchetypes();
+        }
+        catch ( Exception e )
+        {
+            throw new ArchetypeDataSourceException( "Error reading ~/.m2/archetype.xml" );
+        }
+
+        for ( Iterator i = list.iterator(); i.hasNext(); )
         {
             Archetype archetype = (Archetype) i.next();
 

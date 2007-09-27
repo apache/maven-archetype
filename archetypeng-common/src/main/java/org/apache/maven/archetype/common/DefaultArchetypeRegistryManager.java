@@ -149,6 +149,8 @@ public class DefaultArchetypeRegistryManager
         IOException,
         XmlPullParserException
     {
+        System.out.println( "DEFAULT_REGISTRY = " + DEFAULT_REGISTRY );
+
         return readArchetypeRegistry( DEFAULT_REGISTRY );
     }
 
