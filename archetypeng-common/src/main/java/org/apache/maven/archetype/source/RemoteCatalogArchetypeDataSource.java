@@ -1,7 +1,5 @@
 package org.apache.maven.archetype.source;
 
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
@@ -10,20 +8,29 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- * @plexus.component role-hint="remote-registry"
+ * @plexus.component role-hint="remote-catalog"
  * @author Jason van Zyl
  */
-public class RemoteRegistryArchetypeDataSource
-    extends RegistryArchetypeDataSource
-{        
+public class RemoteCatalogArchetypeDataSource
+    extends CatalogArchetypeDataSource
+{
+    public static String REPOSITORY_PROPERTY = "repository";
+
     public List getArchetypes( Properties properties )
         throws ArchetypeDataSourceException
     {
         try
         {
-            URL url = new URL( properties.getProperty( "url" ) );
+            String repository = properties.getProperty( REPOSITORY_PROPERTY );
 
-            return createArchetypeMap( archetypeRegistryManager.readArchetypeRegistry( new InputStreamReader( url.openStream() ) ) );
+            if ( repository.endsWith( "/" ) )
+            {
+                repository = repository.substring( 0, repository.length() - 1 );
+            }
+
+            URL url = new URL( repository + "/" + "archetype-catalog.xml" );
+
+            return createArchetypeMap( readCatalog( new InputStreamReader( url.openStream() ) ) );
         }
         catch ( MalformedURLException e )
         {
@@ -32,10 +39,6 @@ public class RemoteRegistryArchetypeDataSource
         catch ( IOException e )
         {
             throw new ArchetypeDataSourceException( "Error reading archetype registry.", e );
-        }
-        catch ( XmlPullParserException e )
-        {
-            throw new ArchetypeDataSourceException( "Error parsing archetype registry", e );
         }
     }
 }

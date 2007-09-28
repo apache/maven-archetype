@@ -19,12 +19,12 @@
 
 package org.apache.maven.archetype.mojos;
 
+import org.apache.maven.archetype.catalog.Archetype;
+import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.common.ArchetypePropertiesManager;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.creator.ArchetypeCreator;
-import org.apache.maven.archetype.registry.Archetype;
-import org.apache.maven.archetype.registry.ArchetypeRegistry;
 import org.apache.maven.archetype.ui.ArchetypeCreationConfigurator;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -197,6 +197,7 @@ public class CreateArchetypeFromProjectMojo
 
             getLog().info( "Archetype created in target/generated-sources/archetypeng" );
 
+            /*
             Properties p = new Properties();
 
             propertiesManager.readProperties( p, new File( outputDirectory, "archetype.properties" ) );
@@ -209,17 +210,30 @@ public class CreateArchetypeFromProjectMojo
 
             archetype.setVersion( p.getProperty( Constants.ARCHETYPE_VERSION ) );
 
-            archetype.setDescription( "This is the Archetype");
+            archetype.setDescription( "This is the Archetype description");
 
-            ArchetypeRegistry archetypeRegistry = archetypeRegistryManager.getDefaultArchetypeRegistry();
+            ArchetypeCatalog archetypeRegistry = getCatalog();
 
             archetypeRegistry.addArchetype( archetype );
 
-            archetypeRegistryManager.writeArchetypeRegistry( archetypeRegistryFile, archetypeRegistry );
+            writeCatalog( )
+            */
         }
         catch ( Exception ex )
         {
             throw new MojoExecutionException( ex.getMessage(), ex );
         }
     }
+
+    /*
+    private ArchetypeCatalog getCatalog()
+    {
+
+    }
+
+    private void writeCatalog( File catalogFile, ArchetypeCatalog catalog )
+    {
+
+    }
+    */
 }

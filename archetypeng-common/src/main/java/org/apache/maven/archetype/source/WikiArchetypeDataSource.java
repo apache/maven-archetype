@@ -1,6 +1,6 @@
 package org.apache.maven.archetype.source;
 
-import org.apache.maven.archetype.registry.Archetype;
+import org.apache.maven.archetype.catalog.Archetype;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -63,7 +63,7 @@ public class WikiArchetypeDataSource
 
         while ( m.find() )
         {
-            Archetype archetype = new org.apache.maven.archetype.registry.Archetype();
+            Archetype archetype = new Archetype();
 
             archetype.setArtifactId( m.group( 1 ).trim() );
 

@@ -27,7 +27,6 @@ import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -54,7 +53,7 @@ public class DefaultArchetypeSelectionQueryer
         return "Y".equalsIgnoreCase( answer );
     }
 
-    public org.apache.maven.archetype.registry.Archetype selectArchetype( Collection archetypes )
+    public org.apache.maven.archetype.catalog.Archetype selectArchetype( List archetypes )
         throws
         PrompterException
     {
@@ -65,7 +64,7 @@ public class DefaultArchetypeSelectionQueryer
         int counter = 1;
         while ( archetypeIterator.hasNext() )
         {
-            org.apache.maven.archetype.registry.Archetype archetype = (org.apache.maven.archetype.registry.Archetype) archetypeIterator.next();
+            org.apache.maven.archetype.catalog.Archetype archetype = (org.apache.maven.archetype.catalog.Archetype) archetypeIterator.next();
 
             answerMap.put( "" + counter, archetype );
             query +=
@@ -79,9 +78,35 @@ public class DefaultArchetypeSelectionQueryer
 
         String answer = prompter.prompt( query, answers );
 
-        return (org.apache.maven.archetype.registry.Archetype) answerMap.get( answer );
+        return (org.apache.maven.archetype.catalog.Archetype) answerMap.get( answer );
     }
 
+
+    public String selectGroup( List groups )
+        throws
+        PrompterException
+    {
+        String query = "Choose group:\n";
+        Map answerMap = new HashMap();
+        List answers = new ArrayList();
+        Iterator groupIterator = groups.iterator();
+        int counter = 1;
+        while ( groupIterator.hasNext() )
+        {
+            String group = (String) groupIterator.next();
+
+            answerMap.put( "" + counter, group );
+            query += "" + counter + ": " + group + "\n";
+            answers.add( "" + counter );
+
+            counter++;
+        }
+        query += "Choose a number: ";
+
+        String answer = prompter.prompt( query, answers );
+
+        return (String) answerMap.get( answer );
+    }
 
     public Archetype selectArtifact( List archetypes )
         throws
@@ -109,32 +134,6 @@ public class DefaultArchetypeSelectionQueryer
         String answer = prompter.prompt( query, answers );
 
         return (Archetype) answerMap.get( answer );
-    }
-
-    public String selectGroup( List groups )
-        throws
-        PrompterException
-    {
-        String query = "Choose group:\n";
-        Map answerMap = new HashMap();
-        List answers = new ArrayList();
-        Iterator groupIterator = groups.iterator();
-        int counter = 1;
-        while ( groupIterator.hasNext() )
-        {
-            String group = (String) groupIterator.next();
-
-            answerMap.put( "" + counter, group );
-            query += "" + counter + ": " + group + "\n";
-            answers.add( "" + counter );
-
-            counter++;
-        }
-        query += "Choose a number: ";
-
-        String answer = prompter.prompt( query, answers );
-
-        return (String) answerMap.get( answer );
     }
 
     public String selectVersion( List archetypeVersions )

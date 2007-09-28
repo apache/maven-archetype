@@ -19,6 +19,7 @@
 
 package org.apache.maven.archetype.ui;
 
+import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
 import org.apache.maven.archetype.common.ArchetypeDefinition;
 import org.apache.maven.archetype.common.ArchetypeFactory;
@@ -31,16 +32,17 @@ import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.archetype.exception.UnknownGroup;
 import org.apache.maven.archetype.source.ArchetypeDataSource;
 import org.apache.maven.archetype.source.ArchetypeDataSourceException;
-import org.apache.maven.archetype.source.RegistryArchetypeDataSource;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.util.PropertyUtils;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -120,7 +122,7 @@ public class DefaultArchetypeSelector
 
             if ( !archetypeDefinition.isDefined() )
             {
-                Collection archetypes;
+                List archetypes = new ArrayList();
 
                 try
                 {
@@ -132,10 +134,25 @@ public class DefaultArchetypeSelector
                     //  - we need to separate the registry from the configuration as we need to provide one place
                     //    to
 
+                    // This is entirely command line specific
 
-                    ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( "registry" );
+                    File archetypeCatalogPropertiesFile = new File( System.getProperty( "user.home" ), ".m2/archetype-catalog.properties" );
 
-                    archetypes = source.getArchetypes( null );
+                    if ( archetypeCatalogPropertiesFile.exists() )
+                    {
+                        Properties archetypeCatalogProperties = PropertyUtils.loadProperties( archetypeCatalogPropertiesFile );
+
+                        String[] sources = StringUtils.split( archetypeCatalogProperties.getProperty( "sources" ), "," );
+
+                        for ( int i = 0; i < sources.length; i++ )
+                        {
+                            String sourceRoleHint = sources[i];
+
+                            ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( sourceRoleHint );
+
+                            archetypes.addAll( source.getArchetypes( getArchetypeSourceProperties( sourceRoleHint, archetypeCatalogProperties ) ) );
+                        }
+                    }                                                            
                 }
                 catch ( ArchetypeDataSourceException e )
                 {
@@ -144,8 +161,7 @@ public class DefaultArchetypeSelector
 
                 if ( archetypes.size() > 0 )
                 {
-                    org.apache.maven.archetype.registry.Archetype archetype = archetypeSelectionQueryer.selectArchetype(
-                        archetypes );
+                    Archetype archetype = archetypeSelectionQueryer.selectArchetype( archetypes );
 
                     archetypeDefinition.setArtifactId( archetype.getArtifactId() );
 
@@ -188,6 +204,27 @@ public class DefaultArchetypeSelector
                         
             return archetypeDefinition;
         }
+    }
+
+    private Properties getArchetypeSourceProperties( String sourceRoleHint, Properties archetypeCatalogProperties )
+    {
+        Properties p = new Properties();
+
+        for ( Iterator i = archetypeCatalogProperties.keySet().iterator(); i.hasNext(); )
+        {
+            String key = (String) i.next();
+
+            if ( key.startsWith( sourceRoleHint ) )
+            {
+                String k = key.substring( sourceRoleHint.length() + 1 );
+
+                p.setProperty( k, archetypeCatalogProperties.getProperty( key ) );
+            }
+        }
+
+        System.out.println( "p = " + p );
+
+        return p;
     }
 
     public static Properties toProperties( ArchetypeDefinition ad )
