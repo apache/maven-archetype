@@ -42,6 +42,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 /** @plexus.component */
@@ -63,6 +64,9 @@ public class DefaultArchetypeSelector
 
     /** @plexus.requirement */
     private ArchetypeSelectionQueryer archetypeSelectionQueryer;
+
+    /** @plexus.requirement role="org.apache.maven.archetype.source.ArchetypeDataSource" */
+    private Map archetypeSources;
 
     public ArchetypeDefinition selectArchetype(
         String archetypeGroupId,
@@ -120,85 +124,45 @@ public class DefaultArchetypeSelector
 
                 try
                 {
-                    ArchetypeDataSource source = new RegistryArchetypeDataSource( archetypeRegistryManager );
+                    // Now where would this configuration come from
+                    // - We need a list of archetypes that can be added to and changed, we need to pull
+                    //   these from different sources
+                    //
+                    // - We then need a way to configure the sources
+                    //  - we need to separate the registry from the configuration as we need to provide one place
+                    //    to
 
-                    archetypes = source.getArchetypes().values();
 
-                    System.out.println( "archetypes = " + archetypes );
+                    ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( "registry" );
+
+                    archetypes = source.getArchetypes( null );
                 }
                 catch ( ArchetypeDataSourceException e )
                 {
-                    throw new ArchetypeSelectionFailure( "Error loading archetypes from data source.", e );
+                    throw new ArchetypeSelectionFailure( "Error loading archetypes from data source(s).", e );
                 }
 
-                if ( archetypes != null )
+                if ( archetypes.size() > 0 )
                 {
                     org.apache.maven.archetype.registry.Archetype archetype = archetypeSelectionQueryer.selectArchetype(
                         archetypes );
 
-                    ArchetypeDefinition ad = new ArchetypeDefinition();
+                    archetypeDefinition.setArtifactId( archetype.getArtifactId() );
 
-                    ad.setArtifactId( archetype.getArtifactId() );
+                    archetypeDefinition.setName( archetype.getArtifactId() );
 
-                    ad.setName( archetype.getArtifactId() );
+                    archetypeDefinition.setGroupId( archetype.getGroupId() );
 
-                    ad.setGroupId( archetype.getGroupId() );
+                    archetypeDefinition.setVersion( archetype.getVersion() );
 
-                    ad.setVersion( archetype.getVersion() );
-
-                    ad.setRepository( archetype.getRepository() );
+                    archetypeDefinition.setRepository( archetype.getRepository() );
 
                     String goals = StringUtils.join( archetype.getGoals().iterator(), "," );
 
-                    ad.setGoals( goals );
-
-                    archetypePropertiesManager.writeProperties(
-                        toProperties( ad ),
-                        propertyFile
-                    );
-
-                    return ad;
+                    archetypeDefinition.setGoals( goals );
                 }
             }
         }
-        else
-        {
-            if ( !archetypeDefinition.isDefined() )
-            {
-                if ( !archetypeDefinition.isPartiallyDefined() )
-                {
-                    throw new ArchetypeNotDefined( "The archetype is not defined" );
-                }
-                else
-                {
-                    getLogger().debug( "Archetype is partially defined" );
-                    archetypeDefinition.setVersion(
-                        archetypeArtifactManager.getReleaseVersion(
-                            archetypeDefinition.getGroupId(),
-                            archetypeDefinition.getArtifactId(),
-                            localRepository,
-                            repositories
-                        )
-                    );
-                    getLogger().info(
-                        "Using default version " + archetypeDefinition.getVersion()
-                    );
-                }
-            }
-
-            if ( !archetypeDefinition.isDefined() )
-            {
-                throw new ArchetypeSelectionFailure( "The archetype must be selected here" );
-            }
-            else
-            {
-                getLogger().info(
-                    "Archetype selected (" + archetypeDefinition.getGroupId() + ":"
-                        + archetypeDefinition.getArtifactId() + ":" + archetypeDefinition
-                        .getVersion() + ")"
-                );
-            }
-        } // end if
 
         if ( !archetypeArtifactManager.exists(
             archetypeDefinition.getGroupId(),

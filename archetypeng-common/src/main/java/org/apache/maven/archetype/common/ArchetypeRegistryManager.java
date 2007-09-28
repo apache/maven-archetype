@@ -20,13 +20,11 @@
 package org.apache.maven.archetype.common;
 
 import org.apache.maven.archetype.registry.ArchetypeRegistry;
-
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-
+import java.io.Reader;
 import java.util.List;
 
 public interface ArchetypeRegistryManager
@@ -43,16 +41,19 @@ public interface ArchetypeRegistryManager
         throws
         IOException;
 
+    ArchetypeRegistry readArchetypeRegistry( Reader reader )
+        throws
+        IOException,
+        XmlPullParserException;
+
     ArchetypeRegistry readArchetypeRegistry( File archetypeRegistryFile )
         throws
         IOException,
-        FileNotFoundException,
         XmlPullParserException;
 
     ArchetypeRegistry readArchetypeRegistry()
         throws
         IOException,
-        FileNotFoundException,
         XmlPullParserException;
 
     List getRepositories(

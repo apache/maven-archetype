@@ -19,7 +19,6 @@
 
 package org.apache.maven.archetype.common;
 
-import org.apache.maven.archetype.registry.Archetype;
 import org.apache.maven.archetype.registry.ArchetypeRegistry;
 import org.apache.maven.archetype.registry.io.xpp3.ArchetypeRegistryXpp3Reader;
 import org.apache.maven.archetype.registry.io.xpp3.ArchetypeRegistryXpp3Writer;
@@ -32,22 +31,14 @@ import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /** @plexus.component */
 public class DefaultArchetypeRegistryManager
@@ -149,8 +140,6 @@ public class DefaultArchetypeRegistryManager
         IOException,
         XmlPullParserException
     {
-        System.out.println( "DEFAULT_REGISTRY = " + DEFAULT_REGISTRY );
-
         return readArchetypeRegistry( DEFAULT_REGISTRY );
     }
 
@@ -161,22 +150,28 @@ public class DefaultArchetypeRegistryManager
     {
         if ( !archetypeRegistryFile.exists() )
         {
-            ArchetypeRegistry registry = getDefaultArchetypeRegistry();
-
-            writeArchetypeRegistry( archetypeRegistryFile, registry );            
+            return getDefaultArchetypeRegistry();
         }
+        else
+        {
+            return readArchetypeRegistry( new FileReader( archetypeRegistryFile ) );
+        }
+    }
 
-        ArchetypeRegistryXpp3Reader reader = new ArchetypeRegistryXpp3Reader();
-        
-        FileReader fileReader = new FileReader( archetypeRegistryFile );
+    public ArchetypeRegistry readArchetypeRegistry( Reader reader )
+        throws
+        IOException,
+        XmlPullParserException
+    {
+        ArchetypeRegistryXpp3Reader xpp3Reader = new ArchetypeRegistryXpp3Reader();
 
         try
         {
-            return reader.read( fileReader );
+            return xpp3Reader.read( reader );
         }
         finally
         {
-            IOUtil.close( fileReader );
+            IOUtil.close( reader );
         }
     }
 

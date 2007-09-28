@@ -2,48 +2,54 @@ package org.apache.maven.archetype.source;
 
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 import org.apache.maven.archetype.registry.Archetype;
+import org.apache.maven.archetype.registry.ArchetypeRegistry;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
-import java.util.HashMap;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.io.IOException;
+import java.util.Properties;
 
-/** @author Jason van Zyl */
+/**
+ * @plexus.component role-hint="registry"
+ * @author Jason van Zyl
+ */
 public class RegistryArchetypeDataSource
     implements ArchetypeDataSource
 {
-    private ArchetypeRegistryManager archetypeRegistryManager;
+    /** @plexus.requirement */
+    protected ArchetypeRegistryManager archetypeRegistryManager;
 
-    public RegistryArchetypeDataSource( ArchetypeRegistryManager archetypeRegistryManager )
-    {
-        this.archetypeRegistryManager = archetypeRegistryManager;
-    }
-
-    public Map getArchetypes()
+    public List getArchetypes( Properties properties )
         throws ArchetypeDataSourceException
     {
-        Map archetypes = new HashMap();
-
-        List list;
-
         try
         {
-            list = archetypeRegistryManager.readArchetypeRegistry().getArchetypes();
+            return createArchetypeMap( archetypeRegistryManager.readArchetypeRegistry() );
         }
-        catch ( Exception e )
+        catch ( IOException e )
         {
-            throw new ArchetypeDataSourceException( "Error reading ~/.m2/archetype.xml" );
+            throw new ArchetypeDataSourceException( "Error reading archetype registry.", e );
         }
-
-        for ( Iterator i = list.iterator(); i.hasNext(); )
+        catch ( XmlPullParserException e )
         {
-            Archetype archetype = (Archetype) i.next();
-
-            archetypes.put( archetype.getArtifactId(), archetype );
+            throw new ArchetypeDataSourceException( "Error parsing archetype registry", e );
         }
+    }
 
-        return archetypes;
+    protected List createArchetypeMap( ArchetypeRegistry registry )
+        throws ArchetypeDataSourceException
+    {
+        List archetypes = new ArrayList();
+
+         for ( Iterator i = registry.getArchetypes().iterator(); i.hasNext(); )
+         {
+             Archetype archetype = (Archetype) i.next();
+
+             archetypes.add( archetype );
+         }
+
+         return archetypes;
     }
 }

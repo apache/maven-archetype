@@ -1,37 +1,38 @@
 package org.apache.maven.archetype.source;
 
+import org.apache.maven.archetype.registry.Archetype;
+
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.IOException;
 import java.net.URL;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/** @author Jason van Zyl */
+/**
+ * @plexus.component role-hint="wiki"
+ * @author Jason van Zyl
+ */
 public class WikiArchetypeDataSource
     implements ArchetypeDataSource
 {
     private static String DEFAULT_ARCHETYPE_INVENTORY_PAGE = "http://docs.codehaus.org/pages/viewpagesrc.action?pageId=48400";
 
-    private String url;
-
-    public WikiArchetypeDataSource()
-    {
-        this( DEFAULT_ARCHETYPE_INVENTORY_PAGE );
-    }
-
-    public WikiArchetypeDataSource( String url )
-    {
-        this.url = url;
-    }
-
-    public Map getArchetypes()
+    public List getArchetypes( Properties properties )
         throws ArchetypeDataSourceException
     {
-        Map archetypes = new LinkedHashMap();
+        String url = properties.getProperty( "url" );
+
+        if ( url == null )
+        {
+            url = DEFAULT_ARCHETYPE_INVENTORY_PAGE;
+        }
+
+        List archetypes = new ArrayList();
 
         StringBuffer sb = new StringBuffer();
 
@@ -62,11 +63,11 @@ public class WikiArchetypeDataSource
 
         while ( m.find() )
         {
-            org.apache.maven.archetype.registry.Archetype arch = new org.apache.maven.archetype.registry.Archetype();
+            Archetype archetype = new org.apache.maven.archetype.registry.Archetype();
 
-            arch.setArtifactId( m.group( 1 ).trim() );
+            archetype.setArtifactId( m.group( 1 ).trim() );
 
-            arch.setGroupId( m.group( 2 ).trim() );
+            archetype.setGroupId( m.group( 2 ).trim() );
 
             String version = m.group( 3 ).trim();
 
@@ -75,13 +76,13 @@ public class WikiArchetypeDataSource
                 version = "RELEASE";
             }
 
-            arch.setVersion( version );
+            archetype.setVersion( version );
 
-            arch.setRepository( cleanupUrl( m.group( 4 ).trim() ) );
+            archetype.setRepository( cleanupUrl( m.group( 4 ).trim() ) );
 
-            arch.setDescription( cleanup( m.group( 5 ).trim() ) );
+            archetype.setDescription( cleanup( m.group( 5 ).trim() ) );
 
-            archetypes.put( arch.getArtifactId(), arch );
+            archetypes.add( archetype );
         }
 
         return archetypes;
