@@ -218,8 +218,6 @@ public class DefaultArchetypeSelector
             }
         }
 
-        System.out.println( "p = " + p );
-
         return p;
     }
 
