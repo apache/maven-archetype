@@ -126,16 +126,6 @@ public class DefaultArchetypeSelector
 
                 try
                 {
-                    // Now where would this configuration come from
-                    // - We need a list of archetypes that can be added to and changed, we need to pull
-                    //   these from different sources
-                    //
-                    // - We then need a way to configure the sources
-                    //  - we need to separate the registry from the configuration as we need to provide one place
-                    //    to
-
-                    // This is entirely command line specific
-
                     File archetypeCatalogPropertiesFile = new File( System.getProperty( "user.home" ), ".m2/archetype-catalog.properties" );
 
                     if ( archetypeCatalogPropertiesFile.exists() )
@@ -152,7 +142,13 @@ public class DefaultArchetypeSelector
 
                             archetypes.addAll( source.getArchetypes( getArchetypeSourceProperties( sourceRoleHint, archetypeCatalogProperties ) ) );
                         }
-                    }                                                            
+                    }
+                    else
+                    {
+                        ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( "wiki" );
+
+                        archetypes.addAll( source.getArchetypes( new Properties() ) );
+                    }
                 }
                 catch ( ArchetypeDataSourceException e )
                 {
