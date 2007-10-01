@@ -42,6 +42,8 @@ import org.apache.maven.archetype.metadata.FileSet;
 import org.apache.maven.archetype.metadata.ModuleDescriptor;
 import org.apache.maven.archetype.metadata.RequiredProperty;
 import org.apache.maven.archetype.metadata.io.xpp3.ArchetypeDescriptorXpp3Writer;
+import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Extension;
@@ -50,6 +52,8 @@ import org.apache.maven.model.Parent;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.model.Profile;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.project.MavenProjectBuilder;
+import org.apache.maven.project.ProjectBuildingException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.FileUtils;
@@ -92,6 +96,9 @@ public class FilesetArchetypeCreator
     /** @plexus.requirement */
     private ArchetypeRegistryManager archetypeRegistryManager;
 
+    /** @plexus.requirement */
+    private MavenProjectBuilder projectBuilder;
+
     public void createArchetype(
         MavenProject project,
         File propertyFile,
@@ -102,7 +109,8 @@ public class FilesetArchetypeCreator
         boolean preserveCData,
         boolean keepParent,
         boolean partialArchetype,
-        File archetypeRegistryFile
+        File archetypeRegistryFile,
+        ArtifactRepository localRepository
     )
         throws
         IOException,
@@ -135,6 +143,14 @@ public class FilesetArchetypeCreator
 
         Model model = new Model();
         model.setModelVersion( "4.0.0" );
+        model.setGroupId( archetypeDefinition.getGroupId() );
+        model.setArtifactId( archetypeDefinition.getArtifactId() );
+        model.setVersion( archetypeDefinition.getVersion() );
+        model.setPackaging( "maven-archetype" );
+        model.setName( archetypeDefinition.getArtifactId() );
+
+        Build build = new Build();
+        model.setBuild( build );
 
         // In many cases where we are behind a firewall making Archetypes for work mates we want
         // to simply be able to deploy the archetypes once we have created them. In order to do
@@ -146,21 +162,33 @@ public class FilesetArchetypeCreator
 
         if ( project.getParent() != null )
         {
-            Parent parent = new Parent();
-            parent.setGroupId( project.getParent().getGroupId() );
-            parent.setArtifactId( project.getParent().getArtifactId() );
-            parent.setVersion( project.getParent().getVersion() );
-            model.setParent( parent );
+            Artifact pa = project.getParentArtifact();
+
+            try
+            {
+                MavenProject p = projectBuilder.buildFromRepository( pa, project.getRemoteArtifactRepositories(), localRepository );
+
+                if ( p.getDistributionManagement() != null )
+                {
+                    model.setDistributionManagement( p.getDistributionManagement() );
+                }
+
+                if ( p.getBuildExtensions() != null )
+                {
+                    for ( Iterator i = p.getBuildExtensions().iterator(); i.hasNext(); )
+                    {
+                        Extension be = (Extension) i.next();
+
+                        model.getBuild().addExtension( be );
+                    }
+                }
+            }
+            catch ( ProjectBuildingException e )
+            {
+                throw new TemplateCreationException(
+                    "Error reading parent POM of project: " + pa.getGroupId() + ":" + pa.getArtifactId() + ":" + pa.getVersion() );
+            }
         }
-
-        model.setGroupId( archetypeDefinition.getGroupId() );
-        model.setArtifactId( archetypeDefinition.getArtifactId() );
-        model.setVersion( archetypeDefinition.getVersion() );
-        model.setPackaging( "maven-archetype" );
-        model.setName( archetypeDefinition.getArtifactId() );
-
-        Build build = new Build();
-        model.setBuild( build );
 
         Extension extension = new Extension();
         extension.setGroupId( "org.apache.maven.archetype" );
