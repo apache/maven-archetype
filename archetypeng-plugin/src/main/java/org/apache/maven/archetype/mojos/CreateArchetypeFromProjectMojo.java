@@ -19,13 +19,11 @@
 
 package org.apache.maven.archetype.mojos;
 
-import org.apache.maven.archetype.catalog.Archetype;
-import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.common.ArchetypePropertiesManager;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
-import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.creator.ArchetypeCreator;
 import org.apache.maven.archetype.ui.ArchetypeCreationConfigurator;
+import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -33,7 +31,6 @@ import org.apache.maven.project.MavenProject;
 
 import java.io.File;
 import java.util.List;
-import java.util.Properties;
 
 /**
  * Creates sample archetype from current project.
@@ -115,6 +112,9 @@ public class CreateArchetypeFromProjectMojo
      */
     private boolean preserveCData = false;
 
+    /** @parameter expression="${localRepository}" */
+    private ArtifactRepository localRepository;
+
     /**
      * Poms in archetype are created with their initial parent.
      * This property is ignored when preserveCData is true.
@@ -147,18 +147,6 @@ public class CreateArchetypeFromProjectMojo
         MojoExecutionException,
         MojoFailureException
     {
-        // This is what we need here:
-        //
-        // - determine what groupId, artifactId, version to use: we default to the POM we're using
-        // - configure it: this will probably get pretty sophisticated eventually
-        // - populate the request
-        //
-        // then:
-        //
-        // result = archetype.createArchetypeFromProject( request );
-        //
-        // look at the result and respond accordingly.
-
         try
         {
             if ( propertyFile != null )
@@ -192,48 +180,15 @@ public class CreateArchetypeFromProjectMojo
                 preserveCData,
                 keepParent,
                 partialArchetype,
-                archetypeRegistryFile
+                archetypeRegistryFile,
+                localRepository
             );
 
             getLog().info( "Archetype created in target/generated-sources/archetypeng" );
-
-            /*
-            Properties p = new Properties();
-
-            propertiesManager.readProperties( p, new File( outputDirectory, "archetype.properties" ) );
-
-            Archetype archetype = new Archetype();
-
-            archetype.setGroupId( p.getProperty( Constants.ARCHETYPE_GROUP_ID ) );
-
-            archetype.setArtifactId( p.getProperty( Constants.ARCHETYPE_ARTIFACT_ID ) );
-
-            archetype.setVersion( p.getProperty( Constants.ARCHETYPE_VERSION ) );
-
-            archetype.setDescription( "This is the Archetype description");
-
-            ArchetypeCatalog archetypeRegistry = getCatalog();
-
-            archetypeRegistry.addArchetype( archetype );
-
-            writeCatalog( )
-            */
         }
         catch ( Exception ex )
         {
             throw new MojoExecutionException( ex.getMessage(), ex );
         }
     }
-
-    /*
-    private ArchetypeCatalog getCatalog()
-    {
-
-    }
-
-    private void writeCatalog( File catalogFile, ArchetypeCatalog catalog )
-    {
-
-    }
-    */
 }

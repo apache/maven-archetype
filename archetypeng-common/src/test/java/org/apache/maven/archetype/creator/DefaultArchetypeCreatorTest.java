@@ -109,9 +109,10 @@ public class DefaultArchetypeCreatorTest
             false,
             false,
             false,
-            getFile( project, "archetype-registry.xml" )
+            getFile( project, "archetype-registry.xml" ),
+            null
         );
-
+        
         File template;
 
         template = getTemplateFile( project, "pom.xml" );
