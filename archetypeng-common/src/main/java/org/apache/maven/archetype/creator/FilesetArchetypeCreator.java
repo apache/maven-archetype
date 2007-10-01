@@ -123,6 +123,7 @@ public class FilesetArchetypeCreator
 
         ArchetypeDefinition archetypeDefinition =
             archetypeFactory.createArchetypeDefinition( properties );
+
         if ( !archetypeDefinition.isDefined() )
         {
             throw new ArchetypeNotDefined( "The archetype is not defined" );
@@ -130,6 +131,7 @@ public class FilesetArchetypeCreator
 
         ArchetypeConfiguration archetypeConfiguration =
             archetypeFactory.createArchetypeConfiguration( archetypeDefinition, properties );
+
         if ( !archetypeConfiguration.isConfigured() )
         {
             throw new ArchetypeNotConfigured( "The archetype is not configured" );

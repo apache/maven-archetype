@@ -28,6 +28,7 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.util.PropertyUtils;
 
 import java.io.File;
 import java.util.List;
@@ -142,6 +143,9 @@ public class CreateArchetypeFromProjectMojo
     /** @parameter expression="${basedir}/target" */
     private File outputDirectory;
 
+    /** @parameter expression="${testMode}" */
+    private boolean testMode;
+
     public void execute()
         throws
         MojoExecutionException,
@@ -185,6 +189,20 @@ public class CreateArchetypeFromProjectMojo
             );
 
             getLog().info( "Archetype created in target/generated-sources/archetypeng" );
+
+            if ( testMode )
+            {
+                // Now here a properties file would be useful to write so that we could automate
+                // some functional tests where we string together an:
+                //
+                // archetype create from project -> deploy it into a test repo
+                // project create from archetype -> use the repository we deployed to archetype to
+                // generate
+                // test the output
+                //
+                // This of course would be strung together from the outside.
+            }
+
         }
         catch ( Exception ex )
         {

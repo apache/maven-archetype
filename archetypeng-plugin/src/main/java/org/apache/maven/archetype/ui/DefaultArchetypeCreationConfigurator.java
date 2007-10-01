@@ -67,7 +67,6 @@ public class DefaultArchetypeCreationConfigurator
         List languages
     )
         throws
-        FileNotFoundException,
         IOException,
         ArchetypeNotDefined,
         ArchetypeNotConfigured,
