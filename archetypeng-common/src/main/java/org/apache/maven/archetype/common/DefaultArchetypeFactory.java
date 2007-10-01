@@ -373,10 +373,12 @@ public class DefaultArchetypeFactory
         );
 
         definition.setGroupId( properties.getProperty( Constants.ARCHETYPE_GROUP_ID, null ) );
-        definition.setArtifactId(
-            properties.getProperty( Constants.ARCHETYPE_ARTIFACT_ID, null )
-        );
+
+        definition.setArtifactId( properties.getProperty( Constants.ARCHETYPE_ARTIFACT_ID, null ) );
+
         definition.setVersion( properties.getProperty( Constants.ARCHETYPE_VERSION, null ) );
+
+        definition.setRepository( properties.getProperty( Constants.ARCHETYPE_REPOSITORY, null ) );
 
         return definition;
     }
