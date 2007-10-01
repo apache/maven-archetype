@@ -30,6 +30,8 @@ public interface Constants
 
     String ARCHETYPE_VERSION = "archetype.version";
 
+    String ARCHETYPE_REPOSITORY = "archetype.repository";
+
     String ARCHETYPE_DESCRIPTOR = "META-INF/maven/archetype-metadata.xml";
 
     String ARCHETYPE_POST_GENERATION_GOALS = "archetype.goals";

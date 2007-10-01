@@ -19,12 +19,11 @@
 
 package org.apache.maven.archetype.mojos;
 
-import org.apache.maven.archetype.common.ArchetypeDefinition;
 import org.apache.maven.archetype.common.ArchetypePropertiesManager;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 import org.apache.maven.archetype.common.Constants;
-import org.apache.maven.archetype.ui.ArchetypeGenerationConfigurator;
 import org.apache.maven.archetype.generator.ArchetypeGenerator;
+import org.apache.maven.archetype.ui.ArchetypeGenerationConfigurator;
 import org.apache.maven.archetype.ui.ArchetypeSelector;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.plugin.AbstractMojo;
@@ -36,10 +35,12 @@ import org.apache.maven.shared.invoker.DefaultInvocationRequest;
 import org.apache.maven.shared.invoker.InvocationRequest;
 import org.apache.maven.shared.invoker.Invoker;
 import org.apache.maven.shared.invoker.MavenInvocationException;
+import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.PropertyUtils;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -202,13 +203,6 @@ public class CreateProjectFromArchetypeMojo
             );
 
             generator.generateArchetype( propertyFile, localRepository, repositories, basedir.getAbsolutePath() );
-
-            Properties archetypeProperties = PropertyUtils.loadProperties( propertyFile );
-
-            if ( archetypeProperties != null )
-            {
-                getPluginContext().put( "artifactId", archetypeProperties.getProperty( "artifactId" ) );
-            }
         }
         catch ( Exception ex )
         {
@@ -221,38 +215,31 @@ public class CreateProjectFromArchetypeMojo
         // run some goals that the archetype creator has requested to be run once the project
         // has been created.
 
-        String postArchetypeGenerationGoals;
+        Properties properties = PropertyUtils.loadProperties( propertyFile );
 
-        Properties p = new Properties();
+        String artifactId = properties.getProperty( "artifactId" );
 
-        try
-        {
-            propertiesManager.readProperties( p, new File( basedir, "archetype.properties" ) );
+        String postArchetypeGenerationGoals = properties.getProperty( Constants.ARCHETYPE_POST_GENERATION_GOALS );
 
-            postArchetypeGenerationGoals = p.getProperty( Constants.ARCHETYPE_POST_GENERATION_GOALS );
-        }
-        catch ( Exception e )
+        if ( StringUtils.isEmpty( postArchetypeGenerationGoals ) )
         {
             postArchetypeGenerationGoals = goals;
         }
 
         if ( StringUtils.isNotEmpty( postArchetypeGenerationGoals ) )
         {
-            invokePostArchetypeGenerationGoals( postArchetypeGenerationGoals );
+            invokePostArchetypeGenerationGoals( postArchetypeGenerationGoals, artifactId );
         }
+
+        FileUtils.fileDelete( propertyFile.getAbsolutePath() );
     }
 
-
-    private void invokePostArchetypeGenerationGoals( String goals )
+    private void invokePostArchetypeGenerationGoals( String goals, String artifactId )
         throws
         MojoExecutionException,
         MojoFailureException
     {
-        //TODO update the archetype descriptor to save goals and properties
-        //TODO probably write out the properties to a file for now
-        //TODO remove the properties files when the execution is complete
-
-        File projectBasedir = new File( basedir, (String) getPluginContext().get( "artifactId" ) );
+        File projectBasedir = new File( basedir, artifactId );
 
         if ( projectBasedir.exists() )
         {

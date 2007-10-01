@@ -228,6 +228,11 @@ public class DefaultArchetypeSelector
             (org.codehaus.plexus.util.StringUtils.isNotEmpty( ad.getGoals() ) ? ad.getGoals() : "" )
         );
 
+        properties.setProperty (
+            Constants.ARCHETYPE_REPOSITORY,
+            (org.codehaus.plexus.util.StringUtils.isNotEmpty( ad.getRepository() ) ? ad.getRepository() : "" )
+        );
+
         return properties;
     }
 
