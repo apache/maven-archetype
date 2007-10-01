@@ -101,25 +101,6 @@ public class DefaultArchetypeSelector
 
         if ( interactiveMode.booleanValue() )
         {
-            if ( archetypeDefinition.isPartiallyDefined() )
-            {
-                getLogger().debug( "Archetype is partially defined" );
-                archetypeDefinition.setVersion(
-                    archetypeArtifactManager.getReleaseVersion(
-                        archetypeDefinition.getGroupId(),
-                        archetypeDefinition.getArtifactId(),
-                        localRepository,
-                        repositories
-                    )
-                );
-            }
-            else
-            {
-                getLogger().debug( "Archetype is not defined" );
-            }
-
-            // We are going to let the user select from a list of available archetypes first
-
             if ( !archetypeDefinition.isDefined() )
             {
                 List archetypes = new ArrayList();
