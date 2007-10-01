@@ -69,7 +69,7 @@ public class DefaultArchetypeSelector
 
     /** @plexus.requirement role="org.apache.maven.archetype.source.ArchetypeDataSource" */
     private Map archetypeSources;
-
+    
     public ArchetypeDefinition selectArchetype(
         String archetypeGroupId,
         String archetypeArtifactId,
@@ -168,6 +168,8 @@ public class DefaultArchetypeSelector
                     archetypeDefinition.setVersion( archetype.getVersion() );
 
                     archetypeDefinition.setRepository( archetype.getRepository() );
+
+                    repositories.add( archetypeRegistryManager.createRepository( archetype.getRepository(), archetype.getArtifactId() + "-repo" ) );
 
                     String goals = StringUtils.join( archetype.getGoals().iterator(), "," );
 

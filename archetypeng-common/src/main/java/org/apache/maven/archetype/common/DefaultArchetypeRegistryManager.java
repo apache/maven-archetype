@@ -225,7 +225,7 @@ public class DefaultArchetypeRegistryManager
      * Code stealed from MavenArchetypeMojo
      * (org.apache.maven.plugins:maven-archetype-plugin:1.0-alpha4).
      */
-    private ArtifactRepository createRepository( String url,
+    public ArtifactRepository createRepository( String url,
                                                  String repositoryId )
     {
         // snapshots vs releases

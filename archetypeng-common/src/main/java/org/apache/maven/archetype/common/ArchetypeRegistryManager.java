@@ -20,6 +20,7 @@
 package org.apache.maven.archetype.common;
 
 import org.apache.maven.archetype.registry.ArchetypeRegistry;
+import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import java.io.File;
@@ -70,5 +71,7 @@ public interface ArchetypeRegistryManager
         throws
         IOException;
 
-    public ArchetypeRegistry getDefaultArchetypeRegistry();
+    ArchetypeRegistry getDefaultArchetypeRegistry();    
+
+    ArtifactRepository createRepository( String url, String repositoryId );
 }
