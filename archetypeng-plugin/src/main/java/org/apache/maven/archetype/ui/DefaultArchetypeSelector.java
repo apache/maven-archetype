@@ -150,14 +150,18 @@ public class DefaultArchetypeSelector
 
                     archetypeDefinition.setRepository( archetype.getRepository() );
 
-                    repositories.add( archetypeRegistryManager.createRepository( archetype.getRepository(), archetype.getArtifactId() + "-repo" ) );
-
                     String goals = StringUtils.join( archetype.getGoals().iterator(), "," );
 
                     archetypeDefinition.setGoals( goals );
                 }
             }
         }
+
+        // Whether we are in batch or interactive mode we must take the repository from the definition
+        // and put it into the list of repositories that we will search.
+
+        repositories.add(
+            archetypeRegistryManager.createRepository( archetypeDefinition.getRepository(), archetypeDefinition.getArtifactId() + "-repo" ) );
 
         if ( !archetypeArtifactManager.exists(
             archetypeDefinition.getGroupId(),
