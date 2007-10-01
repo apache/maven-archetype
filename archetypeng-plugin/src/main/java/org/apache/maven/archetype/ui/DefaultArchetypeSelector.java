@@ -69,7 +69,7 @@ public class DefaultArchetypeSelector
 
     /** @plexus.requirement role="org.apache.maven.archetype.source.ArchetypeDataSource" */
     private Map archetypeSources;
-    
+
     public ArchetypeDefinition selectArchetype(
         String archetypeGroupId,
         String archetypeArtifactId,
@@ -113,11 +113,15 @@ public class DefaultArchetypeSelector
                     {
                         Properties archetypeCatalogProperties = PropertyUtils.loadProperties( archetypeCatalogPropertiesFile );
 
+                        getLogger().debug("Using catalogs " + archetypeCatalogProperties);
+
                         String[] sources = StringUtils.split( archetypeCatalogProperties.getProperty( "sources" ), "," );
 
                         for ( int i = 0; i < sources.length; i++ )
                         {
                             String sourceRoleHint = sources[i];
+
+                            getLogger().debug("Reading catalog "+sourceRoleHint);
 
                             ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( sourceRoleHint );
 
@@ -126,6 +130,8 @@ public class DefaultArchetypeSelector
                     }
                     else
                     {
+                        getLogger().debug("Using wiki catalog");
+
                         ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( "wiki" );
 
                         archetypes.addAll( source.getArchetypes( new Properties() ) );
@@ -184,7 +190,7 @@ public class DefaultArchetypeSelector
                 toProperties( archetypeDefinition ),
                 propertyFile
             );
-                        
+
             return archetypeDefinition;
         }
     }

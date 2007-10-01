@@ -16,12 +16,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 /**
  * @author Jason van Zyl
  * @plexus.component role-hint="catalog"
  */
 public class CatalogArchetypeDataSource
+    extends AbstractLogEnabled
     implements ArchetypeDataSource
 {
     public static String ARCHETYPE_CATALOG_PROPERTY = "file";
@@ -36,6 +38,8 @@ public class CatalogArchetypeDataSource
         String s = properties.getProperty( ARCHETYPE_CATALOG_PROPERTY );
 
         s = StringUtils.replace( s, "${user.home}", System.getProperty( "user.home" ) );
+
+        getLogger().debug( "Using catalog " + s );
 
         File catalogFile = new File( s );
 
