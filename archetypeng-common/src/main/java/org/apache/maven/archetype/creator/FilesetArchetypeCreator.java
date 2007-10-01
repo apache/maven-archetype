@@ -43,13 +43,13 @@ import org.apache.maven.archetype.metadata.ModuleDescriptor;
 import org.apache.maven.archetype.metadata.RequiredProperty;
 import org.apache.maven.archetype.metadata.io.xpp3.ArchetypeDescriptorXpp3Writer;
 import org.apache.maven.model.Build;
+import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Extension;
 import org.apache.maven.model.Model;
+import org.apache.maven.model.Parent;
 import org.apache.maven.model.Plugin;
-import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Profile;
 import org.apache.maven.project.MavenProject;
-
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.FileUtils;
@@ -58,11 +58,10 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -136,6 +135,24 @@ public class FilesetArchetypeCreator
 
         Model model = new Model();
         model.setModelVersion( "4.0.0" );
+
+        // In many cases where we are behind a firewall making Archetypes for work mates we want
+        // to simply be able to deploy the archetypes once we have created them. In order to do
+        // this we want to utilize information from the project we are creating the archetype from.
+        // This will be a fully working project that has been testing and inherits from a POM
+        // that contains deployment information, along with any extensions required for deployment.
+        // We don't want to create archetypes that cannot be deployed after we create them. People
+        // might want to edit the archetype POM but they should not have too.
+
+        if ( project.getParent() != null )
+        {
+            Parent parent = new Parent();
+            parent.setGroupId( project.getParent().getGroupId() );
+            parent.setArtifactId( project.getParent().getArtifactId() );
+            parent.setVersion( project.getParent().getVersion() );
+            model.setParent( parent );
+        }
+
         model.setGroupId( archetypeDefinition.getGroupId() );
         model.setArtifactId( archetypeDefinition.getArtifactId() );
         model.setVersion( archetypeDefinition.getVersion() );
