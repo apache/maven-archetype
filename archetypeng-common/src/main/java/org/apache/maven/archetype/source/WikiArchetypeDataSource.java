@@ -97,5 +97,11 @@ public class WikiArchetypeDataSource
     static String cleanupUrl( String val )
     {
         return val.replaceAll( "\\r|\\n|\\s{2,}|\\[|\\]|\\&nbsp;", "" );
-    }    
+    }
+
+    public void updateCatalog( Properties properties, Archetype archetype )
+        throws ArchetypeDataSourceException
+    {
+        throw new UnsupportedOperationException( "Not supported yet." );
+    }
 }

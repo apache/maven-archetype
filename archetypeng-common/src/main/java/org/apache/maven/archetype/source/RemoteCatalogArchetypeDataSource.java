@@ -6,6 +6,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Properties;
+import org.apache.maven.archetype.catalog.Archetype;
 
 /**
  * @plexus.component role-hint="remote-catalog"
@@ -25,12 +26,12 @@ public class RemoteCatalogArchetypeDataSource
 
             if ( repository.endsWith( "/" ) )
             {
-                repository = repository.substring( 0, repository.length() - 1 );
+                repository = repository.substring( 0, repository.length(  ) - 1 );
             }
 
             URL url = new URL( repository + "/" + "archetype-catalog.xml" );
 
-            return createArchetypeMap( readCatalog( new InputStreamReader( url.openStream() ) ) );
+            return createArchetypeMap( readCatalog( new InputStreamReader( url.openStream(  ) ) ) );
         }
         catch ( MalformedURLException e )
         {
@@ -40,5 +41,11 @@ public class RemoteCatalogArchetypeDataSource
         {
             throw new ArchetypeDataSourceException( "Error reading archetype registry.", e );
         }
+    }
+
+    public void updateCatalog( Properties properties, Archetype archetype )
+        throws ArchetypeDataSourceException
+    {
+        throw new UnsupportedOperationException( "Not supported yet." );
     }
 }

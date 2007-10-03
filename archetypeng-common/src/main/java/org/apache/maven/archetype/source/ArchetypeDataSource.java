@@ -2,6 +2,7 @@ package org.apache.maven.archetype.source;
 
 import java.util.List;
 import java.util.Properties;
+import org.apache.maven.archetype.catalog.Archetype;
 
 /**
  * Sources we can get Archetypes from. This may be the local registry, a Wiki, or,
@@ -14,8 +15,12 @@ import java.util.Properties;
  */
 public interface ArchetypeDataSource
 {
-    String ROLE = ArchetypeDataSource.class.getName();
+
+    String ROLE = ArchetypeDataSource.class.getName(  );
 
     List getArchetypes( Properties properties )
+        throws ArchetypeDataSourceException;
+
+    public void updateCatalog( Properties properties, Archetype archetype )
         throws ArchetypeDataSourceException;
 }
