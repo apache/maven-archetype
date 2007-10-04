@@ -43,9 +43,9 @@ public class RemoteCatalogArchetypeDataSource
         }
     }
 
-    public void updateCatalog( Properties properties, Archetype archetype )
+    public void updateCatalog( Properties properties, Archetype archetype, Settings settings )
         throws ArchetypeDataSourceException
     {
-        throw new UnsupportedOperationException( "Not supported yet." );
+        throw new ArchetypeDataSourceException( "Not supported yet." );
     }
 }

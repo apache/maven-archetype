@@ -17,6 +17,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Writer;
+import org.apache.maven.settings.Settings;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 /**
@@ -64,7 +65,7 @@ public class CatalogArchetypeDataSource
         }
     }
 
-    public void updateCatalog( Properties properties, Archetype archetype )
+    public void updateCatalog( Properties properties, Archetype archetype, Settings settings )
         throws ArchetypeDataSourceException
     {
         String s = properties.getProperty( ARCHETYPE_CATALOG_PROPERTY );

@@ -71,7 +71,7 @@ public class updateLocalCatalogMojo
 
             for ( int i = 0; i < sources.length; i++ )
             {
-                String sourceRoleHint = sources[i];
+                String sourceRoleHint = sources[i].trim();
 
                 try
                 {

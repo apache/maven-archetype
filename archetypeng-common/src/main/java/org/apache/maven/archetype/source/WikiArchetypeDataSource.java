@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.maven.settings.Settings;
 
 /**
  * @plexus.component role-hint="wiki"
@@ -99,9 +100,9 @@ public class WikiArchetypeDataSource
         return val.replaceAll( "\\r|\\n|\\s{2,}|\\[|\\]|\\&nbsp;", "" );
     }
 
-    public void updateCatalog( Properties properties, Archetype archetype )
+    public void updateCatalog( Properties properties, Archetype archetype, Settings settings )
         throws ArchetypeDataSourceException
     {
-        throw new UnsupportedOperationException( "Not supported yet." );
+        throw new ArchetypeDataSourceException( "Not supported yet." );
     }
 }
