@@ -97,7 +97,7 @@ public class CatalogArchetypeDataSource
 
         Iterator archetypes = catalog.getArchetypes(  ).iterator(  );
         boolean found = false;
-        Archetype newArchetype = null;
+        Archetype newArchetype = archetype;
         while ( !found && archetypes.hasNext(  ) )
         {
             Archetype a = (Archetype) archetypes.next();

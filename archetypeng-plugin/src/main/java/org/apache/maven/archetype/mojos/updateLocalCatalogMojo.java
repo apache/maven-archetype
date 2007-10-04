@@ -27,7 +27,7 @@ public class updateLocalCatalogMojo
     extends AbstractMojo
     implements ContextEnabled
 {
-    /** @plexus.requirement role="org.apache.maven.archetype.source.ArchetypeDataSource" */
+    /** @component role="org.apache.maven.archetype.source.ArchetypeDataSource" */
     private Map archetypeSources;
 
     /**
@@ -51,45 +51,49 @@ public class updateLocalCatalogMojo
     public void execute( )
         throws MojoExecutionException
     {
-        try
-        {
-            Archetype archetype = new Archetype(  );
-            archetype.setGroupId( project.getGroupId(  ) );
-            archetype.setArtifactId( project.getArtifactId(  ) );
-            archetype.setVersion( project.getVersion(  ) );
-            archetype.setDescription( project.getName(  ) );
-            archetype.setRepository( localRepository.toString(  ) );
+        Archetype archetype = new Archetype(  );
+        archetype.setGroupId( project.getGroupId(  ) );
+        archetype.setArtifactId( project.getArtifactId(  ) );
+        archetype.setVersion( project.getVersion(  ) );
+        archetype.setDescription( project.getName(  ) );
+        archetype.setRepository( localRepository.toString(  ) );
 //            archetype.setGoals(project.get);
 //            archetype.setProperties(project.get);
-            File archetypeCatalogPropertiesFile = new File( System.getProperty( "user.home" ), ".m2/archetype-catalog.properties" );
+        File archetypeCatalogPropertiesFile = new File( System.getProperty( "user.home" ), ".m2/archetype-catalog.properties" );
 
-            if ( archetypeCatalogPropertiesFile.exists(  ) )
+        if ( archetypeCatalogPropertiesFile.exists(  ) )
+        {
+            Properties archetypeCatalogProperties = PropertyUtils.loadProperties( archetypeCatalogPropertiesFile );
+
+            getLog(  ).debug( "Updating catalogs " + archetypeCatalogProperties );
+
+            String[] sources = StringUtils.split( archetypeCatalogProperties.getProperty( "sources" ), "," );
+
+            for ( int i = 0; i < sources.length; i++ )
             {
-                Properties archetypeCatalogProperties = PropertyUtils.loadProperties( archetypeCatalogPropertiesFile );
+                String sourceRoleHint = sources[i];
 
-                getLog(  ).debug( "Updating catalogs " + archetypeCatalogProperties );
-
-                String[] sources = StringUtils.split( archetypeCatalogProperties.getProperty( "sources" ), "," );
-
-                for ( int i = 0; i < sources.length; i++ )
+                try
                 {
-                    String sourceRoleHint = sources[i];
-
                     getLog(  ).debug( "Updating catalog " + sourceRoleHint );
 
                     ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( sourceRoleHint );
 
                     source.updateCatalog( getArchetypeSourceProperties( sourceRoleHint, archetypeCatalogProperties ), archetype );
+
+                    getLog(  ).
+                        info( "Updated " + sourceRoleHint + " using repository " + localRepository.toString(  ) );
+                }
+                catch ( ArchetypeDataSourceException ex )
+                {
+                    getLog(  ).
+                        warn( "Can't update " + sourceRoleHint + " using repository " + localRepository.toString(  ) );
                 }
             }
-            else
-            {
-                getLog(  ).debug( "Not updating wiki catalog" );
-            }
         }
-        catch ( ArchetypeDataSourceException ex )
+        else
         {
-            throw new MojoExecutionException( ex.getMessage(  ), ex );
+            getLog(  ).debug( "Not updating wiki catalog" );
         }
     }
 
