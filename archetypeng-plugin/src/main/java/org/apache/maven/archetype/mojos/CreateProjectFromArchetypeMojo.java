@@ -194,6 +194,8 @@ public class CreateProjectFromArchetypeMojo
                 repositories
             );
 
+            // Create the request here for the archetyper and use that instead of the configurator directly here.
+
             configurator.configureArchetype(
                 settings.getInteractiveMode(),
                 propertyFile,

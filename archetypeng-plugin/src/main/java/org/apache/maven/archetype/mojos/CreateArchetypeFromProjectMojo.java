@@ -174,6 +174,9 @@ public class CreateArchetypeFromProjectMojo
                     archetypeRegistryFile
                 );
 
+
+            //Create a request here which encapsulates everything below and then use Archetyper to do the creation.
+
             creator.createArchetype(
                 project,
                 propertyFile,
