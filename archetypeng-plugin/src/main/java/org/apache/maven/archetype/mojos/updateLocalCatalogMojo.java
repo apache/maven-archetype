@@ -11,6 +11,7 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.ContextEnabled;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.settings.Settings;
 import org.codehaus.plexus.util.PropertyUtils;
 import org.codehaus.plexus.util.StringUtils;
 
@@ -48,6 +49,15 @@ public class updateLocalCatalogMojo
      */
     private File localRepository;
 
+    /**
+     * The Maven settings.
+     *
+     * @parameter expression="${settings}"
+     * @required
+     * @readonly
+     */
+    private Settings settings;
+
     public void execute( )
         throws MojoExecutionException
     {
@@ -79,7 +89,7 @@ public class updateLocalCatalogMojo
 
                     ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( sourceRoleHint );
 
-                    source.updateCatalog( getArchetypeSourceProperties( sourceRoleHint, archetypeCatalogProperties ), archetype );
+                    source.updateCatalog( getArchetypeSourceProperties( sourceRoleHint, archetypeCatalogProperties ), archetype, settings );
 
                     getLog(  ).
                         info( "Updated " + sourceRoleHint + " using repository " + localRepository.toString(  ) );
