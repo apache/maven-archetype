@@ -21,6 +21,8 @@ package org.apache.maven.archetype.generator;
 
 import org.apache.maven.archetype.Archetype;
 import org.apache.maven.archetype.ArchetypeDescriptorException;
+import org.apache.maven.archetype.ArchetypeGenerationRequest;
+import org.apache.maven.archetype.ArchetypeGenerationResult;
 import org.apache.maven.archetype.ArchetypeNotFoundException;
 import org.apache.maven.archetype.ArchetypeTemplateProcessingException;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
@@ -45,16 +47,21 @@ import org.dom4j.DocumentException;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 
 /** @plexus.component */
 public class DefaultArchetypeGenerator
     extends AbstractLogEnabled
     implements ArchetypeGenerator
 {
+    /** @plexus.requirement */
+    private ArchetypeRegistryManager archetypeRegistryManager;
+
     /** @plexus.requirement */
     private ArchetypeArtifactManager archetypeArtifactManager;
 
@@ -66,6 +73,7 @@ public class DefaultArchetypeGenerator
 
     /** @plexus.requirement */
     private FilesetArchetypeGenerator filesetGenerator;
+
     /** @plexus.requirement */
     private Archetype oldArchetype;
 
@@ -89,6 +97,29 @@ public class DefaultArchetypeGenerator
         ArchetypeGenerationFailure
     {
         Properties properties = initialiseArchetypeProperties( propertyFile );
+        generateArchetype( properties, localRepository, repositories, basedir );
+    }
+
+
+    private void generateArchetype(
+        Properties properties,
+        ArtifactRepository localRepository,
+        List repositories,
+        String basedir
+    )
+        throws
+        IOException,
+        ArchetypeNotDefined,
+        UnknownArchetype,
+        ArchetypeNotConfigured,
+        ProjectDirectoryExists,
+        PomFileExists,
+        OutputFileExists,
+        XmlPullParserException,
+        DocumentException,
+        InvalidPackaging,
+        ArchetypeGenerationFailure
+    {
 
         ArchetypeDefinition archetypeDefinition =
             archetypeFactory.createArchetypeDefinition( properties );
@@ -278,6 +309,80 @@ public class DefaultArchetypeGenerator
             throw new ArchetypeGenerationFailure(
                 "Failed to generate project from the old archetype"
             );
+        }
+    }
+
+    public void generateArchetype( ArchetypeGenerationRequest request, ArchetypeGenerationResult result )
+    {
+        try
+        {
+            Properties properties = request.getAdditionalProperties(  );
+            properties.setProperty( Constants.ARCHETYPE_GROUP_ID, request.getArchetypeGroupId() );
+            properties.setProperty( Constants.ARCHETYPE_ARTIFACT_ID, request.getArchetypeArtifactId() );
+            properties.setProperty( Constants.ARCHETYPE_VERSION, request.getArchetypeVersion() );
+
+            properties.setProperty( Constants.GROUP_ID, request.getGroupId(  ) );
+            properties.setProperty( Constants.ARTIFACT_ID, request.getArtifactId(  ) );
+            properties.setProperty( Constants.VERSION, request.getVersion(  ) );
+            properties.setProperty( Constants.PACKAGE, request.getPackage(  ) );
+            properties.setProperty( Constants.ARCHETYPE_POST_GENERATION_GOALS, request.getArchetypeGoals(  ) );
+
+            generateArchetype( properties, request.getLocalRepository(  ), Collections.singletonList( archetypeRegistryManager.createRepository( request.getArchetypeRepository(  ), "repository" ) ), request.getOutputDirectory(  ) );
+        }
+        catch ( IOException ex )
+        {
+            getLogger().error(ex.getMessage(), ex);
+            result.setCause(ex);
+        }
+        catch ( ArchetypeNotDefined ex )
+        {
+            getLogger().error(ex.getMessage(), ex);
+            result.setCause(ex);
+        }
+        catch ( UnknownArchetype ex )
+        {
+            getLogger().error(ex.getMessage(), ex);
+            result.setCause(ex);
+        }
+        catch ( ArchetypeNotConfigured ex )
+        {
+            getLogger().error(ex.getMessage(), ex);
+            result.setCause(ex);
+        }
+        catch ( ProjectDirectoryExists ex )
+        {
+            getLogger().error(ex.getMessage(), ex);
+            result.setCause(ex);
+        }
+        catch ( PomFileExists ex )
+        {
+            getLogger().error(ex.getMessage(), ex);
+            result.setCause(ex);
+        }
+        catch ( OutputFileExists ex )
+        {
+            getLogger().error(ex.getMessage(), ex);
+            result.setCause(ex);
+        }
+        catch ( XmlPullParserException ex )
+        {
+            getLogger().error(ex.getMessage(), ex);
+            result.setCause(ex);
+        }
+        catch ( DocumentException ex )
+        {
+            getLogger().error(ex.getMessage(), ex);
+            result.setCause(ex);
+        }
+        catch ( InvalidPackaging ex )
+        {
+            getLogger().error(ex.getMessage(), ex);
+            result.setCause(ex);
+        }
+        catch ( ArchetypeGenerationFailure ex )
+        {
+            getLogger().error(ex.getMessage(), ex);
+            result.setCause(ex);
         }
     }
 }

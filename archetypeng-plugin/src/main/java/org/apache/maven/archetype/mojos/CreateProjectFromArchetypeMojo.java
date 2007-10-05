@@ -40,10 +40,12 @@ import org.codehaus.plexus.util.PropertyUtils;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+import org.apache.maven.archetype.ArchetypeGenerationRequest;
+import org.apache.maven.archetype.ArchetypeGenerationResult;
+import org.apache.maven.archetype.Archetyper;
 
 /**
  * Generates sample project from archetype.
@@ -57,6 +59,9 @@ public class CreateProjectFromArchetypeMojo
     extends AbstractMojo
     implements ContextEnabled
 {
+    /** @component */
+    private Archetyper archetyper;
+
     /** @component */
     private ArchetypeSelector selector;
 
@@ -170,6 +175,13 @@ public class CreateProjectFromArchetypeMojo
         //
         // look at the result and respond accordingly.
 
+        ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
+        request.setArchetypeGroupId( archetypeGroupId );
+        request.setArchetypeArtifactId( archetypeArtifactId );
+        request.setArchetypeVersion( archetypeVersion );
+        request.setOutputDirectory( basedir.getAbsolutePath() );
+        request.setLocalRepository( localRepository );
+
         try
         {
             // This is not really necessary as we will use the central repository or the repository that
@@ -183,28 +195,50 @@ public class CreateProjectFromArchetypeMojo
                     archetypeRegistryFile
                 );
 
+            // Only interactiveMode, repositories and registry file are needed outside the request.
             selector.selectArchetype(
-                archetypeGroupId,
-                archetypeArtifactId,
-                archetypeVersion,
+                request,
                 settings.getInteractiveMode(),
-                propertyFile,
                 archetypeRegistryFile,
-                localRepository,
                 repositories
             );
+//            Old way to call components
+//            selector.selectArchetype(
+//                archetypeGroupId,
+//                archetypeArtifactId,
+//                archetypeVersion,
+//                settings.getInteractiveMode(),
+//                propertyFile,
+//                archetypeRegistryFile,
+//                localRepository,
+//                repositories
+//            );
 
             // Create the request here for the archetyper and use that instead of the configurator directly here.
 
+            // Only interactiveMode, system.properties (configuration properties) and repositories are needed outside the request.
             configurator.configureArchetype(
+                request,
                 settings.getInteractiveMode(),
-                propertyFile,
                 System.getProperties(),
-                localRepository,
                 repositories
             );
+//            Old way to call components
+//            configurator.configureArchetype(
+//                settings.getInteractiveMode(),
+//                propertyFile,
+//                System.getProperties(),
+//                localRepository,
+//                repositories
+//            );
 
-            generator.generateArchetype( propertyFile, localRepository, repositories, basedir.getAbsolutePath() );
+            // At this point, the archetype should have been downloaded by the configurator,
+            // so the repositories are not needed in the request
+
+            ArchetypeGenerationResult result = archetyper.generateProjectFromArchetype( request );
+
+            // Old way to call the components
+            //generator.generateArchetype( propertyFile, localRepository, repositories, basedir.getAbsolutePath() );
         }
         catch ( Exception ex )
         {
@@ -219,9 +253,9 @@ public class CreateProjectFromArchetypeMojo
 
         Properties properties = PropertyUtils.loadProperties( propertyFile );
 
-        String artifactId = properties.getProperty( "artifactId" );
+        String artifactId = request.getArtifactId();
 
-        String postArchetypeGenerationGoals = properties.getProperty( Constants.ARCHETYPE_POST_GENERATION_GOALS );
+        String postArchetypeGenerationGoals = request.getArchetypeGoals();
 
         if ( StringUtils.isEmpty( postArchetypeGenerationGoals ) )
         {
@@ -233,7 +267,7 @@ public class CreateProjectFromArchetypeMojo
             invokePostArchetypeGenerationGoals( postArchetypeGenerationGoals, artifactId );
         }
 
-        FileUtils.fileDelete( propertyFile.getAbsolutePath() );
+//        FileUtils.fileDelete( propertyFile.getAbsolutePath() );
     }
 
     private void invokePostArchetypeGenerationGoals( String goals, String artifactId )

@@ -21,7 +21,7 @@ public class DefaultArchetyper
         ArchetypeCreationResult result = new ArchetypeCreationResult();
 
         // This should take information from the request and that's it.
-        //creator.createArchetype( );
+        //creator.createArchetype( request, result );
 
         return result;
     }
@@ -31,7 +31,7 @@ public class DefaultArchetyper
         ArchetypeGenerationResult result = new ArchetypeGenerationResult();
 
         // This should take information from the request and that's it.
-        //generator.generateArchetype( );
+        generator.generateArchetype( request, result );
 
         return result;
     }

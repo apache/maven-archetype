@@ -9,5 +9,5 @@ public class ArchetypeCreationRequest
 {
     private ArtifactRepository localRepository;
 
-    private List remoteRepositories;     
+    private List remoteRepositories;
 }

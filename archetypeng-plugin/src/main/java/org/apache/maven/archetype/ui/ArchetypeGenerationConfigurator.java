@@ -19,6 +19,7 @@
 
 package org.apache.maven.archetype.ui;
 
+import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.exception.ArchetypeGenerationConfigurationFailure;
 import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
 import org.apache.maven.archetype.exception.ArchetypeNotDefined;
@@ -32,12 +33,27 @@ import java.io.IOException;
 
 import java.util.List;
 import java.util.Properties;
+import org.apache.maven.archetype.common.ArchetypeConfiguration;
 
 public interface ArchetypeGenerationConfigurator
 {
     String ROLE = ArchetypeGenerationConfigurator.class.getName();
 
-    void configureArchetype(
+    public void configureArchetype(
+        ArchetypeGenerationRequest request,
+        Boolean interactiveMode,
+        Properties commandLineProperties,
+        List repositories
+    )
+        throws
+        ArchetypeNotDefined,
+        UnknownArchetype,
+        ArchetypeNotConfigured,
+        IOException,
+        PrompterException,
+        ArchetypeGenerationConfigurationFailure;
+
+    public ArchetypeConfiguration configureArchetype(
         Boolean interactiveMode,
         File propertyFile,
         Properties commandLineProperties,

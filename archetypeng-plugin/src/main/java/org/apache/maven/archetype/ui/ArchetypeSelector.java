@@ -19,6 +19,7 @@
 
 package org.apache.maven.archetype.ui;
 
+import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.common.ArchetypeDefinition;
 import org.apache.maven.archetype.exception.ArchetypeNotDefined;
 import org.apache.maven.archetype.exception.ArchetypeSelectionFailure;
@@ -35,6 +36,20 @@ import java.util.List;
 public interface ArchetypeSelector
 {
     String ROLE = ArchetypeSelector.class.getName();
+
+    public void selectArchetype( ArchetypeGenerationRequest request,
+                                 Boolean interactiveMode,
+                                 File archetypeRegistryFile,
+                                 List repositories
+    )
+        throws
+        ArchetypeNotDefined,
+        UnknownArchetype,
+        UnknownGroup,
+        IOException,
+        FileNotFoundException,
+        PrompterException,
+        ArchetypeSelectionFailure;
 
     ArchetypeDefinition selectArchetype( String archetypeGroupId,
                                          String archetypeArtifactId,

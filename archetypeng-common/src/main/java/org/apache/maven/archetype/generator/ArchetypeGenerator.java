@@ -19,6 +19,8 @@
 
 package org.apache.maven.archetype.generator;
 
+import org.apache.maven.archetype.ArchetypeGenerationRequest;
+import org.apache.maven.archetype.ArchetypeGenerationResult;
 import org.apache.maven.archetype.common.ArchetypeDefinition;
 import org.apache.maven.archetype.exception.ArchetypeGenerationFailure;
 import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
@@ -40,6 +42,10 @@ import java.util.List;
 public interface ArchetypeGenerator
 {
     String ROLE = ArchetypeGenerator.class.getName();
+
+    public void generateArchetype( ArchetypeGenerationRequest request,
+                                   ArchetypeGenerationResult result
+    );
 
     void generateArchetype( File propertyFile,
                             ArtifactRepository localRepository,

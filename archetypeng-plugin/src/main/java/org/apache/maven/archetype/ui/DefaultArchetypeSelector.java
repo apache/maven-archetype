@@ -19,6 +19,7 @@
 
 package org.apache.maven.archetype.ui;
 
+import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
 import org.apache.maven.archetype.common.ArchetypeDefinition;
@@ -186,10 +187,11 @@ public class DefaultArchetypeSelector
         }
         else
         {
-            archetypePropertiesManager.writeProperties(
-                toProperties( archetypeDefinition ),
-                propertyFile
-            );
+//            properties is no longer needed
+//            archetypePropertiesManager.writeProperties(
+//                toProperties( archetypeDefinition ),
+//                propertyFile
+//            );
 
             return archetypeDefinition;
         }
@@ -256,14 +258,15 @@ public class DefaultArchetypeSelector
         IOException
     {
         Properties properties = new Properties();
-        try
-        {
-            archetypePropertiesManager.readProperties( properties, propertyFile );
-        }
-        catch ( FileNotFoundException e )
-        {
-            getLogger().debug( "archetype.properties does not exist" );
-        }
+//        propertyFile is no longer needed
+//        try
+//        {
+//            archetypePropertiesManager.readProperties( properties, propertyFile );
+//        }
+//        catch ( FileNotFoundException e )
+//        {
+//            getLogger().debug( "archetype.properties does not exist" );
+//        }
 
         if ( archetypeGroupId != null )
         {
@@ -281,5 +284,40 @@ public class DefaultArchetypeSelector
         }
 
         return properties;
+    }
+
+    public void selectArchetype(
+        ArchetypeGenerationRequest request,
+        Boolean interactiveMode,
+        File archetypeRegistryFile,
+        List repositories
+    )
+        throws
+        ArchetypeNotDefined,
+        UnknownArchetype,
+        UnknownGroup,
+        IOException,
+        FileNotFoundException,
+        PrompterException,
+        ArchetypeSelectionFailure
+    {
+        // propertyFile is no longer needed, set to null!
+        // archetypeRegistryFile is no longer used, set to null!
+        ArchetypeDefinition definition = selectArchetype(
+            request.getArchetypeGroupId(),
+            request.getArchetypeArtifactId(),
+            request.getArchetypeVersion(),
+            interactiveMode,
+            null,
+            null,
+            request.getLocalRepository(),
+            repositories);
+
+        request.setArchetypeGroupId( definition.getGroupId() );
+        request.setArchetypeArtifactId( definition.getArtifactId() );
+        request.setArchetypeVersion( definition.getVersion() );
+        request.setArchetypeRepository( definition.getRepository() );
+        request.setArchetypeGoals( definition.getGoals() );
+        request.setArchetypeName( definition.getName() );
     }
 }

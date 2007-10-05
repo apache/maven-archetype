@@ -20,6 +20,7 @@
 package org.apache.maven.archetype.ui;
 
 import org.apache.maven.archetype.Archetype;
+import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
 import org.apache.maven.archetype.common.ArchetypeConfiguration;
 import org.apache.maven.archetype.common.ArchetypeDefinition;
@@ -42,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import org.apache.maven.archetype.common.Constants;
 
 /** @plexus.component */
 public class DefaultArchetypeGenerationConfigurator
@@ -50,6 +52,7 @@ public class DefaultArchetypeGenerationConfigurator
 {
     /** @plexus.requirement */
     Archetype oldArchetype;
+
     /** @plexus.requirement */
     private ArchetypeArtifactManager archetypeArtifactManager;
 
@@ -62,7 +65,7 @@ public class DefaultArchetypeGenerationConfigurator
     /** @plexus.requirement */
     private ArchetypePropertiesManager archetypePropertiesManager;
 
-    public void configureArchetype(
+    public ArchetypeConfiguration configureArchetype(
         Boolean interactiveMode,
         File propertyFile,
         Properties commandLineProperties,
@@ -77,9 +80,11 @@ public class DefaultArchetypeGenerationConfigurator
         PrompterException,
         ArchetypeGenerationConfigurationFailure
     {
+        // propertyFile is no longer needed
         Properties properties =
             initialiseArchetypeProperties( commandLineProperties, propertyFile );
 
+        // The archetype should be defined at this point and exist!
         ArchetypeDefinition archetypeDefinition =
             archetypeFactory.createArchetypeDefinition( properties );
 
@@ -208,10 +213,13 @@ public class DefaultArchetypeGenerationConfigurator
             }
         }
 
-        archetypePropertiesManager.writeProperties(
-            archetypeConfiguration.toProperties(),
-            propertyFile
-        );
+//        propertyFile is no longer needed
+//        archetypePropertiesManager.writeProperties(
+//            archetypeConfiguration.toProperties(),
+//            propertyFile
+//        );
+
+        return archetypeConfiguration;
     }
 
     private Properties initialiseArchetypeProperties(
@@ -223,7 +231,8 @@ public class DefaultArchetypeGenerationConfigurator
         IOException
     {
         Properties properties = new Properties();
-        archetypePropertiesManager.readProperties( properties, propertyFile );
+//        propertyFile is no longer needed
+//        archetypePropertiesManager.readProperties( properties, propertyFile );
 
         Iterator commandLinePropertiesIterator =
             new ArrayList( commandLineProperties.keySet() ).iterator();
@@ -236,5 +245,47 @@ public class DefaultArchetypeGenerationConfigurator
             );
         }
         return properties;
+    }
+
+    public void configureArchetype(
+        ArchetypeGenerationRequest request,
+        Boolean interactiveMode,
+        Properties commandLineProperties,
+        List repositories
+    )
+        throws
+        ArchetypeNotDefined,
+        UnknownArchetype,
+        ArchetypeNotConfigured,
+        IOException,
+        PrompterException,
+        ArchetypeGenerationConfigurationFailure
+    {
+        Properties p = new Properties( commandLineProperties );
+        p.setProperty( Constants.ARCHETYPE_GROUP_ID, request.getArchetypeGroupId() );
+        p.setProperty( Constants.ARCHETYPE_ARTIFACT_ID, request.getArchetypeArtifactId() );
+        p.setProperty( Constants.ARCHETYPE_VERSION, request.getArchetypeVersion() );
+
+        // propertyFile is no longer needed, set to null:
+        ArchetypeConfiguration archetypeConfiguration = configureArchetype(
+            interactiveMode,
+            null,
+            p,
+            request.getLocalRepository(),
+            repositories
+        );
+
+        request.setGroupId( archetypeConfiguration.getProperty( Constants.GROUP_ID ) );
+        request.setArtifactId( archetypeConfiguration.getProperty( Constants.ARTIFACT_ID ) );
+        request.setVersion( archetypeConfiguration.getProperty( Constants.VERSION ) );
+        request.setPackage( archetypeConfiguration.getProperty( Constants.PACKAGE ) );
+        Properties properties = archetypeConfiguration.getProperties();
+        properties.remove( Constants.GROUP_ID );
+        properties.remove( Constants.ARTIFACT_ID );
+        properties.remove( Constants.VERSION );
+        properties.remove( Constants.PACKAGE );
+
+        request.setAdditionalProperties( properties );
+
     }
 }
