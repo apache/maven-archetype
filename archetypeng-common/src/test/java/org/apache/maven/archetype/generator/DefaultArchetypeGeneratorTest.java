@@ -70,6 +70,7 @@ public class DefaultArchetypeGeneratorTest
 
         DefaultArchetypeGenerator instance =
             (DefaultArchetypeGenerator) lookup( ArchetypeGenerator.ROLE );
+
         instanceDefined( instance );
 
         try
@@ -531,37 +532,6 @@ public class DefaultArchetypeGeneratorTest
         assertEquals( "file-value", model.getGroupId() );
         assertEquals( "file-value", model.getArtifactId() );
         assertEquals( "file-value", model.getVersion() );
-    }
-
-    public void testNoPropertyFile()
-        throws
-        Exception
-    {
-        System.out.println( "testNoPropertyFile" );
-
-        String project = "generate-1";
-        File propertyFile = getPropertiesFile( project );
-        String basedir = propertyFile.getParent();
-
-        DefaultArchetypeGenerator instance =
-            (DefaultArchetypeGenerator) lookup( ArchetypeGenerator.ROLE );
-        instanceDefined( instance );
-
-        try
-        {
-            instance.generateArchetype( propertyFile, localRepository, repositories, basedir );
-
-            fail( "Exception must be thrown" );
-        }
-        catch ( FileNotFoundException e )
-        {
-            /* Commented out as error messages are localised by default, and I (rafale)
-             * don't know how to have unlocalised messages from the exception object. String
-             * errorMessage = e.getMessage (); assertTrue (  "Exception not correct",
-             * errorMessage.contains ( "No such file or directory"  ) || errorMessage.contains (
-             * "The system cannot find the file specified" ) );
-             */
-        }
     }
 
     public void testPropertiesNotDefined()

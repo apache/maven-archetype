@@ -365,12 +365,6 @@ public class DefaultArchetypeFactory
     public ArchetypeDefinition createArchetypeDefinition( Properties properties )
     {
         ArchetypeDefinition definition = new ArchetypeDefinition();
-        getLogger().debug(
-            "Creating ArchetypeDefinition ("
-                + properties.getProperty( Constants.ARCHETYPE_GROUP_ID, null ) + ":"
-                + properties.getProperty( Constants.ARCHETYPE_ARTIFACT_ID, null ) + ":"
-                + properties.getProperty( Constants.ARCHETYPE_VERSION, null ) + ")"
-        );
 
         definition.setGroupId( properties.getProperty( Constants.ARCHETYPE_GROUP_ID, null ) );
 

@@ -21,7 +21,6 @@ package org.apache.maven.archetype.generator;
 
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
-import org.apache.maven.archetype.common.ArchetypeDefinition;
 import org.apache.maven.archetype.exception.ArchetypeGenerationFailure;
 import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
 import org.apache.maven.archetype.exception.ArchetypeNotDefined;
@@ -35,7 +34,6 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.dom4j.DocumentException;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -45,4 +43,23 @@ public interface ArchetypeGenerator
 
     void generateArchetype( ArchetypeGenerationRequest request,
                             ArchetypeGenerationResult result );
+
+    void generateArchetype(
+        File propertyFile,
+        ArtifactRepository localRepository,
+        List repositories,
+        String basedir )
+        throws
+        IOException,
+        ArchetypeNotDefined,
+        UnknownArchetype,
+        ArchetypeNotConfigured,
+        ProjectDirectoryExists,
+        PomFileExists,
+        OutputFileExists,
+        XmlPullParserException,
+        DocumentException,
+        InvalidPackaging,
+        ArchetypeGenerationFailure;
+
 }

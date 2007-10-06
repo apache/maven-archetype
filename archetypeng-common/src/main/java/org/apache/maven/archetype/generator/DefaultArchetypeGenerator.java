@@ -30,6 +30,7 @@ import org.apache.maven.archetype.common.ArchetypeConfiguration;
 import org.apache.maven.archetype.common.ArchetypeDefinition;
 import org.apache.maven.archetype.common.ArchetypeFactory;
 import org.apache.maven.archetype.common.ArchetypePropertiesManager;
+import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.exception.ArchetypeGenerationFailure;
 import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
@@ -41,18 +42,19 @@ import org.apache.maven.archetype.exception.ProjectDirectoryExists;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.util.PropertyUtils;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.dom4j.DocumentException;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 
 /** @plexus.component */
 public class DefaultArchetypeGenerator
@@ -76,6 +78,30 @@ public class DefaultArchetypeGenerator
 
     /** @plexus.requirement */
     private Archetype oldArchetype;
+
+    //TODO: This is required for test and needs to be converted over to using the request
+    public void generateArchetype(
+        File propertyFile,
+        ArtifactRepository localRepository,
+        List repositories,
+        String basedir )
+        throws
+        IOException,
+        ArchetypeNotDefined,
+        UnknownArchetype,
+        ArchetypeNotConfigured,
+        ProjectDirectoryExists,
+        PomFileExists,
+        OutputFileExists,
+        XmlPullParserException,
+        DocumentException,
+        InvalidPackaging,
+        ArchetypeGenerationFailure
+    {
+        Properties properties = PropertyUtils.loadProperties( propertyFile );
+
+        generateArchetype( null, properties, localRepository, repositories, basedir );
+    }
 
     private void generateArchetype(
         ArchetypeGenerationRequest request,
@@ -106,7 +132,17 @@ public class DefaultArchetypeGenerator
             throw new ArchetypeNotDefined( "The archetype is not defined" );
         }
 
-        if ( !archetypeArtifactManager.exists( archetypeDefinition, localRepository, repositories ) )
+        List repos = new ArrayList( repositories );
+
+        if ( request != null )
+        {
+            ArtifactRepository remoteRepo = archetypeRegistryManager.createRepository( request.getRemoteRepository(),
+                archetypeDefinition.getArtifactId() + "-repo" );
+
+            repos.add( remoteRepo );
+        }
+
+        if ( !archetypeArtifactManager.exists( archetypeDefinition, localRepository, repos ) )
         {
             throw new UnknownArchetype(
                 "The desired archetype does not exist (" + archetypeDefinition.getGroupId() + ":"
@@ -120,7 +156,7 @@ public class DefaultArchetypeGenerator
             archetypeDefinition.getArtifactId(),
             archetypeDefinition.getVersion(),
             localRepository,
-            repositories
+            repos
         )
             )
         {
@@ -128,7 +164,7 @@ public class DefaultArchetypeGenerator
                 properties,
                 localRepository,
                 basedir,
-                repositories,
+                repos,
                 archetypeDefinition
             );
         }
@@ -138,14 +174,14 @@ public class DefaultArchetypeGenerator
                 archetypeDefinition.getArtifactId(),
                 archetypeDefinition.getVersion(),
                 localRepository,
-                repositories ) )
+                repos ) )
         {
             processOldArchetype(
                 localRepository,
                 properties,
                 basedir,
                 archetypeDefinition,
-                repositories
+                repos
             );
         }
         else
