@@ -70,7 +70,7 @@ public class DefaultArchetypeSelector
     /** @plexus.requirement role="org.apache.maven.archetype.source.ArchetypeDataSource" */
     private Map archetypeSources;
 
-    public ArchetypeDefinition selectArchetype(
+    private ArchetypeDefinition selectArchetype(
         String archetypeGroupId,
         String archetypeArtifactId,
         String archetypeVersion,

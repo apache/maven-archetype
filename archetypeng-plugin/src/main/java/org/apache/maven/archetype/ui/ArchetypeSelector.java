@@ -47,25 +47,6 @@ public interface ArchetypeSelector
         UnknownArchetype,
         UnknownGroup,
         IOException,
-        FileNotFoundException,
-        PrompterException,
-        ArchetypeSelectionFailure;
-
-    ArchetypeDefinition selectArchetype( String archetypeGroupId,
-                                         String archetypeArtifactId,
-                                         String archetypeVersion,
-                                         Boolean interactiveMode,
-                                         File propertyFile,
-                                         File archetypeRegistryFile,
-                                         ArtifactRepository localRepository,
-                                         List repositories
-    )
-        throws
-        ArchetypeNotDefined,
-        UnknownArchetype,
-        UnknownGroup,
-        IOException,
-        FileNotFoundException,
         PrompterException,
         ArchetypeSelectionFailure;
 }
