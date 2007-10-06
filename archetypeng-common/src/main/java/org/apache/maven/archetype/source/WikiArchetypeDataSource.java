@@ -1,6 +1,7 @@
 package org.apache.maven.archetype.source;
 
 import org.apache.maven.archetype.catalog.Archetype;
+import org.apache.maven.settings.Settings;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,7 +13,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.maven.settings.Settings;
 
 /**
  * @plexus.component role-hint="wiki"

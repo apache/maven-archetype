@@ -1,16 +1,12 @@
 package org.apache.maven.archetype.test;
 
-import org.apache.maven.archetype.ArchetypeGenerationRequest;
-import org.apache.maven.archetype.ArchetypeGenerationResult;
 import org.apache.maven.archetype.Archetyper;
-import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.project.MavenProjectBuilder;
 import org.codehaus.plexus.PlexusTestCase;
 
 import java.io.File;
-import java.util.List;
 
 /** @author Jason van Zyl */
 public class ArchetyperRoundtripTest

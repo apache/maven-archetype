@@ -27,7 +27,6 @@ import org.apache.maven.archetype.exception.ProjectDirectoryExists;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 
 import java.io.File;
-
 import java.util.Properties;
 
 /** @author rafale */

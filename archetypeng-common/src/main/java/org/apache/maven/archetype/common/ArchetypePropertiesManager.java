@@ -22,7 +22,6 @@ package org.apache.maven.archetype.common;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
 import java.util.Properties;
 
 public interface ArchetypePropertiesManager

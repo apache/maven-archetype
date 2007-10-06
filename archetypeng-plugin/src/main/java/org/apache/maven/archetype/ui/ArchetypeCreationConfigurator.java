@@ -23,13 +23,11 @@ import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
 import org.apache.maven.archetype.exception.ArchetypeNotDefined;
 import org.apache.maven.archetype.exception.TemplateCreationException;
 import org.apache.maven.project.MavenProject;
-
 import org.codehaus.plexus.components.interactivity.PrompterException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
 import java.util.List;
 import java.util.Properties;
 

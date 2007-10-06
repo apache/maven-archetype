@@ -33,7 +33,6 @@ import org.apache.maven.artifact.repository.metadata.RepositoryMetadataResolutio
 import org.apache.maven.shared.downloader.DownloadException;
 import org.apache.maven.shared.downloader.DownloadNotFoundException;
 import org.apache.maven.shared.downloader.Downloader;
-
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
@@ -43,11 +42,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;

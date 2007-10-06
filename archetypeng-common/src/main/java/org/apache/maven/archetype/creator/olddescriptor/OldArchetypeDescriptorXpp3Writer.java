@@ -23,7 +23,6 @@ import org.codehaus.plexus.util.xml.pull.MXSerializer;
 import org.codehaus.plexus.util.xml.pull.XmlSerializer;
 
 import java.io.Writer;
-
 import java.util.Iterator;
 
 /** @author rafale */

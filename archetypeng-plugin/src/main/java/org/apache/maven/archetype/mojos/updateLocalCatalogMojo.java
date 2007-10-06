@@ -1,9 +1,5 @@
 package org.apache.maven.archetype.mojos;
 
-import java.io.File;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Properties;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.source.ArchetypeDataSource;
 import org.apache.maven.archetype.source.ArchetypeDataSourceException;
@@ -14,6 +10,11 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.settings.Settings;
 import org.codehaus.plexus.util.PropertyUtils;
 import org.codehaus.plexus.util.StringUtils;
+
+import java.io.File;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Properties;
 
 
 /**

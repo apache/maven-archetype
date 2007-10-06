@@ -6,7 +6,6 @@ import org.apache.maven.archetype.Archetyper;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.project.MavenProjectBuilder;
 import org.codehaus.plexus.PlexusTestCase;
 
 import java.io.File;

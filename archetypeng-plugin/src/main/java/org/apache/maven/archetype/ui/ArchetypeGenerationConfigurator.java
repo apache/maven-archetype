@@ -24,16 +24,11 @@ import org.apache.maven.archetype.exception.ArchetypeGenerationConfigurationFail
 import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
 import org.apache.maven.archetype.exception.ArchetypeNotDefined;
 import org.apache.maven.archetype.exception.UnknownArchetype;
-import org.apache.maven.artifact.repository.ArtifactRepository;
-
 import org.codehaus.plexus.components.interactivity.PrompterException;
 
-import java.io.File;
 import java.io.IOException;
-
 import java.util.List;
 import java.util.Properties;
-import org.apache.maven.archetype.common.ArchetypeConfiguration;
 
 public interface ArchetypeGenerationConfigurator
 {

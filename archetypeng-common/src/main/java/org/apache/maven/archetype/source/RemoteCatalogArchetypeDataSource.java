@@ -1,15 +1,14 @@
 package org.apache.maven.archetype.source;
 
+import org.apache.maven.archetype.catalog.Archetype;
+import org.apache.maven.settings.Settings;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Properties;
-import org.apache.maven.archetype.catalog.Archetype;
-import org.apache.maven.artifact.manager.WagonManager;
-import org.apache.maven.settings.Settings;
-import org.codehaus.plexus.PlexusContainer;
 
 /**
  * @plexus.component role-hint="remote-catalog"

@@ -21,6 +21,7 @@ package org.apache.maven.archetype.creator;
 
 //import org.apache.maven.archetype.ui.DefaultArchetypeCreationConfigurator;
 //import org.apache.maven.archetype.ui.ArchetypeCreationConfigurator;
+
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.DefaultArtifactRepository;
 import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
@@ -30,7 +31,6 @@ import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.project.ProjectBuildingException;
-
 import org.codehaus.plexus.util.IOUtil;
 
 import java.io.File;
@@ -39,7 +39,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;

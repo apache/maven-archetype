@@ -18,9 +18,9 @@
  */
 package org.apache.maven.archetype.common.util;
 
-import java.util.Stack;
-
 import org.jdom.Namespace;
+
+import java.util.Stack;
 
 /**
  * A non-public utility class used by both <code>{@link XMLOutputter}</code> and

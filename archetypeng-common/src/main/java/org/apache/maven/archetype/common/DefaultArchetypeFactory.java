@@ -20,7 +20,6 @@
 package org.apache.maven.archetype.common;
 
 import org.apache.maven.project.MavenProject;
-
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 import java.util.Iterator;

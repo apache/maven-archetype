@@ -27,8 +27,8 @@ package org.apache.maven.archetype.common;
 // - Imported classes and packages -/
 // ---------------------------------/
 
-import org.apache.maven.archetype.common.util.XMLOutputter;
 import org.apache.maven.archetype.common.util.Format;
+import org.apache.maven.archetype.common.util.XMLOutputter;
 import org.apache.maven.model.Activation;
 import org.apache.maven.model.ActivationFile;
 import org.apache.maven.model.ActivationOS;
@@ -72,9 +72,7 @@ import org.apache.maven.model.RepositoryPolicy;
 import org.apache.maven.model.Resource;
 import org.apache.maven.model.Scm;
 import org.apache.maven.model.Site;
-
 import org.codehaus.plexus.util.xml.Xpp3Dom;
-
 import org.jdom.Content;
 import org.jdom.DefaultJDOMFactory;
 import org.jdom.Document;
@@ -84,7 +82,6 @@ import org.jdom.Text;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;

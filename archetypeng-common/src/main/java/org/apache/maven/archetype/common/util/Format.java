@@ -18,9 +18,9 @@
  */
 package org.apache.maven.archetype.common.util;
 
-import java.lang.reflect.Method;
-
 import org.jdom.output.EscapeStrategy;
+
+import java.lang.reflect.Method;
 
 /**
  * Class to encapsulate XMLOutputter format options.

@@ -20,7 +20,6 @@
 package org.apache.maven.archetype.ui;
 
 import org.apache.maven.archetype.common.ArchetypeConfiguration;
-
 import org.codehaus.plexus.components.interactivity.PrompterException;
 
 public interface ArchetypeCreationQueryer

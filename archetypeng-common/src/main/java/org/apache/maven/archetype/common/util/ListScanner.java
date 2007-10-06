@@ -23,7 +23,6 @@ import org.codehaus.plexus.util.SelectorUtils;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

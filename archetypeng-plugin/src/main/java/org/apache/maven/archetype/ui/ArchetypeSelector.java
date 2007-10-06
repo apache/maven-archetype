@@ -26,9 +26,7 @@ import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.archetype.exception.UnknownGroup;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 //TODO: We should need any remote repositories here, we should simply be doing selection, any remote catalogs
 //      should be validating correctness, and if it so happens we get a crap entry then the generation mechanism

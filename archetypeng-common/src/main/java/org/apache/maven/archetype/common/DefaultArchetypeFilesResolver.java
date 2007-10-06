@@ -19,24 +19,21 @@
 
 package org.apache.maven.archetype.common;
 
+import org.apache.maven.archetype.common.util.ListScanner;
+import org.apache.maven.archetype.common.util.PathUtils;
 import org.apache.maven.archetype.metadata.FileSet;
-
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
-import org.apache.maven.archetype.common.util.ListScanner;
-import org.apache.maven.archetype.common.util.PathUtils;
 
 /** @plexus.component */
 public class DefaultArchetypeFilesResolver

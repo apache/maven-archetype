@@ -36,17 +36,14 @@ import org.apache.maven.archetype.metadata.AbstractArchetypeDescriptor;
 import org.apache.maven.archetype.metadata.ArchetypeDescriptor;
 import org.apache.maven.archetype.metadata.FileSet;
 import org.apache.maven.archetype.metadata.ModuleDescriptor;
-
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.context.Context;
-
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.codehaus.plexus.velocity.VelocityComponent;
-
 import org.dom4j.DocumentException;
 
 import java.io.File;
@@ -56,7 +53,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;

@@ -20,16 +20,14 @@
 package org.apache.maven.archetype.mojos.registry;
 
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
+import org.apache.maven.archetype.registry.ArchetypeRegistry;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-
 import java.util.Iterator;
-
-import org.apache.maven.archetype.registry.ArchetypeRegistry;
 
 /**
  * Show the registered language directories.

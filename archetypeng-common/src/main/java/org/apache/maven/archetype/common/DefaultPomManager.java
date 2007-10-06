@@ -19,6 +19,7 @@
 
 package org.apache.maven.archetype.common;
 
+import org.apache.maven.archetype.common.util.FileCharsetDetector;
 import org.apache.maven.archetype.common.util.Format;
 import org.apache.maven.archetype.exception.InvalidPackaging;
 import org.apache.maven.model.Build;
@@ -30,23 +31,18 @@ import org.apache.maven.model.ReportPlugin;
 import org.apache.maven.model.Reporting;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
-
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.Node;
-
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
-
 import org.jdom.JDOMException;
-
 import org.jdom.input.SAXBuilder;
 
 import java.io.File;
@@ -61,13 +57,10 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
-
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.maven.archetype.common.util.FileCharsetDetector;
 
 /** @plexus.component */
 public class DefaultPomManager

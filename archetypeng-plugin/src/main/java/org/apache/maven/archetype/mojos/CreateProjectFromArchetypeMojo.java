@@ -19,6 +19,9 @@
 
 package org.apache.maven.archetype.mojos;
 
+import org.apache.maven.archetype.ArchetypeGenerationRequest;
+import org.apache.maven.archetype.ArchetypeGenerationResult;
+import org.apache.maven.archetype.Archetyper;
 import org.apache.maven.archetype.common.ArchetypePropertiesManager;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 import org.apache.maven.archetype.generator.ArchetypeGenerator;
@@ -41,9 +44,6 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-import org.apache.maven.archetype.ArchetypeGenerationRequest;
-import org.apache.maven.archetype.ArchetypeGenerationResult;
-import org.apache.maven.archetype.Archetyper;
 
 /**
  * Generates sample project from archetype.

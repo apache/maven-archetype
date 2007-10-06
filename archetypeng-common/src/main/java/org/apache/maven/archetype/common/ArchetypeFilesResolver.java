@@ -23,7 +23,6 @@ import org.apache.maven.archetype.metadata.FileSet;
 
 import java.io.File;
 import java.io.IOException;
-
 import java.util.List;
 
 /** @author rafale */

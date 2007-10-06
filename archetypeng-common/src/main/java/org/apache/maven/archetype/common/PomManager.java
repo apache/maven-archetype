@@ -21,9 +21,7 @@ package org.apache.maven.archetype.common;
 
 import org.apache.maven.archetype.exception.InvalidPackaging;
 import org.apache.maven.model.Model;
-
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-
 import org.dom4j.DocumentException;
 
 import java.io.File;

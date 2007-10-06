@@ -1,7 +1,5 @@
 package org.apache.maven.archetype;
 
-import org.apache.maven.archetype.exception.ArchetypeGenerationFailure;
-
 /** @author Jason van Zyl */
 public class ArchetypeGenerationResult
 {

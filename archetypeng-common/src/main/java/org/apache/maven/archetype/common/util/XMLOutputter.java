@@ -18,16 +18,6 @@
  */
 package org.apache.maven.archetype.common.util;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.List;
-import javax.xml.transform.Result;
-
 import org.jdom.Attribute;
 import org.jdom.CDATA;
 import org.jdom.Comment;
@@ -39,6 +29,16 @@ import org.jdom.Namespace;
 import org.jdom.ProcessingInstruction;
 import org.jdom.Text;
 import org.jdom.output.EscapeStrategy;
+
+import javax.xml.transform.Result;
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.List;
 
 /**
  * This class is a fork from jdom 1.0 modified to preserve CData and comments parts.

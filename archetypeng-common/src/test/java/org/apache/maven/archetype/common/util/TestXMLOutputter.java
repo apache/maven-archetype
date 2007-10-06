@@ -19,16 +19,14 @@
 
 package org.apache.maven.archetype.common.util;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
-
 import junit.framework.TestCase;
-
-
 import org.jdom.Document;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
+
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
 
 /** @author <a href="mailto:jdcasey@apache.org">John Casey</a> */
 public class TestXMLOutputter

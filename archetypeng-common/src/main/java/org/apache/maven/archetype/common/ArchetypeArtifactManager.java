@@ -25,7 +25,6 @@ import org.apache.maven.archetype.metadata.ArchetypeDescriptor;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 
 import java.io.File;
-
 import java.util.List;
 import java.util.zip.ZipFile;
 

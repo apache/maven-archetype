@@ -24,12 +24,10 @@ import org.apache.maven.archetype.registry.ArchetypeRegistry;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
