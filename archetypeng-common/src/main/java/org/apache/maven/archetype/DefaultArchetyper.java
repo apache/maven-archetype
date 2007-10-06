@@ -4,6 +4,7 @@ import org.apache.maven.archetype.creator.ArchetypeCreator;
 import org.apache.maven.archetype.generator.ArchetypeGenerator;
 import org.apache.maven.archetype.source.ArchetypeDataSource;
 import org.apache.maven.archetype.source.ArchetypeDataSourceException;
+import org.apache.maven.archetype.source.WikiArchetypeDataSource;
 import org.codehaus.plexus.util.PropertyUtils;
 import org.codehaus.plexus.util.StringUtils;
 
@@ -65,34 +66,44 @@ public class DefaultArchetyper
     {
         File archetypeCatalogPropertiesFile = new File( System.getProperty( "user.home" ), ".m2/archetype-catalog.properties" );
 
-        return getAvailableArchetypes( archetypeCatalogPropertiesFile );
-    }
-
-    public Collection getAvailableArchetypes( File archetypeCatalogPropertiesFile )
-    {
-        List archetypes = new ArrayList();
+        Properties archetypeCatalogProperties;
 
         if ( archetypeCatalogPropertiesFile.exists() )
         {
-            Properties archetypeCatalogProperties = PropertyUtils.loadProperties( archetypeCatalogPropertiesFile );
+            archetypeCatalogProperties = PropertyUtils.loadProperties( archetypeCatalogPropertiesFile );
+        }
+        else
+        {
+            archetypeCatalogProperties = new Properties();
 
-            String[] sources = StringUtils.split( archetypeCatalogProperties.getProperty( "sources" ), "," );
+            archetypeCatalogProperties.setProperty( "sources", "wiki" );
 
-            for ( int i = 0; i < sources.length; i++ )
+            archetypeCatalogProperties.setProperty( "wiki.url", WikiArchetypeDataSource.DEFAULT_ARCHETYPE_INVENTORY_PAGE );
+        }
+
+        return getAvailableArchetypes( archetypeCatalogProperties );
+    }
+
+    public Collection getAvailableArchetypes( Properties archetypeCatalogProperties )
+    {
+        List archetypes = new ArrayList();
+
+        String[] sources = StringUtils.split( archetypeCatalogProperties.getProperty( "sources" ), "," );
+
+        for ( int i = 0; i < sources.length; i++ )
+        {
+            String sourceRoleHint = sources[i];
+
+            try
             {
-                String sourceRoleHint = sources[i];
+                ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( sourceRoleHint );
 
-                try
-                {
-                    ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( sourceRoleHint );
-
-                    archetypes.addAll(
-                        source.getArchetypes( getArchetypeDataSourceProperties( sourceRoleHint, archetypeCatalogProperties ) ) );
-                }
-                catch ( ArchetypeDataSourceException e )
-                {
-                    // do nothing, gracefully move on
-                }
+                archetypes.addAll(
+                    source.getArchetypes( getArchetypeDataSourceProperties( sourceRoleHint, archetypeCatalogProperties ) ) );
+            }
+            catch ( ArchetypeDataSourceException e )
+            {
+                // do nothing, gracefully move on
             }
         }
 

@@ -23,7 +23,7 @@ public class WikiArchetypeDataSource
 {
     public static String URL = "url";
 
-    private static String DEFAULT_ARCHETYPE_INVENTORY_PAGE = "http://docs.codehaus.org/pages/viewpagesrc.action?pageId=48400";
+    public static String DEFAULT_ARCHETYPE_INVENTORY_PAGE = "http://docs.codehaus.org/pages/viewpagesrc.action?pageId=48400";
 
     public List getArchetypes( Properties properties )
         throws ArchetypeDataSourceException
