@@ -16,12 +16,13 @@ import org.apache.maven.settings.Settings;
  */
 public interface ArchetypeDataSource
 {
-
-    String ROLE = ArchetypeDataSource.class.getName(  );
+    String ROLE = ArchetypeDataSource.class.getName();
 
     List getArchetypes( Properties properties )
         throws ArchetypeDataSourceException;
 
-    public void updateCatalog( Properties properties, Archetype archetype, Settings settings )
+    void updateCatalog( Properties properties, Archetype archetype, Settings settings )
         throws ArchetypeDataSourceException;
+
+    ArchetypeDataSourceDescriptor getDescriptor();
 }

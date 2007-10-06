@@ -3,9 +3,12 @@ package org.apache.maven.archetype;
 import org.apache.maven.archetype.creator.ArchetypeCreator;
 import org.apache.maven.archetype.generator.ArchetypeGenerator;
 import org.apache.maven.archetype.source.ArchetypeDataSource;
+import org.apache.maven.archetype.source.ArchetypeDataSourceException;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * @plexus.component
@@ -41,6 +44,12 @@ public class DefaultArchetyper
         return result;
     }
 
+    public Collection getArchetypes( ArchetypeDataSource source, Properties sourceConfiguration )
+        throws ArchetypeDataSourceException
+    {
+        return source.getArchetypes( sourceConfiguration );
+    }
+
     public Collection getArchetypeDataSources()
     {
         return archetypeSources.values();
@@ -50,4 +59,25 @@ public class DefaultArchetyper
     {
         return (ArchetypeDataSource) archetypeSources.get(  roleHint );
     }
+
+    public Properties getArchetypeDataSourceProperties( String sourceRoleHint,
+                                                        Properties archetypeCatalogProperties )
+    {
+        Properties p = new Properties();
+
+        for ( Iterator i = archetypeCatalogProperties.keySet().iterator(); i.hasNext(); )
+        {
+            String key = (String) i.next();
+
+            if ( key.startsWith( sourceRoleHint ) )
+            {
+                String k = key.substring( sourceRoleHint.length() + 1 );
+
+                p.setProperty( k, archetypeCatalogProperties.getProperty( key ) );
+            }
+        }
+
+        return p;
+    }
+
 }

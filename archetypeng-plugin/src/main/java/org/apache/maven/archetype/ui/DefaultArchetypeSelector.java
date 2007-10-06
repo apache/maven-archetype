@@ -40,7 +40,6 @@ import org.codehaus.plexus.util.PropertyUtils;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -126,7 +125,8 @@ public class DefaultArchetypeSelector
                         {
                             ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( sourceRoleHint );
 
-                            archetypes.addAll( source.getArchetypes( getArchetypeSourceProperties( sourceRoleHint, archetypeCatalogProperties ) ) );
+                            archetypes.addAll(
+                                source.getArchetypes( getArchetypeDataSourceProperties( sourceRoleHint, archetypeCatalogProperties ) ) );
                         }
                         catch ( ArchetypeDataSourceException e )
                         {
@@ -200,8 +200,8 @@ public class DefaultArchetypeSelector
         }
     }
 
-    private Properties getArchetypeSourceProperties( String sourceRoleHint,
-                                                     Properties archetypeCatalogProperties )
+    private Properties getArchetypeDataSourceProperties( String sourceRoleHint,
+                                                         Properties archetypeCatalogProperties )
     {
         Properties p = new Properties();
 

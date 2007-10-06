@@ -21,12 +21,14 @@ import org.apache.maven.settings.Settings;
 public class WikiArchetypeDataSource
     implements ArchetypeDataSource
 {
+    public static String URL = "url";
+
     private static String DEFAULT_ARCHETYPE_INVENTORY_PAGE = "http://docs.codehaus.org/pages/viewpagesrc.action?pageId=48400";
 
     public List getArchetypes( Properties properties )
         throws ArchetypeDataSourceException
     {
-        String url = properties.getProperty( "url" );
+        String url = properties.getProperty( URL );
 
         if ( url == null )
         {
@@ -104,5 +106,14 @@ public class WikiArchetypeDataSource
         throws ArchetypeDataSourceException
     {
         throw new ArchetypeDataSourceException( "Not supported yet." );
+    }
+
+    public ArchetypeDataSourceDescriptor getDescriptor()
+    {
+        ArchetypeDataSourceDescriptor d = new ArchetypeDataSourceDescriptor();
+
+        d.addParameter( URL, String.class, DEFAULT_ARCHETYPE_INVENTORY_PAGE, "The URL of the Wiki page which contains the Archetype information." );
+
+        return d;
     }
 }

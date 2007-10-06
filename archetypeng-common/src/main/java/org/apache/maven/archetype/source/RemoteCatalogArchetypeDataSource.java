@@ -177,4 +177,12 @@ public class RemoteCatalogArchetypeDataSource
 //        }
 //    }
 
+    public ArchetypeDataSourceDescriptor getDescriptor()
+    {
+        ArchetypeDataSourceDescriptor d = new ArchetypeDataSourceDescriptor();
+
+        d.addParameter( REPOSITORY_PROPERTY, String.class, "http://repo1.maven.org/maven2", "The repository URL where the archetype catalog resides." );
+
+        return d;
+    }
 }
