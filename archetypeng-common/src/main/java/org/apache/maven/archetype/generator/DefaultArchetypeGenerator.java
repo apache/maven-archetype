@@ -330,7 +330,7 @@ public class DefaultArchetypeGenerator
 
             properties.setProperty( Constants.PACKAGE, request.getPackage(  ) );
 
-            properties.setProperty( Constants.ARCHETYPE_POST_GENERATION_GOALS, request.getArchetypeGoals(  ) );
+            properties.setProperty( Constants.ARCHETYPE_POST_GENERATION_GOALS, request.getArchetypeGoals() );
 
             generateArchetype( request, properties, request.getLocalRepository(), Collections.singletonList( archetypeRegistryManager.createRepository( request.getArchetypeRepository(), "repository" ) ), request.getOutputDirectory(  ) );
         }

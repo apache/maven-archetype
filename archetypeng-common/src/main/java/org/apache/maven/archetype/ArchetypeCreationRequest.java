@@ -10,16 +10,27 @@ import java.util.List;
 public class ArchetypeCreationRequest
 {
     private ArtifactRepository localRepository;
+
     private List remoteRepositories;
+
     private MavenProject project;
+
     private File propertyFile;
+
     private List languages;
+
     private List filtereds;
-    private String defaultEncoding;
-    private boolean ignoreReplica;
-    private boolean preserveCData;
-    private boolean keepParent;
-    private boolean partialArchetype;
+
+    private String defaultEncoding = "UTF-8";
+
+    private boolean ignoreReplica = true;
+
+    private boolean preserveCData = false;
+
+    private boolean keepParent = true;
+
+    private boolean partialArchetype = false;
+
     private File archetypeRegistryFile;
 
     public ArtifactRepository getLocalRepository()

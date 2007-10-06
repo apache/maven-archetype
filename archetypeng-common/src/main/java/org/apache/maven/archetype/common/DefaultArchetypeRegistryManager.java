@@ -226,7 +226,7 @@ public class DefaultArchetypeRegistryManager
      * (org.apache.maven.plugins:maven-archetype-plugin:1.0-alpha4).
      */
     public ArtifactRepository createRepository( String url,
-                                                 String repositoryId )
+                                                String repositoryId )
     {
         // snapshots vs releases
         // offline = to turning the update policy off

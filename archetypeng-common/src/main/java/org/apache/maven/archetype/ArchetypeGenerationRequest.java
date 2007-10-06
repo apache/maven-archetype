@@ -2,7 +2,6 @@ package org.apache.maven.archetype;
 
 import org.apache.maven.artifact.repository.ArtifactRepository;
 
-import java.io.File;
 import java.util.Properties;
 
 /** @author Jason van Zyl */
@@ -21,7 +20,7 @@ public class ArchetypeGenerationRequest
 
     private String archetypeVersion;
 
-    private String archetypeGoals;
+    private String archetypeGoals = "";
 
     private String archetypeRepository;
 
@@ -34,9 +33,26 @@ public class ArchetypeGenerationRequest
 
     private String packageName;
 
-    private Properties properties;
+    private Properties properties = new Properties();
 
     private String remoteRepository;
+
+    public ArchetypeGenerationRequest()
+    {
+    }
+
+    public ArchetypeGenerationRequest( org.apache.maven.archetype.catalog.Archetype archetype )
+    {
+        this.archetypeGroupId = archetype.getGroupId();
+
+        this.archetypeArtifactId = archetype.getArtifactId();
+
+        this.archetypeVersion = archetype.getVersion();
+
+        this.remoteRepository = archetype.getRepository();
+
+        this.archetypeRepository = archetype.getRepository();
+    }
 
     public String getArchetypeGroupId()
     {
@@ -127,9 +143,11 @@ public class ArchetypeGenerationRequest
         return groupId;
     }
 
-    public void setGroupId( String groupId )
+    public ArchetypeGenerationRequest setGroupId( String groupId )
     {
         this.groupId = groupId;
+
+        return this;
     }
 
     public String getVersion()

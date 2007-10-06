@@ -62,7 +62,7 @@ public class DefaultArchetyper
         return archetypeSources.values();
     }
 
-    public Collection getAvailableArchetypes()
+    public List getAvailableArchetypes()
     {
         File archetypeCatalogPropertiesFile = new File( System.getProperty( "user.home" ), ".m2/archetype-catalog.properties" );
 
@@ -84,7 +84,7 @@ public class DefaultArchetyper
         return getAvailableArchetypes( archetypeCatalogProperties );
     }
 
-    public Collection getAvailableArchetypes( Properties archetypeCatalogProperties )
+    public List getAvailableArchetypes( Properties archetypeCatalogProperties )
     {
         List archetypes = new ArrayList();
 

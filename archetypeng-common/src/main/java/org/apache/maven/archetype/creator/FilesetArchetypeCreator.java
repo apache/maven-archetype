@@ -1503,7 +1503,12 @@ public class FilesetArchetypeCreator
         IOException
     {
         Properties properties = new Properties();
-        archetypePropertiesManager.readProperties( properties, propertyFile );
+
+        if ( propertyFile != null && propertyFile.exists() )
+        {
+            archetypePropertiesManager.readProperties( properties, propertyFile );
+        }
+        
         return properties;
     }
 

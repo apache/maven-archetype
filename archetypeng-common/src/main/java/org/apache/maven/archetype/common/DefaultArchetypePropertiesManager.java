@@ -41,7 +41,6 @@ public class DefaultArchetypePropertiesManager
     public void readProperties( Properties properties,
                                 File propertyFile )
         throws
-        FileNotFoundException,
         IOException
     {
         getLogger().debug( "Reading property file " + propertyFile );
