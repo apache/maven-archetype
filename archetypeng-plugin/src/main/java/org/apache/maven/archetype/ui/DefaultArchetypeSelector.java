@@ -106,41 +106,49 @@ public class DefaultArchetypeSelector
             {
                 List archetypes = new ArrayList();
 
-                try
+                File archetypeCatalogPropertiesFile = new File( System.getProperty( "user.home" ), ".m2/archetype-catalog.properties" );
+
+                if ( archetypeCatalogPropertiesFile.exists() )
                 {
-                    File archetypeCatalogPropertiesFile = new File( System.getProperty( "user.home" ), ".m2/archetype-catalog.properties" );
+                    Properties archetypeCatalogProperties = PropertyUtils.loadProperties( archetypeCatalogPropertiesFile );
 
-                    if ( archetypeCatalogPropertiesFile.exists() )
+                    getLogger().debug( "Using catalogs " + archetypeCatalogProperties );
+
+                    String[] sources = StringUtils.split( archetypeCatalogProperties.getProperty( "sources" ), "," );
+
+                    for ( int i = 0; i < sources.length; i++ )
                     {
-                        Properties archetypeCatalogProperties = PropertyUtils.loadProperties( archetypeCatalogPropertiesFile );
+                        String sourceRoleHint = sources[i];
 
-                        getLogger().debug("Using catalogs " + archetypeCatalogProperties);
+                        getLogger().debug( "Reading catalog " + sourceRoleHint );
 
-                        String[] sources = StringUtils.split( archetypeCatalogProperties.getProperty( "sources" ), "," );
-
-                        for ( int i = 0; i < sources.length; i++ )
+                        try
                         {
-                            String sourceRoleHint = sources[i];
-
-                            getLogger().debug("Reading catalog "+sourceRoleHint);
-
                             ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( sourceRoleHint );
 
                             archetypes.addAll( source.getArchetypes( getArchetypeSourceProperties( sourceRoleHint, archetypeCatalogProperties ) ) );
                         }
+                        catch ( ArchetypeDataSourceException e )
+                        {
+                            getLogger().warn( "Unable to get archetypes from " + sourceRoleHint + " source. [" + e.getMessage() + "]" );
+                        }
                     }
-                    else
-                    {
-                        getLogger().debug("Using wiki catalog");
+                }
 
+                if ( archetypes.size() == 0 )
+                {
+                    getLogger().debug( "Using wiki catalog" );
+
+                    try
+                    {
                         ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( "wiki" );
 
                         archetypes.addAll( source.getArchetypes( new Properties() ) );
                     }
-                }
-                catch ( ArchetypeDataSourceException e )
-                {
-                    throw new ArchetypeSelectionFailure( "Error loading archetypes from data source(s).", e );
+                    catch ( ArchetypeDataSourceException e )
+                    {
+                        getLogger().warn( "Unable to get archetypes from default wiki  source. [" + e.getMessage() + "]" );
+                    }
                 }
 
                 if ( archetypes.size() > 0 )
@@ -164,20 +172,21 @@ public class DefaultArchetypeSelector
             }
         }
 
-        // Whether we are in batch or interactive mode we must take the repository from the definition
-        // and put it into the list of repositories that we will search.
+        // Make sure the groupId and artifactId are valid, the version may just default to
+        // the latest release.
+
+        if ( !archetypeDefinition.isPartiallyDefined() )
+        {
+            throw new ArchetypeSelectionFailure( "No valid archetypes could be found to choose." );
+        }
 
         repositories.add(
             archetypeRegistryManager.createRepository( archetypeDefinition.getRepository(), archetypeDefinition.getArtifactId() + "-repo" ) );
 
         if ( !archetypeArtifactManager.exists(
-            archetypeDefinition.getGroupId(),
-            archetypeDefinition.getArtifactId(),
-            archetypeDefinition.getVersion(),
+            archetypeDefinition,
             localRepository,
-            repositories
-        )
-            )
+            repositories ) )
         {
             throw new UnknownArchetype(
                 "The desired archetype does not exist (" + archetypeDefinition.getGroupId() + ":"
@@ -187,17 +196,12 @@ public class DefaultArchetypeSelector
         }
         else
         {
-//            properties is no longer needed
-//            archetypePropertiesManager.writeProperties(
-//                toProperties( archetypeDefinition ),
-//                propertyFile
-//            );
-
             return archetypeDefinition;
         }
     }
 
-    private Properties getArchetypeSourceProperties( String sourceRoleHint, Properties archetypeCatalogProperties )
+    private Properties getArchetypeSourceProperties( String sourceRoleHint,
+                                                     Properties archetypeCatalogProperties )
     {
         Properties p = new Properties();
 
@@ -216,38 +220,6 @@ public class DefaultArchetypeSelector
         return p;
     }
 
-    public static Properties toProperties( ArchetypeDefinition ad )
-    {
-        java.util.Properties properties = new java.util.Properties ();
-
-        properties.setProperty (
-            Constants.ARCHETYPE_GROUP_ID,
-            (org.codehaus.plexus.util.StringUtils.isNotEmpty( ad.getGroupId () ) ? ad.getGroupId () : "" )
-        );
-
-        properties.setProperty (
-            Constants.ARCHETYPE_ARTIFACT_ID,
-            (org.codehaus.plexus.util.StringUtils.isNotEmpty( ad.getArtifactId () ) ? ad.getArtifactId () : "" )
-        );
-
-        properties.setProperty (
-            Constants.ARCHETYPE_VERSION,
-            (org.codehaus.plexus.util.StringUtils.isNotEmpty( ad.getVersion () ) ? ad.getVersion () : "" )
-        );
-
-        properties.setProperty (
-            Constants.ARCHETYPE_POST_GENERATION_GOALS,
-            (org.codehaus.plexus.util.StringUtils.isNotEmpty( ad.getGoals() ) ? ad.getGoals() : "" )
-        );
-
-        properties.setProperty (
-            Constants.ARCHETYPE_REPOSITORY,
-            (org.codehaus.plexus.util.StringUtils.isNotEmpty( ad.getRepository() ) ? ad.getRepository() : "" )
-        );
-
-        return properties;
-    }
-
     private Properties initialiseArchetypeId(
         String archetypeGroupId,
         String archetypeArtifactId,
@@ -258,15 +230,6 @@ public class DefaultArchetypeSelector
         IOException
     {
         Properties properties = new Properties();
-//        propertyFile is no longer needed
-//        try
-//        {
-//            archetypePropertiesManager.readProperties( properties, propertyFile );
-//        }
-//        catch ( FileNotFoundException e )
-//        {
-//            getLogger().debug( "archetype.properties does not exist" );
-//        }
 
         if ( archetypeGroupId != null )
         {
@@ -297,7 +260,6 @@ public class DefaultArchetypeSelector
         UnknownArchetype,
         UnknownGroup,
         IOException,
-        FileNotFoundException,
         PrompterException,
         ArchetypeSelectionFailure
     {
@@ -311,7 +273,7 @@ public class DefaultArchetypeSelector
             null,
             null,
             request.getLocalRepository(),
-            repositories);
+            repositories );
 
         request.setArchetypeGroupId( definition.getGroupId() );
         request.setArchetypeArtifactId( definition.getArtifactId() );

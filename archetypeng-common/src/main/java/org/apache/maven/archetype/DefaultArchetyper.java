@@ -14,7 +14,7 @@ import java.util.Map;
 public class DefaultArchetyper
     implements Archetyper
 {
-    /** @plexus.requirement */
+    /** @plexus.requirement role-hint="fileset" */
     private ArchetypeCreator creator;
 
     /** @plexus.requirement */

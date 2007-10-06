@@ -93,14 +93,7 @@ public class DefaultArchetypeGenerationConfigurator
             throw new ArchetypeNotDefined( "The archetype is not defined" );
         }
 
-        if ( !archetypeArtifactManager.exists(
-            archetypeDefinition.getGroupId(),
-            archetypeDefinition.getArtifactId(),
-            archetypeDefinition.getVersion(),
-            localRepository,
-            repositories
-        )
-            )
+        if ( !archetypeArtifactManager.exists( archetypeDefinition, localRepository, repositories ) )
         {
             throw new UnknownArchetype(
                 "The desired archetype does not exist (" + archetypeDefinition.getGroupId() + ":"

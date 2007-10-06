@@ -89,18 +89,10 @@ public interface ArchetypeArtifactManager
         throws
         UnknownArchetype;
 
-    /**
-     */
-    boolean exists(
-        String groupId,
-        String artifactId,
-        String version,
-        ArtifactRepository localRepository,
-        List repositories
-    );
+    boolean exists( ArchetypeDefinition ad,
+                    ArtifactRepository localRepository,
+                    List remoteRepositories );
 
-    /**
-     */
     boolean isFileSetArchetype(
         String groupId,
         String artifactId,

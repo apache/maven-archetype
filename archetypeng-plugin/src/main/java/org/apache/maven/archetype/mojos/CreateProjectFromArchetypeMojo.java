@@ -21,7 +21,6 @@ package org.apache.maven.archetype.mojos;
 
 import org.apache.maven.archetype.common.ArchetypePropertiesManager;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
-import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.generator.ArchetypeGenerator;
 import org.apache.maven.archetype.ui.ArchetypeGenerationConfigurator;
 import org.apache.maven.archetype.ui.ArchetypeSelector;
@@ -35,7 +34,6 @@ import org.apache.maven.shared.invoker.DefaultInvocationRequest;
 import org.apache.maven.shared.invoker.InvocationRequest;
 import org.apache.maven.shared.invoker.Invoker;
 import org.apache.maven.shared.invoker.MavenInvocationException;
-import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.PropertyUtils;
 import org.codehaus.plexus.util.StringUtils;
 
@@ -205,7 +203,7 @@ public class CreateProjectFromArchetypeMojo
         // Configure Generation
 
         // At this point the project has been generated from the archetype and now we will
-        // run some goals that the archetype creator has requested to be run once the project
+        // run some goals that the archetype archetyper has requested to be run once the project
         // has been created.
 
         Properties properties = PropertyUtils.loadProperties( propertyFile );

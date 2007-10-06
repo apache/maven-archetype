@@ -79,8 +79,7 @@ public class DefaultArchetypeArtifactManager
     {
         try
         {
-            return
-                downloader.download( groupId, artifactId, version, localRepository, repositories );
+            return downloader.download( groupId, artifactId, version, localRepository, repositories );
         }
         catch ( DownloadNotFoundException ex )
         {
@@ -230,18 +229,18 @@ public class DefaultArchetypeArtifactManager
         }
     }
 
-    public boolean exists(
-        String groupId,
-        String artifactId,
-        String version,
-        ArtifactRepository localRepository,
-        List repositories
-    )
+    public boolean exists( ArchetypeDefinition ad, ArtifactRepository localRepository, List remoteRepositories )
     {
         try
         {
-            File archetypeFile =
-                downloader.download( groupId, artifactId, version, localRepository, repositories );
+            File archetypeFile = downloader.download( ad.getGroupId(), ad.getArtifactId(), ad.getVersion(), localRepository, remoteRepositories );
+
+            if ( ad.getVersion().equals( "RELEASE" ) || ad.getVersion().equals( "LATEST" ) )
+            {
+                // We do this so that we don't make another network call to get the version. The downloader
+                // should tell us or just replace it with the new artifact code.
+                ad.setVersion( GavCalculator.calculate( archetypeFile.getAbsolutePath() ).getVersion() );
+            }
 
             return archetypeFile.exists();
         }

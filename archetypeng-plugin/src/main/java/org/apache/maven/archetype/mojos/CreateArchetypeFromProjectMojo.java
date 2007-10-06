@@ -19,16 +19,17 @@
 
 package org.apache.maven.archetype.mojos;
 
+import org.apache.maven.archetype.ArchetypeCreationRequest;
+import org.apache.maven.archetype.ArchetypeCreationResult;
+import org.apache.maven.archetype.Archetyper;
 import org.apache.maven.archetype.common.ArchetypePropertiesManager;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
-import org.apache.maven.archetype.creator.ArchetypeCreator;
 import org.apache.maven.archetype.ui.ArchetypeCreationConfigurator;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.util.PropertyUtils;
 
 import java.io.File;
 import java.util.List;
@@ -57,8 +58,8 @@ public class CreateArchetypeFromProjectMojo
     /** @component */
     ArchetypeRegistryManager archetypeRegistryManager;
 
-    /** @component role-hint="fileset" */
-    ArchetypeCreator creator;
+    /** @component */
+    Archetyper archetyper;
 
     /** @component */
     private ArchetypePropertiesManager propertiesManager;
@@ -174,22 +175,24 @@ public class CreateArchetypeFromProjectMojo
                     archetypeRegistryFile
                 );
 
+            ArchetypeCreationRequest request = new ArchetypeCreationRequest()
+                .setProject( project )
+                .setPropertyFile( propertyFile )
+                .setLanguages( languages )
+                .setFiltereds( filtereds )
+                .setIgnoreReplica( ignoreReplica )
+                .setPreserveCData( preserveCData )
+                .setKeepParent( keepParent )
+                .setPartialArchetype( partialArchetype )
+                .setArchetypeRegistryFile( archetypeRegistryFile )
+                .setLocalRepository( localRepository );
 
-            //Create a request here which encapsulates everything below and then use Archetyper to do the creation.
+            ArchetypeCreationResult result = archetyper.createArchetypeFromProject( request );
 
-            creator.createArchetype(
-                project,
-                propertyFile,
-                languages,
-                filtereds,
-                defaultEncoding,
-                ignoreReplica,
-                preserveCData,
-                keepParent,
-                partialArchetype,
-                archetypeRegistryFile,
-                localRepository
-            );
+            if ( result.getCause() != null )
+            {
+                throw new MojoExecutionException( result.getCause().getMessage(), result.getCause() );
+            }
 
             getLog().info( "Archetype created in target/generated-sources/archetypeng" );
 

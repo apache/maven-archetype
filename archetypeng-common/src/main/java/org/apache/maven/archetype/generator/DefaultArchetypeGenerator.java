@@ -97,6 +97,7 @@ public class DefaultArchetypeGenerator
         ArchetypeGenerationFailure
     {
         Properties properties = initialiseArchetypeProperties( propertyFile );
+
         generateArchetype( properties, localRepository, repositories, basedir );
     }
 
@@ -129,14 +130,7 @@ public class DefaultArchetypeGenerator
             throw new ArchetypeNotDefined( "The archetype is not defined" );
         }
 
-        if ( !archetypeArtifactManager.exists(
-            archetypeDefinition.getGroupId(),
-            archetypeDefinition.getArtifactId(),
-            archetypeDefinition.getVersion(),
-            localRepository,
-            repositories
-        )
-            )
+        if ( !archetypeArtifactManager.exists( archetypeDefinition, localRepository, repositories ) )
         {
             throw new UnknownArchetype(
                 "The desired archetype does not exist (" + archetypeDefinition.getGroupId() + ":"
