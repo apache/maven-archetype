@@ -177,8 +177,7 @@ public class CreateProjectFromArchetypeMojo
                     archetypeRegistryFile
                 );
 
-            // Only interactiveMode, repositories and registry file are needed outside the request.
-            selector.selectArchetype( request, settings.getInteractiveMode(), archetypeRegistryFile, repositories );
+            selector.selectArchetype( request, settings.getInteractiveMode() );
 
             // Only interactiveMode, system.properties (configuration properties) and repositories are needed outside the request.
             configurator.configureArchetype( request, settings.getInteractiveMode(), System.getProperties(), repositories );

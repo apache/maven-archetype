@@ -52,19 +52,4 @@ public interface ArchetypeGenerationConfigurator
         IOException,
         PrompterException,
         ArchetypeGenerationConfigurationFailure;
-
-    public ArchetypeConfiguration configureArchetype(
-        Boolean interactiveMode,
-        File propertyFile,
-        Properties commandLineProperties,
-        ArtifactRepository localRepository,
-        List repositories
-    )
-        throws
-        ArchetypeNotDefined,
-        UnknownArchetype,
-        ArchetypeNotConfigured,
-        IOException,
-        PrompterException,
-        ArchetypeGenerationConfigurationFailure;
 }

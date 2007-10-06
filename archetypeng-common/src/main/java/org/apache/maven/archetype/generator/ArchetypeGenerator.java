@@ -45,22 +45,4 @@ public interface ArchetypeGenerator
 
     void generateArchetype( ArchetypeGenerationRequest request,
                             ArchetypeGenerationResult result );
-
-    void generateArchetype( File propertyFile,
-                            ArtifactRepository localRepository,
-                            List repositories,
-                            String basedir
-    )
-        throws
-        IOException,
-        ArchetypeNotDefined,
-        UnknownArchetype,
-        ArchetypeNotConfigured,
-        ProjectDirectoryExists,
-        PomFileExists,
-        OutputFileExists,
-        XmlPullParserException,
-        DocumentException,
-        InvalidPackaging,
-        ArchetypeGenerationFailure;
 }

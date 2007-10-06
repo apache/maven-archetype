@@ -32,16 +32,14 @@ import java.util.List;
 
 //TODO: We should need any remote repositories here, we should simply be doing selection, any remote catalogs
 //      should be validating correctness, and if it so happens we get a crap entry then the generation mechanism
+
 //      should take care of reporting the error. The selector should not be downloading anything.
 public interface ArchetypeSelector
 {
     String ROLE = ArchetypeSelector.class.getName();
 
-    public void selectArchetype( ArchetypeGenerationRequest request,
-                                 Boolean interactiveMode,
-                                 File archetypeRegistryFile,
-                                 List repositories
-    )
+    void selectArchetype( ArchetypeGenerationRequest request,
+                          Boolean interactiveMode )
         throws
         ArchetypeNotDefined,
         UnknownArchetype,

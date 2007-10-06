@@ -77,32 +77,8 @@ public class DefaultArchetypeGenerator
     /** @plexus.requirement */
     private Archetype oldArchetype;
 
-    public void generateArchetype(
-        File propertyFile,
-        ArtifactRepository localRepository,
-        List repositories,
-        String basedir
-    )
-        throws
-        IOException,
-        ArchetypeNotDefined,
-        UnknownArchetype,
-        ArchetypeNotConfigured,
-        ProjectDirectoryExists,
-        PomFileExists,
-        OutputFileExists,
-        XmlPullParserException,
-        DocumentException,
-        InvalidPackaging,
-        ArchetypeGenerationFailure
-    {
-        Properties properties = initialiseArchetypeProperties( propertyFile );
-
-        generateArchetype( properties, localRepository, repositories, basedir );
-    }
-
-
     private void generateArchetype(
+        ArchetypeGenerationRequest request,
         Properties properties,
         ArtifactRepository localRepository,
         List repositories,
@@ -182,16 +158,6 @@ public class DefaultArchetypeGenerator
     public String getPackageAsDirectory( String packageName )
     {
         return StringUtils.replace( packageName, ".", "/" );
-    }
-
-    /** Common */
-    private Properties initialiseArchetypeProperties( File propertyFile )
-        throws
-        IOException
-    {
-        Properties properties = new Properties();
-        archetypePropertiesManager.readProperties( properties, propertyFile );
-        return properties;
     }
 
     /** FileSetArchetype */
@@ -310,18 +276,25 @@ public class DefaultArchetypeGenerator
     {
         try
         {
-            Properties properties = request.getProperties(  );
+            Properties properties = request.getProperties();
+
             properties.setProperty( Constants.ARCHETYPE_GROUP_ID, request.getArchetypeGroupId() );
+
             properties.setProperty( Constants.ARCHETYPE_ARTIFACT_ID, request.getArchetypeArtifactId() );
+
             properties.setProperty( Constants.ARCHETYPE_VERSION, request.getArchetypeVersion() );
 
             properties.setProperty( Constants.GROUP_ID, request.getGroupId(  ) );
+
             properties.setProperty( Constants.ARTIFACT_ID, request.getArtifactId(  ) );
-            properties.setProperty( Constants.VERSION, request.getVersion(  ) );
+
+            properties.setProperty( Constants.VERSION, request.getVersion() );
+
             properties.setProperty( Constants.PACKAGE, request.getPackage(  ) );
+
             properties.setProperty( Constants.ARCHETYPE_POST_GENERATION_GOALS, request.getArchetypeGoals(  ) );
 
-            generateArchetype( properties, request.getLocalRepository(  ), Collections.singletonList( archetypeRegistryManager.createRepository( request.getArchetypeRepository(  ), "repository" ) ), request.getOutputDirectory(  ) );
+            generateArchetype( request, properties, request.getLocalRepository(), Collections.singletonList( archetypeRegistryManager.createRepository( request.getArchetypeRepository(), "repository" ) ), request.getOutputDirectory(  ) );
         }
         catch ( IOException ex )
         {
