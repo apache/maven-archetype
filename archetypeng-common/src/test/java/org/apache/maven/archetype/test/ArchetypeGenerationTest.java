@@ -36,15 +36,25 @@ public class ArchetypeGenerationTest
 
         Archetype selection = (Archetype) archetypes.get( 14 );
 
-        // With the selected Archetype you can create a generation request as follows:
+        // Now you will present a dialog, or whatever, and grab the following values.
+
+        String groupId = "com.mycompany";
+
+        String artifactId = "app";
+
+        String version = "1.0.0";
+
+        String packageName = "org.mycompany.app";
+
+        // With the selected Archetype and the parameters you can create a generation request as follows:
 
         ArchetypeGenerationRequest agr = new ArchetypeGenerationRequest( selection )
             .setOutputDirectory( new File( getBasedir(), "target/output" ).getAbsolutePath() )
             .setLocalRepository( localRepository )
-            .setGroupId( "foo" )
-            .setArtifactId( "bar" )
-            .setVersion( "1.0.0" )
-            .setPackage( "foo" );
+            .setGroupId( groupId )
+            .setArtifactId( artifactId )
+            .setVersion( version )
+            .setPackage( packageName );
 
         // Then generate away!
 
