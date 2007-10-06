@@ -310,6 +310,8 @@ public class DefaultArchetypeGenerator
 
     public void generateArchetype( ArchetypeGenerationRequest request, ArchetypeGenerationResult result )
     {
+        //TODO: get rid of the property file usage.
+
         try
         {
             Properties properties = request.getProperties();

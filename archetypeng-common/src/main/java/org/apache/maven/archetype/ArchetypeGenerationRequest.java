@@ -1,7 +1,9 @@
 package org.apache.maven.archetype;
 
-import java.util.Properties;
 import org.apache.maven.artifact.repository.ArtifactRepository;
+
+import java.io.File;
+import java.util.Properties;
 
 /** @author Jason van Zyl */
 public class ArchetypeGenerationRequest
