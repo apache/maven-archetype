@@ -21,6 +21,9 @@ public class ArchetypeGenerationTest
     {
         Archetyper archetype = (Archetyper) lookup( Archetyper.ROLE );
 
+        // In the embedder the localRepository will be retrieved from the embedder itself and users won't
+        // have to go through this muck.
+
         ArchetypeRegistryManager registryManager = (ArchetypeRegistryManager) lookup( ArchetypeRegistryManager.ROLE );
 
         ArtifactRepository localRepository = registryManager.createRepository(
@@ -28,7 +31,12 @@ public class ArchetypeGenerationTest
 
         List archetypes = archetype.getAvailableArchetypes();
 
+        // Here I am just grabbing a Archetype but in a UI you would take the Archetype objects and present
+        // them to the user.
+
         Archetype selection = (Archetype) archetypes.get( 14 );
+
+        // With the selected Archetype you can create a generation request as follows:
 
         ArchetypeGenerationRequest agr = new ArchetypeGenerationRequest( selection )
             .setOutputDirectory( new File( getBasedir(), "target/output" ).getAbsolutePath() )
@@ -37,6 +45,8 @@ public class ArchetypeGenerationTest
             .setArtifactId( "bar" )
             .setVersion( "1.0.0" )
             .setPackage( "foo" );
+
+        // Then generate away!
 
         ArchetypeGenerationResult result = archetype.generateProjectFromArchetype( agr );
 
