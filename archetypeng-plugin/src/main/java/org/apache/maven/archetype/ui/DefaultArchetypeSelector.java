@@ -88,6 +88,9 @@ public class DefaultArchetypeSelector
         PrompterException,
         ArchetypeSelectionFailure
     {
+        //TODO: This should be removed, we are using it for testing but we need a programmatic way to perform testing
+        //      and not rely on dropping properties files around.
+
         Properties properties =
             initialiseArchetypeId(
                 archetypeGroupId,
@@ -179,6 +182,9 @@ public class DefaultArchetypeSelector
         {
             throw new ArchetypeSelectionFailure( "No valid archetypes could be found to choose." );
         }
+
+        //TODO: this needs to be remove and let the generator take the selection + configuration and do what's 
+        //      necessary. The selector should not be downloading anything.
 
         repositories.add(
             archetypeRegistryManager.createRepository( archetypeDefinition.getRepository(), archetypeDefinition.getArtifactId() + "-repo" ) );
