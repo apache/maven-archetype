@@ -13,7 +13,7 @@ import java.io.File;
 import java.util.List;
 
 /** @author Jason van Zyl */
-public class ArchetyperTest
+public class ArchetyperRoundtripTest
     extends PlexusTestCase
 {
     public void testArchetyper()
@@ -83,35 +83,5 @@ public class ArchetyperTest
         // (5) deploy the archetype we just created
         // (6) create a project form the archetype we just created
 
-    }
-        
-    public void testProjectGenerationFromAnArchetype()
-        throws Exception
-    {
-        Archetyper archetype = (Archetyper) lookup( Archetyper.ROLE );
-
-        ArchetypeRegistryManager registryManager = (ArchetypeRegistryManager) lookup( ArchetypeRegistryManager.ROLE );
-
-        ArtifactRepository localRepository = registryManager.createRepository(
-            new File( getBasedir(), "target/local-repo" ).toURI().toURL().toExternalForm(), "local-repo" );
-
-        List archetypes = archetype.getAvailableArchetypes();
-
-        Archetype selection = (Archetype) archetypes.get( 14 );
-
-        ArchetypeGenerationRequest agr = new ArchetypeGenerationRequest( selection )
-            .setOutputDirectory( new File( getBasedir(), "target/output" ).getAbsolutePath() )
-            .setLocalRepository( localRepository )
-            .setGroupId( "foo" )
-            .setArtifactId( "bar" )
-            .setVersion( "1.0.0" )
-            .setPackage( "foo" );
-
-        ArchetypeGenerationResult result = archetype.generateProjectFromArchetype( agr );
-
-        if ( result.getCause() != null )
-        {
-            fail( result.getCause().getMessage() );
-        }
-    }
+    }       
 }
