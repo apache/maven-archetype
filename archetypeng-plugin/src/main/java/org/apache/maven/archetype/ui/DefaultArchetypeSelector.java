@@ -26,7 +26,6 @@ import org.apache.maven.archetype.common.ArchetypeDefinition;
 import org.apache.maven.archetype.common.ArchetypeFactory;
 import org.apache.maven.archetype.common.ArchetypePropertiesManager;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
-import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.exception.ArchetypeNotDefined;
 import org.apache.maven.archetype.exception.ArchetypeSelectionFailure;
 import org.apache.maven.archetype.exception.UnknownArchetype;
@@ -71,12 +70,7 @@ public class DefaultArchetypeSelector
     private Map archetypeSources;
 
     private ArchetypeDefinition selectArchetype(
-        String archetypeGroupId,
-        String archetypeArtifactId,
-        String archetypeVersion,
         Boolean interactiveMode,
-        File propertyFile,
-        File archetypeRegistryFile,
         ArtifactRepository localRepository,
         List repositories
     )
@@ -88,19 +82,7 @@ public class DefaultArchetypeSelector
         PrompterException,
         ArchetypeSelectionFailure
     {
-        //TODO: This should be removed, we are using it for testing but we need a programmatic way to perform testing
-        //      and not rely on dropping properties files around.
-
-        Properties properties =
-            initialiseArchetypeId(
-                archetypeGroupId,
-                archetypeArtifactId,
-                archetypeVersion,
-                propertyFile
-            );
-
-        ArchetypeDefinition archetypeDefinition =
-            archetypeFactory.createArchetypeDefinition( properties );
+        ArchetypeDefinition archetypeDefinition = new ArchetypeDefinition();
 
         if ( interactiveMode.booleanValue() )
         {
@@ -226,35 +208,6 @@ public class DefaultArchetypeSelector
         return p;
     }
 
-    private Properties initialiseArchetypeId(
-        String archetypeGroupId,
-        String archetypeArtifactId,
-        String archetypeVersion,
-        File propertyFile
-    )
-        throws
-        IOException
-    {
-        Properties properties = new Properties();
-
-        if ( archetypeGroupId != null )
-        {
-            properties.setProperty( Constants.ARCHETYPE_GROUP_ID, archetypeGroupId );
-        }
-
-        if ( archetypeArtifactId != null )
-        {
-            properties.setProperty( Constants.ARCHETYPE_ARTIFACT_ID, archetypeArtifactId );
-        }
-
-        if ( archetypeVersion != null )
-        {
-            properties.setProperty( Constants.ARCHETYPE_VERSION, archetypeVersion );
-        }
-
-        return properties;
-    }
-
     public void selectArchetype(
         ArchetypeGenerationRequest request,
         Boolean interactiveMode,
@@ -269,23 +222,111 @@ public class DefaultArchetypeSelector
         PrompterException,
         ArchetypeSelectionFailure
     {
-        // propertyFile is no longer needed, set to null!
-        // archetypeRegistryFile is no longer used, set to null!
-        ArchetypeDefinition definition = selectArchetype(
-            request.getArchetypeGroupId(),
-            request.getArchetypeArtifactId(),
-            request.getArchetypeVersion(),
-            interactiveMode,
-            null,
-            null,
-            request.getLocalRepository(),
-            repositories );
+        ArchetypeDefinition definition = new ArchetypeDefinition();
 
-        request.setArchetypeGroupId( definition.getGroupId() );
-        request.setArchetypeArtifactId( definition.getArtifactId() );
-        request.setArchetypeVersion( definition.getVersion() );
-        request.setArchetypeRepository( definition.getRepository() );
-        request.setArchetypeGoals( definition.getGoals() );
-        request.setArchetypeName( definition.getName() );
+        if ( interactiveMode.booleanValue() )
+        {
+            if ( !definition.isDefined() )
+            {
+                List archetypes = new ArrayList();
+
+                File archetypeCatalogPropertiesFile = new File( System.getProperty( "user.home" ), ".m2/archetype-catalog.properties" );
+
+                if ( archetypeCatalogPropertiesFile.exists() )
+                {
+                    Properties archetypeCatalogProperties = PropertyUtils.loadProperties( archetypeCatalogPropertiesFile );
+
+                    getLogger().debug( "Using catalogs " + archetypeCatalogProperties );
+
+                    String[] sources = StringUtils.split( archetypeCatalogProperties.getProperty( "sources" ), "," );
+
+                    for ( int i = 0; i < sources.length; i++ )
+                    {
+                        String sourceRoleHint = sources[i];
+
+                        getLogger().debug( "Reading catalog " + sourceRoleHint );
+
+                        try
+                        {
+                            ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( sourceRoleHint );
+
+                            archetypes.addAll(
+                                source.getArchetypes( getArchetypeDataSourceProperties( sourceRoleHint, archetypeCatalogProperties ) ) );
+                        }
+                        catch ( ArchetypeDataSourceException e )
+                        {
+                            getLogger().warn( "Unable to get archetypes from " + sourceRoleHint + " source. [" + e.getMessage() + "]" );
+                        }
+                    }
+                }
+
+                if ( archetypes.size() == 0 )
+                {
+                    getLogger().debug( "Using wiki catalog" );
+
+                    try
+                    {
+                        ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( "wiki" );
+
+                        archetypes.addAll( source.getArchetypes( new Properties() ) );
+                    }
+                    catch ( ArchetypeDataSourceException e )
+                    {
+                        getLogger().warn( "Unable to get archetypes from default wiki  source. [" + e.getMessage() + "]" );
+                    }
+                }
+
+                if ( archetypes.size() > 0 )
+                {
+                    Archetype archetype = archetypeSelectionQueryer.selectArchetype( archetypes );
+
+                    definition.setArtifactId( archetype.getArtifactId() );
+
+                    definition.setName( archetype.getArtifactId() );
+
+                    definition.setGroupId( archetype.getGroupId() );
+
+                    definition.setVersion( archetype.getVersion() );
+
+                    definition.setRepository( archetype.getRepository() );
+
+                    String goals = StringUtils.join( archetype.getGoals().iterator(), "," );
+
+                    definition.setGoals( goals );
+                }
+            }
+        }
+
+        // Make sure the groupId and artifactId are valid, the version may just default to
+        // the latest release.
+
+        if ( !definition.isPartiallyDefined() )
+        {
+            throw new ArchetypeSelectionFailure( "No valid archetypes could be found to choose." );
+        }
+
+        //TODO: this needs to be remove and let the generator take the selection + configuration and do what's 
+        //      necessary. The selector should not be downloading anything.
+
+        repositories.add(
+            archetypeRegistryManager.createRepository( definition.getRepository(), definition.getArtifactId() + "-repo" ) );
+
+        if ( !archetypeArtifactManager.exists( definition, request.getLocalRepository(), repositories ) )
+        {
+            throw new UnknownArchetype(
+                "The desired archetype does not exist (" + definition.getGroupId() + ":"
+                    + definition.getArtifactId() + ":" + definition.getVersion()
+                    + ")"
+            );
+        }
+        else
+        {
+            request.setArchetypeGroupId( definition.getGroupId() );
+            request.setArchetypeArtifactId( definition.getArtifactId() );
+            request.setArchetypeVersion( definition.getVersion() );
+            request.setArchetypeRepository( definition.getRepository() );
+            request.setArchetypeGoals( definition.getGoals() );
+            request.setArchetypeName( definition.getName() );
+        }
     }
 }
