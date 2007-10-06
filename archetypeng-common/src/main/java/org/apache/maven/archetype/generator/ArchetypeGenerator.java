@@ -43,9 +43,8 @@ public interface ArchetypeGenerator
 {
     String ROLE = ArchetypeGenerator.class.getName();
 
-    public void generateArchetype( ArchetypeGenerationRequest request,
-                                   ArchetypeGenerationResult result
-    );
+    void generateArchetype( ArchetypeGenerationRequest request,
+                            ArchetypeGenerationResult result );
 
     void generateArchetype( File propertyFile,
                             ArtifactRepository localRepository,

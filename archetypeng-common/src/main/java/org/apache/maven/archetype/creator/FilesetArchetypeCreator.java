@@ -21,6 +21,8 @@ package org.apache.maven.archetype.creator;
 
 import org.apache.commons.collections.BidiMap;
 import org.apache.commons.collections.bidimap.DualTreeBidiMap;
+import org.apache.maven.archetype.ArchetypeCreationRequest;
+import org.apache.maven.archetype.ArchetypeCreationResult;
 import org.apache.maven.archetype.common.ArchetypeConfiguration;
 import org.apache.maven.archetype.common.ArchetypeDefinition;
 import org.apache.maven.archetype.common.ArchetypeFactory;
@@ -48,7 +50,6 @@ import org.apache.maven.model.Build;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Extension;
 import org.apache.maven.model.Model;
-import org.apache.maven.model.Parent;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.model.Profile;
 import org.apache.maven.project.MavenProject;
@@ -98,6 +99,45 @@ public class FilesetArchetypeCreator
 
     /** @plexus.requirement */
     private MavenProjectBuilder projectBuilder;
+
+    public void createArchetype( ArchetypeCreationRequest request,
+                                 ArchetypeCreationResult result )
+    {
+        try
+        {
+            createArchetype( request.getProject(),
+                request.getPropertyFile(),
+                request.getLanguages(),
+                request.getFiltereds(),
+                request.getDefaultEncoding(),
+                request.isIgnoreReplica(),
+                request.isPreserveCData(),
+                request.isKeepParent(),
+                request.isPartialArchetype(),
+                request.getArchetypeRegistryFile(),
+                request.getLocalRepository() );
+        }
+        catch ( IOException e )
+        {
+            result.setCause( e );
+        }
+        catch ( ArchetypeNotDefined e )
+        {
+            result.setCause( e );
+        }
+        catch ( ArchetypeNotConfigured e )
+        {
+            result.setCause( e );
+        }
+        catch ( TemplateCreationException e )
+        {
+            result.setCause( e );
+        }
+        catch ( XmlPullParserException e )
+        {
+            result.setCause( e );
+        }
+    }
 
     public void createArchetype(
         MavenProject project,

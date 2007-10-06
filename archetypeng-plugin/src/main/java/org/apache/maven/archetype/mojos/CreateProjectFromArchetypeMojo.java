@@ -163,31 +163,15 @@ public class CreateProjectFromArchetypeMojo
     public void execute()
         throws MojoExecutionException, MojoFailureException
     {
-        // This is what we need here:
-        //
-        // - determine what archetype to use
-        // - configure it
-        // - populate the request
-        //
-        // then:
-        //
-        // result = archetype.generateProjectFromArchteype( request );
-        //
-        // look at the result and respond accordingly.
-
-        ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
-        request.setArchetypeGroupId( archetypeGroupId );
-        request.setArchetypeArtifactId( archetypeArtifactId );
-        request.setArchetypeVersion( archetypeVersion );
-        request.setOutputDirectory( basedir.getAbsolutePath() );
-        request.setLocalRepository( localRepository );
+        ArchetypeGenerationRequest request = new ArchetypeGenerationRequest()
+            .setArchetypeGroupId( archetypeGroupId )
+            .setArchetypeArtifactId( archetypeArtifactId )
+            .setArchetypeVersion( archetypeVersion )
+            .setOutputDirectory( basedir.getAbsolutePath() )
+            .setLocalRepository( localRepository );
 
         try
         {
-            // This is not really necessary as we will use the central repository or the repository that
-            // is specified with the archetype. There is no point in searching N repositories when we
-            // know exactly where the archetype is.
-
             List repositories =
                 archetypeRegistryManager.getRepositories(
                     pomRemoteRepositories,
@@ -202,19 +186,6 @@ public class CreateProjectFromArchetypeMojo
                 archetypeRegistryFile,
                 repositories
             );
-//            Old way to call components
-//            selector.selectArchetype(
-//                archetypeGroupId,
-//                archetypeArtifactId,
-//                archetypeVersion,
-//                settings.getInteractiveMode(),
-//                propertyFile,
-//                archetypeRegistryFile,
-//                localRepository,
-//                repositories
-//            );
-
-            // Create the request here for the archetyper and use that instead of the configurator directly here.
 
             // Only interactiveMode, system.properties (configuration properties) and repositories are needed outside the request.
             configurator.configureArchetype(
@@ -223,22 +194,8 @@ public class CreateProjectFromArchetypeMojo
                 System.getProperties(),
                 repositories
             );
-//            Old way to call components
-//            configurator.configureArchetype(
-//                settings.getInteractiveMode(),
-//                propertyFile,
-//                System.getProperties(),
-//                localRepository,
-//                repositories
-//            );
-
-            // At this point, the archetype should have been downloaded by the configurator,
-            // so the repositories are not needed in the request
 
             ArchetypeGenerationResult result = archetyper.generateProjectFromArchetype( request );
-
-            // Old way to call the components
-            //generator.generateArchetype( propertyFile, localRepository, repositories, basedir.getAbsolutePath() );
         }
         catch ( Exception ex )
         {
@@ -266,8 +223,6 @@ public class CreateProjectFromArchetypeMojo
         {
             invokePostArchetypeGenerationGoals( postArchetypeGenerationGoals, artifactId );
         }
-
-//        FileUtils.fileDelete( propertyFile.getAbsolutePath() );
     }
 
     private void invokePostArchetypeGenerationGoals( String goals, String artifactId )

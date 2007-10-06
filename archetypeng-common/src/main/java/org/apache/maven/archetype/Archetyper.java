@@ -1,5 +1,7 @@
 package org.apache.maven.archetype;
 
+import java.util.Collection;
+
 /** @author Jason van Zyl */
 public interface Archetyper
 {
@@ -8,4 +10,6 @@ public interface Archetyper
     ArchetypeCreationResult createArchetypeFromProject( ArchetypeCreationRequest request );
 
     ArchetypeGenerationResult generateProjectFromArchetype( ArchetypeGenerationRequest request );
+
+    Collection getArchetypeDataSources();
 }

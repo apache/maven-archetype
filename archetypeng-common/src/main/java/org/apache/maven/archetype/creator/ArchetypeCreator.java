@@ -19,6 +19,8 @@
 
 package org.apache.maven.archetype.creator;
 
+import org.apache.maven.archetype.ArchetypeCreationRequest;
+import org.apache.maven.archetype.ArchetypeCreationResult;
 import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
 import org.apache.maven.archetype.exception.ArchetypeNotDefined;
 import org.apache.maven.archetype.exception.TemplateCreationException;
@@ -34,23 +36,20 @@ public interface ArchetypeCreator
 {
     String ROLE = ArchetypeCreator.class.getName();
 
-    void createArchetype(
-        MavenProject project,
-        File propertyFile,
-        List languages,
-        List filtereds,
-        String defaultEncoding,
-        boolean ignoreReplica,
-        boolean preserveCData,
-        boolean keepParent,
-        boolean partialArchetype,
-        File archetypeRegistryFile,
-        ArtifactRepository localRepository
+    void createArchetype( ArchetypeCreationRequest request,
+                          ArchetypeCreationResult result );
+
+    void createArchetype( MavenProject project,
+                          File propertyFile,
+                          List languages,
+                          List filtereds,
+                          String defaultEncoding,
+                          boolean ignoreReplica,
+                          boolean preserveCData,
+                          boolean keepParent,
+                          boolean partialArchetype,
+                          File archetypeRegistryFile,
+                          ArtifactRepository localRepository
     )
-        throws
-        IOException,
-        ArchetypeNotDefined,
-        ArchetypeNotConfigured,
-        TemplateCreationException,
-        XmlPullParserException;
+        throws IOException, ArchetypeNotDefined, ArchetypeNotConfigured, TemplateCreationException, XmlPullParserException;
 }

@@ -7,7 +7,15 @@ import java.util.List;
 /** @author Jason van Zyl */
 public class ArchetypeCreationResult
 {
-    private ArtifactRepository localRepository;
+    private Exception cause;
 
-    private List remoteRepositories;
-}  
+    public Exception getCause()
+    {
+        return cause;
+    }
+
+    public void setCause( Exception cause )
+    {
+        this.cause = cause;
+    }
+}

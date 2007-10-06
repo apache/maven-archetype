@@ -24,7 +24,7 @@ import org.codehaus.plexus.util.StringUtils;
  *
  * @author rafale
  */
-public class updateLocalCatalogMojo
+public class UpdateLocalCatalogMojo
     extends AbstractMojo
     implements ContextEnabled
 {

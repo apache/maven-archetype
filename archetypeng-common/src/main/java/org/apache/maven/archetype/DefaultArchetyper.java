@@ -2,6 +2,10 @@ package org.apache.maven.archetype;
 
 import org.apache.maven.archetype.creator.ArchetypeCreator;
 import org.apache.maven.archetype.generator.ArchetypeGenerator;
+import org.apache.maven.archetype.source.ArchetypeDataSource;
+
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * @plexus.component
@@ -16,12 +20,14 @@ public class DefaultArchetyper
     /** @plexus.requirement */
     private ArchetypeGenerator generator;
 
+    /** @plexus.requirement role="org.apache.maven.archetype.source.ArchetypeDataSource" */
+    private Map archetypeSources;
+
     public ArchetypeCreationResult createArchetypeFromProject( ArchetypeCreationRequest request )
     {
         ArchetypeCreationResult result = new ArchetypeCreationResult();
 
-        // This should take information from the request and that's it.
-        //creator.createArchetype( request, result );
+        creator.createArchetype( request, result );
 
         return result;
     }
@@ -30,9 +36,18 @@ public class DefaultArchetyper
     {
         ArchetypeGenerationResult result = new ArchetypeGenerationResult();
 
-        // This should take information from the request and that's it.
         generator.generateArchetype( request, result );
 
         return result;
+    }
+
+    public Collection getArchetypeDataSources()
+    {
+        return archetypeSources.values();
+    }
+
+    public ArchetypeDataSource getArchetypeDataSource( String roleHint )
+    {
+        return (ArchetypeDataSource) archetypeSources.get(  roleHint );
     }
 }

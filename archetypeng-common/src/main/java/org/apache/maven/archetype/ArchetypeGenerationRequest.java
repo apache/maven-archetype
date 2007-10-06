@@ -39,9 +39,11 @@ public class ArchetypeGenerationRequest
         return archetypeGroupId;
     }
 
-    public void setArchetypeGroupId( String archetypeGroupId )
+    public ArchetypeGenerationRequest setArchetypeGroupId( String archetypeGroupId )
     {
         this.archetypeGroupId = archetypeGroupId;
+
+        return this;
     }
 
     public String getArchetypeArtifactId()
@@ -49,9 +51,11 @@ public class ArchetypeGenerationRequest
         return archetypeArtifactId;
     }
 
-    public void setArchetypeArtifactId( String archetypeArtifactId )
+    public ArchetypeGenerationRequest setArchetypeArtifactId( String archetypeArtifactId )
     {
         this.archetypeArtifactId = archetypeArtifactId;
+
+        return this;
     }
 
     public String getArchetypeVersion()
@@ -59,9 +63,11 @@ public class ArchetypeGenerationRequest
         return archetypeVersion;
     }
 
-    public void setArchetypeVersion( String archetypeVersion )
+    public ArchetypeGenerationRequest setArchetypeVersion( String archetypeVersion )
     {
         this.archetypeVersion = archetypeVersion;
+
+        return this;
     }
 
     public String getArchetypeGoals()
@@ -69,9 +75,11 @@ public class ArchetypeGenerationRequest
         return archetypeGoals;
     }
 
-    public void setArchetypeGoals( String archetypeGoals )
+    public ArchetypeGenerationRequest setArchetypeGoals( String archetypeGoals )
     {
         this.archetypeGoals = archetypeGoals;
+
+        return this;
     }
 
     public String getArchetypeName()
@@ -79,9 +87,11 @@ public class ArchetypeGenerationRequest
         return archetypeName;
     }
 
-    public void setArchetypeName( String archetypeName )
+    public ArchetypeGenerationRequest setArchetypeName( String archetypeName )
     {
         this.archetypeName = archetypeName;
+
+        return this;
     }
 
     public String getArchetypeRepository()
@@ -89,9 +99,11 @@ public class ArchetypeGenerationRequest
         return archetypeRepository;
     }
 
-    public void setArchetypeRepository( String archetypeRepository )
+    public ArchetypeGenerationRequest setArchetypeRepository( String archetypeRepository )
     {
         this.archetypeRepository = archetypeRepository;
+
+        return this;
     }
 
     public String getArtifactId()
@@ -99,9 +111,11 @@ public class ArchetypeGenerationRequest
         return artifactId;
     }
 
-    public void setArtifactId( String artifactId )
+    public ArchetypeGenerationRequest setArtifactId( String artifactId )
     {
         this.artifactId = artifactId;
+
+        return this;
     }
 
     public String getGroupId()
@@ -119,9 +133,11 @@ public class ArchetypeGenerationRequest
         return version;
     }
 
-    public void setVersion( String version )
+    public ArchetypeGenerationRequest setVersion( String version )
     {
         this.version = version;
+
+        return this;
     }
 
     public String getPackage()
@@ -129,9 +145,11 @@ public class ArchetypeGenerationRequest
         return packageName;
     }
 
-    public void setPackage( String packageName )
+    public ArchetypeGenerationRequest setPackage( String packageName )
     {
         this.packageName = packageName;
+
+        return this;
     }
 
     public Properties getAdditionalProperties()
@@ -139,9 +157,11 @@ public class ArchetypeGenerationRequest
         return additionalProperties;
     }
 
-    public void setAdditionalProperties( Properties additionalProperties )
+    public ArchetypeGenerationRequest setAdditionalProperties( Properties additionalProperties )
     {
         this.additionalProperties = additionalProperties;
+
+        return this;
     }
 
     public ArtifactRepository getLocalRepository()
@@ -149,9 +169,11 @@ public class ArchetypeGenerationRequest
         return localRepository;
     }
 
-    public void setLocalRepository( ArtifactRepository localRepository )
+    public ArchetypeGenerationRequest setLocalRepository( ArtifactRepository localRepository )
     {
         this.localRepository = localRepository;
+
+        return this;
     }
 
     public String getOutputDirectory()
@@ -159,8 +181,10 @@ public class ArchetypeGenerationRequest
         return outputDirectory;
     }
 
-    public void setOutputDirectory( String outputDirectory )
+    public ArchetypeGenerationRequest setOutputDirectory( String outputDirectory )
     {
         this.outputDirectory = outputDirectory;
+
+        return this;
     }
 }
