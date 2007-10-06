@@ -278,7 +278,7 @@ public class DefaultArchetypeGenerationConfigurator
         properties.remove( Constants.VERSION );
         properties.remove( Constants.PACKAGE );
 
-        request.setAdditionalProperties( properties );
+        request.setProperties( properties );
 
     }
 }

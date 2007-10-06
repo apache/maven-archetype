@@ -310,7 +310,7 @@ public class DefaultArchetypeGenerator
     {
         try
         {
-            Properties properties = request.getAdditionalProperties(  );
+            Properties properties = request.getProperties(  );
             properties.setProperty( Constants.ARCHETYPE_GROUP_ID, request.getArchetypeGroupId() );
             properties.setProperty( Constants.ARCHETYPE_ARTIFACT_ID, request.getArchetypeArtifactId() );
             properties.setProperty( Constants.ARCHETYPE_VERSION, request.getArchetypeVersion() );

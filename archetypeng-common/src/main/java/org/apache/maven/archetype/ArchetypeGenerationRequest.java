@@ -32,7 +32,9 @@ public class ArchetypeGenerationRequest
 
     private String packageName;
 
-    private Properties additionalProperties;
+    private Properties properties;
+
+    private String remoteRepository;
 
     public String getArchetypeGroupId()
     {
@@ -152,14 +154,14 @@ public class ArchetypeGenerationRequest
         return this;
     }
 
-    public Properties getAdditionalProperties()
+    public Properties getProperties()
     {
-        return additionalProperties;
+        return properties;
     }
 
-    public ArchetypeGenerationRequest setAdditionalProperties( Properties additionalProperties )
+    public ArchetypeGenerationRequest setProperties( Properties additionalProperties )
     {
-        this.additionalProperties = additionalProperties;
+        this.properties = additionalProperties;
 
         return this;
     }
@@ -175,6 +177,19 @@ public class ArchetypeGenerationRequest
 
         return this;
     }
+
+    public String getRemoteRepository()
+    {
+        return remoteRepository;
+    }
+
+    public ArchetypeGenerationRequest setRemoteRepository( String remoteRepository )
+    {
+        this.remoteRepository = remoteRepository;
+
+        return this;
+    }
+
 
     public String getOutputDirectory()
     {

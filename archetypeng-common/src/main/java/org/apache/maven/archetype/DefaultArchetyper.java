@@ -55,11 +55,6 @@ public class DefaultArchetyper
         return archetypeSources.values();
     }
 
-    public ArchetypeDataSource getArchetypeDataSource( String roleHint )
-    {
-        return (ArchetypeDataSource) archetypeSources.get(  roleHint );
-    }
-
     public Properties getArchetypeDataSourceProperties( String sourceRoleHint,
                                                         Properties archetypeCatalogProperties )
     {
