@@ -246,6 +246,7 @@ public class DefaultArchetypeGenerator
                 localRepository,
                 repositories
             );
+        
         archetypeConfiguration =
             archetypeFactory.createArchetypeConfiguration( archetypeDescriptor, properties );
 
