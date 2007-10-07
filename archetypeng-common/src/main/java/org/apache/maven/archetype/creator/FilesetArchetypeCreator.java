@@ -103,78 +103,78 @@ public class FilesetArchetypeCreator
     public void createArchetype( ArchetypeCreationRequest request,
                                  ArchetypeCreationResult result )
     {
-        try
-        {
-            createArchetype( request.getProject(),
-                request.getPropertyFile(),
-                request.getLanguages(),
-                request.getFiltereds(),
-                request.getDefaultEncoding(),
-                request.isIgnoreReplica(),
-                request.isPreserveCData(),
-                request.isKeepParent(),
-                request.isPartialArchetype(),
-                request.getArchetypeRegistryFile(),
-                request.getLocalRepository() );
-        }
-        catch ( IOException e )
-        {
-            result.setCause( e );
-        }
-        catch ( ArchetypeNotDefined e )
-        {
-            result.setCause( e );
-        }
-        catch ( ArchetypeNotConfigured e )
-        {
-            result.setCause( e );
-        }
-        catch ( TemplateCreationException e )
-        {
-            result.setCause( e );
-        }
-        catch ( XmlPullParserException e )
-        {
-            result.setCause( e );
-        }
-    }
+        MavenProject project = request.getProject();
 
-    public void createArchetype(
-        MavenProject project,
-        File propertyFile,
-        List languages,
-        List filtereds,
-        String defaultEncoding,
-        boolean ignoreReplica,
-        boolean preserveCData,
-        boolean keepParent,
-        boolean partialArchetype,
-        File archetypeRegistryFile,
-        ArtifactRepository localRepository
-    )
-        throws
-        IOException,
-        ArchetypeNotDefined,
-        ArchetypeNotConfigured,
-        TemplateCreationException,
-        XmlPullParserException
-    {
-        Properties properties = initialiseArchetypeProperties( propertyFile );
+        File propertyFile = request.getPropertyFile();
 
-        ArchetypeDefinition archetypeDefinition =
-            archetypeFactory.createArchetypeDefinition( properties );
+        List languages = request.getLanguages();
 
-        if ( !archetypeDefinition.isDefined() )
+        List filtereds = request.getFiltereds();
+
+        String defaultEncoding = request.getDefaultEncoding();
+
+        boolean ignoreReplica = request.isIgnoreReplica();
+
+        boolean preserveCData = request.isPreserveCData();
+
+        boolean keepParent = request.isKeepParent();
+
+        boolean partialArchetype = request.isPartialArchetype();
+
+        ArtifactRepository localRepository = request.getLocalRepository();
+
+        ArchetypeDefinition ad = new ArchetypeDefinition();
+
+        ad.setGroupId( project.getGroupId() );
+
+        ad.setArtifactId( project.getArtifactId() );
+
+        ad.setVersion( project.getVersion() );
+
+        if ( !ad.isDefined() )
         {
-            throw new ArchetypeNotDefined( "The archetype is not defined" );
+            result.setCause( new ArchetypeNotDefined( "The archetype is not defined" ) );
+
+            return;
         }
 
-        ArchetypeConfiguration archetypeConfiguration =
-            archetypeFactory.createArchetypeConfiguration( archetypeDefinition, properties );
+        ArchetypeConfiguration ac = new ArchetypeConfiguration();
 
-        if ( !archetypeConfiguration.isConfigured() )
+        ac.setGroupId( ad.getGroupId() );
+
+        ac.setArtifactId( ad.getArtifactId() );
+
+        ac.setVersion( ad.getVersion() );
+
+        ac.setGoals( ad.getGoals() );                
+
+        if ( !ac.isConfigured() )
         {
-            throw new ArchetypeNotConfigured( "The archetype is not configured" );
+            result.setCause( new ArchetypeNotConfigured( "The archetype is not configured" ) );
+
+            return;
+        }
+
+        Properties properties = new Properties();
+
+        properties.setProperty( Constants.GROUP_ID, ad.getGroupId() );
+        ac.setProperty( Constants.GROUP_ID, ad.getGroupId() );
+
+        properties.setProperty( Constants.ARTIFACT_ID, ad.getArtifactId() );
+        ac.setProperty( Constants.ARTIFACT_ID, ad.getArtifactId() );
+
+        properties.setProperty( Constants.VERSION, ad.getVersion() );
+        ac.setProperty( Constants.VERSION, ad.getVersion() );
+
+        if ( request.getPackageName() != null )
+        {
+            properties.setProperty( Constants.PACKAGE, request.getPackageName() );
+            ac.setProperty( Constants.PACKAGE, request.getPackageName() );
+        }
+        else
+        {
+            properties.setProperty( Constants.PACKAGE, ad.getGroupId() );
+            ac.setProperty( Constants.PACKAGE, ad.getGroupId() );
         }
 
         File basedir = project.getBasedir();
@@ -185,11 +185,11 @@ public class FilesetArchetypeCreator
 
         Model model = new Model();
         model.setModelVersion( "4.0.0" );
-        model.setGroupId( archetypeDefinition.getGroupId() );
-        model.setArtifactId( archetypeDefinition.getArtifactId() );
-        model.setVersion( archetypeDefinition.getVersion() );
+        model.setGroupId( ad.getGroupId() );
+        model.setArtifactId( ad.getArtifactId() );
+        model.setVersion( ad.getVersion() );
         model.setPackaging( "maven-archetype" );
-        model.setName( archetypeDefinition.getArtifactId() );
+        model.setName( ad.getArtifactId() );
 
         Build build = new Build();
         model.setBuild( build );
@@ -227,8 +227,10 @@ public class FilesetArchetypeCreator
             }
             catch ( ProjectBuildingException e )
             {
-                throw new TemplateCreationException(
-                    "Error reading parent POM of project: " + pa.getGroupId() + ":" + pa.getArtifactId() + ":" + pa.getVersion() );
+                result.setCause( new TemplateCreationException(
+                    "Error reading parent POM of project: " + pa.getGroupId() + ":" + pa.getArtifactId() + ":" + pa.getVersion() ) );
+
+                return;
             }
         }
 
@@ -247,44 +249,57 @@ public class FilesetArchetypeCreator
         getLogger().debug( "Creating archetype's pom" );
 
         File archetypePomFile = FileUtils.resolveFile( basedir, getArchetypePom() );
-        archetypePomFile.getParentFile().mkdirs();
-        pomManager.writePom( model, archetypePomFile, archetypePomFile );
 
-        File archetypeResourcesDirectory =
-            FileUtils.resolveFile( generatedSourcesDirectory, getTemplateOutputDirectory() );
+        archetypePomFile.getParentFile().mkdirs();
+
+        try
+        {
+            pomManager.writePom( model, archetypePomFile, archetypePomFile );
+        }
+        catch ( IOException e )
+        {
+            result.setCause( e );
+        }
+
+        File archetypeResourcesDirectory = FileUtils.resolveFile( generatedSourcesDirectory, getTemplateOutputDirectory() );
+
         archetypeResourcesDirectory.mkdirs();
 
-        File archetypeFilesDirectory =
-            FileUtils.resolveFile( archetypeResourcesDirectory, Constants.ARCHETYPE_RESOURCES );
+        File archetypeFilesDirectory = FileUtils.resolveFile( archetypeResourcesDirectory, Constants.ARCHETYPE_RESOURCES );
+
         archetypeFilesDirectory.mkdirs();
+
         getLogger().debug( "Archetype's files output directory " + archetypeFilesDirectory );
 
         File replicaMainDirectory =
             FileUtils.resolveFile(
                 generatedSourcesDirectory,
                 getReplicaOutputDirectory() + File.separator
-                    + archetypeDefinition.getArtifactId()
+                    + ad.getArtifactId()
             );
+
         if ( !ignoreReplica )
         {
             replicaMainDirectory.mkdirs();
         }
 
         File replicaFilesDirectory = FileUtils.resolveFile( replicaMainDirectory, "reference" );
+
         if ( !ignoreReplica )
         {
             replicaFilesDirectory.mkdirs();
         }
 
-        File archetypeDescriptorFile =
-            FileUtils.resolveFile( archetypeResourcesDirectory, Constants.ARCHETYPE_DESCRIPTOR );
+        File archetypeDescriptorFile = FileUtils.resolveFile( archetypeResourcesDirectory, Constants.ARCHETYPE_DESCRIPTOR );
+
         archetypeDescriptorFile.getParentFile().mkdirs();
 
         ArchetypeDescriptor archetypeDescriptor = new ArchetypeDescriptor();
-        archetypeDescriptor.setName( archetypeDefinition.getArtifactId() );
-        getLogger().debug(
-            "Starting archetype's descriptor " + archetypeDefinition.getArtifactId()
-        );
+
+        archetypeDescriptor.setName( ad.getArtifactId() );
+
+        getLogger().debug( "Starting archetype's descriptor " + ad.getArtifactId() );
+
         archetypeDescriptor.setPartial( partialArchetype );
 
         addRequiredProperties( archetypeDescriptor, properties );
@@ -294,118 +309,119 @@ public class FilesetArchetypeCreator
         reverseProperties.remove( Constants.GROUP_ID );
 
         // TODO ensure pomReversedProperties contains NO dotted properties
-        Properties pomReversedProperties =
-            getRequiredProperties( archetypeDescriptor, properties );
+        Properties pomReversedProperties = getRequiredProperties( archetypeDescriptor, properties );
+
         pomReversedProperties.remove( Constants.PACKAGE );
 
-        String packageName = archetypeConfiguration.getProperty( Constants.PACKAGE );
+        String packageName = ac.getProperty( Constants.PACKAGE );
 
-        Model pom =
-            pomManager.readPom( FileUtils.resolveFile( basedir, Constants.ARCHETYPE_POM ) );
-
-        registerProject( pom );
-
-        List fileNames = resolveFileNames( pom, basedir );
-        getLogger().debug( "Scanned for files " + fileNames.size() );
-
-        Iterator names = fileNames.iterator();
-        while ( names.hasNext() )
+        try
         {
-            getLogger().debug( "- " + names.next().toString() );
-        }
+            Model pom = pomManager.readPom( FileUtils.resolveFile( basedir, Constants.ARCHETYPE_POM ) );
 
-        List filesets =
-            resolveFileSets( packageName, fileNames, languages, filtereds, defaultEncoding );
-        getLogger().debug( "Resolved filesets for " + archetypeDescriptor.getName() );
+            registerProject( pom );
 
-        archetypeDescriptor.setFileSets( filesets );
+            List fileNames = resolveFileNames( pom, basedir );
 
-        createArchetypeFiles(
-            reverseProperties,
-            filesets,
-            packageName,
-            basedir,
-            archetypeFilesDirectory,
-            defaultEncoding
-        );
-        getLogger().debug( "Created files for " + archetypeDescriptor.getName() );
+            getLogger().debug( "Scanned for files " + fileNames.size() );
 
-        if ( !ignoreReplica )
-        {
-            createReplicaFiles( filesets, basedir, replicaFilesDirectory );
-            getLogger().debug( "Created replica files for " + archetypeDescriptor.getName() );
+            Iterator names = fileNames.iterator();
 
-            FileUtils.copyFile(
-                propertyFile,
-                new File( replicaMainDirectory, "archetype.properties" )
+            while ( names.hasNext() )
+            {
+                getLogger().debug( "- " + names.next().toString() );
+            }
+
+            List filesets = resolveFileSets( packageName, fileNames, languages, filtereds, defaultEncoding );
+
+            getLogger().debug( "Resolved filesets for " + archetypeDescriptor.getName() );
+
+            archetypeDescriptor.setFileSets( filesets );
+
+            createArchetypeFiles( reverseProperties, filesets, packageName, basedir, archetypeFilesDirectory, defaultEncoding );
+
+            getLogger().debug( "Created files for " + archetypeDescriptor.getName() );
+
+            if ( !ignoreReplica )
+            {
+                createReplicaFiles( filesets, basedir, replicaFilesDirectory );
+
+                getLogger().debug( "Created replica files for " + archetypeDescriptor.getName() );
+
+                FileUtils.copyFile( propertyFile, new File( replicaMainDirectory, "archetype.properties" ) );
+
+                new File( replicaMainDirectory, "goal.txt" ).createNewFile();
+            }
+
+            setParentArtifactId(
+                reverseProperties,
+                ac.getProperty( Constants.ARTIFACT_ID )
             );
-            new File( replicaMainDirectory, "goal.txt" ).createNewFile();
-        }
 
-        setParentArtifactId(
-            reverseProperties,
-            archetypeConfiguration.getProperty( Constants.ARTIFACT_ID )
-        );
+            Iterator modules = pom.getModules().iterator();
+            while ( modules.hasNext() )
+            {
+                String moduleId = (String) modules.next();
 
-        Iterator modules = pom.getModules().iterator();
-        while ( modules.hasNext() )
-        {
-            String moduleId = (String) modules.next();
+                getLogger().debug( "Creating module " + moduleId );
 
-            getLogger().debug( "Creating module " + moduleId );
+                ModuleDescriptor moduleDescriptor =
+                    createModule(
+                        reverseProperties,
+                        ac.getProperty( Constants.ARTIFACT_ID ),
+                        moduleId,
+                        packageName,
+                        FileUtils.resolveFile( basedir, moduleId ),
+                        FileUtils.resolveFile( archetypeFilesDirectory, moduleId ),
+                        FileUtils.resolveFile( replicaFilesDirectory, moduleId ),
+                        languages,
+                        filtereds,
+                        defaultEncoding,
+                        ignoreReplica,
+                        preserveCData,
+                        keepParent
+                    );
 
-            ModuleDescriptor moduleDescriptor =
-                createModule(
-                    reverseProperties,
-                    archetypeConfiguration.getProperty( Constants.ARTIFACT_ID ),
-                    moduleId,
-                    packageName,
-                    FileUtils.resolveFile( basedir, moduleId ),
-                    FileUtils.resolveFile( archetypeFilesDirectory, moduleId ),
-                    FileUtils.resolveFile( replicaFilesDirectory, moduleId ),
-                    languages,
-                    filtereds,
-                    defaultEncoding,
-                    ignoreReplica,
-                    preserveCData,
-                    keepParent
+                archetypeDescriptor.addModule( moduleDescriptor );
+                getLogger().debug(
+                    "Added module " + moduleDescriptor.getName() + " in "
+                        + archetypeDescriptor.getName()
                 );
+            }
+            restoreParentArtifactId( reverseProperties, null );
+            restoreArtifactId(
+                reverseProperties,
+                ac.getProperty( Constants.ARTIFACT_ID )
+            );
 
-            archetypeDescriptor.addModule( moduleDescriptor );
+            createPoms( pom, ac.getProperty( Constants.ARTIFACT_ID ),
+                ac.getProperty( Constants.ARTIFACT_ID ),
+                archetypeFilesDirectory, basedir,
+                pomReversedProperties, preserveCData, keepParent );
+
+            getLogger().debug( "Created Archetype " + archetypeDescriptor.getName() + " pom" );
+
+            ArchetypeDescriptorXpp3Writer writer = new ArchetypeDescriptorXpp3Writer();
+            writer.write( new FileWriter( archetypeDescriptorFile ), archetypeDescriptor );
+            getLogger().debug( "Archetype " + archetypeDescriptor.getName() + " descriptor written" );
+
+            OldArchetypeDescriptor oldDescriptor =
+                convertToOldDescriptor( archetypeDescriptor.getName(), packageName, basedir );
+            File oldDescriptorFile =
+                FileUtils.resolveFile(
+                    archetypeResourcesDirectory,
+                    Constants.OLD_ARCHETYPE_DESCRIPTOR
+                );
+            archetypeDescriptorFile.getParentFile().mkdirs();
+            writeOldDescriptor( oldDescriptor, oldDescriptorFile );
             getLogger().debug(
-                "Added module " + moduleDescriptor.getName() + " in "
-                    + archetypeDescriptor.getName()
+                "Archetype " + archetypeDescriptor.getName() + " old descriptor written"
             );
         }
-        restoreParentArtifactId( reverseProperties, null );
-        restoreArtifactId(
-            reverseProperties,
-            archetypeConfiguration.getProperty( Constants.ARTIFACT_ID )
-        );
-
-        createPoms( pom, archetypeConfiguration.getProperty( Constants.ARTIFACT_ID ),
-            archetypeConfiguration.getProperty( Constants.ARTIFACT_ID ),
-            archetypeFilesDirectory, basedir,
-            pomReversedProperties, preserveCData, keepParent );
-
-        getLogger().debug( "Created Archetype " + archetypeDescriptor.getName() + " pom" );
-
-        ArchetypeDescriptorXpp3Writer writer = new ArchetypeDescriptorXpp3Writer();
-        writer.write( new FileWriter( archetypeDescriptorFile ), archetypeDescriptor );
-        getLogger().debug( "Archetype " + archetypeDescriptor.getName() + " descriptor written" );
-
-        OldArchetypeDescriptor oldDescriptor =
-            convertToOldDescriptor( archetypeDescriptor.getName(), packageName, basedir );
-        File oldDescriptorFile =
-            FileUtils.resolveFile(
-                archetypeResourcesDirectory,
-                Constants.OLD_ARCHETYPE_DESCRIPTOR
-            );
-        archetypeDescriptorFile.getParentFile().mkdirs();
-        writeOldDescriptor( oldDescriptor, oldDescriptorFile );
-        getLogger().debug(
-            "Archetype " + archetypeDescriptor.getName() + " old descriptor written"
-        );
+        catch ( Exception e )
+        {
+            result.setCause( e );
+        }
     }
 
     private void addRequiredProperties(
@@ -1508,7 +1524,7 @@ public class FilesetArchetypeCreator
         {
             archetypePropertiesManager.readProperties( properties, propertyFile );
         }
-        
+
         return properties;
     }
 
@@ -1761,7 +1777,9 @@ public class FilesetArchetypeCreator
         List files = new ArrayList( fileNames );
 
         String languageIncludes = "";
+
         Iterator languagesIterator = languages.iterator();
+
         while ( languagesIterator.hasNext() )
         {
             String language = (String) languagesIterator.next();

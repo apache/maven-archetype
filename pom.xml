@@ -298,32 +298,10 @@ under the License.
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <!--
-            You will need to install the runtime jar to compile
-            mvn install:install-file
-                -DgroupId=com.sun -DartifactId=rt -Dversion=1.4.2
-                -Dpackaging=jar -Dfile=/usr/local/j2sdk1.4.2_12/jre/lib/rt.jar
-        -->
         <configuration>
           <source>1.4</source>
           <target>1.4</target>
-          <!--
-              <compilerArguments>
-                  <bootclasspath>
-                      ${settings.localRepository}/com/sun/rt/1.4.2/rt-1.4.2.jar
-                  </bootclasspath>
-              </compilerArguments>
-          -->
         </configuration>
-        <!--
-        <dependencies>
-            <dependency>
-                <groupId>com.sun</groupId>
-                <artifactId>rt</artifactId>
-                <version>1.4.2</version>
-            </dependency>
-        </dependencies>
-        -->
       </plugin>
       <plugin>
         <groupId>org.codehaus.plexus</groupId>

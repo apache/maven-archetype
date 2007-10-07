@@ -70,7 +70,6 @@ public class DefaultPomManager
     public void addModule( File pom,
                            String artifactId )
         throws
-        FileNotFoundException,
         IOException,
         XmlPullParserException,
         DocumentException,
@@ -158,7 +157,6 @@ public class DefaultPomManager
     public void addParent( File pom,
                            File parentPom )
         throws
-        FileNotFoundException,
         IOException,
         XmlPullParserException
     {
@@ -186,7 +184,6 @@ public class DefaultPomManager
     public void mergePoms( File pom,
                            File temporaryPom )
         throws
-        FileNotFoundException,
         IOException,
         XmlPullParserException
     {
@@ -262,7 +259,6 @@ public class DefaultPomManager
 
     public Model readPom( final File pomFile )
         throws
-        FileNotFoundException,
         IOException,
         XmlPullParserException
     { // TODO ensure correct encoding by using default one from method argument !!!

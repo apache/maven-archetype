@@ -4,7 +4,9 @@ import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.project.MavenProject;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 /** @author Jason van Zyl */
 public class ArchetypeCreationRequest
@@ -17,9 +19,9 @@ public class ArchetypeCreationRequest
 
     private File propertyFile;
 
-    private List languages;
+    private List languages = new ArrayList();
 
-    private List filtereds;
+    private List filtereds = new ArrayList();
 
     private String defaultEncoding = "UTF-8";
 
@@ -32,6 +34,10 @@ public class ArchetypeCreationRequest
     private boolean partialArchetype = false;
 
     private File archetypeRegistryFile;
+
+    private String packageName;
+
+    private Properties properties;
 
     public ArtifactRepository getLocalRepository()
     {
@@ -173,6 +179,30 @@ public class ArchetypeCreationRequest
     public ArchetypeCreationRequest setArchetypeRegistryFile( File archetypeRegistryFile )
     {
         this.archetypeRegistryFile = archetypeRegistryFile;
+
+        return this;
+    }
+
+    public Properties getProperties()
+    {
+        return properties;
+    }
+
+    public ArchetypeCreationRequest setProperties( Properties properties )
+    {
+        this.properties = properties;
+
+        return this;
+    }
+
+    public String getPackageName()
+    {
+        return packageName;
+    }
+
+    public ArchetypeCreationRequest setPackageName( String packageName )
+    {
+        this.packageName = packageName;
 
         return this;
     }

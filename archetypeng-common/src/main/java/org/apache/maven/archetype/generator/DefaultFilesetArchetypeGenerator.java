@@ -637,7 +637,6 @@ public class DefaultFilesetArchetypeGenerator
     )
         throws
         OutputFileExists,
-        FileNotFoundException,
         XmlPullParserException,
         DocumentException,
         IOException,

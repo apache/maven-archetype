@@ -38,18 +38,4 @@ public interface ArchetypeCreator
 
     void createArchetype( ArchetypeCreationRequest request,
                           ArchetypeCreationResult result );
-
-    void createArchetype( MavenProject project,
-                          File propertyFile,
-                          List languages,
-                          List filtereds,
-                          String defaultEncoding,
-                          boolean ignoreReplica,
-                          boolean preserveCData,
-                          boolean keepParent,
-                          boolean partialArchetype,
-                          File archetypeRegistryFile,
-                          ArtifactRepository localRepository
-    )
-        throws IOException, ArchetypeNotDefined, ArchetypeNotConfigured, TemplateCreationException, XmlPullParserException;
 }

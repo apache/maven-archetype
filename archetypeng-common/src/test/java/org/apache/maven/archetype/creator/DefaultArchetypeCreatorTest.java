@@ -19,6 +19,9 @@
 
 package org.apache.maven.archetype.creator;
 
+import org.apache.maven.archetype.ArchetypeCreationRequest;
+import org.apache.maven.archetype.ArchetypeCreationResult;
+import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.DefaultArtifactRepository;
 import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
@@ -27,6 +30,7 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
+import org.codehaus.plexus.util.PropertyUtils;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
@@ -37,6 +41,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 
 public class DefaultArchetypeCreatorTest
     extends AbstractMojoTestCase
@@ -59,19 +64,24 @@ public class DefaultArchetypeCreatorTest
         String project = "create-3";
 
         File projectFile = getProjectFile( project );
+
         File projectFileSample = getProjectSampleFile( project );
+
         copy( projectFileSample, projectFile );
 
         FileUtils.deleteDirectory( new File( projectFile.getParentFile(), "target" ) );
 
         File propertyFile = getPropertiesFile( project );
+
         File propertyFileSample = getPropertiesSampleFile( project );
+
         copy( propertyFileSample, propertyFile );
 
-        MavenProject mavenProject =
-            builder.buildWithDependencies( projectFile, localRepository, null );
-        FilesetArchetypeCreator instance =
-            (FilesetArchetypeCreator) lookup( ArchetypeCreator.class.getName(), "fileset" );
+        Properties p = PropertyUtils.loadProperties( propertyFile );
+
+        MavenProject mavenProject = builder.buildWithDependencies( projectFile, localRepository, null );
+
+        FilesetArchetypeCreator instance = (FilesetArchetypeCreator) lookup( ArchetypeCreator.class.getName(), "fileset" );
 
         languages = new ArrayList();
         languages.add( "java" );
@@ -97,20 +107,23 @@ public class DefaultArchetypeCreatorTest
         filtereds.add( "properties" );
         filtereds.add( ".classpath" );
         filtereds.add( ".project" );
-        instance.createArchetype(
-            mavenProject,
-            propertyFile,
-            languages,
-            filtereds,
-            "UTF-8",
-            true,
-            false,
-            false,
-            false,
-            getFile( project, "archetype-registry.xml" ),
-            null
-        );
-        
+
+        ArchetypeCreationRequest request = new ArchetypeCreationRequest()
+            .setProject( mavenProject )
+            .setPackageName( p.getProperty( Constants.PACKAGE ) )
+            .setPropertyFile( propertyFile )
+            .setLanguages( languages )
+            .setFiltereds( filtereds )
+            .setDefaultEncoding( "UTF-8" )
+            .setIgnoreReplica( true )
+            .setPartialArchetype( false )
+            .setPreserveCData( false )
+            .setKeepParent( false );
+
+        ArchetypeCreationResult result = new ArchetypeCreationResult();
+
+        instance.createArchetype( request, result );
+
         File template;
 
         template = getTemplateFile( project, "pom.xml" );
@@ -211,11 +224,7 @@ public class DefaultArchetypeCreatorTest
         assertExists( template );
         assertNotContent( template, "${someProperty}" );
 
-        template =
-            getTemplateFile(
-                project,
-                "application/src/main/java/test/application/images/Application.png"
-            );
+        template = getTemplateFile( project, "application/src/main/java/test/application/images/Application.png" );
         assertExists( template );
         assertNotContent( template, "${someProperty}" );
 
@@ -223,13 +232,11 @@ public class DefaultArchetypeCreatorTest
         assertExists( template );
         assertContent( template, "${someProperty}" );
 
-        template =
-            getTemplateFile( project, "application/src/main/resources/META-INF/MANIFEST.MF" );
+        template = getTemplateFile( project, "application/src/main/resources/META-INF/MANIFEST.MF" );
         assertExists( template );
         assertContent( template, "${someProperty}" );
 
-        template =
-            getTemplateFile( project, "application/src/main/resources/test/application/some/Gro.groovy" );
+        template = getTemplateFile( project, "application/src/main/resources/test/application/some/Gro.groovy" );
         assertExists( template );
         assertContent( template, "${someProperty}" );
 

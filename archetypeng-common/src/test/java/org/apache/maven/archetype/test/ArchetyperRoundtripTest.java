@@ -1,10 +1,14 @@
 package org.apache.maven.archetype.test;
 
+import org.apache.maven.archetype.ArchetypeCreationRequest;
+import org.apache.maven.archetype.ArchetypeCreationResult;
 import org.apache.maven.archetype.Archetyper;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
 import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.util.FileUtils;
 
 import java.io.File;
 
@@ -35,8 +39,6 @@ public class ArchetyperRoundtripTest
         //
         // ------------------------------------------------------------------------
 
-        /*
-
         // (1) create a project from scratch
 
         File sourceProject = new File( getBasedir(), "src/test/projects/test-project" );
@@ -54,9 +56,6 @@ public class ArchetyperRoundtripTest
 
         File pom = new File( workingProject, "pom.xml" );
 
-        ArtifactRepository localRepository = registryManager.createRepository(
-            new File( getBasedir(), "target/local-repo" ).toURI().toURL().toExternalForm(), "local-repo" );
-
         MavenProject project = projectBuilder.build( pom, localRepository, null );
 
         ArchetypeCreationRequest acr = new ArchetypeCreationRequest()
@@ -68,11 +67,7 @@ public class ArchetyperRoundtripTest
         if ( result.getCause() != null )
         {
             fail( result.getCause().getMessage() );
-
-            result.getCause().printStackTrace();
         }
-
-        */
 
         // (3) create our own archetype catalog properties in memory
         // (4) create our own archetype catalog describing the archetype we just created
