@@ -49,12 +49,6 @@ public class DefaultArchetypeSelector
     implements ArchetypeSelector
 {
     /** @plexus.requirement */
-    private ArchetypeArtifactManager archetypeArtifactManager;
-
-    /** @plexus.requirement */
-    private ArchetypeRegistryManager archetypeRegistryManager;
-
-    /** @plexus.requirement */
     private ArchetypeSelectionQueryer archetypeSelectionQueryer;
 
     /** @plexus.requirement role="org.apache.maven.archetype.source.ArchetypeDataSource" */

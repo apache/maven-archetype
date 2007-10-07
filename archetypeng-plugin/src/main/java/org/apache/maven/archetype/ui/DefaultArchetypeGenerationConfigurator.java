@@ -60,9 +60,6 @@ public class DefaultArchetypeGenerationConfigurator
     private ArchetypeGenerationQueryer archetypeGenerationQueryer;
 
     /** @plexus.requirement */
-    private ArchetypePropertiesManager archetypePropertiesManager;
-
-    /** @plexus.requirement */
     private ArchetypeRegistryManager archetypeRegistryManager;
 
     public void configureArchetype(
@@ -111,8 +108,7 @@ public class DefaultArchetypeGenerationConfigurator
 
         ArchetypeConfiguration archetypeConfiguration;
 
-        if (
-            archetypeArtifactManager.isFileSetArchetype( ad.getGroupId(), ad.getArtifactId(), ad.getVersion(), localRepository, repositories ) )
+        if ( archetypeArtifactManager.isFileSetArchetype( ad.getGroupId(), ad.getArtifactId(), ad.getVersion(), localRepository, repositories ) )
         {
             org.apache.maven.archetype.metadata.ArchetypeDescriptor archetypeDescriptor =
                 archetypeArtifactManager.getFileSetArchetypeDescriptor( ad.getGroupId(), ad.getArtifactId(), ad.getVersion(), localRepository,
