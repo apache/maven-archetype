@@ -21,7 +21,7 @@ package org.apache.maven.archetype.generator;
 
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
 import org.apache.maven.archetype.common.ArchetypeConfiguration;
-import org.apache.maven.archetype.common.ArchetypeFactory;
+import org.apache.maven.archetype.ui.ArchetypeFactory;
 import org.apache.maven.archetype.common.ArchetypeFilesResolver;
 import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.common.PomManager;
