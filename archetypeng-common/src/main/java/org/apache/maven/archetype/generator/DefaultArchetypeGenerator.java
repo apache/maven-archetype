@@ -136,7 +136,7 @@ public class DefaultArchetypeGenerator
 
         if ( request != null )
         {
-            ArtifactRepository remoteRepo = archetypeRegistryManager.createRepository( request.getRemoteRepository(),
+            ArtifactRepository remoteRepo = archetypeRegistryManager.createRepository( request.getArchetypeRepository(),
                 archetypeDefinition.getArtifactId() + "-repo" );
 
             repos.add( remoteRepo );
@@ -333,7 +333,9 @@ public class DefaultArchetypeGenerator
 
             properties.setProperty( Constants.ARCHETYPE_POST_GENERATION_GOALS, request.getArchetypeGoals() );
 
-            generateArchetype( request, properties, request.getLocalRepository(), Collections.singletonList( archetypeRegistryManager.createRepository( request.getArchetypeRepository(), "repository" ) ), request.getOutputDirectory(  ) );
+            ArtifactRepository repo = archetypeRegistryManager.createRepository( request.getArchetypeRepository(), "repository" );
+
+            generateArchetype( request, properties, request.getLocalRepository(), Collections.singletonList( repo ), request.getOutputDirectory(  ) );
         }
         catch ( IOException ex )
         {

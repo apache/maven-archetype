@@ -135,13 +135,28 @@ public class ArchetyperRoundtripTest
 
         // (6) create a project form the archetype we just created
 
+        String outputDirectory = new File( getBasedir(), "target/generated-project" ).getAbsolutePath();
+
         /*
-        ArchetypeGenerationRequest agr = new ArchetypeGenerationRequest();
+        ArchetypeGenerationRequest agr = new ArchetypeGenerationRequest()
+            .setArchetypeGroupId( project.getGroupId() )
+            .setArchetypeArtifactId( project.getArtifactId() )
+            .setArchetypeVersion( project.getVersion() )
+            .setGroupId( "com.mycompany" )
+            .setArtifactId( "myapp" )
+            .setVersion( "1.0-SNAPSHOT" )
+            .setPackage( "com.mycompany.myapp" )
+            .setOutputDirectory( outputDirectory )
+            .setLocalRepository( localRepository )
+            .setArchetypeRepository( "http://repo1.maven.org/maven2" );
 
         ArchetypeGenerationResult generationResult = archetype.generateProjectFromArchetype( agr );
 
+        if ( generationResult.getCause() != null )
+        {
+            fail( generationResult.getCause().getMessage() );
+        }
         */
-
     }
 
     private void installArchetype( File basedir,

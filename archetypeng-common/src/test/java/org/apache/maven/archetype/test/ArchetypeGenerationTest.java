@@ -33,7 +33,7 @@ public class ArchetypeGenerationTest
         // Here I am just grabbing a Archetype but in a UI you would take the Archetype objects and present
         // them to the user.
 
-        Archetype selection = (Archetype) archetypes.get( 14 );
+        Archetype selection = (Archetype) archetypes.get( archetypes.size() -1 );
 
         // Now you will present a dialog, or whatever, and grab the following values.
 
