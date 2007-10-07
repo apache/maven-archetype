@@ -106,6 +106,12 @@ under the License.
       <groupId>commons-collections</groupId>
       <artifactId>commons-collections</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.apache.maven.shared</groupId>
+      <artifactId>maven-invoker</artifactId>
+      <version>2.0.6</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
