@@ -60,9 +60,7 @@ public class DefaultArchetypeSelector
     /** @plexus.requirement role="org.apache.maven.archetype.source.ArchetypeDataSource" */
     private Map archetypeSources;
 
-    public void selectArchetype(
-        ArchetypeGenerationRequest request,
-        Boolean interactiveMode )
+    public void selectArchetype( ArchetypeGenerationRequest request, Boolean interactiveMode )
         throws
         ArchetypeNotDefined,
         UnknownArchetype,
@@ -160,11 +158,11 @@ public class DefaultArchetypeSelector
 
         request.setArchetypeVersion( definition.getVersion() );
 
-        request.setArchetypeRepository( definition.getRepository() );
-
         request.setArchetypeGoals( definition.getGoals() );
 
         request.setArchetypeName( definition.getName() );
+
+        request.setArchetypeRepository( definition.getRepository() );
 
         request.setRemoteRepository( definition.getRepository() );        
     }

@@ -36,7 +36,6 @@ import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -66,14 +65,10 @@ public class DefaultArchetypeGenerationConfigurator
     /** @plexus.requirement */
     private ArchetypeRegistryManager archetypeRegistryManager;
 
-    private ArchetypeConfiguration configureArchetype(
+    public void configureArchetype(
         ArchetypeGenerationRequest request,
         Boolean interactiveMode,
-        File propertyFile,
-        Properties commandLineProperties,
-        ArtifactRepository localRepository,
-        List repositories
-    )
+        Properties executionProperties )
         throws
         ArchetypeNotDefined,
         UnknownArchetype,
@@ -82,91 +77,71 @@ public class DefaultArchetypeGenerationConfigurator
         PrompterException,
         ArchetypeGenerationConfigurationFailure
     {
-        // propertyFile is no longer needed
-        Properties properties =
-            initialiseArchetypeProperties( commandLineProperties );
+        ArtifactRepository localRepository = request.getLocalRepository();
 
-        // The archetype should be defined at this point and exist!
-        ArchetypeDefinition archetypeDefinition =
-            archetypeFactory.createArchetypeDefinition( properties );
+        List repositories = new ArrayList();
 
-        if ( !archetypeDefinition.isDefined() )
+        Properties properties = new Properties( executionProperties );
+
+        ArchetypeDefinition ad = new ArchetypeDefinition();
+
+        ad.setGroupId( request.getArchetypeGroupId() );
+
+        ad.setArtifactId( request.getArchetypeArtifactId() );
+
+        ad.setVersion( request.getArchetypeVersion() );
+
+        if ( !ad.isDefined() )
         {
             throw new ArchetypeNotDefined( "The archetype is not defined" );
         }
 
-        repositories.add( archetypeRegistryManager.createRepository( request.getRemoteRepository(), archetypeDefinition.getArtifactId() + "-repo" ) );
+        repositories.add( archetypeRegistryManager.createRepository( request.getRemoteRepository(), ad.getArtifactId() + "-repo" ) );
 
-        if ( !archetypeArtifactManager.exists( archetypeDefinition, localRepository, repositories ) )
+        if ( !archetypeArtifactManager.exists( ad, localRepository, repositories ) )
         {
             throw new UnknownArchetype(
-                "The desired archetype does not exist (" + archetypeDefinition.getGroupId() + ":"
-                    + archetypeDefinition.getArtifactId() + ":" + archetypeDefinition.getVersion()
+                "The desired archetype does not exist (" + ad.getGroupId() + ":"
+                    + ad.getArtifactId() + ":" + ad.getVersion()
                     + ")"
             );
         }
 
-        request.setArchetypeVersion( archetypeDefinition.getVersion() );
+        request.setArchetypeVersion( ad.getVersion() );
 
         ArchetypeConfiguration archetypeConfiguration;
 
         if (
-            archetypeArtifactManager.isFileSetArchetype(
-                archetypeDefinition.getGroupId(),
-                archetypeDefinition.getArtifactId(),
-                archetypeDefinition.getVersion(),
-                localRepository,
-                repositories
-            )
-            )
+            archetypeArtifactManager.isFileSetArchetype( ad.getGroupId(), ad.getArtifactId(), ad.getVersion(), localRepository, repositories ) )
         {
             org.apache.maven.archetype.metadata.ArchetypeDescriptor archetypeDescriptor =
-                archetypeArtifactManager.getFileSetArchetypeDescriptor(
-                    archetypeDefinition.getGroupId(),
-                    archetypeDefinition.getArtifactId(),
-                    archetypeDefinition.getVersion(),
-                    localRepository,
-                    repositories
-                );
-            archetypeConfiguration =
-                archetypeFactory.createArchetypeConfiguration( archetypeDescriptor, properties );
+                archetypeArtifactManager.getFileSetArchetypeDescriptor( ad.getGroupId(), ad.getArtifactId(), ad.getVersion(), localRepository,
+                    repositories );
+
+            archetypeConfiguration = archetypeFactory.createArchetypeConfiguration( archetypeDescriptor, properties );
         }
-        else if ( archetypeArtifactManager.isOldArchetype(
-            archetypeDefinition.getGroupId(),
-            archetypeDefinition.getArtifactId(),
-            archetypeDefinition.getVersion(),
-            localRepository,
-            repositories
-        )
-            )
+        else if ( archetypeArtifactManager.isOldArchetype( ad.getGroupId(), ad.getArtifactId(), ad.getVersion(), localRepository, repositories ) )
         {
             org.apache.maven.archetype.descriptor.ArchetypeDescriptor archetypeDescriptor =
-                archetypeArtifactManager.getOldArchetypeDescriptor(
-                    archetypeDefinition.getGroupId(),
-                    archetypeDefinition.getArtifactId(),
-                    archetypeDefinition.getVersion(),
-                    localRepository,
-                    repositories
-                );
-            archetypeConfiguration =
-                archetypeFactory.createArchetypeConfiguration( archetypeDescriptor, properties );
+                archetypeArtifactManager.getOldArchetypeDescriptor( ad.getGroupId(), ad.getArtifactId(), ad.getVersion(), localRepository,
+                    repositories );
+
+            archetypeConfiguration = archetypeFactory.createArchetypeConfiguration( archetypeDescriptor, properties );
         }
         else
         {
-            throw new ArchetypeGenerationConfigurationFailure(
-                "The defined artifact is not an archetype"
-            );
+            throw new ArchetypeGenerationConfigurationFailure( "The defined artifact is not an archetype" );
         }
 
         if ( interactiveMode.booleanValue() )
         {
             boolean confirmed = false;
+
             while ( !confirmed )
             {
                 if ( !archetypeConfiguration.isConfigured() )
                 {
-                    Iterator requiredProperties =
-                        archetypeConfiguration.getRequiredProperties().iterator();
+                    Iterator requiredProperties = archetypeConfiguration.getRequiredProperties().iterator();
 
                     while ( requiredProperties.hasNext() )
                     {
@@ -174,13 +149,9 @@ public class DefaultArchetypeGenerationConfigurator
 
                         if ( !archetypeConfiguration.isConfigured( requiredProperty ) )
                         {
-                            archetypeConfiguration.setProperty(
-                                requiredProperty,
-                                archetypeGenerationQueryer.getPropertyValue(
-                                    requiredProperty,
-                                    archetypeConfiguration.getDefaultValue( requiredProperty )
-                                )
-                            );
+                            archetypeConfiguration.setProperty( requiredProperty,
+                                archetypeGenerationQueryer.getPropertyValue( requiredProperty,
+                                    archetypeConfiguration.getDefaultValue( requiredProperty ) ) );
                         }
                     }
                 }
@@ -190,9 +161,7 @@ public class DefaultArchetypeGenerationConfigurator
                         "The archetype generation must be configured here"
                     );
                 }
-                else if (
-                    !archetypeGenerationQueryer.confirmConfiguration( archetypeConfiguration )
-                    )
+                else if ( !archetypeGenerationQueryer.confirmConfiguration( archetypeConfiguration ) )
                 {
                     getLogger().debug( "Archetype generation configuration not confirmed" );
                     archetypeConfiguration.reset();
@@ -200,9 +169,10 @@ public class DefaultArchetypeGenerationConfigurator
                 else
                 {
                     getLogger().debug( "Archetype generation configuration confirmed" );
+
                     confirmed = true;
                 }
-            } // end while
+            }
         }
         else
         {
@@ -211,61 +181,7 @@ public class DefaultArchetypeGenerationConfigurator
                 throw new ArchetypeNotConfigured( "The archetype is not configurated" );
             }
         }
-
-        return archetypeConfiguration;
-    }
-
-    private Properties initialiseArchetypeProperties(
-        Properties commandLineProperties )
-        throws
-        IOException
-    {
-        Properties properties = new Properties();
-//        propertyFile is no longer needed
-//        archetypePropertiesManager.readProperties( properties, propertyFile );
-
-        Iterator commandLinePropertiesIterator =
-            new ArrayList( commandLineProperties.keySet() ).iterator();
-        while ( commandLinePropertiesIterator.hasNext() )
-        {
-            String propertyKey = (String) commandLinePropertiesIterator.next();
-            properties.setProperty(
-                propertyKey,
-                commandLineProperties.getProperty( propertyKey )
-            );
-        }
-        return properties;
-    }
-
-    public void configureArchetype(
-        ArchetypeGenerationRequest request,
-        Boolean interactiveMode,
-        Properties commandLineProperties,
-        List repositories
-    )
-        throws
-        ArchetypeNotDefined,
-        UnknownArchetype,
-        ArchetypeNotConfigured,
-        IOException,
-        PrompterException,
-        ArchetypeGenerationConfigurationFailure
-    {
-        Properties p = new Properties( commandLineProperties );
-        p.setProperty( Constants.ARCHETYPE_GROUP_ID, request.getArchetypeGroupId() );
-        p.setProperty( Constants.ARCHETYPE_ARTIFACT_ID, request.getArchetypeArtifactId() );
-        p.setProperty( Constants.ARCHETYPE_VERSION, request.getArchetypeVersion() );
-
-        // propertyFile is no longer needed, set to null:
-        ArchetypeConfiguration archetypeConfiguration = configureArchetype(
-            request,
-            interactiveMode,
-            null,
-            p,
-            request.getLocalRepository(),
-            repositories
-        );
-
+                
         request.setGroupId( archetypeConfiguration.getProperty( Constants.GROUP_ID ) );
 
         request.setArtifactId( archetypeConfiguration.getProperty( Constants.ARTIFACT_ID ) );
@@ -273,8 +189,6 @@ public class DefaultArchetypeGenerationConfigurator
         request.setVersion( archetypeConfiguration.getProperty( Constants.VERSION ) );
 
         request.setPackage( archetypeConfiguration.getProperty( Constants.PACKAGE ) );
-
-        Properties properties = archetypeConfiguration.getProperties();
 
         properties.remove( Constants.GROUP_ID );
 

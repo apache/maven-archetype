@@ -73,6 +73,5 @@ public class ArchetyperRoundtripTest
         // (4) create our own archetype catalog describing the archetype we just created
         // (5) deploy the archetype we just created
         // (6) create a project form the archetype we just created
-
     }       
 }

@@ -37,9 +37,7 @@ public interface ArchetypeGenerationConfigurator
     public void configureArchetype(
         ArchetypeGenerationRequest request,
         Boolean interactiveMode,
-        Properties commandLineProperties,
-        List repositories
-    )
+        Properties commandLineProperties )
         throws
         ArchetypeNotDefined,
         UnknownArchetype,

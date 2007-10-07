@@ -28,6 +28,7 @@ import org.apache.maven.archetype.generator.ArchetypeGenerator;
 import org.apache.maven.archetype.ui.ArchetypeGenerationConfigurator;
 import org.apache.maven.archetype.ui.ArchetypeSelector;
 import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.ContextEnabled;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -97,13 +98,6 @@ public class CreateProjectFromArchetypeMojo
     private String archetypeVersion;
 
     /**
-     * The location of the registry file.
-     *
-     * @parameter expression="${user.home}/.m2/archetype.xml"
-     */
-    private File archetypeRegistryFile;
-
-    /**
      * Local maven repository.
      *
      * @parameter expression="${localRepository}"
@@ -111,30 +105,6 @@ public class CreateProjectFromArchetypeMojo
      * @readonly
      */
     private ArtifactRepository localRepository;
-
-    /**
-     * Remote repositories defined in the project's pom (used only when called from an existing
-     * project).
-     *
-     * @parameter expression="${project.remoteArtifactRepositories}"
-     * @required
-     * @readonly
-     */
-    private List pomRemoteRepositories;
-
-    /**
-     * The property file that holds the plugin configuration.
-     *
-     * @parameter default-value="archetype.properties" expression="${archetype.properties}"
-     */
-    private File propertyFile = null;
-
-    /**
-     * Other remote repositories available for discovering dependencies and extensions.
-     *
-     * @parameter expression="${remoteRepositories}"
-     */
-    private String remoteRepositories;
 
     /**
      * User settings use to check the interactiveMode.
@@ -147,6 +117,9 @@ public class CreateProjectFromArchetypeMojo
 
     /** @parameter expression="${basedir}" */
     private File basedir;
+
+    /** @parameter expression="${session.executionProperties}" */
+    private Properties executionProperties;
 
     /**
      * Additional goals that can be specified by the user during the creation of the archetype.
@@ -170,17 +143,9 @@ public class CreateProjectFromArchetypeMojo
 
         try
         {
-            List repositories =
-                archetypeRegistryManager.getRepositories(
-                    pomRemoteRepositories,
-                    remoteRepositories,
-                    archetypeRegistryFile
-                );
-
             selector.selectArchetype( request, settings.getInteractiveMode() );
 
-            // Only interactiveMode, system.properties (configuration properties) and repositories are needed outside the request.
-            configurator.configureArchetype( request, settings.getInteractiveMode(), System.getProperties(), repositories );
+            configurator.configureArchetype( request, settings.getInteractiveMode(), executionProperties );
 
             ArchetypeGenerationResult result = archetyper.generateProjectFromArchetype( request );
         }
@@ -188,14 +153,6 @@ public class CreateProjectFromArchetypeMojo
         {
             throw new MojoExecutionException( ex.getMessage(), ex );
         }
-
-        // Configure Generation
-
-        // At this point the project has been generated from the archetype and now we will
-        // run some goals that the archetype archetyper has requested to be run once the project
-        // has been created.
-
-        Properties properties = PropertyUtils.loadProperties( propertyFile );
 
         String artifactId = request.getArtifactId();
 
@@ -213,9 +170,7 @@ public class CreateProjectFromArchetypeMojo
     }
 
     private void invokePostArchetypeGenerationGoals( String goals, String artifactId )
-        throws
-        MojoExecutionException,
-        MojoFailureException
+        throws MojoExecutionException, MojoFailureException
     {
         File projectBasedir = new File( basedir, artifactId );
 
