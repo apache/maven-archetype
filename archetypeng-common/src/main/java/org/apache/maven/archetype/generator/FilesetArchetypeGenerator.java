@@ -28,13 +28,14 @@ import org.apache.maven.archetype.exception.UnknownArchetype;
 
 import java.io.File;
 import java.util.Properties;
+import org.apache.maven.archetype.ArchetypeGenerationRequest;
 
 /** @author rafale */
 public interface FilesetArchetypeGenerator
 {
     String ROLE = FilesetArchetypeGenerator.class.getName();
 
-    void generateArchetype( Properties properties,
+    void generateArchetype( ArchetypeGenerationRequest request,
                             File archetypeFile,
                             String basedir )
         throws
@@ -44,4 +45,16 @@ public interface FilesetArchetypeGenerator
         PomFileExists,
         OutputFileExists,
         ArchetypeGenerationFailure;
+
+//    Compile time deprecation ;-)
+//    void generateArchetype( Properties properties,
+//                            File archetypeFile,
+//                            String basedir )
+//        throws
+//        UnknownArchetype,
+//        ArchetypeNotConfigured,
+//        ProjectDirectoryExists,
+//        PomFileExists,
+//        OutputFileExists,
+//        ArchetypeGenerationFailure;
 }

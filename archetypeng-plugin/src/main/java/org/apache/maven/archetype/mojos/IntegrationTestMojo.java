@@ -233,8 +233,8 @@ public class IntegrationTestMojo
             String basedir = goalFile.getParentFile().getPath() + "/project";
 
             FileUtils.mkdir( basedir );
-
-            filesetGenerator.generateArchetype( properties, archetypeFile, basedir );
+//TODO: fix this to use request
+            filesetGenerator.generateArchetype( null, archetypeFile, basedir );
 
             File reference = new File( goalFile.getParentFile(), "reference" );
 

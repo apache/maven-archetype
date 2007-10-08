@@ -23,7 +23,6 @@ import org.apache.commons.collections.BidiMap;
 import org.apache.commons.collections.bidimap.DualTreeBidiMap;
 import org.apache.maven.archetype.ArchetypeCreationRequest;
 import org.apache.maven.archetype.ArchetypeCreationResult;
-import org.apache.maven.archetype.ui.ArchetypeFactory;
 import org.apache.maven.archetype.common.ArchetypeConfiguration;
 import org.apache.maven.archetype.common.ArchetypeDefinition;
 import org.apache.maven.archetype.common.ArchetypeFilesResolver;
@@ -82,9 +81,6 @@ public class FilesetArchetypeCreator
     extends AbstractLogEnabled
     implements ArchetypeCreator
 {
-    /** @plexus.requirement */
-    private ArchetypeFactory archetypeFactory;
-
     /** @plexus.requirement */
     private ArchetypeFilesResolver archetypeFilesResolver;
 

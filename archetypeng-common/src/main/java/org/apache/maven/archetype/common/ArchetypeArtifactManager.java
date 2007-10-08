@@ -31,7 +31,6 @@ import java.util.zip.ZipFile;
 public interface ArchetypeArtifactManager
 {
     String ROLE = ArchetypeArtifactManager.class.getName();
-
     /**
      */
     File getArchetypeFile(
@@ -88,9 +87,17 @@ public interface ArchetypeArtifactManager
         throws
         UnknownArchetype;
 
-    boolean exists( ArchetypeDefinition ad,
-                    ArtifactRepository localRepository,
-                    List remoteRepositories );
+    boolean exists( 
+        String archetypeGroupId,
+        String archetypeArtifactId, 
+        String archetypeVersion, 
+        ArtifactRepository localRepository, 
+        List repos );
+
+
+//    boolean exists( ArchetypeDefinition ad,
+//                    ArtifactRepository localRepository,
+//                    List remoteRepositories );
 
     boolean isFileSetArchetype(
         String groupId,

@@ -94,7 +94,7 @@ public class DefaultArchetypeGenerationConfigurator
 
         repositories.add( archetypeRegistryManager.createRepository( request.getRemoteRepository(), ad.getArtifactId() + "-repo" ) );
 
-        if ( !archetypeArtifactManager.exists( ad, localRepository, repositories ) )
+        if ( !archetypeArtifactManager.exists( ad.getGroupId(), ad.getArtifactId(), ad.getVersion(), localRepository, repositories ) )
         {
             throw new UnknownArchetype(
                 "The desired archetype does not exist (" + ad.getGroupId() + ":"

@@ -226,27 +226,35 @@ public class DefaultArchetypeArtifactManager
         }
     }
 
-    public boolean exists( ArchetypeDefinition ad, ArtifactRepository localRepository, List remoteRepositories )
+    public boolean exists( 
+        String archetypeGroupId, 
+        String archetypeArtifactId, 
+        String archetypeVersion, 
+        ArtifactRepository localRepository, 
+        List remoteRepositories )
     {
         try
         {
-            File archetypeFile = downloader.download( ad.getGroupId(), ad.getArtifactId(), ad.getVersion(), localRepository, remoteRepositories );
+            File archetypeFile = downloader.download( archetypeGroupId, archetypeArtifactId, archetypeVersion, localRepository, remoteRepositories );
 
-            if ( ad.getVersion().equals( "RELEASE" ) || ad.getVersion().equals( "LATEST" ) )
+            if ( archetypeVersion.equals( "RELEASE" ) || archetypeVersion.equals( "LATEST" ) )
             {
                 // We do this so that we don't make another network call to get the version. The downloader
-                // should tell us or just replace it with the new artifact code.
-                ad.setVersion( GavCalculator.calculate( archetypeFile.getAbsolutePath() ).getVersion() );
+                // should tell us or just replace it with the new artifact code.                
+                //TODO: Raphaël note: fix with find a way to return archetypeVersion
+//                ad.setVersion( GavCalculator.calculate( archetypeFile.getAbsolutePath() ).getVersion() );
             }
 
             return archetypeFile.exists();
         }
         catch ( DownloadException e )
         {
+            getLogger().debug("Archetype don't exist", e);
             return false;
         }
         catch ( DownloadNotFoundException e )
         {
+            getLogger().debug("Archetype don't exist", e);
             return false;
         }
     }

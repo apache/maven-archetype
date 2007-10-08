@@ -21,7 +21,6 @@ package org.apache.maven.archetype.generator;
 
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
 import org.apache.maven.archetype.common.ArchetypeConfiguration;
-import org.apache.maven.archetype.ui.ArchetypeFactory;
 import org.apache.maven.archetype.common.ArchetypeFilesResolver;
 import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.common.PomManager;
@@ -58,6 +57,8 @@ import java.util.List;
 import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import org.apache.maven.archetype.ArchetypeGenerationRequest;
+import org.apache.maven.archetype.metadata.RequiredProperty;
 
 /** @plexus.component */
 public class DefaultFilesetArchetypeGenerator
@@ -68,9 +69,6 @@ public class DefaultFilesetArchetypeGenerator
     private ArchetypeArtifactManager archetypeArtifactManager;
 
     /** @plexus.requirement */
-    private ArchetypeFactory archetypeFactory;
-
-    /** @plexus.requirement */
     private ArchetypeFilesResolver archetypeFilesResolver;
 
     /** @plexus.requirement */
@@ -79,7 +77,7 @@ public class DefaultFilesetArchetypeGenerator
     /** @plexus.requirement */
     private VelocityComponent velocity;
 
-    public void generateArchetype( Properties properties,
+    public void generateArchetype( ArchetypeGenerationRequest request,
                                    File archetypeFile,
                                    String basedir )
         throws
@@ -96,21 +94,19 @@ public class DefaultFilesetArchetypeGenerator
         {
             ArchetypeDescriptor archetypeDescriptor =
                 archetypeArtifactManager.getFileSetArchetypeDescriptor( archetypeFile );
-
-            ArchetypeConfiguration archetypeConfiguration =
-                archetypeFactory.createArchetypeConfiguration( archetypeDescriptor, properties );
-
-            if ( !archetypeConfiguration.isConfigured() )
+//XXX HERE use the request
+//            ArchetypeConfiguration archetypeConfiguration =
+//                archetypeFactory.createArchetypeConfiguration( archetypeDescriptor, properties );
+//archetypeConfiguration.isConfigured()
+            if ( !isArchetypeConfigured( archetypeDescriptor, request ) )
             {
                 throw new ArchetypeNotConfigured( "The archetype is not configured" );
             }
 
-            Context context = prepareVelocityContext( archetypeConfiguration );
-            String packageName =
-                archetypeConfiguration.getProperties().getProperty( Constants.PACKAGE );
-
-            String artifactId =
-                archetypeConfiguration.getProperties().getProperty( Constants.ARTIFACT_ID );
+            Context context = prepareVelocityContext( request );
+            
+            String packageName = request.getPackage();
+            String artifactId = request.getArtifactId();
             File outputDirectoryFile = new File( basedir, artifactId );
             File basedirPom = new File( basedir, Constants.ARCHETYPE_POM );
             File pom = new File( outputDirectoryFile, Constants.ARCHETYPE_POM );
@@ -340,21 +336,44 @@ public class DefaultFilesetArchetypeGenerator
         return ( StringUtils.isEmpty( moduleOffset ) ? "/" : ( "/" + moduleOffset + "/" ) );
     }
 
+    private boolean isArchetypeConfigured( ArchetypeDescriptor archetypeDescriptor, ArchetypeGenerationRequest request )
+    {
+        boolean configured = true;
+
+        java.util.Iterator requiredProperties = archetypeDescriptor.getRequiredProperties().iterator();
+        while ( configured && requiredProperties.hasNext () )
+        {
+            RequiredProperty requiredProperty = (RequiredProperty) requiredProperties.next ();
+
+            configured = configured &&
+                org.codehaus.plexus.util.StringUtils.isNotEmpty(
+                    request.getProperties().getProperty ( requiredProperty.getKey() )
+                );
+        }
+
+        return configured;
+    }
+
     private void setParentArtifactId( Context context,
                                       String artifactId )
     {
         context.put( Constants.PARENT_ARTIFACT_ID, artifactId );
     }
 
-    private Context prepareVelocityContext( ArchetypeConfiguration archetypeConfiguration )
+    private Context prepareVelocityContext( ArchetypeGenerationRequest request )
     {
         Context context = new VelocityContext();
-        Iterator iterator = archetypeConfiguration.getProperties().keySet().iterator();
+        context.put(Constants.GROUP_ID, request.getGroupId());
+        context.put(Constants.ARTIFACT_ID, request.getVersion());
+        context.put(Constants.VERSION, request.getVersion());
+        context.put(Constants.PACKAGE, request.getPackage());
+        
+        Iterator iterator = request.getProperties().keySet().iterator();
         while ( iterator.hasNext() )
         {
             String key = (String) iterator.next();
 
-            Object value = archetypeConfiguration.getProperties().getProperty( key );
+            Object value = request.getProperties().getProperty( key );
 
             context.put( key, value );
         }
@@ -656,7 +675,6 @@ public class DefaultFilesetArchetypeGenerator
         /*if ( StringUtils.isEmpty ( moduleOffset ) )
         {*/
         getLogger().debug( "Adding module " + moduleId );
-//System.err.println ( "Adding module " + moduleId );
         pomManager.addModule( basedirPom, moduleId );
         pomManager.addParent( pom, basedirPom );
         //}
