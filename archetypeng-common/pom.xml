@@ -43,7 +43,7 @@
     </dependency>
     <dependency>
       <groupId>org.apache.maven.archetype</groupId>
-      <artifactId>maven-archetype-core</artifactId>
+      <artifactId>archetype-old</artifactId>
     </dependency>
     <dependency>
       <groupId>dom4j</groupId>

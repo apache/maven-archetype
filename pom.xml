@@ -41,6 +41,7 @@
     <module>archetypeng-common</module>
     <module>archetypeng-plugin</module>
     <module>archetypeng-packaging</module>
+    <module>archetype-old</module>
   </modules>
 
   <licenses>
@@ -62,6 +63,17 @@
         <groupId>org.apache.maven.archetype</groupId>
         <artifactId>archetypeng-common</artifactId>
         <version>2.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven.archetype</groupId>
+        <artifactId>archetype-old</artifactId>
+        <version>2.0-SNAPSHOT</version>
+        <exclusions>
+          <exclusion>
+            <groupId>plexus</groupId>
+            <artifactId>plexus-utils</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>org.apache.maven</groupId>
@@ -102,17 +114,6 @@
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-plugin-descriptor</artifactId>
         <version>2.0.7</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.maven.archetype</groupId>
-        <artifactId>maven-archetype-core</artifactId>
-        <version>1.0-alpha-7</version>
-        <exclusions>
-          <exclusion>
-            <groupId>plexus</groupId>
-            <artifactId>plexus-utils</artifactId>
-          </exclusion>
-        </exclusions>
       </dependency>
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
