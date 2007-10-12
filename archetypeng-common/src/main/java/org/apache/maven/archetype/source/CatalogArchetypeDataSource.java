@@ -80,7 +80,7 @@ public class CatalogArchetypeDataSource
             {
                 ArchetypeCatalog catalog = readCatalog( new FileReader( catalogFile ) );
 
-                return createArchetypeMap( catalog );
+                return createArchetypeMap( catalog, catalogFile.getParent() );
             }
             catch ( FileNotFoundException e )
             {
@@ -170,7 +170,7 @@ public class CatalogArchetypeDataSource
         }
     }
 
-    protected List createArchetypeMap( ArchetypeCatalog archetypeCatalog )
+    protected List createArchetypeMap( ArchetypeCatalog archetypeCatalog, String repository )
         throws ArchetypeDataSourceException
     {
         List archetypes = new ArrayList(  );
@@ -178,6 +178,11 @@ public class CatalogArchetypeDataSource
         for ( Iterator i = archetypeCatalog.getArchetypes(  ).iterator(  ); i.hasNext(  ); )
         {
             Archetype archetype = (Archetype) i.next();
+
+            if (archetype.getRepository() == null)
+            {
+                archetype.setRepository(repository);
+            }
 
             archetypes.add( archetype );
         }

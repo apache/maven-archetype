@@ -62,7 +62,7 @@ public class RemoteCatalogArchetypeDataSource
 
             URL url = new URL( repository + "/" + "archetype-catalog.xml" );
 
-            return createArchetypeMap( readCatalog( new InputStreamReader( url.openStream(  ) ) ) );
+            return createArchetypeMap( readCatalog( new InputStreamReader( url.openStream(  ) ) ), repository );
         }
         catch ( MalformedURLException e )
         {

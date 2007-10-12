@@ -95,6 +95,16 @@
           </association>
         </field>
       </fields>
+      <codeSegments>
+        <codeSegment>
+          <code><![CDATA[
+    public String toString ()
+    {
+        return "[" + groupId + ":" + artifactId + ":" + version + " -> " + repository + "]";
+    }
+          ]]></code>
+        </codeSegment>
+      </codeSegments>
     </class>
   </classes>
 </model>
