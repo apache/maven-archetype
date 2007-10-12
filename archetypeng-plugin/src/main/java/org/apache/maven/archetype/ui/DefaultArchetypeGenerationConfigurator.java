@@ -19,7 +19,7 @@
 
 package org.apache.maven.archetype.ui;
 
-import org.apache.maven.archetype.Archetype;
+import org.apache.maven.archetype.old.Archetype;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
 import org.apache.maven.archetype.common.ArchetypeConfiguration;
@@ -117,7 +117,7 @@ public class DefaultArchetypeGenerationConfigurator
         }
         else if ( archetypeArtifactManager.isOldArchetype( ad.getGroupId(), ad.getArtifactId(), ad.getVersion(), localRepository, repositories ) )
         {
-            org.apache.maven.archetype.descriptor.ArchetypeDescriptor archetypeDescriptor =
+            org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor archetypeDescriptor =
                 archetypeArtifactManager.getOldArchetypeDescriptor( ad.getGroupId(), ad.getArtifactId(), ad.getVersion(), localRepository,
                     repositories );
 

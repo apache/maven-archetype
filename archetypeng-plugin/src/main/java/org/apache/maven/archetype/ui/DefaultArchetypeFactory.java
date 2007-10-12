@@ -73,7 +73,7 @@ public class DefaultArchetypeFactory
     }
 
     public ArchetypeConfiguration createArchetypeConfiguration(
-        org.apache.maven.archetype.descriptor.ArchetypeDescriptor archetypeDescriptor,
+        org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor archetypeDescriptor,
         Properties properties
     )
     {
