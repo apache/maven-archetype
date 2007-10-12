@@ -22,6 +22,7 @@ package org.apache.maven.archetype;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 
 import java.util.Properties;
+import org.apache.maven.archetype.catalog.Archetype;
 
 /** @author Jason van Zyl */
 public class ArchetypeGenerationRequest
@@ -60,7 +61,7 @@ public class ArchetypeGenerationRequest
     {
     }
 
-    public ArchetypeGenerationRequest( org.apache.maven.archetype.catalog.Archetype archetype )
+    public ArchetypeGenerationRequest( Archetype archetype )
     {
         this.archetypeGroupId = archetype.getGroupId();
 

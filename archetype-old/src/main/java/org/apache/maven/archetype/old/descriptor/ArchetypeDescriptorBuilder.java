@@ -1,4 +1,4 @@
-package org.apache.maven.archetype.descriptor;
+package org.apache.maven.archetype.old.descriptor;
 
 /*
  * Copyright 2004-2006 The Apache Software Foundation.

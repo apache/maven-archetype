@@ -1,4 +1,4 @@
-package org.apache.maven.archetype;
+package org.apache.maven.archetype.old;
 
 /*
  * Copyright 2004-2006 The Apache Software Foundation.
@@ -16,9 +16,9 @@ package org.apache.maven.archetype;
  * limitations under the License.
  */
 
-import org.apache.maven.archetype.descriptor.ArchetypeDescriptor;
-import org.apache.maven.archetype.descriptor.ArchetypeDescriptorBuilder;
-import org.apache.maven.archetype.descriptor.TemplateDescriptor;
+import org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor;
+import org.apache.maven.archetype.old.descriptor.ArchetypeDescriptorBuilder;
+import org.apache.maven.archetype.old.descriptor.TemplateDescriptor;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
@@ -115,7 +115,7 @@ public class DefaultArchetype
         // ----------------------------------------------------------------------
 
         File archetype;
-
+        
         try
         {
             archetype = downloader.download( archetypeGroupId, archetypeArtifactId, archetypeVersion, localRepository,

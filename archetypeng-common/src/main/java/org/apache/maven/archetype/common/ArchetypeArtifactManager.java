@@ -31,6 +31,7 @@ import java.util.zip.ZipFile;
 public interface ArchetypeArtifactManager
 {
     String ROLE = ArchetypeArtifactManager.class.getName();
+
     /**
      */
     File getArchetypeFile(
@@ -87,11 +88,11 @@ public interface ArchetypeArtifactManager
         throws
         UnknownArchetype;
 
-    boolean exists( 
+    boolean exists(
         String archetypeGroupId,
-        String archetypeArtifactId, 
-        String archetypeVersion, 
-        ArtifactRepository localRepository, 
+        String archetypeArtifactId,
+        String archetypeVersion,
+        ArtifactRepository localRepository,
         List repos );
 
 
@@ -155,7 +156,7 @@ public interface ArchetypeArtifactManager
 
     /**
      */
-    org.apache.maven.archetype.descriptor.ArchetypeDescriptor getOldArchetypeDescriptor(
+    org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor getOldArchetypeDescriptor(
         String groupId,
         String artifactId,
         String version,

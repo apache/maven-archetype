@@ -764,6 +764,7 @@ public class DefaultArchetypeGeneratorTest
         instance.generateArchetype(request, result);
         if ( result.getCause() != null )
         {
+            result.getCause().printStackTrace(System.err);
             fail( "No exception may be thrown ("+result.getCause().getMessage()+")-("/*+result.getCause().getCause().getMessage()*/+")" );
         }
 

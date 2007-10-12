@@ -187,6 +187,12 @@
         <version>1.0-beta-1</version>
         <scope>test</scope>
       </dependency>
+      <dependency>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-file</artifactId>
+        <version>1.0-alpha-6</version>
+        <scope>test</scope>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 

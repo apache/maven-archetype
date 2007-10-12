@@ -19,12 +19,12 @@
 
 package org.apache.maven.archetype.generator;
 
-import org.apache.maven.archetype.Archetype;
-import org.apache.maven.archetype.ArchetypeDescriptorException;
+import org.apache.maven.archetype.old.Archetype;
+import org.apache.maven.archetype.old.ArchetypeDescriptorException;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
-import org.apache.maven.archetype.ArchetypeNotFoundException;
-import org.apache.maven.archetype.ArchetypeTemplateProcessingException;
+import org.apache.maven.archetype.old.ArchetypeNotFoundException;
+import org.apache.maven.archetype.old.ArchetypeTemplateProcessingException;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
 import org.apache.maven.archetype.common.ArchetypeConfiguration;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
@@ -253,7 +253,7 @@ public class DefaultArchetypeGenerator
     {
         ArchetypeConfiguration archetypeConfiguration;
 
-        org.apache.maven.archetype.descriptor.ArchetypeDescriptor archetypeDescriptor =
+        org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor archetypeDescriptor =
             archetypeArtifactManager.getOldArchetypeDescriptor(
                 request.getArchetypeGroupId(),
                 request.getArchetypeArtifactId(),
@@ -278,9 +278,9 @@ public class DefaultArchetypeGenerator
         try
         {
             oldArchetype.createArchetype(
-                request.getGroupId(),
-                request.getArtifactId(),
-                request.getVersion(),
+                request.getArchetypeGroupId(),
+                request.getArchetypeArtifactId(),
+                request.getArchetypeVersion(),
                 localRepository,
                 repositories,
                 map
@@ -309,7 +309,7 @@ public class DefaultArchetypeGenerator
     public void generateArchetype( ArchetypeGenerationRequest request, ArchetypeGenerationResult result )
     {
         //TODO: get rid of the property file usage.
-
+        
         try
         {
 //            Properties properties = request.getProperties();

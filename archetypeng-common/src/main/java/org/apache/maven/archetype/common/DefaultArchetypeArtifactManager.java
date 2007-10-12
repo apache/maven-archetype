@@ -19,7 +19,7 @@
 
 package org.apache.maven.archetype.common;
 
-import org.apache.maven.archetype.descriptor.ArchetypeDescriptorBuilder;
+import org.apache.maven.archetype.old.descriptor.ArchetypeDescriptorBuilder;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.archetype.exception.UnknownGroup;
 import org.apache.maven.archetype.metadata.ArchetypeDescriptor;
@@ -442,7 +442,7 @@ public class DefaultArchetypeArtifactManager
                     repositories
                 );
 
-            org.apache.maven.archetype.descriptor.ArchetypeDescriptor descriptor =
+            org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor descriptor =
                 loadOldArchetypeDescriptor( archetypeJarLoader );
 
             return descriptor.getId() != null;
@@ -461,7 +461,7 @@ public class DefaultArchetypeArtifactManager
         }
     }
 
-    public org.apache.maven.archetype.descriptor.ArchetypeDescriptor getOldArchetypeDescriptor(
+    public org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor getOldArchetypeDescriptor(
         String groupId,
         String artifactId,
         String version,
@@ -579,7 +579,7 @@ public class DefaultArchetypeArtifactManager
         }
     }
 
-    private org.apache.maven.archetype.descriptor.ArchetypeDescriptor loadOldArchetypeDescriptor(
+    private org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor loadOldArchetypeDescriptor(
         ClassLoader archetypeJarLoader
     )
         throws
@@ -588,7 +588,7 @@ public class DefaultArchetypeArtifactManager
     {
         ArchetypeDescriptorBuilder builder = new ArchetypeDescriptorBuilder();
 
-        org.apache.maven.archetype.descriptor.ArchetypeDescriptor descriptor = null;
+        org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor descriptor = null;
 
         Reader reader = null;
         try

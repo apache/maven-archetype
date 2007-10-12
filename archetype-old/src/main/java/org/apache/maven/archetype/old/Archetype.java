@@ -1,4 +1,4 @@
-package org.apache.maven.archetype;
+package org.apache.maven.archetype.old;
 
 /*
  * Copyright 2004-2006 The Apache Software Foundation.
