@@ -43,6 +43,11 @@ w/out the need to add a plugin group in settings -->
 
   <dependencies>
     <dependency>
+      <groupId>org.apache.maven.archetype</groupId>
+      <artifactId>archetypeng-common</artifactId>
+      <version>2.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-plugin-api</artifactId>
       <version>2.0.7</version>
@@ -66,11 +71,6 @@ w/out the need to add a plugin group in settings -->
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-archiver</artifactId>
       <version>2.2</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.archetype</groupId>
-      <artifactId>archetypeng-common</artifactId>
-      <version>2.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.shared</groupId>

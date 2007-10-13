@@ -19,14 +19,17 @@
 
 package org.apache.maven.archetype;
 
+import java.io.IOException;
 import org.apache.maven.archetype.creator.ArchetypeCreator;
 import org.apache.maven.archetype.generator.ArchetypeGenerator;
 import org.apache.maven.archetype.source.ArchetypeDataSource;
 import org.apache.maven.archetype.source.ArchetypeDataSourceException;
 import org.apache.maven.archetype.source.WikiArchetypeDataSource;
+import org.apache.maven.artifact.DependencyResolutionRequiredException;
+import org.codehaus.plexus.archiver.ArchiverException;
+import org.codehaus.plexus.archiver.jar.ManifestException;
 import org.codehaus.plexus.util.PropertyUtils;
 import org.codehaus.plexus.util.StringUtils;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,12 +37,18 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import org.apache.maven.archiver.MavenArchiveConfiguration;
+import org.apache.maven.archiver.MavenArchiver;
+import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.archiver.jar.JarArchiver;
+import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 /**
  * @author Jason van Zyl
  * @plexus.component
  */
 public class DefaultArchetyper
+    extends AbstractLogEnabled
     implements Archetyper
 {
     /** @plexus.requirement role-hint="fileset" */
@@ -51,9 +60,16 @@ public class DefaultArchetyper
     /** @plexus.requirement role="org.apache.maven.archetype.source.ArchetypeDataSource" */
     private Map archetypeSources;
 
+    /**
+     * The Jar archiver.
+     *
+     * @plexus.requirement role="org.codehaus.plexus.archiver.Archiver" role-hint="jar"
+     */
+    private JarArchiver jarArchiver;
+
     public ArchetypeCreationResult createArchetypeFromProject( ArchetypeCreationRequest request )
     {
-        ArchetypeCreationResult result = new ArchetypeCreationResult();
+        ArchetypeCreationResult result = new ArchetypeCreationResult(  );
 
         creator.createArchetype( request, result );
 
@@ -62,38 +78,37 @@ public class DefaultArchetyper
 
     public ArchetypeGenerationResult generateProjectFromArchetype( ArchetypeGenerationRequest request )
     {
-        ArchetypeGenerationResult result = new ArchetypeGenerationResult();
+        ArchetypeGenerationResult result = new ArchetypeGenerationResult(  );
 
         generator.generateArchetype( request, result );
 
         return result;
     }
 
-    public Collection getArchetypes( ArchetypeDataSource source,
-                                     Properties sourceConfiguration )
+    public Collection getArchetypes( ArchetypeDataSource source, Properties sourceConfiguration )
         throws ArchetypeDataSourceException
     {
         return source.getArchetypes( sourceConfiguration );
     }
 
-    public Collection getArchetypeDataSources()
+    public Collection getArchetypeDataSources( )
     {
-        return archetypeSources.values();
+        return archetypeSources.values(  );
     }
 
-    public List getAvailableArchetypes()
+    public List getAvailableArchetypes( )
     {
         File archetypeCatalogPropertiesFile = new File( System.getProperty( "user.home" ), ".m2/archetype-catalog.properties" );
 
         Properties archetypeCatalogProperties;
 
-        if ( archetypeCatalogPropertiesFile.exists() )
+        if ( archetypeCatalogPropertiesFile.exists(  ) )
         {
             archetypeCatalogProperties = PropertyUtils.loadProperties( archetypeCatalogPropertiesFile );
         }
         else
         {
-            archetypeCatalogProperties = new Properties();
+            archetypeCatalogProperties = new Properties(  );
 
             archetypeCatalogProperties.setProperty( "sources", "wiki" );
 
@@ -105,7 +120,7 @@ public class DefaultArchetyper
 
     public List getAvailableArchetypes( Properties archetypeCatalogProperties )
     {
-        List archetypes = new ArrayList();
+        List archetypes = new ArrayList(  );
 
         String[] sources = StringUtils.split( archetypeCatalogProperties.getProperty( "sources" ), "," );
 
@@ -117,8 +132,7 @@ public class DefaultArchetyper
             {
                 ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( sourceRoleHint );
 
-                archetypes.addAll(
-                    source.getArchetypes( getArchetypeDataSourceProperties( sourceRoleHint, archetypeCatalogProperties ) ) );
+                archetypes.addAll( source.getArchetypes( getArchetypeDataSourceProperties( sourceRoleHint, archetypeCatalogProperties ) ) );
             }
             catch ( ArchetypeDataSourceException e )
             {
@@ -128,14 +142,13 @@ public class DefaultArchetyper
 
         // If we haven't found any Archetypes then we will currently attempt to use the Wiki source.
         // Eventually we will use a more reliable remote catalog from the central repository.
-
-        if ( archetypes.size() == 0 )
+        if ( archetypes.size(  ) == 0 )
         {
             try
             {
                 ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( "wiki" );
 
-                archetypes.addAll( source.getArchetypes( new Properties() ) );
+                archetypes.addAll( source.getArchetypes( new Properties(  ) ) );
             }
             catch ( ArchetypeDataSourceException e )
             {
@@ -146,18 +159,17 @@ public class DefaultArchetyper
         return archetypes;
     }
 
-    public Properties getArchetypeDataSourceProperties( String sourceRoleHint,
-                                                        Properties archetypeCatalogProperties )
+    public Properties getArchetypeDataSourceProperties( String sourceRoleHint, Properties archetypeCatalogProperties )
     {
-        Properties p = new Properties();
+        Properties p = new Properties(  );
 
-        for ( Iterator i = archetypeCatalogProperties.keySet().iterator(); i.hasNext(); )
+        for ( Iterator i = archetypeCatalogProperties.keySet(  ).iterator(  ); i.hasNext(  ); )
         {
             String key = (String) i.next();
 
             if ( key.startsWith( sourceRoleHint ) )
             {
-                String k = key.substring( sourceRoleHint.length() + 1 );
+                String k = key.substring( sourceRoleHint.length(  ) + 1 );
 
                 p.setProperty( k, archetypeCatalogProperties.getProperty( key ) );
             }
@@ -166,4 +178,31 @@ public class DefaultArchetyper
         return p;
     }
 
+    public File archiveArchetype( File archetypeDirectory, MavenProject project, File outputDirectory, String finalName, MavenArchiveConfiguration archive )
+        throws ArchiverException, ManifestException,
+        DependencyResolutionRequiredException, IOException
+    {
+        File jarFile = new File( outputDirectory, finalName + ".jar" );
+
+        MavenArchiver archiver = new MavenArchiver(  );
+
+        archiver.setArchiver( jarArchiver );
+
+        archiver.setOutputFile( jarFile );
+
+        archive.setForced( true );
+
+        if ( !archetypeDirectory.exists(  ) )
+        {
+            getLogger(  ).warn( "JAR will be empty - no content was marked for inclusion!" );
+        }
+        else
+        {
+            archiver.getArchiver(  ).addDirectory( archetypeDirectory );
+        }
+
+        archiver.createArchive( project, archive );
+
+        return jarFile;
+    }
 }

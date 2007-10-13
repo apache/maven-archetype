@@ -19,15 +19,17 @@
 
 package org.apache.maven.archetype.mojos;
 
+import java.io.IOException;
 import org.apache.maven.archiver.MavenArchiveConfiguration;
-import org.apache.maven.archiver.MavenArchiver;
+import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.archiver.jar.JarArchiver;
-
 import java.io.File;
+import org.apache.maven.archetype.Archetyper;
+import org.codehaus.plexus.archiver.ArchiverException;
+import org.codehaus.plexus.archiver.jar.ManifestException;
 
 /**
  * @author           rafale
@@ -36,7 +38,7 @@ import java.io.File;
  * @requiresProject
  */
 public class JarMojo
-extends AbstractMojo
+    extends AbstractMojo
 {
     /**
      * Directory containing the classes.
@@ -55,7 +57,7 @@ extends AbstractMojo
      *
      * @parameter
      */
-    private MavenArchiveConfiguration archive = new MavenArchiveConfiguration ();
+    private MavenArchiveConfiguration archive = new MavenArchiveConfiguration(  );
 
     /**
      * Name of the generated JAR.
@@ -64,14 +66,6 @@ extends AbstractMojo
      * @required
      */
     private String finalName;
-
-    /**
-     * The Jar archiver.
-     *
-     * @parameter  expression="${component.org.codehaus.plexus.archiver.Archiver#jar}"
-     * @required
-     */
-    private JarArchiver jarArchiver;
 
     /**
      * Directory containing the generated JAR.
@@ -90,49 +84,36 @@ extends AbstractMojo
      */
     private MavenProject project;
 
-    protected static File getJarFile ( File basedir, String finalName )
+    /**
+     * The archetyper component.
+     *
+     * @component
+     */
+    private Archetyper archetyper;
+
+    public void execute( )
+        throws MojoExecutionException, MojoFailureException
     {
-        return new File ( basedir, finalName + ".jar" );
-    }
-
-    public void execute ()
-    throws MojoExecutionException, MojoFailureException
-    {
-        File jarFile = createArchive ();
-        project.getArtifact ().setFile ( jarFile );
-    }
-
-    private File createArchive ()
-    throws MojoExecutionException
-    {
-        File jarFile = getJarFile ( outputDirectory, finalName );
-
-        MavenArchiver archiver = new MavenArchiver ();
-
-        archiver.setArchiver ( jarArchiver );
-
-        archiver.setOutputFile ( jarFile );
-
-        archive.setForced ( true );
-
         try
         {
-            if ( !archetypeDirectory.exists () )
-            {
-                getLog ().warn ( "JAR will be empty - no content was marked for inclusion!" );
-            }
-            else
-            {
-                archiver.getArchiver ().addDirectory ( archetypeDirectory );
-            }
-
-            archiver.createArchive ( project, archive );
-
-            return jarFile;
+            File jarFile = archetyper.archiveArchetype( archetypeDirectory, project, outputDirectory, finalName, archive );
+            project.getArtifact(  ).setFile( jarFile );
         }
-        catch ( Exception e )
+        catch ( ArchiverException ex )
         {
-            throw new MojoExecutionException ( "Error assembling JAR", e );
+            throw new MojoExecutionException( ex.getMessage(  ), ex );
+        }
+        catch ( ManifestException ex )
+        {
+            throw new MojoExecutionException( ex.getMessage(  ), ex );
+        }
+        catch ( DependencyResolutionRequiredException ex )
+        {
+            throw new MojoExecutionException( ex.getMessage(  ), ex );
+        }
+        catch ( IOException ex )
+        {
+            throw new MojoExecutionException( ex.getMessage(  ), ex );
         }
     }
 }

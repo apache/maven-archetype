@@ -38,7 +38,6 @@ import org.apache.maven.shared.invoker.Invoker;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.cli.CommandLineUtils;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -46,12 +45,13 @@ import java.io.OutputStream;
 import java.io.Writer;
 import java.util.Arrays;
 import java.util.Properties;
+import org.apache.maven.archiver.MavenArchiveConfiguration;
 
 /** @author Jason van Zyl */
 public class ArchetyperRoundtripTest
     extends PlexusTestCase
 {
-    public void testArchetyper()
+    public void testArchetyper( )
         throws Exception
     {
         Archetyper archetype = (Archetyper) lookup( Archetyper.ROLE );
@@ -60,85 +60,78 @@ public class ArchetyperRoundtripTest
 
         MavenProjectBuilder projectBuilder = (MavenProjectBuilder) lookup( MavenProjectBuilder.ROLE );
 
-        ArtifactRepository localRepository = registryManager.createRepository(
-            new File( getBasedir(), "target/local-repo" ).toURI().toURL().toExternalForm(), "local-repo" );
+        ArtifactRepository localRepository = registryManager.createRepository( new File( getBasedir(  ), "target/local-repo" ).toURI(  ).
+            toURL(  ).toExternalForm(  ), "local-repo" );
 
         // (1) create a project from scratch
         // (2) create an archetype from the project
         // (3) create our own archetype catalog properties in memory
         // (4) create our own archetype catalog describing the archetype we just created
-        // (5) deploy the archetype we just created         
+        // (5) deploy the archetype we just created
         // (6) create a project form the archetype we just created
-
         // ------------------------------------------------------------------------
         //
         // ------------------------------------------------------------------------
-
         // (1) create a project from scratch
+        File sourceProject = new File( getBasedir(  ), "src/test/projects/test-project" );
 
-        File sourceProject = new File( getBasedir(), "src/test/projects/test-project" );
+        File workingProject = new File( getBasedir(  ), "target/projects/test-project" );
 
-        File workingProject = new File( getBasedir(), "target/projects/test-project" );
-
-        if ( !workingProject.exists() )
+        if ( !workingProject.exists(  ) )
         {
-            workingProject.mkdirs();
+            workingProject.mkdirs(  );
         }
 
         FileUtils.copyDirectoryStructure( sourceProject, workingProject );
 
         // (2) create an archetype from the project
-
         File pom = new File( workingProject, "pom.xml" );
 
         MavenProject project = projectBuilder.build( pom, localRepository, null );
 
-        ArchetypeCreationRequest acr = new ArchetypeCreationRequest()
-            .setProject( project )
-            .setLocalRepository( localRepository );
+        ArchetypeCreationRequest acr = new ArchetypeCreationRequest(  ).setProject( project ).
+            setLocalRepository( localRepository );
 
         ArchetypeCreationResult creationResult = archetype.createArchetypeFromProject( acr );
 
-        if ( creationResult.getCause() != null )
+        if ( creationResult.getCause(  ) != null )
         {
-            fail( creationResult.getCause().getMessage() );
+            fail( creationResult.getCause(  ).getMessage(  ) );
         }
 
         // (3) create our own archetype catalog properties in memory
-
-        File catalogDirectory = new File( getBasedir(), "target/catalog" );
+        File catalogDirectory = new File( getBasedir(  ), "target/catalog" );
 
         File catalogFile = new File( catalogDirectory, "archetype-catalog.xml" );
 
         File catalogProperties = new File( catalogDirectory, "archetype-catalog.properties" );
 
-        catalogDirectory.mkdirs();
+        catalogDirectory.mkdirs(  );
 
-        Properties p = new Properties();
+        Properties p = new Properties(  );
 
         p.setProperty( "sources", "catalog" );
 
-        p.setProperty( "catalog.file", catalogFile.getAbsolutePath() );
+        p.setProperty( "catalog.file", catalogFile.getAbsolutePath(  ) );
 
         OutputStream os = new FileOutputStream( catalogProperties );
 
         p.store( os, "Generated catalog properties" );
 
         // (4) create our own archetype catalog describing the archetype we just created
+        ArchetypeCatalog catalog = new ArchetypeCatalog(  );
 
-        ArchetypeCatalog catalog = new ArchetypeCatalog();
+        Archetype generatedArchetype = new Archetype(  );
 
-        Archetype generatedArchetype = new Archetype();
+        generatedArchetype.setGroupId( project.getGroupId(  ) );
 
-        generatedArchetype.setGroupId( project.getGroupId() );
+        generatedArchetype.setArtifactId( project.getArtifactId(  ) );
 
-        generatedArchetype.setArtifactId( project.getArtifactId() );
-
-        generatedArchetype.setVersion( project.getVersion() );
+        generatedArchetype.setVersion( project.getVersion(  ) );
 
         catalog.addArchetype( generatedArchetype );
 
-        ArchetypeCatalogXpp3Writer catalogWriter = new ArchetypeCatalogXpp3Writer();
+        ArchetypeCatalogXpp3Writer catalogWriter = new ArchetypeCatalogXpp3Writer(  );
 
         Writer writer = new FileWriter( catalogFile );
 
@@ -147,51 +140,57 @@ public class ArchetyperRoundtripTest
         IOUtils.closeQuietly( writer );
 
         // (5) install the archetype we just created
+        File generatedArchetypeDirectory = new File( project.getBasedir(  ), "target/generated-sources/archetypeng" );
 
-        File generatedArchetypeDirectory = new File( project.getBasedir(), "target/generated-sources/archetypeng" );
+        File generatedArchetypePom = new File( generatedArchetypeDirectory, "pom.xml" );
 
-        installArchetype( generatedArchetypeDirectory, new File( localRepository.getBasedir() ) );
+        MavenProject generatedArchetypeProject = projectBuilder.build( generatedArchetypePom, localRepository, null );
+
+        File archetypeDirectory = new File( generatedArchetypeDirectory, "src/main/resources" );
+        archetype.archiveArchetype(
+            archetypeDirectory, generatedArchetypeProject,
+            new File( generatedArchetypeProject.getBuild(  ).getDirectory(  ) ),
+            generatedArchetypeProject.getBuild(  ).getFinalName(  ),
+            new MavenArchiveConfiguration(  )
+        );
+
+//        installArchetype( generatedArchetypeDirectory, new File( localRepository.getBasedir(  ) ) );
 
         // (6) create a project form the archetype we just created
-
-        String outputDirectory = new File( getBasedir(), "target/generated-project" ).getAbsolutePath();
+        String outputDirectory = new File( getBasedir(  ), "target/generated-project" ).getAbsolutePath(  );
 
         /*
         ArchetypeGenerationRequest agr = new ArchetypeGenerationRequest()
-            .setArchetypeGroupId( project.getGroupId() )
-            .setArchetypeArtifactId( project.getArtifactId() )
-            .setArchetypeVersion( project.getVersion() )
-            .setGroupId( "com.mycompany" )
-            .setArtifactId( "myapp" )
-            .setVersion( "1.0-SNAPSHOT" )
-            .setPackage( "com.mycompany.myapp" )
-            .setOutputDirectory( outputDirectory )
-            .setLocalRepository( localRepository )
-            .setArchetypeRepository( "http://repo1.maven.org/maven2" );
-
+        .setArchetypeGroupId( project.getGroupId() )
+        .setArchetypeArtifactId( project.getArtifactId() )
+        .setArchetypeVersion( project.getVersion() )
+        .setGroupId( "com.mycompany" )
+        .setArtifactId( "myapp" )
+        .setVersion( "1.0-SNAPSHOT" )
+        .setPackage( "com.mycompany.myapp" )
+        .setOutputDirectory( outputDirectory )
+        .setLocalRepository( localRepository )
+        .setArchetypeRepository( "http://repo1.maven.org/maven2" );
         ArchetypeGenerationResult generationResult = archetype.generateProjectFromArchetype( agr );
-
         if ( generationResult.getCause() != null )
         {
-            fail( generationResult.getCause().getMessage() );
+        fail( generationResult.getCause().getMessage() );
         }
-        */
+         */
     }
 
-    private void installArchetype( File basedir,
-                                   File localRepository )
+    private void installArchetype( File basedir, File localRepository )
         throws Exception
     {
+        fail( "The packaging can't be used here as the plugins are not yet made." );
         Invoker invoker = (Invoker) lookup( Invoker.ROLE );
 
-        if ( basedir.exists() )
+        if ( basedir.exists(  ) )
         {
-            InvocationRequest request = new DefaultInvocationRequest()
-                .setBaseDirectory( basedir )
-                .setGoals( Arrays.asList( new String[]{"install"} ) );
-                //.setLocalRepositoryDirectory( localRepository );
-
-            Properties envars = CommandLineUtils.getSystemEnvVars();
+            InvocationRequest request = new DefaultInvocationRequest(  ).setBaseDirectory( basedir ).
+                setGoals( Arrays.asList( new String[]{"install"} ) );
+            //.setLocalRepositoryDirectory( localRepository );
+            Properties envars = CommandLineUtils.getSystemEnvVars(  );
 
             invoker.setMavenHome( new File( envars.getProperty( "M2_HOME" ) ) );
 

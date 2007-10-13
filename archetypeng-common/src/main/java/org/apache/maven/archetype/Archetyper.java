@@ -19,13 +19,20 @@
 
 package org.apache.maven.archetype;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
+import org.apache.maven.archiver.MavenArchiveConfiguration;
+import org.apache.maven.artifact.DependencyResolutionRequiredException;
+import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.archiver.ArchiverException;
+import org.codehaus.plexus.archiver.jar.ManifestException;
 
 /** @author Jason van Zyl */
 public interface Archetyper
 {
-    String ROLE = Archetyper.class.getName();
+    String ROLE = Archetyper.class.getName(  );
 
     /**
      * A command to create an Archetype from an existing Maven project given the suppled
@@ -39,7 +46,7 @@ public interface Archetyper
     /**
      * A command to generate a Maven project from an Archetype given the suppled
      * generation request.
-     *  
+     *
      * @param request
      * @return The result of creating the proejct from the existing archetype. It contains any errors that might have occured.
      */
@@ -52,14 +59,36 @@ public interface Archetyper
      *
      * @return A Map of available archetypes collected from all available source.
      */
-    List getAvailableArchetypes();
+    List getAvailableArchetypes( );
 
     /**
      * Get all available archetypes using a specified catalog properties as the
      * definition for the sources to be used and the configuration for each
      * {@org.apache.maven.archetype.source.ArchetypeDataSource} listed.
      *
+     * @param properties
      * @return A Map of available archetypes collected from all available source.
      */
     List getAvailableArchetypes( Properties properties );
+
+    /**
+     * Creates a jar file for an archetype.
+     * @param archetypeDirectory
+     * @param project
+     * @param outputDirectory
+     * @param finalName
+     * @param archive
+     * @return The File to the generated jar
+     * @throws org.codehaus.plexus.archiver.ArchiverException
+     * @throws org.codehaus.plexus.archiver.jar.ManifestException
+     * @throws org.apache.maven.artifact.DependencyResolutionRequiredException
+     * @throws java.io.IOException
+     */
+    File archiveArchetype(
+        File archetypeDirectory,
+        MavenProject project,
+        File outputDirectory,
+        String finalName,
+        MavenArchiveConfiguration archive )
+    throws ArchiverException, ManifestException, DependencyResolutionRequiredException, IOException;
 }
