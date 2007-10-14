@@ -1,4 +1,4 @@
-package org.apache.maven.test;
+package projects.roundtrip-1-project.src.main.java.org.apache.maven.test;
 
 /**
  * Hello world!
