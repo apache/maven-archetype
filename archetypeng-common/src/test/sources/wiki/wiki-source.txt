@@ -1,0 +1,73 @@
+This page will hold the complete list of archetype (even not hosted at apache).
+
+Each archetype page should enforce the following pattern :
+* Archetype name
+* Command line to call the archetype
+* If the archetype can be used in an existing projects directory
+* A tree view of the resulting files
+* Some additional information like the additional properties used by the plugin
+
+To use an archetype:
+{code}
+mvn archetype:create -DgroupId=<your group> -DartifactId=<your artifact> -DarchetypeArtifactId=<wanted artifact> -DarchetypeGroupId=<wanted artifact group>
+{code}
+Read more [here|http://maven.apache.org/plugins/maven-archetype-plugin/usage.html].
+
+h3. Quick Reference
+
+A quick reference of available archetypes and their repositories. This list is designed so it can be automatically retrieved from archetype front-ends such as Archy - [http://code.google.com/p/archy]. Only archetypes that don't have any "released" artifacts need a version number.
+|| Artifact || Group || Version || Repository || Description ||
+| appfuse-basic-jsf | org.appfuse.archetypes | 2.0 | [http://static.appfuse.org/releases] | AppFuse archetype for creating a web application with Hibernate, Spring and JSF |
+| appfuse-basic-spring | org.appfuse.archetypes | 2.0 | [http://static.appfuse.org/releases] | AppFuse archetype for creating a web application with Hibernate, Spring and Spring MVC |
+| appfuse-basic-struts | org.appfuse.archetypes | 2.0 | [http://static.appfuse.org/releases] | AppFuse archetype for creating a web application with Hibernate, Spring and Struts 2 |
+| appfuse-basic-tapestry | org.appfuse.archetypes | 2.0 | [http://static.appfuse.org/releases] | AppFuse archetype for creating a web application with Hibernate, Spring and Tapestry 4 |
+| appfuse-core | org.appfuse.archetypes | 2.0 | [http://static.appfuse.org/releases] | AppFuse archetype for creating a jar application with Hibernate and Spring and XFire |
+| appfuse-modular-jsf | org.appfuse.archetypes | 2.0 | [http://static.appfuse.org/releases] | AppFuse archetype for creating a modular application with Hibernate, Spring and JSF |
+| appfuse-modular-spring | org.appfuse.archetypes | 2.0 | [http://static.appfuse.org/releases] | AppFuse archetype for creating a modular application with Hibernate, Spring and Spring MVC |
+| appfuse-modular-struts | org.appfuse.archetypes | 2.0 | [http://static.appfuse.org/releases] | AppFuse archetype for creating a modular application with Hibernate, Spring and Struts 2 |
+| appfuse-modular-tapestry | org.appfuse.archetypes | 2.0 | [http://static.appfuse.org/releases] | AppFuse archetype for creating a modular application with Hibernate, Spring and Tapestry 4 |
+| maven-archetype-j2ee-simple | org.apache.maven.archetypes | | [http://repo1.maven.org/maven2] | A simple J2EE Java application |
+| maven-archetype-marmalade-mojo | org.apache.maven.archetypes | | [http://repo1.maven.org/maven2] | A Maven plugin development project using marmalade |
+| maven-archetype-mojo | org.apache.maven.archetypes | | [http://repo1.maven.org/maven2] | A Maven Java plugin development project |
+| maven-archetype-portlet | org.apache.maven.archetypes | | [http://repo1.maven.org/maven2] | A simple portlet application |
+| maven-archetype-profiles | org.apache.maven.archetypes | | [http://repo1.maven.org/maven2] | |
+| maven-archetype-quickstart | org.apache.maven.archetypes | | [http://repo1.maven.org/maven2] | |
+| maven-archetype-simple | org.apache.maven.archetypes | | [http://repo1.maven.org/maven2] | |
+| maven-archetype-site-simple | org.apache.maven.archetypes | | [http://repo1.maven.org/maven2] | A simple site generation project |
+| maven-archetype-site | org.apache.maven.archetypes | | [http://repo1.maven.org/maven2] | A more complex site project |
+| maven-archetype-webapp | org.apache.maven.archetypes | | [http://repo1.maven.org/maven2] | A simple Java web application |
+| struts2-archetype-starter | org.apache.struts | 2.0.9-SNAPSHOT | [http://people.apache.org/repo/m2-snapshot-repository] | A starter Struts 2 application with Sitemesh, DWR, and Spring |
+| struts2-archetype-blank | org.apache.struts | 2.0.9-SNAPSHOT | [http://people.apache.org/repo/m2-snapshot-repository] | A minimal Struts 2 application |
+| struts2-archetype-portlet | org.apache.struts | 2.0.9-SNAPSHOT | [http://people.apache.org/repo/m2-snapshot-repository] | A minimal Struts 2 application that can be deployed as a portlet |
+| struts2-archetype-dbportlet | org.apache.struts | 2.0.9-SNAPSHOT | [http://people.apache.org/repo/m2-snapshot-repository] | A starter Struts 2 portlet that demonstrates a simple CRUD interface with db backing |
+| struts2-archetype-plugin | org.apache.struts | 2.0.9-SNAPSHOT | [http://people.apache.org/repo/m2-snapshot-repository] | A Struts 2 plugin |
+| shale-archetype-blank | org.apache.shale | 1.0.3-SNAPSHOT | [http://people.apache.org/repo/m2-snapshot-repository] | A blank Shale web application with JSF |
+| maven-adf-archetype | org.apache.myfaces.adfbuild | 1.0-SNAPSHOT | [http://people.apache.org/repo/m2-snapshot-repository] | Archetype to ease the burden of creating a new application based with ADF |
+| data-app | net.databinder | 0.4 | [http://repo1.maven.org/maven2] | A new Databinder application with sources and resources. |
+| jini-service-archetype | org.jini.maven-jini-plugin | 2.0 | [http://repo1.maven.org/maven2] | Archetype for Jini service project creation |
+| softeu-archetype-seam | org.apache.maven.archetypes | | [http://maven.softeu.cz/] | JSF+Facelets+Seam Archetype |
+| softeu-archetype-seam-simple | org.apache.maven.archetypes | | [http://maven.softeu.cz/] | JSF+Facelets+Seam (no persistence) Archetype |
+| softeu-archetype-jsf | org.apache.maven.archetypes | | [http://maven.softeu.cz/] | JSF+Facelets Archetype |
+| jpa-maven-archetype | com.rfc.maven.archetypes | | [http://maven.rodcoffin.com/repo] | JPA application |
+| spring-osgi-bundle-archetype | org.springframework.osgi | 1.0-m3-SNAPSHOT | [http://static.springframework.org/maven2-snapshots] | Spring-OSGi archetype |
+| confluence-plugin-archetype | com.atlassian.maven.archetypes | | [http://repository.atlassian.com/maven2] | Atlassian Confluence plugin archetype |
+| maven-archetype-har | net.sf.maven-har | 0.9 | [http://repo1.maven.org/maven2] | Hibernate Archive |
+| maven-archetype-sar | net.sf.maven-sar | 0.9 | [http://repo1.maven.org/maven2] | JBoss Service Archive |
+| wicket-archetype-quickstart | org.apache.wicket | 1.3.0-beta3 | [http://repo1.maven.org/maven2] | A simple Apache Wicket project |
+
+h3. Additional Information
+
+* There is a maven-archetypes project on java.net:
+** [https://maven-archetypes.dev.java.net/]
+** [https://maven-archetypes.dev.java.net/source/browse/maven-archetypes/trunk/archetypes/org/jvnet/archetypes/]
+
+* Webtide has some archetypes available for download and installation locally. (Not in a public repository as far as I know.)
+** [http://www.webtide.com/resources.jsp]
+
+* A SEAM archetype is available from Lunar Logic
+** [http://www.nabble.com/Announcement%3A-Seam-Archetype-t2735410s177.html]
+** [http://www.lunarlogic.com/blog/show/maven_archetype_for_jboss_seam]
+* JSF archetypes from SoftEU
+** [http://software.softeu.cz/archetypes/jsf/] JSF+Facelets
+** [http://software.softeu.cz/archetypes/seam/] JSF+Facelets+Seam ([http://software.softeu.cz/seam/] Maven Seam integration)
+** [http://software.softeu.cz/archetypes/seam-simple/] JSF+Facelets+Seam (no hibernate)

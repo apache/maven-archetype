@@ -47,7 +47,12 @@ public class WikiArchetypeDataSource
     public List getArchetypes( Properties properties )
         throws ArchetypeDataSourceException
     {
-        String url = properties.getProperty( URL );
+        String url = null;
+
+        if ( properties != null )
+        {
+            url = properties.getProperty( URL );
+        }
 
         if ( url == null )
         {

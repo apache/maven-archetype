@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 
 /** @author Jason van Zyl */
 public class CatalogArchetypeDataSink
@@ -43,5 +44,15 @@ public class CatalogArchetypeDataSink
         {
             IOUtil.close( writer );
         }
+    }
+
+    public void putArchetypes( ArchetypeDataSource source,
+                               Properties properties,
+                               Writer writer )
+        throws ArchetypeDataSourceException, ArchetypeDataSinkException
+    {
+        List archetypes = source.getArchetypes( properties );
+
+        putArchetypes( archetypes, writer );
     }
 }
