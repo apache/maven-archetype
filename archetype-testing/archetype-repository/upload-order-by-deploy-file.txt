@@ -1,0 +1,76 @@
+M PUT
+PI /org/some/group/your-artifact/1.0/your-artifact-1.0.jar
+RU http://localhost:8080/org/some/group/your-artifact/1.0/your-artifact-1.0.jar
+CO PK
+
+M PUT
+PI /org/some/group/your-artifact/1.0/your-artifact-1.0.jar.md5
+RU http://localhost:8080/org/some/group/your-artifact/1.0/your-artifact-1.0.jar.md5
+CO 47ff87420f24200edf383ba4a53ed645
+
+M PUT
+PI /org/some/group/your-artifact/1.0/your-artifact-1.0.jar.sha1
+RU http://localhost:8080/org/some/group/your-artifact/1.0/your-artifact-1.0.jar.sha1
+CO c2a1763a75e23880db524df59abcb8e64bf90a7d
+
+M GET
+PI /org/some/group/your-artifact/maven-metadata.xml
+RU http://localhost:8080/org/some/group/your-artifact/maven-metadata.xml
+
+M GET
+PI /org/some/group/your-artifact/maven-metadata.xml.sha1
+RU http://localhost:8080/org/some/group/your-artifact/maven-metadata.xml.sha1
+
+M GET
+PI /org/some/group/your-artifact/maven-metadata.xml
+RU http://localhost:8080/org/some/group/your-artifact/maven-metadata.xml
+
+M GET
+PI /org/some/group/your-artifact/maven-metadata.xml.sha1
+RU http://localhost:8080/org/some/group/your-artifact/maven-metadata.xml.sha1
+
+M PUT
+PI /org/some/group/your-artifact/maven-metadata.xml
+RU http://localhost:8080/org/some/group/your-artifact/maven-metadata.xml
+CO <?xml version="1.0" encoding="UTF-8"?><metadata>
+
+M PUT
+PI /org/some/group/your-artifact/maven-metadata.xml.md5
+RU http://localhost:8080/org/some/group/your-artifact/maven-metadata.xml.md5
+CO f513bc672a2b7f2bbb557cdde793bf30
+
+M PUT
+PI /org/some/group/your-artifact/maven-metadata.xml.sha1
+RU http://localhost:8080/org/some/group/your-artifact/maven-metadata.xml.sha1
+CO 22e31685a6fa47c579bc59565dd916bfa7f6445f
+
+M GET
+PI /org/some/group/your-artifact/1.0/your-artifact-1.0.pom
+RU http://localhost:8080/org/some/group/your-artifact/1.0/your-artifact-1.0.pom
+
+M GET
+PI /org/some/group/your-artifact/1.0/your-artifact-1.0.pom.sha1
+RU http://localhost:8080/org/some/group/your-artifact/1.0/your-artifact-1.0.pom.sha1
+
+M GET
+PI /org/some/group/your-artifact/1.0/your-artifact-1.0.pom
+RU http://localhost:8080/org/some/group/your-artifact/1.0/your-artifact-1.0.pom
+
+M GET
+PI /org/some/group/your-artifact/1.0/your-artifact-1.0.pom.sha1
+RU http://localhost:8080/org/some/group/your-artifact/1.0/your-artifact-1.0.pom.sha1
+
+M PUT
+PI /org/some/group/your-artifact/1.0/your-artifact-1.0.pom
+RU http://localhost:8080/org/some/group/your-artifact/1.0/your-artifact-1.0.pom
+CO <?xml version="1.0" encoding="UTF-8"?><project>
+
+M PUT
+PI /org/some/group/your-artifact/1.0/your-artifact-1.0.pom.md5
+RU http://localhost:8080/org/some/group/your-artifact/1.0/your-artifact-1.0.pom.md5
+CO 8015b21d6aefd4c0800ca37ba6398cac
+
+M PUT
+PI /org/some/group/your-artifact/1.0/your-artifact-1.0.pom.sha1
+RU http://localhost:8080/org/some/group/your-artifact/1.0/your-artifact-1.0.pom.sha1
+CO 5d85923f8e2ec12fc039b49a2f12573277e17c15

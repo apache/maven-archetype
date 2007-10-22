@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><metadata>
+  <plugins>
+    <plugin>
+      <name>Maven Clean Plugin</name>
+      <prefix>clean</prefix>
+      <artifactId>maven-clean-plugin</artifactId>
+    </plugin>
+  </plugins>
+</metadata>
