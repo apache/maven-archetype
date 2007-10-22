@@ -38,6 +38,7 @@
   <packaging>pom</packaging>
 
   <modules>
+    <module>archetype-testing</module>
     <module>archetypeng-common</module>
     <module>archetypeng-plugin</module>
     <module>archetypeng-packaging</module>
