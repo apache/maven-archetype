@@ -51,10 +51,15 @@ public class RemoteCatalogArchetypeDataSource
     public List getArchetypes( Properties properties )
         throws ArchetypeDataSourceException
     {
+        String repository = properties.getProperty( REPOSITORY_PROPERTY );
+        
+        if ( repository == null )
+        {
+            throw new ArchetypeDataSourceException( "To use the remote catalog you must specify the 'remote-catalog.repository' property correctly in your ~/.m2/archetype-catalog.properties file." );
+        }
+        
         try
         {
-            String repository = properties.getProperty( REPOSITORY_PROPERTY );
-
             if ( repository.endsWith( "/" ) )
             {
                 repository = repository.substring( 0, repository.length(  ) - 1 );
