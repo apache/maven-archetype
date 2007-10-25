@@ -71,9 +71,15 @@ public class CatalogArchetypeDataSinkTest
 
         Properties p = new Properties();
 
-        p.setProperty( WikiArchetypeDataSource.URL, new File( getBasedir(), "test/sources/wiki-source.txt" ).toURI().toURL().toExternalForm() );
+        File wikiSource = new File( getBasedir(), "src/test/sources/wiki/wiki-source.txt" );
 
-        sink.putArchetypes( new WikiArchetypeDataSource(), null , writer );
+        assertTrue( wikiSource.exists() );
+
+        p.setProperty( WikiArchetypeDataSource.URL, wikiSource.toURI().toURL().toExternalForm() );
+
+        ArchetypeDataSource ads = new WikiArchetypeDataSource();
+
+        sink.putArchetypes( ads, p, writer );
 
         StringReader reader = new StringReader( writer.toString() );
 
@@ -81,10 +87,8 @@ public class CatalogArchetypeDataSinkTest
 
         ArchetypeCatalog catalog = catalogReader.read( reader );
 
-        Archetyper archetype = (Archetyper) lookup( Archetyper.ROLE );
+        int catalogSize = catalog.getArchetypes().size();
 
-        int size = archetype.getAvailableArchetypes().size();
-
-        assertEquals( size, catalog.getArchetypes().size() );
+        assertEquals( 37, catalogSize );
     }
 }

@@ -86,6 +86,8 @@ public class WikiArchetypeDataSource
         Pattern ptn = Pattern.compile(
             "<br>\\|([-a-zA-Z0-9_. ]+)\\|([-a-zA-Z0-9_. ]+)\\|([-a-zA-Z0-9_. ]+)\\|([-a-zA-Z0-9_.:/ \\[\\],]+)\\|([^|]+)\\|" );
 
+        System.out.println( "sb.toString() = " + sb.toString() );
+
         Matcher m = ptn.matcher( sb.toString() );
 
         while ( m.find() )
