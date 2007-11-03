@@ -1,4 +1,4 @@
-package projects.roundtrip-1-project.src.test.java.org.apache.maven.test;
+package org.apache.maven.test;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
