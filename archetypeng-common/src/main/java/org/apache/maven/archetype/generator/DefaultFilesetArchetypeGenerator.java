@@ -20,7 +20,6 @@
 package org.apache.maven.archetype.generator;
 
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
-import org.apache.maven.archetype.common.ArchetypeConfiguration;
 import org.apache.maven.archetype.common.ArchetypeFilesResolver;
 import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.common.PomManager;
@@ -54,7 +53,6 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
