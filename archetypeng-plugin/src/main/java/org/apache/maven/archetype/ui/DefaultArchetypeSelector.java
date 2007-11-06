@@ -64,7 +64,13 @@ public class DefaultArchetypeSelector
         ArchetypeSelectionFailure
     {
         ArchetypeDefinition definition = new ArchetypeDefinition();
-
+        
+        definition.setArtifactId( request.getArchetypeArtifactId() );
+ 
+        definition.setGroupId( request.getArchetypeGroupId() );
+        
+        definition.setVersion( request.getArchetypeVersion() );
+        
         if ( interactiveMode.booleanValue() )
         {
             if ( !definition.isDefined() )
