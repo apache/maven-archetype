@@ -91,8 +91,11 @@ public class DefaultArchetypeGenerationConfigurator
         {
             throw new ArchetypeNotDefined( "The archetype is not defined" );
         }
-
-        repositories.add( archetypeRegistryManager.createRepository( request.getRemoteRepository(), ad.getArtifactId() + "-repo" ) );
+        
+        if ( request.getRemoteRepository() != null ) 
+        { 
+            repositories.add( archetypeRegistryManager.createRepository( request.getRemoteRepository(), ad.getArtifactId() + "-repo" ) );
+        }
 
         if ( !archetypeArtifactManager.exists( ad.getGroupId(), ad.getArtifactId(), ad.getVersion(), localRepository, repositories ) )
         {
@@ -185,6 +188,8 @@ public class DefaultArchetypeGenerationConfigurator
 
         request.setPackage( archetypeConfiguration.getProperty( Constants.PACKAGE ) );
 
+        properties = archetypeConfiguration.getProperties();
+        
         properties.remove( Constants.GROUP_ID );
 
         properties.remove( Constants.ARTIFACT_ID );
@@ -192,7 +197,7 @@ public class DefaultArchetypeGenerationConfigurator
         properties.remove( Constants.VERSION );
 
         properties.remove( Constants.PACKAGE );
-
+        
         request.setProperties( properties );
     }
 }
