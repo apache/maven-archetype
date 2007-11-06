@@ -122,7 +122,7 @@ public class DefaultArchetypeGenerator
 
         List repos = new ArrayList( /*repositories*/ );
 
-        if ( request != null )
+        if ( request != null  && request.getArchetypeRepository() != null )
         {
             ArtifactRepository remoteRepo = archetypeRegistryManager.createRepository(
                 request.getArchetypeRepository(),
