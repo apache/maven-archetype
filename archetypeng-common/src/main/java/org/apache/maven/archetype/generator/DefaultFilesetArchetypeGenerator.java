@@ -362,7 +362,7 @@ public class DefaultFilesetArchetypeGenerator
     {
         Context context = new VelocityContext();
         context.put(Constants.GROUP_ID, request.getGroupId());
-        context.put(Constants.ARTIFACT_ID, request.getVersion());
+        context.put(Constants.ARTIFACT_ID, request.getArtifactId());
         context.put(Constants.VERSION, request.getVersion());
         context.put(Constants.PACKAGE, request.getPackage());
         
