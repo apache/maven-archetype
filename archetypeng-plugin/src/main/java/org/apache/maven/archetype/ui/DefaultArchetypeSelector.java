@@ -21,9 +21,7 @@ package org.apache.maven.archetype.ui;
 
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.catalog.Archetype;
-import org.apache.maven.archetype.common.ArchetypeArtifactManager;
 import org.apache.maven.archetype.common.ArchetypeDefinition;
-import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 import org.apache.maven.archetype.exception.ArchetypeNotDefined;
 import org.apache.maven.archetype.exception.ArchetypeSelectionFailure;
 import org.apache.maven.archetype.exception.UnknownArchetype;
