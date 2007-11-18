@@ -23,11 +23,11 @@ import java.util.Map;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
- * @version $Id: Archetype.java 390965 2006-04-03 06:55:06Z brett $
+ * @version $Id$
  */
-public interface Archetype
+public interface OldArchetype
 {
-    String ROLE = Archetype.class.getName();
+    String ROLE = OldArchetype.class.getName();
 
     String ARCHETYPE_DESCRIPTOR = "META-INF/maven/archetype.xml";
 

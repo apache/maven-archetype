@@ -48,7 +48,7 @@ public class ArchetypeGenerationRequest
 
     private List mirrors = new ArrayList(  );
 
-    // Archetype definition
+    // OldArchetype definition
     private String archetypeName;
 
     private String archetypeGroupId;
@@ -61,7 +61,7 @@ public class ArchetypeGenerationRequest
 
     private String archetypeRepository;
 
-    // Archetype configuration
+    // OldArchetype configuration
     private String groupId;
 
     private String artifactId;

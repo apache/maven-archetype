@@ -31,18 +31,6 @@ import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
-import org.codehaus.plexus.PlexusTestCase;
-import org.codehaus.plexus.util.FileUtils;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.OutputStream;
-import java.io.Writer;
-import java.util.Properties;
-import org.apache.maven.archiver.MavenArchiveConfiguration;
-import org.codehaus.cargo.container.Container;
-import org.codehaus.cargo.container.EmbeddedLocalContainer;
-import org.codehaus.cargo.container.configuration.Configuration;
 import org.codehaus.cargo.container.deployable.DeployableType;
 import org.codehaus.cargo.container.deployable.WAR;
 import org.codehaus.cargo.container.deployer.Deployer;
@@ -50,11 +38,18 @@ import org.codehaus.cargo.container.jetty.Jetty6xEmbeddedLocalContainer;
 import org.codehaus.cargo.container.jetty.Jetty6xEmbeddedLocalDeployer;
 import org.codehaus.cargo.container.jetty.Jetty6xEmbeddedStandaloneLocalConfiguration;
 import org.codehaus.cargo.container.property.ServletPropertySet;
-import org.codehaus.cargo.generic.configuration.ConfigurationFactory;
-import org.codehaus.cargo.generic.configuration.DefaultConfigurationFactory;
 import org.codehaus.cargo.generic.deployable.DefaultDeployableFactory;
 import org.codehaus.cargo.generic.deployable.DeployableFactory;
+import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.OutputStream;
+import java.io.Writer;
+import java.util.Properties;
 
 
 /** @author Jason van Zyl */
@@ -129,13 +124,14 @@ public class ArchetyperRoundtripTest
     File generatedArchetypePom = new File( generatedArchetypeDirectory, "pom.xml" );
     MavenProject generatedArchetypeProject = projectBuilder.build( generatedArchetypePom,
                                                                    localRepository, null );
+
     File archetypeDirectory = new File( generatedArchetypeDirectory, "src/main/resources" );
-    File archetypeArchive = archetype.archiveArchetype(
-        archetypeDirectory, generatedArchetypeProject,
+
+    File archetypeArchive = archetype.archiveArchetype( archetypeDirectory,
         new File( generatedArchetypeProject.getBuild().getDirectory() ),
-        generatedArchetypeProject.getBuild().getFinalName(),
-        new MavenArchiveConfiguration() );
-    File archetypeInRepository = new File( localRepository.getBasedir(),
+        generatedArchetypeProject.getBuild().getFinalName() );
+
+      File archetypeInRepository = new File( localRepository.getBasedir(),
                                            StringUtils.replace(
                                            generatedArchetypeProject.getGroupId(), ".",
                                            "/" ) + "/" +
@@ -174,7 +170,7 @@ public class ArchetyperRoundtripTest
         setPackage( "com.mycompany.myapp" ).setOutputDirectory( outputDirectory ).
         setLocalRepository( localRepository ).setArchetypeRepository( "http://127.0.0.1:18881/" );
     ArchetypeGenerationResult generationResult = archetype.generateProjectFromArchetype( agr );
-    
+
     if ( generationResult.getCause() != null )
     {
       fail( generationResult.getCause().getMessage() );

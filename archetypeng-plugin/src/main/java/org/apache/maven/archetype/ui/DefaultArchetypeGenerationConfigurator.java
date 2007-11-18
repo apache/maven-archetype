@@ -19,7 +19,7 @@
 
 package org.apache.maven.archetype.ui;
 
-import org.apache.maven.archetype.old.Archetype;
+import org.apache.maven.archetype.old.OldArchetype;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
 import org.apache.maven.archetype.common.ArchetypeConfiguration;
@@ -46,7 +46,7 @@ public class DefaultArchetypeGenerationConfigurator
     implements ArchetypeGenerationConfigurator
 {
     /** @plexus.requirement */
-    Archetype oldArchetype;
+    OldArchetype oldArchetype;
 
     /** @plexus.requirement */
     private ArchetypeArtifactManager archetypeArtifactManager;
@@ -160,12 +160,12 @@ public class DefaultArchetypeGenerationConfigurator
                 }
                 else if ( !archetypeGenerationQueryer.confirmConfiguration( archetypeConfiguration ) )
                 {
-                    getLogger().debug( "Archetype generation configuration not confirmed" );
+                    getLogger().debug( "OldArchetype generation configuration not confirmed" );
                     archetypeConfiguration.reset();
                 }
                 else
                 {
-                    getLogger().debug( "Archetype generation configuration confirmed" );
+                    getLogger().debug( "OldArchetype generation configuration confirmed" );
 
                     confirmed = true;
                 }

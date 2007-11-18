@@ -113,7 +113,7 @@ public class DefaultArchetypeCreationConfigurator
             {
                 if ( !archetypeDefinition.isDefined() )
                 {
-                    getLogger().debug( "Archetype is not defined" );
+                    getLogger().debug( "OldArchetype is not defined" );
                     if ( !archetypeDefinition.isGroupDefined() )
                     {
                         getLogger().debug( "Asking for archetype's groupId" );
@@ -146,7 +146,7 @@ public class DefaultArchetypeCreationConfigurator
 
                 if ( !archetypeConfiguration.isConfigured() )
                 {
-                    getLogger().debug( "Archetype is not configured" );
+                    getLogger().debug( "OldArchetype is not configured" );
                     if ( !archetypeConfiguration.isConfigured( Constants.GROUP_ID ) )
                     {
                         getLogger().debug( "Asking for project's groupId" );

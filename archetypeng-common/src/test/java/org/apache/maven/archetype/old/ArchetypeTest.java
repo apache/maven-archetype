@@ -49,12 +49,12 @@ import java.util.Map;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
- * @version $Id: ArchetypeTest.java 393739 2006-04-13 06:53:02Z brett $
+ * @version $Id$
  */
 public class ArchetypeTest
     extends PlexusTestCase
 {
-    private Archetype archetype;
+    private OldArchetype archetype;
 
     public void testArchetype()
         throws Exception
@@ -134,7 +134,7 @@ public class ArchetypeTest
         {
             VelocityComponent velocity = (VelocityComponent) lookup( VelocityComponent.class.getName() );
 
-            velocity.getEngine().mergeTemplate( Archetype.ARCHETYPE_RESOURCES + "/" + Archetype.ARCHETYPE_POM, context,
+            velocity.getEngine().mergeTemplate( OldArchetype.ARCHETYPE_RESOURCES + "/" + OldArchetype.ARCHETYPE_POM, context,
                                                 writer );
         }
         finally
@@ -157,7 +157,7 @@ public class ArchetypeTest
         }
 
         File artifactDir = getTestFile( "target", (String) parameters.get( "artifactId" ) );
-        File pomFile = getTestFile( artifactDir.getAbsolutePath(), Archetype.ARCHETYPE_POM );
+        File pomFile = getTestFile( artifactDir.getAbsolutePath(), OldArchetype.ARCHETYPE_POM );
 
         try
         {
@@ -207,7 +207,7 @@ public class ArchetypeTest
         }
         catch ( ArtifactNotFoundException e )
         {
-            throw new ArchetypeNotFoundException( "Archetype does not exist: " + e.getMessage(), e );
+            throw new ArchetypeNotFoundException( "OldArchetype does not exist: " + e.getMessage(), e );
         }
 
         URLClassLoader archetypeJarLoader;
@@ -222,7 +222,7 @@ public class ArchetypeTest
         catch ( IOException e )
         {
             throw new ArchetypeDescriptorException(
-                "Error reading the " + Archetype.ARCHETYPE_DESCRIPTOR + " descriptor.", e );
+                "Error reading the " + OldArchetype.ARCHETYPE_DESCRIPTOR + " descriptor.", e );
         }
 
         return archetypeJarLoader;
@@ -234,7 +234,7 @@ public class ArchetypeTest
         String pom = "<project>\n  <packaging>pom</packaging>\n</project>";
 
         StringWriter out = new StringWriter();
-        assertTrue( DefaultArchetype.addModuleToParentPom( "myArtifactId1", new StringReader( pom ), out ) );
+        assertTrue( DefaultOldArchetype.addModuleToParentPom( "myArtifactId1", new StringReader( pom ), out ) );
 
         assertEquals( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + "<project>\n" +
             "  <packaging>pom</packaging>\n" + "  <modules>\n" + "    <module>myArtifactId1</module>\n" +
@@ -243,7 +243,7 @@ public class ArchetypeTest
         pom = "<project>\n  <modelVersion>4.0.0</modelVersion>\n" + "  <packaging>pom</packaging>\n" + "</project>";
 
         out = new StringWriter();
-        assertTrue( DefaultArchetype.addModuleToParentPom( "myArtifactId2", new StringReader( pom ), out ) );
+        assertTrue( DefaultOldArchetype.addModuleToParentPom( "myArtifactId2", new StringReader( pom ), out ) );
 
         assertEquals( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + "<project>\n" +
             "  <modelVersion>4.0.0</modelVersion>\n" + "  <packaging>pom</packaging>\n" + "  <modules>\n" +
@@ -253,7 +253,7 @@ public class ArchetypeTest
             "  </modules>\n" + "</project>";
 
         out = new StringWriter();
-        assertTrue( DefaultArchetype.addModuleToParentPom( "myArtifactId3", new StringReader( pom ), out ) );
+        assertTrue( DefaultOldArchetype.addModuleToParentPom( "myArtifactId3", new StringReader( pom ), out ) );
 
         assertEquals( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project><modelVersion>4.0.0</modelVersion>\n" +
             "  <packaging>pom</packaging>\n" + "  <modules>\n" + "    <module>myArtifactId3</module>\n" +
@@ -263,7 +263,7 @@ public class ArchetypeTest
             "    <module>myArtifactId3</module>\n" + "  </modules>\n" + "</project>";
 
         out = new StringWriter();
-        assertTrue( DefaultArchetype.addModuleToParentPom( "myArtifactId4", new StringReader( pom ), out ) );
+        assertTrue( DefaultOldArchetype.addModuleToParentPom( "myArtifactId4", new StringReader( pom ), out ) );
 
         assertEquals( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project><modelVersion>4.0.0</modelVersion>\n" +
             "  <packaging>pom</packaging>\n" + "  <modules>\n" + "    <module>myArtifactId3</module>\n" +
@@ -273,7 +273,7 @@ public class ArchetypeTest
             "    <module>myArtifactId3</module>\n" + "  </modules>\n" + "</project>";
 
         out = new StringWriter();
-        assertFalse( DefaultArchetype.addModuleToParentPom( "myArtifactId3", new StringReader( pom ), out ) );
+        assertFalse( DefaultOldArchetype.addModuleToParentPom( "myArtifactId3", new StringReader( pom ), out ) );
 
         // empty means unchanged
         assertEquals( "", out.toString() );
@@ -285,7 +285,7 @@ public class ArchetypeTest
         try
         {
             String pom = "<project>\n</project>";
-            DefaultArchetype.addModuleToParentPom( "myArtifactId1", new StringReader( pom ), new StringWriter() );
+            DefaultOldArchetype.addModuleToParentPom( "myArtifactId1", new StringReader( pom ), new StringWriter() );
             fail( "Should fail to add a module to a JAR packaged project" );
         }
         catch ( ArchetypeTemplateProcessingException e )
@@ -301,7 +301,7 @@ public class ArchetypeTest
         try
         {
             String pom = "<project>\n  <packaging>jar</packaging>\n</project>";
-            DefaultArchetype.addModuleToParentPom( "myArtifactId1", new StringReader( pom ), new StringWriter() );
+            DefaultOldArchetype.addModuleToParentPom( "myArtifactId1", new StringReader( pom ), new StringWriter() );
             fail( "Should fail to add a module to a JAR packaged project" );
         }
         catch ( ArchetypeTemplateProcessingException e )
@@ -315,6 +315,6 @@ public class ArchetypeTest
         throws Exception
     {
         super.setUp();
-        archetype = (Archetype) lookup( Archetype.ROLE );
+        archetype = (OldArchetype) lookup( OldArchetype.ROLE );
     }
 }

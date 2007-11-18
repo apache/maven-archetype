@@ -194,7 +194,7 @@ public class CreateArchetypeFromProjectMojo
                 throw new MojoExecutionException( result.getCause().getMessage(), result.getCause() );
             }
 
-            getLog().info( "Archetype created in target/generated-sources/archetypeng" );
+            getLog().info( "OldArchetype created in target/generated-sources/archetypeng" );
 
             if ( testMode )
             {

@@ -79,7 +79,16 @@ public class DefaultArchetypeCreatorTest
 
         Properties p = PropertyUtils.loadProperties( propertyFile );
 
-        MavenProject mavenProject = builder.buildWithDependencies( projectFile, localRepository, null );
+        MavenProject mavenProject = null;
+        
+        try
+        {
+            mavenProject = builder.buildWithDependencies( projectFile, localRepository, null );
+        }
+        catch( Exception e )
+        {
+            e.printStackTrace();
+        }
 
         FilesetArchetypeCreator instance = (FilesetArchetypeCreator) lookup( ArchetypeCreator.class.getName(), "fileset" );
 

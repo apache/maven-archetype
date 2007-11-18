@@ -19,7 +19,7 @@
 
 package org.apache.maven.archetype.generator;
 
-import org.apache.maven.archetype.old.Archetype;
+import org.apache.maven.archetype.old.OldArchetype;
 import org.apache.maven.archetype.old.ArchetypeDescriptorException;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
@@ -61,39 +61,11 @@ public class DefaultArchetypeGenerator
     /** @plexus.requirement */
     private ArchetypeArtifactManager archetypeArtifactManager;
 
-//    /** @plexus.requirement */
-//    private ArchetypePropertiesManager archetypePropertiesManager;
-
     /** @plexus.requirement */
     private FilesetArchetypeGenerator filesetGenerator;
 
     /** @plexus.requirement */
-    private Archetype oldArchetype;
-
-    //TODO: This is required for test and needs to be converted over to using the request
-    // Compile time deprecation
-//    public void generateArchetype(
-//        File propertyFile,
-//        ArtifactRepository localRepository,
-//        List repositories,
-//        String basedir )
-//        throws
-//        IOException,
-//        ArchetypeNotDefined,
-//        UnknownArchetype,
-//        ArchetypeNotConfigured,
-//        ProjectDirectoryExists,
-//        PomFileExists,
-//        OutputFileExists,
-//        XmlPullParserException,
-//        DocumentException,
-//        InvalidPackaging,
-//        ArchetypeGenerationFailure
-//    {
-//        Properties properties = PropertyUtils.loadProperties( propertyFile );
-//
-//        generateArchetype( null, properties, localRepository, repositories, basedir );
-//    }
+    private OldArchetype oldArchetype;
 
     private void generateArchetype(
         ArchetypeGenerationRequest request,
@@ -312,26 +284,6 @@ public class DefaultArchetypeGenerator
         
         try
         {
-//            Properties properties = request.getProperties();
-//
-//            properties.setProperty( Constants.ARCHETYPE_GROUP_ID, request.getArchetypeGroupId() );
-//
-//            properties.setProperty( Constants.ARCHETYPE_ARTIFACT_ID, request.getArchetypeArtifactId() );
-//
-//            properties.setProperty( Constants.ARCHETYPE_VERSION, request.getArchetypeVersion() );
-//
-//            properties.setProperty( Constants.GROUP_ID, request.getGroupId(  ) );
-//
-//            properties.setProperty( Constants.ARTIFACT_ID, request.getArtifactId(  ) );
-//
-//            properties.setProperty( Constants.VERSION, request.getVersion() );
-//
-//            properties.setProperty( Constants.PACKAGE, request.getPackage(  ) );
-//
-//            properties.setProperty( Constants.ARCHETYPE_POST_GENERATION_GOALS, request.getArchetypeGoals() );
-
-            //ArtifactRepository repo = archetypeRegistryManager.createRepository( request.getArchetypeRepository(), "repository" );
-
             generateArchetype( request, null, request.getLocalRepository(), null/*Collections.singletonList( repo )*/, request.getOutputDirectory(  ) );
         }
         catch ( IOException ex )

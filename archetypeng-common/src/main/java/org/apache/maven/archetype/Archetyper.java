@@ -19,15 +19,12 @@
 
 package org.apache.maven.archetype;
 
+import org.apache.maven.artifact.DependencyResolutionRequiredException;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
-import org.apache.maven.archiver.MavenArchiveConfiguration;
-import org.apache.maven.artifact.DependencyResolutionRequiredException;
-import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.archiver.ArchiverException;
-import org.codehaus.plexus.archiver.jar.ManifestException;
 
 /** @author Jason van Zyl */
 public interface Archetyper
@@ -35,7 +32,7 @@ public interface Archetyper
     String ROLE = Archetyper.class.getName(  );
 
     /**
-     * A command to create an Archetype from an existing Maven project given the suppled
+     * A command to create an OldArchetype from an existing Maven project given the suppled
      * creation request.
      *
      * @param request
@@ -44,7 +41,7 @@ public interface Archetyper
     ArchetypeCreationResult createArchetypeFromProject( ArchetypeCreationRequest request );
 
     /**
-     * A command to generate a Maven project from an Archetype given the suppled
+     * A command to generate a Maven project from an OldArchetype given the suppled
      * generation request.
      *
      * @param request
@@ -74,10 +71,8 @@ public interface Archetyper
     /**
      * Creates a jar file for an archetype.
      * @param archetypeDirectory
-     * @param project
      * @param outputDirectory
      * @param finalName
-     * @param archive
      * @return The File to the generated jar
      * @throws org.codehaus.plexus.archiver.ArchiverException
      * @throws org.codehaus.plexus.archiver.jar.ManifestException
@@ -86,9 +81,7 @@ public interface Archetyper
      */
     File archiveArchetype(
         File archetypeDirectory,
-        MavenProject project,
         File outputDirectory,
-        String finalName,
-        MavenArchiveConfiguration archive )
-    throws ArchiverException, ManifestException, DependencyResolutionRequiredException, IOException;
+        String finalName )
+    throws DependencyResolutionRequiredException, IOException;
 }

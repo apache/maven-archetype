@@ -139,10 +139,14 @@ public class DefaultArchetypeGeneratorTest
         request.setProperties( additionalProperties );
 
         ArchetypeGenerationResult result=new ArchetypeGenerationResult();
+
         instance.generateArchetype(request, result);
+
         if ( result.getCause() != null )
         {
-            fail( "No exception may be thrown" );
+            fail( "No exception may be thrown: " + result.getCause().getMessage() );
+
+            result.getCause().printStackTrace();
         }
 
         String template;

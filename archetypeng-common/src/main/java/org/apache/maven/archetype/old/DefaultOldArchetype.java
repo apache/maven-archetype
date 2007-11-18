@@ -66,11 +66,11 @@ import java.util.Set;
 /**
  * @plexus.component
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
- * @version $Id: DefaultArchetype.java 475957 2006-11-16 22:46:52Z jvanzyl $
+ * @version $Id$
  */
-public class DefaultArchetype
+public class DefaultOldArchetype
     extends AbstractLogEnabled
-    implements Archetype
+    implements OldArchetype
 {
     private static final String DEFAULT_TEST_RESOURCE_DIR = "/src/test/resources";
 
@@ -127,7 +127,7 @@ public class DefaultArchetype
         }
         catch ( DownloadNotFoundException e )
         {
-            throw new ArchetypeNotFoundException( "Archetype does not exist.", e );
+            throw new ArchetypeNotFoundException( "OldArchetype does not exist.", e );
         }
 
         // ---------------------------------------------------------------------
@@ -139,7 +139,7 @@ public class DefaultArchetype
             {
                 getLogger().info( "----------------------------------------------------------------------------" );
 
-                getLogger().info( "Using following parameters for creating Archetype: " + archetypeArtifactId + ":" +
+                getLogger().info( "Using following parameters for creating OldArchetype: " + archetypeArtifactId + ":" +
                     archetypeVersion );
 
                 getLogger().info( "----------------------------------------------------------------------------" );
@@ -159,7 +159,7 @@ public class DefaultArchetype
             }
             else
             {
-                getLogger().info( "No Parameters found for creating Archetype" );
+                getLogger().info( "No Parameters found for creating OldArchetype" );
             }
         }
 
@@ -398,11 +398,11 @@ public class DefaultArchetype
         }
 
         // ----------------------------------------------------------------------
-        // Log message on Archetype creation
+        // Log message on OldArchetype creation
         // ----------------------------------------------------------------------
         if ( getLogger().isInfoEnabled() )
         {
-            getLogger().info( "Archetype created in dir: " + outputDirectory );
+            getLogger().info( "OldArchetype created in dir: " + outputDirectory );
         }
 
     }

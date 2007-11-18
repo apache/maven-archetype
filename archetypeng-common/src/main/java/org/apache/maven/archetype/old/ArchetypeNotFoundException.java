@@ -18,22 +18,22 @@ package org.apache.maven.archetype.old;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
- * @version $Id: ArchetypeDescriptorException.java 390965 2006-04-03 06:55:06Z brett $
+ * @version $Id$
  */
-public class ArchetypeDescriptorException
+public class ArchetypeNotFoundException
     extends Exception
 {
-    public ArchetypeDescriptorException( String message )
+    public ArchetypeNotFoundException( String message )
     {
         super( message );
     }
 
-    public ArchetypeDescriptorException( Throwable cause )
+    public ArchetypeNotFoundException( Throwable cause )
     {
         super( cause );
     }
 
-    public ArchetypeDescriptorException( String message, Throwable cause )
+    public ArchetypeNotFoundException( String message, Throwable cause )
     {
         super( message, cause );
     }

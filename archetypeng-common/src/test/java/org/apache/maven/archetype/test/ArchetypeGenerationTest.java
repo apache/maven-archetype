@@ -56,11 +56,11 @@ public class ArchetypeGenerationTest
             .toURI().toURL().toExternalForm());
         List archetypes = archetype.getAvailableArchetypes( catalogProperties );
 System.err.println("archetypes => "+archetypes);
-        // Here I am just grabbing a Archetype but in a UI you would take the Archetype objects and present
+        // Here I am just grabbing a OldArchetype but in a UI you would take the OldArchetype objects and present
         // them to the user.
 
         Archetype selection = (Archetype) archetypes.get( archetypes.size() -1 );
-System.err.println("Selected Archetype = "+selection);
+System.err.println("Selected OldArchetype = "+selection);
         // Now you will present a dialog, or whatever, and grab the following values.
 
         String groupId = "com.mycompany";
@@ -71,7 +71,7 @@ System.err.println("Selected Archetype = "+selection);
 
         String packageName = "org.mycompany.app";
 
-        // With the selected Archetype and the parameters you can create a generation request as follows:
+        // With the selected OldArchetype and the parameters you can create a generation request as follows:
 
         ArchetypeGenerationRequest agr = new ArchetypeGenerationRequest( selection )
             .setOutputDirectory( new File( getBasedir(),

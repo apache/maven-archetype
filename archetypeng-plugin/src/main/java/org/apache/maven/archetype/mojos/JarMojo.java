@@ -20,7 +20,6 @@
 package org.apache.maven.archetype.mojos;
 
 import java.io.IOException;
-import org.apache.maven.archiver.MavenArchiveConfiguration;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -28,8 +27,6 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 import java.io.File;
 import org.apache.maven.archetype.Archetyper;
-import org.codehaus.plexus.archiver.ArchiverException;
-import org.codehaus.plexus.archiver.jar.ManifestException;
 
 /**
  * @author           rafale
@@ -47,17 +44,6 @@ public class JarMojo
      * @required
      */
     private File archetypeDirectory;
-
-    /**
-     * The maven archive configuration to use.
-     *
-     * <p>See <a
-     * href="http://maven.apache.org/ref/current/maven-archiver/apidocs/org/apache/maven/archiver/MavenArchiveConfiguration.html">
-     * the Javadocs for MavenArchiveConfiguration</a>.</p>
-     *
-     * @parameter
-     */
-    private MavenArchiveConfiguration archive = new MavenArchiveConfiguration(  );
 
     /**
      * Name of the generated JAR.
@@ -96,16 +82,9 @@ public class JarMojo
     {
         try
         {
-            File jarFile = archetyper.archiveArchetype( archetypeDirectory, project, outputDirectory, finalName, archive );
-            project.getArtifact(  ).setFile( jarFile );
-        }
-        catch ( ArchiverException ex )
-        {
-            throw new MojoExecutionException( ex.getMessage(  ), ex );
-        }
-        catch ( ManifestException ex )
-        {
-            throw new MojoExecutionException( ex.getMessage(  ), ex );
+            File jarFile = archetyper.archiveArchetype( archetypeDirectory, outputDirectory, finalName );
+
+            project.getArtifact().setFile( jarFile );
         }
         catch ( DependencyResolutionRequiredException ex )
         {

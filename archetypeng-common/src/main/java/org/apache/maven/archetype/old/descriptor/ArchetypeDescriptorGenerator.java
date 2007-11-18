@@ -1,4 +1,4 @@
-package org.apache.maven.archetype.old;
+package org.apache.maven.archetype.old.descriptor;
 
 /*
  * Copyright 2004-2006 The Apache Software Foundation.
@@ -17,24 +17,12 @@ package org.apache.maven.archetype.old;
  */
 
 /**
+ * Pass over the directory containing the sources of the archetype and create
+ * the appropriate descriptor.
+ *
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
- * @version $Id: ArchetypeNotFoundException.java 390965 2006-04-03 06:55:06Z brett $
+ * @version $Id$
  */
-public class ArchetypeNotFoundException
-    extends Exception
+public class ArchetypeDescriptorGenerator
 {
-    public ArchetypeNotFoundException( String message )
-    {
-        super( message );
-    }
-
-    public ArchetypeNotFoundException( Throwable cause )
-    {
-        super( cause );
-    }
-
-    public ArchetypeNotFoundException( String message, Throwable cause )
-    {
-        super( message, cause );
-    }
 }

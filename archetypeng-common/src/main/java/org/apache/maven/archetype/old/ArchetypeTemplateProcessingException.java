@@ -18,7 +18,7 @@ package org.apache.maven.archetype.old;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
- * @version $Id: ArchetypeTemplateProcessingException.java 390965 2006-04-03 06:55:06Z brett $
+ * @version $Id$
  */
 public class ArchetypeTemplateProcessingException
     extends Exception

@@ -32,14 +32,14 @@
   <artifactId>archetypeng-common</artifactId>
   <name>Maven Archetype Common</name>
   <packaging>jar</packaging>
-  <dependencies>
+  <dependencies>    
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-core</artifactId>
+    </dependency>
     <dependency>
       <groupId>net.sourceforge.jchardet</groupId>
       <artifactId>jchardet</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.shared</groupId>
-      <artifactId>maven-downloader</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.archetype</groupId>
@@ -55,27 +55,11 @@
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
-      <artifactId>maven-artifact</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-artifact-manager</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
       <artifactId>maven-model</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-project</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-repository-metadata</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-archiver</artifactId>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
@@ -150,6 +134,10 @@
       <version>6.1.4</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-file</artifactId>
+    </dependency>
   </dependencies>
 
   <build>
@@ -209,6 +197,19 @@
             <configuration>
               <version>1.0.0</version>
               <model>src/main/mdo/archetype-catalog.mdo</model>
+            </configuration>
+          </execution>
+          <execution>
+            <id>archetype-old</id>
+            <goals>
+              <goal>java</goal>
+              <goal>xsd</goal>
+              <goal>xpp3-reader</goal>
+              <goal>xpp3-writer</goal>
+            </goals>
+            <configuration>
+              <version>1.0.0</version>
+              <model>src/main/mdo/archetype.mdo</model>
             </configuration>
           </execution>
         </executions>

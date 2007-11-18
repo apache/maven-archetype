@@ -86,8 +86,6 @@ public class WikiArchetypeDataSource
         Pattern ptn = Pattern.compile(
             "<br>\\|([-a-zA-Z0-9_. ]+)\\|([-a-zA-Z0-9_. ]+)\\|([-a-zA-Z0-9_. ]+)\\|([-a-zA-Z0-9_.:/ \\[\\],]+)\\|([^|]+)\\|" );
 
-        System.out.println( "sb.toString() = " + sb.toString() );
-
         Matcher m = ptn.matcher( sb.toString() );
 
         while ( m.find() )
@@ -138,7 +136,7 @@ public class WikiArchetypeDataSource
     {
         ArchetypeDataSourceDescriptor d = new ArchetypeDataSourceDescriptor();
 
-        d.addParameter( URL, String.class, DEFAULT_ARCHETYPE_INVENTORY_PAGE, "The URL of the Wiki page which contains the Archetype information." );
+        d.addParameter( URL, String.class, DEFAULT_ARCHETYPE_INVENTORY_PAGE, "The URL of the Wiki page which contains the OldArchetype information." );
 
         return d;
     }

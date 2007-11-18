@@ -265,7 +265,7 @@ public class FilesetArchetypeCreator
 
         archetypeFilesDirectory.mkdirs();
 
-        getLogger().debug( "Archetype's files output directory " + archetypeFilesDirectory );
+        getLogger().debug( "OldArchetype's files output directory " + archetypeFilesDirectory );
 
         File replicaMainDirectory =
             FileUtils.resolveFile(
@@ -395,11 +395,11 @@ public class FilesetArchetypeCreator
                 archetypeFilesDirectory, basedir,
                 pomReversedProperties, preserveCData, keepParent );
 
-            getLogger().debug( "Created Archetype " + archetypeDescriptor.getName() + " pom" );
+            getLogger().debug( "Created OldArchetype " + archetypeDescriptor.getName() + " pom" );
 
             ArchetypeDescriptorXpp3Writer writer = new ArchetypeDescriptorXpp3Writer();
             writer.write( new FileWriter( archetypeDescriptorFile ), archetypeDescriptor );
-            getLogger().debug( "Archetype " + archetypeDescriptor.getName() + " descriptor written" );
+            getLogger().debug( "OldArchetype " + archetypeDescriptor.getName() + " descriptor written" );
 
             OldArchetypeDescriptor oldDescriptor =
                 convertToOldDescriptor( archetypeDescriptor.getName(), packageName, basedir );
@@ -411,7 +411,7 @@ public class FilesetArchetypeCreator
             archetypeDescriptorFile.getParentFile().mkdirs();
             writeOldDescriptor( oldDescriptor, oldDescriptorFile );
             getLogger().debug(
-                "Archetype " + archetypeDescriptor.getName() + " old descriptor written"
+                "OldArchetype " + archetypeDescriptor.getName() + " old descriptor written"
             );
         }
         catch ( Exception e )
@@ -978,7 +978,7 @@ public class FilesetArchetypeCreator
         IOException
     {
         getLogger().debug(
-            "Creating Archetype/Module files from " + basedir + " to " + archetypeFilesDirectory
+            "Creating OldArchetype/Module files from " + basedir + " to " + archetypeFilesDirectory
         );
 
         Iterator iterator = fileSets.iterator();
@@ -1095,7 +1095,7 @@ public class FilesetArchetypeCreator
 
             if ( initialcontent.indexOf( "${" + property + "}" ) > 0 )
             {
-                getLogger().warn( "Archetype uses ${" + property +
+                getLogger().warn( "OldArchetype uses ${" + property +
                     "} for internal processing, but file " + initialPomFile +
                     " contains this property already" );
             }
@@ -1403,7 +1403,7 @@ public class FilesetArchetypeCreator
 
             if ( initialcontent.indexOf( "${" + property + "}" ) > 0 )
             {
-                getLogger().warn( "Archetype uses ${" + property +
+                getLogger().warn( "OldArchetype uses ${" + property +
                     "} for internal processing, but file " + initialPomFile +
                     " contains this property already" );
             }
@@ -1417,7 +1417,7 @@ public class FilesetArchetypeCreator
         IOException
     {
         getLogger().debug(
-            "Creating Archetype/Module replica files from " + basedir + " to "
+            "Creating OldArchetype/Module replica files from " + basedir + " to "
                 + replicaFilesDirectory
         );
 
@@ -1667,7 +1667,7 @@ public class FilesetArchetypeCreator
 
                 if ( initialcontent.indexOf( "${" + property + "}" ) > 0 )
                 {
-                    getLogger().warn( "Archetype uses ${" + property +
+                    getLogger().warn( "OldArchetype uses ${" + property +
                         "} for internal processing, but file " + inputFile +
                         " contains this property already" );
                 }

@@ -19,11 +19,11 @@
 
 package org.apache.maven.archetype.common;
 
-import org.apache.maven.archetype.old.descriptor.ArchetypeDescriptorBuilder;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.archetype.exception.UnknownGroup;
 import org.apache.maven.archetype.metadata.ArchetypeDescriptor;
 import org.apache.maven.archetype.metadata.io.xpp3.ArchetypeDescriptorXpp3Reader;
+import org.apache.maven.archetype.old.descriptor.ArchetypeDescriptorBuilder;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.metadata.GroupRepositoryMetadata;
 import org.apache.maven.artifact.repository.metadata.Plugin;
@@ -148,18 +148,18 @@ public class DefaultArchetypeArtifactManager
 
             repositoryMetadataManager.resolve( metadata, repositories, localRepository );
 
-            for (
-                Iterator iter = metadata.getMetadata().getPlugins().iterator();
-                iter.hasNext();
-                )
+            for ( Iterator iter = metadata.getMetadata().getPlugins().iterator(); iter.hasNext(); )
             {
                 Plugin plugin = (Plugin) iter.next();
 
                 Archetype archetype = new Archetype();
 
                 archetype.setGroupId( groupId );
+
                 archetype.setArtifactId( plugin.getArtifactId() );
+
                 archetype.setName( plugin.getName() );
+
                 archetype.setPrefix( plugin.getPrefix() );
 
                 if ( getLogger().isDebugEnabled() )
@@ -218,6 +218,7 @@ public class DefaultArchetypeArtifactManager
         }
         catch ( ZipException e )
         {
+            
             throw new UnknownArchetype( e );
         }
         catch ( IOException e )
@@ -235,7 +236,20 @@ public class DefaultArchetypeArtifactManager
     {
         try
         {
+            System.out.println( "archetypeGroupId = " + archetypeGroupId );
+            System.out.println( "archetypeArtifactId = " + archetypeArtifactId );
+            System.out.println( "archetypeVersion = " + archetypeVersion );
+            System.out.println( "localRepository = " + localRepository );
+            for ( Iterator i = remoteRepositories.iterator(); i.hasNext(); )
+            {
+                ArtifactRepository artifactRepository = (ArtifactRepository) i.next();
+
+                System.out.println( "artifactRepository = " + artifactRepository );
+            }
+
             File archetypeFile = downloader.download( archetypeGroupId, archetypeArtifactId, archetypeVersion, localRepository, remoteRepositories );
+
+            System.out.println( "archetypeFile = " + archetypeFile );
 
             if ( archetypeVersion.equals( "RELEASE" ) || archetypeVersion.equals( "LATEST" ) )
             {
@@ -249,12 +263,14 @@ public class DefaultArchetypeArtifactManager
         }
         catch ( DownloadException e )
         {
-            getLogger().debug("Archetype don't exist", e);
+            e.printStackTrace();
+            getLogger().debug("OldArchetype don't exist", e);
             return false;
         }
         catch ( DownloadNotFoundException e )
         {
-            getLogger().debug("Archetype don't exist", e);
+            e.printStackTrace( );
+            getLogger().debug("OldArchetype don't exist", e);
             return false;
         }
     }
