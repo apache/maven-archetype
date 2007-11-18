@@ -236,28 +236,7 @@ public class DefaultArchetypeArtifactManager
     {
         try
         {
-            System.out.println( "archetypeGroupId = " + archetypeGroupId );
-            System.out.println( "archetypeArtifactId = " + archetypeArtifactId );
-            System.out.println( "archetypeVersion = " + archetypeVersion );
-            System.out.println( "localRepository = " + localRepository );
-            for ( Iterator i = remoteRepositories.iterator(); i.hasNext(); )
-            {
-                ArtifactRepository artifactRepository = (ArtifactRepository) i.next();
-
-                System.out.println( "artifactRepository = " + artifactRepository );
-            }
-
             File archetypeFile = downloader.download( archetypeGroupId, archetypeArtifactId, archetypeVersion, localRepository, remoteRepositories );
-
-            System.out.println( "archetypeFile = " + archetypeFile );
-
-            if ( archetypeVersion.equals( "RELEASE" ) || archetypeVersion.equals( "LATEST" ) )
-            {
-                // We do this so that we don't make another network call to get the version. The downloader
-                // should tell us or just replace it with the new artifact code.                
-                //TODO: Raphaël note: fix with find a way to return archetypeVersion
-//                ad.setVersion( GavCalculator.calculate( archetypeFile.getAbsolutePath() ).getVersion() );
-            }
 
             return archetypeFile.exists();
         }
