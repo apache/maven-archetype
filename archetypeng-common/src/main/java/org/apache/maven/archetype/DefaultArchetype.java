@@ -46,9 +46,9 @@ import java.util.zip.ZipOutputStream;
  * @author Jason van Zyl
  * @plexus.component
  */
-public class DefaultArchetyper
+public class DefaultArchetype
     extends AbstractLogEnabled
-    implements Archetyper
+    implements Archetype
 {
     /** @plexus.requirement role-hint="fileset" */
     private ArchetypeCreator creator;

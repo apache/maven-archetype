@@ -21,7 +21,7 @@ package org.apache.maven.archetype.mojos;
 
 import org.apache.maven.archetype.ArchetypeCreationRequest;
 import org.apache.maven.archetype.ArchetypeCreationResult;
-import org.apache.maven.archetype.Archetyper;
+import org.apache.maven.archetype.Archetype;
 import org.apache.maven.archetype.common.ArchetypePropertiesManager;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 import org.apache.maven.archetype.ui.ArchetypeCreationConfigurator;
@@ -59,7 +59,7 @@ public class CreateArchetypeFromProjectMojo
     ArchetypeRegistryManager archetypeRegistryManager;
 
     /** @component */
-    Archetyper archetyper;
+    Archetype archetype;
 
     /** @component */
     private ArchetypePropertiesManager propertiesManager;
@@ -187,7 +187,7 @@ public class CreateArchetypeFromProjectMojo
                 .setArchetypeRegistryFile( archetypeRegistryFile )
                 .setLocalRepository( localRepository );
 
-            ArchetypeCreationResult result = archetyper.createArchetypeFromProject( request );
+            ArchetypeCreationResult result = archetype.createArchetypeFromProject( request );
 
             if ( result.getCause() != null )
             {

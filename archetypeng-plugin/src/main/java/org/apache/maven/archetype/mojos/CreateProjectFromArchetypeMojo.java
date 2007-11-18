@@ -21,14 +21,13 @@ package org.apache.maven.archetype.mojos;
 
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
-import org.apache.maven.archetype.Archetyper;
+import org.apache.maven.archetype.Archetype;
 import org.apache.maven.archetype.common.ArchetypePropertiesManager;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 import org.apache.maven.archetype.generator.ArchetypeGenerator;
 import org.apache.maven.archetype.ui.ArchetypeGenerationConfigurator;
 import org.apache.maven.archetype.ui.ArchetypeSelector;
 import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.ContextEnabled;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -38,12 +37,10 @@ import org.apache.maven.shared.invoker.DefaultInvocationRequest;
 import org.apache.maven.shared.invoker.InvocationRequest;
 import org.apache.maven.shared.invoker.Invoker;
 import org.apache.maven.shared.invoker.MavenInvocationException;
-import org.codehaus.plexus.util.PropertyUtils;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Properties;
 
 /**
@@ -59,7 +56,7 @@ public class CreateProjectFromArchetypeMojo
     implements ContextEnabled
 {
     /** @component */
-    private Archetyper archetyper;
+    private Archetype archetype;
 
     /** @component */
     private ArchetypeSelector selector;
@@ -147,7 +144,7 @@ public class CreateProjectFromArchetypeMojo
 
             configurator.configureArchetype( request, settings.getInteractiveMode(), executionProperties );
 
-            ArchetypeGenerationResult result = archetyper.generateProjectFromArchetype( request );
+            ArchetypeGenerationResult result = archetype.generateProjectFromArchetype( request );
         }
         catch ( Exception ex )
         {

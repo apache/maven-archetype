@@ -21,8 +21,7 @@ package org.apache.maven.archetype.test;
 
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
-import org.apache.maven.archetype.Archetyper;
-import org.apache.maven.archetype.catalog.Archetype;
+import org.apache.maven.archetype.Archetype;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.codehaus.plexus.PlexusTestCase;
@@ -38,7 +37,7 @@ public class ArchetypeGenerationTest
     public void testProjectGenerationFromAnArchetype()
         throws Exception
     {
-        Archetyper archetype = (Archetyper) lookup( Archetyper.ROLE );
+        Archetype archetype = (Archetype) lookup( Archetype.ROLE );
 
         // In the embedder the localRepository will be retrieved from the embedder itself and users won't
         // have to go through this muck.
@@ -59,7 +58,7 @@ System.err.println("archetypes => "+archetypes);
         // Here I am just grabbing a OldArchetype but in a UI you would take the OldArchetype objects and present
         // them to the user.
 
-        Archetype selection = (Archetype) archetypes.get( archetypes.size() -1 );
+        org.apache.maven.archetype.catalog.Archetype selection = (org.apache.maven.archetype.catalog.Archetype) archetypes.get( archetypes.size() -1 );
 System.err.println("Selected OldArchetype = "+selection);
         // Now you will present a dialog, or whatever, and grab the following values.
 

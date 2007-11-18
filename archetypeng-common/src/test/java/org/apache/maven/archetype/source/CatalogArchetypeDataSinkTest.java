@@ -1,6 +1,5 @@
 package org.apache.maven.archetype.source;
 
-import org.apache.maven.archetype.Archetyper;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Reader;

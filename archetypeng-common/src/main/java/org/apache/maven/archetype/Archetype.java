@@ -27,9 +27,9 @@ import java.util.List;
 import java.util.Properties;
 
 /** @author Jason van Zyl */
-public interface Archetyper
+public interface Archetype
 {
-    String ROLE = Archetyper.class.getName(  );
+    String ROLE = Archetype.class.getName();
 
     /**
      * A command to create an OldArchetype from an existing Maven project given the suppled
@@ -56,7 +56,7 @@ public interface Archetyper
      *
      * @return A Map of available archetypes collected from all available source.
      */
-    List getAvailableArchetypes( );
+    List getAvailableArchetypes();
 
     /**
      * Get all available archetypes using a specified catalog properties as the
@@ -70,18 +70,18 @@ public interface Archetyper
 
     /**
      * Creates a jar file for an archetype.
+     *
      * @param archetypeDirectory
      * @param outputDirectory
      * @param finalName
      * @return The File to the generated jar
-     * @throws org.codehaus.plexus.archiver.ArchiverException
-     * @throws org.codehaus.plexus.archiver.jar.ManifestException
      * @throws org.apache.maven.artifact.DependencyResolutionRequiredException
+     *
      * @throws java.io.IOException
      */
     File archiveArchetype(
         File archetypeDirectory,
         File outputDirectory,
         String finalName )
-    throws DependencyResolutionRequiredException, IOException;
+        throws DependencyResolutionRequiredException, IOException;
 }
