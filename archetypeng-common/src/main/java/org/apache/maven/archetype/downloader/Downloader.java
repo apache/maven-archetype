@@ -1,4 +1,4 @@
-package org.apache.maven.shared.downloader;
+package org.apache.maven.archetype.downloader;
 
 import org.apache.maven.artifact.repository.ArtifactRepository;
 

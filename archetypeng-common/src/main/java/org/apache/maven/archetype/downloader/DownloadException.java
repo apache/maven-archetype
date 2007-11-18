@@ -1,4 +1,4 @@
-package org.apache.maven.shared.downloader;
+package org.apache.maven.archetype.downloader;
 
 /**
  * @author Jason van Zyl
