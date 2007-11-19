@@ -77,8 +77,6 @@ public class RemoteCatalogArchetypeDataSource
         }
         catch ( Exception e )
         {
-            e.printStackTrace();
-
             throw new ArchetypeDataSourceException( "Error reading archetype registry.", e );
         }
     }
