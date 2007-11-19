@@ -22,11 +22,11 @@ package org.apache.maven.archetype.source;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.artifact.manager.WagonManager;
 import org.apache.maven.settings.Settings;
+import org.apache.maven.wagon.Wagon;
+import org.apache.maven.wagon.repository.Repository;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.io.File;
+import java.io.FileReader;
 import java.util.List;
 import java.util.Properties;
 
@@ -58,17 +58,27 @@ public class RemoteCatalogArchetypeDataSource
             {
                 repository = repository.substring( 0, repository.length(  ) - 1 );
             }
-                        
-            URL url = new URL( repository + "/" + "archetype-catalog.xml" );
 
-            return createArchetypeMap( readCatalog( new InputStreamReader( url.openStream(  ) ) ) );
+            // We use wagon to take advantage of a Proxy that has already been setup in a Maven environment.
+
+            Repository wagonRepository = new Repository( "archetype", repository );
+
+            Wagon wagon = wagonManager.getWagon( wagonRepository );
+
+            File catalog = File.createTempFile( "archetype-catalog", ".xml" );
+
+            wagon.connect( wagonRepository );
+
+            wagon.get( "archetype-catalog.xml", catalog );
+
+            wagon.disconnect();
+
+            return createArchetypeMap( readCatalog( new FileReader( catalog ) ) );
         }
-        catch ( MalformedURLException e )
+        catch ( Exception e )
         {
-            throw new ArchetypeDataSourceException( "Invalid URL provided for archetype registry.", e );
-        }
-        catch ( IOException e )
-        {
+            e.printStackTrace();
+
             throw new ArchetypeDataSourceException( "Error reading archetype registry.", e );
         }
     }
