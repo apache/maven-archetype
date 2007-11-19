@@ -23,7 +23,6 @@ import org.apache.maven.archetype.creator.ArchetypeCreator;
 import org.apache.maven.archetype.generator.ArchetypeGenerator;
 import org.apache.maven.archetype.source.ArchetypeDataSource;
 import org.apache.maven.archetype.source.ArchetypeDataSourceException;
-import org.apache.maven.archetype.source.WikiArchetypeDataSource;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.PropertyUtils;
@@ -103,11 +102,6 @@ public class DefaultArchetype
         else
         {
             archetypeCatalogProperties = new Properties();
-
-            archetypeCatalogProperties.setProperty( "sources", "wiki" );
-
-            archetypeCatalogProperties.setProperty( "wiki.url",
-                WikiArchetypeDataSource.DEFAULT_ARCHETYPE_INVENTORY_PAGE );
         }
 
         return getAvailableArchetypes( archetypeCatalogProperties );
@@ -142,7 +136,7 @@ public class DefaultArchetype
         {
             try
             {
-                ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( "wiki" );
+                ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( "internal-catalog" );
 
                 archetypes.addAll( source.getArchetypes( new Properties() ) );
             }

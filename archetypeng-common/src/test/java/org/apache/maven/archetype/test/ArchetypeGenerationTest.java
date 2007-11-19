@@ -46,20 +46,25 @@ public class ArchetypeGenerationTest
 
         ArtifactRepository localRepository = registryManager.createRepository(
             new File( getBasedir(), "target/test-classes/repositories/local" )
-            .toURI().toURL().toExternalForm(), "local-repo" );
+                .toURI().toURL().toExternalForm(), "local-repo" );
 
         Properties catalogProperties = new Properties();
-        catalogProperties.setProperty("sources", "remote-catalog");
-        catalogProperties.setProperty("remote-catalog.repository",
+
+        catalogProperties.setProperty( "sources", "remote-catalog" );
+
+        catalogProperties.setProperty( "remote-catalog.repository",
             new File( getBasedir(), "target/test-classes/repositories/central" )
-            .toURI().toURL().toExternalForm());
+                .toURI().toURL().toExternalForm() );
+
         List archetypes = archetype.getAvailableArchetypes( catalogProperties );
-System.err.println("archetypes => "+archetypes);
+
+        System.err.println( "archetypes => " + archetypes );
         // Here I am just grabbing a OldArchetype but in a UI you would take the OldArchetype objects and present
         // them to the user.
 
-        org.apache.maven.archetype.catalog.Archetype selection = (org.apache.maven.archetype.catalog.Archetype) archetypes.get( archetypes.size() -1 );
-System.err.println("Selected OldArchetype = "+selection);
+        org.apache.maven.archetype.catalog.Archetype selection = (org.apache.maven.archetype.catalog.Archetype) archetypes.get( archetypes.size() - 1 );
+
+        System.err.println( "Selected OldArchetype = " + selection );
         // Now you will present a dialog, or whatever, and grab the following values.
 
         String groupId = "com.mycompany";
@@ -82,22 +87,23 @@ System.err.println("Selected OldArchetype = "+selection);
             .setPackage( packageName );
 
         Properties archetypeRequiredProperties = new Properties();
-        archetypeRequiredProperties.setProperty("property-with-default-1", "value-1");
-        archetypeRequiredProperties.setProperty("property-with-default-2", "value-2");
-        archetypeRequiredProperties.setProperty("property-with-default-3", "value-3");
-        archetypeRequiredProperties.setProperty("property-with-default-4", "value-4");
-        archetypeRequiredProperties.setProperty("property-without-default-1", "some-value-1");
-        archetypeRequiredProperties.setProperty("property-without-default-2", "some-value-2");
-        archetypeRequiredProperties.setProperty("property-without-default-3", "some-value-3");
-        archetypeRequiredProperties.setProperty("property-without-default-4", "some-value-4");
-        agr.setProperties(archetypeRequiredProperties);
+        archetypeRequiredProperties.setProperty( "property-with-default-1", "value-1" );
+        archetypeRequiredProperties.setProperty( "property-with-default-2", "value-2" );
+        archetypeRequiredProperties.setProperty( "property-with-default-3", "value-3" );
+        archetypeRequiredProperties.setProperty( "property-with-default-4", "value-4" );
+        archetypeRequiredProperties.setProperty( "property-without-default-1", "some-value-1" );
+        archetypeRequiredProperties.setProperty( "property-without-default-2", "some-value-2" );
+        archetypeRequiredProperties.setProperty( "property-without-default-3", "some-value-3" );
+        archetypeRequiredProperties.setProperty( "property-without-default-4", "some-value-4" );
+        agr.setProperties( archetypeRequiredProperties );
 
         // Then generate away!
 
         ArchetypeGenerationResult result = archetype.generateProjectFromArchetype( agr );
 
         if ( result.getCause() != null )
-        {result.getCause().printStackTrace(System.err);
+        {
+            result.getCause().printStackTrace( System.err );
             fail( result.getCause().getMessage() );
         }
     }

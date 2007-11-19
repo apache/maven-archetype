@@ -52,9 +52,9 @@ public class CatalogArchetypeDataSource
 
     public static String ARCHETYPE_CATALOG_FILENAME = "archetype-catalog.xml";
 
-    private ArchetypeCatalogXpp3Reader catalogReader = new ArchetypeCatalogXpp3Reader(  );
+    private ArchetypeCatalogXpp3Reader catalogReader = new ArchetypeCatalogXpp3Reader();
 
-    private ArchetypeCatalogXpp3Writer catalogWriter = new ArchetypeCatalogXpp3Writer(  );
+    private ArchetypeCatalogXpp3Writer catalogWriter = new ArchetypeCatalogXpp3Writer();
 
     private File USER_HOME = new File( System.getProperty( "user.home" ) );
 
@@ -69,18 +69,18 @@ public class CatalogArchetypeDataSource
 
         s = StringUtils.replace( s, "${user.home}", System.getProperty( "user.home" ) );
 
-        getLogger(  ).debug( "Using catalog " + s );
+        getLogger().debug( "Using catalog " + s );
 
         File catalogFile = new File( s );
 
-        if ( catalogFile.exists(  ) )
+        if ( catalogFile.exists() )
         {
 
             try
             {
                 ArchetypeCatalog catalog = readCatalog( new FileReader( catalogFile ) );
 
-                return createArchetypeMap( catalog, catalogFile.getParent() );
+                return createArchetypeMap( catalog );
             }
             catch ( FileNotFoundException e )
             {
@@ -89,49 +89,51 @@ public class CatalogArchetypeDataSource
         }
         else
         {
-            return new ArrayList(  );
+            return new ArrayList();
         }
     }
 
-    public void updateCatalog( Properties properties, Archetype archetype, Settings settings )
+    public void updateCatalog( Properties properties,
+                               Archetype archetype,
+                               Settings settings )
         throws ArchetypeDataSourceException
     {
         String s = properties.getProperty( ARCHETYPE_CATALOG_PROPERTY );
 
         s = StringUtils.replace( s, "${user.home}", System.getProperty( "user.home" ) );
 
-        getLogger(  ).debug( "Using catalog " + s );
+        getLogger().debug( "Using catalog " + s );
 
         File catalogFile = new File( s );
 
         ArchetypeCatalog catalog;
-        if ( catalogFile.exists(  ) )
+        if ( catalogFile.exists() )
         {
             try
             {
-                getLogger(  ).debug( "Reading the catalog " + catalogFile );
+                getLogger().debug( "Reading the catalog " + catalogFile );
                 catalog = readCatalog( new FileReader( catalogFile ) );
             }
             catch ( FileNotFoundException ex )
             {
-                getLogger(  ).debug( "Catalog file don't exist" );
-                catalog = new ArchetypeCatalog(  );
+                getLogger().debug( "Catalog file don't exist" );
+                catalog = new ArchetypeCatalog();
             }
         }
         else
         {
-            getLogger(  ).debug( "Catalog file don't exist" );
-            catalog = new ArchetypeCatalog(  );
+            getLogger().debug( "Catalog file don't exist" );
+            catalog = new ArchetypeCatalog();
         }
 
-        Iterator archetypes = catalog.getArchetypes(  ).iterator(  );
+        Iterator archetypes = catalog.getArchetypes().iterator();
         boolean found = false;
         Archetype newArchetype = archetype;
-        while ( !found && archetypes.hasNext(  ) )
+        while ( !found && archetypes.hasNext() )
         {
             Archetype a = (Archetype) archetypes.next();
-            if ( a.getGroupId(  ).equals( archetype.getGroupId(  ) ) && a.getArtifactId(  ).
-                equals( archetype.getArtifactId(  ) ) )
+            if ( a.getGroupId().equals( archetype.getGroupId() ) && a.getArtifactId().
+                equals( archetype.getArtifactId() ) )
             {
                 newArchetype = a;
                 found = true;
@@ -142,16 +144,17 @@ public class CatalogArchetypeDataSource
             catalog.addArchetype( newArchetype );
         }
 
-        newArchetype.setVersion( archetype.getVersion(  ) );
-        newArchetype.setRepository( archetype.getRepository(  ) );
-        newArchetype.setDescription( archetype.getDescription(  ) );
-        newArchetype.setProperties( archetype.getProperties(  ) );
-        newArchetype.setGoals( archetype.getGoals(  ) );
+        newArchetype.setVersion( archetype.getVersion() );
+        newArchetype.setRepository( archetype.getRepository() );
+        newArchetype.setDescription( archetype.getDescription() );
+        newArchetype.setProperties( archetype.getProperties() );
+        newArchetype.setGoals( archetype.getGoals() );
 
         writeLocalCatalog( catalog, catalogFile );
     }
 
-    protected void writeLocalCatalog( ArchetypeCatalog catalog, File catalogFile )
+    protected void writeLocalCatalog( ArchetypeCatalog catalog,
+                                      File catalogFile )
         throws ArchetypeDataSourceException
     {
         FileWriter writer = null;
@@ -170,19 +173,14 @@ public class CatalogArchetypeDataSource
         }
     }
 
-    protected List createArchetypeMap( ArchetypeCatalog archetypeCatalog, String repository )
+    protected List createArchetypeMap( ArchetypeCatalog archetypeCatalog )
         throws ArchetypeDataSourceException
     {
-        List archetypes = new ArrayList(  );
+        List archetypes = new ArrayList();
 
-        for ( Iterator i = archetypeCatalog.getArchetypes(  ).iterator(  ); i.hasNext(  ); )
+        for ( Iterator i = archetypeCatalog.getArchetypes().iterator(); i.hasNext(); )
         {
             Archetype archetype = (Archetype) i.next();
-
-            if (archetype.getRepository() == null)
-            {
-                archetype.setRepository(repository);
-            }
 
             archetypes.add( archetype );
         }
@@ -215,7 +213,8 @@ public class CatalogArchetypeDataSource
     {
         ArchetypeDataSourceDescriptor d = new ArchetypeDataSourceDescriptor();
 
-        d.addParameter( ARCHETYPE_CATALOG_PROPERTY, String.class, DEFAULT_ARCHETYPE_CATALOG.getAbsolutePath(), "The repository URL where the archetype catalog resides." );
+        d.addParameter( ARCHETYPE_CATALOG_PROPERTY, String.class, DEFAULT_ARCHETYPE_CATALOG.getAbsolutePath(),
+            "The repository URL where the archetype catalog resides." );
 
         return d;
     }

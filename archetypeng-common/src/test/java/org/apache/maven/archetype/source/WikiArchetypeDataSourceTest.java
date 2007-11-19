@@ -15,13 +15,7 @@ public class WikiArchetypeDataSourceTest
     {
         Properties p = new Properties();
 
-        File wikiSource = new File( getBasedir(), "src/test/sources/wiki/wiki-source.txt" );
-
-        assertTrue( wikiSource.exists() );
-
-        p.setProperty( WikiArchetypeDataSource.URL, wikiSource.toURI().toURL().toExternalForm() );
-
-        ArchetypeDataSource ads = new WikiArchetypeDataSource();
+        ArchetypeDataSource ads = new InternalCatalogArchetypeDataSource();
 
         List archetypes = ads.getArchetypes( p );
 

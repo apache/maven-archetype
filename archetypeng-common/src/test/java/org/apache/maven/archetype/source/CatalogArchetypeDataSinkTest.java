@@ -74,9 +74,7 @@ public class CatalogArchetypeDataSinkTest
 
         assertTrue( wikiSource.exists() );
 
-        p.setProperty( WikiArchetypeDataSource.URL, wikiSource.toURI().toURL().toExternalForm() );
-
-        ArchetypeDataSource ads = new WikiArchetypeDataSource();
+        ArchetypeDataSource ads = new InternalCatalogArchetypeDataSource();
 
         sink.putArchetypes( ads, p, writer );
 

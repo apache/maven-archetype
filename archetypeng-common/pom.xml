@@ -137,6 +137,12 @@
   </dependencies>
 
   <build>
+    <testResources>
+      <testResource>
+        <directory>src/test/resources</directory>
+        <filtering>true</filtering>
+      </testResource>
+    </testResources>
     <plugins>
       <plugin>
         <groupId>org.codehaus.modello</groupId>
@@ -379,10 +385,6 @@
                 <property name="test.projects.repository" value="repositories/central"></property>
 
                 <mkdir dir="${basedir}/target/test-classes/${test.projects.repository}/${test.projects.target.directory}"></mkdir>
-
-                <copy todir="${basedir}/target/test-classes/${test.projects.repository}/${test.projects.target.directory}">
-                  <fileset dir="${basedir}/src/test/central-repository"></fileset>
-                </copy>
               </tasks>
             </configuration>
             <goals>

@@ -5,6 +5,7 @@
       <artifactId>fileset</artifactId>
       <version>1.0</version>
       <description>Fileset test archetype</description>
+      <repository>file://${basedir}/target/test-classes/repositories/central</repository>
     </archetype>
   </archetypes>
 </archetype-catalog>
