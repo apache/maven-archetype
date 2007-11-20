@@ -94,6 +94,7 @@ public class ArchetyperRoundtripWithProxyTest
 
         File workingProject = new File( getBasedir(),
             "target/test-classes/projects/roundtrip-2-project" );
+        FileUtils.forceDelete(new File(workingProject, "target"));
 
         // (2) create an archetype from the project
         File pom = new File( workingProject, "pom.xml" );
@@ -169,6 +170,7 @@ public class ArchetyperRoundtripWithProxyTest
         // (6) create a project form the archetype we just created
         String outputDirectory = new File( getBasedir(),
             "target/test-classes/projects/roundtrip-2-recreatedproject" ).getAbsolutePath();
+        FileUtils.forceDelete(outputDirectory);
 
         WagonManager manager = (WagonManager) lookup(WagonManager.class);
         manager.addProxy("http", "localhost", 18882, null, null, null);

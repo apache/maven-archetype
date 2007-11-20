@@ -29,6 +29,8 @@ import org.codehaus.plexus.PlexusTestCase;
 import java.io.File;
 import java.util.List;
 import java.util.Properties;
+import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.IOUtil;
 
 /** @author Jason van Zyl */
 public class ArchetypeGenerationTest
@@ -76,10 +78,11 @@ public class ArchetypeGenerationTest
         String packageName = "org.mycompany.app";
 
         // With the selected OldArchetype and the parameters you can create a generation request as follows:
-
+        File outputDirectory = new File( getBasedir(), "target/test-classes/projects/archetyper-generate-1" );
+        FileUtils.forceDelete(outputDirectory);
+        
         ArchetypeGenerationRequest agr = new ArchetypeGenerationRequest( selection )
-            .setOutputDirectory( new File( getBasedir(),
-                "target/test-classes/projects/archetyper-generate-1" ).getAbsolutePath() )
+            .setOutputDirectory( outputDirectory.getAbsolutePath() )
             .setLocalRepository( localRepository )
             .setGroupId( groupId )
             .setArtifactId( artifactId )

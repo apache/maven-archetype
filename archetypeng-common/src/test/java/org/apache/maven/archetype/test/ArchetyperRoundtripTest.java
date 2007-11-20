@@ -95,6 +95,7 @@ public class ArchetyperRoundtripTest
 
         File workingProject = new File( getBasedir(),
             "target/test-classes/projects/roundtrip-1-project" );
+        FileUtils.forceDelete(new File(workingProject, "target"));
 
         // (2) create an archetype from the project
         File pom = new File( workingProject, "pom.xml" );
@@ -170,6 +171,7 @@ public class ArchetyperRoundtripTest
         // (6) create a project form the archetype we just created
         String outputDirectory = new File( getBasedir(),
             "target/test-classes/projects/roundtrip-1-recreatedproject" ).getAbsolutePath();
+        FileUtils.forceDelete(outputDirectory);
 
         ArchetypeGenerationRequest agr =
             new ArchetypeGenerationRequest().setArchetypeGroupId(
