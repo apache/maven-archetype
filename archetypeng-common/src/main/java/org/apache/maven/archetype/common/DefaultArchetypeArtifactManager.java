@@ -68,6 +68,7 @@ public class DefaultArchetypeArtifactManager
         final String groupId,
         final String artifactId,
         final String version,
+                          ArtifactRepository archetypeRepository,
         final ArtifactRepository localRepository,
         final List repositories
     )
@@ -76,7 +77,7 @@ public class DefaultArchetypeArtifactManager
     {
         try
         {
-            return downloader.download( groupId, artifactId, version, localRepository, repositories );
+            return downloader.download( groupId, artifactId, version, archetypeRepository, localRepository, repositories );
         }
         catch ( DownloadNotFoundException ex )
         {
@@ -110,6 +111,7 @@ public class DefaultArchetypeArtifactManager
         String groupId,
         String artifactId,
         String version,
+                          ArtifactRepository archetypeRepository,
         ArtifactRepository localRepository,
         List repositories
     )
@@ -119,7 +121,7 @@ public class DefaultArchetypeArtifactManager
         try
         {
             File archetypeFile =
-                getArchetypeFile( groupId, artifactId, version, localRepository, repositories );
+                getArchetypeFile( groupId, artifactId, version, archetypeRepository, localRepository, repositories );
             URL[] urls = new URL[1];
 
             urls[0] = archetypeFile.toURI().toURL();
@@ -203,6 +205,7 @@ public class DefaultArchetypeArtifactManager
         String groupId,
         String artifactId,
         String version,
+                          ArtifactRepository archetypeRepository,
         ArtifactRepository localRepository,
         List repositories
     )
@@ -212,7 +215,7 @@ public class DefaultArchetypeArtifactManager
         try
         {
             File archetypeFile =
-                getArchetypeFile( groupId, artifactId, version, localRepository, repositories );
+                getArchetypeFile( groupId, artifactId, version, archetypeRepository, localRepository, repositories );
 
             return new ZipFile( archetypeFile );
         }
@@ -231,12 +234,13 @@ public class DefaultArchetypeArtifactManager
         String archetypeGroupId, 
         String archetypeArtifactId, 
         String archetypeVersion, 
+        ArtifactRepository archetypeRepository, 
         ArtifactRepository localRepository, 
         List remoteRepositories )
     {
         try
-        {
-            File archetypeFile = downloader.download( archetypeGroupId, archetypeArtifactId, archetypeVersion, localRepository, remoteRepositories );
+        {                        
+            File archetypeFile = downloader.download( archetypeGroupId, archetypeArtifactId, archetypeVersion, archetypeRepository, localRepository, remoteRepositories );
 
             return archetypeFile.exists();
         }
@@ -258,6 +262,7 @@ public class DefaultArchetypeArtifactManager
         String groupId,
         String artifactId,
         String version,
+                          ArtifactRepository archetypeRepository,
         ArtifactRepository localRepository,
         List repositories
     )
@@ -268,7 +273,7 @@ public class DefaultArchetypeArtifactManager
                 getArchetypeJarLoader(
                     groupId,
                     artifactId,
-                    version,
+                    version, archetypeRepository,
                     localRepository,
                     repositories
                 );
@@ -316,6 +321,7 @@ public class DefaultArchetypeArtifactManager
         String groupId,
         String artifactId,
         String version,
+                          ArtifactRepository archetypeRepository,
         ArtifactRepository localRepository,
         List repositories
     )
@@ -328,7 +334,7 @@ public class DefaultArchetypeArtifactManager
                 getArchetypeJarLoader(
                     groupId,
                     artifactId,
-                    version,
+                    version, archetypeRepository,
                     localRepository,
                     repositories
                 );
@@ -385,6 +391,7 @@ public class DefaultArchetypeArtifactManager
         String groupId,
         String artifactId,
         String version,
+                          ArtifactRepository archetypeRepository,
         ArtifactRepository localRepository,
         List repositories
     )
@@ -394,7 +401,7 @@ public class DefaultArchetypeArtifactManager
         List archetypeResources = new ArrayList();
 
         ZipFile zipFile =
-            getArchetypeZipFile( groupId, artifactId, version, localRepository, repositories );
+            getArchetypeZipFile( groupId, artifactId, version, archetypeRepository, localRepository, repositories );
 
         Enumeration enumeration = zipFile.entries();
         while ( enumeration.hasMoreElements() )
@@ -422,6 +429,7 @@ public class DefaultArchetypeArtifactManager
         String groupId,
         String artifactId,
         String version,
+                          ArtifactRepository archetypeRepository,
         ArtifactRepository localRepository,
         List repositories
     )
@@ -432,7 +440,7 @@ public class DefaultArchetypeArtifactManager
                 getArchetypeJarLoader(
                     groupId,
                     artifactId,
-                    version,
+                    version, archetypeRepository,
                     localRepository,
                     repositories
                 );
@@ -460,6 +468,7 @@ public class DefaultArchetypeArtifactManager
         String groupId,
         String artifactId,
         String version,
+                          ArtifactRepository archetypeRepository,
         ArtifactRepository localRepository,
         List repositories
     )
@@ -472,7 +481,7 @@ public class DefaultArchetypeArtifactManager
                 getArchetypeJarLoader(
                     groupId,
                     artifactId,
-                    version,
+                    version, archetypeRepository,
                     localRepository,
                     repositories
                 );
@@ -668,4 +677,4 @@ public class DefaultArchetypeArtifactManager
                 ? Thread.currentThread().getContextClassLoader().getResourceAsStream( name )
                 : loader.getResourceAsStream( name );
     }
-}
+    }

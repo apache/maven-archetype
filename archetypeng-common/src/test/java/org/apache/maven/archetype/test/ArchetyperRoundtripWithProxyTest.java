@@ -52,9 +52,10 @@ import java.io.OutputStream;
 import java.io.Writer;
 import java.net.URL;
 import java.util.Properties;
+import org.apache.maven.artifact.manager.WagonManager;
 
 /** @author Jason van Zyl */
-public class ArchetyperRoundtripTest
+public class ArchetyperRoundtripWithProxyTest
     extends PlexusTestCase
 {
     Jetty6xEmbeddedLocalContainer container;
@@ -62,7 +63,6 @@ public class ArchetyperRoundtripTest
     public void testArchetyper()
         throws Exception
     {
-
         Archetype archetype = (Archetype) lookup( Archetype.ROLE );
 
         ArchetypeRegistryManager registryManager = (ArchetypeRegistryManager) lookup( ArchetypeRegistryManager.ROLE );
@@ -74,7 +74,6 @@ public class ArchetyperRoundtripTest
             toURL().
             toExternalForm(),
             "local-repo" );
-
         ArtifactRepository centralRepository = registryManager.createRepository( new File( getBasedir(),
             "target/test-classes/repositories/central" ).toURI().
             toURL().
@@ -94,7 +93,7 @@ public class ArchetyperRoundtripTest
 //        File sourceProject = new File( getBasedir(  ), "target/test-classes/projects/roundtrip-1-project" );
 
         File workingProject = new File( getBasedir(),
-            "target/test-classes/projects/roundtrip-1-project" );
+            "target/test-classes/projects/roundtrip-2-project" );
 
         // (2) create an archetype from the project
         File pom = new File( workingProject, "pom.xml" );
@@ -159,7 +158,7 @@ public class ArchetyperRoundtripTest
         generatedArchetype.setGroupId( generatedArchetypeProject.getGroupId() );
         generatedArchetype.setArtifactId( generatedArchetypeProject.getArtifactId() );
         generatedArchetype.setVersion( generatedArchetypeProject.getVersion() );
-        generatedArchetype.setRepository( "http://localhost:18881/repo/" );
+        generatedArchetype.setRepository( "http://127.0.0.2:18881/" );
         catalog.addArchetype( generatedArchetype );
 
         ArchetypeCatalogXpp3Writer catalogWriter = new ArchetypeCatalogXpp3Writer();
@@ -169,7 +168,10 @@ public class ArchetyperRoundtripTest
 
         // (6) create a project form the archetype we just created
         String outputDirectory = new File( getBasedir(),
-            "target/test-classes/projects/roundtrip-1-recreatedproject" ).getAbsolutePath();
+            "target/test-classes/projects/roundtrip-2-recreatedproject" ).getAbsolutePath();
+
+        WagonManager manager = (WagonManager) lookup(WagonManager.class);
+        manager.addProxy("http", "localhost", 18882, null, null, null);
 
         ArchetypeGenerationRequest agr =
             new ArchetypeGenerationRequest().setArchetypeGroupId(
@@ -178,7 +180,7 @@ public class ArchetyperRoundtripTest
             setArchetypeVersion( generatedArchetypeProject.getVersion() ).
             setGroupId( "com.mycompany" ).setArtifactId( "myapp" ).setVersion( "1.0-SNAPSHOT" ).
             setPackage( "com.mycompany.myapp" ).setOutputDirectory( outputDirectory ).
-            setLocalRepository( localRepository ).setArchetypeRepository( "http://localhost:18881/repo/" );
+            setLocalRepository( localRepository ).setArchetypeRepository( "http://127.0.0.2:18881/" );
         ArchetypeGenerationResult generationResult = archetype.generateProjectFromArchetype( agr );
 
         if ( generationResult.getCause() != null )
@@ -195,8 +197,8 @@ public class ArchetyperRoundtripTest
         //        Start Cargo
 
         Jetty6xEmbeddedStandaloneLocalConfiguration configuration =
-            new Jetty6xEmbeddedStandaloneLocalConfiguration( "target/repository-webapp" );
-        configuration.setProperty( ServletPropertySet.PORT, "18881" );
+            new Jetty6xEmbeddedStandaloneLocalConfiguration( "target/proxy-webapp" );
+        configuration.setProperty( ServletPropertySet.PORT, "18882" );
 
         System.setProperty( "org.apache.maven.archetype.reporitory.directory",
             getTestPath( "target/test-classes/repositories/central" ) );
@@ -206,14 +208,14 @@ public class ArchetyperRoundtripTest
 
         DeployableFactory factory = new DefaultDeployableFactory();
         WAR war = (WAR) factory.createDeployable( container.getId(),
-            "target/wars/archetype-repository.war",
+            "target/wars/archetype-proxy.war",
             DeployableType.WAR );
 
-        war.setContext( "/repo" );
+        war.setContext( "/" );
 
         Deployer deployer = new Jetty6xEmbeddedLocalDeployer( container );
         deployer.deploy( war,
-            new URLDeployableMonitor( new URL( "http://localhost:18881/repo/dummy" ) ) );
+            new URLDeployableMonitor( new URL( "http://localhost:18882/dummy" ) ) );
         deployer.start( war );
 
     }

@@ -14,7 +14,7 @@
  *  limitations under the License.
  *  under the License.
  */
-package org.apache.maven.archetype.repository;
+package org.apache.maven.archetype.proxy;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -69,29 +69,69 @@ public class RepositoryServlet
     {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
+        
+        
+        
+        log( "A = " + request.getAuthType() );
+        log( "A = " + request.getCharacterEncoding() );
+        log( "A = " + request.getContentType() );
+        log( "B = " + request.getContextPath() );
+        log( "B = " + request.getLocalAddr() );
+        log( "B = " + request.getLocalName() );
+        log( "C = " + request.getMethod() );
+        log( "C = " + request.getPathInfo() );
+        log( "C = " + request.getPathTranslated() );
+        log( "D = " + request.getProtocol() );
+        log( "D = " + request.getQueryString() );
+        log( "D = " + request.getRemoteAddr() );
+        log( "E = " + request.getRemoteHost() );
+        log( "E = " + request.getRemoteUser() );
+        log( "E = " + request.getRequestURI() );
+        log( "F = " + request.getRequestedSessionId() );
+        log( "F = " + request.getScheme() );
+        log( "F = " + request.getServerName() );
+        log( "G = " + request.getServletPath() );
+        log( "G = " + request.getAttributeNames() );
+        log( "G = " + request.getCookies() );
+        log( "H = " + request.getHeaderNames() );
+//        log( "H = " + request.get );
+//        log( "H = " + request.get );
+//        log( "I = " + request.get );
+//        log( "I = " + request.get );
+//        log( "I = " + request.get );
+//        log( "J = " + request.get );
+//        log( "J = " + request.get );
+//        log( "J = " + request.get );
+//        log( "K = " + request.get );
+//        log( "K = " + request.get );
+//        log( "K = " + request.get );
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
         response.setHeader( "Date", null );
         response.setHeader( "Server", null );
 
 
         log( "Requested file = " + request.getRequestURI(  ) );
-        System.err.println( "Requested file = " + request.getRequestURI(  ) );
         String filePath =
             System.getProperty( "org.apache.maven.archetype.reporitory.directory" ).trim(  ) + "/" +
             request.getRequestURI(  );
-        filePath=filePath.replace("repo/", "/");
-        filePath=filePath.replaceAll("//", "/");
-        filePath=filePath.replaceAll("//", "/");
-        filePath=filePath.replaceAll("//", "/");
         log( "Complete file path = " + filePath );
-        System.err.println( "Complete file path = " + filePath );
 
         String method = request.getMethod(  );
 
         if ( "GET".equalsIgnoreCase( method ) )
         {
             log( "Getting file" );
-            System.err.println( "Getting file" );
             try
             {
                 File requestedFile = new File( filePath );
@@ -103,45 +143,36 @@ public class RepositoryServlet
                     IO.copy( is, response.getOutputStream(  ) );
                     response.setStatus( HttpServletResponse.SC_OK );
                     log( "File sent" );
-                    System.err.println( "File sent" );
                 }
                 else
                 {
                     log( "Can not send file no content" );
-                    System.err.println( "Can not send file no content" );
                 }
             }
             catch ( FileNotFoundException fileNotFoundException )
             {
                 response.setStatus( HttpServletResponse.SC_NOT_FOUND );
                 log( "Requested file not found ", fileNotFoundException );
-                System.err.println( "Requested file not found "+ fileNotFoundException );
-                fileNotFoundException.printStackTrace(System.err);
             }
             catch ( IOException iOException )
             {
                 response.setStatus( HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
                 log( "Can not send file", iOException );
-                System.err.println( "Can not send file"+ iOException );
-                iOException.printStackTrace(System.err);
             }
         }
         else if ( "PUT".equalsIgnoreCase( method ) )
         {
             log( "Putting file" );
-            System.err.println( "Putting file" );
             File uploadedFile = new File( filePath );
             if ( uploadedFile.exists(  ) )
             {
                 uploadedFile.delete(  );
                 log( "Removed old file" );
-                System.err.println( "Removed old file" );
             }
             else if ( !uploadedFile.getParentFile(  ).exists(  ) )
             {
                 uploadedFile.getParentFile(  ).mkdirs(  );
                 log( "Created directory " + uploadedFile.getParent(  ) );
-                System.err.println( "Created directory " + uploadedFile.getParent(  ) );
             }
 
             try
@@ -150,15 +181,12 @@ public class RepositoryServlet
                 IO.copy( request.getReader(  ), fw );
                 response.setStatus( HttpServletResponse.SC_OK );
                 log( "File copied" );
-                System.err.println( "File copied" );
             }
             catch ( IOException iOException )
             {
 
                 response.setStatus( HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
                 log( "Can not send file", iOException );
-                System.err.println( "Can not send file"+ iOException );
-                iOException.printStackTrace(System.err);
             }
         }
         else
@@ -179,24 +207,10 @@ public class RepositoryServlet
                 StringWriter w = new StringWriter(  );
                 IO.copy( request.getReader(  ), w );
                 log( "Content " + w.toString(  ) );
-                
-                
-                System.err.println( "Method " + request.getMethod(  ) );
-                System.err.println( "ContextPath " + request.getContextPath(  ) );
-                System.err.println( "QueryString" + request.getQueryString(  ) );
-                System.err.println( "PathInfo " + request.getPathInfo(  ) );
-                System.err.println( "ServletPath " + request.getServletPath(  ) );
-                System.err.println( "AttributeNames " + request.getAttributeNames(  ).toString(  ) );
-                System.err.println( "HeaderNames " + request.getHeaderNames(  ).toString(  ) );
-                System.err.println( "RequestURL " + request.getRequestURL(  ).toString(  ) );
-                System.err.println( "ParameterNames " + request.getParameterNames(  ).toString(  ) );
-                System.err.println( "Content " + w.toString(  ) );
             }
             catch ( IOException iOException )
             {
                 log( "Error in unnknown method", iOException );
-                System.err.println( "Error in unnknown method"+ iOException );
-                iOException.printStackTrace(System.err);
             }
         }
     }

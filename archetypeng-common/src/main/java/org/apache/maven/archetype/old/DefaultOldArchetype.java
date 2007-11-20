@@ -105,6 +105,7 @@ public class DefaultOldArchetype
     public void createArchetype( String archetypeGroupId,
                                  String archetypeArtifactId,
                                  String archetypeVersion,
+                          ArtifactRepository archetypeRepository,
                                  ArtifactRepository localRepository,
                                  List remoteRepositories,
                                  Map parameters )
@@ -118,7 +119,7 @@ public class DefaultOldArchetype
         
         try
         {
-            archetype = downloader.download( archetypeGroupId, archetypeArtifactId, archetypeVersion, localRepository,
+            archetype = downloader.download( archetypeGroupId, archetypeArtifactId, archetypeVersion, archetypeRepository, localRepository,
                                              remoteRepositories );
         }
         catch ( DownloadException e )

@@ -5,8 +5,12 @@
     <servlet-name>ProxyServlet</servlet-name>
     <servlet-class>org.apache.maven.archetype.proxy.ProxyServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>RepositoryServlet</servlet-name>
+    <servlet-class>org.apache.maven.archetype.proxy.RepositoryServlet</servlet-class>
+  </servlet>
   <servlet-mapping>
-    <servlet-name>ProxyServlet</servlet-name>
+    <servlet-name>RepositoryServlet</servlet-name>
     <url-pattern>/*</url-pattern>
   </servlet-mapping>
 </web-app>

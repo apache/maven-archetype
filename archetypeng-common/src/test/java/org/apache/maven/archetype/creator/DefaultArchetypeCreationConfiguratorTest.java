@@ -22,35 +22,35 @@ package org.apache.maven.archetype.creator;
 //import org.apache.maven.archetype.ui.DefaultArchetypeCreationConfigurator;
 //import org.apache.maven.archetype.ui.ArchetypeCreationConfigurator;
 
-import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.repository.DefaultArtifactRepository;
-import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
-import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
-import org.apache.maven.artifact.resolver.ArtifactResolutionException;
+//import org.apache.maven.artifact.repository.ArtifactRepository;
+//import org.apache.maven.artifact.repository.DefaultArtifactRepository;
+//import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
+//import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
+//import org.apache.maven.artifact.resolver.ArtifactResolutionException;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
-import org.apache.maven.project.MavenProject;
-import org.apache.maven.project.MavenProjectBuilder;
-import org.apache.maven.project.ProjectBuildingException;
-import org.codehaus.plexus.util.IOUtil;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
+//import org.apache.maven.project.MavenProject;
+//import org.apache.maven.project.MavenProjectBuilder;
+//import org.apache.maven.project.ProjectBuildingException;
+//import org.codehaus.plexus.util.IOUtil;
+//
+//import java.io.File;
+//import java.io.FileInputStream;
+//import java.io.FileNotFoundException;
+//import java.io.FileReader;
+//import java.io.FileWriter;
+//import java.io.IOException;
+//import java.util.Arrays;
+//import java.util.List;
+//import java.util.Properties;
 
 public class DefaultArchetypeCreationConfiguratorTest
     extends AbstractMojoTestCase
 {
-    private List languages;
-    private DefaultArtifactRepository localRepository;
-
-    private List repositories;
-    
+//    private List languages;
+//    private DefaultArtifactRepository localRepository;
+//
+//    private List repositories;
+//    
     public void testNothing()
     {
         //TODO: All the tests were commented out Because the tested classes are beeing moved for now and will be removed soon
@@ -516,53 +516,53 @@ public class DefaultArchetypeCreationConfiguratorTest
 //
 //        assertEquals ( 7, properties.size () );
 //    }
-
-    protected void tearDown()
-        throws
-        Exception
-    {
-        super.tearDown();
-    }
-
-    protected void setUp()
-        throws
-        Exception
-    {
-        super.setUp();
-
-        localRepository =
-            new DefaultArtifactRepository(
-                "local",
-                new File( getBasedir(), "target/test-classes/repositories/local" ).toURI()
-                    .toString(),
-                new DefaultRepositoryLayout()
-            );
-
-        repositories =
-            Arrays.asList(
-                new ArtifactRepository[]
-                    {
-                        new DefaultArtifactRepository(
-                            "central",
-                            new File( getBasedir(), "target/test-classes/repositories/central" )
-                                .toURI().toString(),
-                            new DefaultRepositoryLayout()
-                        )
-                    }
-            );
-    }
-
-    private void copy( final File in,
-                       final File out )
-        throws
-        IOException
-    {
-        assertTrue( !out.exists() || out.delete() );
-        assertFalse( out.exists() );
-        IOUtil.copy( new FileReader( in ), new FileWriter( out ) );
-        assertTrue( out.exists() );
-        assertTrue( in.exists() );
-    }
+//
+//    protected void tearDown()
+//        throws
+//        Exception
+//    {
+//        super.tearDown();
+//    }
+//
+//    protected void setUp()
+//        throws
+//        Exception
+//    {
+//        super.setUp();
+//
+//        localRepository =
+//            new DefaultArtifactRepository(
+//                "local",
+//                new File( getBasedir(), "target/test-classes/repositories/local" ).toURI()
+//                    .toString(),
+//                new DefaultRepositoryLayout()
+//            );
+//
+//        repositories =
+//            Arrays.asList(
+//                new ArtifactRepository[]
+//                    {
+//                        new DefaultArtifactRepository(
+//                            "central",
+//                            new File( getBasedir(), "target/test-classes/repositories/central" )
+//                                .toURI().toString(),
+//                            new DefaultRepositoryLayout()
+//                        )
+//                    }
+//            );
+//    }
+//
+//    private void copy( final File in,
+//                       final File out )
+//        throws
+//        IOException
+//    {
+//        assertTrue( !out.exists() || out.delete() );
+//        assertFalse( out.exists() );
+//        IOUtil.copy( new FileReader( in ), new FileWriter( out ) );
+//        assertTrue( out.exists() );
+//        assertTrue( in.exists() );
+//    }
 
 // /*Commented on 2007 09 25
 //    private void instanceDefined( DefaultArchetypeCreationConfigurator instance )
@@ -577,57 +577,57 @@ public class DefaultArchetypeCreationConfiguratorTest
 //    }
 // Commented on 2007 09 25*/
 
-    private MavenProject loadProject( final File projectFile )
-        throws
-        ArtifactNotFoundException,
-        Exception,
-        ArtifactResolutionException,
-        ProjectBuildingException
-    {
-        MavenProjectBuilder builder = (MavenProjectBuilder) lookup( MavenProjectBuilder.ROLE );
-        return builder.buildWithDependencies( projectFile, localRepository, null );
-    }
-
-    private Properties loadProperties( File propertyFile )
-        throws
-        IOException,
-        FileNotFoundException
-    {
-        Properties properties = new Properties();
-        properties.load( new FileInputStream( propertyFile ) );
-        return properties;
-    }
-
-    private File getProjectFile( String project )
-    {
-        return new File( getBasedir(), "target/test-classes/projects/" + project + "/pom.xml" );
-    }
-
-    private File getProjectSampleFile( String project )
-    {
-        return
-            new File(
-                getBasedir(),
-                "target/test-classes/projects/" + project + "/pom.xml.sample"
-            );
-    }
-
-    private File getPropertiesFile( String project )
-    {
-        return
-            new File(
-                getBasedir(),
-                "target/test-classes/projects/" + project + "/archetype.properties"
-            );
-    }
-
-    private File getPropertiesSampleFile( final String project )
-    {
-        File propertyFileSample =
-            new File(
-                getBasedir(),
-                "target/test-classes/projects/" + project + "/archetype.properties.sample"
-            );
-        return propertyFileSample;
-    }
+//    private MavenProject loadProject( final File projectFile )
+//        throws
+//        ArtifactNotFoundException,
+//        Exception,
+//        ArtifactResolutionException,
+//        ProjectBuildingException
+//    {
+//        MavenProjectBuilder builder = (MavenProjectBuilder) lookup( MavenProjectBuilder.ROLE );
+//        return builder.buildWithDependencies( projectFile, localRepository, null );
+//    }
+//
+//    private Properties loadProperties( File propertyFile )
+//        throws
+//        IOException,
+//        FileNotFoundException
+//    {
+//        Properties properties = new Properties();
+//        properties.load( new FileInputStream( propertyFile ) );
+//        return properties;
+//    }
+//
+//    private File getProjectFile( String project )
+//    {
+//        return new File( getBasedir(), "target/test-classes/projects/" + project + "/pom.xml" );
+//    }
+//
+//    private File getProjectSampleFile( String project )
+//    {
+//        return
+//            new File(
+//                getBasedir(),
+//                "target/test-classes/projects/" + project + "/pom.xml.sample"
+//            );
+//    }
+//
+//    private File getPropertiesFile( String project )
+//    {
+//        return
+//            new File(
+//                getBasedir(),
+//                "target/test-classes/projects/" + project + "/archetype.properties"
+//            );
+//    }
+//
+//    private File getPropertiesSampleFile( final String project )
+//    {
+//        File propertyFileSample =
+//            new File(
+//                getBasedir(),
+//                "target/test-classes/projects/" + project + "/archetype.properties.sample"
+//            );
+//        return propertyFileSample;
+//    }
 }

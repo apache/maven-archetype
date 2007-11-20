@@ -94,19 +94,23 @@ public class DefaultArchetypeGenerator
 
         List repos = new ArrayList( /*repositories*/ );
 
+        ArtifactRepository remoteRepo = null;
         if ( request != null  && request.getArchetypeRepository() != null )
         {
-            ArtifactRepository remoteRepo = archetypeRegistryManager.createRepository(
+            remoteRepo=archetypeRegistryManager.createRepository(
                 request.getArchetypeRepository(),
                 request.getArchetypeArtifactId() + "-repo" );
 
             repos.add( remoteRepo );
+
+            System.err.println("REPO"+remoteRepo);
+
         }
 
         if ( !archetypeArtifactManager.exists(
             request.getArchetypeGroupId(),
             request.getArchetypeArtifactId(),
-            request.getArchetypeVersion(),
+            request.getArchetypeVersion(),remoteRepo,
             localRepository,
             repos ) )
         {
@@ -120,14 +124,14 @@ public class DefaultArchetypeGenerator
         if ( archetypeArtifactManager.isFileSetArchetype(
             request.getArchetypeGroupId(),
             request.getArchetypeArtifactId(),
-            request.getArchetypeVersion(),
+            request.getArchetypeVersion(),remoteRepo,
             localRepository,
             repos
         )
             )
         {
             processFileSetArchetype(
-                request,
+                request,remoteRepo,
                 localRepository,
                 basedir,
                 repos
@@ -137,12 +141,12 @@ public class DefaultArchetypeGenerator
             archetypeArtifactManager.isOldArchetype(
                 request.getArchetypeGroupId(),
                 request.getArchetypeArtifactId(),
-                request.getArchetypeVersion(),
+                request.getArchetypeVersion(),remoteRepo,
                 localRepository,
                 repos ) )
         {
             processOldArchetype(
-                request,
+                request,remoteRepo,
                 localRepository,
                 basedir,
                 repos
@@ -170,6 +174,7 @@ public class DefaultArchetypeGenerator
     /** FileSetArchetype */
     private void processFileSetArchetype(
         final ArchetypeGenerationRequest request,
+        ArtifactRepository remoteRepo,
         final ArtifactRepository localRepository,
         final String basedir,
         final List repositories
@@ -205,7 +210,7 @@ public class DefaultArchetypeGenerator
             archetypeArtifactManager.getArchetypeFile(
                 request.getArchetypeGroupId(),
                 request.getArchetypeArtifactId(),
-                request.getArchetypeVersion(),
+                request.getArchetypeVersion(),remoteRepo,
                 localRepository,
                 repositories
             );
@@ -215,6 +220,7 @@ public class DefaultArchetypeGenerator
 
     private void processOldArchetype(
         ArchetypeGenerationRequest request,
+        ArtifactRepository remoteRepo,
         ArtifactRepository localRepository,
         String basedir,
         List repositories
@@ -229,7 +235,7 @@ public class DefaultArchetypeGenerator
             archetypeArtifactManager.getOldArchetypeDescriptor(
                 request.getArchetypeGroupId(),
                 request.getArchetypeArtifactId(),
-                request.getArchetypeVersion(),
+                request.getArchetypeVersion(),remoteRepo,
                 localRepository,
                 repositories
             );
@@ -252,7 +258,7 @@ public class DefaultArchetypeGenerator
             oldArchetype.createArchetype(
                 request.getArchetypeGroupId(),
                 request.getArchetypeArtifactId(),
-                request.getArchetypeVersion(),
+                request.getArchetypeVersion(),remoteRepo,
                 localRepository,
                 repositories,
                 map
@@ -281,7 +287,7 @@ public class DefaultArchetypeGenerator
     public void generateArchetype( ArchetypeGenerationRequest request, ArchetypeGenerationResult result )
     {
         //TODO: get rid of the property file usage.
-        
+
         try
         {
             generateArchetype( request, null, request.getLocalRepository(), null/*Collections.singletonList( repo )*/, request.getOutputDirectory(  ) );

@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+import org.apache.maven.project.MavenProjectBuildingResult;
 
 public class DefaultArchetypeCreatorTest
     extends AbstractMojoTestCase
@@ -80,10 +81,22 @@ public class DefaultArchetypeCreatorTest
         Properties p = PropertyUtils.loadProperties( propertyFile );
 
         MavenProject mavenProject = null;
-        
+
         try
         {
-            mavenProject = builder.buildWithDependencies( projectFile, localRepository, null );
+            Object result = builder.buildWithDependencies( projectFile, localRepository, null );
+            if ( result instanceof MavenProject )
+            {// Using maven 2.0.x / x >= 7
+                mavenProject = (MavenProject) result;
+            }
+            else if ( result instanceof MavenProjectBuildingResult )
+            {// Using maven 2.1
+                mavenProject = ((MavenProjectBuildingResult) result).getProject();
+            }
+            else
+            {
+                fail( "Wrong result class" );
+            }
         }
         catch( Exception e )
         {

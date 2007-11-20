@@ -38,6 +38,7 @@ public interface ArchetypeArtifactManager
         final String groupId,
         final String artifactId,
         final String version,
+                          ArtifactRepository archetypeRepository,
         final ArtifactRepository localRepository,
         final List repositories
     )
@@ -56,6 +57,7 @@ public interface ArchetypeArtifactManager
         String groupId,
         String artifactId,
         String version,
+                          ArtifactRepository archetypeRepository,
         ArtifactRepository localRepository,
         List repositories
     )
@@ -82,6 +84,7 @@ public interface ArchetypeArtifactManager
         String groupId,
         String artifactId,
         String version,
+                          ArtifactRepository archetypeRepository,
         ArtifactRepository localRepository,
         List repositories
     )
@@ -92,6 +95,7 @@ public interface ArchetypeArtifactManager
         String archetypeGroupId,
         String archetypeArtifactId,
         String archetypeVersion,
+                          ArtifactRepository archetypeRepository,
         ArtifactRepository localRepository,
         List repos );
 
@@ -104,6 +108,7 @@ public interface ArchetypeArtifactManager
         String groupId,
         String artifactId,
         String version,
+                          ArtifactRepository archetypeRepository,
         ArtifactRepository localRepository,
         List repositories
     );
@@ -120,6 +125,7 @@ public interface ArchetypeArtifactManager
         String groupId,
         String artifactId,
         String version,
+                          ArtifactRepository archetypeRepository,
         ArtifactRepository localRepository,
         List repositories
     )
@@ -138,6 +144,7 @@ public interface ArchetypeArtifactManager
         String groupId,
         String artifactId,
         String version,
+                          ArtifactRepository archetypeRepository,
         ArtifactRepository localRepository,
         List repositories
     )
@@ -150,6 +157,7 @@ public interface ArchetypeArtifactManager
         String groupId,
         String artifactId,
         String version,
+                          ArtifactRepository archetypeRepository,
         ArtifactRepository localRepository,
         List repositories
     );
@@ -160,6 +168,7 @@ public interface ArchetypeArtifactManager
         String groupId,
         String artifactId,
         String version,
+                          ArtifactRepository archetypeRepository,
         ArtifactRepository localRepository,
         List repositories
     )

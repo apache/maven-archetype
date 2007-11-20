@@ -97,7 +97,7 @@ public class ArchetypeTest
         String archetypeGroupId = "org.apache.maven.archetypes";
         String archetypeArtifactId = "maven-archetype-quickstart";
         String archetypeVersion = "1.0-alpha-1-SNAPSHOT";
-        archetype.createArchetype( archetypeGroupId, archetypeArtifactId, archetypeVersion, localRepository,
+        archetype.createArchetype( archetypeGroupId, archetypeArtifactId, archetypeVersion, remoteRepository, localRepository,
                                    remoteRepositories, parameters );
 
         // ----------------------------------------------------------------------

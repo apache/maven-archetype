@@ -48,19 +48,19 @@ public class CatalogArchetypeDataSource
     extends AbstractLogEnabled
     implements ArchetypeDataSource
 {
-    public static String ARCHETYPE_CATALOG_PROPERTY = "file";
+    public static final String ARCHETYPE_CATALOG_PROPERTY = "file";
 
-    public static String ARCHETYPE_CATALOG_FILENAME = "archetype-catalog.xml";
+    public static final String ARCHETYPE_CATALOG_FILENAME = "archetype-catalog.xml";
 
     private ArchetypeCatalogXpp3Reader catalogReader = new ArchetypeCatalogXpp3Reader();
 
     private ArchetypeCatalogXpp3Writer catalogWriter = new ArchetypeCatalogXpp3Writer();
 
-    private File USER_HOME = new File( System.getProperty( "user.home" ) );
+    public static final File USER_HOME = new File( System.getProperty( "user.home" ) );
 
-    private File MAVEN_CONFIGURATION = new File( USER_HOME, ".m2" );
+    public static final File MAVEN_CONFIGURATION = new File( USER_HOME, ".m2" );
 
-    private File DEFAULT_ARCHETYPE_CATALOG = new File( MAVEN_CONFIGURATION, ARCHETYPE_CATALOG_FILENAME );
+    public static final File DEFAULT_ARCHETYPE_CATALOG = new File( MAVEN_CONFIGURATION, ARCHETYPE_CATALOG_FILENAME );
 
     public List getArchetypes( Properties properties )
         throws ArchetypeDataSourceException

@@ -111,7 +111,7 @@ public class DefaultArchetypeSelector
 
                     try
                     {
-                        ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( "wiki" );
+                        ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( "internal-catalog" );
 
                         archetypes.addAll( source.getArchetypes( new Properties() ) );
                     }

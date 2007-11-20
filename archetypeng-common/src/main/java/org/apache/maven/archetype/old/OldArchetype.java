@@ -39,6 +39,7 @@ public interface OldArchetype
     String ARCHETYPE_POM = "pom.xml";
 
     void createArchetype( String archetypeGroupId, String archetypeArtifactId, String archetypeVersion,
+                          ArtifactRepository archetypeRepository,
                           ArtifactRepository localRepository, List remoteRepositories, Map parameters )
         throws ArchetypeNotFoundException, ArchetypeDescriptorException, ArchetypeTemplateProcessingException;
 }
