@@ -135,13 +135,13 @@ public class DefaultArchetypeRegistryManager
         return languages;
     }
 
-    public ArchetypeRegistry readArchetypeRegistry()
-        throws
-        IOException,
-        XmlPullParserException
-    {
-        return readArchetypeRegistry( DEFAULT_REGISTRY );
-    }
+//    public ArchetypeRegistry readArchetypeRegistry()
+//        throws
+//        IOException,
+//        XmlPullParserException
+//    {
+//        return readArchetypeRegistry( DEFAULT_REGISTRY );
+//    }
 
     public ArchetypeRegistry readArchetypeRegistry( File archetypeRegistryFile )
         throws
@@ -175,31 +175,31 @@ public class DefaultArchetypeRegistryManager
         }
     }
 
-    public List getRepositories(
-        List pomRemoteRepositories,
-        String remoteRepositories,
-        File archetypeRegistryFile
-    )
-        throws
-        IOException,
-        XmlPullParserException
-    {
-        List archetypeRemoteRepositories = new ArrayList( pomRemoteRepositories );
-
-        if ( remoteRepositories != null )
-        {
-            archetypeRemoteRepositories = new ArrayList();
-
-            String[] s = StringUtils.split( remoteRepositories, "," );
-
-            for ( int i = 0; i < s.length; i++ )
-            {
-                archetypeRemoteRepositories.add( createRepository( s[i], "id" + i ) );
-            }
-        }
-
-        return archetypeRemoteRepositories;
-    }
+//    public List getRepositories(
+//        List pomRemoteRepositories,
+//        String remoteRepositories,
+//        File archetypeRegistryFile
+//    )
+//        throws
+//        IOException,
+//        XmlPullParserException
+//    {
+//        List archetypeRemoteRepositories = new ArrayList( pomRemoteRepositories );
+//
+//        if ( remoteRepositories != null )
+//        {
+//            archetypeRemoteRepositories = new ArrayList();
+//
+//            String[] s = StringUtils.split( remoteRepositories, "," );
+//
+//            for ( int i = 0; i < s.length; i++ )
+//            {
+//                archetypeRemoteRepositories.add( createRepository( s[i], "id" + i ) );
+//            }
+//        }
+//
+//        return archetypeRemoteRepositories;
+//    }
 
     public void writeArchetypeRegistry(
         File archetypeRegistryFile,

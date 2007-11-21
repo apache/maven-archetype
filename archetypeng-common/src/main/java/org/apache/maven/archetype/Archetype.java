@@ -49,14 +49,14 @@ public interface Archetype
      */
     ArchetypeGenerationResult generateProjectFromArchetype( ArchetypeGenerationRequest request );
 
-    /**
-     * Get all available archetypes using the standard ~/.m2/archetype-catalog.properties as the
-     * definition for the sources to be used and the configuration for each
-     * {@org.apache.maven.archetype.source.ArchetypeDataSource} listed.
-     *
-     * @return A Map of available archetypes collected from all available source.
-     */
-    List getAvailableArchetypes();
+//    /**
+//     * Get all available archetypes using the standard ~/.m2/archetype-catalog.properties as the
+//     * definition for the sources to be used and the configuration for each
+//     * {@org.apache.maven.archetype.source.ArchetypeDataSource} listed.
+//     *
+//     * @return A Map of available archetypes collected from all available source.
+//     */
+//    List getAvailableArchetypes();
 
     /**
      * Get all available archetypes using a specified catalog properties as the

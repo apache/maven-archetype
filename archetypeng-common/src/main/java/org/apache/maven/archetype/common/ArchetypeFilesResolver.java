@@ -36,8 +36,8 @@ public interface ArchetypeFilesResolver
     List getFilteredFiles( List files,
                            String filtered );
 
-    List filterFiles( FileSet fileSet,
-                      List archetypeResources );
+//    List filterFiles( FileSet fileSet,
+//                      List archetypeResources );
 
     List filterFiles( String moduleOffset,
                       FileSet fileSet,
@@ -79,8 +79,8 @@ public interface ArchetypeFilesResolver
         throws
         IOException;
 
-    List getUnfilteredFiles( List files,
-                             String filtered );
+//    List getUnfilteredFiles( List files,
+//                             String filtered );
 
     List getUnpackagedFiles( List files,
                              String packageName );

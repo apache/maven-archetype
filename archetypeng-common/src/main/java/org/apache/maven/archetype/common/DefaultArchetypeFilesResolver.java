@@ -69,11 +69,11 @@ public class DefaultArchetypeFilesResolver
         return result;
     }
 
-    public List filterFiles( FileSet fileSet,
-                             List archetypeResources )
-    {
-        return filterFiles( "", fileSet, archetypeResources );
-    }
+//    public List filterFiles( FileSet fileSet,
+//                             List archetypeResources )
+//    {
+//        return filterFiles( "", fileSet, archetypeResources );
+//    }
 
     public List filterFiles( String moduleOffset,
                              FileSet fileSet,
@@ -301,22 +301,22 @@ public class DefaultArchetypeFilesResolver
         return resolvePackage( files );
     }
 
-    public List getUnfilteredFiles( List files,
-                                    String filtered )
-    {
-        ListScanner scanner = new ListScanner();
-        scanner.setBasedir( "" );
-
-        scanner.setIncludes( "**" );
-        scanner.setExcludes( filtered );
-
-        List result = scanner.scan( files );
-        getLogger().debug(
-            "Scanned " + result.size() + " unfiltered files in " + files.size() + " files"
-        );
-
-        return result;
-    }
+//    public List getUnfilteredFiles( List files,
+//                                    String filtered )
+//    {
+//        ListScanner scanner = new ListScanner();
+//        scanner.setBasedir( "" );
+//
+//        scanner.setIncludes( "**" );
+//        scanner.setExcludes( filtered );
+//
+//        List result = scanner.scan( files );
+//        getLogger().debug(
+//            "Scanned " + result.size() + " unfiltered files in " + files.size() + " files"
+//        );
+//
+//        return result;
+//    }
 
     public List getUnpackagedFiles( List files,
                                     String packageName )

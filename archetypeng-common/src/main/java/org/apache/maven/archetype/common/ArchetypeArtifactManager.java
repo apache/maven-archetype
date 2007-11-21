@@ -64,13 +64,13 @@ public interface ArchetypeArtifactManager
         throws
         UnknownArchetype;
 
-    /**
-     */
-    List getArchetypes( String groupId,
-                        ArtifactRepository localRepository,
-                        List repositories )
-        throws
-        UnknownGroup;
+//    /**
+//     */
+//    List getArchetypes( String groupId,
+//                        ArtifactRepository localRepository,
+//                        List repositories )
+//        throws
+//        UnknownGroup;
 
     /**
      */
@@ -138,18 +138,18 @@ public interface ArchetypeArtifactManager
         throws
         UnknownArchetype;
 
-    /**
-     */
-    List getFilesetArchetypeResources(
-        String groupId,
-        String artifactId,
-        String version,
-                          ArtifactRepository archetypeRepository,
-        ArtifactRepository localRepository,
-        List repositories
-    )
-        throws
-        UnknownArchetype;
+//    /**
+//     */
+//    List getFilesetArchetypeResources(
+//        String groupId,
+//        String artifactId,
+//        String version,
+//                          ArtifactRepository archetypeRepository,
+//        ArtifactRepository localRepository,
+//        List repositories
+//    )
+//        throws
+//        UnknownArchetype;
 
     /**
      */
@@ -175,25 +175,25 @@ public interface ArchetypeArtifactManager
         throws
         UnknownArchetype;
 
-    /**
-     */
-    String getReleaseVersion(
-        String groupId,
-        String artifactId,
-        ArtifactRepository localRepository,
-        List repositories
-    )
-        throws
-        UnknownArchetype;
+//    /**
+//     */
+//    String getReleaseVersion(
+//        String groupId,
+//        String artifactId,
+//        ArtifactRepository localRepository,
+//        List repositories
+//    )
+//        throws
+//        UnknownArchetype;
 
-    /**
-     */
-    List getVersions(
-        String groupId,
-        String artifactId,
-        ArtifactRepository localRepository,
-        List repositories
-    )
-        throws
-        UnknownArchetype;
+//    /**
+//     */
+//    List getVersions(
+//        String groupId,
+//        String artifactId,
+//        ArtifactRepository localRepository,
+//        List repositories
+//    )
+//        throws
+//        UnknownArchetype;
 }

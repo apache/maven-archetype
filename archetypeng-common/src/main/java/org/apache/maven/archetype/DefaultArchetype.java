@@ -76,36 +76,36 @@ public class DefaultArchetype
         return result;
     }
 
-    public Collection getArchetypes( ArchetypeDataSource source,
-                                     Properties sourceConfiguration )
-        throws ArchetypeDataSourceException
-    {
-        return source.getArchetypes( sourceConfiguration );
-    }
+//    public Collection getArchetypes( ArchetypeDataSource source,
+//                                     Properties sourceConfiguration )
+//        throws ArchetypeDataSourceException
+//    {
+//        return source.getArchetypes( sourceConfiguration );
+//    }
 
-    public Collection getArchetypeDataSources()
-    {
-        return archetypeSources.values();
-    }
+//    public Collection getArchetypeDataSources()
+//    {
+//        return archetypeSources.values();
+//    }
 
-    public List getAvailableArchetypes()
-    {
-        File archetypeCatalogPropertiesFile = new File( System.getProperty( "user.home" ),
-            ".m2/archetype-catalog.properties" );
-
-        Properties archetypeCatalogProperties;
-
-        if ( archetypeCatalogPropertiesFile.exists() )
-        {
-            archetypeCatalogProperties = PropertyUtils.loadProperties( archetypeCatalogPropertiesFile );
-        }
-        else
-        {
-            archetypeCatalogProperties = new Properties();
-        }
-
-        return getAvailableArchetypes( archetypeCatalogProperties );
-    }
+//    public List getAvailableArchetypes()
+//    {
+//        File archetypeCatalogPropertiesFile = new File( System.getProperty( "user.home" ),
+//            ".m2/archetype-catalog.properties" );
+//
+//        Properties archetypeCatalogProperties;
+//
+//        if ( archetypeCatalogPropertiesFile.exists() )
+//        {
+//            archetypeCatalogProperties = PropertyUtils.loadProperties( archetypeCatalogPropertiesFile );
+//        }
+//        else
+//        {
+//            archetypeCatalogProperties = new Properties();
+//        }
+//
+//        return getAvailableArchetypes( archetypeCatalogProperties );
+//    }
 
     public List getAvailableArchetypes( Properties archetypeCatalogProperties )
     {

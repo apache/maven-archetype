@@ -1510,19 +1510,19 @@ public class FilesetArchetypeCreator
         return groups;
     }
 
-    private Properties initialiseArchetypeProperties( File propertyFile )
-        throws
-        IOException
-    {
-        Properties properties = new Properties();
-
-        if ( propertyFile != null && propertyFile.exists() )
-        {
-            archetypePropertiesManager.readProperties( properties, propertyFile );
-        }
-
-        return properties;
-    }
+//    private Properties initialiseArchetypeProperties( File propertyFile )
+//        throws
+//        IOException
+//    {
+//        Properties properties = new Properties();
+//
+//        if ( propertyFile != null && propertyFile.exists() )
+//        {
+//            archetypePropertiesManager.readProperties( properties, propertyFile );
+//        }
+//
+//        return properties;
+//    }
 
     private FileSet getPackagedFileSet(
         final boolean filtered,

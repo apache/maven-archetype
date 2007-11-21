@@ -52,19 +52,19 @@ public interface ArchetypeRegistryManager
         IOException,
         XmlPullParserException;
 
-    ArchetypeRegistry readArchetypeRegistry()
-        throws
-        IOException,
-        XmlPullParserException;
+//    ArchetypeRegistry readArchetypeRegistry()
+//        throws
+//        IOException,
+//        XmlPullParserException;
 
-    List getRepositories(
-        List pomRemoteRepositories,
-        String remoteRepositories,
-        File archetypeRegistryFile
-    )
-        throws
-        IOException,
-        XmlPullParserException;
+//    List getRepositories(
+//        List pomRemoteRepositories,
+//        String remoteRepositories,
+//        File archetypeRegistryFile
+//    )
+//        throws
+//        IOException,
+//        XmlPullParserException;
 
     void writeArchetypeRegistry( File archetypeRegistryFile,
                                  ArchetypeRegistry archetypeRegistry )
