@@ -22,7 +22,6 @@ package org.apache.maven.archetype.mojos;
 import org.apache.maven.archetype.ArchetypeCreationRequest;
 import org.apache.maven.archetype.ArchetypeCreationResult;
 import org.apache.maven.archetype.Archetype;
-import org.apache.maven.archetype.ui.ArchetypePropertiesManager;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 import org.apache.maven.archetype.ui.ArchetypeCreationConfigurator;
 import org.apache.maven.artifact.repository.ArtifactRepository;
@@ -60,9 +59,6 @@ public class CreateArchetypeFromProjectMojo
 
     /** @component */
     Archetype archetype;
-
-    /** @component */
-    private ArchetypePropertiesManager propertiesManager;
 
     /**
      * File extensions which are checked for project's text files (vs binary files).

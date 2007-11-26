@@ -22,7 +22,6 @@ package org.apache.maven.archetype.ui;
 import org.apache.maven.archetype.common.ArchetypeConfiguration;
 import org.apache.maven.archetype.common.ArchetypeDefinition;
 import org.apache.maven.archetype.common.ArchetypeFilesResolver;
-import org.apache.maven.archetype.ui.ArchetypePropertiesManager;
 import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
 import org.apache.maven.archetype.exception.ArchetypeNotDefined;
@@ -33,12 +32,17 @@ import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import org.codehaus.plexus.util.IOUtil;
 
 /** @plexus.component */
 public class DefaultArchetypeCreationConfigurator
@@ -53,9 +57,6 @@ public class DefaultArchetypeCreationConfigurator
 
     /** @plexus.requirement */
     private ArchetypeFilesResolver archetypeFilesResolver;
-
-    /** @plexus.requirement */
-    private ArchetypePropertiesManager archetypePropertiesManager;
 
     public void configureArchetypeCreation(
         MavenProject project,
@@ -239,7 +240,7 @@ public class DefaultArchetypeCreationConfigurator
             }
         } // end if
 
-        archetypePropertiesManager.writeProperties(
+        writeProperties(
             archetypeConfiguration.toProperties(),
             propertyFile
         );
@@ -324,6 +325,65 @@ public class DefaultArchetypeCreationConfigurator
             );
     }
 
+    public void readProperties( Properties properties,
+                                File propertyFile )
+        throws
+        IOException
+    {
+        getLogger().debug( "Reading property file " + propertyFile );
+
+        InputStream is = new FileInputStream( propertyFile );
+
+        try
+        {
+            properties.load( is );
+
+            getLogger().debug( "Read " + properties.size() + " properties" );
+        }
+        finally
+        {
+            IOUtil.close( is );
+        }
+    }
+
+    public void writeProperties( Properties properties,
+                                 File propertyFile )
+        throws
+        IOException
+    {
+        Properties storedProperties = new Properties();
+        try
+        {
+            readProperties( storedProperties, propertyFile );
+        }
+        catch ( FileNotFoundException ex )
+        {
+            getLogger().debug( "Property file not found. Creating a new one" );
+        }
+
+        getLogger().debug( "Adding " + properties.size() + " properties" );
+
+        Iterator propertiesIterator = properties.keySet().iterator();
+        while ( propertiesIterator.hasNext() )
+        {
+            String propertyKey = (String) propertiesIterator.next();
+            storedProperties.setProperty( propertyKey, properties.getProperty( propertyKey ) );
+        }
+
+        OutputStream os = new FileOutputStream( propertyFile );
+
+        try
+        {
+            storedProperties.store( os, "" );
+
+            getLogger().debug( "Stored " + storedProperties.size() + " properties" );
+        }
+        finally
+        {
+            IOUtil.close( os );
+        }
+    }
+    
     private Properties initialiseArchetypeProperties(
         Properties commandLineProperties,
         File propertyFile
@@ -335,7 +395,7 @@ public class DefaultArchetypeCreationConfigurator
 
         try
         {
-            archetypePropertiesManager.readProperties( properties, propertyFile );
+            readProperties( properties, propertyFile );
         }
         catch ( FileNotFoundException ex )
         {
