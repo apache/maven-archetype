@@ -26,7 +26,6 @@ import org.apache.maven.archetype.ArchetypeCreationResult;
 import org.apache.maven.archetype.common.ArchetypeConfiguration;
 import org.apache.maven.archetype.common.ArchetypeDefinition;
 import org.apache.maven.archetype.common.ArchetypeFilesResolver;
-import org.apache.maven.archetype.common.ArchetypePropertiesManager;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.common.PomManager;
@@ -83,9 +82,6 @@ public class FilesetArchetypeCreator
 {
     /** @plexus.requirement */
     private ArchetypeFilesResolver archetypeFilesResolver;
-
-    /** @plexus.requirement */
-    private ArchetypePropertiesManager archetypePropertiesManager;
 
     /** @plexus.requirement */
     private PomManager pomManager;

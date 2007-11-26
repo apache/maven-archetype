@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.apache.maven.archetype.common;
+package org.apache.maven.archetype.ui;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.IOUtil;

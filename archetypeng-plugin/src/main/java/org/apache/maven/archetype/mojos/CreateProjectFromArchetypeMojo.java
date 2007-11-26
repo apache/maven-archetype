@@ -22,7 +22,7 @@ package org.apache.maven.archetype.mojos;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
 import org.apache.maven.archetype.Archetype;
-import org.apache.maven.archetype.common.ArchetypePropertiesManager;
+import org.apache.maven.archetype.ui.ArchetypePropertiesManager;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 import org.apache.maven.archetype.generator.ArchetypeGenerator;
 import org.apache.maven.archetype.ui.ArchetypeGenerationConfigurator;
