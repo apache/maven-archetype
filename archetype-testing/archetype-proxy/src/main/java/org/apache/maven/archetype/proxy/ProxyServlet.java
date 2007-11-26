@@ -16,6 +16,7 @@
  */
 package org.apache.maven.archetype.proxy;
 
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -36,6 +37,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.mortbay.util.IO;
+
 /**
  * Stolen code from Mortbay
  *
@@ -44,9 +46,8 @@ import org.mortbay.util.IO;
 public class ProxyServlet
     extends HttpServlet
 {
-    private int _tunnelTimeoutMs = 300000;
+    protected HashSet _DontProxyHeaders = new HashSet();
 
-    protected HashSet _DontProxyHeaders = new HashSet(  );
     {
         _DontProxyHeaders.add( "proxy-connection" );
         _DontProxyHeaders.add( "connection" );
@@ -58,6 +59,7 @@ public class ProxyServlet
         _DontProxyHeaders.add( "proxy-authenticate" );
         _DontProxyHeaders.add( "upgrade" );
     }
+
     private ServletConfig config;
 
     private ServletContext context;
@@ -65,16 +67,17 @@ public class ProxyServlet
     /* (non-Javadoc)
      * @see javax.servlet.Servlet#init(javax.servlet.ServletConfig)
      */
-    public void init( ServletConfig config ) throws ServletException
+    public void init( ServletConfig config )
+        throws ServletException
     {
         this.config = config;
-        this.context = config.getServletContext(  );
+        this.context = config.getServletContext();
     }
 
     /* (non-Javadoc)
      * @see javax.servlet.Servlet#getServletConfig()
      */
-    public ServletConfig getServletConfig( )
+    public ServletConfig getServletConfig()
     {
         return config;
     }
@@ -82,29 +85,31 @@ public class ProxyServlet
     /* (non-Javadoc)
      * @see javax.servlet.Servlet#service(javax.servlet.ServletRequest, javax.servlet.ServletResponse)
      */
-    public void service( ServletRequest req, ServletResponse res ) throws ServletException,
-        IOException
+    public void service( ServletRequest req, ServletResponse res )
+        throws ServletException,
+               IOException
     {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
-        if ( "CONNECT".equalsIgnoreCase( request.getMethod(  ) ) )
+        if ( "CONNECT".equalsIgnoreCase( request.getMethod() ) )
         {
             handleConnect( request, response );
         }
         else
         {
-            String uri = request.getRequestURI(  );
-            if ( request.getQueryString(  ) != null )
+            String uri = request.getRequestURI();
+            if ( request.getQueryString() != null )
             {
-                uri += "?" + request.getQueryString(  );
+                uri += "?" + request.getQueryString();
             }
             URL url =
-                new URL( request.getScheme(  ), request.getServerName(  ), request.getServerPort(  ),
+                new URL( request.getScheme(), request.getServerName(),
+                request.getServerPort(),
                 uri );
 
             context.log( "\n\n\nURL=" + url );
 
-            URLConnection connection = url.openConnection(  );
+            URLConnection connection = url.openConnection();
             connection.setAllowUserInteraction( false );
 
             // Set method
@@ -112,7 +117,7 @@ public class ProxyServlet
             if ( connection instanceof HttpURLConnection )
             {
                 http = (HttpURLConnection) connection;
-                http.setRequestMethod( request.getMethod(  ) );
+                http.setRequestMethod( request.getMethod() );
                 http.setInstanceFollowRedirects( false );
             }
 
@@ -120,7 +125,7 @@ public class ProxyServlet
             String connectionHdr = request.getHeader( "Connection" );
             if ( connectionHdr != null )
             {
-                connectionHdr = connectionHdr.toLowerCase(  );
+                connectionHdr = connectionHdr.toLowerCase();
                 if ( connectionHdr.equals( "keep-alive" ) || connectionHdr.equals( "close" ) )
                 {
                     connectionHdr = null;
@@ -130,12 +135,12 @@ public class ProxyServlet
             // copy headers
             boolean xForwardedFor = false;
             boolean hasContent = false;
-            Enumeration enm = request.getHeaderNames(  );
-            while ( enm.hasMoreElements(  ) )
+            Enumeration enm = request.getHeaderNames();
+            while ( enm.hasMoreElements() )
             {
                 // TODO could be better than this!
                 String hdr = (String) enm.nextElement();
-                String lhdr = hdr.toLowerCase(  );
+                String lhdr = hdr.toLowerCase();
 
                 if ( _DontProxyHeaders.contains( lhdr ) )
                 {
@@ -150,7 +155,7 @@ public class ProxyServlet
                     hasContent = true;
                 }
                 Enumeration vals = request.getHeaders( hdr );
-                while ( vals.hasMoreElements(  ) )
+                while ( vals.hasMoreElements() )
                 {
                     String val = (String) vals.nextElement();
                     if ( val != null )
@@ -166,7 +171,7 @@ public class ProxyServlet
             connection.setRequestProperty( "Via", "1.1 (jetty)" );
             if ( !xForwardedFor )
             {
-                connection.addRequestProperty( "X-Forwarded-For", request.getRemoteAddr(  ) );
+                connection.addRequestProperty( "X-Forwarded-For", request.getRemoteAddr() );
             }
             // a little bit of cache control
             String cache_control = request.getHeader( "Cache-Control" );
@@ -175,22 +180,22 @@ public class ProxyServlet
             {
                 connection.setUseCaches( false );
 
-                // customize Connection
+            // customize Connection
             }
             try
             {
                 connection.setDoInput( true );
 
                 // do input thang!
-                InputStream in = request.getInputStream(  );
+                InputStream in = request.getInputStream();
                 if ( hasContent )
                 {
                     connection.setDoOutput( true );
-                    IO.copy( in, connection.getOutputStream(  ) );
+                    IO.copy( in, connection.getOutputStream() );
                 }
 
                 // Connect
-                connection.connect(  );
+                connection.connect();
             }
             catch ( Exception e )
             {
@@ -203,23 +208,23 @@ public class ProxyServlet
             int code = 500;
             if ( http != null )
             {
-                proxy_in = http.getErrorStream(  );
+                proxy_in = http.getErrorStream();
 
-                code = http.getResponseCode(  );
-                response.setStatus( code, http.getResponseMessage(  ) );
-                context.log( "response = " + http.getResponseCode(  ) );
+                code = http.getResponseCode();
+                response.setStatus( code, http.getResponseMessage() );
+                context.log( "response = " + http.getResponseCode() );
             }
 
             if ( proxy_in == null )
             {
                 try
                 {
-                    proxy_in = connection.getInputStream(  );
+                    proxy_in = connection.getInputStream();
                 }
                 catch ( Exception e )
                 {
                     context.log( "stream", e );
-                    proxy_in = http.getErrorStream(  );
+                    proxy_in = http.getErrorStream();
                 }
             }
 
@@ -233,7 +238,7 @@ public class ProxyServlet
             String val = connection.getHeaderField( h );
             while ( hdr != null || val != null )
             {
-                String lhdr = hdr != null ? hdr.toLowerCase(  ) : null;
+                String lhdr = hdr != null ? hdr.toLowerCase() : null;
                 if ( hdr != null && val != null && !_DontProxyHeaders.contains( lhdr ) )
                 {
                     response.addHeader( hdr, val );
@@ -249,16 +254,17 @@ public class ProxyServlet
             // Handle
             if ( proxy_in != null )
             {
-                IO.copy( proxy_in, response.getOutputStream(  ) );
+                IO.copy( proxy_in, response.getOutputStream() );
             }
         }
     }
 
     /* ------------------------------------------------------------ */
     public void handleConnect( HttpServletRequest request,
-        HttpServletResponse response ) throws IOException
+        HttpServletResponse response )
+        throws IOException
     {
-        String uri = request.getRequestURI(  );
+        String uri = request.getRequestURI();
 
         context.log( "CONNECT: " + uri );
 
@@ -276,41 +282,31 @@ public class ProxyServlet
             }
         }
 
-
-
-
         InetSocketAddress inetAddress =
             new InetSocketAddress( host, Integer.parseInt( port ) );
 
-        //if (isForbidden(HttpMessage.__SSL_SCHEME,addrPort.getHost(),addrPort.getPort(),false))
-        //{
-        //    sendForbid(request,response,uri);
-        //}
-        //else
-        {
-            InputStream in = request.getInputStream(  );
-            OutputStream out = response.getOutputStream(  );
+        InputStream in = request.getInputStream();
+        OutputStream out = response.getOutputStream();
 
-            Socket socket = new Socket( inetAddress.getAddress(  ), inetAddress.getPort(  ) );
-            context.log( "Socket: " + socket );
+        Socket socket = new Socket( inetAddress.getAddress(), inetAddress.getPort() );
+        context.log( "Socket: " + socket );
 
-            response.setStatus( 200 );
-            response.setHeader( "Connection", "close" );
-            response.flushBuffer(  );
+        response.setStatus( 200 );
+        response.setHeader( "Connection", "close" );
+        response.flushBuffer();
 
 
 
-            context.log( "out<-in" );
-            IO.copyThread( socket.getInputStream(  ), out );
-            context.log( "in->out" );
-            IO.copy( in, socket.getOutputStream(  ) );
-        }
+        context.log( "out<-in" );
+        IO.copyThread( socket.getInputStream(), out );
+        context.log( "in->out" );
+        IO.copy( in, socket.getOutputStream() );
     }
 
     /* (non-Javadoc)
      * @see javax.servlet.Servlet#getServletInfo()
      */
-    public String getServletInfo( )
+    public String getServletInfo()
     {
         return "Proxy Servlet";
     }
@@ -318,7 +314,7 @@ public class ProxyServlet
     /* (non-Javadoc)
      * @see javax.servlet.Servlet#destroy()
      */
-    public void destroy( )
+    public void destroy()
     {
     }
 
@@ -328,26 +324,27 @@ public class ProxyServlet
      * @param response servlet response
      */
     protected void processRequest( HttpServletRequest request,
-        HttpServletResponse response ) throws ServletException, IOException
+        HttpServletResponse response )
+        throws ServletException, IOException
     {
         response.setContentType( "text/html;charset=UTF-8" );
-        PrintWriter out = response.getWriter(  );
+        PrintWriter out = response.getWriter();
         try
         {
-            /* TODO output your page here
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ProxyServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ProxyServlet at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-             */
+        /* TODO output your page here
+        out.println("<html>");
+        out.println("<head>");
+        out.println("<title>Servlet ProxyServlet</title>");
+        out.println("</head>");
+        out.println("<body>");
+        out.println("<h1>Servlet ProxyServlet at " + request.getContextPath () + "</h1>");
+        out.println("</body>");
+        out.println("</html>");
+         */
         }
         finally
         {
-            out.close(  );
+            out.close();
         }
     }
 

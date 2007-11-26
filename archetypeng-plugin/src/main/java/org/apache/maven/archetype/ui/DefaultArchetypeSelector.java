@@ -96,7 +96,7 @@ public class DefaultArchetypeSelector
                             ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( sourceRoleHint );
 
                             archetypes.addAll(
-                                source.getArchetypes( getArchetypeDataSourceProperties( sourceRoleHint, archetypeCatalogProperties ) ) );
+                                source.getArchetypeCatalog( getArchetypeDataSourceProperties( sourceRoleHint, archetypeCatalogProperties ) ).getArchetypes() );
                         }
                         catch ( ArchetypeDataSourceException e )
                         {
@@ -113,7 +113,7 @@ public class DefaultArchetypeSelector
                     {
                         ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( "internal-catalog" );
 
-                        archetypes.addAll( source.getArchetypes( new Properties() ) );
+                        archetypes.addAll( source.getArchetypeCatalog( new Properties() ).getArchetypes() );
                     }
                     catch ( ArchetypeDataSourceException e )
                     {

@@ -116,7 +116,7 @@ public class DefaultOldArchetype
         // ----------------------------------------------------------------------
 
         File archetype;
-        
+
         try
         {
             archetype = downloader.download( archetypeGroupId, archetypeArtifactId, archetypeVersion, archetypeRepository, localRepository,

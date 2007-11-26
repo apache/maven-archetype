@@ -29,6 +29,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.List;
 import java.util.Properties;
+import org.apache.maven.archetype.catalog.ArchetypeCatalog;
+import org.apache.maven.wagon.ResourceDoesNotExistException;
 
 /**
  * @plexus.component role-hint="remote-catalog"
@@ -42,16 +44,56 @@ public class RemoteCatalogArchetypeDataSource
 
     public static String REPOSITORY_PROPERTY = "repository";
 
+    public ArchetypeCatalog getArchetypeCatalog( Properties properties )
+        throws ArchetypeDataSourceException
+    {
+        String repository = properties.getProperty( REPOSITORY_PROPERTY );
+
+        if ( repository == null )
+        {
+            throw new ArchetypeDataSourceException( "To use the remote catalog you must specify the 'repository' property with an URL." );
+        }
+
+        try
+        {
+            if ( repository.endsWith( "/" ) )
+            {
+                repository = repository.substring( 0, repository.length(  ) - 1 );
+            }
+
+            // We use wagon to take advantage of a Proxy that has already been setup in a Maven environment.
+
+            Repository wagonRepository = new Repository( "archetype", repository );
+
+            Wagon wagon = wagonManager.getWagon( wagonRepository );
+
+            File catalog = File.createTempFile( "archetype-catalog", ".xml" );
+
+            wagon.connect( wagonRepository );
+
+            wagon.get( "archetype-catalog.xml", catalog );
+
+            wagon.disconnect();
+
+            return readCatalog( new FileReader( catalog ) );
+        }
+        catch ( Exception e )
+        {
+            getLogger().warn( "Error reading archetype catalog "+ repository, e );
+            return new ArchetypeCatalog();
+        }
+    }
+
     public List getArchetypes( Properties properties )
         throws ArchetypeDataSourceException
     {
         String repository = properties.getProperty( REPOSITORY_PROPERTY );
-        
+
         if ( repository == null )
         {
             throw new ArchetypeDataSourceException( "To use the remote catalog you must specify the 'remote-catalog.repository' property correctly in your ~/.m2/archetype-catalog.properties file." );
         }
-        
+
         try
         {
             if ( repository.endsWith( "/" ) )
@@ -85,14 +127,5 @@ public class RemoteCatalogArchetypeDataSource
         throws ArchetypeDataSourceException
     {
         throw new ArchetypeDataSourceException( "Not supported yet." );
-    }
-
-    public ArchetypeDataSourceDescriptor getDescriptor()
-    {
-        ArchetypeDataSourceDescriptor d = new ArchetypeDataSourceDescriptor();
-
-        d.addParameter( REPOSITORY_PROPERTY, String.class, "http://repo1.maven.org/maven2", "The repository URL where the archetype catalog resides." );
-
-        return d;
     }
 }

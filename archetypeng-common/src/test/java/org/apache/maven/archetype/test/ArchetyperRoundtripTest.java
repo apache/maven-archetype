@@ -57,7 +57,7 @@ import java.util.Properties;
 public class ArchetyperRoundtripTest
     extends PlexusTestCase
 {
-    Jetty6xEmbeddedLocalContainer container;
+    private Jetty6xEmbeddedLocalContainer container;
 
     public void testArchetyper()
         throws Exception

@@ -142,7 +142,7 @@ public class FilesetArchetypeCreator
 
         ac.setVersion( ad.getVersion() );
 
-        ac.setGoals( ad.getGoals() );                
+        ac.setGoals( ad.getGoals() );
 
         if ( !ac.isConfigured() )
         {
@@ -1510,20 +1510,6 @@ public class FilesetArchetypeCreator
         return groups;
     }
 
-//    private Properties initialiseArchetypeProperties( File propertyFile )
-//        throws
-//        IOException
-//    {
-//        Properties properties = new Properties();
-//
-//        if ( propertyFile != null && propertyFile.exists() )
-//        {
-//            archetypePropertiesManager.readProperties( properties, propertyFile );
-//        }
-//
-//        return properties;
-//    }
-
     private FileSet getPackagedFileSet(
         final boolean filtered,
         final Set packagedExtensions,
@@ -1680,7 +1666,6 @@ public class FilesetArchetypeCreator
                 new FileOutputStream( outputFile ),
                 fileEncoding
             );
-//            FileUtils.fileWrite ( outputFile.getAbsolutePath (), content );
         } // end while
     }
 

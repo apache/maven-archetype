@@ -50,7 +50,6 @@ public class DefaultArchetypeGeneratorTest
     extends AbstractMojoTestCase
 {
     ArtifactRepository localRepository;
-    //List repositories;
 
     public void testArchetypeNotDefined()
         throws
@@ -1013,8 +1012,6 @@ public class DefaultArchetypeGeneratorTest
     {
         assertNotNull( instance );
         assertNotNull( getVariableValueFromObject( instance, "archetypeArtifactManager" ) );
-//        assertNotNull( getVariableValueFromObject( instance, "archetypeFactory" ) );
-//        assertNotNull( getVariableValueFromObject( instance, "archetypePropertiesManager" ) );
         assertNotNull( getVariableValueFromObject( instance, "oldArchetype" ) );
         assertNotNull( getVariableValueFromObject( instance, "filesetGenerator" ) );
     }

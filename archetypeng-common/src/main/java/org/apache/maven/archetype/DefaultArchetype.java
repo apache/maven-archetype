@@ -19,6 +19,7 @@
 
 package org.apache.maven.archetype;
 
+import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.creator.ArchetypeCreator;
 import org.apache.maven.archetype.generator.ArchetypeGenerator;
 import org.apache.maven.archetype.source.ArchetypeDataSource;
@@ -74,99 +75,6 @@ public class DefaultArchetype
         generator.generateArchetype( request, result );
 
         return result;
-    }
-
-//    public Collection getArchetypes( ArchetypeDataSource source,
-//                                     Properties sourceConfiguration )
-//        throws ArchetypeDataSourceException
-//    {
-//        return source.getArchetypes( sourceConfiguration );
-//    }
-
-//    public Collection getArchetypeDataSources()
-//    {
-//        return archetypeSources.values();
-//    }
-
-//    public List getAvailableArchetypes()
-//    {
-//        File archetypeCatalogPropertiesFile = new File( System.getProperty( "user.home" ),
-//            ".m2/archetype-catalog.properties" );
-//
-//        Properties archetypeCatalogProperties;
-//
-//        if ( archetypeCatalogPropertiesFile.exists() )
-//        {
-//            archetypeCatalogProperties = PropertyUtils.loadProperties( archetypeCatalogPropertiesFile );
-//        }
-//        else
-//        {
-//            archetypeCatalogProperties = new Properties();
-//        }
-//
-//        return getAvailableArchetypes( archetypeCatalogProperties );
-//    }
-
-    public List getAvailableArchetypes( Properties archetypeCatalogProperties )
-    {
-        List archetypes = new ArrayList();
-
-        String[] sources = StringUtils.split( archetypeCatalogProperties.getProperty( "sources" ), "," );
-
-        for ( int i = 0; i < sources.length; i++ )
-        {
-            String sourceRoleHint = sources[i];
-
-            try
-            {
-                ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( sourceRoleHint );
-
-                archetypes.addAll( source.getArchetypes(
-                    getArchetypeDataSourceProperties( sourceRoleHint, archetypeCatalogProperties ) ) );
-            }
-            catch ( ArchetypeDataSourceException e )
-            {
-                // do nothing, gracefully move on
-            }
-        }
-
-        // If we haven't found any Archetypes then we will currently attempt to use the Wiki source.
-        // Eventually we will use a more reliable remote catalog from the central repository.
-        if ( archetypes.size() == 0 )
-        {
-            try
-            {
-                ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( "internal-catalog" );
-
-                archetypes.addAll( source.getArchetypes( new Properties() ) );
-            }
-            catch ( ArchetypeDataSourceException e )
-            {
-                // do nothing, gracefully move on
-            }
-        }
-
-        return archetypes;
-    }
-
-    public Properties getArchetypeDataSourceProperties( String sourceRoleHint,
-                                                        Properties archetypeCatalogProperties )
-    {
-        Properties p = new Properties();
-
-        for ( Iterator i = archetypeCatalogProperties.keySet().iterator(); i.hasNext(); )
-        {
-            String key = (String) i.next();
-
-            if ( key.startsWith( sourceRoleHint ) )
-            {
-                String k = key.substring( sourceRoleHint.length() + 1 );
-
-                p.setProperty( k, archetypeCatalogProperties.getProperty( key ) );
-            }
-        }
-
-        return p;
     }
 
     public File archiveArchetype( File archetypeDirectory,
@@ -239,6 +147,62 @@ public class DefaultArchetype
 
                 zos.closeEntry();
             }
+        }
+    }
+
+    public ArchetypeCatalog getInternalCatalog()
+    {
+        try
+        {
+            ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( "internal-catalog" );
+
+            return source.getArchetypeCatalog( new Properties() );
+        }
+        catch ( ArchetypeDataSourceException e )
+        {
+            return new ArchetypeCatalog();
+        }
+    }
+
+    public ArchetypeCatalog getDefaultLocalCatalog()
+    {
+        return getLocalCatalog("${user.home}/.m2/archetype-catalog.xml");
+    }
+
+    public ArchetypeCatalog getLocalCatalog( String path )
+    {
+        try
+        {
+            Properties properties=new Properties();
+            properties.setProperty("file", path);
+            ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( "catalog" );
+
+            return source.getArchetypeCatalog( properties );
+        }
+        catch ( ArchetypeDataSourceException e )
+        {
+            return new ArchetypeCatalog();
+        }
+    }
+
+    public ArchetypeCatalog getRemoteCatalog()
+    {
+        return getRemoteCatalog("http://repo1.maven.org/maven2");
+    }
+
+    public ArchetypeCatalog getRemoteCatalog( String url )
+    {
+        try
+        {
+            Properties properties=new Properties();
+            properties.setProperty("repository", url);
+            ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( "remote-catalog" );
+
+            return source.getArchetypeCatalog( properties );
+        }
+        catch ( ArchetypeDataSourceException e )
+        {
+            return new ArchetypeCatalog();
         }
     }
 }

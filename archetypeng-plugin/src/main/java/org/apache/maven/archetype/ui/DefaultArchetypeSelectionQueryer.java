@@ -19,7 +19,7 @@
 
 package org.apache.maven.archetype.ui;
 
-import org.apache.maven.archetype.common.Archetype;
+//import org.apache.maven.archetype.common.Archetype;
 import org.apache.maven.archetype.common.ArchetypeDefinition;
 import org.codehaus.plexus.components.interactivity.Prompter;
 import org.codehaus.plexus.components.interactivity.PrompterException;
@@ -81,85 +81,85 @@ public class DefaultArchetypeSelectionQueryer
         return (org.apache.maven.archetype.catalog.Archetype) answerMap.get( answer );
     }
 
-
-    public String selectGroup( List groups )
-        throws
-        PrompterException
-    {
-        String query = "Choose group:\n";
-        Map answerMap = new HashMap();
-        List answers = new ArrayList();
-        Iterator groupIterator = groups.iterator();
-        int counter = 1;
-        while ( groupIterator.hasNext() )
-        {
-            String group = (String) groupIterator.next();
-
-            answerMap.put( "" + counter, group );
-            query += "" + counter + ": " + group + "\n";
-            answers.add( "" + counter );
-
-            counter++;
-        }
-        query += "Choose a number: ";
-
-        String answer = prompter.prompt( query, answers );
-
-        return (String) answerMap.get( answer );
-    }
-
-    public Archetype selectArtifact( List archetypes )
-        throws
-        PrompterException
-    {
-        String query = "Choose archetype:\n";
-        Map answerMap = new HashMap();
-        List answers = new ArrayList();
-        Iterator archetypeIterator = archetypes.iterator();
-        int counter = 1;
-        while ( archetypeIterator.hasNext() )
-        {
-            Archetype archetype = (Archetype) archetypeIterator.next();
-
-            answerMap.put( "" + counter, archetype );
-            query +=
-                "" + counter + ": " + archetype.getName() + " (" + archetype.getGroupId() + ":"
-                    + archetype.getArtifactId() + ")\n";
-            answers.add( "" + counter );
-
-            counter++;
-        }
-        query += "Choose a number: ";
-
-        String answer = prompter.prompt( query, answers );
-
-        return (Archetype) answerMap.get( answer );
-    }
-
-    public String selectVersion( List archetypeVersions )
-        throws
-        PrompterException
-    {
-        String query = "Choose version: \n";
-        Map answerMap = new HashMap();
-        List answers = new ArrayList();
-
-        Iterator archetypeVersionsKeys = archetypeVersions.iterator();
-        int counter = 1;
-        while ( archetypeVersionsKeys.hasNext() )
-        {
-            String archetypeVersion = (String) archetypeVersionsKeys.next();
-
-            answerMap.put( "" + counter, archetypeVersion );
-            query += "" + counter + ": " + archetypeVersion + "\n";
-            answers.add( "" + counter );
-
-            counter++;
-        }
-        query += "Choose a number: ";
-
-        String answer = prompter.prompt( query, answers );
-
-        return (String) answerMap.get( answer );
-    }
+//
+//    public String selectGroup( List groups )
+//        throws
+//        PrompterException
+//    {
+//        String query = "Choose group:\n";
+//        Map answerMap = new HashMap();
+//        List answers = new ArrayList();
+//        Iterator groupIterator = groups.iterator();
+//        int counter = 1;
+//        while ( groupIterator.hasNext() )
+//        {
+//            String group = (String) groupIterator.next();
+//
+//            answerMap.put( "" + counter, group );
+//            query += "" + counter + ": " + group + "\n";
+//            answers.add( "" + counter );
+//
+//            counter++;
+//        }
+//        query += "Choose a number: ";
+//
+//        String answer = prompter.prompt( query, answers );
+//
+//        return (String) answerMap.get( answer );
+//    }
+//
+//    public Archetype selectArtifact( List archetypes )
+//        throws
+//        PrompterException
+//    {
+//        String query = "Choose archetype:\n";
+//        Map answerMap = new HashMap();
+//        List answers = new ArrayList();
+//        Iterator archetypeIterator = archetypes.iterator();
+//        int counter = 1;
+//        while ( archetypeIterator.hasNext() )
+//        {
+//            Archetype archetype = (Archetype) archetypeIterator.next();
+//
+//            answerMap.put( "" + counter, archetype );
+//            query +=
+//                "" + counter + ": " + archetype.getName() + " (" + archetype.getGroupId() + ":"
+//                    + archetype.getArtifactId() + ")\n";
+//            answers.add( "" + counter );
+//
+//            counter++;
+//        }
+//        query += "Choose a number: ";
+//
+//        String answer = prompter.prompt( query, answers );
+//
+//        return (Archetype) answerMap.get( answer );
+//    }
+//
+//    public String selectVersion( List archetypeVersions )
+//        throws
+//        PrompterException
+//    {
+//        String query = "Choose version: \n";
+//        Map answerMap = new HashMap();
+//        List answers = new ArrayList();
+//
+//        Iterator archetypeVersionsKeys = archetypeVersions.iterator();
+//        int counter = 1;
+//        while ( archetypeVersionsKeys.hasNext() )
+//        {
+//            String archetypeVersion = (String) archetypeVersionsKeys.next();
+//
+//            answerMap.put( "" + counter, archetypeVersion );
+//            query += "" + counter + ": " + archetypeVersion + "\n";
+//            answers.add( "" + counter );
+//
+//            counter++;
+//        }
+//        query += "Choose a number: ";
+//
+//        String answer = prompter.prompt( query, answers );
+//
+//        return (String) answerMap.get( answer );
+//    }
 }

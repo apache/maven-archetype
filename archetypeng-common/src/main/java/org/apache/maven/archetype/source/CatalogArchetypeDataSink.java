@@ -51,7 +51,7 @@ public class CatalogArchetypeDataSink
                                Writer writer )
         throws ArchetypeDataSourceException, ArchetypeDataSinkException
     {
-        List archetypes = source.getArchetypes( properties );
+        List archetypes = source.getArchetypeCatalog( properties ).getArchetypes();
 
         putArchetypes( archetypes, writer );
     }

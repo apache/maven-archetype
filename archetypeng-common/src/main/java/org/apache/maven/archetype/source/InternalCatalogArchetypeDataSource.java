@@ -20,6 +20,7 @@
 package org.apache.maven.archetype.source;
 
 import org.apache.maven.archetype.catalog.Archetype;
+import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.settings.Settings;
 
 import java.io.IOException;
@@ -36,6 +37,16 @@ import java.util.Properties;
 public class InternalCatalogArchetypeDataSource
     extends CatalogArchetypeDataSource
 {
+
+    public ArchetypeCatalog getArchetypeCatalog( Properties properties )
+        throws ArchetypeDataSourceException
+    {
+        Reader reader = new InputStreamReader(
+            getClass().getClassLoader().getResourceAsStream( "archetype-catalog.xml" ) );
+
+        return readCatalog( reader );
+    }
+
     public List getArchetypes( Properties properties )
         throws ArchetypeDataSourceException
     {
@@ -45,11 +56,11 @@ public class InternalCatalogArchetypeDataSource
         return createArchetypeMap( readCatalog( reader ) );
     }
 
-    public void updateCatalog( Properties properties,
-                               Archetype archetype,
-                               Settings settings )
-        throws ArchetypeDataSourceException
-    {
-        throw new ArchetypeDataSourceException( "Not supported yet." );
-    }
+//    public void updateCatalog( Properties properties,
+//                               Archetype archetype,
+//                               Settings settings )
+//        throws ArchetypeDataSourceException
+//    {
+//        throw new ArchetypeDataSourceException( "Not supported yet." );
+//    }
 }

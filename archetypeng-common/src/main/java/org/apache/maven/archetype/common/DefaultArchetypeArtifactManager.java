@@ -134,55 +134,6 @@ public class DefaultArchetypeArtifactManager
         }
     }
 
-//    public List getArchetypes(
-//        String groupId,
-//        ArtifactRepository localRepository,
-//        List repositories
-//    )
-//        throws
-//        UnknownGroup
-//    {
-//        try
-//        {
-//            List archetypes = new ArrayList();
-//
-//            RepositoryMetadata metadata = new GroupRepositoryMetadata( groupId );
-//
-//            repositoryMetadataManager.resolve( metadata, repositories, localRepository );
-//
-//            for ( Iterator iter = metadata.getMetadata().getPlugins().iterator(); iter.hasNext(); )
-//            {
-//                Plugin plugin = (Plugin) iter.next();
-//
-//                Archetype archetype = new Archetype();
-//
-//                archetype.setGroupId( groupId );
-//
-//                archetype.setArtifactId( plugin.getArtifactId() );
-//
-//                archetype.setName( plugin.getName() );
-//
-//                archetype.setPrefix( plugin.getPrefix() );
-//
-//                if ( getLogger().isDebugEnabled() )
-//                {
-//                    getLogger().debug( "plugin=" + groupId + ":" + plugin.getArtifactId() );
-//                }
-//
-//                if ( !archetypes.contains( archetype ) )
-//                {
-//                    archetypes.add( archetype );
-//                }
-//            } // end for
-//
-//            return archetypes;
-//        }
-//        catch ( RepositoryMetadataResolutionException e )
-//        {
-//            throw new UnknownGroup( e );
-//        }
-//    }
-
     public ZipFile getArchetypeZipFile( File archetypeFile )
         throws
         UnknownArchetype
@@ -201,45 +152,16 @@ public class DefaultArchetypeArtifactManager
         }
     }
 
-    public ZipFile getArchetypeZipFile(
-        String groupId,
-        String artifactId,
-        String version,
-                          ArtifactRepository archetypeRepository,
+    public boolean exists(
+        String archetypeGroupId,
+        String archetypeArtifactId,
+        String archetypeVersion,
+        ArtifactRepository archetypeRepository,
         ArtifactRepository localRepository,
-        List repositories
-    )
-        throws
-        UnknownArchetype
-    {
-        try
-        {
-            File archetypeFile =
-                getArchetypeFile( groupId, artifactId, version, archetypeRepository, localRepository, repositories );
-
-            return new ZipFile( archetypeFile );
-        }
-        catch ( ZipException e )
-        {
-            
-            throw new UnknownArchetype( e );
-        }
-        catch ( IOException e )
-        {
-            throw new UnknownArchetype( e );
-        }
-    }
-
-    public boolean exists( 
-        String archetypeGroupId, 
-        String archetypeArtifactId, 
-        String archetypeVersion, 
-        ArtifactRepository archetypeRepository, 
-        ArtifactRepository localRepository, 
         List remoteRepositories )
     {
         try
-        {                        
+        {
             File archetypeFile = downloader.download( archetypeGroupId, archetypeArtifactId, archetypeVersion, archetypeRepository, localRepository, remoteRepositories );
 
             return archetypeFile.exists();
@@ -387,44 +309,6 @@ public class DefaultArchetypeArtifactManager
         return archetypeResources;
     }
 
-//    public List getFilesetArchetypeResources(
-//        String groupId,
-//        String artifactId,
-//        String version,
-//                          ArtifactRepository archetypeRepository,
-//        ArtifactRepository localRepository,
-//        List repositories
-//    )
-//        throws
-//        UnknownArchetype
-//    {
-//        List archetypeResources = new ArrayList();
-//
-//        ZipFile zipFile =
-//            getArchetypeZipFile( groupId, artifactId, version, archetypeRepository, localRepository, repositories );
-//
-//        Enumeration enumeration = zipFile.entries();
-//        while ( enumeration.hasMoreElements() )
-//        {
-//            ZipEntry entry = (ZipEntry) enumeration.nextElement();
-//
-//            if ( !entry.isDirectory()
-//                && entry.getName().startsWith( Constants.ARCHETYPE_RESOURCES )
-//                )
-//            {
-//                // not supposed to be file.seperator
-//                archetypeResources.add(
-//                    StringUtils.replace(
-//                        entry.getName(),
-//                        Constants.ARCHETYPE_RESOURCES + "/",
-//                        ""
-//                    )
-//                );
-//            }
-//        }
-//        return archetypeResources;
-//    }
-
     public boolean isOldArchetype(
         String groupId,
         String artifactId,
@@ -497,54 +381,6 @@ public class DefaultArchetypeArtifactManager
             throw new UnknownArchetype( e );
         }
     }
-
-//    public String getReleaseVersion(
-//        String groupId,
-//        String artifactId,
-//        ArtifactRepository localRepository,
-//        List repositories
-//    )
-//        throws
-//        UnknownArchetype
-//    {
-//        try
-//        {
-//            RepositoryMetadata metadata =
-//                new GroupRepositoryMetadata( groupId + "." + artifactId );
-//
-//            repositoryMetadataManager.resolve( metadata, repositories, localRepository );
-//
-//            return metadata.getMetadata().getVersioning().getRelease();
-//        }
-//        catch ( RepositoryMetadataResolutionException e )
-//        {
-//            throw new UnknownArchetype( e );
-//        }
-//    }
-
-//    public List getVersions(
-//        String groupId,
-//        String artifactId,
-//        ArtifactRepository localRepository,
-//        List repositories
-//    )
-//        throws
-//        UnknownArchetype
-//    {
-//        try
-//        {
-//            RepositoryMetadata metadata =
-//                new GroupRepositoryMetadata( groupId + "." + artifactId );
-//
-//            repositoryMetadataManager.resolve( metadata, repositories, localRepository );
-//
-//            return metadata.getMetadata().getVersioning().getVersions();
-//        }
-//        catch ( RepositoryMetadataResolutionException e )
-//        {
-//            throw new UnknownArchetype( e );
-//        }
-//    }
 
     private Reader getArchetypeDescriptorReader( ClassLoader archetypeJarLoader )
         throws

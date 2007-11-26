@@ -92,17 +92,14 @@ public class DefaultFilesetArchetypeGenerator
         {
             ArchetypeDescriptor archetypeDescriptor =
                 archetypeArtifactManager.getFileSetArchetypeDescriptor( archetypeFile );
-//XXX HERE use the request
-//            ArchetypeConfiguration archetypeConfiguration =
-//                archetypeFactory.createArchetypeConfiguration( archetypeDescriptor, properties );
-//archetypeConfiguration.isConfigured()
+
             if ( !isArchetypeConfigured( archetypeDescriptor, request ) )
             {
                 throw new ArchetypeNotConfigured( "The archetype is not configured" );
             }
 
             Context context = prepareVelocityContext( request );
-            
+
             String packageName = request.getPackage();
             String artifactId = request.getArtifactId();
             File outputDirectoryFile = new File( basedir, artifactId );
@@ -365,7 +362,7 @@ public class DefaultFilesetArchetypeGenerator
         context.put(Constants.ARTIFACT_ID, request.getArtifactId());
         context.put(Constants.VERSION, request.getVersion());
         context.put(Constants.PACKAGE, request.getPackage());
-        
+
         Iterator iterator = request.getProperties().keySet().iterator();
         while ( iterator.hasNext() )
         {
@@ -670,12 +667,9 @@ public class DefaultFilesetArchetypeGenerator
             true
         );
 
-        /*if ( StringUtils.isEmpty ( moduleOffset ) )
-        {*/
         getLogger().debug( "Adding module " + moduleId );
         pomManager.addModule( basedirPom, moduleId );
         pomManager.addParent( pom, basedirPom );
-        //}
     }
 
     private void processTemplate(

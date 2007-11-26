@@ -163,7 +163,6 @@ public class RepositoryServlet
         }
         else
         {
-
             response.setStatus( HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
             try
             {
@@ -179,18 +178,18 @@ public class RepositoryServlet
                 StringWriter w = new StringWriter(  );
                 IO.copy( request.getReader(  ), w );
                 log( "Content " + w.toString(  ) );
-                
-                
-                System.err.println( "Method " + request.getMethod(  ) );
-                System.err.println( "ContextPath " + request.getContextPath(  ) );
-                System.err.println( "QueryString" + request.getQueryString(  ) );
-                System.err.println( "PathInfo " + request.getPathInfo(  ) );
-                System.err.println( "ServletPath " + request.getServletPath(  ) );
-                System.err.println( "AttributeNames " + request.getAttributeNames(  ).toString(  ) );
-                System.err.println( "HeaderNames " + request.getHeaderNames(  ).toString(  ) );
-                System.err.println( "RequestURL " + request.getRequestURL(  ).toString(  ) );
-                System.err.println( "ParameterNames " + request.getParameterNames(  ).toString(  ) );
-                System.err.println( "Content " + w.toString(  ) );
+
+
+//                System.err.println( "Method " + request.getMethod(  ) );
+//                System.err.println( "ContextPath " + request.getContextPath(  ) );
+//                System.err.println( "QueryString" + request.getQueryString(  ) );
+//                System.err.println( "PathInfo " + request.getPathInfo(  ) );
+//                System.err.println( "ServletPath " + request.getServletPath(  ) );
+//                System.err.println( "AttributeNames " + request.getAttributeNames(  ).toString(  ) );
+//                System.err.println( "HeaderNames " + request.getHeaderNames(  ).toString(  ) );
+//                System.err.println( "RequestURL " + request.getRequestURL(  ).toString(  ) );
+//                System.err.println( "ParameterNames " + request.getParameterNames(  ).toString(  ) );
+//                System.err.println( "Content " + w.toString(  ) );
             }
             catch ( IOException iOException )
             {
@@ -249,6 +248,6 @@ public class RepositoryServlet
     {
         return "Repository Servlet";
     }
-    
-    
+
+
 }

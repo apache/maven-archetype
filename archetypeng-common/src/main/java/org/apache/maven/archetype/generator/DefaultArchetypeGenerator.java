@@ -102,9 +102,6 @@ public class DefaultArchetypeGenerator
                 request.getArchetypeArtifactId() + "-repo" );
 
             repos.add( remoteRepo );
-
-            System.err.println("REPO"+remoteRepo);
-
         }
 
         if ( !archetypeArtifactManager.exists(

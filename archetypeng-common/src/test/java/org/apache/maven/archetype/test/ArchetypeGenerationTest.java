@@ -29,6 +29,7 @@ import org.codehaus.plexus.PlexusTestCase;
 import java.io.File;
 import java.util.List;
 import java.util.Properties;
+import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
 
@@ -50,21 +51,16 @@ public class ArchetypeGenerationTest
             new File( getBasedir(), "target/test-classes/repositories/local" )
                 .toURI().toURL().toExternalForm(), "local-repo" );
 
-        Properties catalogProperties = new Properties();
+        ArchetypeCatalog catalog = archetype.getLocalCatalog( 
+            new File( getBasedir(), "target/test-classes/repositories/central" ).getAbsolutePath()
+                 );
 
-        catalogProperties.setProperty( "sources", "remote-catalog" );
-
-        catalogProperties.setProperty( "remote-catalog.repository",
-            new File( getBasedir(), "target/test-classes/repositories/central" )
-                .toURI().toURL().toExternalForm() );
-
-        List archetypes = archetype.getAvailableArchetypes( catalogProperties );
-
-        System.err.println( "archetypes => " + archetypes );
+        System.err.println( "archetypes => " + catalog.getArchetypes() );
         // Here I am just grabbing a OldArchetype but in a UI you would take the OldArchetype objects and present
         // them to the user.
 
-        org.apache.maven.archetype.catalog.Archetype selection = (org.apache.maven.archetype.catalog.Archetype) archetypes.get( archetypes.size() - 1 );
+        org.apache.maven.archetype.catalog.Archetype selection = (org.apache.maven.archetype.catalog.Archetype) 
+            catalog.getArchetypes().get( catalog.getArchetypes().size() - 1 );
 
         System.err.println( "Selected OldArchetype = " + selection );
         // Now you will present a dialog, or whatever, and grab the following values.

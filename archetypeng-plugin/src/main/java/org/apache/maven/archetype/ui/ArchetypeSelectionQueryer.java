@@ -19,7 +19,7 @@
 
 package org.apache.maven.archetype.ui;
 
-import org.apache.maven.archetype.common.Archetype;
+//import org.apache.maven.archetype.common.Archetype;
 import org.apache.maven.archetype.common.ArchetypeDefinition;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 
@@ -37,15 +37,15 @@ public interface ArchetypeSelectionQueryer
         throws
         PrompterException;
 
-    Archetype selectArtifact( List list )
-        throws
-        PrompterException;
-
-    String selectGroup( List list )
-        throws
-        PrompterException;
-
-    String selectVersion( List list )
-        throws
-        PrompterException;
+//    Archetype selectArtifact( List list )
+//        throws
+//        PrompterException;
+//
+//    String selectGroup( List list )
+//        throws
+//        PrompterException;
+//
+//    String selectVersion( List list )
+//        throws
+//        PrompterException;
 }

@@ -84,11 +84,6 @@ public class FileCharsetDetector
         {
             String[] prob = det.getProbableCharsets();
 
-//            if ( Arrays.asList ( prob ).contains ( "windows-1252" ) )
-//            {
-//                charset = "ISO-8859-1";
-//            }
-//            else
             if ( prob.length > 0 )
             {
                 charset = prob[0];

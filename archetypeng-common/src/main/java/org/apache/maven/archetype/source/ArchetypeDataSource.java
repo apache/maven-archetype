@@ -20,6 +20,7 @@
 package org.apache.maven.archetype.source;
 
 import org.apache.maven.archetype.catalog.Archetype;
+import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.settings.Settings;
 
 import java.util.List;
@@ -38,11 +39,14 @@ public interface ArchetypeDataSource
 {
     String ROLE = ArchetypeDataSource.class.getName();
 
-    List getArchetypes( Properties properties )
+//    List getArchetypes( Properties properties )
+//        throws ArchetypeDataSourceException;
+
+    ArchetypeCatalog getArchetypeCatalog( Properties properties )
         throws ArchetypeDataSourceException;
 
     void updateCatalog( Properties properties, Archetype archetype, Settings settings )
         throws ArchetypeDataSourceException;
 
-    ArchetypeDataSourceDescriptor getDescriptor();
+//    ArchetypeDataSourceDescriptor getDescriptor();
 }

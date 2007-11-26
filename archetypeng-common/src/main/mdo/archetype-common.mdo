@@ -30,7 +30,7 @@
 
   <classes>
 
-    <class rootElement="true">
+    <!--class>
       <name>Archetype</name>
       <fields>
         <field>
@@ -101,9 +101,9 @@
                     ]]></code>
         </codeSegment>
       </codeSegments>
-    </class>
+    </class-->
 
-    <class>
+    <class rootElement="true">
       <name>ArchetypeDefinition</name>
       <fields>
         <field>

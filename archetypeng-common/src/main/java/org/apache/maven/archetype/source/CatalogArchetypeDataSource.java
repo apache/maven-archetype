@@ -209,13 +209,47 @@ public class CatalogArchetypeDataSource
         }
     }
 
-    public ArchetypeDataSourceDescriptor getDescriptor()
+    public ArchetypeCatalog getArchetypeCatalog( Properties properties )
+        throws ArchetypeDataSourceException
     {
-        ArchetypeDataSourceDescriptor d = new ArchetypeDataSourceDescriptor();
+        String s = properties.getProperty( ARCHETYPE_CATALOG_PROPERTY );
 
-        d.addParameter( ARCHETYPE_CATALOG_PROPERTY, String.class, DEFAULT_ARCHETYPE_CATALOG.getAbsolutePath(),
-            "The repository URL where the archetype catalog resides." );
+        s = StringUtils.replace( s, "${user.home}", System.getProperty( "user.home" ) );
 
-        return d;
+        File catalogFile = new File( s );
+        if ( catalogFile.exists() && catalogFile.isDirectory() )
+        {
+            catalogFile = new File( catalogFile, ARCHETYPE_CATALOG_FILENAME );
+        }
+        getLogger().debug( "Using catalog " + catalogFile );
+
+        if ( catalogFile.exists() )
+        {
+
+            try
+            {
+                return readCatalog( new FileReader( catalogFile ) );
+
+            }
+            catch ( FileNotFoundException e )
+            {
+                throw new ArchetypeDataSourceException( "The specific archetype catalog does not exist.",
+                    e );
+            }
+        }
+        else
+        {
+            return new ArchetypeCatalog();
+        }
     }
+
+//    public ArchetypeDataSourceDescriptor getDescriptor()
+//    {
+//        ArchetypeDataSourceDescriptor d = new ArchetypeDataSourceDescriptor();
+//
+//        d.addParameter( ARCHETYPE_CATALOG_PROPERTY, String.class, DEFAULT_ARCHETYPE_CATALOG.getAbsolutePath(),
+//            "The repository URL where the archetype catalog resides." );
+//
+//        return d;
+//    }
 }

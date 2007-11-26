@@ -71,7 +71,7 @@ public interface ArchetypeRegistryManager
         throws
         IOException;
 
-    ArchetypeRegistry getDefaultArchetypeRegistry();    
+    ArchetypeRegistry getDefaultArchetypeRegistry();
 
     ArtifactRepository createRepository( String url, String repositoryId );
 }

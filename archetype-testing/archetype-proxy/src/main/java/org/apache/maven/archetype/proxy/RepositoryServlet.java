@@ -69,31 +69,32 @@ public class RepositoryServlet
     {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
-        
-        
-        
-        log( "A = " + request.getAuthType() );
-        log( "A = " + request.getCharacterEncoding() );
-        log( "A = " + request.getContentType() );
-        log( "B = " + request.getContextPath() );
-        log( "B = " + request.getLocalAddr() );
-        log( "B = " + request.getLocalName() );
-        log( "C = " + request.getMethod() );
-        log( "C = " + request.getPathInfo() );
-        log( "C = " + request.getPathTranslated() );
-        log( "D = " + request.getProtocol() );
-        log( "D = " + request.getQueryString() );
-        log( "D = " + request.getRemoteAddr() );
-        log( "E = " + request.getRemoteHost() );
-        log( "E = " + request.getRemoteUser() );
-        log( "E = " + request.getRequestURI() );
-        log( "F = " + request.getRequestedSessionId() );
-        log( "F = " + request.getScheme() );
-        log( "F = " + request.getServerName() );
-        log( "G = " + request.getServletPath() );
-        log( "G = " + request.getAttributeNames() );
-        log( "G = " + request.getCookies() );
-        log( "H = " + request.getHeaderNames() );
+
+
+
+//        log( "A = " + request.getAuthType() );
+//        log( "A = " + request.getCharacterEncoding() );
+//        log( "A = " + request.getContentType() );
+//        log( "B = " + request.getContextPath() );
+//        log( "B = " + request.getLocalAddr() );
+//        log( "B = " + request.getLocalName() );
+//        log( "C = " + request.getMethod() );
+//        log( "C = " + request.getPathInfo() );
+//        log( "C = " + request.getPathTranslated() );
+//        log( "D = " + request.getProtocol() );
+//        log( "D = " + request.getQueryString() );
+//        log( "D = " + request.getRemoteAddr() );
+//        log( "E = " + request.getRemoteHost() );
+//        log( "E = " + request.getRemoteUser() );
+//        log( "E = " + request.getRequestURI() );
+//        log( "F = " + request.getRequestedSessionId() );
+//        log( "F = " + request.getScheme() );
+//        log( "F = " + request.getServerName() );
+//        log( "G = " + request.getServletPath() );
+//        log( "G = " + request.getAttributeNames() );
+//        log( "G = " + request.getCookies() );
+//        log( "H = " + request.getHeaderNames() );
+
 //        log( "H = " + request.get );
 //        log( "H = " + request.get );
 //        log( "I = " + request.get );
@@ -105,17 +106,17 @@ public class RepositoryServlet
 //        log( "K = " + request.get );
 //        log( "K = " + request.get );
 //        log( "K = " + request.get );
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
+
+
+
+
 
         response.setHeader( "Date", null );
         response.setHeader( "Server", null );
@@ -263,6 +264,6 @@ public class RepositoryServlet
     {
         return "Repository Servlet";
     }
-    
-    
+
+
 }
