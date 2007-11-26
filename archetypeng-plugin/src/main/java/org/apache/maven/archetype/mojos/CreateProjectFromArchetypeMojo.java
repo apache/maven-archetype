@@ -94,6 +94,13 @@ public class CreateProjectFromArchetypeMojo
     private String archetypeVersion;
 
     /**
+     * The archetype's catalogs.
+     *
+     * @parameter expression="${archetypeCatalog}" default-value="internal"
+     */
+    private String archetypeCatalog;
+
+    /**
      * Local maven repository.
      *
      * @parameter expression="${localRepository}"
@@ -105,11 +112,11 @@ public class CreateProjectFromArchetypeMojo
     /**
      * User settings use to check the interactiveMode.
      *
-     * @parameter expression="${settings}"
+     * @parameter expression="${settings.interactiveMode}"
      * @required
      * @readonly
      */
-    private Settings settings;
+    private Boolean interactiveMode;
 
     /** @parameter expression="${basedir}" */
     private File basedir;
@@ -136,9 +143,9 @@ public class CreateProjectFromArchetypeMojo
 
         try
         {
-            selector.selectArchetype( request, settings.getInteractiveMode() );
+            selector.selectArchetype( request, interactiveMode, archetypeCatalog );
 
-            configurator.configureArchetype( request, settings.getInteractiveMode(), executionProperties );
+            configurator.configureArchetype( request, interactiveMode, executionProperties );
 
             ArchetypeGenerationResult result = archetype.generateProjectFromArchetype( request );
         }

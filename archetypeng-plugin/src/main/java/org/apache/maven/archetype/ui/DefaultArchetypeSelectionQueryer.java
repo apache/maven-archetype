@@ -20,6 +20,7 @@
 package org.apache.maven.archetype.ui;
 
 //import org.apache.maven.archetype.common.Archetype;
+import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.common.ArchetypeDefinition;
 import org.codehaus.plexus.components.interactivity.Prompter;
 import org.codehaus.plexus.components.interactivity.PrompterException;
@@ -53,9 +54,8 @@ public class DefaultArchetypeSelectionQueryer
         return "Y".equalsIgnoreCase( answer );
     }
 
-    public org.apache.maven.archetype.catalog.Archetype selectArchetype( List archetypes )
-        throws
-        PrompterException
+    public Archetype selectArchetype( List archetypes )
+        throws PrompterException
     {
         String query = "Choose archetype:\n";
         Map answerMap = new HashMap();
@@ -74,6 +74,42 @@ public class DefaultArchetypeSelectionQueryer
 
             counter++;
         }
+        query += "Choose a number: ";
+
+        String answer = prompter.prompt( query, answers );
+
+        return (org.apache.maven.archetype.catalog.Archetype) answerMap.get( answer );
+    }
+
+    public Archetype selectArchetype( Map catalogs )
+        throws PrompterException
+    {
+        String query = "Choose archetype:\n";
+        Map answerMap = new HashMap();
+        List answers = new ArrayList();
+
+        Iterator catalogIterator = catalogs.keySet().iterator();
+        int counter = 1;
+        while ( catalogIterator.hasNext() )
+        {
+            String catalog = (String) catalogIterator.next();
+
+            Iterator archetypeIterator = ((List) catalogs.get( catalog )).iterator();
+            while ( archetypeIterator.hasNext() )
+            {
+                org.apache.maven.archetype.catalog.Archetype archetype = (org.apache.maven.archetype.catalog.Archetype) archetypeIterator.next();
+
+                answerMap.put( "" + counter, archetype );
+                query +=
+                    "" + counter + ": " + catalog +
+                    " -> " + archetype.getArtifactId() + " (" + archetype.getDescription() + ")\n";
+                answers.add( "" + counter );
+
+                counter++;
+            }
+
+        }
+
         query += "Choose a number: ";
 
         String answer = prompter.prompt( query, answers );

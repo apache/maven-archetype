@@ -20,6 +20,8 @@
 package org.apache.maven.archetype.ui;
 
 //import org.apache.maven.archetype.common.Archetype;
+import java.util.Map;
+import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.common.ArchetypeDefinition;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 
@@ -29,13 +31,16 @@ public interface ArchetypeSelectionQueryer
 {
     String ROLE = ArchetypeSelectionQueryer.class.getName();
 
+    public Archetype selectArchetype( Map map )
+        throws PrompterException;
+
     boolean confirmSelection( ArchetypeDefinition archetypeDefinition )
         throws
         PrompterException;
 
-    org.apache.maven.archetype.catalog.Archetype selectArchetype( List list )
-        throws
-        PrompterException;
+//    Archetype selectArchetype( List list )
+//        throws
+//        PrompterException;
 
 //    Archetype selectArtifact( List list )
 //        throws

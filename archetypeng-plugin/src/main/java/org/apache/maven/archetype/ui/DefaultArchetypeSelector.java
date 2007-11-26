@@ -30,16 +30,14 @@ import org.apache.maven.archetype.source.ArchetypeDataSource;
 import org.apache.maven.archetype.source.ArchetypeDataSourceException;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.util.PropertyUtils;
 import org.codehaus.plexus.util.StringUtils;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import org.apache.commons.collections.iterators.ArrayIterator;
 
 /** @plexus.component */
 public class DefaultArchetypeSelector
@@ -48,6 +46,8 @@ public class DefaultArchetypeSelector
 {
     /** @plexus.requirement */
     private ArchetypeSelectionQueryer archetypeSelectionQueryer;
+    /** @plexus.requirement */
+    private org.apache.maven.archetype.Archetype archetype;
 
     /** @plexus.requirement role="org.apache.maven.archetype.source.ArchetypeDataSource" */
     private Map archetypeSources;
@@ -59,22 +59,62 @@ public class DefaultArchetypeSelector
         UnknownGroup,
         IOException,
         PrompterException,
+        ArchetypeSelectionFailure{throw new UnsupportedOperationException("change method");}
+
+    public void selectArchetype( ArchetypeGenerationRequest request, Boolean interactiveMode, String catalogs )
+        throws
+        ArchetypeNotDefined,
+        UnknownArchetype,
+        UnknownGroup,
+        IOException,
+        PrompterException,
         ArchetypeSelectionFailure
     {
         ArchetypeDefinition definition = new ArchetypeDefinition();
-        
+
         definition.setArtifactId( request.getArchetypeArtifactId() );
- 
+
         definition.setGroupId( request.getArchetypeGroupId() );
-        
+
         definition.setVersion( request.getArchetypeVersion() );
-        
+
+        // buggy? what in else statement
         if ( interactiveMode.booleanValue() )
         {
+            // buggy? what in else statement
             if ( !definition.isDefined() )
             {
-                List archetypes = new ArrayList();
+                Map archetypes = new HashMap();
 
+                Iterator ca = new ArrayIterator( StringUtils.split( catalogs, "," ) );
+                while(ca.hasNext())
+                {
+                    String catalog = (String) ca.next();
+                    
+                    if ("internal".equalsIgnoreCase(catalog))
+                    {//System.err.println("UNSING internal");
+                        archetypes.put("internal", archetype.getInternalCatalog().getArchetypes());
+                    }
+                    else if ("local".equalsIgnoreCase(catalog))
+                    {//System.err.println("UNSING local");
+                        archetypes.put("local", archetype.getDefaultLocalCatalog().getArchetypes());
+                    }
+                    else if ("remote".equalsIgnoreCase(catalog))
+                    {//System.err.println("UNSING remote");
+                        archetypes.put("remote", archetype.getRemoteCatalog().getArchetypes());
+                    }
+                    else if (catalog.startsWith("file://"))
+                    {//System.err.println("UNSING local "+catalog);
+                        String path = catalog.substring(7);
+                        archetypes.put("local", archetype.getLocalCatalog(path).getArchetypes());
+                    }
+                    else if (catalog.startsWith("http://"))
+                    {//System.err.println("UNSING remote "+catalog);
+                        archetypes.put("remote", archetype.getRemoteCatalog(catalog));
+                    }
+                }
+                
+                /*
                 File archetypeCatalogPropertiesFile = new File( System.getProperty( "user.home" ), ".m2/archetype-catalog.properties" );
 
                 if ( archetypeCatalogPropertiesFile.exists() )
@@ -104,38 +144,31 @@ public class DefaultArchetypeSelector
                         }
                     }
                 }
+                */
 
                 if ( archetypes.size() == 0 )
                 {
-                    getLogger().debug( "Using wiki catalog" );
+                    getLogger().debug( "Using internal catalog" );
 
-                    try
-                    {
-                        ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( "internal-catalog" );
-
-                        archetypes.addAll( source.getArchetypeCatalog( new Properties() ).getArchetypes() );
-                    }
-                    catch ( ArchetypeDataSourceException e )
-                    {
-                        getLogger().warn( "Unable to get archetypes from default wiki  source. [" + e.getMessage() + "]" );
-                    }
+                        archetypes.put("internal", archetype.getInternalCatalog().getArchetypes());
                 }
 
+                // buggy? what in else statement
                 if ( archetypes.size() > 0 )
                 {
-                    Archetype archetype = archetypeSelectionQueryer.selectArchetype( archetypes );
+                    Archetype selectedArchetype = archetypeSelectionQueryer.selectArchetype( archetypes );
 
-                    definition.setArtifactId( archetype.getArtifactId() );
+                    definition.setArtifactId( selectedArchetype.getArtifactId() );
 
-                    definition.setName( archetype.getArtifactId() );
+                    definition.setName( selectedArchetype.getArtifactId() );
 
-                    definition.setGroupId( archetype.getGroupId() );
+                    definition.setGroupId( selectedArchetype.getGroupId() );
 
-                    definition.setVersion( archetype.getVersion() );
+                    definition.setVersion( selectedArchetype.getVersion() );
 
-                    definition.setRepository( archetype.getRepository() );
+                    definition.setRepository( selectedArchetype.getRepository() );
 
-                    String goals = StringUtils.join( archetype.getGoals().iterator(), "," );
+                    String goals = StringUtils.join( selectedArchetype.getGoals().iterator(), "," );
 
                     definition.setGoals( goals );
                 }
@@ -162,7 +195,7 @@ public class DefaultArchetypeSelector
 
         request.setArchetypeRepository( definition.getRepository() );
 
-        request.setRemoteRepository( definition.getRepository() );        
+        request.setRemoteRepository( definition.getRepository() );
     }
 
     private Properties getArchetypeDataSourceProperties( String sourceRoleHint,
