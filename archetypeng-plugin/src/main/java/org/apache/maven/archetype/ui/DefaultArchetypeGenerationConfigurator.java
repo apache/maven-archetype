@@ -138,8 +138,9 @@ public class DefaultArchetypeGenerationConfigurator
         {
             throw new ArchetypeGenerationConfigurationFailure( "The defined artifact is not an archetype" );
         }
-
-        if ( interactiveMode.booleanValue() )
+        
+        // mkleint: if already preconfigured, don't ask for confirmation, assume it's fine.
+        if ( interactiveMode.booleanValue()  && !archetypeConfiguration.isConfigured() )
         {
             boolean confirmed = false;
 
