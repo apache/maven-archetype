@@ -123,7 +123,9 @@ public class CreateProjectFromArchetypeMojo
 
     private Properties executionProperties;
 
-    /** @parameter expression="${session}" 
+    /** 
+     *  @parameter expression="${session}" 
+     *  @readonly
      */
     private MavenSession session;
     /**
