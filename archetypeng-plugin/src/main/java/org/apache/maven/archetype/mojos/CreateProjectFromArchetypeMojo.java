@@ -31,7 +31,6 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.ContextEnabled;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.settings.Settings;
 import org.apache.maven.shared.invoker.DefaultInvocationRequest;
 import org.apache.maven.shared.invoker.InvocationRequest;
 import org.apache.maven.shared.invoker.Invoker;
@@ -41,6 +40,7 @@ import org.codehaus.plexus.util.StringUtils;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Properties;
+import org.apache.maven.execution.MavenSession;
 
 /**
  * Generates sample project from archetype.
@@ -121,9 +121,11 @@ public class CreateProjectFromArchetypeMojo
     /** @parameter expression="${basedir}" */
     private File basedir;
 
-    /** @parameter expression="${session.executionProperties}" */
     private Properties executionProperties;
 
+    /** @parameter expression="${session}" 
+     */
+    private MavenSession session;
     /**
      * Additional goals that can be specified by the user during the creation of the archetype.
      *
@@ -134,6 +136,9 @@ public class CreateProjectFromArchetypeMojo
     public void execute()
         throws MojoExecutionException, MojoFailureException
     {
+        
+        executionProperties = session.getExecutionProperties();
+        
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest()
             .setArchetypeGroupId( archetypeGroupId )
             .setArchetypeArtifactId( archetypeArtifactId )
