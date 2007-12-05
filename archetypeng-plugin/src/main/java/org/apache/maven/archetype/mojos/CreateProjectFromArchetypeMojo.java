@@ -95,6 +95,13 @@ public class CreateProjectFromArchetypeMojo
 
     /**
      * The archetype's catalogs.
+     * It is a comma separated list of catalogs.
+     * Catalogs use scheme:
+     * - 'file://...' with archetype-catalog.xml automatically appended when defining a directory
+     * - 'http://...' with archetype-catalog.xml always appended
+     * - 'local' which is the shortcut for 'file://~/.m2/archetype-catalog.xml'
+     * - 'remote' which is the shortcut for 'http://repo1.maven.org/maven2'
+     * - 'internal' which is an internal catalog
      *
      * @parameter expression="${archetypeCatalog}" default-value="internal"
      */
@@ -121,8 +128,6 @@ public class CreateProjectFromArchetypeMojo
     /** @parameter expression="${basedir}" */
     private File basedir;
 
-    private Properties executionProperties;
-
     /** 
      *  @parameter expression="${session}" 
      *  @readonly
@@ -139,7 +144,7 @@ public class CreateProjectFromArchetypeMojo
         throws MojoExecutionException, MojoFailureException
     {
         
-        executionProperties = session.getExecutionProperties();
+        Properties executionProperties = session.getExecutionProperties();
         
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest()
             .setArchetypeGroupId( archetypeGroupId )
