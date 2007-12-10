@@ -111,7 +111,7 @@ public class DefaultArchetypeCreationConfigurator
             boolean confirmed = false;
             while ( !confirmed )
             {
-                if ( !archetypeDefinition.isDefined() )
+                if ( !archetypeDefinition.isDefined() )//<editor-fold text="...">
                 {
                     getLogger().debug( "OldArchetype is not defined" );
                     if ( !archetypeDefinition.isGroupDefined() )
@@ -142,9 +142,9 @@ public class DefaultArchetypeCreationConfigurator
                         archetypeConfiguration,
                         archetypeDefinition
                     );
-                }
+                }//</editor-fold>
 
-                if ( !archetypeConfiguration.isConfigured() )
+                if ( !archetypeConfiguration.isConfigured() )//<editor-fold text="...">
                 {
                     getLogger().debug( "OldArchetype is not configured" );
                     if ( !archetypeConfiguration.isConfigured( Constants.GROUP_ID ) )
@@ -189,7 +189,7 @@ public class DefaultArchetypeCreationConfigurator
                             )
                         );
                     }
-                } // end if
+                }//</editor-fold>
 
                 boolean stopAddingProperties = false;
                 while ( !stopAddingProperties )

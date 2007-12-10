@@ -94,6 +94,13 @@ public class CreateProjectFromArchetypeMojo
     private String archetypeVersion;
 
     /**
+     * The archetype's repository.
+     *
+     * @parameter expression="${archetypeRepository}"
+     */
+    private String archetypeRepository;
+
+    /**
      * The archetype's catalogs.
      * It is a comma separated list of catalogs.
      * Catalogs use scheme:
@@ -151,7 +158,8 @@ public class CreateProjectFromArchetypeMojo
             .setArchetypeArtifactId( archetypeArtifactId )
             .setArchetypeVersion( archetypeVersion )
             .setOutputDirectory( basedir.getAbsolutePath() )
-            .setLocalRepository( localRepository );
+            .setLocalRepository( localRepository )
+            .setArchetypeRepository(archetypeRepository);
 
         try
         {

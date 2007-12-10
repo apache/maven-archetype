@@ -102,6 +102,23 @@
     {
         return "[" + groupId + ":" + artifactId + ":" + version + " -> " + repository + "]";
     }
+    public int hashCode ()
+    {
+        return groupId.hashCode () + 17 * artifactId.hashCode ();
+    }
+    public boolean equals (Object object)
+    {
+        if (object == null || !(object instanceof Archetype) )
+        {
+            return false;
+        }
+        else 
+        {
+            Archetype a = (Archetype) object;
+            return org.codehaus.plexus.util.StringUtils.equals( groupId, a.getGroupId () ) && 
+                   org.codehaus.plexus.util.StringUtils.equals( artifactId, a.getArtifactId () );
+        }
+    }
           ]]></code>
         </codeSegment>
       </codeSegments>

@@ -35,6 +35,7 @@ import org.codehaus.plexus.util.StringUtils;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import org.apache.commons.collections.iterators.ArrayIterator;
@@ -49,9 +50,6 @@ public class DefaultArchetypeSelector
     /** @plexus.requirement */
     private org.apache.maven.archetype.Archetype archetype;
 
-    /** @plexus.requirement role="org.apache.maven.archetype.source.ArchetypeDataSource" */
-    private Map archetypeSources;
-
     public void selectArchetype( ArchetypeGenerationRequest request, Boolean interactiveMode )
         throws
         ArchetypeNotDefined,
@@ -61,7 +59,8 @@ public class DefaultArchetypeSelector
         PrompterException,
         ArchetypeSelectionFailure{throw new UnsupportedOperationException("change method");}
 
-    public void selectArchetype( ArchetypeGenerationRequest request, Boolean interactiveMode, String catalogs )
+    public void selectArchetype( ArchetypeGenerationRequest request, 
+            Boolean interactiveMode, String catalogs )
         throws
         ArchetypeNotDefined,
         UnknownArchetype,
@@ -70,111 +69,126 @@ public class DefaultArchetypeSelector
         PrompterException,
         ArchetypeSelectionFailure
     {
+        //This should be an internal class
         ArchetypeDefinition definition = new ArchetypeDefinition();
 
-        definition.setArtifactId( request.getArchetypeArtifactId() );
-
         definition.setGroupId( request.getArchetypeGroupId() );
-
+        definition.setArtifactId( request.getArchetypeArtifactId() );
         definition.setVersion( request.getArchetypeVersion() );
+        
+        Map archetypes = getArchetypesByCatalog ( catalogs );
 
-        // buggy? what in else statement
-        if ( interactiveMode.booleanValue() )
+        if ( definition.isDefined ()
+            && StringUtils.isNotEmpty ( request.getArchetypeRepository () )
+        )
         {
-            // buggy? what in else statement
-            if ( !definition.isDefined() )
+            getLogger ().info ( "Archetype defined by properties" );
+        }
+        else
+        {
+            if ( definition.isDefined ()
+                && StringUtils.isEmpty ( request.getArchetypeRepository () )
+            )
             {
-                Map archetypes = new HashMap();
-
-                Iterator ca = new ArrayIterator( StringUtils.split( catalogs, "," ) );
-                while(ca.hasNext())
+                Iterator ca = new ArrayIterator ( StringUtils.split ( catalogs, "," ) );
+                boolean found = false;
+                while ( !found && ca.hasNext () )
                 {
-                    String catalog = (String) ca.next();
-                    
-                    if ("internal".equalsIgnoreCase(catalog))
-                    {//System.err.println("UNSING internal");
-                        archetypes.put("internal", archetype.getInternalCatalog().getArchetypes());
-                    }
-                    else if ("local".equalsIgnoreCase(catalog))
-                    {//System.err.println("UNSING local");
-                        archetypes.put("local", archetype.getDefaultLocalCatalog().getArchetypes());
-                    }
-                    else if ("remote".equalsIgnoreCase(catalog))
-                    {//System.err.println("UNSING remote");
-                        archetypes.put("remote", archetype.getRemoteCatalog().getArchetypes());
-                    }
-                    else if (catalog.startsWith("file://"))
-                    {//System.err.println("UNSING local "+catalog);
-                        String path = catalog.substring(7);
-                        archetypes.put("local", archetype.getLocalCatalog(path).getArchetypes());
-                    }
-                    else if (catalog.startsWith("http://"))
-                    {//System.err.println("UNSING remote "+catalog);
-                        archetypes.put("remote", archetype.getRemoteCatalog(catalog));
-                    }
-                }
-                
-                /*
-                File archetypeCatalogPropertiesFile = new File( System.getProperty( "user.home" ), ".m2/archetype-catalog.properties" );
-
-                if ( archetypeCatalogPropertiesFile.exists() )
-                {
-                    Properties archetypeCatalogProperties = PropertyUtils.loadProperties( archetypeCatalogPropertiesFile );
-
-                    getLogger().debug( "Using catalogs " + archetypeCatalogProperties );
-
-                    String[] sources = StringUtils.split( archetypeCatalogProperties.getProperty( "sources" ), "," );
-
-                    for ( int i = 0; i < sources.length; i++ )
+                    String catalogKey = (String) ca.next ();
+                    List catalog = (List) archetypes.get ( catalogKey );
+                    Archetype example = new Archetype ();
+                    example.setGroupId ( request.getArchetypeGroupId () );
+                    example.setArtifactId ( request.getArchetypeArtifactId () );
+                    if ( catalog.contains ( example ) )
                     {
-                        String sourceRoleHint = sources[i];
+                        found = true;
 
-                        getLogger().debug( "Reading catalog " + sourceRoleHint );
+                        Archetype foundArchetype =
+                            (Archetype) catalog.get ( catalog.indexOf ( example ) );
+                        definition.setName ( foundArchetype.getArtifactId () );
+                        definition.setRepository ( foundArchetype.getRepository () );
 
-                        try
-                        {
-                            ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( sourceRoleHint );
-
-                            archetypes.addAll(
-                                source.getArchetypeCatalog( getArchetypeDataSourceProperties( sourceRoleHint, archetypeCatalogProperties ) ).getArchetypes() );
-                        }
-                        catch ( ArchetypeDataSourceException e )
-                        {
-                            getLogger().warn( "Unable to get archetypes from " + sourceRoleHint + " source. [" + e.getMessage() + "]" );
-                        }
+                        getLogger ().info (
+                            "Archetype repository missing. Using the one from " + foundArchetype
+                            + " found in catalog " + catalogKey
+                        );
                     }
                 }
-                */
-
-                if ( archetypes.size() == 0 )
+                if ( !found )
                 {
-                    getLogger().debug( "Using internal catalog" );
-
-                        archetypes.put("internal", archetype.getInternalCatalog().getArchetypes());
-                }
-
-                // buggy? what in else statement
-                if ( archetypes.size() > 0 )
-                {
-                    Archetype selectedArchetype = archetypeSelectionQueryer.selectArchetype( archetypes );
-
-                    definition.setArtifactId( selectedArchetype.getArtifactId() );
-
-                    definition.setName( selectedArchetype.getArtifactId() );
-
-                    definition.setGroupId( selectedArchetype.getGroupId() );
-
-                    definition.setVersion( selectedArchetype.getVersion() );
-
-                    definition.setRepository( selectedArchetype.getRepository() );
-
-                    String goals = StringUtils.join( selectedArchetype.getGoals().iterator(), "," );
-
-                    definition.setGoals( goals );
+                    getLogger ().warn ( "No archetype repository found." );
+                    if ( interactiveMode.booleanValue () )
+                    {
+                        definition.setVersion ( null );
+                    }
                 }
             }
-        }
+            if ( !definition.isDefined () && definition.isPartiallyDefined () )
+            {
+                Iterator ca = new ArrayIterator ( StringUtils.split ( catalogs, "," ) );
+                boolean found = false;
+                while ( !found && ca.hasNext () )
+                {
+                    String catalogKey = (String) ca.next ();
+                    List catalog = (List) archetypes.get ( catalogKey );
+                    Archetype example = new Archetype ();
+                    example.setGroupId ( request.getArchetypeGroupId () );
+                    example.setArtifactId ( request.getArchetypeArtifactId () );
+                    if ( catalog.contains ( example ) )
+                    {
+                        found = true;
 
+                        Archetype foundArchetype =
+                            (Archetype) catalog.get ( catalog.indexOf ( example ) );
+                        definition.setGroupId ( foundArchetype.getGroupId () );
+                        definition.setArtifactId ( foundArchetype.getArtifactId () );
+                        definition.setVersion ( foundArchetype.getVersion () );
+                        definition.setName ( foundArchetype.getArtifactId () );
+                        definition.setRepository ( foundArchetype.getRepository () );
+
+                        String goals =
+                            StringUtils.join ( foundArchetype.getGoals ().iterator (), "," );
+                        definition.setGoals ( goals );
+
+                        getLogger ().info (
+                            "Archetype " + foundArchetype
+                            + " found in catalog " + catalogKey
+                        );
+                    }
+                }
+                if ( !found )
+                {
+                    getLogger ().warn ( "Specified archetype not found." );
+                    if ( interactiveMode.booleanValue () )
+                    {
+                        definition.setVersion ( null );
+                        definition.setGroupId ( null );
+                        definition.setArtifactId ( null );
+                    }
+                }
+            }
+        } 
+
+        if ( interactiveMode.booleanValue ()
+            && !definition.isDefined ()
+            && !definition.isPartiallyDefined ()
+        )
+        {
+            if ( archetypes.size () > 0 )
+            {
+                Archetype selectedArchetype =
+                    archetypeSelectionQueryer.selectArchetype ( archetypes );
+
+                definition.setGroupId ( selectedArchetype.getGroupId () );
+                definition.setArtifactId ( selectedArchetype.getArtifactId () );
+                definition.setVersion ( selectedArchetype.getVersion () );
+                definition.setName ( selectedArchetype.getArtifactId () );
+                definition.setRepository ( selectedArchetype.getRepository () );
+                String goals = StringUtils.join ( selectedArchetype.getGoals ().iterator (), "," );
+                definition.setGoals ( goals );
+            }
+        }
+        
         // Make sure the groupId and artifactId are valid, the version may just default to
         // the latest release.
 
@@ -195,7 +209,37 @@ public class DefaultArchetypeSelector
 
         request.setArchetypeRepository( definition.getRepository() );
 
-        request.setRemoteRepository( definition.getRepository() );
+//        request.setRemoteRepository( definition.getRepository() );
+    }
+
+    private Map getArchetypesByCatalog(String catalogs) {
+
+        Map archetypes = new HashMap();
+
+        Iterator ca = new ArrayIterator(StringUtils.split(catalogs, ","));
+        while (ca.hasNext()) {
+            String catalog = (String) ca.next();
+
+            if ("internal".equalsIgnoreCase(catalog)) {
+                archetypes.put("internal", archetype.getInternalCatalog().getArchetypes());
+            } else if ("local".equalsIgnoreCase(catalog)) {
+                archetypes.put("local", archetype.getDefaultLocalCatalog().getArchetypes());
+            } else if ("remote".equalsIgnoreCase(catalog)) {
+                archetypes.put("remote", archetype.getRemoteCatalog().getArchetypes());
+            } else if (catalog.startsWith("file://")) {
+                String path = catalog.substring(7);
+                archetypes.put("local", archetype.getLocalCatalog(path).getArchetypes());
+            } else if (catalog.startsWith("http://")) {
+                archetypes.put("remote", archetype.getRemoteCatalog(catalog));
+            }
+        }
+
+        if (archetypes.size() == 0) {
+            getLogger().debug("Using internal catalog");
+
+            archetypes.put("internal", archetype.getInternalCatalog().getArchetypes());
+        }
+        return archetypes;
     }
 
     private Properties getArchetypeDataSourceProperties( String sourceRoleHint,
