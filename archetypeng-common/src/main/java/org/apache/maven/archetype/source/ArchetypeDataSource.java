@@ -45,7 +45,7 @@ public interface ArchetypeDataSource
     ArchetypeCatalog getArchetypeCatalog( Properties properties )
         throws ArchetypeDataSourceException;
 
-    void updateCatalog( Properties properties, Archetype archetype, Settings settings )
+    void updateCatalog( Properties properties, Archetype archetype )
         throws ArchetypeDataSourceException;
 
 //    ArchetypeDataSourceDescriptor getDescriptor();

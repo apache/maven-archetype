@@ -20,15 +20,11 @@
 package org.apache.maven.archetype.mojos;
 
 import org.apache.maven.archetype.catalog.Archetype;
-import org.apache.maven.archetype.source.ArchetypeDataSource;
-import org.apache.maven.archetype.source.ArchetypeDataSourceException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.ContextEnabled;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.settings.Settings;
-import org.codehaus.plexus.util.PropertyUtils;
-import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
 import java.util.Iterator;
@@ -48,6 +44,9 @@ public class UpdateLocalCatalogMojo
     extends AbstractMojo
     implements ContextEnabled
 {
+    /** @component */
+    private org.apache.maven.archetype.Archetype archetyper;
+    
     /** @component role="org.apache.maven.archetype.source.ArchetypeDataSource" */
     private Map archetypeSources;
 
@@ -86,9 +85,12 @@ public class UpdateLocalCatalogMojo
         archetype.setArtifactId( project.getArtifactId(  ) );
         archetype.setVersion( project.getVersion(  ) );
         archetype.setDescription( project.getName(  ) );
-        archetype.setRepository( localRepository.toString(  ) );
+//        archetype.setRepository( localRepository.toString(  ) );
 //            archetype.setGoals(project.get);
 //            archetype.setProperties(project.get);
+        
+        archetyper.updateLocalCatalog(archetype);
+        /*
         File archetypeCatalogPropertiesFile = new File( System.getProperty( "user.home" ), ".m2/archetype-catalog.properties" );
 
         if ( archetypeCatalogPropertiesFile.exists(  ) )
@@ -125,6 +127,7 @@ public class UpdateLocalCatalogMojo
         {
             getLog(  ).debug( "Not updating wiki catalog" );
         }
+        */
     }
 
     private Properties getArchetypeSourceProperties( String sourceRoleHint, Properties archetypeCatalogProperties )

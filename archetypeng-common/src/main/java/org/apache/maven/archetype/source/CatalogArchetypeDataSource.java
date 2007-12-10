@@ -94,8 +94,7 @@ public class CatalogArchetypeDataSource
     }
 
     public void updateCatalog( Properties properties,
-                               Archetype archetype,
-                               Settings settings )
+                               Archetype archetype )
         throws ArchetypeDataSourceException
     {
         String s = properties.getProperty( ARCHETYPE_CATALOG_PROPERTY );

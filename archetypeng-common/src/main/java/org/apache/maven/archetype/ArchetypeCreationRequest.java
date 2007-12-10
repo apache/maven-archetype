@@ -32,7 +32,7 @@ public class ArchetypeCreationRequest
 {
     private ArtifactRepository localRepository;
 
-    private List remoteRepositories;
+//    private List remoteRepositories;
 
     private MavenProject project;
 
@@ -70,17 +70,17 @@ public class ArchetypeCreationRequest
         return this;
     }
 
-    public List getRemoteRepositories()
-    {
-        return remoteRepositories;
-    }
-
-    public ArchetypeCreationRequest setRemoteRepositories( List remoteRepositories )
-    {
-        this.remoteRepositories = remoteRepositories;
-
-        return this;
-    }
+//    public List getRemoteRepositories()
+//    {
+//        return remoteRepositories;
+//    }
+//
+//    public ArchetypeCreationRequest setRemoteRepositories( List remoteRepositories )
+//    {
+//        this.remoteRepositories = remoteRepositories;
+//
+//        return this;
+//    }
 
     public MavenProject getProject()
     {

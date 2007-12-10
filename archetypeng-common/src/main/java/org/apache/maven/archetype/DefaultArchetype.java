@@ -205,4 +205,22 @@ public class DefaultArchetype
             return new ArchetypeCatalog();
         }
     }
+
+    public void updateLocalCatalog(org.apache.maven.archetype.catalog.Archetype archetype) {
+        updateLocalCatalog(archetype, "${user.home}/.m2/archetype-catalog.xml");
+    }
+
+    public void updateLocalCatalog(org.apache.maven.archetype.catalog.Archetype archetype, String path) {
+        try
+        {
+            Properties properties=new Properties();
+            properties.setProperty("file", path);
+            ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( "catalog" );
+
+            source.updateCatalog(properties, archetype);
+        }
+        catch ( ArchetypeDataSourceException e )
+        {
+        }
+    }
 }

@@ -143,6 +143,9 @@ public class CreateArchetypeFromProjectMojo
     /** @parameter expression="${testMode}" */
     private boolean testMode;
 
+    /** @parameter expression="${packageName}" */
+    private String packageName;//Find a better way to resolve the package!!! enforce usage of the configurator
+
     public void execute()
         throws
         MojoExecutionException,
@@ -173,15 +176,22 @@ public class CreateArchetypeFromProjectMojo
 
             ArchetypeCreationRequest request = new ArchetypeCreationRequest()
                 .setProject( project )
+                /*Used when in interactive mode*/
                 .setPropertyFile( propertyFile )
                 .setLanguages( languages )
+                /*Should be refactored to use some ant patterns*/
                 .setFiltereds( filtereds )
+                /*Should be removed*/
                 .setIgnoreReplica( ignoreReplica )
+                /*This should be correctly handled*/
                 .setPreserveCData( preserveCData )
                 .setKeepParent( keepParent )
                 .setPartialArchetype( partialArchetype )
+                /*This should be used before there and use only languages and filtereds*/
                 .setArchetypeRegistryFile( archetypeRegistryFile )
-                .setLocalRepository( localRepository );
+                .setLocalRepository( localRepository )
+                /*this should be resolved and asked for user to verify*/
+                .setPackageName(packageName);
 
             ArchetypeCreationResult result = archetype.createArchetypeFromProject( request );
 
