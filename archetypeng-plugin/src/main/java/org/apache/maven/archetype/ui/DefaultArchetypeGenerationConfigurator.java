@@ -92,9 +92,9 @@ public class DefaultArchetypeGenerationConfigurator
         {
             throw new ArchetypeNotDefined( "The archetype is not defined" );
         }
-        if ( request.getRemoteRepository() != null )
+        if ( request.getArchetypeRepository() != null )
         {
-            archetypeRepository = archetypeRegistryManager.createRepository( request.getRemoteRepository(),
+            archetypeRepository = archetypeRegistryManager.createRepository( request.getArchetypeRepository(),
                 ad.getArtifactId() + "-repo" );
             repositories.add( archetypeRepository );
         }

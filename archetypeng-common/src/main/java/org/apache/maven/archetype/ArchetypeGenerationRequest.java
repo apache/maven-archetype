@@ -48,7 +48,7 @@ public class ArchetypeGenerationRequest
 
     private List mirrors = new ArrayList(  );
 
-    // OldArchetype definition
+    // Archetype definition
     private String archetypeName;
 
     private String archetypeGroupId;
@@ -61,7 +61,7 @@ public class ArchetypeGenerationRequest
 
     private String archetypeRepository;
 
-    // OldArchetype configuration
+    // Archetype configuration
     private String groupId;
 
     private String artifactId;
@@ -71,8 +71,6 @@ public class ArchetypeGenerationRequest
     private String packageName;
 
     private Properties properties = new Properties(  );
-
-    private String remoteRepository;
 
     public ArchetypeGenerationRequest( )
     {
@@ -85,8 +83,6 @@ public class ArchetypeGenerationRequest
         this.archetypeArtifactId = archetype.getArtifactId(  );
 
         this.archetypeVersion = archetype.getVersion(  );
-
-        this.remoteRepository = archetype.getRepository(  );
 
         this.archetypeRepository = archetype.getRepository(  );
     }
@@ -231,18 +227,6 @@ public class ArchetypeGenerationRequest
     public ArchetypeGenerationRequest setLocalRepository( ArtifactRepository localRepository )
     {
         this.localRepository = localRepository;
-
-        return this;
-    }
-
-    public String getRemoteRepository( )
-    {
-        return remoteRepository;
-    }
-
-    public ArchetypeGenerationRequest setRemoteRepository( String remoteRepository )
-    {
-        this.remoteRepository = remoteRepository;
 
         return this;
     }
