@@ -18,11 +18,11 @@ public class WikiArchetypeDataSourceTest
         ArchetypeDataSource ads = new InternalCatalogArchetypeDataSource();
         List archetypes = ads.getArchetypeCatalog( p ).getArchetypes();
 
-        assertEquals( 37, archetypes.size() );
+        assertEquals( 36, archetypes.size() );
 
         Archetype a = (Archetype) lookup(Archetype.class);
         archetypes=a.getInternalCatalog().getArchetypes();
 
-        assertEquals( 37, archetypes.size() );
+        assertEquals( 36, archetypes.size() );
     }
 }

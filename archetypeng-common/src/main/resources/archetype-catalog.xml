@@ -106,6 +106,7 @@
       <repository>http://repo1.maven.org/maven2</repository>
       <description></description>
     </archetype>
+    <!-- missing archetype.xml
     <archetype>
       <groupId>org.apache.maven.archetypes</groupId>
       <artifactId>maven-archetype-simple</artifactId>
@@ -113,6 +114,7 @@
       <repository>http://repo1.maven.org/maven2</repository>
       <description></description>
     </archetype>
+    -->
     <archetype>
       <groupId>org.apache.maven.archetypes</groupId>
       <artifactId>maven-archetype-site-simple</artifactId>
@@ -186,7 +188,7 @@
     <archetype>
       <groupId>net.databinder</groupId>
       <artifactId>data-app</artifactId>
-      <version>0.4</version>
+      <version>1.0</version>
       <repository>http://repo1.maven.org/maven2</repository>
       <description>A new Databinder application with sources and resources.</description>
     </archetype>

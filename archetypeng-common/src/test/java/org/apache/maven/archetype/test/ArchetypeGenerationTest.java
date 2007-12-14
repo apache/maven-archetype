@@ -27,6 +27,7 @@ import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.codehaus.plexus.PlexusTestCase;
 
 import java.io.File;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
@@ -104,6 +105,47 @@ public class ArchetypeGenerationTest
         {
             result.getCause().printStackTrace( System.err );
             fail( result.getCause().getMessage() );
+        }
+    }
+    
+    
+
+    public void testInternalCatalog ()
+    throws Exception
+    {
+        ArchetypeRegistryManager registryManager = (ArchetypeRegistryManager) lookup( ArchetypeRegistryManager.ROLE );
+
+        ArtifactRepository localRepository = registryManager.createRepository( new File( getBasedir(),
+            "target/test-classes/repositories/local" ).toURI().
+            toURL().
+            toExternalForm(),
+            "local-repo" );
+        
+        File outputDirectory = new File(getBasedir(), "target/internal-archetypes-projects");
+        outputDirectory.mkdirs();
+        
+        Archetype archetype = (Archetype) lookup ( Archetype.class );
+
+        ArchetypeCatalog result = archetype.getInternalCatalog ();
+
+        Iterator archetypes = result.getArchetypes ().iterator ();
+        int count = 1;
+        while ( archetypes.hasNext () )
+        {
+            org.apache.maven.archetype.catalog.Archetype a =
+                (org.apache.maven.archetype.catalog.Archetype) archetypes.next ();
+
+            System.err.println("\n\n\n\n\n\nTesting archetype "+a);
+            ArchetypeGenerationRequest request = new ArchetypeGenerationRequest ( a )
+            .setGroupId ( "groupId" + count )
+            .setArtifactId ( "artifactId" + count )
+            .setVersion ( "version" + count )
+            .setPackage ( "package" + count )
+            .setOutputDirectory(outputDirectory.getPath())
+            .setLocalRepository( localRepository );
+            archetype.generateProjectFromArchetype ( request );
+            count++;
+            System.err.println("\n\n\n\n\n");
         }
     }
 }
