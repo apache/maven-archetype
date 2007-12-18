@@ -25,7 +25,7 @@
   <parent>
     <groupId>org.apache.maven</groupId>
     <artifactId>maven-parent</artifactId>
-    <version>5</version>
+    <version>7</version>
     <relativePath>../pom/maven/pom.xml</relativePath>
   </parent>
 
@@ -267,7 +267,7 @@
               <javadoc>false</javadoc>
               <logLevel>warn</logLevel>
               <profile>default</profile>
-              <convention>file:///home/users/rafale/projects/RafaleCodeConvention.xml</convention>
+              <convention>file:///home/rafale/projects/RafaleCodeConvention.xml</convention>
               <includes>
                 <include>**/*.java</include>
               </includes>
@@ -288,18 +288,30 @@
         </plugins>
       </build>
     </profile>
-  </profiles>
+  </profiles> 
+  
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/sandbox/trunk/archetypeng</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/sandbox/trunk/archetypeng</developerConnection>
+    <url>http://svn.apache.org/viewcvs.cgi/maven/sandbox/trunk/archetypeng</url>
+  </scm>
 
   <build>
-       <pluginManagement>
+    <pluginManagement>
        <plugins>
+         <plugin>
+          <artifactId>maven-release-plugin</artifactId>
+          <configuration>
+            <tagBase>https://svn.apache.org/repos/asf/maven/sandbox/tags</tagBase>
+          </configuration>
+        </plugin>
          <plugin>
            <groupId>org.apache.maven.plugins</groupId>
            <artifactId>maven-surefire-plugin</artifactId>
            <version>2.3</version>
-         </plugin>
+         </plugin>  
        </plugins>
-      </pluginManagement>
+    </pluginManagement>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>

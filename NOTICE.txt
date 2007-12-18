@@ -1,3 +1,5 @@
-We use jchardet jchardet.sourceforge.net for file encoding recognition. 
-jchardet is using Mozilla 1.1 license
+This product includes software developed by 
+The Apache Software Foundation (http://www.apache.org/).
 
+This product includes software developed by jchardet.sourceforge.net 
+jchardet is using Mozilla 1.1 license.
