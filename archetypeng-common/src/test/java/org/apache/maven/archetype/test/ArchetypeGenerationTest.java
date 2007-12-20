@@ -108,44 +108,4 @@ public class ArchetypeGenerationTest
         }
     }
     
-    
-
-    public void testInternalCatalog ()
-    throws Exception
-    {
-        ArchetypeRegistryManager registryManager = (ArchetypeRegistryManager) lookup( ArchetypeRegistryManager.ROLE );
-
-        ArtifactRepository localRepository = registryManager.createRepository( new File( getBasedir(),
-            "target/test-classes/repositories/local" ).toURI().
-            toURL().
-            toExternalForm(),
-            "local-repo" );
-        
-        File outputDirectory = new File(getBasedir(), "target/internal-archetypes-projects");
-        outputDirectory.mkdirs();
-        
-        Archetype archetype = (Archetype) lookup ( Archetype.class );
-
-        ArchetypeCatalog result = archetype.getInternalCatalog ();
-
-        Iterator archetypes = result.getArchetypes ().iterator ();
-        int count = 1;
-        while ( archetypes.hasNext () )
-        {
-            org.apache.maven.archetype.catalog.Archetype a =
-                (org.apache.maven.archetype.catalog.Archetype) archetypes.next ();
-
-            System.err.println("\n\n\n\n\n\nTesting archetype "+a);
-            ArchetypeGenerationRequest request = new ArchetypeGenerationRequest ( a )
-            .setGroupId ( "groupId" + count )
-            .setArtifactId ( "artifactId" + count )
-            .setVersion ( "version" + count )
-            .setPackage ( "package" + count )
-            .setOutputDirectory(outputDirectory.getPath())
-            .setLocalRepository( localRepository );
-            archetype.generateProjectFromArchetype ( request );
-            count++;
-            System.err.println("\n\n\n\n\n");
-        }
-    }
 }
