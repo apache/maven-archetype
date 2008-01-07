@@ -126,9 +126,8 @@ public class CreateProjectFromArchetypeMojo
     /**
      * User settings use to check the interactiveMode.
      *
-     * @parameter expression="${settings.interactiveMode}"
+     * @parameter expression="${archetype.interactive}" default-value="${settings.interactiveMode}"
      * @required
-     * @readonly
      */
     private Boolean interactiveMode;
 
