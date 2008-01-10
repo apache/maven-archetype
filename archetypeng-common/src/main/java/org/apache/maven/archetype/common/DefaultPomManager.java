@@ -290,6 +290,40 @@ public class DefaultPomManager
         return model;
     }
 
+
+    public Model readPom( InputStream pomStream )
+        throws
+        IOException,
+        XmlPullParserException
+    { // TODO ensure correct encoding by using default one from method argument !!!
+
+        Model model;
+        Reader pomReader = null;
+        try
+        {
+//            FileCharsetDetector detector = new FileCharsetDetector( pomStream );
+
+            String fileEncoding = /*detector.isFound() ? detector.getCharset() :*/ "UTF-8";
+
+            pomReader = new InputStreamReader( pomStream, fileEncoding );
+
+            MavenXpp3Reader reader = new MavenXpp3Reader();
+
+            model = reader.read( pomReader );
+
+            if ( StringUtils.isEmpty( model.getModelEncoding() ) )
+            {
+                model.setModelEncoding( fileEncoding );
+            }
+        }
+        finally
+        {
+            IOUtil.close( pomReader );
+            pomReader = null;
+        }
+        return model;
+    }
+
     public void writePom( final Model model,
                           final File pomFile,
                           final File initialPomFile )
