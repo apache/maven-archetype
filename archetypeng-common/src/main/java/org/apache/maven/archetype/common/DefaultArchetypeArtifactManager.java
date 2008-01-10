@@ -20,19 +20,15 @@
 package org.apache.maven.archetype.common;
 
 import org.apache.maven.archetype.exception.UnknownArchetype;
-import org.apache.maven.archetype.exception.UnknownGroup;
 import org.apache.maven.archetype.metadata.ArchetypeDescriptor;
 import org.apache.maven.archetype.metadata.io.xpp3.ArchetypeDescriptorXpp3Reader;
 import org.apache.maven.archetype.old.descriptor.ArchetypeDescriptorBuilder;
 import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.repository.metadata.GroupRepositoryMetadata;
-import org.apache.maven.artifact.repository.metadata.Plugin;
-import org.apache.maven.artifact.repository.metadata.RepositoryMetadata;
 import org.apache.maven.artifact.repository.metadata.RepositoryMetadataManager;
-import org.apache.maven.artifact.repository.metadata.RepositoryMetadataResolutionException;
 import org.apache.maven.archetype.downloader.DownloadException;
 import org.apache.maven.archetype.downloader.DownloadNotFoundException;
 import org.apache.maven.archetype.downloader.Downloader;
+import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
@@ -47,11 +43,11 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
+import org.apache.maven.model.Model;
 
 /** @plexus.component */
 public class DefaultArchetypeArtifactManager
@@ -63,6 +59,9 @@ public class DefaultArchetypeArtifactManager
 
     /** @plexus.requirement */
     private RepositoryMetadataManager repositoryMetadataManager;
+
+    /** @plexus.requirement */
+    private PomManager pomManager;
 
     public File getArchetypeFile(
         final String groupId,
@@ -200,10 +199,29 @@ public class DefaultArchetypeArtifactManager
                     repositories
                 );
 
-            org.apache.maven.archetype.metadata.ArchetypeDescriptor descriptor =
-                loadFileSetArchetypeDescriptor( archetypeJarLoader );
+            return isFileSetArchetype(archetypeJarLoader);
+        }
+        catch ( XmlPullParserException e )
+        {
+            return false;
+        }
+        catch ( IOException e )
+        {
+            return false;
+        }
+        catch ( UnknownArchetype e )
+        {
+            return false;
+        }
+    }
 
-            return descriptor.getName() != null;
+    public boolean isFileSetArchetype(File archetypeFile) {
+        try
+        {
+            ClassLoader archetypeJarLoader =
+                getArchetypeJarLoader(archetypeFile);
+
+            return isFileSetArchetype(archetypeJarLoader);
         }
         catch ( XmlPullParserException e )
         {
@@ -329,10 +347,29 @@ public class DefaultArchetypeArtifactManager
                     repositories
                 );
 
-            org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor descriptor =
-                loadOldArchetypeDescriptor( archetypeJarLoader );
+            return isOldArchetype(archetypeJarLoader);
+        }
+        catch ( XmlPullParserException e )
+        {
+            return false;
+        }
+        catch ( IOException e )
+        {
+            return false;
+        }
+        catch ( UnknownArchetype ex )
+        {
+            return false;
+        }
+    }
 
-            return descriptor.getId() != null;
+    public boolean isOldArchetype(File archetypeFile) {
+        try
+        {
+            ClassLoader archetypeJarLoader =
+                getArchetypeJarLoader(archetypeFile);
+
+            return isOldArchetype(archetypeJarLoader);
         }
         catch ( XmlPullParserException e )
         {
@@ -396,6 +433,24 @@ public class DefaultArchetypeArtifactManager
         }
 
         return new InputStreamReader( is );
+    }
+
+    private boolean isFileSetArchetype ( ClassLoader archetypeJarLoader )
+    throws XmlPullParserException, IOException
+    {
+        org.apache.maven.archetype.metadata.ArchetypeDescriptor descriptor =
+            loadFileSetArchetypeDescriptor ( archetypeJarLoader );
+
+        return descriptor.getName () != null;
+    }
+
+    private boolean isOldArchetype ( ClassLoader archetypeJarLoader )
+    throws IOException, XmlPullParserException
+    {
+        org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor descriptor =
+            loadOldArchetypeDescriptor ( archetypeJarLoader );
+
+        return descriptor.getId () != null;
     }
 
     private org.apache.maven.archetype.metadata.ArchetypeDescriptor loadFileSetArchetypeDescriptor(
@@ -512,5 +567,52 @@ public class DefaultArchetypeArtifactManager
             ( loader == null )
                 ? Thread.currentThread().getContextClassLoader().getResourceAsStream( name )
                 : loader.getResourceAsStream( name );
+    }
+
+    public Model getArchetypePom ( File jar )
+    throws XmlPullParserException, UnknownArchetype, IOException
+    {
+        String pomFileName = null;
+        ZipFile zipFile = getArchetypeZipFile ( jar );
+        Enumeration enumeration = zipFile.entries ();
+        while ( enumeration.hasMoreElements () )
+        {
+            ZipEntry el = (ZipEntry) enumeration.nextElement ();
+//            System.err.println (
+//                "entry=" + el.getName () + "  " + el.getComment () + " D" + el.isDirectory ()
+//            );
+
+            String entry = el.getName ();
+            if ( entry.startsWith ( "META-INF/maven" ) && entry.endsWith ( "pom.xml" ) )
+            {
+                pomFileName = entry;
+            }
+        }
+
+        return
+            ( pomFileName == null )
+            ? null
+            : pomManager.readPom ( zipFile.getInputStream ( zipFile.getEntry ( pomFileName ) ) );
+  }
+
+    public org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor getOldArchetypeDescriptor (
+        File archetypeFile
+    )
+    throws UnknownArchetype
+    {
+        try
+        {
+            ClassLoader archetypeJarLoader = getArchetypeJarLoader ( archetypeFile );
+
+            return loadOldArchetypeDescriptor ( archetypeJarLoader );
+        }
+        catch ( XmlPullParserException e )
+        {
+            throw new UnknownArchetype ( e );
+        }
+        catch ( IOException e )
+        {
+            throw new UnknownArchetype ( e );
+        }
     }
 }

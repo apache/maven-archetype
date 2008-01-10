@@ -45,6 +45,16 @@
           </association>
         </field>
       </fields>
+      <codeSegments>
+        <codeSegment>
+          <code><![CDATA[
+    public String toString ()
+    {
+        return archetypes.toString();
+    }
+          ]]></code>
+        </codeSegment>
+      </codeSegments>
     </class>
     <class>
       <name>Archetype</name>

@@ -25,8 +25,8 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.dom4j.DocumentException;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 
 public interface PomManager
 {
@@ -53,6 +53,11 @@ public interface PomManager
         XmlPullParserException;
 
     Model readPom( File pomFile )
+        throws
+        IOException,
+        XmlPullParserException;
+    
+    Model readPom( InputStream pomStream )
         throws
         IOException,
         XmlPullParserException;

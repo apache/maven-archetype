@@ -20,17 +20,21 @@
 package org.apache.maven.archetype.common;
 
 import org.apache.maven.archetype.exception.UnknownArchetype;
-import org.apache.maven.archetype.exception.UnknownGroup;
 import org.apache.maven.archetype.metadata.ArchetypeDescriptor;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.zip.ZipFile;
+import org.apache.maven.model.Model;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 public interface ArchetypeArtifactManager
 {
     String ROLE = ArchetypeArtifactManager.class.getName();
+
+    public Model getArchetypePom(File jar) throws XmlPullParserException, UnknownArchetype, IOException;
 
     /**
      */
@@ -99,6 +103,8 @@ public interface ArchetypeArtifactManager
         ArtifactRepository localRepository,
         List repositories
     );
+    
+    boolean isFileSetArchetype( File archetypeFile );
 
     /**
      */
@@ -135,6 +141,8 @@ public interface ArchetypeArtifactManager
         ArtifactRepository localRepository,
         List repositories
     );
+    
+    boolean isOldArchetype( File archetypeFile );
 
     /**
      */
@@ -145,6 +153,11 @@ public interface ArchetypeArtifactManager
                           ArtifactRepository archetypeRepository,
         ArtifactRepository localRepository,
         List repositories
+    )
+        throws
+        UnknownArchetype;
+    org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor getOldArchetypeDescriptor(
+        File archetypeFile
     )
         throws
         UnknownArchetype;
