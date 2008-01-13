@@ -1,0 +1,42 @@
+ -----
+ Archetypeng - Main
+ -----
+ The Maven Team
+ -----
+
+Purpose
+
+    The purpose of this plugin is to provide the mecanism to
+    {{{generation.html}create}} a sample project from an
+    {{{archetypes.html}archetype}} and to {{{creation.html}create-from-project}} an archetype
+    from an existing project.
+
+Quickstart
+
+    There is two way of using the archetype plugin:
+
+    * call <<<mvn archetypeng:{{{generation.html}create}}>>> for project
+      generation from an archetype. To avoid console prompts and only use a
+      property file, add <<<-B>>> option.
+
+    * call <<<mvn archetypeng:{{{creation.html}create-from-project}}>>> in a project directory
+      for archetype creation. To avoid console prompts and only use a property
+      file, add <<<-B>>> option.
+
+    []
+
+Table of content
+
+    [[1]] {{{generation.html}Generation}} of a project.
+
+    [[1]] {{{creation.html}Creation}} of an archetype.
+
+    [[1]] What are {{{archetypes.html}archetypes}} ?
+
+    [[1]] {{{mojos.html}Mojos}} of the plugin.
+
+    [[1]] How to {{{archetype-handcraft.html}handcraft}} archetypes ?
+
+    [[1]] Archetypeng {{{design.html}design}} for developers.
+
+    []

@@ -1,0 +1,39 @@
+ -----
+ Archetypeng - Archetypes
+ -----
+ The Maven Team
+ -----
+
+Archetypes
+
+    An archetype is a {{{#Descriptor}descriptor}} and a set of
+    {{{#Templates}templates}}. There is two kind of archetypes: complete and
+    partial.
+
+    A complete archetype represents a Maven 2 project with complete features.
+    Eg. a class library, a desktop application, a web application.
+
+    A partial archetype represents an added feature to an existing Maven 2
+    project. Eg. using modello, using jetty.
+
+    The archetype is packaged in a jar file.
+
+    Archetypes can be created using the {{{creation.html}creation}} mecanism or 
+    can be {{{archetype-handcraft.html}handcrafted}}.
+
+* {Descriptor}
+
+    The archetype descriptor is an xml file defining:
+
+    * the archetype name,
+
+    * the properties needed by the templates,
+
+    * the templates used to generate the project sorted by categories.
+
+    []
+
+* {Templates}
+
+    The templates are velocity template files. They are used to generate the 
+    sources of the project.

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Licensed to the Apache Software Foundation (ASF) under one
+  ~ or more contributor license agreements.  See the NOTICE file
+  ~ distributed with this work for additional information
+  ~ regarding copyright ownership.  The ASF licenses this file
+  ~ to you under the Apache License, Version 2.0 (the
+  ~ "License"); you may not use this file except in compliance
+  ~ with the License.  You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing,
+  ~ software distributed under the License is distributed on an
+  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~ KIND, either express or implied.  See the License for the
+  ~ specific language governing permissions and limitations
+  ~ under the License.
+  -->
+<model>
+  <id>archetype-descriptor</id>
+  <name>ArchetypeDescriptor</name>
+
+  <defaults>
+    <default>
+      <key>package</key>
+      <value>org.apache.maven.archetype.metadata</value>
+    </default>
+  </defaults>
+  <classes>
+    <class rootElement="true" xml.tagName="archetype-descriptor">
+      <name>ArchetypeDescriptor</name>
+      <superClass>AbstractArchetypeDescriptor</superClass>
+      <fields>
+        <field xml.attribute="true">
+          <name>name</name>
+          <type>String</type>
+          <required>true</required>
+        </field>
+        <field xml.attribute="true">
+          <name>partial</name>
+          <type>boolean</type>
+          <required>false</required>
+        </field>
+        <field>
+          <name>requiredProperties</name>
+          <association>
+            <type>RequiredProperty</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>ModuleDescriptor</name>
+      <superClass>AbstractArchetypeDescriptor</superClass>
+      <fields>
+        <field xml.attribute="true">
+          <name>id</name>
+          <type>String</type>
+          <required>true</required>
+        </field>
+        <field xml.attribute="true">
+          <name>dir</name>
+          <type>String</type>
+          <required>true</required>
+        </field>
+        <field xml.attribute="true">
+          <name>name</name>
+          <type>String</type>
+          <required>true</required>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>AbstractArchetypeDescriptor</name>
+      <fields>
+        <field>
+          <name>fileSets</name>
+          <association>
+            <type>FileSet</type>
+            <multiplicity>*</multiplicity>
+          </association>
+          <required>true</required>
+        </field>
+        <field>
+          <name>modules</name>
+          <association>
+            <type>ModuleDescriptor</type>
+            <multiplicity>*</multiplicity>
+          </association>
+          <required>false</required>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>FileSet</name>
+      <fields>
+        <field xml.attribute="true">
+          <name>filtered</name>
+          <type>boolean</type>
+          <required>false</required>
+        </field>
+        <field xml.attribute="true">
+          <name>packaged</name>
+          <type>boolean</type>
+          <required>false</required>
+        </field>
+        <field xml.attribute="true">
+          <name>encoding</name>
+          <type>String</type>
+          <required>false</required>
+        </field>
+        <field>
+          <name>directory</name>
+          <type>String</type>
+          <required>true</required>
+        </field>
+        <field>
+          <name>includes</name>
+          <association>
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+          <required>false</required>
+        </field>
+        <field>
+          <name>excludes</name>
+          <association>
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+          <required>false</required>
+        </field>
+      </fields>
+      <codeSegments>
+        <codeSegment>
+          <code><![CDATA[
+    {
+        filtered = true;
+        packaged = true;
+    }
+
+    public String toString ()
+    {
+        return
+            getDirectory () + " (" +
+                (isFiltered () ? "Filtered" : "Copied") +
+                "-" +
+                (isPackaged () ? "Packaged" : "Flat") +
+            ") [" +
+                org.codehaus.plexus.util.StringUtils.join ( getIncludes ().iterator (), ", " ) +
+                " -- " +
+                org.codehaus.plexus.util.StringUtils.join ( getExcludes ().iterator (), ", " ) +
+            "]";
+
+    }
+                    ]]></code>
+        </codeSegment>
+      </codeSegments>
+    </class>
+
+    <class>
+      <name>RequiredProperty</name>
+      <fields>
+        <field xml.attribute="true">
+          <name>key</name>
+          <type>String</type>
+          <required>true</required>
+        </field>
+        <field>
+          <name>defaultValue</name>
+          <type>String</type>
+          <required>false</required>
+        </field>
+      </fields>
+    </class>
+  </classes>
+</model>

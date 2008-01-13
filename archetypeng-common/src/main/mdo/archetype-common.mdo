@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Licensed to the Apache Software Foundation (ASF) under one
+  ~ or more contributor license agreements.  See the NOTICE file
+  ~ distributed with this work for additional information
+  ~ regarding copyright ownership.  The ASF licenses this file
+  ~ to you under the Apache License, Version 2.0 (the
+  ~ "License"); you may not use this file except in compliance
+  ~ with the License.  You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing,
+  ~ software distributed under the License is distributed on an
+  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~ KIND, either express or implied.  See the License for the
+  ~ specific language governing permissions and limitations
+  ~ under the License.
+  -->
+<model>
+  <id>archetype-common</id>
+  <name>ArchetypeCommon</name>
+
+  <defaults>
+    <default>
+      <key>package</key>
+      <value>org.apache.maven.archetype.common</value>
+    </default>
+  </defaults>
+
+  <classes>
+
+    <!--class>
+      <name>Archetype</name>
+      <fields>
+        <field>
+          <name>GroupId</name>
+          <type>String</type>
+        </field>
+        <field>
+          <name>ArtifactId</name>
+          <type>String</type>
+        </field>
+        <field>
+          <name>Version</name>
+          <type>String</type>
+        </field>
+        <field>
+          <name>Name</name>
+          <type>String</type>
+        </field>
+        <field>
+          <name>Prefix</name>
+          <type>String</type>
+        </field>
+      </fields>
+      <codeSegments>
+        <codeSegment>
+          <code><![CDATA[
+    public boolean equals( Object o )
+    {
+        if ( this == o )
+        {
+            return true;
+        }
+
+        if ( !( o instanceof Archetype ) )
+        {
+            return false;
+        }
+
+        Archetype a = (Archetype) o;
+
+        if ( !a.getArtifactId().equals( getArtifactId() ) )
+        {
+            return false;
+        }
+        else if ( !a.getGroupId().equals( getGroupId() ) )
+        {
+            return false;
+        }
+        /*
+        else if ( !a.getPrefix().equals( getPrefix() ) )
+        {
+            return false;
+        }
+        else if ( !a.getName().equals( getName() ) )
+        {
+            return false;
+        }*/
+        return true;
+    }
+
+    public int hashCode()
+    {
+        int result = 17;
+        result = 37 * result + getArtifactId().hashCode();
+        result = 37 * result + getGroupId().hashCode();
+        return result;
+    }
+                    ]]></code>
+        </codeSegment>
+      </codeSegments>
+    </class-->
+
+    <class rootElement="true">
+      <name>ArchetypeDefinition</name>
+      <fields>
+        <field>
+          <name>GroupId</name>
+          <type>String</type>
+        </field>
+        <field>
+          <name>ArtifactId</name>
+          <type>String</type>
+        </field>
+        <field>
+          <name>Version</name>
+          <type>String</type>
+        </field>
+        <field>
+          <name>Name</name>
+          <type>String</type>
+        </field>
+        <field>
+          <name>repository</name>
+          <type>String</type>
+        </field>
+        <field>
+          <name>goals</name>
+          <type>String</type>
+        </field>
+      </fields>
+      <codeSegments>
+        <codeSegment>
+          <code><![CDATA[
+    public void reset ()
+    {
+        setGroupId ( null );
+        setArtifactId ( null );
+        setVersion ( null );
+    }
+
+    public boolean isArtifactDefined ()
+    {
+        return org.codehaus.plexus.util.StringUtils.isNotEmpty( getArtifactId () );
+    }
+
+    public boolean isDefined ()
+    {
+        return isPartiallyDefined () && isVersionDefined ();
+    }
+
+    public boolean isGroupDefined ()
+    {
+        return org.codehaus.plexus.util.StringUtils.isNotEmpty( getGroupId () );
+    }
+
+    public boolean isPartiallyDefined ()
+    {
+        return isGroupDefined () && isArtifactDefined ();
+    }
+
+    public boolean isVersionDefined ()
+    {
+        return org.codehaus.plexus.util.StringUtils.isNotEmpty( getVersion () );
+    }
+                    ]]></code>
+        </codeSegment>
+      </codeSegments>
+    </class>
+
+    <class>
+      <name>ArchetypeConfiguration</name>
+      <fields>
+        <field>
+          <name>GroupId</name>
+          <type>String</type>
+        </field>
+        <field>
+          <name>ArtifactId</name>
+          <type>String</type>
+        </field>
+        <field>
+          <name>Version</name>
+          <type>String</type>
+        </field>
+        <field>
+          <name>Name</name>
+          <type>String</type>
+        </field>
+        <field>
+          <name>goals</name>
+          <type>String</type>
+        </field>
+        <field>
+          <name>RequiredProperties</name>
+          <association>
+            <type>String</type>
+            <multiplicity>*</multiplicity>
+          </association>
+        </field>
+      </fields>
+      <codeSegments>
+        <codeSegment>
+          <code><![CDATA[
+    public void reset ()
+    {
+        properties.clear ();
+    }
+
+    private java.util.Properties properties = new java.util.Properties ();
+
+    public void setProperty ( String requiredProperty, String propertyValue )
+    {
+        properties.setProperty ( requiredProperty, propertyValue );
+    }
+
+    public String getProperty (String property)
+    {
+        return properties.getProperty ( property, null );
+    }
+
+    public java.util.Properties getProperties ()
+    {
+        return properties;
+    }
+
+    public java.util.Properties toProperties ()
+    {
+        java.util.Properties result = new java.util.Properties ();
+        result.putAll ( properties );
+        result.setProperty (
+            Constants.ARCHETYPE_GROUP_ID,
+            (org.codehaus.plexus.util.StringUtils.isNotEmpty( getGroupId () ) ? getGroupId () : "" )
+        );
+        result.setProperty (
+            Constants.ARCHETYPE_ARTIFACT_ID,
+            (org.codehaus.plexus.util.StringUtils.isNotEmpty( getArtifactId () ) ? getArtifactId () : "" )
+        );
+        result.setProperty (
+            Constants.ARCHETYPE_VERSION,
+            (org.codehaus.plexus.util.StringUtils.isNotEmpty( getVersion () ) ? getVersion () : "" )
+        );
+
+        properties.setProperty (
+            Constants.ARCHETYPE_POST_GENERATION_GOALS,
+            (org.codehaus.plexus.util.StringUtils.isNotEmpty( getGoals() ) ? getGoals() : "" )
+        );
+
+        return result;
+    }
+
+    public boolean isConfigured ()
+    {
+        boolean configured = true;
+
+        java.util.Iterator requiredProperties = getRequiredProperties().iterator();
+        while ( configured && requiredProperties.hasNext () )
+        {
+            String requiredProperty = (String) requiredProperties.next ();
+
+            configured = configured &&
+                org.codehaus.plexus.util.StringUtils.isNotEmpty(
+                    properties.getProperty ( requiredProperty )
+                );
+        }
+
+        return configured;
+    }
+
+    public boolean isConfigured ( String requiredProperties )
+    {
+        return org.codehaus.plexus.util.StringUtils.isNotEmpty (
+                    properties.getProperty ( requiredProperties )
+                );
+    }
+
+    private java.util.Properties defaultProperties = new java.util.Properties ();
+
+    public void setDefaultProperty ( String requiredProperty, String propertyValue )
+    {
+        defaultProperties.setProperty ( requiredProperty, propertyValue );
+    }
+
+    public String getDefaultValue (String requiredProperty)
+    {
+        return defaultProperties.getProperty ( requiredProperty, null );
+    }
+
+    public java.util.Properties getDefaultValues ()
+    {
+        return defaultProperties;
+    }
+                    ]]></code>
+        </codeSegment>
+      </codeSegments>
+    </class>
+  </classes>
+</model>
