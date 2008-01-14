@@ -129,7 +129,7 @@ public class ArchetyperRoundtripWithProxyTest
 
         // (5) install the archetype we just created
         File generatedArchetypeDirectory = new File( project.getBasedir(),
-            "target/generated-sources/archetypeng" );
+            "target/generated-sources/archetype" );
         File generatedArchetypePom = new File( generatedArchetypeDirectory, "pom.xml" );
         MavenProject generatedArchetypeProject = projectBuilder.build( generatedArchetypePom,
             localRepository, null );

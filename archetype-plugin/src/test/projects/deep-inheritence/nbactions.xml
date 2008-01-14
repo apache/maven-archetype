@@ -5,7 +5,7 @@
             <recursive>false</recursive>
             <goals>
                 <goal>clean</goal>
-                <goal>archetypeng:create-from-project</goal>
+                <goal>archetype:create-from-project</goal>
             </goals>
         </action>
         <action>
@@ -14,7 +14,7 @@
             <recursive>false</recursive>
             <goals>
                 <goal>clean</goal>
-                <goal>archetypeng:create-from-project</goal>
+                <goal>archetype:create-from-project</goal>
             </goals>
         </action>
     </actions>

@@ -28,7 +28,7 @@
     <artifactId>test-create-1</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <name>Maven ArchetypeNG Test create-1</name>
+    <name>Maven archetype Test create-1</name>
     <packaging>pom</packaging>
 
 </project>

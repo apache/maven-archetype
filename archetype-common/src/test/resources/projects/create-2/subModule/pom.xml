@@ -31,7 +31,7 @@
   </parent>
 
   <artifactId>test-create-2</artifactId>
-  <name>Maven ArchetypeNG Test create-2-subModule</name>
+  <name>Maven archetype Test create-2-subModule</name>
   <packaging>pom</packaging>
 
 </project>

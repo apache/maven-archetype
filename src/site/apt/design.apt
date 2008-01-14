@@ -1,12 +1,12 @@
  -----
- Archetypeng - Design
+ archetype - Design
  -----
  The Maven Team
  -----
 
 Design
 
-    The archetypeng plugin is built upon a stack.
+    The archetype plugin is built upon a stack.
 
     The top most elements are the {{{mojos.html}mojos}}, among them two are
     mojos invoking a custom lifecycle on which are binded the inner mojos.

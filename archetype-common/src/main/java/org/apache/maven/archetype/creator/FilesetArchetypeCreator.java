@@ -228,13 +228,13 @@ public class FilesetArchetypeCreator
 
         Extension extension = new Extension();
         extension.setGroupId( "org.apache.maven.archetype" );
-        extension.setArtifactId( "archetypeng-packaging" );
+        extension.setArtifactId( "archetype-packaging" );
         extension.setVersion( "2.0-SNAPSHOT" );
         model.getBuild().addExtension( extension );
 
         Plugin plugin = new Plugin();
         plugin.setGroupId( "org.apache.maven.plugins" );
-        plugin.setArtifactId( "maven-archetypeng-plugin" );
+        plugin.setArtifactId( "maven-archetype-plugin" );
         plugin.setVersion( "2.0-SNAPSHOT" );
         plugin.setExtensions( true );
         model.getBuild().addPlugin( plugin );
@@ -1470,7 +1470,7 @@ public class FilesetArchetypeCreator
 
     private String getGeneratedSourcesDirectory()
     {
-        return "target" + File.separator + "generated-sources" + File.separator + "archetypeng";
+        return "target" + File.separator + "generated-sources" + File.separator + "archetype";
     }
 
     private Map getGroupsMap( final List files,
