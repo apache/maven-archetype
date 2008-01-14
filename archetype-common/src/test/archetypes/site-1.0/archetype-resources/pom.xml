@@ -28,6 +28,6 @@ under the License.
   <artifactId>${artifactId}</artifactId>
   <version>${version}</version>
 
-  <name>Maven ArchetypeNG Test site</name>
+  <name>Maven archetype Test site</name>
   <packaging>pom</packaging>
 </project>

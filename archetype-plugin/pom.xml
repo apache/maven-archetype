@@ -26,17 +26,17 @@
 
   <parent>
     <groupId>org.apache.maven.archetype</groupId>
-    <artifactId>maven-archetypeng</artifactId>
+    <artifactId>maven-archetype</artifactId>
     <version>2.0-SNAPSHOT</version>
   </parent>
 
   <!--
     The purpose of having groupId different from other
-    modules is to call mvn archetypeng:*
+    modules is to call mvn archetype:*
     w/out the need to add a plugin group in settings
   -->
   <groupId>org.apache.maven.plugins</groupId>
-  <artifactId>maven-archetypeng-plugin</artifactId>
+  <artifactId>maven-archetype-plugin</artifactId>
 
   <name>Maven Archetype Plugin</name>
   <packaging>maven-plugin</packaging>
@@ -48,7 +48,7 @@
   <dependencies>
     <dependency>
       <groupId>org.apache.maven.archetype</groupId>
-      <artifactId>archetypeng-common</artifactId>
+      <artifactId>archetype-common</artifactId>
       <version>2.0-SNAPSHOT</version>
     </dependency>
     <dependency>
@@ -76,7 +76,7 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
         <configuration>
-          <goalPrefix>archetypeng</goalPrefix>
+          <goalPrefix>archetype</goalPrefix>
         </configuration>
       </plugin>
     </plugins>

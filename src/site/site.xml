@@ -20,7 +20,7 @@
       <item name="Archetype Creation" href="./creation.html"/>
       <item name="Handcrafting archetypes" href="./archetype-handcraft.html"/>
       <item name="Mojos of the plugin" href="./mojos.html"/>
-      <item name="Desing of the Archetypeng plugin" href="./design.html"/>
+      <item name="Desing of the archetype plugin" href="./design.html"/>
     </menu>
     ${reports}
   </body>

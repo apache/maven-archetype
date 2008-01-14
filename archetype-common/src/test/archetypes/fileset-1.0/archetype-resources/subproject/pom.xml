@@ -34,7 +34,7 @@
   <artifactId>${artifactId}</artifactId>
   <version>${version}</version>
 
-  <name>Maven ArchetypeNG Test Subfolder</name>
+  <name>Maven archetype Test Subfolder</name>
   <packaging>pom</packaging>
 
   <modules>

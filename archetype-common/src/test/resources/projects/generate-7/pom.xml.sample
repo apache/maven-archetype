@@ -28,7 +28,7 @@
     <artifactId>test-generate-7</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <name>Maven ArchetypeNG Test Generate 7</name>
+    <name>Maven archetype Test Generate 7</name>
     <packaging>jar</packaging>
 
 </project>

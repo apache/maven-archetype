@@ -1,5 +1,5 @@
  -----
- Archetypeng - Creation
+ archetype - Creation
  -----
  The Maven Team
  -----
@@ -15,7 +15,7 @@ Creation
     []
 
     At the end of these steps, you have a Maven 2 archetype created in the
-    target/generated-sources/archetypeng directory.
+    target/generated-sources/archetype directory.
 
     It is possible to use the generation plugin in {{{#Batch}batch}} mode.
 
@@ -47,7 +47,7 @@ Creation
 
 * Example of use
 
-    To create an archetype, call <mvn archetypeng:create-from-project>.
+    To create an archetype, call <mvn archetype:create-from-project>.
 
 
 +--
@@ -60,7 +60,7 @@ Creation
     |       `-- org
     |           `-- codehaus
     |               `-- mojo
-    |                   `-- archetypeng
+    |                   `-- archetype
     |                       `-- test
     |                           `-- start
     |                               `-- App.java
@@ -69,7 +69,7 @@ Creation
             `-- org
                 `-- codehaus
                     `-- mojo
-                        `-- archetypeng
+                        `-- archetype
                             `-- test
                                 `-- start
                                     `-- AppTest.java
@@ -81,25 +81,25 @@ Creation
     {{{generation.html}generation}} :-)).
 
 +--
-[rafale@fixe test-start]$ mvn archetypeng:create-from-project
+[rafale@fixe test-start]$ mvn archetype:create-from-project
 [INFO] Scanning for projects...
-[INFO] Searching repository for plugin with prefix: 'archetypeng'.
-[INFO] artifact org.codehaus.mojo:maven-archetypeng-plugin: checking for updates from central
+[INFO] Searching repository for plugin with prefix: 'archetype'.
+[INFO] artifact org.codehaus.mojo:maven-archetype-plugin: checking for updates from central
 [INFO] ----------------------------------------------------------------------------
 [INFO] Building test-start
-[INFO]    task-segment: [archetypeng:create-from-project]
+[INFO]    task-segment: [archetype:create-from-project]
 [INFO] ----------------------------------------------------------------------------
-[INFO] Preparing archetypeng:create-from-project
+[INFO] Preparing archetype:create-from-project
 +--
 
     The first step of the creation: <configure-creation>
 
 +--
-[INFO] [archetypeng:configure-creation]
-Define value for archetype.groupId:  org.codehaus.mojo.archetypeng.test: :
+[INFO] [archetype:configure-creation]
+Define value for archetype.groupId:  org.codehaus.mojo.archetype.test: :
 Define value for archetype.artifactId:  test-start-archetype: :
 Define value for archetype.version:  1.0-SNAPSHOT: :
-Define value for groupId:  org.codehaus.mojo.archetypeng.test: :
+Define value for groupId:  org.codehaus.mojo.archetype.test: :
 Define value for artifactId:  test-start: :
 Define value for version:  1.0-SNAPSHOT: :
 +--
@@ -118,12 +118,12 @@ Add a new custom property Y: : N
 
 +--
 Confirm archetype configuration:
-archetype.groupId: org.codehaus.mojo.archetypeng.test
+archetype.groupId: org.codehaus.mojo.archetype.test
 archetype.artifactId: test-start-archetype
 archetype.version: 1.0-SNAPSHOT
-package: org.codehaus.mojo.archetypeng.test.start
+package: org.codehaus.mojo.archetype.test.start
 version: 1.0-SNAPSHOT
-groupId: org.codehaus.mojo.archetypeng.test
+groupId: org.codehaus.mojo.archetype.test
 aProperty: String searched in the sources
 artifactId: test-start
  Y: : Y
@@ -132,13 +132,13 @@ artifactId: test-start
     The archetype configuration is confirmed.
 
 +--
-[INFO] [archetypeng:create-archetype]
+[INFO] [archetype:create-archetype]
 +--
 
     The second step do the work without any comment.
 
 +--
-[INFO] [archetypeng:create-from-project]
+[INFO] [archetype:create-from-project]
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESSFUL
 [INFO] ------------------------------------------------------------------------
@@ -151,8 +151,8 @@ artifactId: test-start
     The resuting project is created in the target directory.
 
 +--
-[rafale@fixe test-start]$ tree target/generated-sources/archetypeng
-target/generated-sources/archetypeng
+[rafale@fixe test-start]$ tree target/generated-sources/archetype
+target/generated-sources/archetype
 |-- pom.xml
 `-- src
     `-- main
@@ -176,7 +176,7 @@ target/generated-sources/archetypeng
 * {Batch} mode
 
     To enable the batch mode and remove the prompts, just run
-    <mvn archetypeng:create-from-project -B>.
+    <mvn archetype:create-from-project -B>.
 
     The batch mode wiil need the same answers as the interactive mode. These
     answers are provided in a property file named archetype.properties in the
@@ -191,10 +191,10 @@ target/generated-sources/archetypeng
 #
 #Mon Mar 12 19:09:51 CET 2007
 version=1.0-SNAPSHOT
-package=org.codehaus.mojo.archetypeng.test.start
-archetype.groupId=org.codehaus.mojo.archetypeng.test
+package=org.codehaus.mojo.archetype.test.start
+archetype.groupId=org.codehaus.mojo.archetype.test
 archetype.artifactId=test-start-archetype
-groupId=org.codehaus.mojo.archetypeng.test
+groupId=org.codehaus.mojo.archetype.test
 artifactId=test-start
 archetype.version=1.0-SNAPSHOT
 +--
@@ -212,7 +212,7 @@ archetype.version=1.0-SNAPSHOT
     |       `-- org
     |           `-- codehaus
     |               `-- mojo
-    |                   `-- archetypeng
+    |                   `-- archetype
     |                       `-- test
     |                           `-- start
     |                               `-- App.java
@@ -221,7 +221,7 @@ archetype.version=1.0-SNAPSHOT
             `-- org
                 `-- codehaus
                     `-- mojo
-                        `-- archetypeng
+                        `-- archetype
                             `-- test
                                 `-- start
                                     `-- AppTest.java
@@ -232,18 +232,18 @@ archetype.version=1.0-SNAPSHOT
     Ensure the property file exists.
 
 +--
-[rafale@fixe test-start]$ mvn archetypeng:create-from-project -B
+[rafale@fixe test-start]$ mvn archetype:create-from-project -B
 [INFO] Scanning for projects...
-[INFO] Searching repository for plugin with prefix: 'archetypeng'.
-[INFO] artifact org.codehaus.mojo:maven-archetypeng-plugin: checking for updates from central
+[INFO] Searching repository for plugin with prefix: 'archetype'.
+[INFO] artifact org.codehaus.mojo:maven-archetype-plugin: checking for updates from central
 [INFO] ----------------------------------------------------------------------------
 [INFO] Building test-start
-[INFO]    task-segment: [archetypeng:create-from-project]
+[INFO]    task-segment: [archetype:create-from-project]
 [INFO] ----------------------------------------------------------------------------
-[INFO] Preparing archetypeng:create-from-project
-[INFO] [archetypeng:configure-creation]
-[INFO] [archetypeng:create-archetype]
-[INFO] [archetypeng:create-from-project]
+[INFO] Preparing archetype:create-from-project
+[INFO] [archetype:configure-creation]
+[INFO] [archetype:create-archetype]
+[INFO] [archetype:create-from-project]
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESSFUL
 [INFO] ------------------------------------------------------------------------

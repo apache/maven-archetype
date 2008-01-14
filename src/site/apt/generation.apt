@@ -1,5 +1,5 @@
  -----
- Archetypeng - Generation
+ archetype - Generation
  -----
  The Maven Team
  -----
@@ -65,7 +65,7 @@ Generation
 
 * Example of use
 
-    To generate a project, call <mvn archetypeng:create>.
+    To generate a project, call <mvn archetype:create>.
 
 +--
 [rafale@fixe test]$ tree
@@ -77,16 +77,16 @@ Generation
     Ensuring an empty directory.
 
 +--
-[rafale@fixe test]$ mvn archetypeng:create
+[rafale@fixe test]$ mvn archetype:create
 [INFO] Scanning for projects...
-[INFO] Searching repository for plugin with prefix: 'archetypeng'.
-[INFO] artifact org.codehaus.mojo:maven-archetypeng-plugin: checking for updates from central
+[INFO] Searching repository for plugin with prefix: 'archetype'.
+[INFO] artifact org.codehaus.mojo:maven-archetype-plugin: checking for updates from central
 [INFO] ----------------------------------------------------------------------------
 [INFO] Building Maven Default Project
-[INFO]    task-segment: [archetypeng:create] (aggregator-style)
+[INFO]    task-segment: [archetype:create] (aggregator-style)
 [INFO] ----------------------------------------------------------------------------
-[INFO] Preparing archetypeng:create
-[INFO] [archetypeng:select-archetype]
+[INFO] Preparing archetype:create
+[INFO] [archetype:select-archetype]
 +--
 
     The first step of the generation: <select-archetype>
@@ -103,17 +103,17 @@ Choose a number:  (1/2): 2
 +--
 [INFO] org.codehaus.mojo.archetypes: checking for updates from central
 Choose archetype:
-1: Starting Archetype (org.codehaus.mojo.archetypes:maven-archetypeng-start)
-2: Archetype Archetype (org.codehaus.mojo.archetypes:maven-archetypeng-archetype)
-3: Plugin Archetype (org.codehaus.mojo.archetypes:maven-archetypeng-maven-plugin)
-4: Site Archetype (org.codehaus.mojo.archetypes:maven-archetypeng-site)
+1: Starting Archetype (org.codehaus.mojo.archetypes:maven-archetype-start)
+2: Archetype Archetype (org.codehaus.mojo.archetypes:maven-archetype-archetype)
+3: Plugin Archetype (org.codehaus.mojo.archetypes:maven-archetype-maven-plugin)
+4: Site Archetype (org.codehaus.mojo.archetypes:maven-archetype-site)
 Choose a number:  (1/2/3/4): 1
 +--
 
     The <Starting Archetype> is choosen
 
 +--
-[INFO] org.codehaus.mojo.archetypes.maven-archetypeng-start: checking for updates from central
+[INFO] org.codehaus.mojo.archetypes.maven-archetype-start: checking for updates from central
 Choose version:
 1: 1.0-SNAPSHOT
 Choose a number:  (1): 1
@@ -130,26 +130,26 @@ org.codehaus.mojo.archetypes/Starting Archetype
     The selection is confirmed.
 
 +--
-[INFO] [archetypeng:configure-generation]
+[INFO] [archetype:configure-generation]
 +--
 
     The second step of the generation: <configure-generation>
 
 +--
-Define value for groupId: : org.codehaus.mojo.archetypeng.test
+Define value for groupId: : org.codehaus.mojo.archetype.test
 Define value for artifactId: : test-start
 Define value for version: : 1.0-SNAPSHOT
-Define value for package: : org.codehaus.mojo.archetypeng.test.start
+Define value for package: : org.codehaus.mojo.archetype.test.start
 +--
 
     Each of the common properties are answered.
 
 +--
 Confirm properties configuration:
-groupId: org.codehaus.mojo.archetypeng.test
+groupId: org.codehaus.mojo.archetype.test
 artifactId: test-start
 version: 1.0-SNAPSHOT
-package: org.codehaus.mojo.archetypeng.test.start
+package: org.codehaus.mojo.archetype.test.start
  Y: : Y
 +--
 
@@ -165,13 +165,13 @@ package: org.codehaus.mojo.archetypeng.test.start
     The third step loads velocity.
 
 +--
-[INFO] [archetypeng:generate-project]
+[INFO] [archetype:generate-project]
 +--
 
     The third step do the work without any comment.
 
 +--
-[INFO] [archetypeng:create]
+[INFO] [archetype:create]
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESSFUL
 [INFO] ------------------------------------------------------------------------
@@ -196,7 +196,7 @@ test-start
     |       `-- org
     |           `-- codehaus
     |               `-- mojo
-    |                   `-- archetypeng
+    |                   `-- archetype
     |                       `-- test
     |                           `-- start
     |                               `-- App.java
@@ -205,7 +205,7 @@ test-start
             `-- org
                 `-- codehaus
                     `-- mojo
-                        `-- archetypeng
+                        `-- archetype
                             `-- test
                                 `-- start
                                     `-- AppTest.java
@@ -216,7 +216,7 @@ test-start
 * {Batch} mode
 
     To enable the batch mode and remove the prompts, just run
-    <mvn archetypeng:generate -B>.
+    <mvn archetype:generate -B>.
 
     The batch mode wiil need the same answers as the interactive mode. These
     answers are provided in a property file named archetype.properties in the
@@ -230,13 +230,13 @@ test-start
 [rafale@fixe test]$ cat archetype.properties
 #
 #Sun Mar 11 22:11:28 CET 2007
-archetype.artifactId=maven-archetypeng-start
+archetype.artifactId=maven-archetype-start
 archetype.groupId=org.codehaus.mojo.archetypes
 archetype.version=1.0-SNAPSHOT
-groupId=org.codehaus.mojo.archetypeng.test
+groupId=org.codehaus.mojo.archetype.test
 artifactId=test-start
 version=1.0-SNAPSHOT
-package=org.codehaus.mojo.archetypeng.test.start
+package=org.codehaus.mojo.archetype.test.start
 +--
 
     Here is the plugin execution.
@@ -252,23 +252,23 @@ package=org.codehaus.mojo.archetypeng.test.start
     Ensure the property file exists.
 
 +--
-[rafale@fixe test]$ mvn archetypeng:create -B
+[rafale@fixe test]$ mvn archetype:create -B
 [INFO] Scanning for projects...
-[INFO] Searching repository for plugin with prefix: 'archetypeng'.
+[INFO] Searching repository for plugin with prefix: 'archetype'.
 [INFO] ----------------------------------------------------------------------------
 [INFO] Building Maven Default Project
-[INFO]    task-segment: [archetypeng:create] (aggregator-style)
+[INFO]    task-segment: [archetype:create] (aggregator-style)
 [INFO] ----------------------------------------------------------------------------
-[INFO] Preparing archetypeng:create
-[INFO] [archetypeng:select-archetype]
-[INFO] Archetype selected (org.codehaus.mojo.archetypes:maven-archetypeng-start:1.0-SNAPSHOT)
-[INFO] [archetypeng:configure-generation]
+[INFO] Preparing archetype:create
+[INFO] [archetype:select-archetype]
+[INFO] Archetype selected (org.codehaus.mojo.archetypes:maven-archetype-start:1.0-SNAPSHOT)
+[INFO] [archetype:configure-generation]
 [INFO] Setting property: classpath.resource.loader.class => 'org.codehaus.plexus.velocity.ContextClassLoaderResourceLoader'.
 [INFO] Setting property: velocimacro.messages.on => 'false'.
 [INFO] Setting property: resource.loader => 'classpath'.
 [INFO] Setting property: resource.manager.logwhenfound => 'false'.
-[INFO] [archetypeng:generate-project]
-[INFO] [archetypeng:create]
+[INFO] [archetype:generate-project]
+[INFO] [archetype:create]
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESSFUL
 [INFO] ------------------------------------------------------------------------

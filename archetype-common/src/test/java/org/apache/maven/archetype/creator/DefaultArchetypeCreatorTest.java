@@ -153,7 +153,7 @@ public class DefaultArchetypeCreatorTest
         assertContent( template, "${groupId}" );
         assertContent( template, "${artifactId}" );
         assertContent( template, "${version}" );
-        assertContent( template, "Maven ArchetypeNG Test create-3" );
+        assertContent( template, "Maven archetype Test create-3" );
         assertContent( template, "<packaging>pom</packaging>" );
         assertNotContent( template, "<parent>" );
 
@@ -178,7 +178,7 @@ public class DefaultArchetypeCreatorTest
         assertContent( template, "${groupId}" );
         assertContent( template, "${artifactId}" );
         assertContent( template, "${version}" );
-        assertContent( template, "Maven ArchetypeNG Test create-3-libraries" );
+        assertContent( template, "Maven archetype Test create-3-libraries" );
         assertContent( template, "<packaging>pom</packaging>" );
         assertNotContent( template, "<parent>" );
 
@@ -187,7 +187,7 @@ public class DefaultArchetypeCreatorTest
         assertContent( template, "${groupId}" );
         assertContent( template, "${artifactId}" );
         assertContent( template, "${version}" );
-        assertContent( template, "Maven ArchetypeNG Test create-3-libraries-project-a" );
+        assertContent( template, "Maven archetype Test create-3-libraries-project-a" );
         assertNotContent( template, "<packaging>pom</packaging>" );
         assertNotContent( template, "<parent>" );
 
@@ -200,7 +200,7 @@ public class DefaultArchetypeCreatorTest
         assertContent( template, "${groupId}" );
         assertContent( template, "${artifactId}" );
         assertContent( template, "${version}" );
-        assertContent( template, "Maven ArchetypeNG Test create-3-libraries-project-b" );
+        assertContent( template, "Maven archetype Test create-3-libraries-project-b" );
         assertNotContent( template, "<packaging>pom</packaging>" );
         assertNotContent( template, "<parent>" );
 
@@ -222,7 +222,7 @@ public class DefaultArchetypeCreatorTest
         assertContent( template, "${groupId}" );
         assertContent( template, "${artifactId}" );
         assertContent( template, "${version}" );
-        assertContent( template, "Maven ArchetypeNG Test create-3-application" );
+        assertContent( template, "Maven archetype Test create-3-application" );
         assertNotContent( template, "<packaging>pom</packaging>" );
         assertNotContent( template, "<parent>" );
 
@@ -369,7 +369,7 @@ public class DefaultArchetypeCreatorTest
         return
             new File(
                 getBasedir(),
-                "target/test-classes/projects/" + project + "/target/generated-sources/archetypeng/"
+                "target/test-classes/projects/" + project + "/target/generated-sources/archetype/"
                     + "src/main/resources/"
                     + "META-INF/maven/archetype.xml"
             );
@@ -426,7 +426,7 @@ public class DefaultArchetypeCreatorTest
         return
             new File(
                 getBasedir(),
-                "target/test-classes/projects/" + project + "/target/generated-sources/archetypeng/"
+                "target/test-classes/projects/" + project + "/target/generated-sources/archetype/"
                     + "src/main/resources/"
                     + "archetype-resources/" + template
             );

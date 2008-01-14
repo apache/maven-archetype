@@ -28,7 +28,7 @@
   <artifactId>${artifactId}</artifactId>
   <version>${version}</version>
 
-  <name>Maven ArchetypeNG Test Old archetype</name>
+  <name>Maven archetype Test Old archetype</name>
   <packaging>jar</packaging>
 
 </project>

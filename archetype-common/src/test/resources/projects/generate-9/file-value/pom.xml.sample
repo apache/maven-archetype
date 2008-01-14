@@ -34,7 +34,7 @@
     <artifactId>file-value</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <name>Maven ArchetypeNG Test Generate 9</name>
+    <name>Maven archetype Test Generate 9</name>
     <packaging>jar</packaging>
 
 

@@ -1,5 +1,5 @@
  -----
- Archetypeng - Mojos
+ archetype - Mojos
  -----
  The Maven Team
  -----
@@ -82,6 +82,6 @@ Mojos
       the resolved templates.
 
       The resulting archetype Maven 2 project is created in the 
-      target/generate-sources/archetypeng directory.
+      target/generate-sources/archetype directory.
 
     []

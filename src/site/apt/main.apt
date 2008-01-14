@@ -1,5 +1,5 @@
  -----
- Archetypeng - Main
+ archetype - Main
  -----
  The Maven Team
  -----
@@ -15,11 +15,11 @@ Quickstart
 
     There is two way of using the archetype plugin:
 
-    * call <<<mvn archetypeng:{{{generation.html}create}}>>> for project
+    * call <<<mvn archetype:{{{generation.html}create}}>>> for project
       generation from an archetype. To avoid console prompts and only use a
       property file, add <<<-B>>> option.
 
-    * call <<<mvn archetypeng:{{{creation.html}create-from-project}}>>> in a project directory
+    * call <<<mvn archetype:{{{creation.html}create-from-project}}>>> in a project directory
       for archetype creation. To avoid console prompts and only use a property
       file, add <<<-B>>> option.
 
@@ -37,6 +37,6 @@ Table of content
 
     [[1]] How to {{{archetype-handcraft.html}handcraft}} archetypes ?
 
-    [[1]] Archetypeng {{{design.html}design}} for developers.
+    [[1]] archetype {{{design.html}design}} for developers.
 
     []
