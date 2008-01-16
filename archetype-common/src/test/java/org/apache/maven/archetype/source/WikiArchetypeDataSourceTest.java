@@ -20,7 +20,7 @@ public class WikiArchetypeDataSourceTest
 
         assertEquals( 36, archetypes.size() );
 
-        Archetype a = (Archetype) lookup(Archetype.class);
+        Archetype a = (Archetype) lookup(Archetype.class.getName());
         archetypes=a.getInternalCatalog().getArchetypes();
 
         assertEquals( 36, archetypes.size() );

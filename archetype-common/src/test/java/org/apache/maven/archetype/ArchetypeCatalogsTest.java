@@ -48,7 +48,7 @@ public class ArchetypeCatalogsTest
         throws Exception
     {
 
-        Archetype archetype = (Archetype) lookup( Archetype.class );
+        Archetype archetype = (Archetype) lookup( Archetype.class.getName() );
 
         ArchetypeCatalog result = archetype.getRemoteCatalog( "http://localhost:18881/repo/" );
 
@@ -67,7 +67,7 @@ public class ArchetypeCatalogsTest
         throws Exception
     {
 
-        Archetype archetype = (Archetype) lookup( Archetype.class );
+        Archetype archetype = (Archetype) lookup( Archetype.class.getName() );
 
         ArchetypeCatalog result = archetype.getLocalCatalog( getTestFile( "target/test-classes/repositories/test-catalog" ).
             getAbsolutePath() );

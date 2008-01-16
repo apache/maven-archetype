@@ -51,7 +51,7 @@ public class InternalCatalogArchetypesVerification
         File outputDirectory = new File(getBasedir(), "target/internal-archetypes-projects");
         outputDirectory.mkdirs();
         
-        Archetype archetype = (Archetype) lookup ( Archetype.class );
+        Archetype archetype = (Archetype) lookup ( Archetype.class.getName() );
 
         ArchetypeCatalog result = archetype.getInternalCatalog ();
 

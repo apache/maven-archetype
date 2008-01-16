@@ -262,7 +262,7 @@
             </activation>
             <properties>
                 <mavenVersion>2.0.8</mavenVersion>
-                <maven.test.skip>true</maven.test.skip>
+                <!--maven.test.skip>true</maven.test.skip-->
             </properties>
             <dependencyManagement>
                 <dependencies>
@@ -326,7 +326,7 @@
                     <dependency>
                         <groupId>org.codehaus.plexus</groupId>
                         <artifactId>plexus-container-default</artifactId>
-                        <version>1.0-alpha-40</version>
+                        <version>1.0-alpha-9-stable-1</version>
                     </dependency>
                     <dependency>
                         <groupId>org.codehaus.plexus</groupId>
