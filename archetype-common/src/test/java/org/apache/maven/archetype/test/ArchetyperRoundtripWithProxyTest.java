@@ -172,7 +172,7 @@ public class ArchetyperRoundtripWithProxyTest
             "target/test-classes/projects/roundtrip-2-recreatedproject" ).getAbsolutePath();
         FileUtils.forceDelete(outputDirectory);
 
-        WagonManager manager = (WagonManager) lookup(WagonManager.class);
+        WagonManager manager = (WagonManager) lookup(WagonManager.class.getName());
         manager.addProxy("http", "localhost", 18882, null, null, null);
 
         ArchetypeGenerationRequest agr =
