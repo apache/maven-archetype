@@ -555,9 +555,9 @@
     </profiles> 
     
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/maven/sandbox/trunk/archetype</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/sandbox/trunk/archetype</developerConnection>
-        <url>http://svn.apache.org/viewcvs.cgi/maven/sandbox/trunk/archetype</url>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/maven/archetype/trunk</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/trunk</developerConnection>
+        <url>http://svn.apache.org/viewcvs.cgi/maven/archetype/trunk</url>
     </scm>
     
     <build>
@@ -566,7 +566,7 @@
                 <plugin>
                     <artifactId>maven-release-plugin</artifactId>
                     <configuration>
-                        <tagBase>https://svn.apache.org/repos/asf/maven/sandbox/tags</tagBase>
+                        <tagBase>https://svn.apache.org/repos/asf/maven/archetype/tags</tagBase>
                     </configuration>
                 </plugin>
                 <plugin>
