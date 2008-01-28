@@ -140,6 +140,20 @@
       <version>1.0-beta-2</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>archetype-repository</artifactId>
+      <version>${project.version}</version>
+      <type>war</type>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>archetype-proxy</artifactId>
+      <version>${project.version}</version>
+      <type>war</type>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -230,30 +244,14 @@
             <id>copy</id>
             <phase>process-test-resources</phase>
             <goals>
-              <goal>copy</goal>
+              <goal>copy-dependencies</goal>
             </goals>
             <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>${project.groupId}</groupId>
-                  <artifactId>archetype-repository</artifactId>
-                  <version>${project.version}</version>
-                  <type>war</type>
-                  <overWrite>true</overWrite>
-                  <destFileName>archetype-repository.war</destFileName>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>${project.groupId}</groupId>
-                  <artifactId>archetype-proxy</artifactId>
-                  <version>${project.version}</version>
-                  <type>war</type>
-                  <overWrite>true</overWrite>
-                  <destFileName>archetype-proxy.war</destFileName>
-                </artifactItem>
-              </artifactItems>
               <outputDirectory>${project.build.directory}/wars</outputDirectory>
               <overWriteReleases>true</overWriteReleases>
               <overWriteSnapshots>true</overWriteSnapshots>
+              <includeTypes>war</includeTypes>
+              <stripVersion>true</stripVersion>
             </configuration>
           </execution>
         </executions>
