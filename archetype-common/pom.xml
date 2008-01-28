@@ -251,6 +251,7 @@
                   <destFileName>archetype-proxy.war</destFileName>
                 </artifactItem>
               </artifactItems>
+              <includeArtifactIds>archetype-repository,archetype-proxy</includeArtifactIds>
               <outputDirectory>${project.build.directory}/wars</outputDirectory>
               <overWriteReleases>true</overWriteReleases>
               <overWriteSnapshots>true</overWriteSnapshots>
