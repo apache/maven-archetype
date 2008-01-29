@@ -237,7 +237,7 @@ public class DefaultArchetypeGeneratorTest
         instance.generateArchetype(request, result);
         if ( result.getCause() != null )
         {
-            fail( "No exception may be thrown" );
+            fail( "No exception may be thrown: " + result.getCause().getMessage() );
         }
 
         Model model = readPom( getProjectFile( project + File.separator + "file-value" ) );
@@ -307,7 +307,7 @@ public class DefaultArchetypeGeneratorTest
         instance.generateArchetype(request, result);
         if ( result.getCause() != null )
         {
-            fail( "No exception may be thrown" );
+            fail( "No exception may be thrown: " + result.getCause().getMessage() );
         }
 
         Model model = readPom( getProjectFile( project + File.separator + "file-value" ) );
@@ -376,7 +376,7 @@ public class DefaultArchetypeGeneratorTest
         instance.generateArchetype(request, result);
         if ( result.getCause() != null )
         {
-            fail( "No exception may be thrown" );
+            fail( "No exception may be thrown: " + result.getCause().getMessage() );
         }
 
         Model model = readPom( getProjectFile( project + File.separator + "file-value" ) );
@@ -450,7 +450,7 @@ public class DefaultArchetypeGeneratorTest
         instance.generateArchetype(request, result);
         if ( result.getCause() != null )
         {
-            fail( "No exception may be thrown" );
+            fail( "No exception may be thrown: " + result.getCause().getMessage() );
         }
 
         Model model = readPom( getProjectFile( project ) );
@@ -500,7 +500,7 @@ public class DefaultArchetypeGeneratorTest
         instance.generateArchetype(request, result);
         if ( result.getCause() != null )
         {
-            fail( "No exception may be thrown" );
+            fail( "No exception may be thrown: " + result.getCause().getMessage() );
         }
 
         Model model = readPom( getProjectFile( project + File.separator + "file-value" ) );
@@ -558,7 +558,7 @@ public class DefaultArchetypeGeneratorTest
         instance.generateArchetype(request, result);
         if ( result.getCause() != null )
         {
-            fail( "No exception may be thrown" );
+            fail( "No exception may be thrown: " + result.getCause().getMessage() );
         }
 
         String template;
@@ -623,7 +623,7 @@ public class DefaultArchetypeGeneratorTest
         instance.generateArchetype(request, result);
         if ( result.getCause() != null )
         {result.getCause().printStackTrace(System.err);
-            fail( "No exception may be thrown" );
+            fail( "No exception may be thrown: " + result.getCause().getMessage() );
         }
 
         Model model;
@@ -768,7 +768,7 @@ public class DefaultArchetypeGeneratorTest
         if ( result.getCause() != null )
         {
             result.getCause().printStackTrace(System.err);
-            fail( "No exception may be thrown ("+result.getCause().getMessage()+")-("/*+result.getCause().getCause().getMessage()*/+")" );
+            fail( "No exception may be thrown: " + result.getCause().getMessage() );
         }
 
         String template;
@@ -819,7 +819,7 @@ public class DefaultArchetypeGeneratorTest
         instance.generateArchetype(request, result);
         if ( result.getCause() == null )
         {
-            fail( "Exception must be thrown" );
+            fail( "No exception may be thrown: " + result.getCause().getMessage() );
         }
         else
         {
