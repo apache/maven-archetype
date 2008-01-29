@@ -79,7 +79,7 @@ public class RepositoryServlet
         String filePath =
             System.getProperty( "org.apache.maven.archetype.reporitory.directory" ).trim(  ) + "/" +
             request.getRequestURI(  );
-        filePath=filePath.replace("repo/", "/");
+        filePath=filePath.replaceAll("/repo/", "/");
         filePath=filePath.replaceAll("//", "/");
         filePath=filePath.replaceAll("//", "/");
         filePath=filePath.replaceAll("//", "/");
