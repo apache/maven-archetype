@@ -33,6 +33,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.mortbay.util.IO;
+import org.mortbay.util.StringUtil;
 
 /**
  *
@@ -126,6 +127,8 @@ public class RepositoryServlet
         String filePath =
             System.getProperty( "org.apache.maven.archetype.reporitory.directory" ).trim(  ) + "/" +
             request.getRequestURI(  );
+        filePath = StringUtil.replace(filePath, "\\", "/");
+        filePath = StringUtil.replace(filePath, "/", File.separator);
         log( "Complete file path = " + filePath );
 
         String method = request.getMethod(  );

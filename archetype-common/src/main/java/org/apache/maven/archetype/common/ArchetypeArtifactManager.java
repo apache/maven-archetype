@@ -22,143 +22,124 @@ package org.apache.maven.archetype.common;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.archetype.metadata.ArchetypeDescriptor;
 import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.model.Model;
+
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import java.io.File;
 import java.io.IOException;
+
 import java.util.List;
 import java.util.zip.ZipFile;
-import org.apache.maven.model.Model;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 public interface ArchetypeArtifactManager
 {
-    String ROLE = ArchetypeArtifactManager.class.getName();
+    String ROLE = ArchetypeArtifactManager.class.getName ();
 
-    public Model getArchetypePom(File jar) throws XmlPullParserException, UnknownArchetype, IOException;
+    Model getArchetypePom ( File jar )
+    throws XmlPullParserException, UnknownArchetype, IOException;
 
     /**
      */
-    File getArchetypeFile(
+    File getArchetypeFile (
         final String groupId,
         final String artifactId,
         final String version,
-                          ArtifactRepository archetypeRepository,
+        ArtifactRepository archetypeRepository,
         final ArtifactRepository localRepository,
         final List repositories
     )
-        throws
-        UnknownArchetype;
+    throws UnknownArchetype;
 
     /**
      */
-    ClassLoader getArchetypeJarLoader( File archetypeFile )
-        throws
-        UnknownArchetype;
+    ClassLoader getArchetypeJarLoader ( File archetypeFile )
+    throws UnknownArchetype;
 
     /**
      */
-    ClassLoader getArchetypeJarLoader(
+    ZipFile getArchetypeZipFile ( File archetypeFile )
+    throws UnknownArchetype;
+
+    /**
+     */
+    boolean isFileSetArchetype ( File archetypeFile );
+
+    /**
+     */
+    boolean isFileSetArchetype (
         String groupId,
         String artifactId,
         String version,
-                          ArtifactRepository archetypeRepository,
+        ArtifactRepository archetypeRepository,
         ArtifactRepository localRepository,
         List repositories
-    )
-        throws
-        UnknownArchetype;
+    );
 
     /**
      */
-    ZipFile getArchetypeZipFile( File archetypeFile )
-        throws
-        UnknownArchetype;
+    boolean isOldArchetype ( File archetypeFile );
 
-//    /**
-//     */
-//    ZipFile getArchetypeZipFile(
-//        String groupId,
-//        String artifactId,
-//        String version,
-//                          ArtifactRepository archetypeRepository,
-//        ArtifactRepository localRepository,
-//        List repositories
-//    )
-//        throws
-//        UnknownArchetype;
+    /**
+     */
+    boolean isOldArchetype (
+        String groupId,
+        String artifactId,
+        String version,
+        ArtifactRepository archetypeRepository,
+        ArtifactRepository localRepository,
+        List repositories
+    );
 
-    boolean exists(
+    /**
+     */
+    boolean exists (
         String archetypeGroupId,
         String archetypeArtifactId,
         String archetypeVersion,
-                          ArtifactRepository archetypeRepository,
+        ArtifactRepository archetypeRepository,
         ArtifactRepository localRepository,
-        List repos );
-
-    boolean isFileSetArchetype(
-        String groupId,
-        String artifactId,
-        String version,
-                          ArtifactRepository archetypeRepository,
-        ArtifactRepository localRepository,
-        List repositories
+        List repos
     );
-    
-    boolean isFileSetArchetype( File archetypeFile );
 
     /**
      */
-    ArchetypeDescriptor getFileSetArchetypeDescriptor( File archetypeFile )
-        throws
-        UnknownArchetype;
+    ArchetypeDescriptor getFileSetArchetypeDescriptor ( File archetypeFile )
+    throws UnknownArchetype;
 
     /**
      */
-    org.apache.maven.archetype.metadata.ArchetypeDescriptor getFileSetArchetypeDescriptor(
+    org.apache.maven.archetype.metadata.ArchetypeDescriptor getFileSetArchetypeDescriptor (
         String groupId,
         String artifactId,
         String version,
-                          ArtifactRepository archetypeRepository,
+        ArtifactRepository archetypeRepository,
         ArtifactRepository localRepository,
         List repositories
     )
-        throws
-        UnknownArchetype;
+    throws UnknownArchetype;
 
     /**
      */
-    List getFilesetArchetypeResources( File archetypeFile )
-        throws
-        UnknownArchetype;
+    List getFilesetArchetypeResources ( File archetypeFile )
+    throws UnknownArchetype;
 
     /**
      */
-    boolean isOldArchetype(
-        String groupId,
-        String artifactId,
-        String version,
-                          ArtifactRepository archetypeRepository,
-        ArtifactRepository localRepository,
-        List repositories
-    );
-    
-    boolean isOldArchetype( File archetypeFile );
-
-    /**
-     */
-    org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor getOldArchetypeDescriptor(
-        String groupId,
-        String artifactId,
-        String version,
-                          ArtifactRepository archetypeRepository,
-        ArtifactRepository localRepository,
-        List repositories
-    )
-        throws
-        UnknownArchetype;
-    org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor getOldArchetypeDescriptor(
+    org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor getOldArchetypeDescriptor (
         File archetypeFile
     )
-        throws
-        UnknownArchetype;
+    throws UnknownArchetype;
+
+    /**
+     */
+    org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor getOldArchetypeDescriptor (
+        String groupId,
+        String artifactId,
+        String version,
+        ArtifactRepository archetypeRepository,
+        ArtifactRepository localRepository,
+        List repositories
+    )
+    throws UnknownArchetype;
 }
