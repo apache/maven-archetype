@@ -23,11 +23,13 @@ import org.apache.commons.io.FileUtils;
 
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
+import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Writer;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.model.Model;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import java.io.File;
@@ -35,7 +37,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import java.util.Iterator;
-import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Writer;
 
 /**
  * @author            rafale
@@ -108,24 +109,28 @@ implements RepositoryCrawler
                         else
                         {
                             String version = jar.getParentFile ().getName ();
-                            
+
                             String artifactId = jar.getParentFile ().getParentFile ().getName ();
-                            
+
                             String groupIdSep =
-                                jar.getParentFile ().getParentFile ().getParentFile ().getPath ()
-                                .replace ( repository.getPath (), "" );
-                            String groupId = groupIdSep.replace ( File.separator, "." );
+                                StringUtils.replace (
+                                    jar.getParentFile ().getParentFile ().getParentFile ()
+                                    .getPath (),
+                                    repository.getPath (),
+                                    ""
+                                );
+                            String groupId = groupIdSep.replace ( File.separatorChar, '.' );
                             groupId =
                                 groupId.startsWith ( "." ) ? groupId.substring ( 1 ) : groupId;
                             groupId =
                                 groupId.endsWith ( "." )
                                 ? groupId.substring ( 0, groupId.length () - 1 )
                                 : groupId;
-                            
+
                             archetype.setGroupId ( groupId );
                             archetype.setArtifactId ( artifactId );
                             archetype.setVersion ( version );
-                            
+
                             getLogger ().info (
                                 "\tArchetype " + archetype + " defined by repository path"
                             );
