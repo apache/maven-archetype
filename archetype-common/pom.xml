@@ -1,33 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-  ~ Licensed to the Apache Software Foundation (ASF) under one
-  ~ or more contributor license agreements.  See the NOTICE file
-  ~ distributed with this work for additional information
-  ~ regarding copyright ownership.  The ASF licenses this file
-  ~ to you under the Apache License, Version 2.0 (the
-  ~ "License"); you may not use this file except in compliance
-  ~ with the License.  You may obtain a copy of the License at
-  ~
-  ~     http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing,
-  ~ software distributed under the License is distributed on an
-  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-  ~ KIND, either express or implied.  See the License for the
-  ~ specific language governing permissions and limitations
-  ~ under the License.
-  -->
-<project
-  xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <groupId>org.apache.maven.archetype</groupId>
     <artifactId>maven-archetype</artifactId>
-    <version>2.0-SNAPSHOT</version>
+    <version>2.0-alpha-1</version>
   </parent>
   <artifactId>archetype-common</artifactId>
   <name>Maven Archetype Common</name>
@@ -273,18 +251,16 @@
             <phase>process-test-resources</phase>
             <configuration>
               <tasks>
-                <property name="test.projects.name" value="basic"></property>
-                <property name="test.projects.version" value="1.0"></property>
-                <property name="test.projects.archetype" value="${test.projects.name}-${test.projects.version}"></property>
-                <property name="test.projects.source.directory" value="${test.projects.archetype}"></property>
-                <property name="test.projects.target.directory" value="archetypes/${test.projects.name}/${test.projects.version}"></property>
-                <property name="test.projects.repository" value="repositories/central"></property>
+                <property name="test.projects.name" value="basic" />
+                <property name="test.projects.version" value="1.0" />
+                <property name="test.projects.archetype" value="${test.projects.name}-${test.projects.version}" />
+                <property name="test.projects.source.directory" value="${test.projects.archetype}" />
+                <property name="test.projects.target.directory" value="archetypes/${test.projects.name}/${test.projects.version}" />
+                <property name="test.projects.repository" value="repositories/central" />
 
-                <mkdir dir="${basedir}/target/test-classes/${test.projects.repository}/${test.projects.target.directory}/"></mkdir>
+                <mkdir dir="${basedir}/target/test-classes/${test.projects.repository}/${test.projects.target.directory}/" />
 
-                <jar
-                  destfile="${basedir}/target/test-classes/${test.projects.repository}/${test.projects.target.directory}/${test.projects.archetype}.jar"
-                  basedir="${basedir}/src/test/archetypes/${test.projects.source.directory}/"></jar>
+                <jar destfile="${basedir}/target/test-classes/${test.projects.repository}/${test.projects.target.directory}/${test.projects.archetype}.jar" basedir="${basedir}/src/test/archetypes/${test.projects.source.directory}/" />
               </tasks>
             </configuration>
             <goals>
@@ -297,17 +273,15 @@
             <phase>process-test-resources</phase>
             <configuration>
               <tasks>
-                <property name="test.projects.name" value="partial"></property>
-                <property name="test.projects.version" value="1.0"></property>
-                <property name="test.projects.archetype" value="${test.projects.name}-${test.projects.version}"></property>
-                <property name="test.projects.source.directory" value="${test.projects.archetype}"></property>
-                <property name="test.projects.target.directory" value="archetypes/${test.projects.name}/${test.projects.version}"></property>
-                <property name="test.projects.repository" value="repositories/central"></property>
-                <mkdir dir="${basedir}/target/test-classes/${test.projects.repository}/${test.projects.target.directory}/"></mkdir>
+                <property name="test.projects.name" value="partial" />
+                <property name="test.projects.version" value="1.0" />
+                <property name="test.projects.archetype" value="${test.projects.name}-${test.projects.version}" />
+                <property name="test.projects.source.directory" value="${test.projects.archetype}" />
+                <property name="test.projects.target.directory" value="archetypes/${test.projects.name}/${test.projects.version}" />
+                <property name="test.projects.repository" value="repositories/central" />
+                <mkdir dir="${basedir}/target/test-classes/${test.projects.repository}/${test.projects.target.directory}/" />
 
-                <jar
-                  destfile="${basedir}/target/test-classes/${test.projects.repository}/${test.projects.target.directory}/${test.projects.archetype}.jar"
-                  basedir="${basedir}/src/test/archetypes/${test.projects.source.directory}/"></jar>
+                <jar destfile="${basedir}/target/test-classes/${test.projects.repository}/${test.projects.target.directory}/${test.projects.archetype}.jar" basedir="${basedir}/src/test/archetypes/${test.projects.source.directory}/" />
               </tasks>
             </configuration>
             <goals>
@@ -320,18 +294,16 @@
             <phase>process-test-resources</phase>
             <configuration>
               <tasks>
-                <property name="test.projects.name" value="site"></property>
-                <property name="test.projects.version" value="1.0"></property>
-                <property name="test.projects.archetype" value="${test.projects.name}-${test.projects.version}"></property>
-                <property name="test.projects.source.directory" value="${test.projects.archetype}"></property>
-                <property name="test.projects.target.directory" value="archetypes/${test.projects.name}/${test.projects.version}"></property>
-                <property name="test.projects.repository" value="repositories/central"></property>
+                <property name="test.projects.name" value="site" />
+                <property name="test.projects.version" value="1.0" />
+                <property name="test.projects.archetype" value="${test.projects.name}-${test.projects.version}" />
+                <property name="test.projects.source.directory" value="${test.projects.archetype}" />
+                <property name="test.projects.target.directory" value="archetypes/${test.projects.name}/${test.projects.version}" />
+                <property name="test.projects.repository" value="repositories/central" />
 
-                <mkdir dir="${basedir}/target/test-classes/${test.projects.repository}/${test.projects.target.directory}/"></mkdir>
+                <mkdir dir="${basedir}/target/test-classes/${test.projects.repository}/${test.projects.target.directory}/" />
 
-                <jar
-                  destfile="${basedir}/target/test-classes/${test.projects.repository}/${test.projects.target.directory}/${test.projects.archetype}.jar"
-                  basedir="${basedir}/src/test/archetypes/${test.projects.source.directory}/"></jar>
+                <jar destfile="${basedir}/target/test-classes/${test.projects.repository}/${test.projects.target.directory}/${test.projects.archetype}.jar" basedir="${basedir}/src/test/archetypes/${test.projects.source.directory}/" />
               </tasks>
             </configuration>
             <goals>
@@ -344,18 +316,16 @@
             <phase>process-test-resources</phase>
             <configuration>
               <tasks>
-                <property name="test.projects.name" value="old"></property>
-                <property name="test.projects.version" value="1.0"></property>
-                <property name="test.projects.archetype" value="${test.projects.name}-${test.projects.version}"></property>
-                <property name="test.projects.source.directory" value="${test.projects.archetype}"></property>
-                <property name="test.projects.target.directory" value="archetypes/${test.projects.name}/${test.projects.version}"></property>
-                <property name="test.projects.repository" value="repositories/central"></property>
+                <property name="test.projects.name" value="old" />
+                <property name="test.projects.version" value="1.0" />
+                <property name="test.projects.archetype" value="${test.projects.name}-${test.projects.version}" />
+                <property name="test.projects.source.directory" value="${test.projects.archetype}" />
+                <property name="test.projects.target.directory" value="archetypes/${test.projects.name}/${test.projects.version}" />
+                <property name="test.projects.repository" value="repositories/central" />
 
-                <mkdir dir="${basedir}/target/test-classes/${test.projects.repository}/${test.projects.target.directory}/"></mkdir>
+                <mkdir dir="${basedir}/target/test-classes/${test.projects.repository}/${test.projects.target.directory}/" />
 
-                <jar
-                  destfile="${basedir}/target/test-classes/${test.projects.repository}/${test.projects.target.directory}/${test.projects.archetype}.jar"
-                  basedir="${basedir}/src/test/archetypes/${test.projects.source.directory}/"></jar>
+                <jar destfile="${basedir}/target/test-classes/${test.projects.repository}/${test.projects.target.directory}/${test.projects.archetype}.jar" basedir="${basedir}/src/test/archetypes/${test.projects.source.directory}/" />
               </tasks>
             </configuration>
             <goals>
@@ -368,18 +338,16 @@
             <phase>process-test-resources</phase>
             <configuration>
               <tasks>
-                <property name="test.projects.name" value="fileset"></property>
-                <property name="test.projects.version" value="1.0"></property>
-                <property name="test.projects.archetype" value="${test.projects.name}-${test.projects.version}"></property>
-                <property name="test.projects.source.directory" value="${test.projects.archetype}"></property>
-                <property name="test.projects.target.directory" value="archetypes/${test.projects.name}/${test.projects.version}"></property>
-                <property name="test.projects.repository" value="repositories/central"></property>
+                <property name="test.projects.name" value="fileset" />
+                <property name="test.projects.version" value="1.0" />
+                <property name="test.projects.archetype" value="${test.projects.name}-${test.projects.version}" />
+                <property name="test.projects.source.directory" value="${test.projects.archetype}" />
+                <property name="test.projects.target.directory" value="archetypes/${test.projects.name}/${test.projects.version}" />
+                <property name="test.projects.repository" value="repositories/central" />
 
-                <mkdir dir="${basedir}/target/test-classes/${test.projects.repository}/${test.projects.target.directory}/"></mkdir>
+                <mkdir dir="${basedir}/target/test-classes/${test.projects.repository}/${test.projects.target.directory}/" />
 
-                <jar
-                  destfile="${basedir}/target/test-classes/${test.projects.repository}/${test.projects.target.directory}/${test.projects.archetype}.jar"
-                  basedir="${basedir}/src/test/archetypes/${test.projects.source.directory}/"></jar>
+                <jar destfile="${basedir}/target/test-classes/${test.projects.repository}/${test.projects.target.directory}/${test.projects.archetype}.jar" basedir="${basedir}/src/test/archetypes/${test.projects.source.directory}/" />
               </tasks>
             </configuration>
             <goals>
@@ -392,11 +360,11 @@
             <phase>process-test-resources</phase>
             <configuration>
               <tasks>
-                <property name="test.projects.source.directory" value="${test.projects.archetype}"></property>
-                <property name="test.projects.target.directory" value="archetypes"></property>
-                <property name="test.projects.repository" value="repositories/central"></property>
+                <property name="test.projects.source.directory" value="${test.projects.archetype}" />
+                <property name="test.projects.target.directory" value="archetypes" />
+                <property name="test.projects.repository" value="repositories/central" />
 
-                <mkdir dir="${basedir}/target/test-classes/${test.projects.repository}/${test.projects.target.directory}"></mkdir>
+                <mkdir dir="${basedir}/target/test-classes/${test.projects.repository}/${test.projects.target.directory}" />
               </tasks>
             </configuration>
             <goals>
