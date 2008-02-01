@@ -313,7 +313,7 @@
                     <artifactId>maven-release-plugin</artifactId>
                     <configuration>
                         <tagBase>https://svn.apache.org/repos/asf/maven/archetype/tags</tagBase>      
-                        <preparationGoals>clean install verify</preparationGoals>
+                        <preparationGoals>clean install</preparationGoals>
                     </configuration>
                 </plugin>
                 <plugin>
