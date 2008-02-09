@@ -1,0 +1,165 @@
+ ------
+ Usage
+ ------
+ Raphaël Piéroni
+ ------
+ 25 January 2008
+ ------
+
+~~ Licensed to the Apache Software Foundation (ASF) under one
+~~ or more contributor license agreements.  See the NOTICE file
+~~ distributed with this work for additional information
+~~ regarding copyright ownership.  The ASF licenses this file
+~~ to you under the Apache License, Version 2.0 (the
+~~ "License"); you may not use this file except in compliance
+~~ with the License.  You may obtain a copy of the License at
+~~
+~~     http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~ Unless required by applicable law or agreed to in writing,
+~~ software distributed under the License is distributed on an
+~~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~ KIND, either express or implied.  See the License for the
+~~ specific language governing permissions and limitations
+~~ under the License.
+
+~~ NOTE: For help with the syntax of this file, see:
+~~ http://maven.apache.org/guides/mini/guide-apt-format.html
+
+
+* Projet creation
+
+    Creating a project from an archetype involves three steps:
+
+    * the selection of the archetype,
+
+    * the configuration of that archetype,
+
+    * the effective creation of the project from the collected information.
+
+    []
+
+ * Usage
+
+   Calling <<<archetype:create>>> the plugin will first ask to choose
+   the archetype from the internal catalog. Just enter the number of the archetype.
+
+   It then ask to enter the values for the groupId, the artifactId
+   and the version of the project to create and the basic package 
+   for the sources.
+
+   It then ask for the confirmation of the configuration and perform 
+   the creation of the project.
+
+   In the following example, we selected the quickstart archetype (numbered 15)
+   and set <<<groupId>>> to <<<com.company>>>, <<<artifactId>>> to <<<project>>>,
+   <<<version>>> to <<<1.0>>> and <<<package>>> to <<<com.company.project>>>.
+
++---
+$ mvn archetype:create
+[INFO] Scanning for projects...
+[INFO] Searching repository for plugin with prefix: 'archetype'.
+[INFO] ------------------------------------------------------------------------
+[INFO] Building Maven Default Project
+[INFO]    task-segment: [archetype:create] (aggregator-style)
+[INFO] ------------------------------------------------------------------------
+[INFO] Preparing archetype:create
+[INFO] No goals needed for project - skipping
+[INFO] Setting property: classpath.resource.loader.class => 'org.codehaus.plexus.velocity.ContextClassLoaderResourceLoader'.
+[INFO] Setting property: velocimacro.messages.on => 'false'.
+[INFO] Setting property: resource.loader => 'classpath'.
+[INFO] Setting property: resource.manager.logwhenfound => 'false'.
+[INFO] [archetype:create]
+Choose archetype:
+1: internal -> appfuse-basic-jsf (AppFuse archetype for creating a web application with Hibernate, Spring and JSF)
+2: internal -> appfuse-basic-spring (AppFuse archetype for creating a web application with Hibernate, Spring and Spring MVC)
+3: internal -> appfuse-basic-struts (AppFuse archetype for creating a web application with Hibernate, Spring and Struts 2)
+4: internal -> appfuse-basic-tapestry (AppFuse archetype for creating a web application with Hibernate, Spring and Tapestry 4)
+5: internal -> appfuse-core (AppFuse archetype for creating a jar application with Hibernate and Spring and XFire)
+6: internal -> appfuse-modular-jsf (AppFuse archetype for creating a modular application with Hibernate, Spring and JSF)
+7: internal -> appfuse-modular-spring (AppFuse archetype for creating a modular application with Hibernate, Spring and Spring MVC)
+8: internal -> appfuse-modular-struts (AppFuse archetype for creating a modular application with Hibernate, Spring and Struts 2)
+9: internal -> appfuse-modular-tapestry (AppFuse archetype for creating a modular application with Hibernate, Spring and Tapestry 4)
+10: internal -> maven-archetype-j2ee-simple (A simple J2EE Java application)
+11: internal -> maven-archetype-marmalade-mojo (A Maven plugin development project using marmalade)
+12: internal -> maven-archetype-mojo (A Maven Java plugin development project)
+13: internal -> maven-archetype-portlet (A simple portlet application)
+14: internal -> maven-archetype-profiles ()
+15: internal -> maven-archetype-quickstart ()
+16: internal -> maven-archetype-site-simple (A simple site generation project)
+17: internal -> maven-archetype-site (A more complex site project)
+18: internal -> maven-archetype-webapp (A simple Java web application)
+19: internal -> struts2-archetype-starter (A starter Struts 2 application with Sitemesh, DWR, and Spring)
+20: internal -> struts2-archetype-blank (A minimal Struts 2 application)
+21: internal -> struts2-archetype-portlet (A minimal Struts 2 application that can be deployed as a portlet)
+22: internal -> struts2-archetype-dbportlet (A starter Struts 2 portlet that demonstrates a simple CRUD interface with db backing)
+23: internal -> struts2-archetype-plugin (A Struts 2 plugin)
+24: internal -> shale-archetype-blank (A blank Shale web application with JSF)
+25: internal -> maven-adf-archetype (Archetype to ease the burden of creating a new application based with ADF)
+26: internal -> data-app (A new Databinder application with sources and resources.)
+27: internal -> jini-service-archetype (Archetype for Jini service project creation)
+28: internal -> softeu-archetype-seam (JSF+Facelets+Seam Archetype)
+29: internal -> softeu-archetype-seam-simple (JSF+Facelets+Seam (no persistence) Archetype)
+30: internal -> softeu-archetype-jsf (JSF+Facelets Archetype)
+31: internal -> jpa-maven-archetype (JPA application)
+32: internal -> spring-osgi-bundle-archetype (Spring-OSGi archetype)
+33: internal -> confluence-plugin-archetype (Atlassian Confluence plugin archetype)
+34: internal -> maven-archetype-har (Hibernate Archive)
+35: internal -> maven-archetype-sar (JBoss Service Archive)
+36: internal -> wicket-archetype-quickstart (A simple Apache Wicket project)
+Choose a number:  (1/2/3/4/5/6/7/8/9/10/11/12/13/14/15/16/17/18/19/20/21/22/23/24/25/26/27/28/29/30/31/32/33/34/35/36): 15
+[INFO] artifact org.apache.maven.archetypes:maven-archetype-quickstart: checking for updates from maven-archetype-quickstart-repo
+Downloading: http://repo1.maven.org/maven2/org/apache/maven/archetypes/maven-archetype-quickstart/1.0/maven-archetype-quickstart-1.0.jar
+4K downloaded
+Define value for groupId: : com.company 
+Define value for artifactId: : project
+Define value for version: : 1.0
+Define value for package: : com.company.project
+Confirm properties configuration:
+groupId: com.company
+artifactId: project
+version: 1.0
+package: com.company.project
+ Y: : 
+[INFO] ----------------------------------------------------------------------------
+[INFO] Using following parameters for creating OldArchetype: maven-archetype-quickstart:RELEASE
+[INFO] ----------------------------------------------------------------------------
+[INFO] Parameter: groupId, Value: com.company
+[INFO] Parameter: packageName, Value: com.company.project
+[INFO] Parameter: package, Value: com.company.project
+[INFO] Parameter: artifactId, Value: project
+[INFO] Parameter: basedir, Value: /home/local/rafale/projects/tmp
+[INFO] Parameter: version, Value: 1.0
+[INFO] ********************* End of debug info from resources from generated POM ***********************
+[INFO] OldArchetype created in dir: /home/local/rafale/projects/tmp/project
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESSFUL
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 54 seconds
+[INFO] Finished at: Fri Jan 25 23:01:01 GMT 2008
+[INFO] Final Memory: 10M/25M
+[INFO] ------------------------------------------------------------------------
++---
+
+   Here's the resulting tree of the created project
+
++---
+$ tree project
+project
+|-- pom.xml
+`-- src
+    |-- main
+    |   `-- java
+    |       `-- com
+    |           `-- company
+    |               `-- project
+    |                   `-- App.java
+    `-- test
+        `-- java
+            `-- com
+                `-- company
+                    `-- project
+                        `-- AppTest.java
+
+11 directories, 3 files
++---
