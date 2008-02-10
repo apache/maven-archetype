@@ -230,7 +230,7 @@ public class DefaultArchetypeSelector
                 String path = catalog.substring(7);
                 archetypes.put("local", archetype.getLocalCatalog(path).getArchetypes());
             } else if (catalog.startsWith("http://")) {
-                archetypes.put("remote", archetype.getRemoteCatalog(catalog));
+                archetypes.put("remote", archetype.getRemoteCatalog(catalog).getArchetypes());
             }
         }
 
