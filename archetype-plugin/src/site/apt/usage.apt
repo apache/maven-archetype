@@ -27,7 +27,7 @@
 ~~ http://maven.apache.org/guides/mini/guide-apt-format.html
 
 
-* Projet creation
+Projet creation
 
     Creating a project from an archetype involves three steps:
 
@@ -39,7 +39,7 @@
 
     []
 
- * Usage
+Usage
 
    Calling <<<archetype:create>>> the plugin will first ask to choose
    the archetype from the internal catalog. Just enter the number of the archetype.
@@ -163,3 +163,4 @@ project
 
 11 directories, 3 files
 +---
+
