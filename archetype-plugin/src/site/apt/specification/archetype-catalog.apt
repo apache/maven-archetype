@@ -1,0 +1,239 @@
+ ------
+ Archetype Catalog
+ ------
+ Raphaël Piéroni
+ ------
+ 10 February 2008
+ ------
+
+~~ Licensed to the Apache Software Foundation (ASF) under one
+~~ or more contributor license agreements.  See the NOTICE file
+~~ distributed with this work for additional information
+~~ regarding copyright ownership.  The ASF licenses this file
+~~ to you under the Apache License, Version 2.0 (the
+~~ "License"); you may not use this file except in compliance
+~~ with the License.  You may obtain a copy of the License at
+~~
+~~     http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~ Unless required by applicable law or agreed to in writing,
+~~ software distributed under the License is distributed on an
+~~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~ KIND, either express or implied.  See the License for the
+~~ specific language governing permissions and limitations
+~~ under the License.
+
+~~ NOTE: For help with the syntax of this file, see:
+~~ http://maven.apache.org/guides/mini/guide-apt-format.html
+
+
+How the Archetype Plugin know about archetype?
+
+~~TODO: add content
+
++---
+Content of a catalog file
+    an xml file commonly named archetype-catalog.xml
+    <?xml ?> 
+
+ <archetype-catalog> 
+
+ 
+
+ <archetype> 
+
+ <groupId/> 
+
+ <artifactId/> 
+
+ 
+
+ <repositoryUrl/> 
+
+ <!-- optional when the file resides in a remote repository --> 
+
+ 
+
+ <goals> 
+
+ <!-- list of goals called on a project after its generation from an archetype --> 
+
+ <!-- optional they whould reside in the archetype metadata file --> 
+
+ <goal>clean:clean</goal> 
+
+ </goals> 
+
+ 
+
+ <properties> 
+
+ <!-- properties used in combination with the goals --> 
+
+ <!-- should also reside in the archetype metadata --> 
+
+ <property.name>property value</property.name> 
+
+ </properties> 
+
+ </archetype> 
+
+ ... 
+
+ </archetype-catalog>
+
+
+
++---
+
+
+
+
+
++---
+Selection behaviour
+    1. default behaviour 
+
+ 
+
+ prompt to select archetype from the internal catalog 
+
+ check repository for latest RELEASE 
+
+ use that release 
+
+ 
+
+ act as if -Darchetype.catalog=internal
+        case archetype is defined 
+
+ group artifact and version of archetype has values
+            if repository is defined
+                if archetype exists in repository
+                    use IT
+                else
+                    if interactive
+                        same as groupId and artifactId
+                    else FAIL
+            else
+                if archetype exist in one catalog
+                    use IT
+                if archetpe exists in more than one catalog
+                    use FIRST
+                else
+                    same as groupId and artifactId
+        case archetype is partially defined 
+
+ group and artifact has values
+            if repository is defined
+                if archetype exists in repository
+                    select LATEST
+                else
+                    same as archetype not defined
+            else
+                if archetype exist in one catalog
+                    select LATEST
+                if archetype exist in more than one catalog
+                    select LATEST
+                esle
+                    same as archetype not defined
+        case archetype is not defined
+            get archetypes from defined catalogs 
+
+ ask for one
+                select LATEST
+    2. choose version 
+
+ 
+
+ prompt to select archetype from internal catalog 
+
+ check repository for all versions 
+
+ prompt to select the version (one of the retrieved release versions(latest first), LATEST or SNAPSHOT is allowed) 
+
+ if SNAPSHOT is selected reprompt to select one of the retrieved snapshot versions (latest first) 
+
+ if LATEST is selected take the latest release version 
+
+ use the selected archetype and version 
+
+ 
+
+ activated with -Darchetype.selectVersion=true or -Da.sv=true (for shorter)
+        any select LATEST
+            if interactive and selectVersion 
+
+ get versions fromall repositories 
+
+ ask for one version
+    3. use another catalog 
+
+ 
+
+ load the catalog from the remote source 
+
+ then same behaviour as basic 
+
+ 
+
+ activated with -Darchetype.catalog=http://ip:port/path/file.xml 
+
+ or with -Darchetype.catalog=http://ip:port/path (defauls to archetype-catalog.xml) 
+
+ or with -Darchetype.catalog=remote (defaults to http://repo1.maven.org/maven2/archetype-catalog.xml) 
+
+ or with -Darchetype.catalog=file:///absolute/path/to/archetype-catalog.xml (no default file) 
+
+ 
+
+ possible to combine with the -Darchetype.selectVersion property 
+
+ 
+
+ usage of proxy: handled by Maven in command line and in the IDE so all wagon download are transparent to the archetype plugin 
+
+ 
+
+ alternative activation in combination with the ~/.m2/archetype-catalog.properties file 
+
+ activation -Darchetype.catalog=name (name different from internal, remote or wiki) 
+
+ then the catalog properties file must contains a line with name=http://ip:port/path (same defaulting) 
+
+ 
+
+ remote catalogs and local catalog do not define repositoryUrls 
+
+ in their archetypes' definition as this is obviously implied
+    4. use multiple catalogs 
+
+ 
+
+ load all defined catalogs separately 
+
+ prompt to select archetype from those catalogs (without duplicates) 
+
+ check in each repositories for versions and select the LATEST 
+
+ 
+
+ activated with -Darchetype.catalog=internal,remote,wiki,http://ip:port/path (same defaulting) 
+
+ 
+
+ possible to combine with -Darchetype.selectVersion
+    Archetype cataloger has methods 
+
+ - getInternalCatalog/0 
+
+ ------ getWikiCatalog/0 
+
+ - getRemoteCatalog/0 /1(url) 
+
+ - getLocalCatalog/0 /1(path) 
+
+ - updateLocalCatalog/2(achetype, path) 
+
+ - updateRemoteCatalog/3 (archetype, url, credentials)
++---

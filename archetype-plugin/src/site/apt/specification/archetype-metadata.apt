@@ -1,0 +1,210 @@
+ ------
+ Archetype Metadata
+ ------
+ Raphaël Piéroni
+ ------
+ 10 February 2008
+ ------
+
+~~ Licensed to the Apache Software Foundation (ASF) under one
+~~ or more contributor license agreements.  See the NOTICE file
+~~ distributed with this work for additional information
+~~ regarding copyright ownership.  The ASF licenses this file
+~~ to you under the Apache License, Version 2.0 (the
+~~ "License"); you may not use this file except in compliance
+~~ with the License.  You may obtain a copy of the License at
+~~
+~~     http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~ Unless required by applicable law or agreed to in writing,
+~~ software distributed under the License is distributed on an
+~~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~ KIND, either express or implied.  See the License for the
+~~ specific language governing permissions and limitations
+~~ under the License.
+
+~~ NOTE: For help with the syntax of this file, see:
+~~ http://maven.apache.org/guides/mini/guide-apt-format.html
+
+
+How metadata on an archetype is stored?
+
+    The metadata about an archetype is stored in the archetype-metadata.xml file
+    located in the directory META-INF/maven of it's jar file.
+
+    The metadata file stores the additionnal properties, with corresponding 
+    default values.
+
+    It also stores the project's files generation in filesets.
+
+    Finnaly it also stores inner modules of the archetype, which enable the 
+    creation of multi-modules projects with a single archetype.
+
+    A minimal archetype-metadata.xml file looks like:
+
++---
+<?xml version="1.0" encoding="UTF-8"?>
+<archetype-descriptor name="basic">
+  <fileSets>
+    <fileSet filtered="true" packaged="true">
+      <directory>src/main/java</directory>
+      <includes>
+        <include>**/*.java</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</archetype-descriptor>
++---
+
+    This example above shows:
+    
+    * the archetype name is <<<basic>>>
+
+    * the archetype defines a single fileset: 
+    
+      * the fileset will take all the files in archetype-resources/src/main/java
+        that match the <<<**/*.java>>> pattern
+
+      * the selected files will be generated using the velocity engine 
+        (<<<filtered=true>>>)
+
+      * the files will be generated in the src/main/java directory of the 
+        generated project in the same directory as in the jar file, but with 
+        that directory prepended by the package property.
+      
+      []
+
+    []
+
+
+ * Defining additional properties
+
+    The main properties that are used by the velocity engine during project's file generation are groupId, artifactId, version, package.
+
+    It is possible to define additionnal properties that must be valued before the file generation. 
+
+    These additionnal properties can be provided with default values, which enable not to ask the user for there values.
+
+    Additionnal properties are defined in the archetype-metadata.xml file with:
+
++---
+<archetype-descriptor name="basic">
+  <requiredProperties>
+    <requiredProperty key="property-with-default">
+      <defaultValue>default-value</defaultValue>
+    </requiredProperty>
+    <requiredProperty key="property-without-default"/>
+  </requiredProperties>
+...
+</archetype-descriptor>
++---
+    
+    Here two additionnal properties are defined: <<<property-without-default>>>
+    and <<<property-with-default>>>.
+
+    Be aware that the property keys can not contain any dot as there are 
+    velocity properties.
+
+
+* Defining specific filesets
+
+    The filesets contained in the archetype-metadata.xml file defines the way
+    the project's files located in the jar file are used by the Archetype Plugin 
+    to generate a project.
+
+    Filesets must define the directory where the files will be searched for 
+    which is also the directory where the project's files will be generated. 
+    The first is the directory inside the archetype jar file, the second is the 
+    directory in the generated project's tree.
+
+    Filesets also defines the inclusion/exclusion of files "à la " ant. 
+    This provide a powerfull way to describe a large set of files to be selected 
+    for the generation process.
+
+    Filesets can be filtered, which means the selected files will be used 
+    as Velocity templates. They can be non-filtered, which means the selected 
+    files will be binary copied.
+
+    Filesets can be packaged, which means the selected files will be 
+    generated/copied in a directory structure that is prepended by the package 
+    property. They can be non-packaged, which means that the selected files 
+    will be generated/copied without that prepend.
+
+    A fileset is defined in the archetype-metadata.xml with this fragment:
+
++---
+...
+  <fileSets>
+    <fileSet filtered="true" packaged="true">
+      <directory>src/test/java</directory>
+      <includes>
+        <include>**/*.java</include>
+      </includes>
+      <excludes>
+        <excludeAllTest.java</include>
+      </excludes>
+    </fileSet>
+  </fileSets>
+...
++---
+
+    This example shows a fileset that will select all the java files in the 
+    <<<src/test/java>>> directory of the archetype resources, but the 
+    <<<AllTest.java>>> file that is located at the root of this directory.
+
+    This filset also is packaged and filtered.
+
+
+* Defining multi module in the archetype metadata
+
+    Inner modules of an archetype are used to create a multi module Maven 2 
+    project from a single archetype.
+
+    Modules in the archetype-metadata.xml file are defined like:
+
++---
+<archetype-descriptor name="multi-module">
+  <fileSets>
+    ...
+  </fileSets>
+  <modules>
+    <module name="SubProject" id="subproject" dir="sub-project">
+      <fileSets>
+        ...
+      </fileSets>
+    </module>
+  </modules>
+</archetype-descriptor>
++---
+
+    In the example above, the archetype <<<multi-module>>> contains a module 
+    named <<<SubProject>>>. This module is located in the <<<sub-project>>> 
+    directory of the archetype. It also has the artifactId <<<subproject>>>.
+
+    The attributes name, id and dir of the module are used to determine the 
+    directory where togenerated that module files, they also are used to 
+    determine the artifactId of the Maven 2 project corresponding to this 
+    module.
+
+
+* Putting all together
+
+    The <<<requiredProperties>>> is only allowed as a child of 
+    archetype-descriptor.
+
+    Modules are allowed in archetype-descriptor and in modules (no limit is 
+    given).
+
+    archetype-descriptor and modules must define at least one fileset each to 
+    be valid.
+
+    It is possible to define default values to main required properties by 
+    defining say the groupId and giving it a default:
+
++---
+...
+  <requiredProperties>
+    <requiredProperty key="groupId">
+      <defaultValue>com.company.department</defaultValue>
+    </requiredProperty>
++---

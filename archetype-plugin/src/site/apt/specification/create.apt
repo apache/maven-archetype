@@ -1,0 +1,120 @@
+ ------
+ Create a Project from an Archetype
+ ------
+ Raphaël Piéroni
+ ------
+ 10 February 2008
+ ------
+
+~~ Licensed to the Apache Software Foundation (ASF) under one
+~~ or more contributor license agreements.  See the NOTICE file
+~~ distributed with this work for additional information
+~~ regarding copyright ownership.  The ASF licenses this file
+~~ to you under the Apache License, Version 2.0 (the
+~~ "License"); you may not use this file except in compliance
+~~ with the License.  You may obtain a copy of the License at
+~~
+~~     http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~ Unless required by applicable law or agreed to in writing,
+~~ software distributed under the License is distributed on an
+~~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~ KIND, either express or implied.  See the License for the
+~~ specific language governing permissions and limitations
+~~ under the License.
+
+~~ NOTE: For help with the syntax of this file, see:
+~~ http://maven.apache.org/guides/mini/guide-apt-format.html
+
+
+What is done during the creation of a project?
+
+~~TODO: add content
++---
+How to use an archetype?
+    The simple way : 
+
+ mvn archetype:create
+        standard call and standard output/prompt and standard generated tree
+    Configuring the plugin
+        for selection
+            -Darchetype.catalog
+                This property is used to define the catalogs to search archetypes into. 
+
+ This property hold a comma separated list of catalogs. 
+
+ The valid catalogs are: internal (the default), local, remote, file://path, http://url. 
+
+ - internal uses an internal catalog 
+
+ - local uses the ~/.m2/archetype-catalog.xml file 
+
+ - remote uses the http://repo1.maven.org/maven2/arccchetype-catalog.xml file 
+
+ - file://path uses the catalog file defined by path (or the archetype-catalog.xml file located in path directory) 
+
+ - http://url uses the catalog file defined by url (or the archetype-catalog.xml file located in url web directory)
+            -DarchetypeGroupId 
+
+ -DarchetypeArtifactId 
+
+ -DarchetypeVersion 
+
+ -DarchetypeRepository
+                When these 4 properties are defined, no catalog is searched. 
+
+ When only archetypeRepository is missing, the first archetype sharing both group and artifact ids found in any catalog gives its repository definition. 
+
+ When archetypeRepository and achetypeVersion are missing, the first archetype sharing both group and artifact ids found in any catalog, gives its repository and version definition. 
+
+ When archetypeGroupId or archetypeArtifactId is missing the standard selection behaviour occurs.
+            -Darchetype.interactive
+                Defined in settings.xml, this property allow the usage of archetype selection. 
+
+ defaults to @settings.interactiveMode
+            @settings.localRepository
+                Used to cache downloaded archetypes
+        for configuration
+            defined using executionProperties 
+
+ 
+
+ -DgroupId 
+
+ -DartifactId 
+
+ -Dversion 
+
+ -Dpackage 
+
+ -DanotherVelocityProperty
+                these properties are used to configure the created project 
+
+ groupId (defaults to com.company) 
+
+ artifactId (defaults to project) 
+
+ version (defaults to 1.0-SNAPSHOT) 
+
+ package (defaults to groupId.artifactId)
+                these properties should be renamed to 
+
+ target.groupId 
+
+ target.artifactId 
+
+ target.version 
+
+ target.package
+            -Darchetype.interactive
+                Defined in settings.xml, this property allow the usage of archetype selection. 
+
+ defaults to @settings.interactiveMode
+        for generation
+            -DarchetypeGoals
+                comma separated list of goals called against the project after been created
+            @basedir
+                the directory where the project will be created
+        for batch mode
+    Beeing behind a proxy is automatically configured by Maven
++---
