@@ -17,11 +17,19 @@
   <artifactId>maven-archetype-plugin</artifactId>
 
   <name>Maven Archetype Plugin</name>
+  <url>http://maven.apache.org/plugins/maven-archetype-plugin</url>
   <packaging>maven-plugin</packaging>
 
   <prerequisites>
     <maven>2.0.7</maven>
   </prerequisites>
+  
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/archetype/trunk/archetype-plugin</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/trunk/archetype-plugin</developerConnection>
+    <url>http://svn.apache.org/viewvc/maven/archetype/trunk/archetype-plugin</url>
+  </scm>
+
 
   <dependencies>
     <dependency>
