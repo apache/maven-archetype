@@ -78,6 +78,34 @@
       </plugin>
     </plugins>
   </reporting>
+
+  <profiles>
+    <profile>
+      <id>ciProfile</id>
+      <activation>
+        <property>
+          <name>enableCiProfile</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-docck-plugin</artifactId>
+            <version>1.0-beta-2</version>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>check</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
   <distributionManagement>
     <site>
       <id>apache.website</id>
