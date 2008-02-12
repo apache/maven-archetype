@@ -29,211 +29,90 @@
 
 How the Archetype Plugin know about archetype?
 
-~~TODO: add content
+    Knowledge about archetypes are stored in catalogs.
+
+    The catalogs are xml files.
+
+    The Archetype Plugin comes bundled with an internal catalog. 
+    The one used by default.
+
+    The Archetype Plugin can use catalogs from local filesystem and from HTTP 
+    connexions.
+
+* Catalog file explained
+
+    Catalogs are xml file with such content:
 
 +---
-Content of a catalog file
-    an xml file commonly named archetype-catalog.xml
-    <?xml ?> 
-
- <archetype-catalog> 
-
- 
-
- <archetype> 
-
- <groupId/> 
-
- <artifactId/> 
-
- 
-
- <repositoryUrl/> 
-
- <!-- optional when the file resides in a remote repository --> 
-
- 
-
- <goals> 
-
- <!-- list of goals called on a project after its generation from an archetype --> 
-
- <!-- optional they whould reside in the archetype metadata file --> 
-
- <goal>clean:clean</goal> 
-
- </goals> 
-
- 
-
- <properties> 
-
- <!-- properties used in combination with the goals --> 
-
- <!-- should also reside in the archetype metadata --> 
-
- <property.name>property value</property.name> 
-
- </properties> 
-
- </archetype> 
-
- ... 
-
- </archetype-catalog>
-
-
-
+<?xml version="1.0" encoding="UTF-8"?>
+<archetype-catalog>
+  <archetypes>
+    <archetype>
+[1]    <groupId>org.appfuse.archetypes</groupId>
+[2]    <artifactId>appfuse-basic-jsf</artifactId>
+[3]    <version>2.0</version>
+[4]    <repository>http://static.appfuse.org/releases</repository>
+[5]    <description>AppFuse archetype for creating a web application with Hibernate, Spring and JSF</description>
+    </archetype>
+    ...
+  </archetypes>
+</archetype-catalog>
 +---
 
+    [[1]] The groupId of the archetype. <<REQUIRED>>
 
+    [[2]] The artifactId of the archetype. <<REQUIRED>>
 
+    [[3]] The version of the archetype. <<<RELEASE>>> is a valid version. <<REQUIRED>>
 
+    [[4]] The repository where to find the archetype. <<OPTIONAL>>. When 
+          ommited, the archetype is searched in the repository where the catalog 
+          comes from.
+
+    [[5]] The description of the archetype. <<OPTIONAL>>
+    
+
+* Archetype selection explained
+
+    During the creation of a project from an archetype, the Archetype Plugin
+    ask the user to choose an archetype from a list containing the archetypes
+    from each of the provided catalogs (Yes there may be many).
+
+    For each archetype in the list the Archetype Plugin shows a line like:
 
 +---
-Selection behaviour
-    1. default behaviour 
-
- 
-
- prompt to select archetype from the internal catalog 
-
- check repository for latest RELEASE 
-
- use that release 
-
- 
-
- act as if -Darchetype.catalog=internal
-        case archetype is defined 
-
- group artifact and version of archetype has values
-            if repository is defined
-                if archetype exists in repository
-                    use IT
-                else
-                    if interactive
-                        same as groupId and artifactId
-                    else FAIL
-            else
-                if archetype exist in one catalog
-                    use IT
-                if archetpe exists in more than one catalog
-                    use FIRST
-                else
-                    same as groupId and artifactId
-        case archetype is partially defined 
-
- group and artifact has values
-            if repository is defined
-                if archetype exists in repository
-                    select LATEST
-                else
-                    same as archetype not defined
-            else
-                if archetype exist in one catalog
-                    select LATEST
-                if archetype exist in more than one catalog
-                    select LATEST
-                esle
-                    same as archetype not defined
-        case archetype is not defined
-            get archetypes from defined catalogs 
-
- ask for one
-                select LATEST
-    2. choose version 
-
- 
-
- prompt to select archetype from internal catalog 
-
- check repository for all versions 
-
- prompt to select the version (one of the retrieved release versions(latest first), LATEST or SNAPSHOT is allowed) 
-
- if SNAPSHOT is selected reprompt to select one of the retrieved snapshot versions (latest first) 
-
- if LATEST is selected take the latest release version 
-
- use the selected archetype and version 
-
- 
-
- activated with -Darchetype.selectVersion=true or -Da.sv=true (for shorter)
-        any select LATEST
-            if interactive and selectVersion 
-
- get versions fromall repositories 
-
- ask for one version
-    3. use another catalog 
-
- 
-
- load the catalog from the remote source 
-
- then same behaviour as basic 
-
- 
-
- activated with -Darchetype.catalog=http://ip:port/path/file.xml 
-
- or with -Darchetype.catalog=http://ip:port/path (defauls to archetype-catalog.xml) 
-
- or with -Darchetype.catalog=remote (defaults to http://repo1.maven.org/maven2/archetype-catalog.xml) 
-
- or with -Darchetype.catalog=file:///absolute/path/to/archetype-catalog.xml (no default file) 
-
- 
-
- possible to combine with the -Darchetype.selectVersion property 
-
- 
-
- usage of proxy: handled by Maven in command line and in the IDE so all wagon download are transparent to the archetype plugin 
-
- 
-
- alternative activation in combination with the ~/.m2/archetype-catalog.properties file 
-
- activation -Darchetype.catalog=name (name different from internal, remote or wiki) 
-
- then the catalog properties file must contains a line with name=http://ip:port/path (same defaulting) 
-
- 
-
- remote catalogs and local catalog do not define repositoryUrls 
-
- in their archetypes' definition as this is obviously implied
-    4. use multiple catalogs 
-
- 
-
- load all defined catalogs separately 
-
- prompt to select archetype from those catalogs (without duplicates) 
-
- check in each repositories for versions and select the LATEST 
-
- 
-
- activated with -Darchetype.catalog=internal,remote,wiki,http://ip:port/path (same defaulting) 
-
- 
-
- possible to combine with -Darchetype.selectVersion
-    Archetype cataloger has methods 
-
- - getInternalCatalog/0 
-
- ------ getWikiCatalog/0 
-
- - getRemoteCatalog/0 /1(url) 
-
- - getLocalCatalog/0 /1(path) 
-
- - updateLocalCatalog/2(achetype, path) 
-
- - updateRemoteCatalog/3 (archetype, url, credentials)
+1: internal -> appfuse-basic-jsf (AppFuse archetype for creating a web application with Hibernate, Spring and JSF)
 +---
+
+    * <<<1:>>> The index of the archetype in the aggregated list (starting from 
+      1).
+
+    * <<<internal>>> The name of the catalog where the archetype is originating.
+
+    * <<<appfuse-basic-jsf>>> The artifactId of the archetype
+
+    * <<<(AppFuse archetype...)>>> The description of the archetype as found in 
+      the catalog.
+
+
+* Creating a catalog file
+
+    At the end of the <<<create-from-project>>> behaviour, the Archetype Plugin
+    install/deploy the archetype, and update the local/remote catalog.
+    
+    The <<<crawl-repository>>> mojo is used to create a catalog file by crawling 
+    a Maven 2 repository located in the filesystem. 
+    
+* Location of catalog files
+
+    The Archetype Plugin knows by default its internal catalog. It also know 
+    about the <<<local>>> and <<<remote>>> catalogs. 
+
+    <<<local>>> represents the catalog file <<<~/.m2/archetype-catalog.xml>>>.
+
+    <<<remote>>> represents the catalog file <<<http://repo1.maven.org/maven2/archetype-catalog.xml>>>.
+
+    The Archetype Plugin can also read catalogs from filesystem/HTTP by 
+    providing the path/URL of a catalog file or of a directory contaings the
+    <<<archetype-catalog.xml>>> file.
+    
