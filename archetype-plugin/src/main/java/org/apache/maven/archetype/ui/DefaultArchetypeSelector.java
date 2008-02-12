@@ -116,11 +116,10 @@ public class DefaultArchetypeSelector
                 }
                 if ( !found )
                 {
-                    getLogger ().warn ( "No archetype repository found." );
-                    if ( interactiveMode.booleanValue () )
-                    {
-                        definition.setVersion ( null );
-                    }
+                    getLogger ().warn ( "No archetype repository found. Falling back to central repository (http://repo1.maven.org/maven2). " );
+                    getLogger ().warn ( "Use -DarchetypeRepository=<your repository> if archetype's repository is elsewhere." );
+                    
+                    definition.setRepository("http://repo1.maven.org/maven2");
                 }
             }
             if ( !definition.isDefined () && definition.isPartiallyDefined () )
