@@ -40,10 +40,10 @@ Specification
 
     * {{{archetype-catalog.html}How the Archetype Plugin know about archetype?}}
 
-    * {{{create-from-project.html}What is done during the creation of an archetype?}}
-
-    * {{{update-catalog.html}How the Archetype Plugin know about new archetypes?}}
-
-    * {{{crawl-repository.html}How archetype lists are created?}}
+~~    * {{{create-from-project.html}What is done during the creation of an archetype?}}
+~~
+~~    * {{{update-catalog.html}How the Archetype Plugin know about new archetypes?}}
+~~
+~~    * {{{crawl-repository.html}How archetype lists are created?}}
     
     []

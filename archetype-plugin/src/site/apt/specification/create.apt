@@ -30,6 +30,13 @@
 What is done during the creation of a project?
 
 ~~TODO: add content
+ * Archetype selection explained
+
+    During the creation of a project from an archetype, the Archetype Plugin
+    ask the user to choose an archetype from a list containing the archetypes
+    from each of the provided catalogs (Yes there may be many).
+
+    For each archetype in the list the selection 
 +---
 How to use an archetype?
     The simple way : 
