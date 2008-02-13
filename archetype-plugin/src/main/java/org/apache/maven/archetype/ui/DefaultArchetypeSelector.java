@@ -19,6 +19,7 @@
 
 package org.apache.maven.archetype.ui;
 
+import org.apache.commons.collections.iterators.ArrayIterator;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.common.ArchetypeDefinition;
@@ -26,8 +27,6 @@ import org.apache.maven.archetype.exception.ArchetypeNotDefined;
 import org.apache.maven.archetype.exception.ArchetypeSelectionFailure;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.archetype.exception.UnknownGroup;
-import org.apache.maven.archetype.source.ArchetypeDataSource;
-import org.apache.maven.archetype.source.ArchetypeDataSourceException;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
@@ -38,7 +37,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import org.apache.commons.collections.iterators.ArrayIterator;
 
 /** @plexus.component */
 public class DefaultArchetypeSelector
@@ -67,7 +65,7 @@ public class DefaultArchetypeSelector
         UnknownGroup,
         IOException,
         PrompterException,
-        ArchetypeSelectionFailure
+        ArchetypeSelectionFailure                    
     {
         //This should be an internal class
         ArchetypeDefinition definition = new ArchetypeDefinition();
@@ -212,6 +210,10 @@ public class DefaultArchetypeSelector
     }
 
     private Map getArchetypesByCatalog(String catalogs) {
+        if ( catalogs == null )
+        {
+            throw new NullPointerException( "catalogs can not be null" );
+        }
 
         Map archetypes = new HashMap();
 
@@ -259,5 +261,10 @@ public class DefaultArchetypeSelector
         }
 
         return p;
+    }
+
+    public void setArchetypeSelectionQueryer( ArchetypeSelectionQueryer archetypeSelectionQueryer )
+    {
+        this.archetypeSelectionQueryer = archetypeSelectionQueryer;
     }
 }

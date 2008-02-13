@@ -19,15 +19,16 @@
 
 package org.apache.maven.archetype;
 
-import java.util.ArrayList;
-import java.util.List;
-import org.apache.maven.artifact.repository.ArtifactRepository;
-import java.util.Properties;
 import org.apache.maven.archetype.catalog.Archetype;
+import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.settings.Mirror;
 import org.apache.maven.settings.Proxy;
 import org.apache.maven.settings.Server;
 import org.apache.maven.wagon.events.TransferListener;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 /** @author Jason van Zyl */
 public class ArchetypeGenerationRequest
@@ -72,6 +73,10 @@ public class ArchetypeGenerationRequest
 
     private Properties properties = new Properties(  );
 
+    private static final String DEFAULT_ARCHETYPE_GROUP = "org.apache.maven.archetypes";
+
+    private static final String DEFAULT_ARCHETYPE_VERSION = "RELEASE";
+
     public ArchetypeGenerationRequest( )
     {
     }
@@ -89,6 +94,10 @@ public class ArchetypeGenerationRequest
 
     public String getArchetypeGroupId( )
     {
+        if ( archetypeGroupId == null )
+        {
+            return DEFAULT_ARCHETYPE_GROUP;
+        }
         return archetypeGroupId;
     }
 
@@ -113,6 +122,10 @@ public class ArchetypeGenerationRequest
 
     public String getArchetypeVersion( )
     {
+        if ( archetypeVersion == null )
+        {
+            return DEFAULT_ARCHETYPE_VERSION;
+        }
         return archetypeVersion;
     }
 
