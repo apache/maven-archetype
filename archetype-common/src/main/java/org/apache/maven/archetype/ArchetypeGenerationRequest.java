@@ -73,10 +73,6 @@ public class ArchetypeGenerationRequest
 
     private Properties properties = new Properties(  );
 
-    private static final String DEFAULT_ARCHETYPE_GROUP = "org.apache.maven.archetypes";
-
-    private static final String DEFAULT_ARCHETYPE_VERSION = "RELEASE";
-
     public ArchetypeGenerationRequest( )
     {
     }
@@ -94,10 +90,6 @@ public class ArchetypeGenerationRequest
 
     public String getArchetypeGroupId( )
     {
-        if ( archetypeGroupId == null )
-        {
-            return DEFAULT_ARCHETYPE_GROUP;
-        }
         return archetypeGroupId;
     }
 
@@ -122,10 +114,6 @@ public class ArchetypeGenerationRequest
 
     public String getArchetypeVersion( )
     {
-        if ( archetypeVersion == null )
-        {
-            return DEFAULT_ARCHETYPE_VERSION;
-        }
         return archetypeVersion;
     }
 

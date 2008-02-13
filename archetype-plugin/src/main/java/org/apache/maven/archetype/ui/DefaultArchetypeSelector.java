@@ -43,6 +43,12 @@ public class DefaultArchetypeSelector
     extends AbstractLogEnabled
     implements ArchetypeSelector
 {
+    private static final String DEFAULT_ARCHETYPE_GROUPID = "org.apache.maven.archetypes";
+
+    private static final String DEFAULT_ARCHETYPE_VERSION = "RELEASE";
+
+    private static final String DEFAULT_ARCHETYPE_ARTIFACTID = "maven-archetype-quickstart";
+
     /** @plexus.requirement */
     private ArchetypeSelectionQueryer archetypeSelectionQueryer;
     /** @plexus.requirement */
@@ -164,28 +170,43 @@ public class DefaultArchetypeSelector
                     }
                 }
             }
-        } 
+        }
 
-        if ( interactiveMode.booleanValue ()
-            && !definition.isDefined ()
-            && !definition.isPartiallyDefined ()
-        )
+        // set the defaults - only group and version can be auto-defaulted
+        if ( definition.getGroupId() == null )
         {
-            if ( archetypes.size () > 0 )
-            {
-                Archetype selectedArchetype =
-                    archetypeSelectionQueryer.selectArchetype ( archetypes );
+            definition.setGroupId( DEFAULT_ARCHETYPE_GROUPID );
+        }
+        if ( definition.getVersion() == null )
+        {
+            definition.setVersion( DEFAULT_ARCHETYPE_VERSION );
+        }
 
-                definition.setGroupId ( selectedArchetype.getGroupId () );
-                definition.setArtifactId ( selectedArchetype.getArtifactId () );
-                definition.setVersion ( selectedArchetype.getVersion () );
-                definition.setName ( selectedArchetype.getArtifactId () );
-                definition.setRepository ( selectedArchetype.getRepository () );
-                String goals = StringUtils.join ( selectedArchetype.getGoals ().iterator (), "," );
-                definition.setGoals ( goals );
+        if ( !definition.isDefined() && !definition.isPartiallyDefined() )
+        {
+            // if artifact ID is set to it's default, we still prompt to confirm 
+            if ( definition.getArtifactId() == null )
+            {
+                definition.setArtifactId( DEFAULT_ARCHETYPE_ARTIFACTID );
+            }
+
+            if ( interactiveMode.booleanValue() )
+            {
+                if ( archetypes.size() > 0 )
+                {
+                    Archetype selectedArchetype = archetypeSelectionQueryer.selectArchetype( archetypes, definition );
+
+                    definition.setGroupId( selectedArchetype.getGroupId() );
+                    definition.setArtifactId( selectedArchetype.getArtifactId() );
+                    definition.setVersion( selectedArchetype.getVersion() );
+                    definition.setName( selectedArchetype.getArtifactId() );
+                    definition.setRepository( selectedArchetype.getRepository() );
+                    String goals = StringUtils.join( selectedArchetype.getGoals().iterator(), "," );
+                    definition.setGoals( goals );
+                }
             }
         }
-        
+
         // Make sure the groupId and artifactId are valid, the version may just default to
         // the latest release.
 

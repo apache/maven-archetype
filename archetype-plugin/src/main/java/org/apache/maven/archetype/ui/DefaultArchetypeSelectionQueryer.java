@@ -84,12 +84,19 @@ public class DefaultArchetypeSelectionQueryer
     public Archetype selectArchetype( Map catalogs )
         throws PrompterException
     {
+        return selectArchetype( catalogs, null );
+    }
+
+    public Archetype selectArchetype( Map catalogs, ArchetypeDefinition defaultDefinition )
+        throws PrompterException
+    {
         String query = "Choose archetype:\n";
         Map answerMap = new HashMap();
         List answers = new ArrayList();
 
         Iterator catalogIterator = catalogs.keySet().iterator();
         int counter = 1;
+        int defaultSelection = 0;
         while ( catalogIterator.hasNext() )
         {
             String catalog = (String) catalogIterator.next();
@@ -105,6 +112,13 @@ public class DefaultArchetypeSelectionQueryer
                     " -> " + archetype.getArtifactId() + " (" + archetype.getDescription() + ")\n";
                 answers.add( "" + counter );
 
+                if ( defaultDefinition != null && archetype.getGroupId().equals( defaultDefinition.getGroupId() ) &&
+                    archetype.getArtifactId().equals( defaultDefinition.getArtifactId() ) &&
+                    archetype.getVersion().equals( defaultDefinition.getVersion() ) )
+                {
+                    defaultSelection = counter;
+                }
+
                 counter++;
             }
 
@@ -112,7 +126,15 @@ public class DefaultArchetypeSelectionQueryer
 
         query += "Choose a number: ";
 
-        String answer = prompter.prompt( query, answers );
+        String answer;
+        if ( defaultSelection == 0 )
+        {
+            answer = prompter.prompt( query, answers );
+        }
+        else
+        {
+            answer = prompter.prompt( query, answers, Integer.toString( defaultSelection ) );
+        }
 
         return (org.apache.maven.archetype.catalog.Archetype) answerMap.get( answer );
     }
@@ -198,4 +220,9 @@ public class DefaultArchetypeSelectionQueryer
 //
 //        return (String) answerMap.get( answer );
 //    }
+
+    public void setPrompter( Prompter prompter )
+    {
+        this.prompter = prompter;
+    }
 }

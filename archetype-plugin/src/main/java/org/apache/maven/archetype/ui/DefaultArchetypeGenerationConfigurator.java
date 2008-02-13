@@ -19,7 +19,6 @@
 package org.apache.maven.archetype.ui;
 
 
-import org.apache.maven.archetype.old.OldArchetype;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
 import org.apache.maven.archetype.common.ArchetypeConfiguration;
@@ -30,6 +29,7 @@ import org.apache.maven.archetype.exception.ArchetypeGenerationConfigurationFail
 import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
 import org.apache.maven.archetype.exception.ArchetypeNotDefined;
 import org.apache.maven.archetype.exception.UnknownArchetype;
+import org.apache.maven.archetype.old.OldArchetype;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -40,6 +40,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
+// TODO: this seems to have more responsibilities than just a configurator
 /** @plexus.component */
 public class DefaultArchetypeGenerationConfigurator
     extends AbstractLogEnabled
@@ -140,52 +141,71 @@ public class DefaultArchetypeGenerationConfigurator
         }
         
         // mkleint: if already preconfigured, don't ask for confirmation, assume it's fine.
-        if ( interactiveMode.booleanValue()  && !archetypeConfiguration.isConfigured() )
+        if ( !archetypeConfiguration.isConfigured() )
         {
-            boolean confirmed = false;
-
-            while ( !confirmed )
+            if ( interactiveMode.booleanValue() )
             {
-                if ( !archetypeConfiguration.isConfigured() )
+                boolean confirmed = false;
+
+                while ( !confirmed )
                 {
-                    Iterator requiredProperties = archetypeConfiguration.getRequiredProperties().
-                        iterator();
-
-                    while ( requiredProperties.hasNext() )
+                    if ( !archetypeConfiguration.isConfigured() )
                     {
-                        String requiredProperty = (String) requiredProperties.next();
+                        Iterator requiredProperties = archetypeConfiguration.getRequiredProperties().
+                            iterator();
 
-                        if ( !archetypeConfiguration.isConfigured( requiredProperty ) )
+                        while ( requiredProperties.hasNext() )
                         {
-                            archetypeConfiguration.setProperty( requiredProperty,
-                                archetypeGenerationQueryer.getPropertyValue( requiredProperty,
-                                archetypeConfiguration.getDefaultValue( requiredProperty ) ) );
+                            String requiredProperty = (String) requiredProperties.next();
+
+                            if ( !archetypeConfiguration.isConfigured( requiredProperty ) )
+                            {
+                                archetypeConfiguration.setProperty( requiredProperty,
+                                    archetypeGenerationQueryer.getPropertyValue( requiredProperty,
+                                    archetypeConfiguration.getDefaultValue( requiredProperty ) ) );
+                            }
                         }
                     }
-                }
-                if ( !archetypeConfiguration.isConfigured() )
-                {
-                    throw new ArchetypeGenerationConfigurationFailure(
-                        "The archetype generation must be configured here" );
-                }
-                else if ( !archetypeGenerationQueryer.confirmConfiguration( archetypeConfiguration ) )
-                {
-                    getLogger().debug( "OldArchetype generation configuration not confirmed" );
-                    archetypeConfiguration.reset();
-                }
-                else
-                {
-                    getLogger().debug( "OldArchetype generation configuration confirmed" );
 
-                    confirmed = true;
+                    if ( !archetypeConfiguration.isConfigured() )
+                    {
+                        throw new ArchetypeGenerationConfigurationFailure(
+                            "The archetype generation must be configured here" );
+                    }
+                    else if ( !archetypeGenerationQueryer.confirmConfiguration( archetypeConfiguration ) )
+                    {
+                        getLogger().debug( "OldArchetype generation configuration not confirmed" );
+                        archetypeConfiguration.reset();
+                    }
+                    else
+                    {
+                        getLogger().debug( "OldArchetype generation configuration confirmed" );
+
+                        confirmed = true;
+                    }
                 }
             }
-        }
-        else
-        {
-            if ( !archetypeConfiguration.isConfigured() )
+            else
             {
-                throw new ArchetypeNotConfigured( "The archetype is not configurated" );
+                Iterator requiredProperties = archetypeConfiguration.getRequiredProperties().
+                    iterator();
+
+                while ( requiredProperties.hasNext() )
+                {
+                    String requiredProperty = (String) requiredProperties.next();
+
+                    if ( !archetypeConfiguration.isConfigured( requiredProperty ) )
+                    {
+                        archetypeConfiguration.setProperty( requiredProperty, archetypeConfiguration.getDefaultValue(
+                            requiredProperty ) );
+                    }
+                }
+
+                // in batch mode, we assume the defaults, and if still not configured fail
+                if ( !archetypeConfiguration.isConfigured() )
+                {
+                    throw new ArchetypeNotConfigured( "The archetype is not configured" );
+                }
             }
         }
 
@@ -208,5 +228,10 @@ public class DefaultArchetypeGenerationConfigurator
         properties.remove( Constants.PACKAGE );
 
         request.setProperties( properties );
+    }
+
+    public void setArchetypeArtifactManager( ArchetypeArtifactManager archetypeArtifactManager )
+    {
+        this.archetypeArtifactManager = archetypeArtifactManager;
     }
 }
