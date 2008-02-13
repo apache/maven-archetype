@@ -19,14 +19,15 @@
 
 package org.apache.maven.archetype.mojos;
 
+import org.apache.maven.archetype.Archetype;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
-import org.apache.maven.archetype.Archetype;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 import org.apache.maven.archetype.generator.ArchetypeGenerator;
 import org.apache.maven.archetype.ui.ArchetypeGenerationConfigurator;
 import org.apache.maven.archetype.ui.ArchetypeSelector;
 import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.ContextEnabled;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -40,7 +41,6 @@ import org.codehaus.plexus.util.StringUtils;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Properties;
-import org.apache.maven.execution.MavenSession;
 
 /**
  * Generates sample project from archetype.
@@ -164,6 +164,7 @@ public class CreateProjectFromArchetypeMojo
         {
             selector.selectArchetype( request, interactiveMode, archetypeCatalog );
 
+            // TODO: it's confusing that request has fields that get populated but not accepted as input (eg, groupId)
             configurator.configureArchetype( request, interactiveMode, executionProperties );
 
             ArchetypeGenerationResult result = archetype.generateProjectFromArchetype( request );

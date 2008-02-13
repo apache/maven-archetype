@@ -19,10 +19,10 @@
 
 package org.apache.maven.archetype.ui;
 
-import org.apache.maven.project.MavenProject;
 import org.apache.maven.archetype.common.ArchetypeConfiguration;
 import org.apache.maven.archetype.common.ArchetypeDefinition;
 import org.apache.maven.archetype.common.Constants;
+import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 import java.util.Iterator;
@@ -128,6 +128,8 @@ public class DefaultArchetypeFactory
                     + configuration.getProperty( Constants.VERSION )
             );
         }
+        configuration.setDefaultProperty( Constants.VERSION, "1.0-SNAPSHOT" );
+
         configuration.addRequiredProperty( Constants.PACKAGE );
         getLogger().debug( "Adding requiredProperty " + Constants.PACKAGE );
         if ( null
@@ -143,6 +145,7 @@ public class DefaultArchetypeFactory
                 )
             );
         }
+        configuration.setDefaultProperty( Constants.PACKAGE, configuration.getProperty( Constants.GROUP_ID ) );
 
         return configuration;
     }

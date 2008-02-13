@@ -19,14 +19,15 @@
 
 package org.apache.maven.archetype.ui;
 
-//import org.apache.maven.archetype.common.Archetype;
-import java.util.Map;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.common.ArchetypeDefinition;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 
-import java.util.List;
+import java.util.Map;
 
+/**
+ * @todo this interface is bound to it's implementation through the prompter exception
+ */
 public interface ArchetypeSelectionQueryer
 {
     String ROLE = ArchetypeSelectionQueryer.class.getName();
@@ -53,4 +54,15 @@ public interface ArchetypeSelectionQueryer
 //    String selectVersion( List list )
 //        throws
 //        PrompterException;
+
+    /**
+     * Select an archetype from the given map.
+     *
+     * @param archetypes the archetypes to choose from
+     * @param defaultDefinition the default archetype, if present in the map
+     * @return the selected archetype
+     * @throws org.codehaus.plexus.components.interactivity.PrompterException if there is a problem in making a selection
+     */
+    Archetype selectArchetype( Map archetypes, ArchetypeDefinition defaultDefinition )
+        throws PrompterException;
 }

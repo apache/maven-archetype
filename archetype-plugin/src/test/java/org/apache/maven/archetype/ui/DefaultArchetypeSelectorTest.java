@@ -21,16 +21,20 @@ package org.apache.maven.archetype.ui;
 
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.catalog.Archetype;
+import org.apache.maven.archetype.common.ArchetypeDefinition;
 import org.apache.maven.archetype.exception.ArchetypeNotDefined;
 import org.apache.maven.archetype.exception.ArchetypeSelectionFailure;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.archetype.exception.UnknownGroup;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.components.interactivity.PrompterException;
+import org.easymock.AbstractMatcher;
+import org.easymock.ArgumentsMatcher;
 import org.easymock.MockControl;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Map;
 
 public class DefaultArchetypeSelectorTest
     extends PlexusTestCase
@@ -106,7 +110,7 @@ public class DefaultArchetypeSelectorTest
         MockControl control = MockControl.createControl( ArchetypeSelectionQueryer.class );
 
         ArchetypeSelectionQueryer queryer = (ArchetypeSelectionQueryer) control.getMock();
-        queryer.selectArchetype( Collections.EMPTY_MAP );
+        queryer.selectArchetype( Collections.EMPTY_MAP, new ArchetypeDefinition() );
         control.setMatcher( MockControl.ALWAYS_MATCHER );
         Archetype archetype = new Archetype();
         archetype.setArtifactId( "set-artifactId" );
@@ -125,5 +129,134 @@ public class DefaultArchetypeSelectorTest
         assertEquals( "set-groupId", request.getArchetypeGroupId() );
         assertEquals( "set-artifactId", request.getArchetypeArtifactId() );
         assertEquals( "set-version", request.getArchetypeVersion() );
+    }
+
+    public void testArchetypeNotInRequestDefaultsInBatchMode()
+        throws PrompterException, IOException, UnknownGroup, ArchetypeSelectionFailure, UnknownArchetype,
+        ArchetypeNotDefined
+    {
+        ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
+
+        MockControl control = MockControl.createControl( ArchetypeSelectionQueryer.class );
+
+        ArchetypeSelectionQueryer queryer = (ArchetypeSelectionQueryer) control.getMock();
+        // expect it to not be called
+
+        control.replay();
+
+        selector.setArchetypeSelectionQueryer( queryer );
+
+        selector.selectArchetype( request, Boolean.FALSE, "" );
+
+        control.verify();
+
+        assertEquals( "org.apache.maven.archetypes", request.getArchetypeGroupId() );
+        assertEquals( "maven-archetype-quickstart", request.getArchetypeArtifactId() );
+        assertEquals( "RELEASE", request.getArchetypeVersion() );
+    }
+
+    public void testArchetypeNotInRequestDefaults()
+        throws PrompterException, IOException, UnknownGroup, ArchetypeSelectionFailure, UnknownArchetype,
+        ArchetypeNotDefined
+    {
+        ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
+
+        MockControl control = MockControl.createControl( ArchetypeSelectionQueryer.class );
+
+        ArchetypeSelectionQueryer queryer = (ArchetypeSelectionQueryer) control.getMock();
+        queryer.selectArchetype( Collections.EMPTY_MAP, createDefaultArchetypeDefinition() );
+        control.setMatcher( createArgumentMatcher() );
+        Archetype archetype = new Archetype();
+        archetype.setArtifactId( "set-artifactId" );
+        archetype.setGroupId( "set-groupId" );
+        archetype.setVersion( "set-version" );
+        control.setReturnValue( archetype );
+
+        control.replay();
+
+        selector.setArchetypeSelectionQueryer( queryer );
+
+        selector.selectArchetype( request, Boolean.TRUE, "" );
+
+        control.verify();
+
+        assertEquals( "set-groupId", request.getArchetypeGroupId() );
+        assertEquals( "set-artifactId", request.getArchetypeArtifactId() );
+        assertEquals( "set-version", request.getArchetypeVersion() );
+    }
+
+    private ArchetypeDefinition createDefaultArchetypeDefinition()
+    {
+        ArchetypeDefinition definition = new ArchetypeDefinition();
+        definition.setGroupId( "org.apache.maven.archetypes" );
+        definition.setArtifactId( "maven-archetype-quickstart" );
+        definition.setVersion( "RELEASE" );
+        return definition;
+    }
+
+    private static ArgumentsMatcher createArgumentMatcher()
+    {
+        return new AbstractMatcher()
+        {
+            protected boolean argumentMatches( Object o, Object o1 )
+            {
+                return !( o instanceof ArchetypeDefinition ) ||
+                    compareArchetypeDefinition( (ArchetypeDefinition) o, (ArchetypeDefinition) o1 );
+            }
+
+            private boolean compareArchetypeDefinition( ArchetypeDefinition o, ArchetypeDefinition o1 )
+            {
+                if ( o1 == o )
+                {
+                    return true;
+                }
+                if ( o == null )
+                {
+                    return false;
+                }
+
+                if ( o1.getArtifactId() != null
+                    ? !o1.getArtifactId().equals( o.getArtifactId() )
+                    : o.getArtifactId() != null )
+                {
+                    return false;
+                }
+                if ( o1.getGroupId() != null ? !o1.getGroupId().equals( o.getGroupId() ) : o.getGroupId() != null )
+                {
+                    return false;
+                }
+                if ( o1.getName() != null ? !o1.getName().equals( o.getName() ) : o.getName() != null )
+                {
+                    return false;
+                }
+                if ( o1.getVersion() != null ? !o1.getVersion().equals( o.getVersion() ) : o.getVersion() != null )
+                {
+                    return false;
+                }
+                if ( o1.getGoals() != null ? !o1.getGoals().equals( o.getGoals() ) : o.getGoals() != null )
+                {
+                    return false;
+                }
+                if ( o1.getRepository() != null
+                    ? !o1.getRepository().equals( o.getRepository() )
+                    : o.getRepository() != null )
+                {
+                    return false;
+                }
+
+                return true;
+            }
+
+            protected String argumentToString( Object o )
+            {
+                return o instanceof Map ? "..." : toString( (ArchetypeDefinition) o );
+            }
+
+            private String toString( ArchetypeDefinition archetypeDefinition )
+            {
+                return "groupId = " + archetypeDefinition.getGroupId() + ", " + "artifactId = " +
+                    archetypeDefinition.getArtifactId() + ", " + "version = " + archetypeDefinition.getVersion();
+            }
+        };
     }
 }
