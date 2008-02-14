@@ -56,6 +56,7 @@ import org.apache.maven.project.ProjectBuildingException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
@@ -65,6 +66,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -229,13 +231,13 @@ public class FilesetArchetypeCreator
         Extension extension = new Extension();
         extension.setGroupId( "org.apache.maven.archetype" );
         extension.setArtifactId( "archetype-packaging" );
-        extension.setVersion( "2.0-SNAPSHOT" );
+        extension.setVersion( getArchetypeVersion() );
         model.getBuild().addExtension( extension );
 
         Plugin plugin = new Plugin();
         plugin.setGroupId( "org.apache.maven.plugins" );
         plugin.setArtifactId( "maven-archetype-plugin" );
-        plugin.setVersion( "2.0-SNAPSHOT" );
+        plugin.setVersion( getArchetypeVersion() );
         plugin.setExtensions( true );
         model.getBuild().addPlugin( plugin );
         getLogger().debug( "Creating archetype's pom" );
@@ -2228,5 +2230,45 @@ public class FilesetArchetypeCreator
     {
         OldArchetypeDescriptorXpp3Writer writer = new OldArchetypeDescriptorXpp3Writer();
         writer.write( new FileWriter( oldDescriptorFile ), oldDescriptor );
+    }
+    
+    private static final String MAVEN_PROPERTIES = "META-INF/maven/org.apache.maven.archetype/archetype-common/pom.properties";
+    
+    public String getArchetypeVersion()
+    {
+        InputStream is = null;
+        
+        // This should actually come from the pom.properties at testing but it's not generated and put into the JAR, it happens
+        // as part of the JAR plugin which is crap as it makes testing inconsistent.
+        String version = "version";
+        
+        try
+        {
+            Properties properties = new Properties();
+
+            is = getClass().getClassLoader().getResourceAsStream( MAVEN_PROPERTIES );
+
+            if ( is != null )
+            {
+                properties.load( is );
+
+                String property = properties.getProperty( "version" );
+
+                if ( property != null )
+                {
+                    return property;
+                }
+            }
+
+            return version;
+        }
+        catch ( IOException e )
+        {
+            return version;
+        }
+        finally
+        {
+            IOUtil.close( is );
+        }
     }
 }
