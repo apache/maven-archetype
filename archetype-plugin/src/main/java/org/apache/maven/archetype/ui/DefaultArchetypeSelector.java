@@ -43,11 +43,11 @@ public class DefaultArchetypeSelector
     extends AbstractLogEnabled
     implements ArchetypeSelector
 {
-    private static final String DEFAULT_ARCHETYPE_GROUPID = "org.apache.maven.archetypes";
+    static final String DEFAULT_ARCHETYPE_GROUPID = "org.apache.maven.archetypes";
 
-    private static final String DEFAULT_ARCHETYPE_VERSION = "RELEASE";
+    static final String DEFAULT_ARCHETYPE_VERSION = "1.0";
 
-    private static final String DEFAULT_ARCHETYPE_ARTIFACTID = "maven-archetype-quickstart";
+    static final String DEFAULT_ARCHETYPE_ARTIFACTID = "maven-archetype-quickstart";
 
     /** @plexus.requirement */
     private ArchetypeSelectionQueryer archetypeSelectionQueryer;
