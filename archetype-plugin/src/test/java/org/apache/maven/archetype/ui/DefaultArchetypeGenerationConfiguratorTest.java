@@ -108,4 +108,27 @@ public class DefaultArchetypeGenerationConfiguratorTest
         assertEquals( "1.0-SNAPSHOT", request.getVersion() );
         assertEquals( "preset-groupId", request.getPackage() );
     }
+
+    // TODO: should test this in interactive mode to check for prompting
+    public void testOldArchetypeGeneratedFieldsDefaultsMissingGroupId()
+        throws PrompterException, IOException, UnknownGroup, ArchetypeSelectionFailure, UnknownArchetype,
+        ArchetypeNotDefined, ArchetypeGenerationConfigurationFailure
+    {
+        ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
+        request.setArchetypeGroupId( "archetypeGroupId" );
+        request.setArchetypeArtifactId( "archetypeArtifactId" );
+        request.setArchetypeVersion( "archetypeVersion" );
+        Properties properties = new Properties();
+        properties.setProperty( "artifactId", "preset-artifactId" );
+
+        try
+        {
+            configurator.configureArchetype( request, Boolean.FALSE, properties );
+            fail( "Archetype was not fully configured - fail" );
+        }
+        catch ( ArchetypeNotConfigured archetypeNotDefined )
+        {
+            assertTrue( true );
+        }
+    }
 }
