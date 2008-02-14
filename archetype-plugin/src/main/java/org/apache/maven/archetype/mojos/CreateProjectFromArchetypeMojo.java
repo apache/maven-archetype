@@ -47,7 +47,7 @@ import java.util.Properties;
  *
  * @author rafale
  * @requiresProject false
- * @goal create
+ * @goal generate
  * @execute phase="generate-sources"
  */
 public class CreateProjectFromArchetypeMojo
