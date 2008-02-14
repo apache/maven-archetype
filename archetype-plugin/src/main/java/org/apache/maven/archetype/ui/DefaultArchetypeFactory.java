@@ -145,7 +145,10 @@ public class DefaultArchetypeFactory
                 )
             );
         }
-        configuration.setDefaultProperty( Constants.PACKAGE, configuration.getProperty( Constants.GROUP_ID ) );
+        if ( configuration.getProperty( Constants.GROUP_ID ) != null )
+        {
+            configuration.setDefaultProperty( Constants.PACKAGE, configuration.getProperty( Constants.GROUP_ID ) );
+        }
 
         return configuration;
     }

@@ -196,8 +196,11 @@ public class DefaultArchetypeGenerationConfigurator
 
                     if ( !archetypeConfiguration.isConfigured( requiredProperty ) )
                     {
-                        archetypeConfiguration.setProperty( requiredProperty, archetypeConfiguration.getDefaultValue(
-                            requiredProperty ) );
+                        if ( archetypeConfiguration.getDefaultValue( requiredProperty ) != null )
+                        {
+                            archetypeConfiguration.setProperty( requiredProperty, archetypeConfiguration.getDefaultValue(
+                                requiredProperty ) );
+                        }
                     }
                 }
 
