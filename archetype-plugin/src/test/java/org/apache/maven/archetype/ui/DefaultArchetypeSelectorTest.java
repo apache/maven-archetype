@@ -96,9 +96,9 @@ public class DefaultArchetypeSelectorTest
 
         control.verify();
 
-        assertEquals( "org.apache.maven.archetypes", request.getArchetypeGroupId() );
+        assertEquals( DefaultArchetypeSelector.DEFAULT_ARCHETYPE_GROUPID, request.getArchetypeGroupId() );
         assertEquals( "preset-artifactId", request.getArchetypeArtifactId() );
-        assertEquals( "RELEASE", request.getArchetypeVersion() );
+        assertEquals( DefaultArchetypeSelector.DEFAULT_ARCHETYPE_VERSION, request.getArchetypeVersion() );
     }
 
     public void testArchetypeArtifactIdNotInRequest()
@@ -150,9 +150,9 @@ public class DefaultArchetypeSelectorTest
 
         control.verify();
 
-        assertEquals( "org.apache.maven.archetypes", request.getArchetypeGroupId() );
-        assertEquals( "maven-archetype-quickstart", request.getArchetypeArtifactId() );
-        assertEquals( "RELEASE", request.getArchetypeVersion() );
+        assertEquals( DefaultArchetypeSelector.DEFAULT_ARCHETYPE_GROUPID, request.getArchetypeGroupId() );
+        assertEquals( DefaultArchetypeSelector.DEFAULT_ARCHETYPE_ARTIFACTID, request.getArchetypeArtifactId() );
+        assertEquals( DefaultArchetypeSelector.DEFAULT_ARCHETYPE_VERSION, request.getArchetypeVersion() );
     }
 
     public void testArchetypeNotInRequestDefaults()
@@ -188,9 +188,9 @@ public class DefaultArchetypeSelectorTest
     private ArchetypeDefinition createDefaultArchetypeDefinition()
     {
         ArchetypeDefinition definition = new ArchetypeDefinition();
-        definition.setGroupId( "org.apache.maven.archetypes" );
-        definition.setArtifactId( "maven-archetype-quickstart" );
-        definition.setVersion( "RELEASE" );
+        definition.setGroupId( DefaultArchetypeSelector.DEFAULT_ARCHETYPE_GROUPID );
+        definition.setArtifactId( DefaultArchetypeSelector.DEFAULT_ARCHETYPE_ARTIFACTID );
+        definition.setVersion( DefaultArchetypeSelector.DEFAULT_ARCHETYPE_VERSION );
         return definition;
     }
 
