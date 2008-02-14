@@ -67,42 +67,42 @@
     <archetype>
       <groupId>org.apache.maven.archetypes</groupId>
       <artifactId>maven-archetype-j2ee-simple</artifactId>
-      <version>RELEASE</version>
+      <version>1.0</version>
       <repository>http://repo1.maven.org/maven2</repository>
       <description>A simple J2EE Java application</description>
     </archetype>
     <archetype>
       <groupId>org.apache.maven.archetypes</groupId>
       <artifactId>maven-archetype-marmalade-mojo</artifactId>
-      <version>RELEASE</version>
+      <version>1.0-alpha-3</version>
       <repository>http://repo1.maven.org/maven2</repository>
       <description>A Maven plugin development project using marmalade</description>
     </archetype>
     <archetype>
       <groupId>org.apache.maven.archetypes</groupId>
       <artifactId>maven-archetype-mojo</artifactId>
-      <version>RELEASE</version>
+      <version>1.0</version>
       <repository>http://repo1.maven.org/maven2</repository>
       <description>A Maven Java plugin development project</description>
     </archetype>
     <archetype>
       <groupId>org.apache.maven.archetypes</groupId>
       <artifactId>maven-archetype-portlet</artifactId>
-      <version>RELEASE</version>
+      <version>1.0.1</version>
       <repository>http://repo1.maven.org/maven2</repository>
       <description>A simple portlet application</description>
     </archetype>
     <archetype>
       <groupId>org.apache.maven.archetypes</groupId>
       <artifactId>maven-archetype-profiles</artifactId>
-      <version>RELEASE</version>
+      <version>1.0-alpha-4</version>
       <repository>http://repo1.maven.org/maven2</repository>
       <description></description>
     </archetype>
     <archetype>
       <groupId>org.apache.maven.archetypes</groupId>
       <artifactId>maven-archetype-quickstart</artifactId>
-      <version>RELEASE</version>
+      <version>1.0</version>
       <repository>http://repo1.maven.org/maven2</repository>
       <description></description>
     </archetype>
@@ -118,21 +118,21 @@
     <archetype>
       <groupId>org.apache.maven.archetypes</groupId>
       <artifactId>maven-archetype-site-simple</artifactId>
-      <version>RELEASE</version>
+      <version>1.0</version>
       <repository>http://repo1.maven.org/maven2</repository>
       <description>A simple site generation project</description>
     </archetype>
     <archetype>
       <groupId>org.apache.maven.archetypes</groupId>
       <artifactId>maven-archetype-site</artifactId>
-      <version>RELEASE</version>
+      <version>1.0</version>
       <repository>http://repo1.maven.org/maven2</repository>
       <description>A more complex site project</description>
     </archetype>
     <archetype>
       <groupId>org.apache.maven.archetypes</groupId>
       <artifactId>maven-archetype-webapp</artifactId>
-      <version>RELEASE</version>
+      <version>1.0</version>
       <repository>http://repo1.maven.org/maven2</repository>
       <description>A simple Java web application</description>
     </archetype>
