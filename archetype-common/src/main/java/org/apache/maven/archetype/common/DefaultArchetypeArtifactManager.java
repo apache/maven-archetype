@@ -133,16 +133,28 @@ implements ArchetypeArtifactManager
             ZipEntry el = (ZipEntry) enumeration.nextElement ();
 
             String entry = el.getName ();
-            if ( entry.startsWith ( "META-INF/maven" ) && entry.endsWith ( "pom.xml" ) )
+            if ( entry.startsWith ( "META-INF" ) && entry.endsWith ( "pom.xml" ) )
             {
                 pomFileName = entry;
             }
         }
 
-        return
-            ( pomFileName == null )
-            ? null
-            : pomManager.readPom ( zipFile.getInputStream ( zipFile.getEntry ( pomFileName ) ) );
+        if ( pomFileName == null )
+        {
+            return null;
+        }
+
+        ZipEntry pom =
+            zipFile.getEntry ( StringUtils.replace ( pomFileName, File.separator, "/" ) );
+        if ( pom == null )
+        {
+            pom = zipFile.getEntry ( StringUtils.replace ( pomFileName, "/", File.separator ) );
+        }
+        if ( pom == null )
+        {
+            return null;
+        }
+        return pomManager.readPom ( zipFile.getInputStream ( pom ) );
     }
 
     public ZipFile getArchetypeZipFile ( File archetypeFile )
@@ -471,8 +483,21 @@ implements ArchetypeArtifactManager
     private Reader getArchetypeDescriptorReader ( ZipFile zipFile )
     throws IOException
     {
-        ZipEntry entry = zipFile.getEntry ( Constants.ARCHETYPE_DESCRIPTOR );
+        ZipEntry entry =
+            zipFile.getEntry (
+                StringUtils.replace ( Constants.ARCHETYPE_DESCRIPTOR, File.separator, "/" )
+            );
 
+        if ( entry == null )
+        {
+            getLogger ().debug (
+                "No found " + Constants.ARCHETYPE_DESCRIPTOR + " retrying with windows path"
+            );
+            entry =
+                zipFile.getEntry (
+                    StringUtils.replace ( Constants.ARCHETYPE_DESCRIPTOR, "/", File.separator )
+                );
+        }
         if ( entry == null )
         {
             throw new IOException (
@@ -582,7 +607,21 @@ implements ArchetypeArtifactManager
     private Reader getOldArchetypeDescriptorReader ( ZipFile zipFile )
     throws IOException
     {
-        ZipEntry entry = zipFile.getEntry ( Constants.OLD_ARCHETYPE_DESCRIPTOR );
+        ZipEntry entry =
+            zipFile.getEntry (
+                StringUtils.replace ( Constants.OLD_ARCHETYPE_DESCRIPTOR, File.separator, "/" )
+            );
+
+        if ( entry == null )
+        {
+            getLogger ().debug (
+                "No found " + Constants.OLD_ARCHETYPE_DESCRIPTOR + " retrying with windows path"
+            );
+            entry =
+                zipFile.getEntry (
+                    StringUtils.replace ( Constants.OLD_ARCHETYPE_DESCRIPTOR, "/", File.separator )
+                );
+        }
 
         if ( entry == null )
         {
@@ -605,8 +644,25 @@ implements ArchetypeArtifactManager
     private Reader getOlderArchetypeDescriptorReader ( ZipFile zipFile )
     throws IOException
     {
-        ZipEntry entry = zipFile.getEntry ( Constants.OLDER_ARCHETYPE_DESCRIPTOR );
+        ZipEntry entry =
+            zipFile.getEntry (
+                StringUtils.replace ( Constants.OLDER_ARCHETYPE_DESCRIPTOR, File.separator, "/" )
+            );
 
+        if ( entry == null )
+        {
+            getLogger ().debug (
+                "No found " + Constants.OLDER_ARCHETYPE_DESCRIPTOR + " retrying with windows path"
+            );
+            entry =
+                zipFile.getEntry (
+                    StringUtils.replace (
+                        Constants.OLDER_ARCHETYPE_DESCRIPTOR,
+                        "/",
+                        File.separator
+                    )
+                );
+        }
         if ( entry == null )
         {
             throw new IOException (
