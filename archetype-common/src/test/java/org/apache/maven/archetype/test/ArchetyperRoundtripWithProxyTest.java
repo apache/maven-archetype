@@ -135,7 +135,7 @@ public class ArchetyperRoundtripWithProxyTest
             localRepository, null );
 
         File archetypeDirectory = new File( generatedArchetypeDirectory,
-            "src"+File.separator+"xmain"+File.separator+"resources" );
+            "src"+File.separator+"main"+File.separator+"resources" );
 
         File archetypeArchive = archetype.archiveArchetype( archetypeDirectory,
             new File( generatedArchetypeProject.getBuild().getDirectory() ),

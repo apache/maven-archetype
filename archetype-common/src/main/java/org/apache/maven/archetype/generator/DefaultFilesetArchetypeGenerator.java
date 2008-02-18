@@ -684,7 +684,16 @@ public class DefaultFilesetArchetypeGenerator
         ArchetypeGenerationFailure
     {
         templateFileName = templateFileName.replace( File.separatorChar, '/' );
-
+        
+        if ( !velocity.getEngine ().templateExists ( templateFileName )
+            && velocity.getEngine ().templateExists (
+                templateFileName.replace ( '/', File.separatorChar )
+            )
+        )
+        {
+            templateFileName = templateFileName.replace ( '/', File.separatorChar );
+        }
+        
         getLogger().debug( "Prosessing template " + templateFileName );
 
         if ( failIfExists && outFile.exists() )
