@@ -41,7 +41,7 @@ Projet creation
 
 Usage
 
-   Calling <<<archetype:create>>> the plugin will first ask to choose
+   Calling <<<archetype:generate>>> the plugin will first ask to choose
    the archetype from the internal catalog. Just enter the number of the archetype.
 
    It then ask to enter the values for the groupId, the artifactId
@@ -56,20 +56,20 @@ Usage
    <<<version>>> to <<<1.0>>> and <<<package>>> to <<<com.company.project>>>.
 
 +---
-$ mvn archetype:create
+$ mvn archetype:generate
 [INFO] Scanning for projects...
 [INFO] Searching repository for plugin with prefix: 'archetype'.
 [INFO] ------------------------------------------------------------------------
 [INFO] Building Maven Default Project
 [INFO]    task-segment: [archetype:create] (aggregator-style)
 [INFO] ------------------------------------------------------------------------
-[INFO] Preparing archetype:create
+[INFO] Preparing archetype:generate
 [INFO] No goals needed for project - skipping
 [INFO] Setting property: classpath.resource.loader.class => 'org.codehaus.plexus.velocity.ContextClassLoaderResourceLoader'.
 [INFO] Setting property: velocimacro.messages.on => 'false'.
 [INFO] Setting property: resource.loader => 'classpath'.
 [INFO] Setting property: resource.manager.logwhenfound => 'false'.
-[INFO] [archetype:create]
+[INFO] [archetype:generate]
 Choose archetype:
 1: internal -> appfuse-basic-jsf (AppFuse archetype for creating a web application with Hibernate, Spring and JSF)
 2: internal -> appfuse-basic-spring (AppFuse archetype for creating a web application with Hibernate, Spring and Spring MVC)
