@@ -41,7 +41,7 @@ What is done during the creation of a project?
 How to use an archetype?
     The simple way : 
 
- mvn archetype:create
+ mvn archetype:generate
         standard call and standard output/prompt and standard generated tree
     Configuring the plugin
         for selection
