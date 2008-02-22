@@ -164,3 +164,9 @@ project
 11 directories, 3 files
 +---
 
+Backward compatibility
+
+    For backward compatibility with the Archetype Plugin version 1.0-alpha-7,
+    we keeped the old create goal which can be called using 
+    <<<mvn archetype:create>>>. See {{{#}the old documentation}} for further 
+    reading.
