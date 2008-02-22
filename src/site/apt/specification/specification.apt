@@ -36,7 +36,7 @@ Specification
 
     * {{{archetype-metadata.html}How metadata on an archetype is stored?}}
 
-    * {{{create.html}What is done during the creation of a project?}}
+    * {{{generate.html}What is done during the creation of a project?}}
 
     * {{{archetype-catalog.html}How the Archetype Plugin know about archetype?}}
 
