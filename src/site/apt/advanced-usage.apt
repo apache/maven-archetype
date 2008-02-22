@@ -49,18 +49,94 @@ Usage
     <<<target/generated-sources/archetype>>> directory.
 
 +---
-    ADD SOME SAMPLE 
+mvn archetype:create-from-project
+[INFO] Scanning for projects...
+[INFO] Searching repository for plugin with prefix: 'archetype'.
+[INFO] ------------------------------------------------------------------------
+[INFO] Building project
+[INFO]    task-segment: [archetype:create-from-project]
+[INFO] ------------------------------------------------------------------------
+[INFO] Preparing archetype:create-from-project
+[INFO] No goals needed for project - skipping
+[INFO] Setting property: classpath.resource.loader.class => 'org.codehaus.plexus.velocity.ContextClassLoaderResourceLoader'.
+[INFO] Setting property: velocimacro.messages.on => 'false'.
+[INFO] Setting property: resource.loader => 'classpath'.
+[INFO] Setting property: resource.manager.logwhenfound => 'false'.
+[INFO] [archetype:create-from-project]
+[INFO] Setting default archetype's groupId: com.company
+[INFO] Setting default archetype's artifactId: project
+[INFO] Setting default archetype's version: 1.0-SNAPSHOT
+[INFO] Setting default groupId: com.company
+[INFO] Setting default artifactId: project
+[INFO] Setting default version: 1.0-SNAPSHOT
+[INFO] Setting default package: com.company.project
+[INFO] Archetype created in target/generated-sources/archetype
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESSFUL
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 4 seconds
+[INFO] Finished at: Fri Feb 22 21:49:52 GMT 2008
+[INFO] Final Memory: 10M/26M
+[INFO] ------------------------------------------------------------------------
 +---
 
     Then move to that generated directory and call <<<mvn install>>> on the 
     created archetype.
 
 +---
-    ADD SOME SAMPLE
+$ cd target/generated-sources/archetype/
+$ mvn install
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Building project
+[INFO]    task-segment: [install]
+[INFO] ------------------------------------------------------------------------
+[INFO] [resources:resources]
+[INFO] Using default encoding to copy filtered resources.
+[INFO] [resources:testResources]
+[INFO] Using default encoding to copy filtered resources.
+[INFO] Setting property: classpath.resource.loader.class => 'org.codehaus.plexus.velocity.ContextClassLoaderResourceLoader'.
+[INFO] Setting property: velocimacro.messages.on => 'false'.
+[INFO] Setting property: resource.loader => 'classpath'.
+[INFO] Setting property: resource.manager.logwhenfound => 'false'.
+[INFO] [archetype:jar]
+[INFO] [archetype:add-archetype-metadata]
+[INFO] [archetype:integration-test]
+[INFO] [install:install]
+[INFO] Installing /home/local/rafale/projects/tmp/project/target/generated-sources/archetype/target/project-1.0-SNAPSHOT.jar to /home/rafale/.m2/repository/com/company/project/1.0-SNAPSHOT/project-1.0-SNAPSHOT.jar
+[INFO] [archetype:update-local-catalog]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESSFUL
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 10 seconds
+[INFO] Finished at: Fri Feb 22 21:51:57 GMT 2008
+[INFO] Final Memory: 14M/35M
+[INFO] ------------------------------------------------------------------------
 +---
 
     Finally move to a fresh directory and use your archetype.
 
++---
+$ mkdir /tmp/archetype
+$ cd /tmp/archetype
+$ mvn archetype:generate -DarchetypeCatalog=local
+[INFO] Scanning for projects...
+[INFO] Searching repository for plugin with prefix: 'archetype'.
+[INFO] ------------------------------------------------------------------------
+[INFO] Building Maven Default Project
+[INFO]    task-segment: [archetype:generate] (aggregator-style)
+[INFO] ------------------------------------------------------------------------
+[INFO] Preparing archetype:generate
+[INFO] No goals needed for project - skipping
+[INFO] Setting property: classpath.resource.loader.class => 'org.codehaus.plexus.velocity.ContextClassLoaderResourceLoader'.
+[INFO] Setting property: velocimacro.messages.on => 'false'.
+[INFO] Setting property: resource.loader => 'classpath'.
+[INFO] Setting property: resource.manager.logwhenfound => 'false'.
+[INFO] [archetype:generate]
+Choose archetype:
+1: local -> project (project)
+Choose a number:  (1): 
++---
 
 Configuration
     
