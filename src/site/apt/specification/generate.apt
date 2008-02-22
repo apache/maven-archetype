@@ -29,99 +29,80 @@
 
 What is done during the creation of a project?
 
-~~TODO: add content
- * Archetype selection explained
+* Archetype selection 
 
-    During the creation of a project from an archetype, the Archetype Plugin
-    ask the user to choose an archetype from a list containing the archetypes
-    from each of the provided catalogs (Yes there may be many).
+    First the Archetype Plugin ask the user to select an archetype from a list
+    of known archetypes. Archetypes are known using archetype catalogs.
 
-    For each archetype in the list the selection 
-+---
-How to use an archetype?
-    The simple way : 
+* Archetype configuration
 
- mvn archetype:generate
-        standard call and standard output/prompt and standard generated tree
-    Configuring the plugin
-        for selection
-            -Darchetype.catalog
-                This property is used to define the catalogs to search archetypes into. 
+    Then the Archetype Plugin ask the user to provide values for each of the 
+    four main required properties. Which are the project's groupId, artifactId,
+    version and package. 
 
- This property hold a comma separated list of catalogs. 
+    It also ask for values of the additional required properties defined in the
+    archetype's metadata file.
 
- The valid catalogs are: internal (the default), local, remote, file://path, http://url. 
+* Project generation
 
- - internal uses an internal catalog 
+    Finally, the Archetype Plugin generates the Maven 2 project from the 
+    selected/configured archetype.
 
- - local uses the ~/.m2/archetype-catalog.xml file 
+    The archetype used to generate the project can be mono or multi module.
 
- - remote uses the http://repo1.maven.org/maven2/arccchetype-catalog.xml file 
+    The archetype used to generate the project can be partial, which means it 
+    enhance an existing project instead of creating a new one.
 
- - file://path uses the catalog file defined by path (or the archetype-catalog.xml file located in path directory) 
+    If the Archetype Plugin is called from an existing project, using an 
+    complete (not partial) archetype, then it generates a sub module in the 
+    existing project.
 
- - http://url uses the catalog file defined by url (or the archetype-catalog.xml file located in url web directory)
-            -DarchetypeGroupId 
+* Batch mode
 
- -DarchetypeArtifactId 
+    It is possible to call the Archetype Plugin to generate project in batch 
+    mode (to get rid of the prompting). This is achieved by providing the 
+    Archetype Plugin with all the needed values as system properties.
 
- -DarchetypeVersion 
+    * <<<archetypeCatalog>>> which defaults to internal specifies the catalog(s)
+       The valid catalogs are: internal (the default), local, remote, file://path, http://url. 
 
- -DarchetypeRepository
-                When these 4 properties are defined, no catalog is searched. 
+       * <<<internal>>> uses an internal catalog 
 
- When only archetypeRepository is missing, the first archetype sharing both group and artifact ids found in any catalog gives its repository definition. 
+       * <<<local>>> uses the ~/.m2/archetype-catalog.xml file 
 
- When archetypeRepository and achetypeVersion are missing, the first archetype sharing both group and artifact ids found in any catalog, gives its repository and version definition. 
+       * <<<remote>>> uses the http://repo1.maven.org/maven2/archetype-catalog.xml 
+         file 
 
- When archetypeGroupId or archetypeArtifactId is missing the standard selection behaviour occurs.
-            -Darchetype.interactive
-                Defined in settings.xml, this property allow the usage of archetype selection. 
+       * <<<file://path>>> uses the catalog file defined by path (or the 
+         archetype-catalog.xml file located in path directory) 
 
- defaults to @settings.interactiveMode
-            @settings.localRepository
-                Used to cache downloaded archetypes
-        for configuration
-            defined using executionProperties 
+       * <<<http://url>>> uses the catalog file defined by url (or the 
+         archetype-catalog.xml file located in url web directory)
 
- 
+       []
+  
+    * <<<archetypeGroupId>>> specifies the groupId of the archetype to use
+  
+    * <<<archetypeArtifactId>>> specifies the artifactId of the archetype to use
+  
+    * <<<archetypeVersion>>> specifies the version of the archetype to use
+  
+    * <<<archetypeRepository>>> specifies the repository in which the archetype
+      reside
+  
+    * <<<groupId>>> specifies the groupId of the generated project
+  
+    * <<<artifactId>>> specifies the artifactId of the generated project
+  
+    * <<<version>>> specifies the version of the generated project
+  
+    * <<<package>>> specifies the package for the sources of the generated 
+      project
+  
+    * <<<anotherVelocityProperty>>> specifies any other required property
 
- -DgroupId 
+    []
 
- -DartifactId 
+* Behind a Proxy
 
- -Dversion 
-
- -Dpackage 
-
- -DanotherVelocityProperty
-                these properties are used to configure the created project 
-
- groupId (defaults to com.company) 
-
- artifactId (defaults to project) 
-
- version (defaults to 1.0-SNAPSHOT) 
-
- package (defaults to groupId.artifactId)
-                these properties should be renamed to 
-
- target.groupId 
-
- target.artifactId 
-
- target.version 
-
- target.package
-            -Darchetype.interactive
-                Defined in settings.xml, this property allow the usage of archetype selection. 
-
- defaults to @settings.interactiveMode
-        for generation
-            -DarchetypeGoals
-                comma separated list of goals called against the project after been created
-            @basedir
-                the directory where the project will be created
-        for batch mode
     Beeing behind a proxy is automatically configured by Maven
-+---
