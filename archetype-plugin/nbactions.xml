@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>CUSTOM-stage-site-at-apache</actionName>
+            <displayName>stage-site-at-apache</displayName>
+            <goals>
+                <goal>clean</goal>
+                <goal>site:stage-deploy</goal>
+            </goals>
+            <activatedProfiles>
+                <activatedProfile>release-at-apache</activatedProfile>
+            </activatedProfiles>
+        </action>
+    </actions>
