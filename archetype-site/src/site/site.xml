@@ -49,11 +49,11 @@
     </links>
 
     <menu name="Overview">
-      <item name="Introduction" href="index.html"/>
-      <item name="Usage" href="usage.html"/>
-      <item name="Goals" href="archetype-plugin/plugin-info.html"/>      
-      <item name="FAQ" href="faq.html"/>
-      <item name="Specification" href="specification/specification.html"/>
+      <item name="Introduction" href="/index.html"/>
+      <item name="Usage" href="/usage.html"/>
+      <item name="Goals" href="/archetype-plugin/plugin-info.html"/>      
+      <item name="FAQ" href="/faq.html"/>
+      <item name="Specification" href="/specification/specification.html"/>
     </menu>
     
     <!--menu name="Examples">
@@ -77,6 +77,6 @@
       <item name="Desing of the archetype plugin" href="./design.html"/>
     </menu-->
     
-    ${reports}
+    <menu ref="reports"/>
   </body>
 </project>
