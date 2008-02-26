@@ -58,7 +58,7 @@ import org.apache.maven.artifact.manager.WagonManager;
 public class ArchetyperRoundtripWithProxyTest
     extends PlexusTestCase
 {
-    Jetty6xEmbeddedLocalContainer container;
+    Jetty6xEmbeddedLocalContainer jettyContainer;
 
     public void testArchetyper()
         throws Exception
@@ -204,18 +204,18 @@ public class ArchetyperRoundtripWithProxyTest
 
         System.setProperty( "org.apache.maven.archetype.reporitory.directory",
             getTestPath( "target/test-classes/repositories/central" ) );
-        container = new Jetty6xEmbeddedLocalContainer( configuration );
-        container.setTimeout( 180000L );
-        container.start();
+        jettyContainer = new Jetty6xEmbeddedLocalContainer( configuration );
+        jettyContainer.setTimeout( 180000L );
+        jettyContainer.start();
 
         DeployableFactory factory = new DefaultDeployableFactory();
-        WAR war = (WAR) factory.createDeployable( container.getId(),
+        WAR war = (WAR) factory.createDeployable( jettyContainer.getId(),
             "target/wars/archetype-proxy.war",
             DeployableType.WAR );
 
         war.setContext( "/" );
 
-        Deployer deployer = new Jetty6xEmbeddedLocalDeployer( container );
+        Deployer deployer = new Jetty6xEmbeddedLocalDeployer( jettyContainer  );
         deployer.deploy( war,
             new URLDeployableMonitor( new URL( "http://localhost:18882/dummy" ) ) );
         deployer.start( war );
@@ -228,6 +228,6 @@ public class ArchetyperRoundtripWithProxyTest
         super.tearDown();
         //        Stop Cargo
 
-        container.stop();
+        jettyContainer.stop();
     }
 }
