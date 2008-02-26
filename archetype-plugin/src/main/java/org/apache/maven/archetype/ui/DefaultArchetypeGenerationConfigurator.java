@@ -91,7 +91,14 @@ public class DefaultArchetypeGenerationConfigurator
 
         if ( !ad.isDefined() )
         {
-            throw new ArchetypeNotDefined( "The archetype is not defined" );
+            if ( !interactiveMode.booleanValue () )
+            {
+                throw new ArchetypeNotDefined ( "No archetype was chosen" );
+            }
+            else
+            {
+                throw new ArchetypeNotDefined ( "The archetype is not defined" );
+            }
         }
         if ( request.getArchetypeRepository() != null )
         {
@@ -174,12 +181,12 @@ public class DefaultArchetypeGenerationConfigurator
                     }
                     else if ( !archetypeGenerationQueryer.confirmConfiguration( archetypeConfiguration ) )
                     {
-                        getLogger().debug( "OldArchetype generation configuration not confirmed" );
+                        getLogger().debug( "Archetype generation configuration not confirmed" );
                         archetypeConfiguration.reset();
                     }
                     else
                     {
-                        getLogger().debug( "OldArchetype generation configuration confirmed" );
+                        getLogger().debug( "Archetype generation configuration confirmed" );
 
                         confirmed = true;
                     }
@@ -207,7 +214,7 @@ public class DefaultArchetypeGenerationConfigurator
                 // in batch mode, we assume the defaults, and if still not configured fail
                 if ( !archetypeConfiguration.isConfigured() )
                 {
-                    throw new ArchetypeNotConfigured( "The archetype is not configured" );
+                    throw new ArchetypeNotConfigured ( "Archetype " + request.getArchetypeGroupId() + ":" + request.getArchetypeArtifactId() + ":" + request.getArchetypeVersion() + " is not configured" );                    
                 }
             }
         }

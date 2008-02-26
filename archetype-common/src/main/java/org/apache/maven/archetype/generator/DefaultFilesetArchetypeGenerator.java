@@ -95,7 +95,14 @@ public class DefaultFilesetArchetypeGenerator
 
             if ( !isArchetypeConfigured( archetypeDescriptor, request ) )
             {
-                throw new ArchetypeNotConfigured( "The archetype is not configured" );
+                if ( request.isInteractiveMode () )
+                {
+                    throw new ArchetypeNotConfigured ( "No archetype was chosen" );
+                }
+                else
+                {
+                    throw new ArchetypeNotConfigured ( "The archetype is not configured" );
+                }
             }
 
             Context context = prepareVelocityContext( request );
