@@ -40,6 +40,7 @@ import java.util.List;
  * @requiresProject true
  * @goal create-from-project
  * @execute phase="generate-sources"
+ * @aggregator
  */
 public class CreateArchetypeFromProjectMojo
     extends AbstractMojo
