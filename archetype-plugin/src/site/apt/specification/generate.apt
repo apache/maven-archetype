@@ -57,6 +57,10 @@ What is done during the creation of a project?
     complete (not partial) archetype, then it generates a sub module in the 
     existing project.
 
+    If the Archetype Plugin is configured to create a project in an existing 
+    directory, it first check for the existence of a pom.xml file before 
+    failing the generation.
+
 * Batch mode
 
     It is possible to call the Archetype Plugin to generate project in batch 
