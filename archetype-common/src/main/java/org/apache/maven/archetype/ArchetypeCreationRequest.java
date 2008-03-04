@@ -32,8 +32,6 @@ public class ArchetypeCreationRequest
 {
     private ArtifactRepository localRepository;
 
-//    private List remoteRepositories;
-
     private MavenProject project;
 
     private File propertyFile;
@@ -43,8 +41,6 @@ public class ArchetypeCreationRequest
     private List filtereds = new ArrayList();
 
     private String defaultEncoding = "UTF-8";
-
-    private boolean ignoreReplica = true;
 
     private boolean preserveCData = false;
 
@@ -69,18 +65,6 @@ public class ArchetypeCreationRequest
 
         return this;
     }
-
-//    public List getRemoteRepositories()
-//    {
-//        return remoteRepositories;
-//    }
-//
-//    public ArchetypeCreationRequest setRemoteRepositories( List remoteRepositories )
-//    {
-//        this.remoteRepositories = remoteRepositories;
-//
-//        return this;
-//    }
 
     public MavenProject getProject()
     {
@@ -138,18 +122,6 @@ public class ArchetypeCreationRequest
     public ArchetypeCreationRequest setDefaultEncoding( String defaultEncoding )
     {
         this.defaultEncoding = defaultEncoding;
-
-        return this;
-    }
-
-    public boolean isIgnoreReplica()
-    {
-        return ignoreReplica;
-    }
-
-    public ArchetypeCreationRequest setIgnoreReplica( boolean ignoreReplica )
-    {
-        this.ignoreReplica = ignoreReplica;
 
         return this;
     }

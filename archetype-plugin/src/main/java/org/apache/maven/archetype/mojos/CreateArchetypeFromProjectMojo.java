@@ -90,13 +90,6 @@ public class CreateArchetypeFromProjectMojo
     private String defaultEncoding;
 
     /**
-     * Ignore the replica creation.
-     *
-     * @parameter expression="${archetype.ignoreReplica}"
-     */
-    private boolean ignoreReplica = true;
-
-    /**
      * Create a partial archetype.
      *
      * @parameter expression="${archetype.partialArchetype}"
@@ -182,8 +175,6 @@ public class CreateArchetypeFromProjectMojo
                 .setLanguages( languages )
                 /*Should be refactored to use some ant patterns*/
                 .setFiltereds( filtereds )
-                /*Should be removed*/
-                .setIgnoreReplica( ignoreReplica )
                 /*This should be correctly handled*/
                 .setPreserveCData( preserveCData )
                 .setKeepParent( keepParent )
