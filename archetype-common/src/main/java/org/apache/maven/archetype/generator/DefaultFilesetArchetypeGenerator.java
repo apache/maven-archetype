@@ -92,7 +92,7 @@ public class DefaultFilesetArchetypeGenerator
         {
             ArchetypeDescriptor archetypeDescriptor =
                 archetypeArtifactManager.getFileSetArchetypeDescriptor( archetypeFile );
-
+// TODO archetype-137 is to be fixed from here.
             if ( !isArchetypeConfigured( archetypeDescriptor, request ) )
             {
                 if ( request.isInteractiveMode () )
@@ -191,12 +191,16 @@ public class DefaultFilesetArchetypeGenerator
                 getLogger().debug(
                     "Processing complete archetype " + archetypeDescriptor.getName()
                 );
-                if ( outputDirectoryFile.exists() )
+                if ( outputDirectoryFile.exists() && pom.exists() )
                 {
-                    throw new ProjectDirectoryExists( "The project directory already exists" );
+                    throw new ProjectDirectoryExists( "A Maven 2 project already exists in the directory " + outputDirectoryFile.getPath() );
                 }
                 else
                 {
+                    if ( outputDirectoryFile.exists() )
+                    {
+                        getLogger().warn( "The directory " + outputDirectoryFile.getPath() + " already exists." );
+                    }
                     context.put( "rootArtifactId", artifactId );
 
                     processFilesetModule(
