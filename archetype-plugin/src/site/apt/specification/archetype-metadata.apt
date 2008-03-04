@@ -208,3 +208,19 @@ How metadata on an archetype is stored?
       <defaultValue>com.company.department</defaultValue>
     </requiredProperty>
 +---
+
+    Filesets can be defined from the root directory of the module/project by
+    having a blank in its directory element:
+
++---
+    ...
+    <fileSet filtered="true" packaged="true">
+      <directory></directory>
+      <includes>
+        ...
+      </includes>
+      <excludes>
+        ...
+      </excludes>
+    </fileSet>
++---
