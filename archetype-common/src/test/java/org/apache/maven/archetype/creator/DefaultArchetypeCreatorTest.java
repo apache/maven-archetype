@@ -137,7 +137,6 @@ public class DefaultArchetypeCreatorTest
             .setLanguages( languages )
             .setFiltereds( filtereds )
             .setDefaultEncoding( "UTF-8" )
-            .setIgnoreReplica( true )
             .setPartialArchetype( false )
             .setPreserveCData( false )
             .setKeepParent( false );
