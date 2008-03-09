@@ -41,7 +41,8 @@ import java.util.List;
  *
  * @author rafale
  * @requiresProject false
- * @goal remove-languages
+ * (@)goal remove-languages
+ * @deprecated 
  */
 public class RemoveLanguagesMojo
     extends AbstractMojo

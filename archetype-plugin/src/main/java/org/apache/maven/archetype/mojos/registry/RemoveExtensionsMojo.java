@@ -41,7 +41,8 @@ import java.util.List;
  *
  * @author rafale
  * @requiresProject false
- * @goal remove-extensions
+ * (@)goal remove-extensions
+ * @deprecated 
  */
 public class RemoveExtensionsMojo
     extends AbstractMojo
