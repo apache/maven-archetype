@@ -46,7 +46,7 @@ import java.util.Map;
  * @description Creates archetype containers.
  * @requiresProject false
  * @goal create
- * @deprecated Pleas use the generate mojo instead.
+ * @deprecated Please use the generate mojo instead.
  */
 public class MavenArchetypeMojo
     extends AbstractMojo
