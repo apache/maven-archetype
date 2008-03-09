@@ -41,7 +41,8 @@ import java.util.List;
  *
  * @author rafale
  * @requiresProject false
- * @goal add-extensions
+ * (@)goal add-extensions
+ * @deprecated 
  */
 public class AddExtensionsMojo
     extends AbstractMojo

@@ -41,7 +41,8 @@ import java.util.List;
  *
  * @author rafale
  * @requiresProject false
- * @goal add-languages
+ * (@)goal add-languages
+ * @deprecated 
  */
 public class AddLanguagesMojo
     extends AbstractMojo

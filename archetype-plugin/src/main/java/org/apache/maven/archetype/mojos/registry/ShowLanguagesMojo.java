@@ -37,7 +37,8 @@ import java.util.Iterator;
  *
  * @author rafale
  * @requiresProject false
- * @goal show-languages
+ * (@)goal show-languages
+ * @deprecated 
  */
 public class ShowLanguagesMojo
     extends AbstractMojo
