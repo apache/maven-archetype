@@ -183,6 +183,7 @@ public class DefaultArchetypeGenerationConfigurator
                     {
                         getLogger().debug( "Archetype generation configuration not confirmed" );
                         archetypeConfiguration.reset();
+                        restoreCommandLineProperties(archetypeConfiguration, executionProperties);
                     }
                     else
                     {
@@ -243,5 +244,29 @@ public class DefaultArchetypeGenerationConfigurator
     public void setArchetypeArtifactManager( ArchetypeArtifactManager archetypeArtifactManager )
     {
         this.archetypeArtifactManager = archetypeArtifactManager;
+    }
+
+    private void restoreCommandLineProperties(
+        ArchetypeConfiguration archetypeConfiguration,
+        Properties executionProperties
+    )
+    {
+        getLogger().debug( "Restoring command line properties" );
+
+        Iterator properties = archetypeConfiguration.getRequiredProperties().iterator();
+        while( properties.hasNext() )
+        {
+            String property = (String) properties.next();
+            if( executionProperties.containsKey( property ) )
+            {
+                archetypeConfiguration.setProperty(
+                    property,
+                    executionProperties.getProperty( property )
+                );
+                getLogger().debug(
+                    "Restored " + property + "=" + archetypeConfiguration.getProperty( property )
+                );
+            }
+        }
     }
 }
