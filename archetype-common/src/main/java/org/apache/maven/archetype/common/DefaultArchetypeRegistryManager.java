@@ -45,7 +45,7 @@ public class DefaultArchetypeRegistryManager
     extends AbstractLogEnabled
     implements ArchetypeRegistryManager
 {
-    private static File DEFAULT_REGISTRY = new File( System.getProperty( "user.home" ), ".m2/archetype.xml" );
+//    private static File DEFAULT_REGISTRY = new File( System.getProperty( "user.home" ), ".m2/archetype.xml" );
 
     /**
      * Used to create ArtifactRepository objects given the urls of the remote repositories.

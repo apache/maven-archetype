@@ -35,7 +35,7 @@ public interface ArchetypeCreationConfigurator
 {
     String ROLE = ArchetypeCreationConfigurator.class.getName();
 
-    void configureArchetypeCreation(
+    Properties configureArchetypeCreation(
         MavenProject project,
         Boolean interactiveMode,
         Properties commandLineProperties,

@@ -27,6 +27,7 @@ import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 import java.util.Iterator;
 import java.util.Properties;
+import org.codehaus.plexus.util.StringUtils;
 
 /** @plexus.component */
 public class DefaultArchetypeFactory
@@ -309,6 +310,30 @@ public class DefaultArchetypeFactory
         configuration.setGroupId( archetypeDefinition.getGroupId() );
         configuration.setArtifactId( archetypeDefinition.getArtifactId() );
         configuration.setVersion( archetypeDefinition.getVersion() );
+        
+        
+        
+        Iterator requiredProperties = properties.keySet().iterator();
+
+        while( requiredProperties.hasNext() )
+        {
+            String requiredProperty = (String) requiredProperties.next();
+
+            if( requiredProperty.indexOf( "." ) < 0 )
+            {
+                configuration.addRequiredProperty( requiredProperty );
+                getLogger().debug( "Adding requiredProperty " + requiredProperty );
+                configuration.setProperty(
+                    requiredProperty,
+                    properties.getProperty( requiredProperty )
+                );
+                getLogger().debug(
+                    "Setting property " + requiredProperty + "="
+                    + configuration.getProperty( requiredProperty )
+                );
+            }
+        }
+        
 
         configuration.addRequiredProperty( Constants.GROUP_ID );
         getLogger().debug( "Adding requiredProperty " + Constants.GROUP_ID );

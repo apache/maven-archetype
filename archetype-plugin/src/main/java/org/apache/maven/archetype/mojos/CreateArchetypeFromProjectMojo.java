@@ -19,6 +19,8 @@
 
 package org.apache.maven.archetype.mojos;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import org.apache.maven.archetype.ArchetypeCreationRequest;
 import org.apache.maven.archetype.ArchetypeCreationResult;
 import org.apache.maven.archetype.Archetype;
@@ -31,7 +33,14 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 
 import java.io.File;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
+import org.apache.maven.archetype.common.Constants;
+import org.apache.maven.execution.MavenSession;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Creates sample archetype from current project.
@@ -140,11 +149,18 @@ public class CreateArchetypeFromProjectMojo
     /** @parameter expression="${packageName}" */
     private String packageName;//Find a better way to resolve the package!!! enforce usage of the configurator
 
+    /** 
+     *  @parameter expression="${session}" 
+     *  @readonly
+     */
+    private MavenSession session;
+
     public void execute()
         throws
         MojoExecutionException,
         MojoFailureException
     {
+        Properties executionProperties = session.getExecutionProperties();
         try
         {
             if ( propertyFile != null )
@@ -152,20 +168,20 @@ public class CreateArchetypeFromProjectMojo
                 propertyFile.getParentFile().mkdirs();
             }
 
-            List languages = archetypeRegistryManager.getLanguages( archetypeLanguages, archetypeRegistryFile );
+            List languages = getLanguages( archetypeLanguages, propertyFile );
 
-            configurator.configureArchetypeCreation(
+            Properties properties = configurator.configureArchetypeCreation(
                 project,
                 new Boolean( interactive ),
-                System.getProperties(),
+                executionProperties,
                 propertyFile,
                 languages
             );
 
             List filtereds =
-                archetypeRegistryManager.getFilteredExtensions(
+                getFilteredExtensions(
                     archetypeFilteredExtentions,
-                    archetypeRegistryFile
+                    propertyFile
                 );
 
             ArchetypeCreationRequest request = new ArchetypeCreationRequest()
@@ -192,7 +208,7 @@ public class CreateArchetypeFromProjectMojo
                 throw new MojoExecutionException( result.getCause().getMessage(), result.getCause() );
             }
 
-            getLog().info( "OldArchetype created in target/generated-sources/archetype" );
+            getLog().info( "Archetype created in target/generated-sources/archetype" );
 
             if ( testMode )
             {
@@ -212,5 +228,90 @@ public class CreateArchetypeFromProjectMojo
         {
             throw new MojoExecutionException( ex.getMessage(), ex );
         }
+    }
+
+    private List getFilteredExtensions( String archetypeFilteredExtentions, File propertyFile )
+    {
+        List filteredExtensions = new ArrayList();
+
+        if( StringUtils.isNotEmpty( archetypeFilteredExtentions ) )
+        {
+            filteredExtensions.addAll(
+                Arrays.asList( StringUtils.split( archetypeFilteredExtentions, "," ) )
+            );
+            getLog().debug("Found in command line extensions = " + filteredExtensions);
+        }
+
+        if( filteredExtensions.isEmpty() && propertyFile.exists() )
+        {
+            try
+            {
+                Properties properties = new Properties();
+                properties.load( new FileReader( propertyFile ) );
+
+                String extensions =
+                    properties.getProperty( Constants.ARCHETYPE_FILTERED_EXTENSIONS );
+                if( StringUtils.isNotEmpty( extensions ) )
+                {
+                    filteredExtensions.addAll(
+                        Arrays.asList( StringUtils.split( extensions, "," ) )
+                    );
+                }
+            getLog().debug("Found in propertyFile " +  propertyFile.getName() + " extensions = " + filteredExtensions);
+            }
+            catch( IOException e )
+            {
+                getLog().warn( "Can not read " + propertyFile.getName() );
+            }
+        }
+
+        if( filteredExtensions.isEmpty() )
+        {
+            filteredExtensions.addAll( Constants.DEFAULT_FILTERED_EXTENSIONS );
+            getLog().debug("Using default extensions = " + filteredExtensions);
+        }
+
+        return filteredExtensions;
+    }
+
+    private List getLanguages(String archetypeLanguages, File propertyFile) {
+        List resultingLanguages = new ArrayList();
+
+        if ( StringUtils.isNotEmpty( archetypeLanguages ) )
+        {
+            resultingLanguages.addAll( Arrays.asList( StringUtils.split( archetypeLanguages, "," ) ) );
+            getLog().debug("Found in command line languages = " + resultingLanguages);
+        }
+
+        if( resultingLanguages.isEmpty() && propertyFile.exists() )
+        {
+            try
+            {
+                Properties properties = new Properties();
+                properties.load( new FileReader( propertyFile ) );
+
+                String languages =
+                    properties.getProperty( Constants.ARCHETYPE_LANGUAGES );
+                if( StringUtils.isNotEmpty( languages ) )
+                {
+                    resultingLanguages.addAll(
+                        Arrays.asList( StringUtils.split( languages, "," ) )
+                    );
+                }
+            getLog().debug("Found in propertyFile " +  propertyFile.getName() + " languages = " + resultingLanguages);
+            }
+            catch( IOException e )
+            {
+                getLog().warn( "Can not read " + propertyFile.getName() );
+            }
+        }
+
+        if ( resultingLanguages.isEmpty() )
+        {
+            resultingLanguages.addAll( Constants.DEFAULT_LANGUAGES );
+            getLog().debug("Using default languages = " + resultingLanguages);
+        }
+
+        return resultingLanguages;
     }
 }

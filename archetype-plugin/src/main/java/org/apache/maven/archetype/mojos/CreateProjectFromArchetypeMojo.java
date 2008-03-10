@@ -22,7 +22,6 @@ package org.apache.maven.archetype.mojos;
 import org.apache.maven.archetype.Archetype;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
-import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 import org.apache.maven.archetype.generator.ArchetypeGenerator;
 import org.apache.maven.archetype.ui.ArchetypeGenerationConfigurator;
 import org.apache.maven.archetype.ui.ArchetypeSelector;
@@ -59,9 +58,6 @@ public class CreateProjectFromArchetypeMojo
 
     /** @component */
     private ArchetypeSelector selector;
-
-    /** @component */
-    ArchetypeRegistryManager archetypeRegistryManager;
 
     /** @component */
     ArchetypeGenerationConfigurator configurator;
@@ -148,8 +144,7 @@ public class CreateProjectFromArchetypeMojo
 
     public void execute()
         throws MojoExecutionException, MojoFailureException
-    {
-        
+    {        
         Properties executionProperties = session.getExecutionProperties();
         
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest()
