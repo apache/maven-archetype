@@ -44,6 +44,10 @@ public interface Constants
 
     String ARTIFACT_ID = "artifactId";
 
+    String ARCHETYPE_FILTERED_EXTENSIONS = "archetype.filteredExtensions";
+    
+    String ARCHETYPE_LANGUAGES = "archetype.languages";
+
     List DEFAULT_FILTERED_EXTENSIONS =
         Arrays.asList(
             new String[]

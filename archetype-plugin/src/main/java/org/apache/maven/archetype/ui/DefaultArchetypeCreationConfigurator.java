@@ -58,7 +58,7 @@ public class DefaultArchetypeCreationConfigurator
     /** @plexus.requirement */
     private ArchetypeFilesResolver archetypeFilesResolver;
 
-    public void configureArchetypeCreation(
+    public Properties configureArchetypeCreation(
         MavenProject project,
         Boolean interactiveMode,
         Properties commandLineProperties,
@@ -113,7 +113,7 @@ public class DefaultArchetypeCreationConfigurator
             {
                 if ( !archetypeDefinition.isDefined() )//<editor-fold text="...">
                 {
-                    getLogger().debug( "OldArchetype is not defined" );
+                    getLogger().debug( "Archetype is yet not defined" );
                     if ( !archetypeDefinition.isGroupDefined() )
                     {
                         getLogger().debug( "Asking for archetype's groupId" );
@@ -146,7 +146,7 @@ public class DefaultArchetypeCreationConfigurator
 
                 if ( !archetypeConfiguration.isConfigured() )//<editor-fold text="...">
                 {
-                    getLogger().debug( "OldArchetype is not configured" );
+                    getLogger().debug( "Archetype is not yet configured" );
                     if ( !archetypeConfiguration.isConfigured( Constants.GROUP_ID ) )
                     {
                         getLogger().debug( "Asking for project's groupId" );
@@ -240,10 +240,7 @@ public class DefaultArchetypeCreationConfigurator
             }
         } // end if
 
-        writeProperties(
-            archetypeConfiguration.toProperties(),
-            propertyFile
-        );
+        return archetypeConfiguration.toProperties();
     }
 
     private ArchetypeDefinition defineDefaultArchetype(
@@ -402,17 +399,17 @@ public class DefaultArchetypeCreationConfigurator
             getLogger().debug( "archetype.properties does not exist" );
         }
 
-        Iterator commandLinePropertiesIterator =
-            new ArrayList( commandLineProperties.keySet() ).iterator();
-        while ( commandLinePropertiesIterator.hasNext() )
-        {
-            String propertyKey = (String) commandLinePropertiesIterator.next();
-
-            properties.setProperty(
-                propertyKey,
-                commandLineProperties.getProperty( propertyKey )
-            );
-        }
+//        Iterator commandLinePropertiesIterator =
+//            new ArrayList( commandLineProperties.keySet() ).iterator();
+//        while ( commandLinePropertiesIterator.hasNext() )
+//        {
+//            String propertyKey = (String) commandLinePropertiesIterator.next();
+//
+//            properties.setProperty(
+//                propertyKey,
+//                commandLineProperties.getProperty( propertyKey )
+//            );
+//        }
 
         return properties;
     }

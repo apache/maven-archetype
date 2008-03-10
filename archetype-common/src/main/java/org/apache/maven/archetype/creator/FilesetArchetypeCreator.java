@@ -84,8 +84,8 @@ public class FilesetArchetypeCreator
     /** @plexus.requirement */
     private PomManager pomManager;
 
-    /** @plexus.requirement */
-    private ArchetypeRegistryManager archetypeRegistryManager;
+//    /** @plexus.requirement */
+//    private ArchetypeRegistryManager archetypeRegistryManager;
 
     /** @plexus.requirement */
     private MavenProjectBuilder projectBuilder;
@@ -95,7 +95,7 @@ public class FilesetArchetypeCreator
     {
         MavenProject project = request.getProject();
 
-        File propertyFile = request.getPropertyFile();
+//        File propertyFile = request.getPropertyFile();
 
         List languages = request.getLanguages();
 
