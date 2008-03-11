@@ -133,7 +133,7 @@ public class DefaultArchetypeCreatorTest
         ArchetypeCreationRequest request = new ArchetypeCreationRequest()
             .setProject( mavenProject )
             .setPackageName( p.getProperty( Constants.PACKAGE ) )
-            .setPropertyFile( propertyFile )
+            .setProperties( p )
             .setLanguages( languages )
             .setFiltereds( filtereds )
             .setDefaultEncoding( "UTF-8" )
@@ -144,6 +144,11 @@ public class DefaultArchetypeCreatorTest
         ArchetypeCreationResult result = new ArchetypeCreationResult();
 
         instance.createArchetype( request, result );
+        
+        if(result.getCause()!=null){
+            result.getCause().printStackTrace();
+        }
+        assertNull( result.getCause() );
 
         File template;
 

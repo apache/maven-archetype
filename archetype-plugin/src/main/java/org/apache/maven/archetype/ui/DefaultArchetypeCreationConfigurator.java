@@ -240,7 +240,7 @@ public class DefaultArchetypeCreationConfigurator
             }
         } // end if
 
-        return archetypeConfiguration.toProperties();
+        return removeDottedProperties(archetypeConfiguration.toProperties());
     }
 
     private ArchetypeDefinition defineDefaultArchetype(
@@ -399,18 +399,28 @@ public class DefaultArchetypeCreationConfigurator
             getLogger().debug( "archetype.properties does not exist" );
         }
 
-//        Iterator commandLinePropertiesIterator =
-//            new ArrayList( commandLineProperties.keySet() ).iterator();
-//        while ( commandLinePropertiesIterator.hasNext() )
-//        {
-//            String propertyKey = (String) commandLinePropertiesIterator.next();
-//
-//            properties.setProperty(
-//                propertyKey,
-//                commandLineProperties.getProperty( propertyKey )
-//            );
-//        }
-
         return properties;
+    }
+
+    private Properties removeDottedProperties(Properties properties) {
+        List toRemove=new ArrayList(0);
+        Iterator keys = properties.keySet().iterator();
+        while (keys.hasNext())
+        {
+            String key = (String) keys.next();
+            if (key.indexOf(".")>=0)
+            {
+                toRemove.add(key);
+            }
+        }
+        Iterator keysToRemove =toRemove.iterator();
+        while(keysToRemove.hasNext())
+        {
+            String key = (String) keysToRemove.next();
+            properties.remove(key);
+        }
+        return properties;
+            
+        
     }
 }

@@ -19,7 +19,6 @@
 
 package org.apache.maven.archetype.mojos;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import org.apache.maven.archetype.ArchetypeCreationRequest;
 import org.apache.maven.archetype.ArchetypeCreationResult;
@@ -136,7 +135,7 @@ public class CreateArchetypeFromProjectMojo
     /**
      * The property file that holds the plugin configuration.
      *
-     * @parameter default-value="target/archetype.properties" expression="${archetype.properties}"
+     * @parameter expression="${archetype.properties}"
      */
     private File propertyFile;
 
@@ -183,11 +182,11 @@ public class CreateArchetypeFromProjectMojo
                     archetypeFilteredExtentions,
                     propertyFile
                 );
-
+            
             ArchetypeCreationRequest request = new ArchetypeCreationRequest()
                 .setProject( project )
                 /*Used when in interactive mode*/
-                .setPropertyFile( propertyFile )
+                .setProperties( properties )
                 .setLanguages( languages )
                 /*Should be refactored to use some ant patterns*/
                 .setFiltereds( filtereds )

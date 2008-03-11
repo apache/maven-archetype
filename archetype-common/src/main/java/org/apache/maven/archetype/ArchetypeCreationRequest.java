@@ -34,7 +34,7 @@ public class ArchetypeCreationRequest
 
     private MavenProject project;
 
-    private File propertyFile;
+//    private File propertyFile;
 
     private List languages = new ArrayList();
 
@@ -78,17 +78,17 @@ public class ArchetypeCreationRequest
         return this;
     }
 
-    public File getPropertyFile()
-    {
-        return propertyFile;
-    }
-
-    public ArchetypeCreationRequest setPropertyFile( File propertyFile )
-    {
-        this.propertyFile = propertyFile;
-
-        return this;
-    }
+//    public File getPropertyFile()
+//    {
+//        return propertyFile;
+//    }
+//
+//    public ArchetypeCreationRequest setPropertyFile( File propertyFile )
+//    {
+//        this.propertyFile = propertyFile;
+//
+//        return this;
+//    }
 
     public List getLanguages()
     {
