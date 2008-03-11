@@ -24,7 +24,6 @@ import org.apache.commons.collections.bidimap.DualTreeBidiMap;
 import org.apache.maven.archetype.ArchetypeCreationRequest;
 import org.apache.maven.archetype.ArchetypeCreationResult;
 import org.apache.maven.archetype.common.ArchetypeFilesResolver;
-import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.common.PomManager;
 import org.apache.maven.archetype.common.util.FileCharsetDetector;
@@ -84,9 +83,6 @@ public class FilesetArchetypeCreator
     /** @plexus.requirement */
     private PomManager pomManager;
 
-//    /** @plexus.requirement */
-//    private ArchetypeRegistryManager archetypeRegistryManager;
-
     /** @plexus.requirement */
     private MavenProjectBuilder projectBuilder;
 
@@ -94,8 +90,6 @@ public class FilesetArchetypeCreator
                                  ArchetypeCreationResult result )
     {
         MavenProject project = request.getProject();
-
-//        File propertyFile = request.getPropertyFile();
 
         List languages = request.getLanguages();
 
@@ -113,27 +107,52 @@ public class FilesetArchetypeCreator
 
         Properties properties = new Properties();
         Properties configurationProperties = new Properties();
+        if( request.getProperties() != null )
+        {
+            properties.putAll( request.getProperties() );
+            configurationProperties.putAll( request.getProperties() );
+        }
 
-        properties.setProperty( Constants.GROUP_ID, project.getGroupId() );
-        configurationProperties.setProperty( Constants.GROUP_ID, project.getGroupId() );
+        if( !properties.containsKey( Constants.GROUP_ID ) )
+        {
+            properties.setProperty( Constants.GROUP_ID, project.getGroupId() );
+        }
+        configurationProperties.setProperty(
+            Constants.GROUP_ID,
+            properties.getProperty( Constants.GROUP_ID )
+        );
 
-        properties.setProperty( Constants.ARTIFACT_ID, project.getArtifactId() );
-        configurationProperties.setProperty( Constants.ARTIFACT_ID, project.getArtifactId() );
+        if( !properties.containsKey( Constants.ARTIFACT_ID ) )
+        {
+            properties.setProperty( Constants.ARTIFACT_ID, project.getArtifactId() );
+        }
+        configurationProperties.setProperty(
+            Constants.ARTIFACT_ID,
+            properties.getProperty( Constants.ARTIFACT_ID )
+        );
 
-        properties.setProperty( Constants.VERSION, project.getVersion() );
-        configurationProperties.setProperty( Constants.VERSION, project.getVersion() );
+        if( !properties.containsKey( Constants.VERSION ) )
+        {
+            properties.setProperty( Constants.VERSION, project.getVersion() );
+        }
+        configurationProperties.setProperty(
+            Constants.VERSION,
+            properties.getProperty( Constants.VERSION )
+        );
 
-        if ( request.getPackageName() != null )
+        if( request.getPackageName() != null )
         {
             properties.setProperty( Constants.PACKAGE, request.getPackageName() );
-            configurationProperties.setProperty( Constants.PACKAGE, request.getPackageName() );
         }
-        else
+        else if( !properties.containsKey( Constants.PACKAGE ) )
         {
             properties.setProperty( Constants.PACKAGE, project.getGroupId() );
-            configurationProperties.setProperty( Constants.PACKAGE, project.getGroupId() );
         }
-
+        configurationProperties.setProperty(
+            Constants.PACKAGE,
+            properties.getProperty( Constants.PACKAGE )
+        );
+           
         File basedir = project.getBasedir();
         File generatedSourcesDirectory =
             FileUtils.resolveFile( basedir, getGeneratedSourcesDirectory() );
@@ -245,10 +264,9 @@ public class FilesetArchetypeCreator
         // TODO ensure reversedproperties contains NO dotted properties
         Properties reverseProperties = getRequiredProperties( archetypeDescriptor, properties );
         reverseProperties.remove( Constants.GROUP_ID );
-
+        
         // TODO ensure pomReversedProperties contains NO dotted properties
         Properties pomReversedProperties = getRequiredProperties( archetypeDescriptor, properties );
-
         pomReversedProperties.remove( Constants.PACKAGE );
 
         String packageName = configurationProperties.getProperty( Constants.PACKAGE );
@@ -909,7 +927,7 @@ public class FilesetArchetypeCreator
         getLogger().debug(
             "Creating Archetype/Module files from " + basedir + " to " + archetypeFilesDirectory
         );
-
+        
         Iterator iterator = fileSets.iterator();
 
         while ( iterator.hasNext() )
@@ -1572,7 +1590,7 @@ public class FilesetArchetypeCreator
 
                 if ( initialcontent.indexOf( "${" + property + "}" ) > 0 )
                 {
-                    getLogger().warn( "OldArchetype uses ${" + property +
+                    getLogger().warn( "Archetype uses ${" + property +
                         "} for internal processing, but file " + inputFile +
                         " contains this property already" );
                 }
@@ -1619,7 +1637,7 @@ public class FilesetArchetypeCreator
         reversedProperties.remove( Constants.ARCHETYPE_GROUP_ID );
         reversedProperties.remove( Constants.ARCHETYPE_ARTIFACT_ID );
         reversedProperties.remove( Constants.ARCHETYPE_VERSION );
-
+        
         return reversedProperties;
     }
 
@@ -2060,7 +2078,7 @@ public class FilesetArchetypeCreator
     }
 
     private String getReversedContent( String content,
-                                       final Properties properties )
+                                       Properties properties )
     {
         String result = content;
         Iterator propertyIterator = properties.keySet().iterator();
