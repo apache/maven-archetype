@@ -390,13 +390,16 @@ public class DefaultArchetypeCreationConfigurator
     {
         Properties properties = new Properties();
 
-        try
+        if ( propertyFile != null )
         {
-            readProperties( properties, propertyFile );
-        }
-        catch ( FileNotFoundException ex )
-        {
-            getLogger().debug( "archetype.properties does not exist" );
+            try
+            {
+                readProperties( properties, propertyFile );
+            }
+            catch ( FileNotFoundException ex )
+            {
+                getLogger().debug( "archetype.properties does not exist" );
+            }
         }
 
         return properties;
