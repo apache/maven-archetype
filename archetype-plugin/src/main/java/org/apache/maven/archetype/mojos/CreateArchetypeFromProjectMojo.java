@@ -241,7 +241,7 @@ public class CreateArchetypeFromProjectMojo
             getLog().debug("Found in command line extensions = " + filteredExtensions);
         }
 
-        if( filteredExtensions.isEmpty() && propertyFile.exists() )
+        if( filteredExtensions.isEmpty() && propertyFile != null && propertyFile.exists() )
         {
             try
             {
@@ -282,7 +282,7 @@ public class CreateArchetypeFromProjectMojo
             getLog().debug("Found in command line languages = " + resultingLanguages);
         }
 
-        if( resultingLanguages.isEmpty() && propertyFile.exists() )
+        if( resultingLanguages.isEmpty() && propertyFile != null && propertyFile.exists() )
         {
             try
             {
