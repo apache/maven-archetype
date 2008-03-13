@@ -32,7 +32,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -246,7 +246,7 @@ public class CreateArchetypeFromProjectMojo
             try
             {
                 Properties properties = new Properties();
-                properties.load( new FileReader( propertyFile ) );
+                properties.load( new FileInputStream( propertyFile ) );
 
                 String extensions =
                     properties.getProperty( Constants.ARCHETYPE_FILTERED_EXTENSIONS );
@@ -287,7 +287,7 @@ public class CreateArchetypeFromProjectMojo
             try
             {
                 Properties properties = new Properties();
-                properties.load( new FileReader( propertyFile ) );
+                properties.load( new FileInputStream( propertyFile ) );
 
                 String languages =
                     properties.getProperty( Constants.ARCHETYPE_LANGUAGES );
