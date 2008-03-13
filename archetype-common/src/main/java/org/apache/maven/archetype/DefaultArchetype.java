@@ -125,6 +125,8 @@ public class DefaultArchetype
             else
             {
                 String fileName = files[i].getAbsolutePath().substring( offset + 1 );
+                
+                if(File.separatorChar != '/'){ fileName = fileName.replace('\\', '/'); }
 
                 ZipEntry e = new ZipEntry( fileName );
 
