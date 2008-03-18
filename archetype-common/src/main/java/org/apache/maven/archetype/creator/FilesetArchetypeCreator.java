@@ -498,6 +498,11 @@ public class FilesetArchetypeCreator
     private int id = 0;
     private BidiMap registeredProjects = new DualTreeBidiMap();
 
+    private String getPackageInPathFormat( String aPackage )
+    {
+        return StringUtils.replace( aPackage, ".", "/" );
+    }
+
     private void registerProject( Model pom )
     {
         registeredProjects.put( new Integer( id++ ), pom.getId() );
@@ -1637,6 +1642,10 @@ public class FilesetArchetypeCreator
         reversedProperties.remove( Constants.ARCHETYPE_GROUP_ID );
         reversedProperties.remove( Constants.ARCHETYPE_ARTIFACT_ID );
         reversedProperties.remove( Constants.ARCHETYPE_VERSION );
+        reversedProperties.setProperty(
+            Constants.PACKAGE_IN_PATH_FORMAT,
+            getPackageInPathFormat(properties.getProperty( Constants.PACKAGE ))
+        );
         
         return reversedProperties;
     }
