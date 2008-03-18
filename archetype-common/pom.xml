@@ -406,7 +406,8 @@
                       <artifactId>maven-surefire-plugin</artifactId>
                       <configuration>
                           <includes>
-                              <include>**/*Verification.java</include>
+                              <include>**/InternalCatalogFromWiki.java</include>
+                              <include>**/InternalCatalogArchetypesVerification.java</include>
                           </includes>
                       </configuration>
                   </plugin>
