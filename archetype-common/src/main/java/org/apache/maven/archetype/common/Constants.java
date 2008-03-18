@@ -72,6 +72,8 @@ public interface Constants
 
     /*String PACKAGE_NAME = "packageName";*/
 
+    String PACKAGE_IN_PATH_FORMAT = "packageInPathFormat";
+
     String PARENT_ARTIFACT_ID = "parentArtifactId";
 
     String POM_PATH = Constants.ARCHETYPE_RESOURCES + "/" + Constants.ARCHETYPE_POM;

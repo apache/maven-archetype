@@ -342,6 +342,11 @@ public class DefaultFilesetArchetypeGenerator
         return ( StringUtils.isEmpty( moduleOffset ) ? "/" : ( "/" + moduleOffset + "/" ) );
     }
 
+    private String getPackageInPathFormat( String aPackage )
+    {
+        return StringUtils.replace( aPackage, ".", "/" );
+    }
+
     private boolean isArchetypeConfigured( ArchetypeDescriptor archetypeDescriptor, ArchetypeGenerationRequest request )
     {
         boolean configured = true;
@@ -373,6 +378,7 @@ public class DefaultFilesetArchetypeGenerator
         context.put(Constants.ARTIFACT_ID, request.getArtifactId());
         context.put(Constants.VERSION, request.getVersion());
         context.put(Constants.PACKAGE, request.getPackage());
+        context.put(Constants.PACKAGE_IN_PATH_FORMAT, getPackageInPathFormat(request.getPackage()));
 
         Iterator iterator = request.getProperties().keySet().iterator();
         while ( iterator.hasNext() )

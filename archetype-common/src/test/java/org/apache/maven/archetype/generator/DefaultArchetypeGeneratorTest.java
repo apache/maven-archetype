@@ -965,6 +965,7 @@ public class DefaultArchetypeGeneratorTest
         assertEquals( artifactId, properties.getProperty( "artifactId" ) );
         assertEquals( "file-value", properties.getProperty( "version" ) );
         assertEquals( "file.value.package", properties.getProperty( "package" ) );
+        assertEquals( "file/value/package", properties.getProperty( "packageInPathFormat" ) );
     }
 
     private void assertTemplateContentGeneratedWithOldArchetype(
@@ -991,6 +992,7 @@ public class DefaultArchetypeGeneratorTest
         assertEquals( "${artifactId}", properties.getProperty( "artifactId" ) );
         assertEquals( "${version}", properties.getProperty( "version" ) );
         assertEquals( "${package}", properties.getProperty( "package" ) );
+        assertEquals( "${packageInPathFormat}", properties.getProperty( "packageInPathFormat" ) );
     }
 
     private void copy( final File in,

@@ -211,6 +211,8 @@ public class DefaultArchetypeCreatorTest
         template = getTemplateFile( project, "libs/prj-b/src/main/java/test/com/Component.java" );
         assertExists( template );
         assertContent( template, "${someProperty}" );
+        assertContent( template, "${package}" );
+        assertContent( template, "${packageInPathFormat}" );
 
         template = getTemplateFile( project, "libs/prj-b/src/main/java/test/com/package.html" );
         assertExists( template );
@@ -220,6 +222,8 @@ public class DefaultArchetypeCreatorTest
             getTemplateFile( project, "libs/prj-b/src/test/java/test/common/ComponentTest.java" );
         assertExists( template );
         assertContent( template, "${someProperty}" );
+        assertContent( template, "${package}" );
+        assertContent( template, "${packageInPathFormat}" );
 
         template = getTemplateFile( project, "application/pom.xml" );
         assertExists( template );
@@ -233,6 +237,8 @@ public class DefaultArchetypeCreatorTest
         template = getTemplateFile( project, "application/src/main/java/Main.java" );
         assertExists( template );
         assertContent( template, "${someProperty}" );
+        assertContent( template, "${package}" );
+        assertContent( template, "${packageInPathFormat}" );
 
         template =
             getTemplateFile(
@@ -241,6 +247,8 @@ public class DefaultArchetypeCreatorTest
             );
         assertExists( template );
         assertContent( template, "${someProperty}" );
+        assertContent( template, "${package}" );
+        assertContent( template, "${packageInPathFormat}" );
 
         template =
             getTemplateFile(
@@ -257,14 +265,20 @@ public class DefaultArchetypeCreatorTest
         template = getTemplateFile( project, "application/src/main/resources/log4j.properties" );
         assertExists( template );
         assertContent( template, "${someProperty}" );
+        assertContent( template, "${package}" );
+        assertContent( template, "${packageInPathFormat}" );
 
         template = getTemplateFile( project, "application/src/main/resources/META-INF/MANIFEST.MF" );
         assertExists( template );
         assertContent( template, "${someProperty}" );
+        assertContent( template, "${package}" );
+        assertContent( template, "${packageInPathFormat}" );
 
         template = getTemplateFile( project, "application/src/main/resources/test/application/some/Gro.groovy" );
         assertExists( template );
         assertContent( template, "${someProperty}" );
+        assertContent( template, "${package}" );
+        assertContent( template, "${packageInPathFormat}" );
 
         template = getTemplateFile( project, "application/src/main/resources/splash.png" );
         assertExists( template );
@@ -273,6 +287,8 @@ public class DefaultArchetypeCreatorTest
         template = getTemplateFile( project, "application/src/test/java/TestAll.java" );
         assertExists( template );
         assertContent( template, "${someProperty}" );
+        assertContent( template, "${package}" );
+        assertContent( template, "${packageInPathFormat}" );
 
         template =
             getTemplateFile(
@@ -281,19 +297,27 @@ public class DefaultArchetypeCreatorTest
             );
         assertExists( template );
         assertContent( template, "${someProperty}" );
+        assertContent( template, "${package}" );
+        assertContent( template, "${packageInPathFormat}" );
 
         template = getTemplateFile( project, "application/src/it-test/java/test/ItTest1.java" );
         assertExists( template );
         assertContent( template, "${someProperty}" );
+        assertContent( template, "${package}" );
+        assertContent( template, "${packageInPathFormat}" );
 
         template = getTemplateFile( project, "application/src/it-test/java/ItTestAll.java" );
         assertExists( template );
         assertContent( template, "${someProperty}" );
+        assertContent( template, "${package}" );
+        assertContent( template, "${packageInPathFormat}" );
 
         template =
             getTemplateFile( project, "application/src/it-test/resources/ItTest1Result.txt" );
         assertExists( template );
         assertContent( template, "${someProperty}" );
+        assertContent( template, "${package}" );
+        assertContent( template, "${packageInPathFormat}" );
     }
 
     protected void tearDown()
