@@ -1,108 +1,107 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<archetype-catalog>
+<?xml version="1.0" encoding="UTF-8"?><archetype-catalog>
   <archetypes>
     <archetype>
       <groupId>org.appfuse.archetypes</groupId>
       <artifactId>appfuse-basic-jsf</artifactId>
       <version>2.0</version>
-      <repository>http://static.appfuse.org/releases</repository>
+      <repository>http://repo1.maven.org/maven2</repository>
       <description>AppFuse archetype for creating a web application with Hibernate, Spring and JSF</description>
     </archetype>
     <archetype>
       <groupId>org.appfuse.archetypes</groupId>
       <artifactId>appfuse-basic-spring</artifactId>
       <version>2.0</version>
-      <repository>http://static.appfuse.org/releases</repository>
+      <repository>http://repo1.maven.org/maven2</repository>
       <description>AppFuse archetype for creating a web application with Hibernate, Spring and Spring MVC</description>
     </archetype>
     <archetype>
       <groupId>org.appfuse.archetypes</groupId>
       <artifactId>appfuse-basic-struts</artifactId>
       <version>2.0</version>
-      <repository>http://static.appfuse.org/releases</repository>
+      <repository>http://repo1.maven.org/maven2</repository>
       <description>AppFuse archetype for creating a web application with Hibernate, Spring and Struts 2</description>
     </archetype>
     <archetype>
       <groupId>org.appfuse.archetypes</groupId>
       <artifactId>appfuse-basic-tapestry</artifactId>
       <version>2.0</version>
-      <repository>http://static.appfuse.org/releases</repository>
+      <repository>http://repo1.maven.org/maven2</repository>
       <description>AppFuse archetype for creating a web application with Hibernate, Spring and Tapestry 4</description>
     </archetype>
     <archetype>
       <groupId>org.appfuse.archetypes</groupId>
       <artifactId>appfuse-core</artifactId>
       <version>2.0</version>
-      <repository>http://static.appfuse.org/releases</repository>
+      <repository>http://repo1.maven.org/maven2</repository>
       <description>AppFuse archetype for creating a jar application with Hibernate and Spring and XFire</description>
     </archetype>
     <archetype>
       <groupId>org.appfuse.archetypes</groupId>
       <artifactId>appfuse-modular-jsf</artifactId>
       <version>2.0</version>
-      <repository>http://static.appfuse.org/releases</repository>
+      <repository>http://repo1.maven.org/maven2</repository>
       <description>AppFuse archetype for creating a modular application with Hibernate, Spring and JSF</description>
     </archetype>
     <archetype>
       <groupId>org.appfuse.archetypes</groupId>
       <artifactId>appfuse-modular-spring</artifactId>
       <version>2.0</version>
-      <repository>http://static.appfuse.org/releases</repository>
+      <repository>http://repo1.maven.org/maven2</repository>
       <description>AppFuse archetype for creating a modular application with Hibernate, Spring and Spring MVC</description>
     </archetype>
     <archetype>
       <groupId>org.appfuse.archetypes</groupId>
       <artifactId>appfuse-modular-struts</artifactId>
       <version>2.0</version>
-      <repository>http://static.appfuse.org/releases</repository>
+      <repository>http://repo1.maven.org/maven2</repository>
       <description>AppFuse archetype for creating a modular application with Hibernate, Spring and Struts 2</description>
     </archetype>
     <archetype>
       <groupId>org.appfuse.archetypes</groupId>
       <artifactId>appfuse-modular-tapestry</artifactId>
       <version>2.0</version>
-      <repository>http://static.appfuse.org/releases</repository>
+      <repository>http://repo1.maven.org/maven2</repository>
       <description>AppFuse archetype for creating a modular application with Hibernate, Spring and Tapestry 4</description>
     </archetype>
     <archetype>
       <groupId>org.apache.maven.archetypes</groupId>
       <artifactId>maven-archetype-j2ee-simple</artifactId>
-      <version>1.0</version>
+      <version>RELEASE</version>
       <repository>http://repo1.maven.org/maven2</repository>
       <description>A simple J2EE Java application</description>
     </archetype>
     <archetype>
       <groupId>org.apache.maven.archetypes</groupId>
       <artifactId>maven-archetype-marmalade-mojo</artifactId>
-      <version>1.0-alpha-3</version>
+      <version>RELEASE</version>
       <repository>http://repo1.maven.org/maven2</repository>
       <description>A Maven plugin development project using marmalade</description>
     </archetype>
     <archetype>
       <groupId>org.apache.maven.archetypes</groupId>
       <artifactId>maven-archetype-mojo</artifactId>
-      <version>1.0</version>
+      <version>RELEASE</version>
       <repository>http://repo1.maven.org/maven2</repository>
       <description>A Maven Java plugin development project</description>
     </archetype>
     <archetype>
       <groupId>org.apache.maven.archetypes</groupId>
       <artifactId>maven-archetype-portlet</artifactId>
-      <version>1.0.1</version>
+      <version>RELEASE</version>
       <repository>http://repo1.maven.org/maven2</repository>
       <description>A simple portlet application</description>
     </archetype>
     <archetype>
       <groupId>org.apache.maven.archetypes</groupId>
       <artifactId>maven-archetype-profiles</artifactId>
-      <version>1.0-alpha-4</version>
+      <version>RELEASE</version>
       <repository>http://repo1.maven.org/maven2</repository>
       <description></description>
     </archetype>
     <archetype>
       <groupId>org.apache.maven.archetypes</groupId>
       <artifactId>maven-archetype-quickstart</artifactId>
-      <version>1.0</version>
+      <version>RELEASE</version>
       <repository>http://repo1.maven.org/maven2</repository>
       <description></description>
     </archetype>
@@ -118,21 +117,21 @@
     <archetype>
       <groupId>org.apache.maven.archetypes</groupId>
       <artifactId>maven-archetype-site-simple</artifactId>
-      <version>1.0</version>
+      <version>RELEASE</version>
       <repository>http://repo1.maven.org/maven2</repository>
       <description>A simple site generation project</description>
     </archetype>
     <archetype>
       <groupId>org.apache.maven.archetypes</groupId>
       <artifactId>maven-archetype-site</artifactId>
-      <version>1.0</version>
+      <version>RELEASE</version>
       <repository>http://repo1.maven.org/maven2</repository>
       <description>A more complex site project</description>
     </archetype>
     <archetype>
       <groupId>org.apache.maven.archetypes</groupId>
       <artifactId>maven-archetype-webapp</artifactId>
-      <version>1.0</version>
+      <version>RELEASE</version>
       <repository>http://repo1.maven.org/maven2</repository>
       <description>A simple Java web application</description>
     </archetype>
@@ -230,16 +229,23 @@
     <archetype>
       <groupId>org.springframework.osgi</groupId>
       <artifactId>spring-osgi-bundle-archetype</artifactId>
-      <version>1.0-m3-SNAPSHOT</version>
-      <repository>http://static.springframework.org/maven2-snapshots</repository>
+      <version>1.0</version>
+      <repository>http://repo1.maven.org/maven2</repository>
       <description>Spring-OSGi archetype</description>
     </archetype>
     <archetype>
       <groupId>com.atlassian.maven.archetypes</groupId>
       <artifactId>confluence-plugin-archetype</artifactId>
-      <version>RELEASE</version>
-      <repository>http://repository.atlassian.com/maven2</repository>
+      <version>4</version>
+      <repository>https://maven.atlassian.com/public</repository>
       <description>Atlassian Confluence plugin archetype</description>
+    </archetype>
+    <archetype>
+      <groupId>com.atlassian.maven.archetypes</groupId>
+      <artifactId>jira-plugin-archetype</artifactId>
+      <version>5</version>
+      <repository>https://maven.atlassian.com/public</repository>
+      <description>Atlassian JIRA plugin archetype</description>
     </archetype>
     <archetype>
       <groupId>net.sf.maven-har</groupId>
@@ -262,6 +268,54 @@
       <repository>http://repo1.maven.org/maven2</repository>
       <description>A simple Apache Wicket project</description>
     </archetype>
+    <archetype>
+      <groupId>org.apache.tapestry</groupId>
+      <artifactId>quickstart</artifactId>
+      <version>LATEST</version>
+      <repository>http://tapestry.formos.com/maven-snapshot-repository/</repository>
+      <description>A simple Apache Tapestry 5 Project</description>
+    </archetype>
+    <archetype>
+      <groupId>org.scala-tools.archetypes</groupId>
+      <artifactId>scala-archetype-simple</artifactId>
+      <version>1.1</version>
+      <repository>http://scala-tools.org/repo-releases</repository>
+      <description>A simple scala project</description>
+    </archetype>
+    <archetype>
+      <groupId>net.liftweb</groupId>
+      <artifactId>lift-archetype-blank</artifactId>
+      <version>0.6</version>
+      <repository>http://scala-tools.org/repo-releases</repository>
+      <description>A blank/empty liftweb project</description>
+    </archetype>
+    <archetype>
+      <groupId>net.liftweb</groupId>
+      <artifactId>lift-archetype-basic</artifactId>
+      <version>0.6</version>
+      <repository>http://scala-tools.org/repo-releases</repository>
+      <description>The basic (liftweb) project</description>
+    </archetype>
+    <archetype>
+      <groupId>org.apache.cocoon</groupId>
+      <artifactId>cocoon-22-archetype-block-plain</artifactId>
+      <version>1.0.0-RC2</version>
+      <repository>http://repo1.maven.org/maven2</repository>
+      <description>[http://cocoon.apache.org/2.2/maven-plugins/]</description>
+    </archetype>
+    <archetype>
+      <groupId>org.apache.cocoon</groupId>
+      <artifactId>cocoon-22-archetype-block</artifactId>
+      <version>1.0.0-RC2</version>
+      <repository>http://repo1.maven.org/maven2</repository>
+      <description>[http://cocoon.apache.org/2.2/maven-plugins/]</description>
+    </archetype>
+    <archetype>
+      <groupId>org.apache.cocoon</groupId>
+      <artifactId>cocoon-22-archetype-webapp</artifactId>
+      <version>1.0.0-RC2</version>
+      <repository>http://repo1.maven.org/maven2</repository>
+      <description>[http://cocoon.apache.org/2.2/maven-plugins/]</description>
+    </archetype>
   </archetypes>
 </archetype-catalog>
-
