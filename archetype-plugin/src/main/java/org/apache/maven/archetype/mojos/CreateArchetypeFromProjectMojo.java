@@ -202,9 +202,13 @@ public class CreateArchetypeFromProjectMojo
 
             ArchetypeCreationResult result = archetype.createArchetypeFromProject( request );
 
-            if ( result.getCause() != null )
+            if( result.getCause() != null )
             {
-                throw new MojoExecutionException( result.getCause().getMessage(), result.getCause() );
+                throw new MojoFailureException(
+                    result.getCause(),
+                    result.getCause().getMessage(),
+                    result.getCause().getMessage()
+                );
             }
 
             getLog().info( "Archetype created in target/generated-sources/archetype" );
@@ -223,9 +227,13 @@ public class CreateArchetypeFromProjectMojo
             }
 
         }
+        catch ( MojoFailureException ex )
+        {
+            throw ex;
+        }
         catch ( Exception ex )
         {
-            throw new MojoExecutionException( ex.getMessage(), ex );
+            throw new MojoFailureException( ex, ex.getMessage(), ex.getMessage() );
         }
     }
 

@@ -307,17 +307,23 @@ public class FilesetArchetypeCreator
             while ( modules.hasNext() )
             {
                 String moduleId = (String) modules.next();
+                String rootArtifactId = configurationProperties.getProperty( Constants.ARTIFACT_ID );
+                String moduleIdDirectory = moduleId;
+                if ( moduleId.indexOf( rootArtifactId ) >= 0 )
+                {
+                    moduleIdDirectory = StringUtils.replace( moduleId, rootArtifactId, "__rootArtifactId__" );
+                }
 
                 getLogger().debug( "Creating module " + moduleId );
 
                 ModuleDescriptor moduleDescriptor =
                     createModule(
                         reverseProperties,
-                        configurationProperties.getProperty( Constants.ARTIFACT_ID ),
+                        rootArtifactId,
                         moduleId,
                         packageName,
                         FileUtils.resolveFile( basedir, moduleId ),
-                        FileUtils.resolveFile( archetypeFilesDirectory, moduleId ),
+                        FileUtils.resolveFile( archetypeFilesDirectory, moduleIdDirectory ),
                         languages,
                         filtereds,
                         defaultEncoding,
@@ -423,13 +429,18 @@ public class FilesetArchetypeCreator
         while ( modules.hasNext() )
         {
             String subModuleId = (String) modules.next();
+            String subModuleIdDirectory = subModuleId;
+                if ( subModuleId.indexOf( rootArtifactId ) >= 0 )
+                {
+                    subModuleIdDirectory = StringUtils.replace( subModuleId, rootArtifactId, "__rootArtifactId__" );
+                }
 
             createModulePoms(
                 pomReversedProperties,
                 rootArtifactId,
                 packageName,
                 FileUtils.resolveFile( basedir, subModuleId ),
-                FileUtils.resolveFile( archetypeFilesDirectory, subModuleId ),
+                FileUtils.resolveFile( archetypeFilesDirectory, subModuleIdDirectory ),
                 preserveCData,
                 keepParent
             );
@@ -466,13 +477,18 @@ public class FilesetArchetypeCreator
         while ( modules.hasNext() )
         {
             String moduleId = (String) modules.next();
+            String moduleIdDirectory = moduleId;
+                if ( moduleId.indexOf( rootArtifactId ) >= 0 )
+                {
+                    moduleIdDirectory = StringUtils.replace( moduleId, rootArtifactId, "__rootArtifactId__" );
+                }
 
             createModulePoms(
                 pomReversedProperties,
                 rootArtifactId,
                 moduleId,
                 FileUtils.resolveFile( basedir, moduleId ),
-                FileUtils.resolveFile( archetypeFilesDirectory, moduleId ),
+                FileUtils.resolveFile( archetypeFilesDirectory, moduleIdDirectory ),
                 preserveCData,
                 keepParent
             );
@@ -1189,18 +1205,19 @@ public class FilesetArchetypeCreator
         Model pom =
             pomManager.readPom( FileUtils.resolveFile( basedir, Constants.ARCHETYPE_POM ) );
         String replacementId = pom.getArtifactId();
+        String moduleDirectory = pom.getArtifactId();
         if ( replacementId.indexOf( rootArtifactId ) >= 0 )
         {
             replacementId = StringUtils.replace( replacementId, rootArtifactId, "${rootArtifactId}" );
-            moduleId = StringUtils.replace( moduleId, rootArtifactId, "${rootArtifactId}" );
+            moduleDirectory = StringUtils.replace( moduleId, rootArtifactId, "__rootArtifactId__" );
         }
         if ( moduleId.indexOf( rootArtifactId ) >= 0 )
         {
-            moduleId = StringUtils.replace( moduleId, rootArtifactId, "${rootArtifactId}" );
+            moduleDirectory = StringUtils.replace( moduleId, rootArtifactId, "__rootArtifactId__" );
         }
         archetypeDescriptor.setName( replacementId );
         archetypeDescriptor.setId( replacementId );
-        archetypeDescriptor.setDir( moduleId );
+        archetypeDescriptor.setDir( moduleDirectory );
 
         registerProject( pom );
 
@@ -1231,6 +1248,11 @@ public class FilesetArchetypeCreator
         while ( modules.hasNext() )
         {
             String subModuleId = (String) modules.next();
+            String subModuleIdDirectory = subModuleId;
+            if ( subModuleId.indexOf( rootArtifactId ) >= 0 )
+            {
+                subModuleIdDirectory = StringUtils.replace( subModuleId, rootArtifactId, "__rootArtifactId__" );
+            }
 
             getLogger().debug( "Creating module " + subModuleId );
 
@@ -1241,7 +1263,7 @@ public class FilesetArchetypeCreator
                     subModuleId,
                     packageName,
                     FileUtils.resolveFile( basedir, subModuleId ),
-                    FileUtils.resolveFile( archetypeFilesDirectory, subModuleId ),
+                    FileUtils.resolveFile( archetypeFilesDirectory, subModuleIdDirectory ),
                     languages,
                     filtereds,
                     defaultEncoding,
