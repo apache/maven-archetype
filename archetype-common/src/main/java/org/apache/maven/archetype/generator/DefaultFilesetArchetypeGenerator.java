@@ -506,7 +506,11 @@ public class DefaultFilesetArchetypeGenerator
         OutputFileExists
     {
         outputDirectoryFile.mkdirs();
-        getLogger().debug( "Processing " + artifactId );
+        getLogger().debug( "Processing module " + artifactId );
+        getLogger().debug( "Processing module rootArtifactId " + rootArtifactId );
+        getLogger().debug( "Processing module pom " + pom );
+        getLogger().debug( "Processing module moduleOffset " + moduleOffset );
+        getLogger().debug( "Processing module outputDirectoryFile " + outputDirectoryFile );
 
         processFilesetProject(
             archetypeDescriptor,
@@ -537,11 +541,11 @@ public class DefaultFilesetArchetypeGenerator
             artifactId = project.getId();
 
             File moduleOutputDirectoryFile = new File( outputDirectoryFile,
-                StringUtils.replace( project.getDir(), "${rootArtifactId}", rootArtifactId ) );
+                StringUtils.replace( project.getDir(), "__rootArtifactId__", rootArtifactId ) );
             context.put( Constants.ARTIFACT_ID, StringUtils.replace( project.getId(), "${rootArtifactId}", rootArtifactId ) );
             processFilesetModule(
                 rootArtifactId,
-                StringUtils.replace( project.getDir(), "${rootArtifactId}", rootArtifactId ),
+                StringUtils.replace( project.getDir(), "__rootArtifactId__", rootArtifactId ),
                 archetypeResources,
                 new File( moduleOutputDirectoryFile, Constants.ARCHETYPE_POM ),
                 archetypeZipFile,
@@ -579,6 +583,12 @@ public class DefaultFilesetArchetypeGenerator
         FileNotFoundException,
         OutputFileExists
     {
+        getLogger().debug( "Processing fileset project moduleId " + moduleId );
+        getLogger().debug( "Processing fileset project pom " + pom );
+        getLogger().debug( "Processing fileset project moduleOffset " + moduleOffset );
+        getLogger().debug( "Processing fileset project outputDirectoryFile " + outputDirectoryFile );
+        getLogger().debug( "Processing fileset project basedirPom " + basedirPom );
+        
         if ( basedirPom.exists() )
         {
             processPomWithParent(
@@ -702,8 +712,8 @@ public class DefaultFilesetArchetypeGenerator
     {
         templateFileName = templateFileName.replace( File.separatorChar, '/' );
         
-        if ( !velocity.getEngine ().templateExists ( templateFileName )
-            && velocity.getEngine ().templateExists (
+        if ( !velocity.getEngine ().resourceExists( templateFileName )
+            && velocity.getEngine ().resourceExists(
                 templateFileName.replace ( '/', File.separatorChar )
             )
         )

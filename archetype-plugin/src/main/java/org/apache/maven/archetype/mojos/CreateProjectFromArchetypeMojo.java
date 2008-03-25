@@ -162,11 +162,24 @@ public class CreateProjectFromArchetypeMojo
             // TODO: it's confusing that request has fields that get populated but not accepted as input (eg, groupId)
             configurator.configureArchetype( request, interactiveMode, executionProperties );
 
-            ArchetypeGenerationResult result = archetype.generateProjectFromArchetype( request );
+            ArchetypeGenerationResult generationResult =
+                archetype.generateProjectFromArchetype( request );
+            if( generationResult.getCause() != null )
+            {
+                throw new MojoFailureException(
+                    generationResult.getCause(),
+                    generationResult.getCause().getMessage(),
+                    generationResult.getCause().getMessage()
+                );
+            }
+        }
+        catch ( MojoFailureException ex )
+        {
+            throw ex;
         }
         catch ( Exception ex )
         {
-            throw new MojoFailureException( ex.getMessage() );
+            throw new MojoFailureException( ex, ex.getMessage(), ex.getMessage() );
         }
 
         String artifactId = request.getArtifactId();
