@@ -8,6 +8,8 @@ import org.apache.maven.artifact.resolver.ArtifactResolutionException;
 import org.apache.maven.artifact.resolver.ArtifactResolver;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -31,27 +33,20 @@ public class DefaultDownloader
                           String artifactId,
                           String version,
                           ArtifactRepository archetypeRepository,
-                          File localRepository,
-                          String[] remoteRepositories )
-        throws DownloadException, DownloadNotFoundException
-
-    {
-        return download( groupId, artifactId, version, archetypeRepository, localRepository, remoteRepositories );
-    }
-
-    public File download( String groupId,
-                          String artifactId,
-                          String version,
-                          ArtifactRepository archetypeRepository,
                           ArtifactRepository localRepository,
                          List remoteRepositories )
         throws DownloadException, DownloadNotFoundException
    {
         Artifact artifact = artifactFactory.createArtifact( groupId, artifactId, version, Artifact.SCOPE_RUNTIME, "jar" );
-        artifact.setRepository(archetypeRepository);
+//        artifact.setRepository(archetypeRepository);
+        List repositories = new ArrayList(remoteRepositories);
+//        if (repositories.isEmpty() && archetypeRepository != null)
+//        {
+//            repositories.add(archetypeRepository);
+//        }
         try
         {
-            artifactResolver.resolveAlways( artifact, remoteRepositories, localRepository );
+            artifactResolver.resolveAlways( artifact, repositories, localRepository );
         }
         catch ( ArtifactResolutionException e )
         {
@@ -64,4 +59,28 @@ public class DefaultDownloader
 
         return artifact.getFile();
     }
+//    public File downloadOld( String groupId,
+//                          String artifactId,
+//                          String version,
+//                          ArtifactRepository archetypeRepository,
+//                          ArtifactRepository localRepository,
+//                         List remoteRepositories )
+//        throws DownloadException, DownloadNotFoundException
+//   {
+//        Artifact artifact = artifactFactory.createArtifact( groupId, artifactId, version, Artifact.SCOPE_RUNTIME, "jar" );
+//        try
+//        {
+//            artifactResolver.resolveAlways( artifact, remoteRepositories, localRepository );
+//        }
+//        catch ( ArtifactResolutionException e )
+//        {
+//            throw new DownloadException( "Error downloading.", e );
+//        }
+//        catch ( ArtifactNotFoundException e )
+//        {
+//            throw new DownloadNotFoundException( "Requested download does not exist.", e );
+//        }
+//
+//        return artifact.getFile();
+//    }
 }

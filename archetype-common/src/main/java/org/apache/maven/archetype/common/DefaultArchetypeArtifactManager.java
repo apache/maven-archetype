@@ -322,13 +322,13 @@ implements ArchetypeArtifactManager
         catch ( DownloadException e )
         {
             e.printStackTrace ();
-            getLogger ().debug ( "OldArchetype don't exist", e );
+            getLogger ().debug ( "Archetype don't exist", e );
             return false;
         }
         catch ( DownloadNotFoundException e )
         {
             e.printStackTrace ();
-            getLogger ().debug ( "OldArchetype don't exist", e );
+            getLogger ().debug ( "Archetype don't exist", e );
             return false;
         }
     }

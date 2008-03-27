@@ -106,7 +106,9 @@ public class DefaultArchetypeGenerationConfigurator
                 ad.getArtifactId() + "-repo" );
             repositories.add( archetypeRepository );
         }
-
+//        System.err.println("repositories"+repositories);
+//        System.err.println("archetypeRepository"+archetypeRepository);
+//        System.err.println("A request.getArchetypeRepository()"+request.getArchetypeRepository());
         if ( !archetypeArtifactManager.exists( ad.getGroupId(), ad.getArtifactId(),
             ad.getVersion(), archetypeRepository, localRepository, repositories ) )
         {
