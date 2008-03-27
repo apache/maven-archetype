@@ -16,15 +16,15 @@ public interface Downloader
                           String artifactId,
                           String version,
                           ArtifactRepository archetypeRepository,
-                          File localRepository,
-                          String[] remoteRepositories )
-        throws DownloadException, DownloadNotFoundException;
-
-    public File download( String groupId,
-                          String artifactId,
-                          String version,
-                          ArtifactRepository archetypeRepository,
                           ArtifactRepository localRepository,
                           List remoteRepositories )
         throws DownloadException, DownloadNotFoundException;
+
+//    public File downloadOld( String groupId,
+//                          String artifactId,
+//                          String version,
+//                          ArtifactRepository archetypeRepository,
+//                          ArtifactRepository localRepository,
+//                          List remoteRepositories )
+//        throws DownloadException, DownloadNotFoundException;
 }

@@ -54,15 +54,6 @@ public class DefaultArchetypeSelector
     /** @plexus.requirement */
     private org.apache.maven.archetype.Archetype archetype;
 
-    public void selectArchetype( ArchetypeGenerationRequest request, Boolean interactiveMode )
-        throws
-        ArchetypeNotDefined,
-        UnknownArchetype,
-        UnknownGroup,
-        IOException,
-        PrompterException,
-        ArchetypeSelectionFailure{throw new UnsupportedOperationException("change method");}
-
     public void selectArchetype( ArchetypeGenerationRequest request, 
             Boolean interactiveMode, String catalogs )
         throws
@@ -225,9 +216,9 @@ public class DefaultArchetypeSelector
 
         request.setArchetypeName( definition.getName() );
 
-        request.setArchetypeRepository( definition.getRepository() );
-
-//        request.setRemoteRepository( definition.getRepository() );
+        if (StringUtils.isNotEmpty(definition.getRepository())){
+            request.setArchetypeRepository( definition.getRepository() );
+        }
     }
 
     private Map getArchetypesByCatalog(String catalogs) {

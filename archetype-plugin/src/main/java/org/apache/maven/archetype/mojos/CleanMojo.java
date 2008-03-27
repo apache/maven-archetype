@@ -30,7 +30,8 @@ import java.io.File;
  *
  * @author rafale
  * @requiresProject false
- * @goal clean
+ * //@ //goal clean
+ * @deprecated 
  */
 public class CleanMojo
     extends AbstractMojo
