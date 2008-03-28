@@ -96,7 +96,7 @@ public class RoundtripMultiModuleTest
 //        File sourceProject = new File( getBasedir(  ), "target/test-classes/projects/roundtrip-1-project" );
 
         File workingProject = new File( getBasedir(),
-            "target"+File.separator+"test-classes"+File.separator+"projects"+File.separator+"roundtrip-multi-module-project" );
+            "target"+File.separator+"test-classes"+File.separator+"projects"+File.separator+"roundtrip-multi" );
         FileUtils.forceDelete(new File(workingProject, "target"));
 
         // (2) create an archetype from the project
@@ -176,7 +176,7 @@ public class RoundtripMultiModuleTest
 
         // (6) create a project form the archetype we just created
         String outputDirectory = new File( getBasedir(),
-            "target"+File.separator+"test-classes"+File.separator+"projects"+File.separator+"roundtrip-multi-module-recreatedproject" ).getAbsolutePath();
+            "target"+File.separator+"test-classes"+File.separator+"projects"+File.separator+"roundtrip-multi-recreated" ).getAbsolutePath();
         FileUtils.forceDelete(outputDirectory);
 
         ArchetypeGenerationRequest agr =
