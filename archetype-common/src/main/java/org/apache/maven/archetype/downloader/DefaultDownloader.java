@@ -77,28 +77,28 @@ public class DefaultDownloader
 
         return artifact.getFile();
     }
-//    public File downloadOld( String groupId,
-//                          String artifactId,
-//                          String version,
-//                          ArtifactRepository archetypeRepository,
-//                          ArtifactRepository localRepository,
-//                         List remoteRepositories )
-//        throws DownloadException, DownloadNotFoundException
-//   {
-//        Artifact artifact = artifactFactory.createArtifact( groupId, artifactId, version, Artifact.SCOPE_RUNTIME, "jar" );
-//        try
-//        {
-//            artifactResolver.resolveAlways( artifact, remoteRepositories, localRepository );
-//        }
-//        catch ( ArtifactResolutionException e )
-//        {
-//            throw new DownloadException( "Error downloading.", e );
-//        }
-//        catch ( ArtifactNotFoundException e )
-//        {
-//            throw new DownloadNotFoundException( "Requested download does not exist.", e );
-//        }
-//
-//        return artifact.getFile();
-//    }
+    public File downloadOld( String groupId,
+                          String artifactId,
+                          String version,
+                          ArtifactRepository archetypeRepository,
+                          ArtifactRepository localRepository,
+                         List remoteRepositories )
+        throws DownloadException, DownloadNotFoundException
+   {
+        Artifact artifact = artifactFactory.createArtifact( groupId, artifactId, version, Artifact.SCOPE_RUNTIME, "jar" );
+        try
+        {
+            artifactResolver.resolveAlways( artifact, remoteRepositories, localRepository );
+        }
+        catch ( ArtifactResolutionException e )
+        {
+            throw new DownloadException( "Error downloading.", e );
+        }
+        catch ( ArtifactNotFoundException e )
+        {
+            throw new DownloadNotFoundException( "Requested download does not exist.", e );
+        }
+
+        return artifact.getFile();
+    }
 }

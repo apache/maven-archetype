@@ -167,6 +167,7 @@ public class MavenArchetypeMojo
     public void execute()
         throws MojoExecutionException
     {
+        getLog().warn( "This goal is deprecated. Please use mvn archetype:generate instead" );
         // TODO: prompt for missing values
         // TODO: configurable license
 

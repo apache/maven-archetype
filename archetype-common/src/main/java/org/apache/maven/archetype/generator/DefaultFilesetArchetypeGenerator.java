@@ -92,7 +92,7 @@ public class DefaultFilesetArchetypeGenerator
         {
             ArchetypeDescriptor archetypeDescriptor =
                 archetypeArtifactManager.getFileSetArchetypeDescriptor( archetypeFile );
-// TODO archetype-137 is to be fixed from here.
+
             if ( !isArchetypeConfigured( archetypeDescriptor, request ) )
             {
                 if ( request.isInteractiveMode () )
