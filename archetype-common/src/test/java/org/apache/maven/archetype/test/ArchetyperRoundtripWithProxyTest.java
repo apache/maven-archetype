@@ -59,6 +59,7 @@ public class ArchetyperRoundtripWithProxyTest
     extends PlexusTestCase
 {
     Jetty6xEmbeddedLocalContainer jettyContainer;
+    Jetty6xEmbeddedLocalContainer jettyContainer2;
 
     public void testArchetyper()
         throws Exception
@@ -219,6 +220,29 @@ public class ArchetyperRoundtripWithProxyTest
         deployer.deploy( war,
             new URLDeployableMonitor( new URL( "http://localhost:18882/dummy" ) ) );
         deployer.start( war );
+        
+        
+        Jetty6xEmbeddedStandaloneLocalConfiguration configuration2 =
+            new Jetty6xEmbeddedStandaloneLocalConfiguration( "target/repository-webapp" );
+        configuration2.setProperty( ServletPropertySet.PORT, "18881" );
+
+        System.setProperty( "org.apache.maven.archetype.reporitory.directory",
+            getTestPath( "target/test-classes/repositories/central" ) );
+        jettyContainer2 = new Jetty6xEmbeddedLocalContainer( configuration2 );
+        jettyContainer2.setTimeout( 180000L );
+        jettyContainer2.start();
+
+        DeployableFactory factory2 = new DefaultDeployableFactory();
+        WAR war2 = (WAR) factory2.createDeployable( jettyContainer2.getId(),
+            "target/wars/archetype-repository.war",
+            DeployableType.WAR );
+
+        war2.setContext( "/" );
+
+        Deployer deployer2 = new Jetty6xEmbeddedLocalDeployer( jettyContainer2 );
+        deployer2.deploy( war2,
+            new URLDeployableMonitor( new URL( "http://localhost:18881/repo/dummy" ) ) );
+        deployer2.start( war );
 
     }
 
@@ -229,5 +253,6 @@ public class ArchetyperRoundtripWithProxyTest
         //        Stop Cargo
 
         jettyContainer.stop();
+        jettyContainer2.stop();
     }
 }

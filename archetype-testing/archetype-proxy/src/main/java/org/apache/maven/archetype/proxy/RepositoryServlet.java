@@ -123,7 +123,7 @@ public class RepositoryServlet
         response.setHeader( "Server", null );
 
 
-        log( "Requested file = " + request.getRequestURI(  ) );
+        log( "Proxy Requested file = " + request.getRequestURI(  ) );
         String filePath =
             System.getProperty( "org.apache.maven.archetype.reporitory.directory" ).trim(  ) + "/" +
             request.getRequestURI(  );
