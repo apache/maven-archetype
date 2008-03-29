@@ -229,14 +229,6 @@ public class DefaultArchetypeGenerationConfigurator
 
         properties = archetypeConfiguration.getProperties();
 
-        properties.remove( Constants.GROUP_ID );
-
-        properties.remove( Constants.ARTIFACT_ID );
-
-        properties.remove( Constants.VERSION );
-
-        properties.remove( Constants.PACKAGE );
-
         request.setProperties( properties );
     }
 

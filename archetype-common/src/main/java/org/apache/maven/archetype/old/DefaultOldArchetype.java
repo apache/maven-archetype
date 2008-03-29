@@ -119,7 +119,7 @@ public class DefaultOldArchetype
 
         try
         {
-            archetype = downloader.download( archetypeGroupId, archetypeArtifactId, archetypeVersion, archetypeRepository, localRepository,
+            archetype = downloader.downloadOld( archetypeGroupId, archetypeArtifactId, archetypeVersion, archetypeRepository, localRepository,
                                              remoteRepositories );
         }
         catch ( DownloadException e )

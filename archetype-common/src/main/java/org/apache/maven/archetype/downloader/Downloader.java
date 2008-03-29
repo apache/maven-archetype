@@ -20,11 +20,11 @@ public interface Downloader
                           List remoteRepositories )
         throws DownloadException, DownloadNotFoundException;
 
-//    public File downloadOld( String groupId,
-//                          String artifactId,
-//                          String version,
-//                          ArtifactRepository archetypeRepository,
-//                          ArtifactRepository localRepository,
-//                          List remoteRepositories )
-//        throws DownloadException, DownloadNotFoundException;
+    public File downloadOld( String groupId,
+                          String artifactId,
+                          String version,
+                          ArtifactRepository archetypeRepository,
+                          ArtifactRepository localRepository,
+                          List remoteRepositories )
+        throws DownloadException, DownloadNotFoundException;
 }
