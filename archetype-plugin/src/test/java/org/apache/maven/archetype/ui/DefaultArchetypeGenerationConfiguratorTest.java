@@ -112,7 +112,7 @@ public class DefaultArchetypeGenerationConfiguratorTest
     // TODO: should test this in interactive mode to check for prompting
     public void testOldArchetypeGeneratedFieldsDefaultsMissingGroupId()
         throws PrompterException, IOException, UnknownGroup, ArchetypeSelectionFailure, UnknownArchetype,
-        ArchetypeNotDefined, ArchetypeGenerationConfigurationFailure
+        ArchetypeNotDefined, ArchetypeGenerationConfigurationFailure, ArchetypeNotConfigured
     {
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
         request.setArchetypeGroupId( "archetypeGroupId" );
@@ -121,14 +121,8 @@ public class DefaultArchetypeGenerationConfiguratorTest
         Properties properties = new Properties();
         properties.setProperty( "artifactId", "preset-artifactId" );
 
-        try
-        {
-            configurator.configureArchetype( request, Boolean.FALSE, properties );
-            fail( "Archetype was not fully configured - fail" );
-        }
-        catch ( ArchetypeNotConfigured archetypeNotDefined )
-        {
-            assertTrue( true );
-        }
+        
+        configurator.configureArchetype( request, Boolean.FALSE, properties );
+        assertEquals( "com.company", request.getGroupId() );
     }
 }
