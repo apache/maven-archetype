@@ -58,12 +58,16 @@
     </dependency>
   </dependencies>
 
+  <properties>
+      <pluginPluginVersion>2.4.1</pluginPluginVersion>
+  </properties>
+
   <build>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
-        <version>2.4.1</version>
+        <version>${pluginPluginVersion}</version>
         <configuration>
           <goalPrefix>archetype</goalPrefix>
         </configuration>
@@ -90,7 +94,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
-        <version>2.2</version>
+        <version>${pluginPluginVersion}</version>
         <reportSets>
           <reportSet>
             <reports>
