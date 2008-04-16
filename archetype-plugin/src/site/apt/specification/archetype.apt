@@ -31,12 +31,12 @@ What is an archetype?
 
 * A Maven 2 project 'en devenir'  
 
-    I.e. a abstract representation of a kind of project 
-    that can be instanciated into a concrete customised 
+    I.e. an abstract representation of a kind of project 
+    that can be instantiated into a concrete customised 
     Maven 2 project. 
 
     An archetype knows which files will be part of the 
-    instanciated project and which properties to fill 
+    instantiated project and which properties to fill 
     to properly customise the project. 
  
     Each archetype defines a set of common properties: 
@@ -77,14 +77,14 @@ What is an archetype?
         
         []
 
-    [[2]] The resources files defined by the archetype metadata,
+    [[2]] The resource files defined by the archetype metadata,
 
-    [[3]] The pom file of a Maven 2 project.
+    [[3]] The POM file of a Maven 2 project.
 
     []
 
 
 * Note
 
-    The common properties should be renamed to ${target.groupId}, ...
+    The common properties should be renamed to <<<${target.groupId}>>>, ...
     to avoid name clash.

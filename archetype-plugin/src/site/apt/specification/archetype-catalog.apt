@@ -27,21 +27,21 @@
 ~~ http://maven.apache.org/guides/mini/guide-apt-format.html
 
 
-How the Archetype Plugin know about archetype?
+How the Archetype Plugin knows about archetypes?
 
     Knowledge about archetypes are stored in catalogs.
 
     The catalogs are xml files.
 
     The Archetype Plugin comes bundled with an internal catalog. 
-    The one used by default.
+    This one is used by default.
 
     The Archetype Plugin can use catalogs from local filesystem and from HTTP 
-    connexions.
+    connections.
 
 * Catalog file explained
 
-    Catalogs are xml file with such content:
+    A catalog is an xml file with such content:
 
 +---
 <?xml version="1.0" encoding="UTF-8"?>
@@ -66,7 +66,7 @@ How the Archetype Plugin know about archetype?
     [[3]] The version of the archetype. <<<RELEASE>>> is a valid version. <<REQUIRED>>
 
     [[4]] The repository where to find the archetype. <<OPTIONAL>>. When 
-          ommited, the archetype is searched in the repository where the catalog 
+          ommitted, the archetype is searched for in the repository where the catalog 
           comes from.
 
     [[5]] The description of the archetype. <<OPTIONAL>>
@@ -76,7 +76,7 @@ How the Archetype Plugin know about archetype?
 
     During the creation of a project from an archetype, the Archetype Plugin
     ask the user to choose an archetype from a list containing the archetypes
-    from each of the provided catalogs (Yes there may be many).
+    from each of the provided catalogs (Yes, there may be many).
 
     For each archetype in the list the Archetype Plugin shows a line like:
 
@@ -100,12 +100,12 @@ How the Archetype Plugin know about archetype?
     At the end of the <<<create-from-project>>> behaviour, the Archetype Plugin
     install/deploy the archetype, and update the local/remote catalog.
     
-    The <<<crawl-repository>>> mojo is used to create a catalog file by crawling 
+    The <<<crawl-repository>>> goal is used to create a catalog file by crawling 
     a Maven 2 repository located in the filesystem. 
     
 * Location of catalog files
 
-    The Archetype Plugin knows by default its internal catalog. It also know 
+    The Archetype Plugin knows by default its internal catalog. It also knows 
     about the <<<local>>> and <<<remote>>> catalogs. 
 
     <<<local>>> represents the catalog file <<<~/.m2/archetype-catalog.xml>>>.
@@ -113,6 +113,6 @@ How the Archetype Plugin know about archetype?
     <<<remote>>> represents the catalog file <<<http://repo1.maven.org/maven2/archetype-catalog.xml>>>.
 
     The Archetype Plugin can also read catalogs from filesystem/HTTP by 
-    providing the path/URL of a catalog file or of a directory contaings the
+    providing the path/URL of a catalog file or of a directory containing the
     <<<archetype-catalog.xml>>> file.
     
