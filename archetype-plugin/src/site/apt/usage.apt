@@ -27,7 +27,7 @@
 ~~ http://maven.apache.org/guides/mini/guide-apt-format.html
 
 
-Projet creation
+Project creation
 
     Creating a project from an archetype involves three steps:
 
@@ -44,11 +44,11 @@ Usage
    Calling <<<archetype:generate>>> the plugin will first ask to choose
    the archetype from the internal catalog. Just enter the number of the archetype.
 
-   It then ask to enter the values for the groupId, the artifactId
-   and the version of the project to create and the basic package 
+   It then asks you to enter the values for the groupId, the artifactId
+   and the version of the project to create and the base package 
    for the sources.
 
-   It then ask for the confirmation of the configuration and perform 
+   It then asks for confirmation of the configuration and performs 
    the creation of the project.
 
    In the following example, we selected the quickstart archetype (numbered 15)
@@ -167,6 +167,8 @@ project
 Backward compatibility
 
     For backward compatibility with the Archetype Plugin version 1.0-alpha-7,
-    we keeped the old create goal which can be called using 
-    <<<mvn archetype:create>>>. See {{{#}the old documentation}} for further 
+    we kept the old <<<create>>> goal which can be called using 
+    <<<mvn archetype:create>>>.
+~~ TODO: The link on the following line doesn't work
+    See {{{#}the old documentation}} for further 
     reading.

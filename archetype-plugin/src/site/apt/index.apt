@@ -41,8 +41,9 @@ Maven 2 Archetype Plugin
   {{{usage.html}Instructions on how to use the Archetype Plugin to create a project}}
   can be found on the usage page.
 
-  The Archetype Plugin is embedded in IDE {{{#}eclipse}}, {{{#}netbeans}}, 
-  {{{#}idea}}.
+~~ TODO: The links in the following paragraph doesn't work
+  The Archetype Plugin is embedded in IDEs {{{#}Eclipse}}, {{{#}NetBeans}}, 
+  {{{#}IDEA}}.
 
   {{{advanced-usage.html}Instruction on how to use the Archetype Plugin to create an archetype from an existing project}} 
   can be found  on the advanced usage page.
@@ -50,10 +51,10 @@ Maven 2 Archetype Plugin
 
 * Goals Overview
 
-  The archetype plugin has two goals:
+  The archetype plugin has four goals:
   
   * {{{create-mojo.html}archetype:create}} creates a Maven 2 project from an 
-    archetype. It use the behaviour of the Archetype plugin Version 1.0-alpha-7.
+    archetype. It use the behaviour of the Archetype Plugin version 1.0-alpha-7.
   
   * {{{generate-mojo.html}archetype:generate}} ask the user to choose an archetype 
     from the archetype catalog, and retrieves it from the remote repository.
@@ -63,7 +64,7 @@ Maven 2 Archetype Plugin
     an archetype from an existing project.
 
   * {{{crawl-mojo.html}archetype:crawl}} search a repository 
-    for archetype and updates a catalog.
+    for archetypes and updates a catalog.
 
   []
 
@@ -73,16 +74,18 @@ Maven 2 Archetype Plugin
    The following examples show how to use the Archetype Plugin in more advanced 
    usecases:
 
-   * {{{examples/create-batch.html}create projects in batch mode}}
+   * {{{examples/create-batch.html}Create projects in batch mode}}
 
-   * {{{#}create a sub module from an archetype}}
+~~ TODO: The link on the following line doesn't work
+   * {{{#}Create a sub module from an archetype}}
 
-   * {{{#}select the archetype from another catalog}}
+~~ TODO: The link on the following line doesn't work
+   * {{{#}Select the archetype from another catalog}}
 
   []
 
 
- * Specification
+* Specification
  
     The specification page contains 
     {{{specification/specification.html}the specification of the main parts of the Archetype Plugin}}.

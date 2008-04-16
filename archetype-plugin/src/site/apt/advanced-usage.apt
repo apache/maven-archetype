@@ -140,12 +140,12 @@ Choose a number:  (1):
 
 Configuration
     
-    The <<<create-from-project>>> mojo enable the user to provide some sensible
+    The <<<create-from-project>>> goal enable the user to provide some sensible
     configuration using the system properties or a property file.
 
     The system properties permits the user to define the groupId, artifactId, 
     version of the created archetype. They also permits to override the resolved 
     package and to create a partial archetype.
 
-    When used, the property file takes precedence on the system properties.
+    When used, the property file takes precedence over the system properties.
     It is also the only way to define additional properties in the archetype.

@@ -48,17 +48,17 @@ What is done during the creation of a project?
     Finally, the Archetype Plugin generates the Maven 2 project from the 
     selected/configured archetype.
 
-    The archetype used to generate the project can be mono or multi module.
+    The archetype used to generate the project can be single or multi module.
 
     The archetype used to generate the project can be partial, which means it 
-    enhance an existing project instead of creating a new one.
+    enhances an existing project instead of creating a new one.
 
-    If the Archetype Plugin is called from an existing project, using an 
+    If the Archetype Plugin is called from an existing project, using a 
     complete (not partial) archetype, then it generates a sub module in the 
     existing project.
 
     If the Archetype Plugin is configured to create a project in an existing 
-    directory, it first check for the existence of a pom.xml file before 
+    directory, it first check for the existence of a <<<pom.xml>>> file before 
     failing the generation.
 
 * Batch mode
@@ -78,10 +78,10 @@ What is done during the creation of a project?
          file 
 
        * <<<file://path>>> uses the catalog file defined by path (or the 
-         archetype-catalog.xml file located in path directory) 
+         <<<archetype-catalog.xml>>> file located in path directory) 
 
        * <<<http://url>>> uses the catalog file defined by url (or the 
-         archetype-catalog.xml file located in url web directory)
+         <<<archetype-catalog.xml>>> file located in url web directory)
 
        []
   
@@ -92,7 +92,7 @@ What is done during the creation of a project?
     * <<<archetypeVersion>>> specifies the version of the archetype to use
   
     * <<<archetypeRepository>>> specifies the repository in which the archetype
-      reside
+      resides
   
     * <<<groupId>>> specifies the groupId of the generated project
   
@@ -109,4 +109,4 @@ What is done during the creation of a project?
 
 * Behind a Proxy
 
-    Beeing behind a proxy is automatically configured by Maven
+    Being behind a proxy is automatically configured by Maven.
