@@ -112,9 +112,9 @@ public class DefaultArchetypeSelectionQueryer
                     " -> " + archetype.getArtifactId() + " (" + archetype.getDescription() + ")\n";
                 answers.add( "" + counter );
 
+                // the version is not tested. This is intentional.
                 if ( defaultDefinition != null && archetype.getGroupId().equals( defaultDefinition.getGroupId() ) &&
-                    archetype.getArtifactId().equals( defaultDefinition.getArtifactId() ) &&
-                    archetype.getVersion().equals( defaultDefinition.getVersion() ) )
+                    archetype.getArtifactId().equals( defaultDefinition.getArtifactId() ) )
                 {
                     defaultSelection = counter;
                 }
