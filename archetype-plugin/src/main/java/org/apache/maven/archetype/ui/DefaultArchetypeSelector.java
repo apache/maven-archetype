@@ -178,6 +178,9 @@ public class DefaultArchetypeSelector
             // if artifact ID is set to it's default, we still prompt to confirm 
             if ( definition.getArtifactId() == null )
             {
+                getLogger().info( "No archetype defined. Using " + DEFAULT_ARCHETYPE_ARTIFACTID + " ("
+                    + definition.getGroupId() + ":" + DEFAULT_ARCHETYPE_ARTIFACTID + ":" + definition.getVersion()
+                    + ")" );
                 definition.setArtifactId( DEFAULT_ARCHETYPE_ARTIFACTID );
             }
 
@@ -248,7 +251,7 @@ public class DefaultArchetypeSelector
         }
 
         if (archetypes.size() == 0) {
-            getLogger().debug("Using internal catalog");
+            getLogger().info("No catalog defined. Using internal catalog");
 
             archetypes.put("internal", archetype.getInternalCatalog().getArchetypes());
         }

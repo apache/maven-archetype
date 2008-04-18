@@ -321,13 +321,11 @@ implements ArchetypeArtifactManager
         }
         catch ( DownloadException e )
         {
-            e.printStackTrace ();
             getLogger ().debug ( "Archetype don't exist", e );
             return false;
         }
         catch ( DownloadNotFoundException e )
         {
-            e.printStackTrace ();
             getLogger ().debug ( "Archetype don't exist", e );
             return false;
         }

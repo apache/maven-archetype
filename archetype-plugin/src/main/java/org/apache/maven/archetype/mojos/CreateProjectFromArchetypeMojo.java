@@ -39,6 +39,7 @@ import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -118,7 +119,16 @@ public class CreateProjectFromArchetypeMojo
      * @readonly
      */
     private ArtifactRepository localRepository;
-
+    
+    /**
+     * List of Remote Repositories used by the resolver.
+     *
+     * @parameter  expression="${project.remoteArtifactRepositories}"
+     * @readonly
+     * @required
+     */
+    private List remoteArtifactRepositories;
+        
     /**
      * User settings use to check the interactiveMode.
      *
@@ -153,10 +163,20 @@ public class CreateProjectFromArchetypeMojo
             .setArchetypeVersion( archetypeVersion )
             .setOutputDirectory( basedir.getAbsolutePath() )
             .setLocalRepository( localRepository )
-            .setArchetypeRepository(archetypeRepository);
+            .setArchetypeRepository(archetypeRepository)
+            .setRemoteArtifactRepositories(remoteArtifactRepositories);
 
         try
         {
+            if( interactiveMode.booleanValue() )
+            {
+                getLog().info( "Generating project in Interactive mode" );
+            }
+            else
+            {
+                getLog().info( "Generating project in Batch mode" );
+            }
+            
             selector.selectArchetype( request, interactiveMode, archetypeCatalog );
 
             // TODO: it's confusing that request has fields that get populated but not accepted as input (eg, groupId)
