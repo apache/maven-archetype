@@ -38,30 +38,19 @@ public class DefaultDownloader
         throws DownloadException, DownloadNotFoundException
    {
         Artifact artifact = artifactFactory.createArtifact( groupId, artifactId, version, Artifact.SCOPE_RUNTIME, "jar" );
-        if ( archetypeRepository != null )
-        {
-            artifact.setRepository(archetypeRepository);
-        }
-        else if ( localRepository != null )
-        {
-            artifact.setRepository(localRepository);
-            
-        }
+
         List repositories = new ArrayList(remoteRepositories);
         if ( repositories.isEmpty() && archetypeRepository != null )
         {
             repositories.add(archetypeRepository);
         }
-        else if ( repositories.isEmpty() && localRepository != null )
+        else
+        if ( repositories.isEmpty() && localRepository != null )
         {
             repositories.add(localRepository);
             
         }
         ArtifactRepository localRepo = localRepository;
-        if ( localRepository == null && archetypeRepository != null )
-        {
-            localRepo = archetypeRepository;
-        }
         try
         {
             artifactResolver.resolveAlways( artifact, repositories, localRepo );

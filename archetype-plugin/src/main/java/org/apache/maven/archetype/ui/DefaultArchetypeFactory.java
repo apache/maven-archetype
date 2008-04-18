@@ -80,33 +80,27 @@ implements ArchetypeFactory
 
         configuration.addRequiredProperty( Constants.GROUP_ID );
         getLogger().debug( "Adding requiredProperty " + Constants.GROUP_ID );
-        if( null != properties.getProperty( Constants.GROUP_ID, null ) )
+        if( null != properties.getProperty( Constants.GROUP_ID ) )
         {
             configuration.setProperty( Constants.GROUP_ID, properties.getProperty( Constants.GROUP_ID ) );
-        }
-        else
-        {
-            configuration.setProperty( Constants.GROUP_ID, "com.company" );
+            configuration.setDefaultProperty( Constants.GROUP_ID, configuration.getProperty( Constants.GROUP_ID ) );
         }
         getLogger().debug( "Setting property " + Constants.GROUP_ID + "="
             + configuration.getProperty( Constants.GROUP_ID ) );
 
         configuration.addRequiredProperty( Constants.ARTIFACT_ID );
         getLogger().debug( "Adding requiredProperty " + Constants.ARTIFACT_ID );
-        if( null != properties.getProperty( Constants.ARTIFACT_ID, null ) )
+        if( null != properties.getProperty( Constants.ARTIFACT_ID ) )
         {
             configuration.setProperty( Constants.ARTIFACT_ID, properties.getProperty( Constants.ARTIFACT_ID ) );
-        }
-        else
-        {
-            configuration.setProperty( Constants.ARTIFACT_ID, archetypeDescriptor.getId() );
+            configuration.setDefaultProperty( Constants.ARTIFACT_ID, configuration.getProperty( Constants.ARTIFACT_ID ) );
         }
         getLogger().debug( "Setting property " + Constants.ARTIFACT_ID + "="
             + configuration.getProperty( Constants.ARTIFACT_ID ) );
 
         configuration.addRequiredProperty( Constants.VERSION );
         getLogger().debug( "Adding requiredProperty " + Constants.VERSION );
-        if( null != properties.getProperty( Constants.VERSION, null ) )
+        if( null != properties.getProperty( Constants.VERSION ) )
         {
             configuration.setProperty( Constants.VERSION, properties.getProperty( Constants.VERSION ) );
         }
@@ -114,26 +108,24 @@ implements ArchetypeFactory
         {
             configuration.setProperty( Constants.VERSION, "1.0-SNAPSHOT" );
         }
+        configuration.setDefaultProperty( Constants.VERSION, configuration.getProperty( Constants.VERSION ) );
         getLogger().debug( "Setting property " + Constants.VERSION + "="
             + configuration.getProperty( Constants.VERSION ) );
-        configuration.setDefaultProperty( Constants.VERSION, "1.0-SNAPSHOT" );
 
         configuration.addRequiredProperty( Constants.PACKAGE );
         getLogger().debug( "Adding requiredProperty " + Constants.PACKAGE );
         if( null != properties.getProperty( Constants.PACKAGE ) )
         {
             configuration.setProperty( Constants.PACKAGE, properties.getProperty( Constants.PACKAGE ) );
+            configuration.setDefaultProperty( Constants.PACKAGE, configuration.getProperty( Constants.PACKAGE ) );
         }
-        else
+        else if( null != configuration.getProperty( Constants.GROUP_ID ) )
         {
             configuration.setProperty( Constants.PACKAGE, configuration.getProperty( Constants.GROUP_ID ) );
+            configuration.setDefaultProperty( Constants.PACKAGE, configuration.getProperty( Constants.PACKAGE ) );
         }
         getLogger().debug( "Setting property " + Constants.PACKAGE + "="
             + configuration.getProperty( Constants.PACKAGE ) );
-        if( configuration.getProperty( Constants.GROUP_ID ) != null )
-        {
-            configuration.setDefaultProperty( Constants.PACKAGE, configuration.getProperty( Constants.GROUP_ID ) );
-        }
 
         return configuration;
     }
@@ -184,10 +176,7 @@ implements ArchetypeFactory
             {
                 configuration.setProperty( Constants.GROUP_ID,
                     properties.getProperty( Constants.GROUP_ID, configuration.getDefaultValue( Constants.GROUP_ID ) ) );
-            }
-            else
-            {
-                configuration.setProperty( Constants.GROUP_ID, "com.company" );
+                configuration.setDefaultProperty( Constants.GROUP_ID, configuration.getProperty( Constants.GROUP_ID ) );
             }
             getLogger().debug( "Setting property " + Constants.GROUP_ID + "="
                 + configuration.getProperty( Constants.GROUP_ID ) );
@@ -201,10 +190,7 @@ implements ArchetypeFactory
                     configuration.getDefaultValue( Constants.ARTIFACT_ID ) ) )
             {
                 configuration.setProperty( Constants.ARTIFACT_ID, properties.getProperty( Constants.ARTIFACT_ID ) );
-            }
-            else
-            {
-                configuration.setProperty( Constants.ARTIFACT_ID, archetypeDescriptor.getName() );
+                configuration.setDefaultProperty( Constants.ARTIFACT_ID, configuration.getProperty( Constants.ARTIFACT_ID ) );
             }
             getLogger().debug( "Setting property " + Constants.ARTIFACT_ID + "="
                 + configuration.getProperty( Constants.ARTIFACT_ID ) );
@@ -223,6 +209,7 @@ implements ArchetypeFactory
             {
                 configuration.setProperty( Constants.VERSION, "1.0-SNAPSHOT" );
             }
+            configuration.setDefaultProperty( Constants.VERSION, configuration.getProperty( Constants.VERSION ) );
             getLogger().debug( "Setting property " + Constants.VERSION + "="
                 + configuration.getProperty( Constants.VERSION ) );
         }
@@ -235,10 +222,12 @@ implements ArchetypeFactory
             {
                 configuration.setProperty( Constants.PACKAGE,
                     properties.getProperty( Constants.PACKAGE, configuration.getDefaultValue( Constants.PACKAGE ) ) );
+                configuration.setDefaultProperty( Constants.PACKAGE, configuration.getProperty( Constants.PACKAGE ) );
             }
-            else
+            else if( null != configuration.getProperty( Constants.GROUP_ID ) )
             {
                 configuration.setProperty( Constants.PACKAGE, configuration.getProperty( Constants.GROUP_ID ) );
+                configuration.setDefaultProperty( Constants.PACKAGE, configuration.getProperty( Constants.PACKAGE ) );
             }
             getLogger().debug( "Setting property " + Constants.PACKAGE + "="
                 + configuration.getProperty( Constants.PACKAGE ) );

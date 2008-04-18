@@ -29,12 +29,6 @@ public interface ArchetypeFactory
 {
     String ROLE = ArchetypeFactory.class.getName();
 
-    /**
-     */
-    ArchetypeConfiguration createArchetypeConfiguration(
-        ArchetypeDefinition archetypeDefinition,
-        Properties properties
-    );
 
     /**
      */
