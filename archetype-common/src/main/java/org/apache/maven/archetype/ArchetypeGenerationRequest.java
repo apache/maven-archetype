@@ -43,6 +43,8 @@ public class ArchetypeGenerationRequest
 
     private ArtifactRepository localRepository;
 
+    private List remoteArtifactRepositories; 
+    
     private Proxy activeProxy;
 
     private List servers = new ArrayList(  );
@@ -314,5 +316,17 @@ public class ArchetypeGenerationRequest
     public List getServers( )
     {
         return servers;
+    }
+    
+    public List getRemoteArtifactRepositories()
+    {
+        return remoteArtifactRepositories;
+    }
+
+    public ArchetypeGenerationRequest setRemoteArtifactRepositories( List remoteArtifactRepositories )
+    {
+        this.remoteArtifactRepositories = remoteArtifactRepositories;
+
+        return this;
     }
 }

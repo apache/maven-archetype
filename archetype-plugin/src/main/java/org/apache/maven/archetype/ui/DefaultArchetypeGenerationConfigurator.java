@@ -122,6 +122,11 @@ implements ArchetypeGenerationConfigurator
                     ad.getArtifactId() + "-repo" );
             repositories.add( archetypeRepository );
         }
+        if( request.getRemoteArtifactRepositories() != null )
+        {
+            repositories.addAll( request.getRemoteArtifactRepositories() );
+        }
+
         if( !archetypeArtifactManager.exists( ad.getGroupId(), ad.getArtifactId(), ad.getVersion(), archetypeRepository,
                 localRepository, repositories ) )
         {
