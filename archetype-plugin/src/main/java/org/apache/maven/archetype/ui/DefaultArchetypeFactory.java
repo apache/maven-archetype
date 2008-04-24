@@ -93,7 +93,8 @@ implements ArchetypeFactory
         if( null != properties.getProperty( Constants.ARTIFACT_ID ) )
         {
             configuration.setProperty( Constants.ARTIFACT_ID, properties.getProperty( Constants.ARTIFACT_ID ) );
-            configuration.setDefaultProperty( Constants.ARTIFACT_ID, configuration.getProperty( Constants.ARTIFACT_ID ) );
+            configuration.setDefaultProperty( Constants.ARTIFACT_ID,
+                configuration.getProperty( Constants.ARTIFACT_ID ) );
         }
         getLogger().debug( "Setting property " + Constants.ARTIFACT_ID + "="
             + configuration.getProperty( Constants.ARTIFACT_ID ) );
@@ -103,12 +104,12 @@ implements ArchetypeFactory
         if( null != properties.getProperty( Constants.VERSION ) )
         {
             configuration.setProperty( Constants.VERSION, properties.getProperty( Constants.VERSION ) );
+            configuration.setDefaultProperty( Constants.VERSION, configuration.getProperty( Constants.VERSION ) );
         }
         else
         {
-            configuration.setProperty( Constants.VERSION, "1.0-SNAPSHOT" );
+            configuration.setDefaultProperty( Constants.VERSION, "1.0-SNAPSHOT" );
         }
-        configuration.setDefaultProperty( Constants.VERSION, configuration.getProperty( Constants.VERSION ) );
         getLogger().debug( "Setting property " + Constants.VERSION + "="
             + configuration.getProperty( Constants.VERSION ) );
 
@@ -190,7 +191,8 @@ implements ArchetypeFactory
                     configuration.getDefaultValue( Constants.ARTIFACT_ID ) ) )
             {
                 configuration.setProperty( Constants.ARTIFACT_ID, properties.getProperty( Constants.ARTIFACT_ID ) );
-                configuration.setDefaultProperty( Constants.ARTIFACT_ID, configuration.getProperty( Constants.ARTIFACT_ID ) );
+                configuration.setDefaultProperty( Constants.ARTIFACT_ID,
+                    configuration.getProperty( Constants.ARTIFACT_ID ) );
             }
             getLogger().debug( "Setting property " + Constants.ARTIFACT_ID + "="
                 + configuration.getProperty( Constants.ARTIFACT_ID ) );
@@ -204,12 +206,12 @@ implements ArchetypeFactory
             {
                 configuration.setProperty( Constants.VERSION,
                     properties.getProperty( Constants.VERSION, configuration.getDefaultValue( Constants.VERSION ) ) );
+                configuration.setDefaultProperty( Constants.VERSION, configuration.getProperty( Constants.VERSION ) );
             }
             else
             {
-                configuration.setProperty( Constants.VERSION, "1.0-SNAPSHOT" );
+                configuration.setDefaultProperty( Constants.VERSION, "1.0-SNAPSHOT" );
             }
-            configuration.setDefaultProperty( Constants.VERSION, configuration.getProperty( Constants.VERSION ) );
             getLogger().debug( "Setting property " + Constants.VERSION + "="
                 + configuration.getProperty( Constants.VERSION ) );
         }
