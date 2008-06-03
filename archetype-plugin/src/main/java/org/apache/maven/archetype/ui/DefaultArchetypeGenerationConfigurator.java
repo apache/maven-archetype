@@ -177,17 +177,30 @@ implements ArchetypeGenerationConfigurator
 
                         if( !archetypeConfiguration.isConfigured( requiredProperty ) )
                         {
-                            archetypeConfiguration.setProperty( requiredProperty,
-                                archetypeGenerationQueryer.getPropertyValue( requiredProperty,
-                                    archetypeConfiguration.getDefaultValue( requiredProperty ) ) );
+                            if( "package".equals(requiredProperty) ) {
+                                // if the asked property is 'package', then
+                                // use its default and if not defined,
+                                // use the 'groupId' property value.
+                                String packageDefault = archetypeConfiguration.getDefaultValue( requiredProperty );
+                                packageDefault = (null == packageDefault || "".equals(packageDefault))?
+                                    archetypeConfiguration.getProperty( "groupId" ):
+                                    archetypeConfiguration.getDefaultValue( requiredProperty );
+                                
+                                archetypeConfiguration.setProperty( requiredProperty,
+                                    archetypeGenerationQueryer.getPropertyValue( requiredProperty,
+                                        packageDefault ) );
+                            } else {
+                                archetypeConfiguration.setProperty( requiredProperty,
+                                    archetypeGenerationQueryer.getPropertyValue( requiredProperty,
+                                        archetypeConfiguration.getDefaultValue( requiredProperty ) ) );
+                            }
                         }
                     }
                 }
 
                 if( !archetypeConfiguration.isConfigured() )
                 {
-                    throw new ArchetypeGenerationConfigurationFailure(
-                        "The archetype generation must be configured here" );
+                    getLogger().warn( "Archetype is not fully configured" );
                 }
                 else if( !archetypeGenerationQueryer.confirmConfiguration( archetypeConfiguration ) )
                 {
