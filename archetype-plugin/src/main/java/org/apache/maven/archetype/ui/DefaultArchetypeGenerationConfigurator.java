@@ -237,6 +237,34 @@ implements ArchetypeGenerationConfigurator
                 // in batch mode, we assume the defaults, and if still not configured fail
                 if( !archetypeConfiguration.isConfigured() )
                 {
+//                    StringBuffer missingProperties = new StringBuffer();
+//                    requiredProperties = archetypeConfiguration.getRequiredProperties().iterator();
+//                    while( requiredProperties.hasNext() )
+//                    {
+//                        String requiredProperty = (String)requiredProperties.next();
+//                        if (!archetypeConfiguration.isConfigured( requiredProperty ))
+//                        {
+//                            missingProperties.append("\nProperty ");
+//                            missingProperties.append(requiredProperty);
+//                            missingProperties.append(" is missing. Add -D");
+//                            missingProperties.append(requiredProperty);
+//                            missingProperties.append("=someValue");
+//                        }
+//                    }
+//                    
+//                    throw new ArchetypeNotConfigured( "Archetype " + request.getArchetypeGroupId() + ":"
+//                        + request.getArchetypeArtifactId() + ":" + request.getArchetypeVersion()
+//                        + " is not configured"+missingProperties.toString() );
+                    requiredProperties = archetypeConfiguration.getRequiredProperties().iterator();
+                    while( requiredProperties.hasNext() )
+                    {
+                        String requiredProperty = (String)requiredProperties.next();
+                        if (!archetypeConfiguration.isConfigured( requiredProperty ))
+                        {
+                            getLogger().warn("Property "+requiredProperty+" is missing. Add -D"+requiredProperty+"=someValue");
+                        }
+                    }
+                    
                     throw new ArchetypeNotConfigured( "Archetype " + request.getArchetypeGroupId() + ":"
                         + request.getArchetypeArtifactId() + ":" + request.getArchetypeVersion()
                         + " is not configured" );
