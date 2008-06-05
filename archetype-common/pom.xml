@@ -407,7 +407,7 @@
                       <configuration>
                           <includes>
                               <include>**/InternalCatalogFromWiki.java</include>
-                              <include>**/InternalCatalogArchetypesVerification.java</include>
+                              <!--include>**/InternalCatalogArchetypesVerification.java</include-->
                           </includes>
                       </configuration>
                   </plugin>
