@@ -86,6 +86,6 @@ public class CatalogArchetypeDataSinkTest
 
         int catalogSize = catalog.getArchetypes().size();
 
-        assertEquals( 44, catalogSize );
+        assertEquals( 46, catalogSize );
     }
 }
