@@ -2,7 +2,6 @@ package org.apache.maven.archetype.source;
 
 import org.codehaus.plexus.PlexusTestCase;
 
-import java.io.File;
 import java.util.List;
 import java.util.Properties;
 import org.apache.maven.archetype.Archetype;

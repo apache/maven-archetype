@@ -27,12 +27,9 @@ import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.codehaus.plexus.PlexusTestCase;
 
 import java.io.File;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Properties;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.codehaus.plexus.util.FileUtils;
-import org.codehaus.plexus.util.IOUtil;
 
 /** @author Jason van Zyl */
 public class ArchetypeGenerationTest

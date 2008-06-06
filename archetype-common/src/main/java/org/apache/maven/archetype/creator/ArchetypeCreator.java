@@ -21,16 +21,6 @@ package org.apache.maven.archetype.creator;
 
 import org.apache.maven.archetype.ArchetypeCreationRequest;
 import org.apache.maven.archetype.ArchetypeCreationResult;
-import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
-import org.apache.maven.archetype.exception.ArchetypeNotDefined;
-import org.apache.maven.archetype.exception.TemplateCreationException;
-import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
 
 public interface ArchetypeCreator
 {

@@ -21,21 +21,6 @@ package org.apache.maven.archetype.generator;
 
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
-import org.apache.maven.archetype.exception.ArchetypeGenerationFailure;
-import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
-import org.apache.maven.archetype.exception.ArchetypeNotDefined;
-import org.apache.maven.archetype.exception.InvalidPackaging;
-import org.apache.maven.archetype.exception.OutputFileExists;
-import org.apache.maven.archetype.exception.PomFileExists;
-import org.apache.maven.archetype.exception.ProjectDirectoryExists;
-import org.apache.maven.archetype.exception.UnknownArchetype;
-import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-import org.dom4j.DocumentException;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
 
 public interface ArchetypeGenerator
 {

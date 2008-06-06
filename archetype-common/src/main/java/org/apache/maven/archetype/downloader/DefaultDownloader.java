@@ -9,7 +9,6 @@ import org.apache.maven.artifact.resolver.ArtifactResolver;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**

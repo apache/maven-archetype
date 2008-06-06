@@ -21,7 +21,6 @@ package org.apache.maven.archetype.source;
 
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.artifact.manager.WagonManager;
-import org.apache.maven.settings.Settings;
 import org.apache.maven.wagon.Wagon;
 import org.apache.maven.wagon.repository.Repository;
 
@@ -30,7 +29,6 @@ import java.io.FileReader;
 import java.util.List;
 import java.util.Properties;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
-import org.apache.maven.wagon.ResourceDoesNotExistException;
 
 /**
  * @plexus.component role-hint="remote-catalog"

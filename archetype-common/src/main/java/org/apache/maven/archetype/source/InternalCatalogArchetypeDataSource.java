@@ -19,14 +19,10 @@
 
 package org.apache.maven.archetype.source;
 
-import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
-import org.apache.maven.settings.Settings;
 
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Properties;
 
