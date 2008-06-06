@@ -66,7 +66,7 @@ public class InternalCatalogFromWiki
         while (archetypes.hasNext()) {
             Archetype archetype = (Archetype) archetypes.next();
             if (archetype.getRepository() != null &&
-                    archetype.getRepository().contains("repo1.apache.org/maven2")) {
+                    archetype.getRepository().indexOf("repo1.apache.org/maven2") >= 0) {
                 archetype.setRepository(null);
             }
             modifiedArchetypes.add(archetype);
