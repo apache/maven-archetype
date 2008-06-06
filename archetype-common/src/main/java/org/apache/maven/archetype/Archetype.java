@@ -23,8 +23,6 @@ import org.apache.maven.artifact.DependencyResolutionRequiredException;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.Properties;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 
 /** @author Jason van Zyl */

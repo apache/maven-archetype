@@ -27,7 +27,6 @@ import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Properties;
 
 public interface ArchetypeGenerationConfigurator

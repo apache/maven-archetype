@@ -53,7 +53,6 @@ import java.io.Writer;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.Properties;
-import org.apache.commons.io.FileSystemUtils;
 
 /** @author Jason van Zyl */
 public class RoundtripMultiModuleTest
