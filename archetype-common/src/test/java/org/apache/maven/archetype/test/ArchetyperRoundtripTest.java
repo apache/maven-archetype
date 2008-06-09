@@ -188,6 +188,26 @@ public class ArchetyperRoundtripTest
             fail( generationResult.getCause().getMessage() );
         }
 
+        //ASSERT symbol_pound replacement (archetype-180 archetype-183)
+        String content = FileUtils.fileRead(
+                outputDirectory + File.separator + "myapp" + File.separator + 
+                "src" + File.separator + "main" + File.separator + "java" + 
+                File.separator + "com" + File.separator + "mycompany" + 
+                File.separator + "myapp" + File.separator + "App.java");
+        System.err.println("content="+content);
+        assertTrue(content.indexOf("//A   #\\{some}")>0);
+        assertTrue(content.indexOf("//B   #{some}")>0);
+        assertTrue(content.indexOf("//F   {some}")>0);
+        assertTrue(content.indexOf("//C   #{some other}")>0);
+        assertTrue(content.indexOf("//D   ${symbol_pound}{some other}")>0);
+        assertTrue(content.indexOf("//E   #{}")>0);
+        assertTrue(content.indexOf("/*")>0);
+        assertTrue(content.indexOf("  A   #\\{some}")>0);
+        assertTrue(content.indexOf("  B   #{some}")>0);
+        assertTrue(content.indexOf("  F   {some}")>0);
+        assertTrue(content.indexOf("  C   #{some other}")>0);
+        assertTrue(content.indexOf("  D   ${symbol_pound}{some other}")>0);
+        assertTrue(content.indexOf("  E   #{}") > 0);
     }
 
     public void setUp()

@@ -15,7 +15,6 @@ public class App
         //C   #{some other}
         //D   \#{some other}
         //E   #{}
-        
         /*
         A   #\{some}
         B   #{some}
