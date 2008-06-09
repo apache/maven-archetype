@@ -2123,7 +2123,9 @@ public class FilesetArchetypeCreator
                     "${" + propertyKey + "}"
                 );
         }
-        return result;
+        //TODO: Replace velocity to a better engine... 
+        return "#set( $symbol_pound = '#' )\n" + StringUtils.replace(
+                result, "#", "${symbol_pound}" );
     }
 
     private String getTemplateOutputDirectory()
