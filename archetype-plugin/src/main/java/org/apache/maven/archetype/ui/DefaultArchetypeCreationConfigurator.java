@@ -236,7 +236,7 @@ public class DefaultArchetypeCreationConfigurator
             }
             else if ( !archetypeConfiguration.isConfigured() )
             {
-                throw new ArchetypeNotConfigured( "The archetype is not configured" );
+                throw new ArchetypeNotConfigured( "The archetype is not configured", null );
             }
         } // end if
 

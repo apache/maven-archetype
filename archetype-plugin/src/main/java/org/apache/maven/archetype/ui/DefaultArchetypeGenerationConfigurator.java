@@ -237,40 +237,35 @@ implements ArchetypeGenerationConfigurator
                 // in batch mode, we assume the defaults, and if still not configured fail
                 if( !archetypeConfiguration.isConfigured() )
                 {
-//                    StringBuffer missingProperties = new StringBuffer();
-//                    requiredProperties = archetypeConfiguration.getRequiredProperties().iterator();
-//                    while( requiredProperties.hasNext() )
-//                    {
-//                        String requiredProperty = (String)requiredProperties.next();
-//                        if (!archetypeConfiguration.isConfigured( requiredProperty ))
-//                        {
-//                            missingProperties.append("\nProperty ");
-//                            missingProperties.append(requiredProperty);
-//                            missingProperties.append(" is missing. Add -D");
-//                            missingProperties.append(requiredProperty);
-//                            missingProperties.append("=someValue");
-//                        }
-//                    }
-//                    
-//                    throw new ArchetypeNotConfigured( "Archetype " + request.getArchetypeGroupId() + ":"
-//                        + request.getArchetypeArtifactId() + ":" + request.getArchetypeVersion()
-//                        + " is not configured"+missingProperties.toString() );
+                    StringBuffer exceptionMessage = new StringBuffer();
+                    exceptionMessage.append("Archetype " );
+                    exceptionMessage.append( request.getArchetypeGroupId() );
+                    exceptionMessage.append( ":" );
+                    exceptionMessage.append( request.getArchetypeArtifactId() );
+                    exceptionMessage.append( ":" );
+                    exceptionMessage.append( request.getArchetypeVersion() );
+                    exceptionMessage.append( " is not configured" );
+                    
+                    List missingProperties = new ArrayList( 0 );
                     requiredProperties = archetypeConfiguration.getRequiredProperties().iterator();
                     while( requiredProperties.hasNext() )
                     {
                         String requiredProperty = (String)requiredProperties.next();
                         if (!archetypeConfiguration.isConfigured( requiredProperty ))
                         {
-                            getLogger().warn("Property "+requiredProperty+" is missing. Add -D"+requiredProperty+"=someValue");
+                            exceptionMessage.append( "\n\tProperty " );
+                            exceptionMessage.append( requiredProperty );
+                            missingProperties.add( requiredProperty );
+                            exceptionMessage.append( " is missing." );
+                            getLogger().warn( "Property " + requiredProperty + 
+                                " is missing. Add -D" + requiredProperty + "=someValue" );
                         }
                     }
                     
-                    throw new ArchetypeNotConfigured( "Archetype " + request.getArchetypeGroupId() + ":"
-                        + request.getArchetypeArtifactId() + ":" + request.getArchetypeVersion()
-                        + " is not configured" );
+                    throw new ArchetypeNotConfigured( exceptionMessage.toString(), missingProperties );
                 }
             }
-        } // end if-else
+        }
 
         request.setGroupId( archetypeConfiguration.getProperty( Constants.GROUP_ID ) );
 

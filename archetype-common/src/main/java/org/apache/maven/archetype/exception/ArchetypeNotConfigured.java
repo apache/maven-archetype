@@ -19,26 +19,38 @@
 
 package org.apache.maven.archetype.exception;
 
+import java.util.List;
+
 public class ArchetypeNotConfigured
     extends Exception
 {
-    public ArchetypeNotConfigured()
+    private List missingProperties;
+
+    public List getMissingProperties() {
+        return missingProperties;
+    }
+    
+    public ArchetypeNotConfigured( List missingProperties )
     {
+        this.missingProperties = missingProperties;
     }
 
-    public ArchetypeNotConfigured( String msg )
+    public ArchetypeNotConfigured( String msg, List missingProperties )
     {
         super( msg );
+        this.missingProperties = missingProperties;
     }
 
-    public ArchetypeNotConfigured( Throwable cause )
+    public ArchetypeNotConfigured( Throwable cause, List missingProperties )
     {
         super( cause );
+        this.missingProperties = missingProperties;
     }
 
     public ArchetypeNotConfigured( String msg,
-                                   Throwable cause )
+                                   Throwable cause, List missingProperties )
     {
         super( msg, cause );
+        this.missingProperties = missingProperties;
     }
 }

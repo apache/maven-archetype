@@ -823,10 +823,12 @@ public class DefaultArchetypeGeneratorTest
         }
         else
         {
-            assertEquals(
+            assertTrue(
                 "Exception not correct",
-                "The archetype is not configured",
-                result.getCause().getMessage()
+                result.getCause().getMessage().startsWith( 
+                    "Archetype archetypes:basic:1.0 is not configured" ) &&
+                result.getCause().getMessage().endsWith( 
+                    "Property property-without-default-4 is missing." )
             );
         }
     }
