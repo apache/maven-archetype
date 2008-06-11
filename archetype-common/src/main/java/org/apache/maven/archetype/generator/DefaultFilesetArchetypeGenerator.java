@@ -732,8 +732,8 @@ public class DefaultFilesetArchetypeGenerator
     {
         templateFileName = templateFileName.replace( File.separatorChar, '/' );
         
-        if ( !velocity.getEngine ().resourceExists( templateFileName )
-            && velocity.getEngine ().resourceExists(
+        if ( !velocity.getEngine ().templateExists( templateFileName )
+            && velocity.getEngine ().templateExists(
                 templateFileName.replace ( '/', File.separatorChar )
             )
         )
