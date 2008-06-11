@@ -69,12 +69,6 @@ public class DefaultArchetypeFilesResolver
         return result;
     }
 
-//    public List filterFiles( FileSet fileSet,
-//                             List archetypeResources )
-//    {
-//        return filterFiles( "", fileSet, archetypeResources );
-//    }
-
     public List filterFiles( String moduleOffset,
                              FileSet fileSet,
                              List archetypeResources )
