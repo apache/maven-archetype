@@ -51,6 +51,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -97,11 +98,36 @@ public class DefaultFilesetArchetypeGenerator
             {
                 if ( request.isInteractiveMode () )
                 {
-                    throw new ArchetypeNotConfigured ( "No archetype was chosen" );
+                    throw new ArchetypeNotConfigured ( "No archetype was chosen", null );
                 }
                 else
                 {
-                    throw new ArchetypeNotConfigured ( "The archetype is not configured" );
+                    StringBuffer exceptionMessage = new StringBuffer();
+                    exceptionMessage.append("Archetype " );
+                    exceptionMessage.append( request.getArchetypeGroupId() );
+                    exceptionMessage.append( ":" );
+                    exceptionMessage.append( request.getArchetypeArtifactId() );
+                    exceptionMessage.append( ":" );
+                    exceptionMessage.append( request.getArchetypeVersion() );
+                    exceptionMessage.append( " is not configured" );
+                    
+                    List missingProperties = new ArrayList( 0 );
+                    java.util.Iterator requiredProperties = 
+                            archetypeDescriptor.getRequiredProperties().iterator();
+                    while( requiredProperties.hasNext() )
+                    {
+                        RequiredProperty requiredProperty = (RequiredProperty) requiredProperties.next ();
+                        if (org.codehaus.plexus.util.StringUtils.isEmpty(
+                            request.getProperties().getProperty ( requiredProperty.getKey() ) ) )
+                        {
+                            exceptionMessage.append( "\n\tProperty " );
+                            exceptionMessage.append( requiredProperty.getKey() );
+                            missingProperties.add( requiredProperty.getKey() );
+                            exceptionMessage.append( " is missing." );
+                        }
+                    }
+                    
+                    throw new ArchetypeNotConfigured( exceptionMessage.toString(), missingProperties );
                 }
             }
 
@@ -217,7 +243,7 @@ public class DefaultFilesetArchetypeGenerator
                         context
                     );
                 }
-            } // end if
+            }
         }
         catch ( FileNotFoundException ex )
         {
@@ -821,7 +847,7 @@ public class DefaultFilesetArchetypeGenerator
                 );
                 getLogger().debug( "Copied " + fileSetResources.size() + " files" );
             }
-        } // end while
+        }
     }
 
     private void restoreParentArtifactId( Context context,
