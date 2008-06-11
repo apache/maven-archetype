@@ -28,6 +28,7 @@ import org.apache.maven.archetype.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Writer;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
+import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
@@ -58,7 +59,7 @@ import java.util.Properties;
 public class RoundtripMultiModuleTest
     extends PlexusTestCase
 {
-    private Jetty6xEmbeddedLocalContainer container;
+    private Jetty6xEmbeddedLocalContainer jettyContainer;
 
     public void testArchetyper()
         throws Exception
@@ -104,7 +105,10 @@ public class RoundtripMultiModuleTest
         MavenProject project = projectBuilder.build( pom, localRepository, null );
 
         ArchetypeCreationRequest acr = new ArchetypeCreationRequest().setProject( project ).
-            setLocalRepository( localRepository );
+            setLocalRepository( localRepository )
+            .setFiltereds(Constants.DEFAULT_FILTERED_EXTENSIONS)
+            .setLanguages(Constants.DEFAULT_LANGUAGES)
+            ;
 
         ArchetypeCreationResult creationResult = archetype.createArchetypeFromProject( acr );
 
@@ -192,6 +196,20 @@ public class RoundtripMultiModuleTest
         {
             fail( generationResult.getCause().getMessage() );
         }
+        
+        assertTrue(new File(outputDirectory + File.separator + "myapp" + File.separator + "myapp-api", ".classpath").exists());
+        assertTrue(new File(outputDirectory + File.separator + "myapp" + File.separator + "myapp-cli", ".classpath").exists());
+        assertTrue(new File(outputDirectory + File.separator + "myapp" + File.separator + "myapp-core", ".classpath").exists());
+        assertTrue(new File(outputDirectory + File.separator + "myapp" + File.separator + "myapp-model", ".classpath").exists());
+        assertTrue(new File(outputDirectory + File.separator + "myapp" + File.separator + "myapp-stores" + File.separator + "myapp-store-memory", ".classpath").exists());
+        assertTrue(new File(outputDirectory + File.separator + "myapp" + File.separator + "myapp-stores" + File.separator + "myapp-store-xstream", ".classpath").exists());
+
+        assertTrue(new File(outputDirectory + File.separator + "myapp" + File.separator + "myapp-api", ".checkstyle").exists());
+        assertTrue(new File(outputDirectory + File.separator + "myapp" + File.separator + "myapp-cli", ".checkstyle").exists());
+        assertTrue(new File(outputDirectory + File.separator + "myapp" + File.separator + "myapp-core", ".checkstyle").exists());
+        assertTrue(new File(outputDirectory + File.separator + "myapp" + File.separator + "myapp-model", ".checkstyle").exists());
+        assertTrue(new File(outputDirectory + File.separator + "myapp" + File.separator + "myapp-stores" + File.separator + "myapp-store-memory", ".checkstyle").exists());
+        assertTrue(new File(outputDirectory + File.separator + "myapp" + File.separator + "myapp-stores" + File.separator + "myapp-store-xstream", ".checkstyle").exists());
 
     }
 
@@ -207,18 +225,18 @@ public class RoundtripMultiModuleTest
 
         System.setProperty( "org.apache.maven.archetype.reporitory.directory",
             getTestPath( "target/test-classes/repositories/central" ) );
-        container = new Jetty6xEmbeddedLocalContainer( configuration );
-        container.setTimeout( 180000L );
-        container.start();
+        jettyContainer = new Jetty6xEmbeddedLocalContainer( configuration );
+        jettyContainer.setTimeout( 180000L );
+        jettyContainer.start();
 
         DeployableFactory factory = new DefaultDeployableFactory();
-        WAR war = (WAR) factory.createDeployable( container.getId(),
+        WAR war = (WAR) factory.createDeployable( jettyContainer.getId(),
             "target/wars/archetype-repository.war",
             DeployableType.WAR );
 
         war.setContext( "/repo" );
 
-        Deployer deployer = new Jetty6xEmbeddedLocalDeployer( container );
+        Deployer deployer = new Jetty6xEmbeddedLocalDeployer( jettyContainer );
         deployer.deploy( war,
             new URLDeployableMonitor( new URL( "http://localhost:18881/repo/dummy" ) ) );
         deployer.start( war );
@@ -231,7 +249,7 @@ public class RoundtripMultiModuleTest
         super.tearDown();
         //        Stop Cargo
 
-        container.stop();
+        jettyContainer.stop();
     }
 
     private void assertArchetypeCreated(File workingProject) {

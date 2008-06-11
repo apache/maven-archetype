@@ -308,25 +308,12 @@ public class DefaultFilesetArchetypeGenerator
         while ( iterator.hasNext() )
         {
             String template = (String) iterator.next();
+            File outputFile = getOutputFile( 
+                    template, directory, outputDirectoryFile, 
+                    packaged, packageName, moduleOffset);
 
-            String templateName = StringUtils.replaceOnce( template, directory + "/", "" );
-
-            if ( !StringUtils.isEmpty( moduleOffset ) )
-            {
-                templateName = StringUtils.replaceOnce( templateName, moduleOffset + "/", "" );
-            }
-            templateName = StringUtils.replace( templateName, File.separator, "/" );
-
-            File outFile =
-                new File(
-                    outputDirectoryFile, /*(StringUtils.isEmpty
-                                          * (moduleOffset)?"":moduleOffset+"/")+*/
-                    directory + "/" + ( packaged ? getPackageAsDirectory( packageName ) : "" )
-                        + "/" + templateName
-                );
-
-            copyFile( outFile, template, failIfExists, archetypeZipFile );
-        } // end while
+            copyFile( outputFile, template, failIfExists, archetypeZipFile );
+        }
     }
 
     private String getEncoding( String archetypeEncoding )
@@ -340,6 +327,16 @@ public class DefaultFilesetArchetypeGenerator
     private String getOffsetSeparator( String moduleOffset )
     {
         return ( StringUtils.isEmpty( moduleOffset ) ? "/" : ( "/" + moduleOffset + "/" ) );
+    }
+
+    private File getOutputFile( String template, String directory, File outputDirectoryFile, boolean packaged, String packageName, String moduleOffset )
+    {
+        String templateName = StringUtils.replaceOnce( template, directory, "" );
+        File outputFile = new File( outputDirectoryFile, directory + "/" + 
+                (packaged ? getPackageAsDirectory(packageName) : "") + 
+                "/" + templateName.substring(moduleOffset.length()));
+
+        return outputFile;
     }
 
     private String getPackageInPathFormat( String aPackage )
@@ -468,20 +465,17 @@ public class DefaultFilesetArchetypeGenerator
             String template = (String) iterator.next();
 
             String templateName = StringUtils.replaceOnce( template, directory, "" );
+            File outputFile = getOutputFile( 
+                    template, directory, outputDirectoryFile, 
+                    packaged, packageName, moduleOffset);
 
-            processTemplate(
-                new File(
-                    outputDirectoryFile,
-                    directory + "/" + ( packaged ? getPackageAsDirectory( packageName ) : "" )
-                        + "/" + templateName.substring( moduleOffset.length() )
-                ),
+            processTemplate(outputFile,
                 context,
-                Constants.ARCHETYPE_RESOURCES + "/" /*+
-                                                     *getOffsetSeparator(moduleOffset)*/ + template,
+                Constants.ARCHETYPE_RESOURCES + "/" + template,
                 archetypeEncoding,
                 failIfExists
             );
-        } // end while
+        }
     }
 
     private void processFilesetModule(

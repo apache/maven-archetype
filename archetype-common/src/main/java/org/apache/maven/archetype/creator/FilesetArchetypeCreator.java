@@ -1694,7 +1694,7 @@ public class FilesetArchetypeCreator
 
         excludes = PathUtils.convertPathForOS( excludes );
 
-        List fileNames = FileUtils.getFileNames( basedir, "**", excludes, false );
+        List fileNames = FileUtils.getFileNames( basedir, "**,.*,**/.*", excludes, false );
 
         getLogger().debug( "Resolved " + fileNames.size() + " files" );
         getLogger().debug( "Resolved Files:" + fileNames );
