@@ -52,7 +52,7 @@ public class DefaultDownloader
         ArtifactRepository localRepo = localRepository;
         try
         {
-            artifactResolver.resolveAlways( artifact, repositories, localRepo );
+            artifactResolver.resolve( artifact, repositories, localRepo );
         }
         catch ( ArtifactResolutionException e )
         {
@@ -76,7 +76,7 @@ public class DefaultDownloader
         Artifact artifact = artifactFactory.createArtifact( groupId, artifactId, version, Artifact.SCOPE_RUNTIME, "jar" );
         try
         {
-            artifactResolver.resolveAlways( artifact, remoteRepositories, localRepository );
+            artifactResolver.resolve( artifact, remoteRepositories, localRepository );
         }
         catch ( ArtifactResolutionException e )
         {
