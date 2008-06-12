@@ -59,26 +59,42 @@ public class RemoteCatalogArchetypeDataSource
                 repository = repository.substring( 0, repository.length(  ) - 1 );
             }
 
+            getLogger().debug("Searching for remote catalog: "+ repository +"/archetype-catalog.xml");
             // We use wagon to take advantage of a Proxy that has already been setup in a Maven environment.
-
             Repository wagonRepository = new Repository( "archetype", repository );
-
             Wagon wagon = wagonManager.getWagon( wagonRepository );
-
             File catalog = File.createTempFile( "archetype-catalog", ".xml" );
-
             wagon.connect( wagonRepository );
-
             wagon.get( "archetype-catalog.xml", catalog );
-
             wagon.disconnect();
-
             return readCatalog( new FileReader( catalog ) );
         }
-        catch ( Exception e )
+        catch ( ArchetypeDataSourceException e )
         {
-            getLogger().warn( "Error reading archetype catalog "+ repository, e );
-            return new ArchetypeCatalog();
+            throw e;
+        }
+        catch ( Exception e )
+        {// When the default archetype catalog names doesn't works, we assume the repository is the URL to a file 
+            try
+            {
+                String repositoryPath = repository.substring(0, repository.lastIndexOf("/"));
+                String fileName = repository.substring(repository.lastIndexOf("/") + 1);
+                
+                getLogger().debug("Searching for remote catalog: "+ repositoryPath +"/"+fileName);
+                // We use wagon to take advantage of a Proxy that has already been setup in a Maven environment.
+                Repository wagonRepository = new Repository( "archetype", repositoryPath );
+                Wagon wagon = wagonManager.getWagon( wagonRepository );
+                File catalog = File.createTempFile( "archetype-catalog", ".xml" );
+                wagon.connect( wagonRepository );
+                wagon.get( fileName , catalog );
+                wagon.disconnect();
+                return readCatalog( new FileReader( catalog ) );
+            }
+            catch ( Exception ex )
+            {
+                getLogger().warn( "Error reading archetype catalog "+ repository, ex );
+                return new ArchetypeCatalog();
+            }
         }
     }
 
