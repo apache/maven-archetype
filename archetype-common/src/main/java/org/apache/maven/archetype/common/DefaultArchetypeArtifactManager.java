@@ -47,6 +47,8 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
@@ -72,6 +74,8 @@ implements ArchetypeArtifactManager
      * @plexus.requirement
      */
     private RepositoryMetadataManager repositoryMetadataManager;
+    
+    private Map archetypeCache = new TreeMap();
 
     public File getArchetypeFile (
         final String groupId,
@@ -85,15 +89,28 @@ implements ArchetypeArtifactManager
     {
         try
         {
-            return
-                downloader.download (
+            File archetype = getArchetype(
                     groupId,
                     artifactId,
-                    version,
-                    archetypeRepository,
-                    localRepository,
-                    repositories
-                );
+                    version);
+            if (archetype==null)
+            {
+                archetype = 
+                    downloader.download (
+                        groupId,
+                        artifactId,
+                        version,
+                        archetypeRepository,
+                        localRepository,
+                        repositories
+                    );
+                setArchetype(
+                        groupId,
+                        artifactId,
+                        version,
+                        archetype);
+            }
+            return archetype;
         }
         catch ( DownloadNotFoundException ex )
         {
@@ -307,17 +324,29 @@ implements ArchetypeArtifactManager
     {
         try
         {
-            File archetypeFile =
-                downloader.download (
+            File archetype = getArchetype(
                     archetypeGroupId,
                     archetypeArtifactId,
-                    archetypeVersion,
-                    archetypeRepository,
-                    localRepository,
-                    remoteRepositories
-                );
+                    archetypeVersion);
+            if (archetype==null)
+            {
+                archetype = 
+                    downloader.download (
+                        archetypeGroupId,
+                        archetypeArtifactId,
+                        archetypeVersion,
+                        archetypeRepository,
+                        localRepository,
+                        remoteRepositories
+                    );
+                setArchetype(
+                        archetypeGroupId,
+                        archetypeArtifactId,
+                        archetypeVersion,
+                        archetype);
+            }
 
-            return archetypeFile.exists ();
+            return archetype.exists ();
         }
         catch ( DownloadException e )
         {
@@ -476,6 +505,30 @@ implements ArchetypeArtifactManager
         {
             throw new UnknownArchetype ( e );
         }
+    }
+
+    private File getArchetype(String archetypeGroupId,
+            String archetypeArtifactId, 
+            String archetypeVersion) {
+        String key = archetypeGroupId+":"+archetypeArtifactId+":"+archetypeVersion;
+        if (archetypeCache.containsKey(key))
+        {
+            getLogger().debug("Found archetype "+key+" in cache: "+archetypeCache.get(key));
+            return (File) archetypeCache.get(key);
+        }
+        else
+        {
+            getLogger().debug("Not found archetype "+key+" in cache");
+            return null;
+        }
+    }
+
+    private void setArchetype(String archetypeGroupId, 
+            String archetypeArtifactId,
+            String archetypeVersion,
+            File archetype) {
+        String key = archetypeGroupId+":"+archetypeArtifactId+":"+archetypeVersion;
+        archetypeCache.put(key, archetype);
     }
 
     private Reader getArchetypeDescriptorReader ( ZipFile zipFile )

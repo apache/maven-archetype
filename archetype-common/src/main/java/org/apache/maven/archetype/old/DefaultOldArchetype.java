@@ -20,15 +20,14 @@ import org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor;
 import org.apache.maven.archetype.old.descriptor.ArchetypeDescriptorBuilder;
 import org.apache.maven.archetype.old.descriptor.TemplateDescriptor;
 import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.archetype.common.ArchetypeArtifactManager;
+import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Parent;
 import org.apache.maven.model.Resource;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
-import org.apache.maven.archetype.downloader.DownloadException;
-import org.apache.maven.archetype.downloader.DownloadNotFoundException;
-import org.apache.maven.archetype.downloader.Downloader;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.context.Context;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -89,10 +88,8 @@ public class DefaultOldArchetype
      */
     private VelocityComponent velocity;
 
-    /**
-     * @plexus.requirement
-     */
-    private Downloader downloader;
+    /** @plexus.requirement */
+    private ArchetypeArtifactManager archetypeArtifactManager;
 
     // ----------------------------------------------------------------------
     // Implementation
@@ -105,7 +102,7 @@ public class DefaultOldArchetype
     public void createArchetype( String archetypeGroupId,
                                  String archetypeArtifactId,
                                  String archetypeVersion,
-                          ArtifactRepository archetypeRepository,
+                                 ArtifactRepository archetypeRepository,
                                  ArtifactRepository localRepository,
                                  List remoteRepositories,
                                  Map parameters )
@@ -119,16 +116,13 @@ public class DefaultOldArchetype
 
         try
         {
-            archetype = downloader.downloadOld( archetypeGroupId, archetypeArtifactId, archetypeVersion, archetypeRepository, localRepository,
-                                             remoteRepositories );
+            archetype = archetypeArtifactManager.getArchetypeFile( 
+                archetypeGroupId, archetypeArtifactId, archetypeVersion, 
+                archetypeRepository, localRepository, remoteRepositories );
         }
-        catch ( DownloadException e )
+        catch ( UnknownArchetype e )
         {
             throw new ArchetypeDescriptorException( "Error attempting to download archetype.", e );
-        }
-        catch ( DownloadNotFoundException e )
-        {
-            throw new ArchetypeNotFoundException( "OldArchetype does not exist.", e );
         }
 
         // ---------------------------------------------------------------------
