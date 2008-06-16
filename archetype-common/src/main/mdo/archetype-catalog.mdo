@@ -110,7 +110,7 @@
           <code><![CDATA[
     public String toString ()
     {
-        return "[" + groupId + ":" + artifactId + ":" + version + " -> " + repository + "]";
+        return "[" + groupId + ":" + artifactId + ":" + version + (repository != null ? " -> " + repository : "") + "]";
     }
     public int hashCode ()
     {
