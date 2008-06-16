@@ -19,6 +19,7 @@ package org.apache.maven.archetype.mojos;
  * under the License.
  */
 
+import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.archetype.old.OldArchetype;
 import org.apache.maven.archetype.old.ArchetypeDescriptorException;
 import org.apache.maven.archetype.old.ArchetypeNotFoundException;
@@ -226,14 +227,18 @@ public class MavenArchetypeMojo
 
         try
         {
-            archetype.createArchetype( 
+            archetype.createArchetype(
                     archetypeGroupId, 
                     archetypeArtifactId, 
                     archetypeVersion, 
-                    createRepository( "http://repo1.maven.org/maven2", "central" ),
-                    localRepository,
+                    createRepository("http://repo1.maven.org/maven2", "central"), 
+                    localRepository, 
                     archetypeRemoteRepositories, 
-                    map );
+                    map);            
+        }
+        catch (UnknownArchetype e) 
+        {
+            throw new MojoExecutionException( "Error creating from archetype", e );
         }
         catch ( ArchetypeNotFoundException e )
         {

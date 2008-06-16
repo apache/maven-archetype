@@ -1,5 +1,7 @@
 package org.apache.maven.archetype.old;
 
+import org.apache.maven.archetype.exception.ArchetypeGenerationFailure;
+
 /*
  * Copyright 2004-2006 The Apache Software Foundation.
  *
@@ -21,7 +23,7 @@ package org.apache.maven.archetype.old;
  * @version $Id$
  */
 public class ArchetypeTemplateProcessingException
-    extends Exception
+    extends ArchetypeGenerationFailure
 {
     public ArchetypeTemplateProcessingException( String message )
     {

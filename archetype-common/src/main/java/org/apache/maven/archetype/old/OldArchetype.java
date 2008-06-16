@@ -20,6 +20,7 @@ import org.apache.maven.artifact.repository.ArtifactRepository;
 
 import java.util.List;
 import java.util.Map;
+import org.apache.maven.archetype.exception.UnknownArchetype;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -41,5 +42,5 @@ public interface OldArchetype
     void createArchetype( String archetypeGroupId, String archetypeArtifactId, String archetypeVersion,
                           ArtifactRepository archetypeRepository,
                           ArtifactRepository localRepository, List remoteRepositories, Map parameters )
-        throws ArchetypeNotFoundException, ArchetypeDescriptorException, ArchetypeTemplateProcessingException;
+        throws UnknownArchetype, ArchetypeNotFoundException, ArchetypeDescriptorException, ArchetypeTemplateProcessingException;
 }

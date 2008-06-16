@@ -106,7 +106,7 @@ public class DefaultOldArchetype
                                  ArtifactRepository localRepository,
                                  List remoteRepositories,
                                  Map parameters )
-        throws ArchetypeNotFoundException, ArchetypeDescriptorException, ArchetypeTemplateProcessingException
+        throws UnknownArchetype, ArchetypeNotFoundException, ArchetypeDescriptorException, ArchetypeTemplateProcessingException
     {
         // ----------------------------------------------------------------------
         // Download the archetype
@@ -114,16 +114,16 @@ public class DefaultOldArchetype
 
         File archetype;
 
-        try
-        {
+//        try
+//        {
             archetype = archetypeArtifactManager.getArchetypeFile( 
                 archetypeGroupId, archetypeArtifactId, archetypeVersion, 
                 archetypeRepository, localRepository, remoteRepositories );
-        }
-        catch ( UnknownArchetype e )
-        {
-            throw new ArchetypeDescriptorException( "Error attempting to download archetype.", e );
-        }
+//        }
+//        catch ( UnknownArchetype e )
+//        {
+//            throw new ArchetypeDescriptorException( "Error attempting to download archetype.", e );
+//        }
 
         // ---------------------------------------------------------------------
         // Get Logger and display all parameters used
@@ -239,7 +239,7 @@ public class DefaultOldArchetype
                 }
                 else
                 {
-                    throw new ArchetypeTemplateProcessingException(
+                    throw new ArchetypeTemplateProcessingException( "Directory " +
                         outputDirectoryFile.getName() + " already exists - please run from a clean directory" );
                 }
             }

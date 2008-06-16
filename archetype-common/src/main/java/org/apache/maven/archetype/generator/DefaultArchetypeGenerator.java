@@ -69,9 +69,7 @@ public class DefaultArchetypeGenerator
 
     private void generateArchetype(
         ArchetypeGenerationRequest request,
-        Properties properties,
         ArtifactRepository localRepository,
-        List repositories,
         String basedir
     )
         throws
@@ -250,8 +248,8 @@ public class DefaultArchetypeGenerator
         map.put( "artifactId", request.getArtifactId() );
 
         map.put( "version", request.getVersion() );
-        try
-        {
+//        try
+//        {
             oldArchetype.createArchetype(
                 request.getArchetypeGroupId(),
                 request.getArchetypeArtifactId(),
@@ -260,34 +258,32 @@ public class DefaultArchetypeGenerator
                 repositories,
                 map
             );
-        }
-        catch ( ArchetypeDescriptorException ex )
-        {
-            throw new ArchetypeGenerationFailure(
-                "Failed to generate project from the old archetype", ex
-            );
-        }
-        catch ( ArchetypeTemplateProcessingException ex )
-        {
-            throw new ArchetypeGenerationFailure(
-                "Failed to generate project from the old archetype", ex
-            );
-        }
-        catch ( ArchetypeNotFoundException ex )
-        {
-            throw new ArchetypeGenerationFailure(
-                "Failed to generate project from the old archetype", ex
-            );
-        }
+//        }
+//        catch ( ArchetypeDescriptorException ex )
+//        {
+//            throw new ArchetypeGenerationFailure(
+//                "Failed to generate project from the old archetype", ex
+//            );
+//        }
+//        catch ( ArchetypeTemplateProcessingException ex )
+//        {
+//            throw new ArchetypeGenerationFailure(
+//                "Failed to generate project from the old archetype", ex
+//            );
+//        }
+//        catch ( ArchetypeNotFoundException ex )
+//        {
+//            throw new ArchetypeGenerationFailure(
+//                "Failed to generate project from the old archetype", ex
+//            );
+//        }
     }
 
     public void generateArchetype( ArchetypeGenerationRequest request, ArchetypeGenerationResult result )
     {
-        //TODO: get rid of the property file usage.
-
         try
         {
-            generateArchetype( request, null, request.getLocalRepository(), null/*Collections.singletonList( repo )*/, request.getOutputDirectory(  ) );
+            generateArchetype( request, request.getLocalRepository(), request.getOutputDirectory() );
         }
         catch ( IOException ex )
         {
