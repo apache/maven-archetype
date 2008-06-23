@@ -102,8 +102,10 @@ public class ArchetyperRoundtripTest
 
         MavenProject project = projectBuilder.build( pom, localRepository, null );
 
+        Properties properties = new Properties();
+        properties.setProperty("someProperty", "someValue");
         ArchetypeCreationRequest acr = new ArchetypeCreationRequest().setProject( project ).
-            setLocalRepository( localRepository );
+            setLocalRepository( localRepository ).setProperties(properties);
 
         ArchetypeCreationResult creationResult = archetype.createArchetypeFromProject( acr );
 
@@ -114,19 +116,9 @@ public class ArchetyperRoundtripTest
 
         // (3) create our own archetype catalog properties in memory
         File catalogDirectory = new File( getBasedir(), "target"+File.separator+"catalog" );
-
-        File catalogFile = new File( catalogDirectory, "archetype-catalog.xml" );
-
-        File catalogProperties = new File( catalogDirectory,
-            "archetype-catalog.properties" );
-
         catalogDirectory.mkdirs();
 
-        Properties p = new Properties();
-        p.setProperty( "sources", "catalog" );
-        p.setProperty( "catalog.file", catalogFile.getAbsolutePath() );
-        OutputStream os = new FileOutputStream( catalogProperties );
-        p.store( os, "Generated catalog properties" );
+        File catalogFile = new File( catalogDirectory, "archetype-catalog.xml" );
 
         // (5) install the archetype we just created
         File generatedArchetypeDirectory = new File( project.getBasedir(),
@@ -179,8 +171,9 @@ public class ArchetyperRoundtripTest
             setArchetypeArtifactId( generatedArchetypeProject.getArtifactId() ).
             setArchetypeVersion( generatedArchetypeProject.getVersion() ).
             setGroupId( "com.mycompany" ).setArtifactId( "myapp" ).setVersion( "1.0-SNAPSHOT" ).
-            setPackage( "com.mycompany.myapp" ).setOutputDirectory( outputDirectory ).
-            setLocalRepository( localRepository ).setArchetypeRepository( "http://localhost:18881/repo/" );
+            setPackage( "com.mycompany.myapp" ).setProperties(properties).
+            setOutputDirectory( outputDirectory ).setLocalRepository( localRepository ).
+            setArchetypeRepository( "http://localhost:18881/repo/" );
         ArchetypeGenerationResult generationResult = archetype.generateProjectFromArchetype( agr );
 
         if ( generationResult.getCause() != null )
@@ -197,17 +190,22 @@ public class ArchetyperRoundtripTest
         System.err.println("content="+content);
         assertTrue(content.indexOf("//A   #\\{some}")>0);
         assertTrue(content.indexOf("//B   #{some}")>0);
-        assertTrue(content.indexOf("//F   {some}")>0);
         assertTrue(content.indexOf("//C   #{some other}")>0);
-        assertTrue(content.indexOf("//D   ${symbol_pound}{some other}")>0);
+        assertTrue(content.indexOf("//D   \\#{some other}")>0);
         assertTrue(content.indexOf("//E   #{}")>0);
+        assertTrue(content.indexOf("//F   {some}")>0);
+        assertTrue(content.indexOf("//G   ${someOtherProperty}")>0);
+        assertTrue(content.indexOf("//H   ${someValue}")>0);
         assertTrue(content.indexOf("/*")>0);
         assertTrue(content.indexOf("  A   #\\{some}")>0);
         assertTrue(content.indexOf("  B   #{some}")>0);
-        assertTrue(content.indexOf("  F   {some}")>0);
         assertTrue(content.indexOf("  C   #{some other}")>0);
-        assertTrue(content.indexOf("  D   ${symbol_pound}{some other}")>0);
+        assertTrue(content.indexOf("  D   \\#{some other}")>0);
         assertTrue(content.indexOf("  E   #{}") > 0);
+        assertTrue(content.indexOf("  F   {some}")>0);
+        assertTrue(content.indexOf("  G   ${someOtherProperty}")>0);
+        assertTrue(content.indexOf("  H   ${someValue}")>0);
+        //Assert symbol_dollar archetype-138
     }
 
     public void setUp()

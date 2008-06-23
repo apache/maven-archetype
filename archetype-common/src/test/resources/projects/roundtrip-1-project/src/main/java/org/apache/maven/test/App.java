@@ -11,17 +11,21 @@ public class App
         System.out.println( "Hello World!" );
         //A   #\{some}
         //B   #{some}
-        //F   {some}
         //C   #{some other}
         //D   \#{some other}
         //E   #{}
+        //F   {some}
+        //G   ${someOtherProperty}
+        //H   ${someValue}
         /*
         A   #\{some}
         B   #{some}
-        F   {some}
         C   #{some other}
         D   \#{some other}
         E   #{}
+        F   {some}
+        G   ${someOtherProperty}
+        H   ${someValue}
          */
     }
 }
