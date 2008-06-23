@@ -30,6 +30,7 @@ import java.io.File;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
+import org.codehaus.plexus.util.StringUtils;
 
 
 /**
@@ -84,7 +85,14 @@ public class UpdateLocalCatalogMojo
         archetype.setGroupId( project.getGroupId(  ) );
         archetype.setArtifactId( project.getArtifactId(  ) );
         archetype.setVersion( project.getVersion(  ) );
-        archetype.setDescription( project.getName(  ) );
+        if (StringUtils.isNotEmpty(project.getDescription()))
+        {
+            archetype.setDescription(project.getDescription());
+        }
+        else
+        {
+            archetype.setDescription(project.getName());
+        }
 //        archetype.setRepository( localRepository.toString(  ) );
 //            archetype.setGoals(project.get);
 //            archetype.setProperties(project.get);
