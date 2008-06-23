@@ -2111,7 +2111,9 @@ public class FilesetArchetypeCreator
     private String getReversedContent( String content,
                                        Properties properties )
     {
-        String result = content;
+        String result = StringUtils.replace( 
+                StringUtils.replace( content, "$", "${symbol_dollar}" ), 
+                "\\", "${symbol_escape}" );
         Iterator propertyIterator = properties.keySet().iterator();
         while ( propertyIterator.hasNext() )
         {
@@ -2124,8 +2126,9 @@ public class FilesetArchetypeCreator
                 );
         }
         //TODO: Replace velocity to a better engine... 
-        return "#set( $symbol_pound = '#' )\n" + StringUtils.replace(
-                result, "#", "${symbol_pound}" );
+        return "#set( $symbol_pound = '#' )\n" + "#set( $symbol_dollar = '$' )\n" + 
+               "#set( $symbol_escape = '\\' )\n" + 
+               StringUtils.replace( result, "#", "${symbol_pound}" );
     }
 
     private String getTemplateOutputDirectory()
