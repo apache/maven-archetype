@@ -813,6 +813,13 @@ public class DefaultFilesetArchetypeGenerator
             List fileSetResources =
                 archetypeFilesResolver.filterFiles( moduleOffset, fileSet, archetypeResources );
 
+            //This creates an empty directory, even if there is no file to process
+            //Fix for ARCHETYPE-57
+            getOutputFile(
+                moduleOffset, fileSet.getDirectory(), outputDirectoryFile,
+                fileSet.isPackaged(), packageName, moduleOffset ).mkdirs();
+
+
             if ( fileSet.isFiltered() )
             {
                 getLogger().debug(
