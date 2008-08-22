@@ -77,6 +77,12 @@
         <include>*.xml</include>
       </includes>
     </fileSet>
+    <fileSet filtered="false" packaged="false">
+      <directory>src/main/toto</directory>
+      <includes>
+        <include>**/*</include>
+      </includes>
+    </fileSet>
   </fileSets>
 
   <modules>
@@ -86,6 +92,12 @@
           <directory>src/main/java</directory>
           <includes>
             <include>**/*.java</include>
+          </includes>
+        </fileSet>
+        <fileSet filtered="true" packaged="false">
+          <directory>src/main/toto</directory>
+          <includes>
+            <include>**/*</include>
           </includes>
         </fileSet>
       </fileSets>

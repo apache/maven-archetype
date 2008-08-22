@@ -161,7 +161,7 @@ public class FilesetArchetypeCreator
 
         Model model = new Model();
         model.setModelVersion( "4.0.0" );
-        model.setGroupId( project.getGroupId() );
+        model.setGroupId( project.getGroupId() );// these values should be retrieve from the requst with sensible defaults
         model.setArtifactId( project.getArtifactId() );
         model.setVersion( project.getVersion() );
         model.setPackaging( "maven-archetype" );
