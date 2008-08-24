@@ -110,55 +110,6 @@
       <description>A simple Java web application</description>
     </archetype>
     <archetype>
-      <groupId>org.apache.struts</groupId>
-      <artifactId>struts2-archetype-starter</artifactId>
-      <version>2.0.9-SNAPSHOT</version>
-      <repository>http://people.apache.org/repo/m2-snapshot-repository</repository>
-      <description>A starter Struts 2 application with Sitemesh, DWR, and Spring</description>
-    </archetype>
-    <archetype>
-      <groupId>org.apache.struts</groupId>
-      <artifactId>struts2-archetype-blank</artifactId>
-      <version>2.0.9-SNAPSHOT</version>
-      <repository>http://people.apache.org/repo/m2-snapshot-repository</repository>
-      <description>A minimal Struts 2 application</description>
-    </archetype>
-    <archetype>
-      <groupId>org.apache.struts</groupId>
-      <artifactId>struts2-archetype-portlet</artifactId>
-      <version>2.0.9-SNAPSHOT</version>
-      <repository>http://people.apache.org/repo/m2-snapshot-repository</repository>
-      <description>A minimal Struts 2 application that can be deployed as a portlet</description>
-    </archetype>
-    <archetype>
-      <groupId>org.apache.struts</groupId>
-      <artifactId>struts2-archetype-dbportlet</artifactId>
-      <version>2.0.9-SNAPSHOT</version>
-      <repository>http://people.apache.org/repo/m2-snapshot-repository</repository>
-      <description>A starter Struts 2 portlet that demonstrates a simple CRUD interface with db backing</description>
-    </archetype>
-    <archetype>
-      <groupId>org.apache.struts</groupId>
-      <artifactId>struts2-archetype-plugin</artifactId>
-      <version>2.0.9-SNAPSHOT</version>
-      <repository>http://people.apache.org/repo/m2-snapshot-repository</repository>
-      <description>A Struts 2 plugin</description>
-    </archetype>
-    <archetype>
-      <groupId>org.apache.shale</groupId>
-      <artifactId>shale-archetype-blank</artifactId>
-      <version>1.0.3-SNAPSHOT</version>
-      <repository>http://people.apache.org/repo/m2-snapshot-repository</repository>
-      <description>A blank Shale web application with JSF</description>
-    </archetype>
-    <archetype>
-      <groupId>org.apache.myfaces.adfbuild</groupId>
-      <artifactId>maven-adf-archetype</artifactId>
-      <version>1.0-SNAPSHOT</version>
-      <repository>http://people.apache.org/repo/m2-snapshot-repository</repository>
-      <description>Archetype to ease the burden of creating a new application based with ADF</description>
-    </archetype>
-    <archetype>
       <groupId>org.jini.maven-jini-plugin</groupId>
       <artifactId>jini-service-archetype</artifactId>
       <version>2.0</version>
