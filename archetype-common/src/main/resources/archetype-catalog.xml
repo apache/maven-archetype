@@ -184,7 +184,7 @@
     <archetype>
       <groupId>org.scala-tools.archetypes</groupId>
       <artifactId>scala-archetype-simple</artifactId>
-      <version>1.1</version>
+      <version>1.2</version>
       <repository>http://scala-tools.org/repo-releases</repository>
       <description>A simple scala project</description>
     </archetype>
@@ -243,6 +243,18 @@
       <artifactId>myfaces-archetype-jsfcomponents</artifactId>
       <version>1.0.0</version>
       <description>A simple archetype for create custom JSF components using MyFaces</description>
+    </archetype>
+    <archetype>
+      <groupId>org.codehaus.groovy.maven.archetypes</groupId>
+      <artifactId>gmaven-archetype-basic</artifactId>
+      <version>1.0-rc-3</version>
+      <description>Groovy basic archetype</description>
+    </archetype>
+    <archetype>
+      <groupId>org.codehaus.groovy.maven.archetypes</groupId>
+      <artifactId>gmaven-archetype-mojo</artifactId>
+      <version>1.0-rc-3</version>
+      <description>Groovy mojo archetype</description>
     </archetype>
   </archetypes>
 </archetype-catalog>

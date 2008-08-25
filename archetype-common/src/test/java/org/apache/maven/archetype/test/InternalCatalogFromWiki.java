@@ -27,7 +27,10 @@ import org.apache.maven.archetype.ArchetypeGenerationResult;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Writer;
+import org.apache.maven.archetype.common.ArchetypeArtifactManager;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
+import org.apache.maven.archetype.metadata.ArchetypeDescriptor;
+import org.apache.maven.archetype.metadata.RequiredProperty;
 import org.apache.maven.archetype.source.ArchetypeDataSource;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.codehaus.plexus.PlexusTestCase;
@@ -53,14 +56,14 @@ public class InternalCatalogFromWiki
         outputDirectory.mkdirs();
 
         org.apache.maven.archetype.Archetype plexusarchetype = (org.apache.maven.archetype.Archetype) lookup(org.apache.maven.archetype.Archetype.class.getName());
+        ArchetypeArtifactManager aam = (ArchetypeArtifactManager) lookup(ArchetypeArtifactManager.class.getName());
+        ArchetypeRegistryManager arm = (ArchetypeRegistryManager) lookup(ArchetypeRegistryManager.class.getName());
 
-
-        Properties properties = new Properties();
 
 //        ArchetypeDataSource ads =  (ArchetypeDataSource) lookup( ArchetypeDataSource.ROLE, "wiki" );
         ArchetypeDataSource ads = new WikiArchetypeDataSource();
 
-        ArchetypeCatalog ac = ads.getArchetypeCatalog(properties);
+        ArchetypeCatalog ac = ads.getArchetypeCatalog(new Properties());
         List modifiedArchetypes = new ArrayList();
         Iterator archetypes = ac.getArchetypes().iterator();
         while (archetypes.hasNext()) {
@@ -88,6 +91,7 @@ public class InternalCatalogFromWiki
         List archetypesRemoved = new ArrayList();
         archetypes = ac.getArchetypes().iterator();
         int count = 1;
+
         while (archetypes.hasNext()) {
             org.apache.maven.archetype.catalog.Archetype a = (org.apache.maven.archetype.catalog.Archetype) archetypes.next();
             org.apache.maven.archetype.catalog.Archetype ar = new org.apache.maven.archetype.catalog.Archetype();
@@ -99,21 +103,57 @@ public class InternalCatalogFromWiki
             ar.setGoals(a.getGoals());
             ar.setProperties(a.getProperties());
             ar.setRepository(a.getRepository());
+
             if (ar.getRepository() == null) {
                 ar.setRepository("http://repo1.maven.org/maven2");
             }
             System.err.println("\n\n\n\n\n\nTesting archetype " + ar);
             ArchetypeGenerationRequest request = new ArchetypeGenerationRequest(ar).setGroupId("groupId" + count).setArtifactId("artifactId" + count).setVersion("version" + count).setPackage("package" + count).setOutputDirectory(outputDirectory.getPath()).setLocalRepository(localRepository);
+
+            Properties properties = new Properties();
+            if (aam.isFileSetArchetype(a.getGroupId(), a.getArtifactId(), "RELEASE", arm.createRepository(
+                    a.getRepository(),
+                    a.getRepository() + "-repo"), localRepository, new ArrayList( /*repositories*/))) {
+                ArchetypeDescriptor descriptor = aam.getFileSetArchetypeDescriptor(a.getGroupId(), a.getArtifactId(), "RELEASE", arm.createRepository(
+                        a.getRepository(),
+                        a.getRepository() + "-repo"), localRepository, new ArrayList( /*repositories*/));
+
+                Iterator required = descriptor.getRequiredProperties().iterator();
+                while (required.hasNext()) {
+                    RequiredProperty prop = (RequiredProperty) required.next();
+
+                    properties.setProperty(prop.getKey(), prop.getDefaultValue() != null && !"".equals(prop.getDefaultValue()) ? prop.getDefaultValue() : "test-value");
+                }
+
+            }
+            request.setProperties(properties);
             ArchetypeGenerationResult generationResult = plexusarchetype.generateProjectFromArchetype(request);
             if (generationResult != null && generationResult.getCause() != null) {
                 ar.setVersion(a.getVersion());
                 request = new ArchetypeGenerationRequest(ar).setGroupId("groupId" + count).setArtifactId("artifactId" + count).setVersion("version" + count).setPackage("package" + count).setOutputDirectory(outputDirectory.getPath()).setLocalRepository(localRepository);
+                properties = new Properties();
+                if (aam.isFileSetArchetype(a.getGroupId(), a.getArtifactId(), a.getVersion(), arm.createRepository(
+                        a.getRepository(),
+                        a.getRepository() + "-repo"), localRepository, new ArrayList( /*repositories*/))) {
+                    ArchetypeDescriptor descriptor = aam.getFileSetArchetypeDescriptor(a.getGroupId(), a.getArtifactId(), a.getVersion(), arm.createRepository(
+                            a.getRepository(),
+                            a.getRepository() + "-repo"), localRepository, new ArrayList( /*repositories*/));
+
+                    Iterator required = descriptor.getRequiredProperties().iterator();
+                    while (required.hasNext()) {
+                        RequiredProperty prop = (RequiredProperty) required.next();
+
+                        properties.setProperty(prop.getKey(), prop.getDefaultValue() != null && !"".equals(prop.getDefaultValue()) ? prop.getDefaultValue() : "test-value");
+                    }
+
+                }
+                request.setProperties(properties);
                 generationResult = plexusarchetype.generateProjectFromArchetype(request);
                 if (generationResult != null && generationResult.getCause() != null) {
                     if ("http://repo1.maven.org/maven2".equals(ar.getRepository())) {
                         ar.setRepository(null);
                     }
-                    archetypesRemoved.add(ar);
+//                    archetypesRemoved.add(ar);
                 } else {
                     if ("http://repo1.maven.org/maven2".equals(ar.getRepository())) {
                         ar.setRepository(null);
