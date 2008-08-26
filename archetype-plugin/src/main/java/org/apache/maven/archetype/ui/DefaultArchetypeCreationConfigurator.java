@@ -240,7 +240,7 @@ public class DefaultArchetypeCreationConfigurator
             }
         } // end if
 
-        return removeDottedProperties(archetypeConfiguration.toProperties());
+        return archetypeConfiguration.toProperties();
     }
 
     private ArchetypeDefinition defineDefaultArchetype(
@@ -250,22 +250,17 @@ public class DefaultArchetypeCreationConfigurator
     {
         if ( StringUtils.isEmpty( properties.getProperty( Constants.ARCHETYPE_GROUP_ID ) ) )
         {
-            getLogger().info( "Setting default archetype's groupId: " + project.getGroupId() );
             properties.setProperty( Constants.ARCHETYPE_GROUP_ID, project.getGroupId() );
         }
         if ( StringUtils.isEmpty( properties.getProperty( Constants.ARCHETYPE_ARTIFACT_ID ) ) )
         {
-            getLogger().info(
-                "Setting default archetype's artifactId: " + project.getArtifactId()
-            );
             properties.setProperty(
                 Constants.ARCHETYPE_ARTIFACT_ID,
-                project.getArtifactId() + "-archetype"
+                project.getArtifactId() + Constants.ARCHETYPE_SUFFIX
             );
         }
         if ( StringUtils.isEmpty( properties.getProperty( Constants.ARCHETYPE_VERSION ) ) )
         {
-            getLogger().info( "Setting default archetype's version: " + project.getVersion() );
             properties.setProperty( Constants.ARCHETYPE_VERSION, project.getVersion() );
         }
 
@@ -295,6 +290,24 @@ public class DefaultArchetypeCreationConfigurator
         {
             getLogger().info( "Setting default version: " + project.getVersion() );
             properties.setProperty( Constants.VERSION, project.getVersion() );
+        }
+        
+        if ( StringUtils.isEmpty( properties.getProperty( Constants.ARCHETYPE_GROUP_ID ) ) )
+        {
+            getLogger().info( "Setting default archetype's groupId: " + project.getGroupId() );
+            properties.setProperty( Constants.ARCHETYPE_GROUP_ID, project.getGroupId() );
+        }
+
+        if ( StringUtils.isEmpty( properties.getProperty( Constants.ARCHETYPE_ARTIFACT_ID ) ) )
+        {
+            getLogger().info( "Setting default archetype's artifactId: " + project.getArtifactId() );
+            properties.setProperty( Constants.ARCHETYPE_ARTIFACT_ID, project.getArtifactId()+Constants.ARCHETYPE_SUFFIX );
+        }
+
+        if ( StringUtils.isEmpty( properties.getProperty( Constants.ARCHETYPE_VERSION ) ) )
+        {
+            getLogger().info( "Setting default archetype's version: " + project.getVersion() );
+            properties.setProperty( Constants.ARCHETYPE_VERSION, project.getVersion() );
         }
 
         if ( StringUtils.isEmpty(
