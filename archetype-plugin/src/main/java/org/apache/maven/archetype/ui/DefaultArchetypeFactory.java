@@ -250,9 +250,9 @@ implements ArchetypeFactory
         ArchetypeConfiguration configuration = new ArchetypeConfiguration();
         getLogger().debug( "Creating ArchetypeConfiguration from ArchetypeDefinition, MavenProject and Properties" );
 
-        configuration.setGroupId( archetypeDefinition.getGroupId() );
-        configuration.setArtifactId( archetypeDefinition.getArtifactId() );
-        configuration.setVersion( archetypeDefinition.getVersion() );
+        configuration.setGroupId( properties.getProperty(Constants.ARCHETYPE_GROUP_ID) );
+        configuration.setArtifactId( properties.getProperty(Constants.ARCHETYPE_ARTIFACT_ID) );
+        configuration.setVersion( properties.getProperty(Constants.ARCHETYPE_VERSION) );
 
         Iterator requiredProperties = properties.keySet().iterator();
 
@@ -310,6 +310,20 @@ implements ArchetypeFactory
                 + configuration.getProperty( Constants.PACKAGE ) );
         }
 
+        if( null != properties.getProperty( Constants.ARCHETYPE_GROUP_ID, null ) )
+        {
+            configuration.setProperty( Constants.ARCHETYPE_GROUP_ID, properties.getProperty( Constants.ARCHETYPE_GROUP_ID ) );
+        }
+
+        if( null != properties.getProperty( Constants.ARCHETYPE_ARTIFACT_ID, null ) )
+        {
+            configuration.setProperty( Constants.ARCHETYPE_ARTIFACT_ID, properties.getProperty( Constants.ARCHETYPE_ARTIFACT_ID ) );
+        }
+
+        if( null != properties.getProperty( Constants.ARCHETYPE_VERSION, null ) )
+        {
+            configuration.setProperty( Constants.ARCHETYPE_VERSION, properties.getProperty( Constants.ARCHETYPE_VERSION ) );
+        }
         return configuration;
     }
 

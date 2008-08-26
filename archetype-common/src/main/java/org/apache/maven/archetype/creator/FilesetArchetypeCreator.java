@@ -161,11 +161,11 @@ public class FilesetArchetypeCreator
 
         Model model = new Model();
         model.setModelVersion( "4.0.0" );
-        model.setGroupId( project.getGroupId() );// these values should be retrieve from the requst with sensible defaults
-        model.setArtifactId( project.getArtifactId() );
-        model.setVersion( project.getVersion() );
+        model.setGroupId( configurationProperties.getProperty(Constants.ARCHETYPE_GROUP_ID, project.getGroupId() ) );// these values should be retrieve from the requst with sensible defaults
+        model.setArtifactId( configurationProperties.getProperty(Constants.ARCHETYPE_ARTIFACT_ID, project.getArtifactId() ) );
+        model.setVersion( configurationProperties.getProperty(Constants.ARCHETYPE_VERSION, project.getVersion() ) );
         model.setPackaging( "maven-archetype" );
-        model.setName( project.getArtifactId() );
+        model.setName( configurationProperties.getProperty(Constants.ARCHETYPE_ARTIFACT_ID, project.getArtifactId() ) );
 
         Build build = new Build();
         model.setBuild( build );
