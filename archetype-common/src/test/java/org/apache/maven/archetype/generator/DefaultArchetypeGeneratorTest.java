@@ -714,6 +714,14 @@ public class DefaultArchetypeGeneratorTest
             "subsubproject"
         );
 
+        template = "subproject/subsubproject/src/main/java/file/value/package/" +
+                "file-value/inner/subsubproject/innest/Somefile-valueClasssubsubproject.java";
+        assertTemplateContentGeneratedWithFileSetArchetype(
+            projectDirectory,
+            template,
+            "subsubproject"
+        );
+
         model =
             readPom(
                 getProjectFile(
