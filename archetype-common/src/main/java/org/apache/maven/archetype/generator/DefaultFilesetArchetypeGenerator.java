@@ -322,7 +322,8 @@ public class DefaultFilesetArchetypeGenerator
         File outputDirectoryFile,
         ZipFile archetypeZipFile,
         String moduleOffset,
-        boolean failIfExists
+        boolean failIfExists,
+        Context context
     )
         throws
         OutputFileExists,
@@ -336,7 +337,7 @@ public class DefaultFilesetArchetypeGenerator
             String template = (String) iterator.next();
             File outputFile = getOutputFile( 
                     template, directory, outputDirectoryFile, 
-                    packaged, packageName, moduleOffset);
+                    packaged, packageName, moduleOffset, context);
 
             copyFile( outputFile, template, failIfExists, archetypeZipFile );
         }
@@ -355,12 +356,22 @@ public class DefaultFilesetArchetypeGenerator
         return ( StringUtils.isEmpty( moduleOffset ) ? "/" : ( "/" + moduleOffset + "/" ) );
     }
 
-    private File getOutputFile( String template, String directory, File outputDirectoryFile, boolean packaged, String packageName, String moduleOffset )
+    private File getOutputFile( 
+        String template, 
+        String directory, 
+        File outputDirectoryFile, 
+        boolean packaged, 
+        String packageName, 
+        String moduleOffset,
+        Context context )
     {
         String templateName = StringUtils.replaceOnce( template, directory, "" );
-        File outputFile = new File( outputDirectoryFile, directory + "/" + 
+        String outputFileName = directory + "/" + 
                 (packaged ? getPackageAsDirectory(packageName) : "") + 
-                "/" + templateName.substring(moduleOffset.length()));
+                "/" + templateName.substring(moduleOffset.length() );
+        outputFileName = StringUtils.replace(outputFileName, "__rootArtifactId__", (String)context.get("rootArtifactId"));
+        outputFileName = StringUtils.replace(outputFileName, "__artifactId__", (String)context.get("artifactId"));
+        File outputFile = new File(outputDirectoryFile, outputFileName);
 
         return outputFile;
     }
@@ -493,7 +504,7 @@ public class DefaultFilesetArchetypeGenerator
             String templateName = StringUtils.replaceOnce( template, directory, "" );
             File outputFile = getOutputFile( 
                     template, directory, outputDirectoryFile, 
-                    packaged, packageName, moduleOffset);
+                    packaged, packageName, moduleOffset, context);
 
             processTemplate(outputFile,
                 context,
@@ -817,7 +828,7 @@ public class DefaultFilesetArchetypeGenerator
             //Fix for ARCHETYPE-57
             getOutputFile(
                 moduleOffset, fileSet.getDirectory(), outputDirectoryFile,
-                fileSet.isPackaged(), packageName, moduleOffset ).mkdirs();
+                fileSet.isPackaged(), packageName, moduleOffset, context ).mkdirs();
 
 
             if ( fileSet.isFiltered() )
@@ -850,7 +861,8 @@ public class DefaultFilesetArchetypeGenerator
                     outputDirectoryFile,
                     archetypeZipFile,
                     moduleOffset,
-                    failIfExists
+                    failIfExists,
+                    context
                 );
                 getLogger().debug( "Copied " + fileSetResources.size() + " files" );
             }
