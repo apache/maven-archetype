@@ -169,6 +169,6 @@ Backward compatibility
     For backward compatibility with the Archetype Plugin version 1.0-alpha-7,
     we kept the old <<<create>>> goal which can be called using 
     <<<mvn archetype:create>>>.
-~~ TODO: The link on the following line doesn't work
-    See {{{#}the old documentation}} for further 
+
+    See {{{http://maven.apache.org/plugins/maven-archetype-plugin-1.0-alpha-7/index.html}the old documentation}} for further
     reading.

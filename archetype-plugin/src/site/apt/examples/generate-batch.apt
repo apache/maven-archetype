@@ -1,5 +1,5 @@
  ------
- Create project in batch mode
+ Generate project in batch mode
  ------
  Raphaël Piéroni
  ------
@@ -26,14 +26,15 @@
 ~~ NOTE: For help with the syntax of this file, see:
 ~~ http://maven.apache.org/doxia/references/apt-format.html
 
- * Create project in batch mode
+ * Generate project in batch mode
 
    It is possible to get rid of the interactivity of the archetype plugin
-   by defining the <<<archetype.interactive>>> property to <<<false>>>.
-   A couple of meaningfull properties are the required.
+   by defining the <<<interactive>>> property to <<<false>>> or by using the -B
+   flag.
+   A couple of meaningfull properties are then required.
    
    The archetypeGroupId, archetypeArtifactId and archetypeVersion defines the 
-   archetype to use for project creation.
+   archetype to use for project generation.
 
    The groupId, artifactId, version and package are the main properties to be 
    set. Each archetype require these properties. Some archetypes defines other 
@@ -41,23 +42,22 @@
 
 
 +--
-$ mvn archetype:create -DarchetypeGroupId=org.apache.maven.archetypes -Darchetype.interactive=false -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.0 -DgroupId=com.company -DartifactId=project -Dversion=1.0 -Dpackage=1.5
+$ mvn archetype:generate -B -DarchetypeGroupId=org.apache.maven.archetypes -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.0 -DgroupId=com.company -DartifactId=project -Dversion=1.0 -Dpackage=1.5
 [INFO] Scanning for projects...
 [INFO] Searching repository for plugin with prefix: 'archetype'.
 [INFO] ------------------------------------------------------------------------
 [INFO] Building Maven Default Project
-[INFO]    task-segment: [archetype:create] (aggregator-style)
+[INFO]    task-segment: [archetype:generate] (aggregator-style)
 [INFO] ------------------------------------------------------------------------
-[INFO] Preparing archetype:create
+[INFO] Preparing archetype:generate
 [INFO] No goals needed for project - skipping
-Downloading: http://repo1.maven.org/maven2/com/company/wagon-http-shared/1.0-beta-2/wagon-http-shared-1.0-beta-2.pom
-Downloading: http://repo1.maven.org/maven2/com/company/wagon-http-shared/1.0-beta-2/wagon-http-shared-1.0-beta-2.pom
 [INFO] Setting property: classpath.resource.loader.class => 'org.codehaus.plexus.velocity.ContextClassLoaderResourceLoader'.
 [INFO] Setting property: velocimacro.messages.on => 'false'.
 [INFO] Setting property: resource.loader => 'classpath'.
 [INFO] Setting property: resource.manager.logwhenfound => 'false'.
-[INFO] [archetype:create]
-[INFO] Archetype repository missing. Using the one from [org.apache.maven.archetypes:maven-archetype-quickstart:RELEASE -> http://repo1.maven.org/maven2] found in catalog internal
+[INFO] [archetype:generate]
+[INFO] Generating project in Batch mode
+[INFO] Archetype repository missing. Using the one from [org.apache.maven.archetypes:maven-archetype-quickstart:RELEASE] found in catalog internal
 [INFO] ----------------------------------------------------------------------------
 [INFO] Using following parameters for creating OldArchetype: maven-archetype-quickstart:1.0
 [INFO] ----------------------------------------------------------------------------
@@ -65,15 +65,16 @@ Downloading: http://repo1.maven.org/maven2/com/company/wagon-http-shared/1.0-bet
 [INFO] Parameter: packageName, Value: 1.5
 [INFO] Parameter: package, Value: 1.5
 [INFO] Parameter: artifactId, Value: project
-[INFO] Parameter: basedir, Value: /home/local/rafale/projects/tmp
+[INFO] Parameter: basedir, Value: /private/tmp/archetype
 [INFO] Parameter: version, Value: 1.0
 [INFO] ********************* End of debug info from resources from generated POM ***********************
-[INFO] OldArchetype created in dir: /home/local/rafale/projects/tmp/project
+[INFO] OldArchetype created in dir: /private/tmp/archetype/project
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESSFUL
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time: 6 seconds
-[INFO] Finished at: Mon Feb 04 19:56:03 GMT 2008
-[INFO] Final Memory: 10M/25M
+[INFO] Total time: 2 seconds
+[INFO] Finished at: Tue Sep 09 18:59:24 CEST 2008
+[INFO] Final Memory: 8M/15M
 [INFO] ------------------------------------------------------------------------
+
 +--

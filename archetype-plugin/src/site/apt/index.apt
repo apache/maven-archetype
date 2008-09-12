@@ -45,8 +45,8 @@ Maven 2 Archetype Plugin
   The Archetype Plugin is embedded in IDEs {{{#}Eclipse}}, {{{#}NetBeans}}, 
   {{{#}IDEA}}.
 
-  {{{advanced-usage.html}Instruction on how to use the Archetype Plugin to create an archetype from an existing project}} 
-  can be found  on the advanced usage page.
+  {{{advanced-usage.html}Instructions on how to use the Archetype Plugin to create an archetype from an existing project}}
+  can be found on the advanced usage page.
 
 
 * Goals Overview
@@ -74,13 +74,25 @@ Maven 2 Archetype Plugin
    The following examples show how to use the Archetype Plugin in more advanced 
    usecases:
 
-   * {{{examples/create-batch.html}Create projects in batch mode}}
+   * {{{examples/generate-batch.html}Generate projects in batch mode}}
+
+   * {{{examples/generate-alternative-catalog.html}Generate project using an alternative catalog}}
 
 ~~ TODO: The link on the following line doesn't work
-   * {{{#}Create a sub module from an archetype}}
+   * {{{examples/create-multi-module-project.html}Create an archetype from a multi module project}}
 
 ~~ TODO: The link on the following line doesn't work
-   * {{{#}Select the archetype from another catalog}}
+   * {{{#}Generate a sub module from an archetype}}
+
+~~ TODO: The link on the following line doesn't work
+   * {{{#}Create an archetype in batch mode}}
+
+~~ TODO: The link on the following line doesn't work
+   * {{{#}Create an archetype with a property file}}
+
+~~ TODO: The link on the following line doesn't work
+   * {{{#}Handcrafting an archetype}} or features available to an archetype
+     when not created by <<<create-from-project>>>.
 
   []
 
