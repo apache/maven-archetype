@@ -78,21 +78,20 @@ Maven 2 Archetype Plugin
 
    * {{{examples/generate-alternative-catalog.html}Generate project using an alternative catalog}}
 
-~~ TODO: The link on the following line doesn't work
    * {{{examples/create-multi-module-project.html}Create an archetype from a multi module project}}
-
-~~ TODO: The link on the following line doesn't work
-   * {{{#}Generate a sub module from an archetype}}
-
-~~ TODO: The link on the following line doesn't work
-   * {{{#}Create an archetype in batch mode}}
 
 ~~ TODO: The link on the following line doesn't work
    * {{{#}Create an archetype with a property file}}
 
 ~~ TODO: The link on the following line doesn't work
    * {{{#}Handcrafting an archetype}} or features available to an archetype
-     when not created by <<<create-from-project>>>.
+     when not created by <<<create-from-project>>>
+
+~~ TODO: The link on the following line doesn't work
+   * {{{#}Generate a sub module from an archetype}}
+
+~~ TODO: The link on the following line doesn't work
+   * {{{#}Create an archetype in interactive mode}}
 
   []
 
