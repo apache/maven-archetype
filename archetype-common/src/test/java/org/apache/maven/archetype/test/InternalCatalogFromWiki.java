@@ -158,7 +158,10 @@ public class InternalCatalogFromWiki
                     if ("http://repo1.maven.org/maven2".equals(ar.getRepository())) {
                         ar.setRepository(null);
                     }
-                    archetypesUsed.add(ar);
+                    if( !ar.getVersion().contains("SNAPSHOT") && !ar.getVersion().contains("snapshot") )
+                    {
+                        archetypesUsed.add(ar);
+                    }
                 }
             } else {
                 if ("http://repo1.maven.org/maven2".equals(ar.getRepository())) {
