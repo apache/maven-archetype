@@ -722,6 +722,24 @@ public class DefaultArchetypeGeneratorTest
             "subsubproject"
         );
 
+        template = "subproject/subsubproject/src/main/java/file/value/package/" +
+                "file-value/inner/subsubproject/innest/ArbitraryProperty-file-value.java";
+        assertTemplateContentGeneratedWithFileSetArchetype(
+            projectDirectory,
+            template,
+            "subsubproject"
+        );
+
+        // Test that undefined properties are safely ignored (and skipped)
+        template = "subproject/subsubproject/src/main/java/file/value/package/" +
+                "file-value/inner/subsubproject/innest/" +
+                "SkipsUndefinedProperty-__undefined-property__-file-value.java";
+        assertTemplateContentGeneratedWithFileSetArchetype(
+            projectDirectory,
+            template,
+            "subsubproject"
+        );
+
         model =
             readPom(
                 getProjectFile(
@@ -833,9 +851,9 @@ public class DefaultArchetypeGeneratorTest
         {
             assertTrue(
                 "Exception not correct",
-                result.getCause().getMessage().startsWith( 
+                result.getCause().getMessage().startsWith(
                     "Archetype archetypes:basic:1.0 is not configured" ) &&
-                result.getCause().getMessage().endsWith( 
+                result.getCause().getMessage().endsWith(
                     "Property property-without-default-4 is missing." )
             );
         }
