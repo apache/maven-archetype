@@ -54,6 +54,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
@@ -75,6 +76,17 @@ public class DefaultFilesetArchetypeGenerator
 
     /** @plexus.requirement */
     private VelocityComponent velocity;
+
+    /**
+     * Token delimiter. 
+     */
+    private static final String DELIMITER = "__";
+
+    /**
+     * Pattern used to detect tokens in a string. Tokens are any text surrounded
+     * by the delimiter. 
+     */
+    private static final Pattern TOKEN_PATTERN = Pattern.compile(".*" + DELIMITER + ".*" + DELIMITER + ".*");
 
     public void generateArchetype( ArchetypeGenerationRequest request,
                                    File archetypeFile,
@@ -369,11 +381,90 @@ public class DefaultFilesetArchetypeGenerator
         String outputFileName = directory + "/" + 
                 (packaged ? getPackageAsDirectory(packageName) : "") + 
                 "/" + templateName.substring(moduleOffset.length() );
-        outputFileName = StringUtils.replace(outputFileName, "__rootArtifactId__", (String)context.get("rootArtifactId"));
-        outputFileName = StringUtils.replace(outputFileName, "__artifactId__", (String)context.get("artifactId"));
-        File outputFile = new File(outputDirectoryFile, outputFileName);
+
+        if ( TOKEN_PATTERN.matcher(outputFileName).matches() ) 
+        {
+            outputFileName = replaceFilenameTokens( outputFileName, context );
+        }
+
+        File outputFile = new File( outputDirectoryFile, outputFileName );
 
         return outputFile;
+    }
+
+    /**
+     * Replaces all tokens (text surrounded by the {@link #DELIMITER}) within 
+     * the given string, using properties contained within the context. If a 
+     * property does not exist in the context, the token is left unmodified 
+     * and a warning is logged.
+     *
+     * @param filePath the file name and path to be interpolated  
+     * @param context contains the available properties 
+     */  
+    private String replaceFilenameTokens( String filePath, Context context ) 
+    {
+        String interpolatedResult = filePath;
+        String propertyToken = null;
+        String contextPropertyValue = null;
+
+        int start = 0;
+        int end = 0;
+        int skipUndefinedPropertyIndex = 0;
+
+        int maxAttempts = StringUtils.countMatches( interpolatedResult, 
+                DELIMITER ) / 2;
+
+        for ( int x = 0; x < maxAttempts && start != -1; x++ ) 
+        {
+            start = interpolatedResult.indexOf( DELIMITER, skipUndefinedPropertyIndex );
+
+            if ( start != -1 ) 
+            {
+                end = interpolatedResult.indexOf( DELIMITER, 
+                        start + DELIMITER.length() );
+
+                if ( end != -1 ) 
+                {
+                   propertyToken = interpolatedResult.substring( 
+                           start + DELIMITER.length(), end );
+                }
+
+                contextPropertyValue = (String) context.get( propertyToken );
+    
+                if ( contextPropertyValue != null && 
+                            contextPropertyValue.trim().length() > 0 ) 
+                {
+                    if (getLogger().isDebugEnabled())
+                    {
+                        getLogger().debug( "Replacing '" + DELIMITER + propertyToken
+                                + DELIMITER + "' in file path '" + 
+                                interpolatedResult + "' with value '" + 
+                                contextPropertyValue + "'."); 
+                    }
+                  
+                    interpolatedResult = StringUtils.replace( 
+                            interpolatedResult, 
+                            DELIMITER + propertyToken + DELIMITER, 
+                            contextPropertyValue );
+    
+                } else 
+                {
+                    // Need to skip the undefined property
+                    skipUndefinedPropertyIndex = end + DELIMITER.length() + 1;
+                   
+                    getLogger().warn( "Property '" + propertyToken + 
+                            "' was not specified, so the token in '" + 
+                            interpolatedResult + "' is not being replaced." );
+                }
+            }
+        }
+
+        if (getLogger().isDebugEnabled())
+        {
+            getLogger().debug( "Final interpolated file path: '" + interpolatedResult + "'" ); 
+        }
+
+        return interpolatedResult; 
     }
 
     private String getPackageInPathFormat( String aPackage )
