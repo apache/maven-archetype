@@ -33,7 +33,6 @@ Maven 2 Archetype Plugin
  from an existing template called an archetype.
 
  It also allows the user to create an archetype from an existing project. 
- (<currently under development>)
 
 
 * Usage
@@ -80,18 +79,17 @@ Maven 2 Archetype Plugin
 
    * {{{examples/create-multi-module-project.html}Create an archetype from a multi module project}}
 
-~~ TODO: The link on the following line doesn't work
-   * {{{#}Create an archetype with a property file}}
+   * {{{examples/create-with-property-file.html}Create an archetype with a property file}}
 
 ~~ TODO: The link on the following line doesn't work
    * {{{#}Handcrafting an archetype}} or features available to an archetype
-     when not created by <<<create-from-project>>>
+     when not created by <<<create-from-project>>> - TBD
 
 ~~ TODO: The link on the following line doesn't work
-   * {{{#}Generate a sub module from an archetype}}
+   * {{{#}Generate a sub module from an archetype}} - TBD
 
 ~~ TODO: The link on the following line doesn't work
-   * {{{#}Create an archetype in interactive mode}}
+   * {{{#}Create an archetype in interactive mode}} - TBD
 
   []
 

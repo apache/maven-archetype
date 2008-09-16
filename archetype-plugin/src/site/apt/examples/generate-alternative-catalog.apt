@@ -26,7 +26,7 @@
 ~~ NOTE: For help with the syntax of this file, see:
 ~~ http://maven.apache.org/doxia/references/apt-format.html
 
- * Generate project using an alternative catalog
+Generate project using an alternative catalog
 
    It is possible to use an alternative catalog as the internal one by defining
    the <<<archetypeCatalog>>> property to a specific value which can be one of:
