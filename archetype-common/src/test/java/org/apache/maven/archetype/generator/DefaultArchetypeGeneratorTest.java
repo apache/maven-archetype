@@ -723,7 +723,8 @@ public class DefaultArchetypeGeneratorTest
         );
 
         template = "subproject/subsubproject/src/main/java/file/value/package/" +
-                "file-value/inner/subsubproject/innest/ArbitraryProperty-file-value.java";
+                /*"file-value/inner/subsubproject/innest/" +*/
+                "ArbitraryProperty-file-value.java";
         assertTemplateContentGeneratedWithFileSetArchetype(
             projectDirectory,
             template,
@@ -732,7 +733,7 @@ public class DefaultArchetypeGeneratorTest
 
         // Test that undefined properties are safely ignored (and skipped)
         template = "subproject/subsubproject/src/main/java/file/value/package/" +
-                "file-value/inner/subsubproject/innest/" +
+                /**"file-value/inner/subsubproject/innest/" +*/
                 "SkipsUndefinedProperty-__undefined-property__-file-value.java";
         assertTemplateContentGeneratedWithFileSetArchetype(
             projectDirectory,
