@@ -75,37 +75,37 @@
     <dependency>
       <groupId>org.codehaus.cargo</groupId>
       <artifactId>cargo-core-api-container</artifactId>
-      <version>0.9</version>
+      <version>1.0-alpha-6</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.codehaus.cargo</groupId>
       <artifactId>cargo-core-api-util</artifactId>
-      <version>0.9</version>
+      <version>1.0-alpha-6</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.codehaus.cargo</groupId>
       <artifactId>cargo-core-api-generic</artifactId>
-      <version>0.9</version>
+      <version>1.0-alpha-6</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.codehaus.cargo</groupId>
       <artifactId>cargo-core-api-module</artifactId>
-      <version>0.9</version>
+      <version>1.0-alpha-6</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.codehaus.cargo</groupId>
       <artifactId>cargo-core-container-jetty</artifactId>
-      <version>0.9</version>
+      <version>1.0-alpha-6</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.mortbay.jetty</groupId>
       <artifactId>jetty</artifactId>
-      <version>6.1.4</version>
+      <version>6.1.11</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -115,7 +115,7 @@
     <dependency>
       <groupId>org.apache.maven.wagon</groupId>
       <artifactId>wagon-http</artifactId>
-      <version>1.0-beta-2</version>
+      <version>1.0-beta-2</version><!-- with 1.0-beta-4 some tests fail -->
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -145,7 +145,7 @@
       <plugin>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-maven-plugin</artifactId>
-        <version>1.0-alpha-14</version>
+        <version>1.0-alpha-21</version>
         <executions>
           <execution>
             <id>archetype-common</id>
