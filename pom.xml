@@ -70,6 +70,16 @@
                 <groupId>org.codehaus.plexus</groupId>
                 <artifactId>plexus-velocity</artifactId>
                 <version>1.1.3</version><!-- with 1.1.4 1.1.5 1.1.6 1.1.7 tests fail -->
+                <exclusions>
+                    <exclusion>
+                        <groupId>velocity</groupId>
+                        <artifactId>velocity</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>velocity</groupId>
+                        <artifactId>velocity-api</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>commons-io</groupId>
