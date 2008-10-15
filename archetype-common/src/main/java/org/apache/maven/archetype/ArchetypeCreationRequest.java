@@ -54,6 +54,18 @@ public class ArchetypeCreationRequest
 
     private Properties properties;
 
+    private String postPhase;
+
+    public String getPostPhase() {
+        return postPhase;
+    }
+
+    public ArchetypeCreationRequest setPostPhase(String postPhase) {
+        this.postPhase = postPhase;
+
+        return this;
+    }
+
     public ArtifactRepository getLocalRepository()
     {
         return localRepository;

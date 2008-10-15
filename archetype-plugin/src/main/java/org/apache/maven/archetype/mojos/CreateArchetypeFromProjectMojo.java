@@ -138,6 +138,14 @@ public class CreateArchetypeFromProjectMojo
      * @parameter expression="${archetype.properties}"
      */
     private File propertyFile;
+    
+    /**
+     * The property telling which phase call on the generated archetype.
+     * Interresting values are: package, instal and deploy
+     *
+     * @parameter expression="${archetype.postPhase}" default-value="package"
+     */
+    private String archetypePostPhase;
 
     /** @parameter expression="${basedir}/target" */
     private File outputDirectory;
@@ -198,7 +206,8 @@ public class CreateArchetypeFromProjectMojo
                 .setArchetypeRegistryFile( archetypeRegistryFile )
                 .setLocalRepository( localRepository )
                 /*this should be resolved and asked for user to verify*/
-                .setPackageName(packageName);
+                .setPackageName(packageName)
+                .setPostPhase( archetypePostPhase );
 
             ArchetypeCreationResult result = archetype.createArchetypeFromProject( request );
 

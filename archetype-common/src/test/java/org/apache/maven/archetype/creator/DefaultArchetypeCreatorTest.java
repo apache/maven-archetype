@@ -139,7 +139,8 @@ public class DefaultArchetypeCreatorTest
             .setDefaultEncoding( "UTF-8" )
             .setPartialArchetype( false )
             .setPreserveCData( false )
-            .setKeepParent( false );
+            .setKeepParent( false )
+            .setPostPhase( "package" );
 
         ArchetypeCreationResult result = new ArchetypeCreationResult();
 

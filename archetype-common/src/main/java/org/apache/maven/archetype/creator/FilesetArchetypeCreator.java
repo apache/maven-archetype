@@ -19,8 +19,6 @@
 
 package org.apache.maven.archetype.creator;
 
-import org.apache.commons.collections.BidiMap;
-import org.apache.commons.collections.bidimap.DualTreeBidiMap;
 import org.apache.maven.archetype.ArchetypeCreationRequest;
 import org.apache.maven.archetype.ArchetypeCreationResult;
 import org.apache.maven.archetype.common.ArchetypeFilesResolver;
@@ -64,6 +62,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -71,6 +70,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import org.apache.maven.shared.invoker.DefaultInvocationRequest;
+import org.apache.maven.shared.invoker.DefaultInvoker;
+import org.apache.maven.shared.invoker.InvocationRequest;
+import org.apache.maven.shared.invoker.Invoker;
 
 /** @plexus.component role-hint="fileset" */
 public class FilesetArchetypeCreator
@@ -90,19 +93,12 @@ public class FilesetArchetypeCreator
                                  ArchetypeCreationResult result )
     {
         MavenProject project = request.getProject();
-
         List languages = request.getLanguages();
-
         List filtereds = request.getFiltereds();
-
         String defaultEncoding = request.getDefaultEncoding();
-
         boolean preserveCData = request.isPreserveCData();
-
         boolean keepParent = request.isKeepParent();
-
         boolean partialArchetype = request.isPartialArchetype();
-
         ArtifactRepository localRepository = request.getLocalRepository();
 
         Properties properties = new Properties();
@@ -238,25 +234,18 @@ public class FilesetArchetypeCreator
         }
 
         File archetypeResourcesDirectory = FileUtils.resolveFile( generatedSourcesDirectory, getTemplateOutputDirectory() );
-
         archetypeResourcesDirectory.mkdirs();
 
         File archetypeFilesDirectory = FileUtils.resolveFile( archetypeResourcesDirectory, Constants.ARCHETYPE_RESOURCES );
-
         archetypeFilesDirectory.mkdirs();
-
         getLogger().debug( "Archetype's files output directory " + archetypeFilesDirectory );
 
         File archetypeDescriptorFile = FileUtils.resolveFile( archetypeResourcesDirectory, Constants.ARCHETYPE_DESCRIPTOR );
-
         archetypeDescriptorFile.getParentFile().mkdirs();
 
         ArchetypeDescriptor archetypeDescriptor = new ArchetypeDescriptor();
-
         archetypeDescriptor.setName( project.getArtifactId() );
-
         getLogger().debug( "Starting archetype's descriptor " + project.getArtifactId() );
-
         archetypeDescriptor.setPartial( partialArchetype );
 
         addRequiredProperties( archetypeDescriptor, properties );
@@ -275,10 +264,7 @@ public class FilesetArchetypeCreator
         {
             Model pom = pomManager.readPom( FileUtils.resolveFile( basedir, Constants.ARCHETYPE_POM ) );
 
-            registerProject( pom );
-
             List fileNames = resolveFileNames( pom, basedir );
-
             getLogger().debug( "Scanned for files " + fileNames.size() );
 
             Iterator names = fileNames.iterator();
@@ -289,13 +275,11 @@ public class FilesetArchetypeCreator
             }
 
             List filesets = resolveFileSets( packageName, fileNames, languages, filtereds, defaultEncoding );
-
             getLogger().debug( "Resolved filesets for " + archetypeDescriptor.getName() );
 
             archetypeDescriptor.setFileSets( filesets );
 
             createArchetypeFiles( reverseProperties, filesets, packageName, basedir, archetypeFilesDirectory, defaultEncoding );
-
             getLogger().debug( "Created files for " + archetypeDescriptor.getName() );
 
             setParentArtifactId(
@@ -313,7 +297,6 @@ public class FilesetArchetypeCreator
                 {
                     moduleIdDirectory = StringUtils.replace( moduleId, rootArtifactId, "__rootArtifactId__" );
                 }
-
                 getLogger().debug( "Creating module " + moduleId );
 
                 ModuleDescriptor moduleDescriptor =
@@ -347,7 +330,6 @@ public class FilesetArchetypeCreator
                 configurationProperties.getProperty( Constants.ARTIFACT_ID ),
                 archetypeFilesDirectory, basedir,
                 pomReversedProperties, preserveCData, keepParent );
-
             getLogger().debug( "Created Archetype " + archetypeDescriptor.getName() + " pom" );
 
             ArchetypeDescriptorXpp3Writer writer = new ArchetypeDescriptorXpp3Writer();
@@ -366,6 +348,13 @@ public class FilesetArchetypeCreator
             getLogger().debug(
                 "Archetype " + archetypeDescriptor.getName() + " old descriptor written"
             );
+            
+            InvocationRequest internalRequest = new DefaultInvocationRequest();
+            internalRequest.setPomFile( archetypePomFile );
+            internalRequest.setGoals( Collections.singletonList( request.getPostPhase() ) );
+
+            Invoker invoker = new DefaultInvoker();
+            invoker.execute(internalRequest);
         }
         catch ( Exception e )
         {
@@ -511,17 +500,9 @@ public class FilesetArchetypeCreator
         return getGeneratedSourcesDirectory() + File.separator + Constants.ARCHETYPE_POM;
     }
 
-    private int id = 0;
-    private BidiMap registeredProjects = new DualTreeBidiMap();
-
     private String getPackageInPathFormat( String aPackage )
     {
         return StringUtils.replace( aPackage, ".", "/" );
-    }
-
-    private void registerProject( Model pom )
-    {
-        registeredProjects.put( new Integer( id++ ), pom.getId() );
     }
 
     private void rewriteReferences( Model pom,
@@ -1044,10 +1025,7 @@ public class FilesetArchetypeCreator
             pom.setModules( null );
             pom.setGroupId( "${" + Constants.GROUP_ID + "}" );
             pom.setArtifactId( "${" + Constants.ARTIFACT_ID + "}" );
-            if ( pom.getVersion() != null )
-            {
-                pom.setVersion( "${" + Constants.VERSION + "}" );
-            }
+            pom.setVersion( "${" + Constants.VERSION + "}" );
 
             rewriteReferences( pom, pomReversedProperties.getProperty( Constants.ARTIFACT_ID ),
                 pomReversedProperties.getProperty( Constants.GROUP_ID ) );
@@ -1218,8 +1196,6 @@ public class FilesetArchetypeCreator
         archetypeDescriptor.setName( replacementId );
         archetypeDescriptor.setId( replacementId );
         archetypeDescriptor.setDir( moduleDirectory );
-
-        registerProject( pom );
 
         setArtifactId( reverseProperties, pom.getArtifactId() );
 
