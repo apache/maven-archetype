@@ -103,7 +103,8 @@ public class ArchetyperRoundtripWithProxyTest
         MavenProject project = projectBuilder.build( pom, localRepository, null );
 
         ArchetypeCreationRequest acr = new ArchetypeCreationRequest().setProject( project ).
-            setLocalRepository( localRepository );
+            setLocalRepository( localRepository )
+            .setPostPhase( "package" );
 
         ArchetypeCreationResult creationResult = archetype.createArchetypeFromProject( acr );
 

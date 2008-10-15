@@ -105,7 +105,8 @@ public class ArchetyperRoundtripTest
         Properties properties = new Properties();
         properties.setProperty("someProperty", "someValue");
         ArchetypeCreationRequest acr = new ArchetypeCreationRequest().setProject( project ).
-            setLocalRepository( localRepository ).setProperties(properties);
+            setLocalRepository( localRepository ).setProperties(properties)
+            .setPostPhase( "package" );
 
         ArchetypeCreationResult creationResult = archetype.createArchetypeFromProject( acr );
 
