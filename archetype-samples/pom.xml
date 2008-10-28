@@ -18,6 +18,7 @@
 
   <!--modules>
     <module>quickstart</module>
+    <module>mojo</module>
   </modules-->
 
   <properties>
