@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.apache.maven.archetypes</groupId>
     <artifactId>archetype-samples</artifactId>
-    <version>2.0-SNAPSHOT</version>
+    <version>2.0-alpha-5-SNAPSHOT</version>
   </parent>
 
   <artifactId>maven-mojo</artifactId>
@@ -20,6 +20,12 @@
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-plugin-api</artifactId>
       <version>2.0.9</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.shared</groupId>
+      <artifactId>maven-plugin-testing-harness</artifactId>
+      <version>1.1</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
