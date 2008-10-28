@@ -252,11 +252,11 @@ public class FilesetArchetypeCreator
 
         // TODO ensure reversedproperties contains NO dotted properties
         Properties reverseProperties = getRequiredProperties( archetypeDescriptor, properties );
-        reverseProperties.remove( Constants.GROUP_ID );
+        //reverseProperties.remove( Constants.GROUP_ID );
         
         // TODO ensure pomReversedProperties contains NO dotted properties
         Properties pomReversedProperties = getRequiredProperties( archetypeDescriptor, properties );
-        pomReversedProperties.remove( Constants.PACKAGE );
+        //pomReversedProperties.remove( Constants.PACKAGE );
 
         String packageName = configurationProperties.getProperty( Constants.PACKAGE );
 
