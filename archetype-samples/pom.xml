@@ -19,6 +19,7 @@
   <!--modules>
     <module>quickstart</module>
     <module>mojo</module>
+    <module>webapp</module>
   </modules-->
 
   <properties>
