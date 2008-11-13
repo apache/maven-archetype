@@ -652,6 +652,18 @@ public class DefaultArchetypeGeneratorTest
             template,
             "file-value"
         );
+        template = "src/main/resources/file-value/touch.txt";
+        assertTemplateContentGeneratedWithFileSetArchetype(
+            projectDirectory,
+            template,
+            "file-value"
+        );
+        template = "src/main/resources/file-value/touch_root.txt";
+        assertTemplateContentGeneratedWithFileSetArchetype(
+            projectDirectory,
+            template,
+            "file-value"
+        );
 
         template = "src/main/resources/some-dir/App.png";
         assertTemplateCopiedWithFileSetArchetype( projectDirectory, template );
