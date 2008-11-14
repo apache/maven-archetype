@@ -153,7 +153,8 @@ implements ArchetypeFactory
             configuration.addRequiredProperty( requiredProperty.getKey() );
             getLogger().debug( "Adding requiredProperty " + requiredProperty.getKey() );
 
-            if( null != properties.getProperty( requiredProperty.getKey(), requiredProperty.getDefaultValue() ) )
+            if( null != properties.getProperty( requiredProperty.getKey(), requiredProperty.getDefaultValue() ) &&
+                !containsInnerProperty(requiredProperty.getDefaultValue()) )
             {
                 configuration.setProperty( requiredProperty.getKey(),
                     properties.getProperty( requiredProperty.getKey(), requiredProperty.getDefaultValue() ) );
@@ -168,12 +169,13 @@ implements ArchetypeFactory
             }
         } // end while
 
-        if( !configuration.isConfigured( Constants.GROUP_ID ) )
+        if( !configuration.isConfigured( Constants.GROUP_ID )&&null==configuration.getDefaultValue( Constants.GROUP_ID ) )
         {
             configuration.addRequiredProperty( Constants.GROUP_ID );
             getLogger().debug( "Adding requiredProperty " + Constants.GROUP_ID );
             if( null
-                != properties.getProperty( Constants.GROUP_ID, configuration.getDefaultValue( Constants.GROUP_ID ) ) )
+                != properties.getProperty( Constants.GROUP_ID, configuration.getDefaultValue( Constants.GROUP_ID ) ) &&
+                !containsInnerProperty(configuration.getDefaultValue( Constants.GROUP_ID )))
             {
                 configuration.setProperty( Constants.GROUP_ID,
                     properties.getProperty( Constants.GROUP_ID, configuration.getDefaultValue( Constants.GROUP_ID ) ) );
@@ -182,13 +184,14 @@ implements ArchetypeFactory
             getLogger().debug( "Setting property " + Constants.GROUP_ID + "="
                 + configuration.getProperty( Constants.GROUP_ID ) );
         }
-        if( !configuration.isConfigured( Constants.ARTIFACT_ID ) )
+        if( !configuration.isConfigured( Constants.ARTIFACT_ID )&&null==configuration.getDefaultValue( Constants.ARTIFACT_ID ) )
         {
             configuration.addRequiredProperty( Constants.ARTIFACT_ID );
             getLogger().debug( "Adding requiredProperty " + Constants.ARTIFACT_ID );
             if( null
                 != properties.getProperty( Constants.ARTIFACT_ID,
-                    configuration.getDefaultValue( Constants.ARTIFACT_ID ) ) )
+                    configuration.getDefaultValue( Constants.ARTIFACT_ID ) ) &&
+                !containsInnerProperty(configuration.getDefaultValue( Constants.ARTIFACT_ID )))
             {
                 configuration.setProperty( Constants.ARTIFACT_ID, properties.getProperty( Constants.ARTIFACT_ID ) );
                 configuration.setDefaultProperty( Constants.ARTIFACT_ID,
@@ -197,12 +200,13 @@ implements ArchetypeFactory
             getLogger().debug( "Setting property " + Constants.ARTIFACT_ID + "="
                 + configuration.getProperty( Constants.ARTIFACT_ID ) );
         }
-        if( !configuration.isConfigured( Constants.VERSION ) )
+        if( !configuration.isConfigured( Constants.VERSION )&&null==configuration.getDefaultValue( Constants.VERSION ) )
         {
             configuration.addRequiredProperty( Constants.VERSION );
             getLogger().debug( "Adding requiredProperty " + Constants.VERSION );
             if( null != properties.getProperty( Constants.VERSION,
-                    configuration.getDefaultValue( Constants.VERSION ) ) )
+                    configuration.getDefaultValue( Constants.VERSION ) )&&
+                !containsInnerProperty(configuration.getDefaultValue( Constants.VERSION )) )
             {
                 configuration.setProperty( Constants.VERSION,
                     properties.getProperty( Constants.VERSION, configuration.getDefaultValue( Constants.VERSION ) ) );
@@ -215,18 +219,20 @@ implements ArchetypeFactory
             getLogger().debug( "Setting property " + Constants.VERSION + "="
                 + configuration.getProperty( Constants.VERSION ) );
         }
-        if( !configuration.isConfigured( Constants.PACKAGE ) )
+        if( !configuration.isConfigured( Constants.PACKAGE )&&null==configuration.getDefaultValue( Constants.PACKAGE ) )
         {
             configuration.addRequiredProperty( Constants.PACKAGE );
             getLogger().debug( "Adding requiredProperty " + Constants.PACKAGE );
             if( null != properties.getProperty( Constants.PACKAGE,
-                    configuration.getDefaultValue( Constants.PACKAGE ) ) )
+                    configuration.getDefaultValue( Constants.PACKAGE ) )&&
+                !containsInnerProperty(configuration.getDefaultValue( Constants.PACKAGE ) ) )
             {
                 configuration.setProperty( Constants.PACKAGE,
                     properties.getProperty( Constants.PACKAGE, configuration.getDefaultValue( Constants.PACKAGE ) ) );
                 configuration.setDefaultProperty( Constants.PACKAGE, configuration.getProperty( Constants.PACKAGE ) );
             }
-            else if( null != configuration.getProperty( Constants.GROUP_ID ) )
+            else if( null != configuration.getProperty( Constants.GROUP_ID )&&
+                !containsInnerProperty(configuration.getDefaultValue( Constants.PACKAGE ) ) )
             {
                 configuration.setProperty( Constants.PACKAGE, configuration.getProperty( Constants.GROUP_ID ) );
                 configuration.setDefaultProperty( Constants.PACKAGE, configuration.getProperty( Constants.PACKAGE ) );
@@ -348,5 +354,18 @@ implements ArchetypeFactory
         archetypeConfiguration.setGroupId( archetypeDefinition.getGroupId() );
         archetypeConfiguration.setArtifactId( archetypeDefinition.getArtifactId() );
         archetypeConfiguration.setVersion( archetypeDefinition.getVersion() );
+    }
+
+    private boolean containsInnerProperty(String defaultValue)
+    {
+        if (null == defaultValue)
+        {
+            return false;
+        }
+        if (defaultValue.contains("${") && defaultValue.contains("}"))
+        {
+            return true;
+        }
+        return false;
     }
 }
