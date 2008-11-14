@@ -38,9 +38,13 @@ import org.codehaus.plexus.logging.AbstractLogEnabled;
 import java.io.IOException;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import org.codehaus.plexus.util.StringUtils;
 
 // TODO: this seems to have more responsibilities than just a configurator
 /**
@@ -167,10 +171,13 @@ implements ArchetypeGenerationConfigurator
 
             while( !confirmed )
             {
+                List propertiesRequired = archetypeConfiguration.getRequiredProperties();
+                getLogger().debug("Required properties before content sort: "+propertiesRequired);
+                Collections.sort(propertiesRequired, new RequiredPropertyComparator(archetypeConfiguration));
+                getLogger().debug("Required properties after content sort: "+propertiesRequired);
+                    Iterator requiredProperties = propertiesRequired.iterator();
                 if( !archetypeConfiguration.isConfigured() )
                 {
-                    Iterator requiredProperties = archetypeConfiguration.getRequiredProperties().iterator();
-
                     while( requiredProperties.hasNext() )
                     {
                         String requiredProperty = (String) requiredProperties.next();
@@ -188,13 +195,26 @@ implements ArchetypeGenerationConfigurator
                                 
                                 archetypeConfiguration.setProperty( requiredProperty,
                                     archetypeGenerationQueryer.getPropertyValue( requiredProperty,
-                                        packageDefault ) );
+                                        getTransitiveDefaultValue(packageDefault, archetypeConfiguration) ) );
                             } else {
                                 archetypeConfiguration.setProperty( requiredProperty,
                                     archetypeGenerationQueryer.getPropertyValue( requiredProperty,
-                                        archetypeConfiguration.getDefaultValue( requiredProperty ) ) );
+                                        getTransitiveDefaultValue(archetypeConfiguration.getDefaultValue( requiredProperty ), archetypeConfiguration )) );
                             }
                         }
+                        else
+                        {
+                            getLogger().info("Using property: "+requiredProperty+" = "+archetypeConfiguration.getProperty( requiredProperty));
+                        }
+                    }
+                }
+                else
+                {
+
+                    while( requiredProperties.hasNext() )
+                    {
+                        String requiredProperty = (String) requiredProperties.next();
+                        getLogger().info("Using property: "+requiredProperty+" = "+archetypeConfiguration.getProperty( requiredProperty));
                     }
                 }
 
@@ -280,6 +300,21 @@ implements ArchetypeGenerationConfigurator
         request.setProperties( properties );
     }
 
+    private String getTransitiveDefaultValue(String defaultValue, ArchetypeConfiguration archetypeConfiguration) {
+        String result = defaultValue;
+        if(null==result) return null;
+        Iterator requiredProperties = archetypeConfiguration.getRequiredProperties().iterator();
+        while(requiredProperties.hasNext())
+        {
+            String property = (String) requiredProperties.next();
+            if(result.contains("${"+property+"}"))
+            {
+                result = StringUtils.replace(result, "${"+property+"}", archetypeConfiguration.getProperty(property));
+            }
+        }
+        return result;
+    }
+
     private void restoreCommandLineProperties( ArchetypeConfiguration archetypeConfiguration,
         Properties executionProperties )
     {
@@ -294,6 +329,57 @@ implements ArchetypeGenerationConfigurator
                 archetypeConfiguration.setProperty( property, executionProperties.getProperty( property ) );
                 getLogger().debug( "Restored " + property + "=" + archetypeConfiguration.getProperty( property ) );
             }
+        }
+    }
+
+    public static class RequiredPropertyComparator implements Comparator
+    {
+        private final ArchetypeConfiguration archetypeConfiguration;
+
+        public RequiredPropertyComparator(ArchetypeConfiguration archetypeConfiguration)
+        {
+            this.archetypeConfiguration = archetypeConfiguration;
+        }
+
+        public int compare(Object left, Object right)
+        {
+            if (!(left instanceof String) || !(right instanceof String))
+            {
+                return 0;
+            }
+            else
+            {
+                String leftDefault = archetypeConfiguration.getDefaultValue((String)left);
+                String rightDefault = archetypeConfiguration.getDefaultValue((String)right);
+                if(null == leftDefault ||null==rightDefault)
+                {
+                    return comparePropertyName((String)left, (String)right);
+                }
+                else if (leftDefault.indexOf("${"+right+"}")>=0)
+                {//left contains right
+                    return 1;
+                }
+                else if(rightDefault.indexOf("${"+left+"}")>=0)
+                {//right contains left
+                    return -1;
+                }
+                else
+                {
+                    return comparePropertyName((String)left, (String)right);
+                }
+            }
+        }
+
+        private int comparePropertyName(String left, String right) {
+            if("groupId".equals(left)) return -1;
+            if("groupId".equals(right)) return 1;
+            if("artifactId".equals(left)) return -1;
+            if("artifactId".equals(right)) return 1;
+            if("version".equals(left)) return -1;
+            if("version".equals(right)) return 1;
+            if("package".equals(left)) return -1;
+            if("package".equals(right)) return 1;
+            return left.compareTo(right);
         }
     }
 }

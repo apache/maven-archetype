@@ -59,7 +59,7 @@ public class DefaultArchetypeGenerationQueryer
         throws
         PrompterException
     {
-        String query = "Define value for " + requiredProperty + ": ";
+        String query = "Define value for property '" + requiredProperty + "': ";
         String answer;
 
         if ( ( defaultValue != null ) && !defaultValue.equals( "null" ) )
