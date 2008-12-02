@@ -161,6 +161,11 @@ public class DefaultPomManager
         XmlPullParserException
     {
         Model generatedModel = readPom( pom );
+        if( null != generatedModel.getParent() )
+        {
+            getLogger().info( "Parent element not overwrited in " + pom );
+            return;
+        }
 
         Model parentModel = readPom( parentPom );
 
