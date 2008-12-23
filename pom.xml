@@ -1,19 +1,41 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
 
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-parent</artifactId>
-        <version>9</version>
+        <version>10</version>
         <relativePath>../pom/maven/pom.xml</relativePath>
     </parent>
 
     <groupId>org.apache.maven.archetype</groupId>
     <artifactId>maven-archetype</artifactId>
     <version>2.0-alpha-5-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
     <name>Maven Archetype</name>
-    <packaging>pom</packaging>
+    <inceptionYear>2007</inceptionYear>
 
     <modules>
         <module>archetype-testing</module>
@@ -26,18 +48,15 @@
         <netbeans.hint.useExternalMaven>true</netbeans.hint.useExternalMaven>
     </properties>
 
-    <licenses>
-        <license>
-            <name>The Apache Software License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
+    <scm>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/maven/archetype/trunk</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/trunk</developerConnection>
+        <url>http://svn.apache.org/viewcvs.cgi/maven/archetype/trunk</url>
+    </scm>
     <issueManagement>
         <system>jira</system>
         <url>http://jira.codehaus.org/browse/ARCHETYPE</url>
     </issueManagement>
-    <inceptionYear>2007</inceptionYear>
     
     <dependencyManagement>
         <dependencies>
@@ -136,103 +155,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    
-    <profiles>
-        <profile>
-            <id>maven2.0</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <mavenVersion>2.0.8</mavenVersion><!-- with 2.0.9 proxy test fails-->
-            </properties>
-            <dependencyManagement>
-                <dependencies>                    
-                    <dependency>
-                        <groupId>org.apache.maven</groupId>
-                        <artifactId>maven-project</artifactId>
-                        <version>${mavenVersion}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.apache.maven</groupId>
-                        <artifactId>maven-core</artifactId>
-                        <version>${mavenVersion}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.codehaus.plexus</groupId>
-                        <artifactId>plexus-container-default</artifactId>
-                        <version>1.0-alpha-9-stable-1</version>
-                    </dependency>
-                </dependencies>
-            </dependencyManagement>
-        </profile>
-        <profile>
-            <id>maven2.1</id>
-            <properties>
-                <mavenVersion>2.1-SNAPSHOT</mavenVersion>
-            </properties>
-            <dependencyManagement>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.maven</groupId>
-                        <artifactId>maven-plugin-api</artifactId>
-                        <version>${mavenVersion}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.apache.maven</groupId>
-                        <artifactId>maven-model</artifactId>
-                        <version>${mavenVersion}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.apache.maven</groupId>
-                        <artifactId>maven-project</artifactId>
-                        <version>${mavenVersion}</version>
-                        <exclusions>
-                            <exclusion>
-                                <groupId>org.apache.maven</groupId>
-                                <artifactId>maven-artifact</artifactId>
-                            </exclusion>
-                            <exclusion>
-                                <groupId>org.apache.maven</groupId>
-                                <artifactId>maven-artifact-manager</artifactId>
-                            </exclusion>
-                        </exclusions>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.apache.maven</groupId>
-                        <artifactId>maven-core</artifactId>
-                        <version>${mavenVersion}</version>
-                        <exclusions>
-                            <exclusion>
-                                <groupId>org.apache.maven</groupId>
-                                <artifactId>maven-artifact</artifactId>
-                            </exclusion>
-                            <exclusion>
-                                <groupId>org.apache.maven</groupId>
-                                <artifactId>maven-artifact-manager</artifactId>
-                            </exclusion>
-                        </exclusions>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.apache.maven.artifact</groupId>
-                        <artifactId>maven-artifact</artifactId>
-                        <version>3.0-SNAPSHOT</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.codehaus.plexus</groupId>
-                        <artifactId>plexus-container-default</artifactId>
-                        <version>1.0-alpha-40</version>
-                    </dependency>
-                </dependencies>
-            </dependencyManagement>
-        </profile>
-    </profiles> 
-
-    <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/maven/archetype/trunk</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/trunk</developerConnection>
-        <url>http://svn.apache.org/viewcvs.cgi/maven/archetype/trunk</url>
-    </scm>
 
     <build>
         <pluginManagement>
@@ -351,4 +273,95 @@
           </plugin>-->
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>maven2.0</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <mavenVersion>2.0.8</mavenVersion><!-- with 2.0.9 proxy test fails-->
+            </properties>
+            <dependencyManagement>
+                <dependencies>                    
+                    <dependency>
+                        <groupId>org.apache.maven</groupId>
+                        <artifactId>maven-project</artifactId>
+                        <version>${mavenVersion}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.maven</groupId>
+                        <artifactId>maven-core</artifactId>
+                        <version>${mavenVersion}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.codehaus.plexus</groupId>
+                        <artifactId>plexus-container-default</artifactId>
+                        <version>1.0-alpha-9-stable-1</version>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
+        </profile>
+        <profile>
+            <id>maven2.1</id>
+            <properties>
+                <mavenVersion>2.1-SNAPSHOT</mavenVersion>
+            </properties>
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven</groupId>
+                        <artifactId>maven-plugin-api</artifactId>
+                        <version>${mavenVersion}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.maven</groupId>
+                        <artifactId>maven-model</artifactId>
+                        <version>${mavenVersion}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.maven</groupId>
+                        <artifactId>maven-project</artifactId>
+                        <version>${mavenVersion}</version>
+                        <exclusions>
+                            <exclusion>
+                                <groupId>org.apache.maven</groupId>
+                                <artifactId>maven-artifact</artifactId>
+                            </exclusion>
+                            <exclusion>
+                                <groupId>org.apache.maven</groupId>
+                                <artifactId>maven-artifact-manager</artifactId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.maven</groupId>
+                        <artifactId>maven-core</artifactId>
+                        <version>${mavenVersion}</version>
+                        <exclusions>
+                            <exclusion>
+                                <groupId>org.apache.maven</groupId>
+                                <artifactId>maven-artifact</artifactId>
+                            </exclusion>
+                            <exclusion>
+                                <groupId>org.apache.maven</groupId>
+                                <artifactId>maven-artifact-manager</artifactId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.maven.artifact</groupId>
+                        <artifactId>maven-artifact</artifactId>
+                        <version>3.0-SNAPSHOT</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.codehaus.plexus</groupId>
+                        <artifactId>plexus-container-default</artifactId>
+                        <version>1.0-alpha-40</version>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
+        </profile>
+    </profiles> 
 </project>
