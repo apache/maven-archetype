@@ -110,6 +110,36 @@
       <description>A simple Java web application</description>
     </archetype>
     <archetype>
+      <groupId>org.apache.camel.archetypes</groupId>
+      <artifactId>camel-archetype-component</artifactId>
+      <version>RELEASE</version>
+      <description>Creates a new Camel component</description>
+    </archetype>    
+    <archetype>
+      <groupId>org.apache.camel.archetypes</groupId>
+      <artifactId>camel-archetype-activemq</artifactId>
+      <version>RELEASE</version>
+      <description>Creates a new Camel project that configures and interacts with ActiveMQ</description>
+    </archetype>  
+    <archetype>
+      <groupId>org.apache.camel.archetypes</groupId>
+      <artifactId>camel-archetype-java</artifactId>
+      <version>RELEASE</version>
+      <description>Creates a new Camel project using Java DSL</description>
+    </archetype>  
+    <archetype>
+      <groupId>org.apache.camel.archetypes</groupId>
+      <artifactId>camel-archetype-scala</artifactId>
+      <version>RELEASE</version>
+      <description>Creates a new Camel project using Scala DSL</description>
+    </archetype>  
+    <archetype>
+      <groupId>org.apache.camel.archetypes</groupId>
+      <artifactId>camel-archetype-spring</artifactId>
+      <version>RELEASE</version>
+      <description>Creates a new Camel project with added Spring DSL support</description>
+    </archetype>      
+    <archetype>
       <groupId>org.jini.maven-jini-plugin</groupId>
       <artifactId>jini-service-archetype</artifactId>
       <version>2.0</version>
@@ -255,6 +285,6 @@
       <artifactId>gmaven-archetype-mojo</artifactId>
       <version>1.0-rc-3</version>
       <description>Groovy mojo archetype</description>
-    </archetype>
+    </archetype>            
   </archetypes>
 </archetype-catalog>
