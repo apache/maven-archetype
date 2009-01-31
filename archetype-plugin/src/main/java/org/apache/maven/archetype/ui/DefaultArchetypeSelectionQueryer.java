@@ -38,7 +38,7 @@ public class DefaultArchetypeSelectionQueryer
     extends AbstractLogEnabled
     implements ArchetypeSelectionQueryer
 {
-    /** @plexus.requirement */
+    /** @plexus.requirement role-hint="archetype" */
     private Prompter prompter;
 
     public boolean confirmSelection( ArchetypeDefinition archetypeDefinition )
@@ -91,9 +91,10 @@ public class DefaultArchetypeSelectionQueryer
         throws PrompterException
     {
         String query = "Choose archetype:\n";
-        Map answerMap = new HashMap();
+        Map archetypeAnswerMap = new HashMap();
+        Map reversedArchetypeAnswerMap = new HashMap();
         List answers = new ArrayList();
-
+        List archetypeVersions;
         Iterator catalogIterator = catalogs.keySet().iterator();
         int counter = 1;
         int defaultSelection = 0;
@@ -105,21 +106,34 @@ public class DefaultArchetypeSelectionQueryer
             while ( archetypeIterator.hasNext() )
             {
                 org.apache.maven.archetype.catalog.Archetype archetype = (org.apache.maven.archetype.catalog.Archetype) archetypeIterator.next();
-
-                answerMap.put( "" + counter, archetype );
-                query +=
-                    "" + counter + ": " + catalog +
-                    " -> " + archetype.getArtifactId() + " (" + archetype.getDescription() + ")\n";
-                answers.add( "" + counter );
-
-                // the version is not tested. This is intentional.
-                if ( defaultDefinition != null && archetype.getGroupId().equals( defaultDefinition.getGroupId() ) &&
-                    archetype.getArtifactId().equals( defaultDefinition.getArtifactId() ) )
+                String mapKey = ""+counter;
+                String archetypeKey = archetype.getGroupId()+":"+archetype.getArtifactId();
+                if( reversedArchetypeAnswerMap.containsKey( archetypeKey ) )
                 {
-                    defaultSelection = counter;
+                    mapKey = (String) reversedArchetypeAnswerMap.get( archetypeKey );
+                    archetypeVersions = (List) archetypeAnswerMap.get( mapKey );
                 }
+                else
+                {
+                    archetypeVersions = new ArrayList();
+                    archetypeAnswerMap.put( mapKey, archetypeVersions );
+                    reversedArchetypeAnswerMap.put(archetypeKey, mapKey);
+                    query +=
+                        mapKey + ": " + catalog +
+                        " -> " + archetype.getArtifactId() + " (" + archetype.getDescription() + ")\n";
+                    answers.add( mapKey );
 
-                counter++;
+                    // the version is not tested. This is intentional.
+                    if ( defaultDefinition != null && archetype.getGroupId().equals( defaultDefinition.getGroupId() ) &&
+                        archetype.getArtifactId().equals( defaultDefinition.getArtifactId() ) )
+                    {
+                        defaultSelection = counter;
+                    }
+
+                    counter++;
+                }
+                archetypeVersions.add( archetype );
+
             }
 
         }
@@ -136,7 +150,44 @@ public class DefaultArchetypeSelectionQueryer
             answer = prompter.prompt( query, answers, Integer.toString( defaultSelection ) );
         }
 
-        return (org.apache.maven.archetype.catalog.Archetype) answerMap.get( answer );
+        archetypeVersions = (List) archetypeAnswerMap.get( answer );
+
+        if( archetypeVersions.size() == 1 )
+        {
+            return (org.apache.maven.archetype.catalog.Archetype) archetypeVersions.get( 0 );
+        }
+        else
+        {
+            return selectVersion( archetypeVersions );
+        }
+    }
+    private org.apache.maven.archetype.catalog.Archetype selectVersion( List archetypes )
+        throws
+        PrompterException
+    {
+        String query = "Choose version: \n";
+        Map answerMap = new HashMap();
+        List answers = new ArrayList();
+
+        Iterator archetypeVersionsKeys = archetypes.iterator();
+        int counter = 1;
+        org.apache.maven.archetype.catalog.Archetype archetype;
+        while ( archetypeVersionsKeys.hasNext() )
+        {
+            archetype = (org.apache.maven.archetype.catalog.Archetype) archetypeVersionsKeys.next();
+            String archetypeVersion = archetype.getVersion();
+
+            answerMap.put( "" + counter, archetype );
+            query += "" + counter + ": " + archetypeVersion + "\n";
+            answers.add( "" + counter );
+
+            counter++;
+        }
+        query += "Choose a number: ";
+
+        String answer = prompter.prompt( query, answers );
+
+        return  (Archetype) answerMap.get( answer );
     }
 
 //

@@ -107,7 +107,10 @@ public class CreateProjectFromArchetypeMojo
      * - 'remote' which is the shortcut for 'http://repo1.maven.org/maven2'
      * - 'internal' which is an internal catalog
      *
-     * @parameter expression="${archetypeCatalog}" default-value="internal,local"
+     * Since 2.0-alpha-5, default value is no longer internal,local but remote,local
+     * This can only work if central has a catalog file at root.
+     *
+     * @parameter expression="${archetypeCatalog}" default-value="remote,local"
      */
     private String archetypeCatalog;
 

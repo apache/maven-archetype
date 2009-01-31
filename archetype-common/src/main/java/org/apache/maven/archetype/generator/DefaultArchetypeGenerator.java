@@ -163,7 +163,7 @@ public class DefaultArchetypeGenerator
     {
         return org.codehaus.plexus.util.StringUtils.isNotEmpty( request.getArchetypeGroupId() )
         && org.codehaus.plexus.util.StringUtils.isNotEmpty( request.getArchetypeArtifactId() )
-        &&org.codehaus.plexus.util.StringUtils.isNotEmpty( request.getArchetypeVersion() );
+        && org.codehaus.plexus.util.StringUtils.isNotEmpty( request.getArchetypeVersion() );
     }
 
     /** FileSetArchetype */
