@@ -2,7 +2,8 @@
 
  <!-- START SNIPPET: modello-model -->
 
-<model>
+<model xmlns="http://modello.codehaus.org/MODELLO/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://modello.codehaus.org/MODELLO/1.0.0 http://modello.codehaus.org/xsd/modello-1.0.0.xsd">
   <id>archetype</id>
   <name>Archetype</name>
   <description><![CDATA[Maven's model for the archetype descriptor.]]></description>
@@ -28,7 +29,7 @@
           <name>allowPartial</name>
           <version>1.0.0</version>
           <required>true</required>
-          <type>boolean</type>          
+          <type>boolean</type>
         </field>
         <field>
           <name>sources</name>
@@ -45,7 +46,7 @@
             <type>String</type>
             <multiplicity>*</multiplicity>
           </association>
-        </field>        
+        </field>
         <field>
           <name>testSources</name>
           <version>1.0.0</version>
@@ -53,7 +54,7 @@
             <type>String</type>
             <multiplicity>*</multiplicity>
           </association>
-        </field>        
+        </field>
         <field>
           <name>testResources</name>
           <version>1.0.0</version>
@@ -61,7 +62,7 @@
             <type>String</type>
             <multiplicity>*</multiplicity>
           </association>
-        </field>                
+        </field>
         <field>
           <name>siteResources</name>
           <version>1.0.0</version>
@@ -69,7 +70,7 @@
             <type>String</type>
             <multiplicity>*</multiplicity>
           </association>
-        </field>                        
+        </field>
       </fields>
     </class>
   </classes>

@@ -17,7 +17,8 @@
   ~ specific language governing permissions and limitations
   ~ under the License.
   -->
-<model>
+<model xmlns="http://modello.codehaus.org/MODELLO/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://modello.codehaus.org/MODELLO/1.0.0 http://modello.codehaus.org/xsd/modello-1.0.0.xsd">
   <id>archetype-catalog</id>
   <name>ArchetypeCatalog</name>
   <description>
@@ -122,10 +123,10 @@
         {
             return false;
         }
-        else 
+        else
         {
             Archetype a = (Archetype) object;
-            return org.codehaus.plexus.util.StringUtils.equals( groupId, a.getGroupId () ) && 
+            return org.codehaus.plexus.util.StringUtils.equals( groupId, a.getGroupId () ) &&
                    org.codehaus.plexus.util.StringUtils.equals( artifactId, a.getArtifactId () );
         }
     }
