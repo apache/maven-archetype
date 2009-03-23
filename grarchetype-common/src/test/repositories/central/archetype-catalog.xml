@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<archetype-catalog>
+  <archetypes>
+    <archetype>
+      <groupId>archetypes</groupId>
+      <artifactId>single-version</artifactId>
+      <version>RELEASE</version>
+      <description></description>
+    </archetype>
+    <archetype>
+      <groupId>archetypes</groupId>
+      <artifactId>multi-version</artifactId>
+      <version>1</version>
+    </archetype>
+    <archetype>
+      <groupId>archetypes</groupId>
+      <artifactId>multi-version</artifactId>
+      <version>2</version>
+    </archetype>
+    <archetype>
+      <groupId>archetypes</groupId>
+      <artifactId>multi-version</artifactId>
+      <version>3</version>
+    </archetype>
+
+    <archetype>
+      <groupId>archetypes</groupId>
+      <artifactId>nested-complete-main</artifactId>
+      <version>1.0</version>
+    </archetype>
+    <archetype>
+      <groupId>archetypes</groupId>
+      <artifactId>nested-complete-inner</artifactId>
+      <version>1.0</version>
+    </archetype>
+    <archetype>
+      <groupId>archetypes</groupId>
+      <artifactId>nested-complete-innest</artifactId>
+      <version>1.0</version>
+    </archetype>
+
+    <archetype>
+      <groupId>archetypes</groupId>
+      <artifactId>nested-missing-main</artifactId>
+      <version>1.0</version>
+    </archetype>
+    <archetype>
+      <groupId>archetypes</groupId>
+      <artifactId>nested-missing-inner</artifactId>
+      <version>1.0</version>
+    </archetype>
+  </archetypes>
+</archetype-catalog>

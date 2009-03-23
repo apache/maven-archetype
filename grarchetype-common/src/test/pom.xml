@@ -1,0 +1,9 @@
+
+<project schemaLocation='http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd'>
+    <tag0:modelVersion xmlns:tag0='http://maven.apache.org/POM/4.0.0'>4.0.0</tag0:modelVersion>
+    <tag0:groupId xmlns:tag0='http://maven.apache.org/POM/4.0.0'>${groupId}</tag0:groupId>
+    <tag0:artifactId xmlns:tag0='http://maven.apache.org/POM/4.0.0'>${artifactId}</tag0:artifactId>
+    <tag0:version xmlns:tag0='http://maven.apache.org/POM/4.0.0'>${version}</tag0:version>
+    <tag0:name xmlns:tag0='http://maven.apache.org/POM/4.0.0'>Maven archetype Test</tag0:name>
+    <tag0:packaging xmlns:tag0='http://maven.apache.org/POM/4.0.0'>jar</tag0:packaging>
+</project>

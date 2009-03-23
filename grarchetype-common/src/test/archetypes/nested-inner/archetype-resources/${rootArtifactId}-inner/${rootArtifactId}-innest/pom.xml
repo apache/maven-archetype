@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+      <groupId>${groupId}</groupId>
+      <artifactId>${upArtifactId}</artifactId>
+      <version>${version}</version>
+  </parent>
+
+  <artifactId>${artifactId}</artifactId>
+  <version>${version}</version>
+
+  <packaging>jar</packaging>
+
+  <reporting>
+      <outputDirectory>initial directory</outputDirectory>
+      <excludeDefaults>initial excluded</excludeDefaults>
+      <plugins>
+          <plugin>
+              <groupId>archetypes</groupId>
+              <artifactId>plugin-merged</artifactId>
+              <version>1</version>
+          </plugin>
+          <plugin>
+              <groupId>archetypes</groupId>
+              <artifactId>plugin-in-initial</artifactId>
+              <version>1</version>
+          </plugin>
+      </plugins>
+  </reporting>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>archetypes</groupId>
+                <artifactId>only-in-initial</artifactId>
+                <version>1.0</version>
+            </dependency>
+            <dependency>
+                <groupId>archetypes</groupId>
+                <artifactId>merged</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>archetypes</groupId>
+                <artifactId>overrided</artifactId>
+                <version>1.0</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+
+    <repositories>
+        <repository>
+            <id>repository-in-initial</id>
+            <layout>default</layout>
+            <name>repository-in-initial</name>
+            <url>http://host:1</url>
+        </repository>
+        <repository>
+            <id>repository-merged</id>
+            <layout>default</layout>
+            <name>repository-merged</name>
+            <url>http://host:1</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>repository-in-initial</id>
+            <layout>default</layout>
+            <name>repository-in-initial</name>
+            <url>http://host:1</url>
+        </pluginRepository>
+        <pluginRepository>
+            <id>repository-merged</id>
+            <layout>default</layout>
+            <name>repository-merged</name>
+            <url>http://host:1</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+  <properties>
+    <replace>
+    artifactId = ${artifactId}
+    rootArtifactId = ${rootArtifactId}
+    upArtifactId = ${upArtifactId}
+    </replace>
+    <merged-property>1</merged-property>
+    <initial-property>1</initial-property>
+  </properties>
+</project>

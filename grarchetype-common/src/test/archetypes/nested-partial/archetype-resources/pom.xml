@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>${groupId}</groupId>
+    <artifactId>${artifactId}</artifactId>
+    <version>${version}</version>
+
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>${rootArtifactId}-a</module>
+        <module>${rootArtifactId}-b</module>
+        <module>${rootArtifactId}-c</module>
+    </modules>
+
+    <build>
+        <defaultGoal>package</defaultGoal>
+        <plugins>
+            <plugin>
+                <groupId>archetypes</groupId>
+                <artifactId>plugin-merged</artifactId>
+                <version>2</version>
+            </plugin>
+            <plugin>
+                <groupId>archetypes</groupId>
+                <artifactId>plugin-in-partial</artifactId>
+                <version>2</version>
+            </plugin>
+        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>archetypes</groupId>
+                    <artifactId>plugin-merged</artifactId>
+                    <version>2</version>
+                </plugin>
+                <plugin>
+                    <groupId>archetypes</groupId>
+                    <artifactId>plugin-in-partial</artifactId>
+                    <version>2</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <reporting>
+        <outputDirectory>partial directory</outputDirectory>
+        <excludeDefaults>partial excluded</excludeDefaults>
+        <plugins>
+            <plugin>
+                <groupId>archetypes</groupId>
+                <artifactId>plugin-merged</artifactId>
+                <version>2</version>
+            </plugin>
+            <plugin>
+                <groupId>archetypes</groupId>
+                <artifactId>plugin-in-partial</artifactId>
+                <version>2</version>
+            </plugin>
+        </plugins>
+    </reporting>
+
+    <dependencies>
+        <dependency>
+            <groupId>archetypes</groupId>
+            <artifactId>only-in-partial</artifactId>
+            <version>2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>archetypes</groupId>
+            <artifactId>merged</artifactId>
+            <version>2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>archetypes</groupId>
+            <artifactId>overrided</artifactId>
+            <version>2.0</version>
+        </dependency>
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>archetypes</groupId>
+                <artifactId>only-in-partial</artifactId>
+                <version>2.0</version>
+            </dependency>
+            <dependency>
+                <groupId>archetypes</groupId>
+                <artifactId>merged</artifactId>
+                <version>2.0</version>
+            </dependency>
+            <dependency>
+                <groupId>archetypes</groupId>
+                <artifactId>overrided</artifactId>
+                <version>2.0</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <repositories>
+        <repository>
+            <id>repository-in-partial</id>
+            <layout>legacy</layout>
+            <name>repository-in-partial</name>
+            <url>http://host:2</url>
+        </repository>
+        <repository>
+            <id>repository-merged</id>
+            <layout>legacy</layout>
+            <name>repository-merged</name>
+            <url>http://host:2</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>repository-in-partial</id>
+            <layout>legacy</layout>
+            <name>repository-in-partial</name>
+            <url>http://host:2</url>
+        </pluginRepository>
+        <pluginRepository>
+            <id>repository-merged</id>
+            <layout>legacy</layout>
+            <name>repository-merged</name>
+            <url>http://host:2</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <properties>
+        <replace>
+    artifactId = ${artifactId}
+    rootArtifactId = ${rootArtifactId}
+    upArtifactId = ${upArtifactId}
+        </replace>
+        <partial-property>2</partial-property>
+        <merged-property>2</merged-property>
+    </properties>
+</project>

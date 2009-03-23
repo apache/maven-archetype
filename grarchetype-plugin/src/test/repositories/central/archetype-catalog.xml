@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<archetype-catalog>
+  <archetypes>
+    <archetype>
+      <groupId>archetypes</groupId>
+      <artifactId>nested-properties-main</artifactId>
+      <version>1.0</version>
+    </archetype>
+    <archetype>
+      <groupId>archetypes</groupId>
+      <artifactId>nested-properties-inner</artifactId>
+      <version>1.0</version>
+    </archetype>
+    <archetype>
+      <groupId>archetypes</groupId>
+      <artifactId>nested-properties-innest</artifactId>
+      <version>1.0</version>
+    </archetype>
+  </archetypes>
+</archetype-catalog>
