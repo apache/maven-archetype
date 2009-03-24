@@ -54,7 +54,7 @@ public class DefaultArchetypeSelector
     /** @plexus.requirement */
     private org.apache.maven.archetype.Archetype archetype;
 
-    public void selectArchetype( ArchetypeGenerationRequest request, 
+    public void selectArchetype( ArchetypeGenerationRequest request,
             Boolean interactiveMode, String catalogs )
         throws
         ArchetypeNotDefined,
@@ -62,7 +62,7 @@ public class DefaultArchetypeSelector
         UnknownGroup,
         IOException,
         PrompterException,
-        ArchetypeSelectionFailure                    
+        ArchetypeSelectionFailure
     {
         //This should be an internal class
         ArchetypeDefinition definition = new ArchetypeDefinition();
@@ -70,7 +70,7 @@ public class DefaultArchetypeSelector
         definition.setGroupId( request.getArchetypeGroupId() );
         definition.setArtifactId( request.getArchetypeArtifactId() );
         definition.setVersion( request.getArchetypeVersion() );
-        
+
         Map archetypes = getArchetypesByCatalog ( catalogs );
 
         if ( definition.isDefined ()
@@ -109,7 +109,7 @@ public class DefaultArchetypeSelector
                         else if ( keySplitted.length > 1 )
                         {
                             int lastIndex = catalogKey.lastIndexOf("/");
-                            String catalogBase = catalogKey.substring(0, 
+                            String catalogBase = catalogKey.substring(0,
                                     (lastIndex > 7 ? lastIndex : catalogKey.length()));
                             definition.setRepository ( catalogBase );
                         }
@@ -124,7 +124,7 @@ public class DefaultArchetypeSelector
                 {
                     getLogger ().warn ( "No archetype repository found. Falling back to central repository (http://repo1.maven.org/maven2). " );
                     getLogger ().warn ( "Use -DarchetypeRepository=<your repository> if archetype's repository is elsewhere." );
-                    
+
                     definition.setRepository("http://repo1.maven.org/maven2");
                 }
             }
@@ -157,7 +157,7 @@ public class DefaultArchetypeSelector
                         else if ( keySplitted.length > 1 )
                         {
                             int lastIndex = catalogKey.lastIndexOf("/");
-                            String catalogBase = catalogKey.substring(0, 
+                            String catalogBase = catalogKey.substring(0,
                                     (lastIndex > 7 ? lastIndex : catalogKey.length()));
                             definition.setRepository ( catalogBase );
                         }
@@ -197,7 +197,7 @@ public class DefaultArchetypeSelector
 
         if ( !definition.isDefined() && !definition.isPartiallyDefined() )
         {
-            // if artifact ID is set to it's default, we still prompt to confirm 
+            // if artifact ID is set to it's default, we still prompt to confirm
             if ( definition.getArtifactId() == null )
             {
                 getLogger().info( "No archetype defined. Using " + DEFAULT_ARCHETYPE_ARTIFACTID + " ("
@@ -225,7 +225,7 @@ public class DefaultArchetypeSelector
                     else if ( keySplitted.length > 1 )
                     {
                         int lastIndex = catalogKey.lastIndexOf("/");
-                        String catalogBase = catalogKey.substring(0, 
+                        String catalogBase = catalogKey.substring(0,
                                 (lastIndex > 7 ? lastIndex : catalogKey.length()));
                         definition.setRepository ( catalogBase );
                     }
@@ -275,7 +275,13 @@ public class DefaultArchetypeSelector
             } else if ("local".equalsIgnoreCase(catalog)) {
                 archetypes.put("local", archetype.getDefaultLocalCatalog().getArchetypes());
             } else if ("remote".equalsIgnoreCase(catalog)) {
-                archetypes.put("remote", archetype.getRemoteCatalog().getArchetypes());
+                List archetypesFromRemote = archetype.getRemoteCatalog().getArchetypes();
+                if(archetypesFromRemote.size() > 0) {
+                    archetypes.put("remote", archetypesFromRemote);
+                } else {
+                    getLogger().warn("No archetype found in Remote catalog. Defaulting to internal Catalog");
+                    archetypes.put("internal", archetype.getInternalCatalog().getArchetypes());
+                }
             } else if (catalog.startsWith("file://")) {
                 String path = catalog.substring(7);
                 archetypes.put(catalog, archetype.getLocalCatalog(path).getArchetypes());
