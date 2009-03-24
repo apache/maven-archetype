@@ -20,6 +20,7 @@
 package org.apache.maven.archetype.repositorycrawler;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
@@ -163,17 +164,23 @@ implements RepositoryCrawler
 
     public boolean writeCatalog ( ArchetypeCatalog archetypeCatalog, File archetypeCatalogFile )
     {
+        FileWriter fileWriter = null;
         try
         {
             ArchetypeCatalogXpp3Writer catalogWriter = new ArchetypeCatalogXpp3Writer ();
 
-            catalogWriter.write ( new FileWriter ( archetypeCatalogFile ), archetypeCatalog );
+            fileWriter = new FileWriter ( archetypeCatalogFile );
+            catalogWriter.write ( fileWriter, archetypeCatalog );
             return true;
         }
         catch ( IOException ex )
         {
             getLogger ().warn ( "Catalog can not be writen to " + archetypeCatalogFile, ex );
             return false;
+        }
+        finally
+        {
+            IOUtils.closeQuietly(fileWriter);
         }
     }
 }
