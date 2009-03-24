@@ -110,36 +110,6 @@
       <description>A simple Java web application</description>
     </archetype>
     <archetype>
-      <groupId>org.apache.camel.archetypes</groupId>
-      <artifactId>camel-archetype-component</artifactId>
-      <version>RELEASE</version>
-      <description>Creates a new Camel component</description>
-    </archetype>    
-    <archetype>
-      <groupId>org.apache.camel.archetypes</groupId>
-      <artifactId>camel-archetype-activemq</artifactId>
-      <version>RELEASE</version>
-      <description>Creates a new Camel project that configures and interacts with ActiveMQ</description>
-    </archetype>  
-    <archetype>
-      <groupId>org.apache.camel.archetypes</groupId>
-      <artifactId>camel-archetype-java</artifactId>
-      <version>RELEASE</version>
-      <description>Creates a new Camel project using Java DSL</description>
-    </archetype>  
-    <archetype>
-      <groupId>org.apache.camel.archetypes</groupId>
-      <artifactId>camel-archetype-scala</artifactId>
-      <version>RELEASE</version>
-      <description>Creates a new Camel project using Scala DSL</description>
-    </archetype>  
-    <archetype>
-      <groupId>org.apache.camel.archetypes</groupId>
-      <artifactId>camel-archetype-spring</artifactId>
-      <version>RELEASE</version>
-      <description>Creates a new Camel project with added Spring DSL support</description>
-    </archetype>      
-    <archetype>
       <groupId>org.jini.maven-jini-plugin</groupId>
       <artifactId>jini-service-archetype</artifactId>
       <version>2.0</version>
@@ -185,13 +155,6 @@
       <version>RELEASE</version>
       <repository>https://maven.atlassian.com/public</repository>
       <description>Atlassian Confluence plugin archetype</description>
-    </archetype>
-    <archetype>
-      <groupId>com.atlassian.maven.archetypes</groupId>
-      <artifactId>jira-plugin-archetype</artifactId>
-      <version>5</version>
-      <repository>https://maven.atlassian.com/public</repository>
-      <description>Atlassian JIRA plugin archetype</description>
     </archetype>
     <archetype>
       <groupId>net.sf.maven-har</groupId>
@@ -277,14 +240,20 @@
     <archetype>
       <groupId>org.codehaus.groovy.maven.archetypes</groupId>
       <artifactId>gmaven-archetype-basic</artifactId>
-      <version>1.0-rc-3</version>
+      <version>RELEASE</version>
       <description>Groovy basic archetype</description>
     </archetype>
     <archetype>
       <groupId>org.codehaus.groovy.maven.archetypes</groupId>
       <artifactId>gmaven-archetype-mojo</artifactId>
-      <version>1.0-rc-3</version>
+      <version>RELEASE</version>
       <description>Groovy mojo archetype</description>
-    </archetype>            
+    </archetype>
+    <archetype>
+      <groupId>org.apache.struts</groupId>
+      <artifactId>struts2-archetype-starter</artifactId>
+      <version>RELEASE</version>
+      <description>Struts 2 Starter Archetype</description>
+    </archetype>
   </archetypes>
 </archetype-catalog>
