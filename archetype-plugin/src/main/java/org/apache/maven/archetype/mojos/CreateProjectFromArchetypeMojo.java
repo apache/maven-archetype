@@ -131,7 +131,7 @@ public class CreateProjectFromArchetypeMojo
      * @required
      */
     private List remoteArtifactRepositories;
-        
+
     /**
      * User settings use to check the interactiveMode.
      *
@@ -143,8 +143,8 @@ public class CreateProjectFromArchetypeMojo
     /** @parameter expression="${basedir}" */
     private File basedir;
 
-    /** 
-     *  @parameter expression="${session}" 
+    /**
+     *  @parameter expression="${session}"
      *  @readonly
      */
     private MavenSession session;
@@ -157,9 +157,9 @@ public class CreateProjectFromArchetypeMojo
 
     public void execute()
         throws MojoExecutionException, MojoFailureException
-    {        
+    {
         Properties executionProperties = session.getExecutionProperties();
-        
+
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest()
             .setArchetypeGroupId( archetypeGroupId )
             .setArchetypeArtifactId( archetypeArtifactId )
@@ -179,7 +179,7 @@ public class CreateProjectFromArchetypeMojo
             {
                 getLog().info( "Generating project in Batch mode" );
             }
-            
+
             selector.selectArchetype( request, interactiveMode, archetypeCatalog );
 
             configurator.configureArchetype( request, interactiveMode, executionProperties );
