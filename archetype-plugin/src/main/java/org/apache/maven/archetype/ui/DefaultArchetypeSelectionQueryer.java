@@ -26,12 +26,7 @@ import org.codehaus.plexus.components.interactivity.Prompter;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /** @plexus.component */
 public class DefaultArchetypeSelectionQueryer
@@ -168,6 +163,14 @@ public class DefaultArchetypeSelectionQueryer
         String query = "Choose version: \n";
         Map answerMap = new HashMap();
         List answers = new ArrayList();
+
+        Collections.sort(archetypes, new Comparator() {
+            public int compare( Object o1, Object o2 ) {
+                org.apache.maven.archetype.catalog.Archetype a1 = (org.apache.maven.archetype.catalog.Archetype) o1;
+                org.apache.maven.archetype.catalog.Archetype a2 = (org.apache.maven.archetype.catalog.Archetype) o2;
+                return a1.getVersion().compareTo( a2.getVersion() );
+            }
+        });
 
         Iterator archetypeVersionsKeys = archetypes.iterator();
         int counter = 1;
