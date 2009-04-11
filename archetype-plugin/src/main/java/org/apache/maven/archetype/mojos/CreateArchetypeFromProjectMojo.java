@@ -147,7 +147,7 @@ public class CreateArchetypeFromProjectMojo
      */
     private String archetypePostPhase;
 
-    /** @parameter expression="${basedir}/target" */
+    /** @parameter expression="${project.build.directory}" */
     private File outputDirectory;
 
     /** @parameter expression="${testMode}" */
