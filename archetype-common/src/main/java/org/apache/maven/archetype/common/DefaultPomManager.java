@@ -22,20 +22,25 @@ package org.apache.maven.archetype.common;
 import org.apache.maven.archetype.common.util.FileCharsetDetector;
 import org.apache.maven.archetype.common.util.Format;
 import org.apache.maven.archetype.exception.InvalidPackaging;
-import org.apache.maven.model.Build;
-import org.apache.maven.model.Dependency;
-import org.apache.maven.model.Model;
-import org.apache.maven.model.Parent;
-import org.apache.maven.model.Plugin;
-import org.apache.maven.model.ReportPlugin;
-import org.apache.maven.model.Reporting;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
+import org.apache.maven.model.Model;
+import org.apache.maven.model.Parent;
+import org.apache.maven.model.Dependency;
+import org.apache.maven.model.Build;
+import org.apache.maven.model.Profile;
+import org.apache.maven.model.ModelBase;
+import org.apache.maven.model.Reporting;
+import org.apache.maven.model.ReportPlugin;
+import org.apache.maven.model.BuildBase;
+import org.apache.maven.model.Plugin;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+import org.codehaus.plexus.util.xml.Xpp3DomUtils;
+import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -57,10 +62,7 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /** @plexus.component */
 public class DefaultPomManager
@@ -194,8 +196,12 @@ public class DefaultPomManager
     {
         Model model = readPom( pom );
         Model generatedModel = readPom( temporaryPom );
-        mergeDependencies( model, generatedModel );
-        mergeBuildPlugins( model, generatedModel );
+
+        model.getProperties().putAll( generatedModel.getProperties() );
+
+        mergeModelBase( model, generatedModel );
+        mergeModelBuild( model, generatedModel );
+        mergeProfiles( model, generatedModel );
         mergeReportPlugins( model, generatedModel );
 
 //
@@ -404,7 +410,7 @@ public class DefaultPomManager
             Dependency dependency = (Dependency) dependenciesIterator.next();
 
             dependencyMap.put(
-                dependency.getGroupId() + ":" + dependency.getArtifactId(),
+                dependency.getManagementKey(),
                 dependency
             );
         }
@@ -412,8 +418,7 @@ public class DefaultPomManager
         return dependencyMap;
     }
 
-    private void mergeBuildPlugins( Model model,
-                                    Model generatedModel )
+    private void mergeModelBuild( Model model, Model generatedModel )
     {
         if ( generatedModel.getBuild() != null )
         {
@@ -422,31 +427,69 @@ public class DefaultPomManager
                 model.setBuild( new Build() );
             }
 
-            Map pluginsByIds = model.getBuild().getPluginsAsMap();
-            Map generatedPluginsByIds = generatedModel.getBuild().getPluginsAsMap();
+            mergeBuildPlugins( model.getBuild(), generatedModel.getBuild() );
+        }
+    }
 
-            Iterator generatedPluginsIds = generatedPluginsByIds.keySet().iterator();
-            while ( generatedPluginsIds.hasNext() )
+    private void mergeProfiles( Model model, Model generatedModel )
+    {
+        List generatedProfiles = generatedModel.getProfiles();
+        if ( generatedProfiles != null && generatedProfiles.size() > 0 )
+        {
+            List modelProfiles = model.getProfiles();
+            Map modelProfileIdMap = new HashMap();
+            if ( modelProfiles == null )
             {
-                String generatedPluginsId = (String) generatedPluginsIds.next();
-
-                if ( !pluginsByIds.containsKey( generatedPluginsId ) )
+                modelProfiles = new ArrayList();
+                model.setProfiles( modelProfiles );
+            }
+            else if ( modelProfiles.size() > 0 )
+            {
+                // add profile ids from the model for later lookups to the modelProfileIds set
+                Iterator modelProfilesIterator = modelProfiles.iterator();
+                while ( modelProfilesIterator.hasNext() )
                 {
-                    model.getBuild().addPlugin(
-                        (Plugin) generatedPluginsByIds.get( generatedPluginsId )
-                    );
+                    Profile modelProfile = (Profile) modelProfilesIterator.next();
+                    modelProfileIdMap.put( modelProfile.getId(), modelProfile );
+                }
+            }
+
+            Iterator generatedProfilesIterator = generatedProfiles.iterator();
+            while ( generatedProfilesIterator.hasNext() )
+            {
+                Profile generatedProfile = (Profile) generatedProfilesIterator.next();
+                String generatedProfileId = generatedProfile.getId();
+                if ( !modelProfileIdMap.containsKey( generatedProfileId ) )
+                {
+                    model.addProfile( generatedProfile );
                 }
                 else
                 {
-                    getLogger().warn( "Can not override plugin: " + generatedPluginsId );
+                    getLogger().warn( "Try to merge profiles with id " + generatedProfileId );
+                    mergeModelBase( (Profile) modelProfileIdMap.get( generatedProfileId ), generatedProfile );
+                    mergeProfileBuild( (Profile) modelProfileIdMap.get( generatedProfileId ), generatedProfile );
                 }
             }
         }
     }
 
-    private void mergeDependencies( Model model,
-                                    Model generatedModel )
+    private void mergeProfileBuild( Profile modelProfile, Profile generatedProfile )
     {
+        if ( generatedProfile.getBuild() != null )
+        {
+            if ( modelProfile.getBuild() == null )
+            {
+                modelProfile.setBuild( new Build() );
+            }
+            mergeBuildPlugins( modelProfile.getBuild(), generatedProfile.getBuild() );
+            // TODO: merge more than just plugins in the profile...
+        }
+    }
+
+    private void mergeModelBase( ModelBase model, ModelBase generatedModel )
+    {
+        // ModelBase can be a Model or a Profile...
+
         Map dependenciesByIds = createDependencyMap( model.getDependencies() );
         Map generatedDependenciesByIds = createDependencyMap( generatedModel.getDependencies() );
 
@@ -465,6 +508,11 @@ public class DefaultPomManager
             {
                 getLogger().warn( "Can not override property: " + generatedDependencyId );
             }
+
+        // TODO: maybe warn, if a property key gets overriden?
+        model.getProperties().putAll( generatedModel.getProperties() );
+
+        // TODO: maybe merge more than just dependencies and properties...
         }
     }
 
@@ -497,6 +545,31 @@ public class DefaultPomManager
                 {
                     getLogger().warn( "Can not override report: " + generatedReportPluginsId );
                 }
+            }
+        }
+    }
+    private void mergeBuildPlugins( BuildBase modelBuild, BuildBase generatedModelBuild )
+    {
+        Map pluginsByIds = modelBuild.getPluginsAsMap();
+        List generatedPlugins = generatedModelBuild.getPlugins();
+
+        Iterator generatedPluginsIterator = generatedPlugins.iterator();
+        while ( generatedPluginsIterator.hasNext() )
+        {
+            Plugin generatedPlugin = (Plugin) generatedPluginsIterator.next();
+            String generatedPluginsId = generatedPlugin.getKey();
+
+            if ( !pluginsByIds.containsKey( generatedPluginsId ) )
+            {
+                modelBuild.addPlugin( generatedPlugin );
+            }
+            else
+            {
+                getLogger().info( "Try to merge plugin configuration of plugins with id: " + generatedPluginsId );
+                Plugin modelPlugin = (Plugin) pluginsByIds.get( generatedPluginsId );
+
+                modelPlugin.setConfiguration( Xpp3DomUtils.mergeXpp3Dom( (Xpp3Dom) generatedPlugin.getConfiguration(),
+                                                                         (Xpp3Dom) modelPlugin.getConfiguration() ) );
             }
         }
     }
