@@ -64,9 +64,15 @@ public class RemoteCatalogArchetypeDataSource
             Repository wagonRepository = new Repository( "archetype", repository );
             Wagon wagon = wagonManager.getWagon( wagonRepository );
             File catalog = File.createTempFile( "archetype-catalog", ".xml" );
-            wagon.connect( wagonRepository );
-            wagon.get( "archetype-catalog.xml", catalog );
-            wagon.disconnect();
+            try
+            {
+                wagon.connect( wagonRepository );
+                wagon.get( "archetype-catalog.xml", catalog );
+            }
+            finally
+            {
+                disconnectWagon( wagon );
+            }
             return readCatalog( new FileReader( catalog ) );
         }
         catch ( ArchetypeDataSourceException e )
@@ -85,9 +91,15 @@ public class RemoteCatalogArchetypeDataSource
                 Repository wagonRepository = new Repository( "archetype", repositoryPath );
                 Wagon wagon = wagonManager.getWagon( wagonRepository );
                 File catalog = File.createTempFile( "archetype-catalog", ".xml" );
-                wagon.connect( wagonRepository );
-                wagon.get( fileName , catalog );
-                wagon.disconnect();
+                try
+                {
+                    wagon.connect( wagonRepository );
+                    wagon.get( fileName, catalog );
+                }
+                finally
+                {
+                    disconnectWagon( wagon );
+                }
                 return readCatalog( new FileReader( catalog ) );
             }
             catch ( Exception ex )
@@ -142,4 +154,17 @@ public class RemoteCatalogArchetypeDataSource
     {
         throw new ArchetypeDataSourceException( "Not supported yet." );
     }
+
+    private void disconnectWagon( Wagon wagon )
+    {
+        try
+        {
+            wagon.disconnect();
+        }
+        catch ( Exception e )
+        {
+            getLogger().warn( "Problem disconnecting from wagon - ignoring: " + e.getMessage() );
+        }
+    }
+
 }
