@@ -25,7 +25,7 @@ under the License.
   <parent>
     <groupId>org.apache.maven</groupId>
     <artifactId>maven-parent</artifactId>
-    <version>11</version>
+    <version>15</version>
     <relativePath>../pom/maven/pom.xml</relativePath>
   </parent>
 
@@ -45,6 +45,7 @@ under the License.
   </modules>
 
   <properties>
+    <mavenVersion>2.0.8</mavenVersion><!-- with 2.0.9 proxy test fails-->
     <netbeans.hint.useExternalMaven>true</netbeans.hint.useExternalMaven>
   </properties>
 
@@ -76,9 +77,24 @@ under the License.
         <version>${mavenVersion}</version>
       </dependency>
       <dependency>
+        <groupId>org.apache.maven</groupId>
+        <artifactId>maven-project</artifactId>
+        <version>${mavenVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven</groupId>
+        <artifactId>maven-core</artifactId>
+        <version>${mavenVersion}</version>
+      </dependency>
+      <dependency>
         <groupId>org.apache.maven.shared</groupId>
         <artifactId>maven-invoker</artifactId>
         <version>2.0.10</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-container-default</artifactId>
+        <version>1.0-alpha-9-stable-1</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
@@ -277,32 +293,21 @@ under the License.
 
   <profiles>
     <profile>
-      <id>maven2.0</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <properties>
-        <mavenVersion>2.0.8</mavenVersion><!-- with 2.0.9 proxy test fails-->
-      </properties>
-      <dependencyManagement>
-        <dependencies>
-          <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-project</artifactId>
-            <version>${mavenVersion}</version>
-          </dependency>
-          <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-core</artifactId>
-            <version>${mavenVersion}</version>
-          </dependency>
-          <dependency>
-            <groupId>org.codehaus.plexus</groupId>
-            <artifactId>plexus-container-default</artifactId>
-            <version>1.0-alpha-9-stable-1</version>
-          </dependency>
-        </dependencies>
-      </dependencyManagement>
+      <id>apache-release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <dependencies>
+              <dependency>
+                <groupId>org.apache.apache.resources</groupId>
+                <artifactId>apache-source-release-assembly-descriptor</artifactId>
+                <version>1.0.2</version>
+              </dependency>
+            </dependencies>
+           </plugin>
+        </plugins>
+      </build>
     </profile>
     <profile>
       <id>maven2.1</id>
