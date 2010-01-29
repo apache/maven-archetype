@@ -268,13 +268,13 @@
       <description>A simple archetype for create custom JSF components using MyFaces</description>
     </archetype>
     <archetype>
-      <groupId>org.codehaus.groovy.maven.archetypes</groupId>
+      <groupId>org.codehaus.gmaven.archetypes</groupId>
       <artifactId>gmaven-archetype-basic</artifactId>
       <version>RELEASE</version>
       <description>Groovy basic archetype</description>
     </archetype>
     <archetype>
-      <groupId>org.codehaus.groovy.maven.archetypes</groupId>
+      <groupId>org.codehaus.gmaven.archetypes</groupId>
       <artifactId>gmaven-archetype-mojo</artifactId>
       <version>RELEASE</version>
       <description>Groovy mojo archetype</description>
