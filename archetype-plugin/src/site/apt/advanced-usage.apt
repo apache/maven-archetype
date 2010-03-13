@@ -29,7 +29,7 @@
 
 Archetype creation
 
-    Creating an archetype from an existing project involves three steps :
+    Creating an archetype from an existing project involves three steps:
 
     * the archetype resolution
 
@@ -42,10 +42,10 @@ Archetype creation
 
 Usage
 
-    Calling <<<mvn archetype:create-from-project>>> the plugin first resolves 
-    the package by guessing the project directory. 
+    Calling <<<mvn archetype:create-from-project>>> the plugin first resolves
+    the package by guessing the project directory.
 
-    It then generates the directory tree of the archetype in the 
+    It then generates the directory tree of the archetype in the
     <<<target/generated-sources/archetype>>> directory.
 
 +---
@@ -80,7 +80,7 @@ mvn archetype:create-from-project
 [INFO] ------------------------------------------------------------------------
 +---
 
-    Then move to that generated directory and call <<<mvn install>>> on the 
+    Then move to that generated directory and call <<<mvn install>>> on the
     created archetype.
 
 +---
@@ -135,16 +135,16 @@ $ mvn archetype:generate -DarchetypeCatalog=local
 [INFO] [archetype:generate]
 Choose archetype:
 1: local -> project (project)
-Choose a number:  (1): 
+Choose a number:  (1):
 +---
 
 Configuration
-    
+
     The <<<create-from-project>>> goal enable the user to provide some sensible
     configuration using the system properties or a property file.
 
-    The system properties permits the user to define the groupId, artifactId, 
-    version of the created archetype. They also permits to override the resolved 
+    The system properties permits the user to define the groupId, artifactId,
+    version of the created archetype. They also permits to override the resolved
     package and to create a partial archetype.
 
     When used, the property file takes precedence over the system properties.
