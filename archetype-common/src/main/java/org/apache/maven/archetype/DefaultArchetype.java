@@ -26,6 +26,7 @@ import org.apache.maven.archetype.source.ArchetypeDataSource;
 import org.apache.maven.archetype.source.ArchetypeDataSourceException;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.util.IOUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -119,8 +120,11 @@ public class DefaultArchetype
             else
             {
                 String fileName = files[i].getAbsolutePath().substring( offset + 1 );
-                
-                if(File.separatorChar != '/'){ fileName = fileName.replace('\\', '/'); }
+
+                if ( File.separatorChar != '/' )
+                {
+                    fileName = fileName.replace( '\\', '/' );
+                }
 
                 ZipEntry e = new ZipEntry( fileName );
 
@@ -128,14 +132,7 @@ public class DefaultArchetype
 
                 FileInputStream is = new FileInputStream( files[i] );
 
-                byte[] buf = new byte[4096];
-
-                int n;
-
-                while ( ( n = is.read( buf ) ) > 0 )
-                {
-                    zos.write( buf, 0, n );
-                }
+                IOUtil.copy( is, zos );
 
                 is.close();
 
@@ -162,15 +159,15 @@ public class DefaultArchetype
 
     public ArchetypeCatalog getDefaultLocalCatalog()
     {
-        return getLocalCatalog("${user.home}/.m2/archetype-catalog.xml");
+        return getLocalCatalog( "${user.home}/.m2/archetype-catalog.xml" );
     }
 
     public ArchetypeCatalog getLocalCatalog( String path )
     {
         try
         {
-            Properties properties=new Properties();
-            properties.setProperty("file", path);
+            Properties properties = new Properties();
+            properties.setProperty( "file", path );
             ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( "catalog" );
 
             return source.getArchetypeCatalog( properties );
@@ -183,15 +180,15 @@ public class DefaultArchetype
 
     public ArchetypeCatalog getRemoteCatalog()
     {
-        return getRemoteCatalog("http://repo1.maven.org/maven2");
+        return getRemoteCatalog( "http://repo1.maven.org/maven2" );
     }
 
     public ArchetypeCatalog getRemoteCatalog( String url )
     {
         try
         {
-            Properties properties=new Properties();
-            properties.setProperty("repository", url);
+            Properties properties = new Properties();
+            properties.setProperty( "repository", url );
             ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( "remote-catalog" );
 
             return source.getArchetypeCatalog( properties );
@@ -202,18 +199,20 @@ public class DefaultArchetype
         }
     }
 
-    public void updateLocalCatalog(org.apache.maven.archetype.catalog.Archetype archetype) {
-        updateLocalCatalog(archetype, "${user.home}/.m2/archetype-catalog.xml");
+    public void updateLocalCatalog( org.apache.maven.archetype.catalog.Archetype archetype )
+    {
+        updateLocalCatalog( archetype, "${user.home}/.m2/archetype-catalog.xml" );
     }
 
-    public void updateLocalCatalog(org.apache.maven.archetype.catalog.Archetype archetype, String path) {
+    public void updateLocalCatalog( org.apache.maven.archetype.catalog.Archetype archetype, String path )
+    {
         try
         {
-            Properties properties=new Properties();
-            properties.setProperty("file", path);
+            Properties properties = new Properties();
+            properties.setProperty( "file", path );
             ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( "catalog" );
 
-            source.updateCatalog(properties, archetype);
+            source.updateCatalog( properties, archetype );
         }
         catch ( ArchetypeDataSourceException e )
         {

@@ -371,8 +371,7 @@ public class DefaultArchetypeFilesResolver
 
     private List resolveFiles( File basedir,
                                List languages )
-        throws
-        IOException
+        throws IOException
     {
         String[] languagesArray = (String[]) languages.toArray( new String[languages.size()] );
         String[] languagesPathesArray = new String[languagesArray.length];
@@ -415,12 +414,7 @@ public class DefaultArchetypeFilesResolver
             {
                 String language = languagesArray[i];
 
-                if ( StringUtils.countMatches(
-                    minusSrc,
-                    File.separator + language + File.separator
-                )
-                    > 0
-                    )
+                if ( StringUtils.countMatches( minusSrc, File.separator + language + File.separator ) > 0 )
                 {
                     String minusLanguage =
                         StringUtils.prechomp( minusSrc, language + File.separator );

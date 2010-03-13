@@ -45,7 +45,7 @@ public interface Constants
     String ARTIFACT_ID = "artifactId";
 
     String ARCHETYPE_FILTERED_EXTENSIONS = "archetype.filteredExtensions";
-    
+
     String ARCHETYPE_LANGUAGES = "archetype.languages";
 
     List DEFAULT_FILTERED_EXTENSIONS =
@@ -58,7 +58,7 @@ public interface Constants
         );
 
     List DEFAULT_LANGUAGES =
-        Arrays.asList( new String[]{"java", "groovy", "csharp", "aspectj"} );
+        Arrays.asList( new String[]{ "java", "groovy", "csharp", "aspectj" } );
 
     String GROUP_ID = "groupId";
 

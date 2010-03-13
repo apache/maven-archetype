@@ -71,11 +71,7 @@ public class DefaultPomManager
 {
     public void addModule( File pom,
                            String artifactId )
-        throws
-        IOException,
-        XmlPullParserException,
-        DocumentException,
-        InvalidPackaging
+        throws IOException, XmlPullParserException, DocumentException, InvalidPackaging
     {
         boolean found = false;
 
@@ -158,9 +154,7 @@ public class DefaultPomManager
 
     public void addParent( File pom,
                            File parentPom )
-        throws
-        IOException,
-        XmlPullParserException
+        throws IOException, XmlPullParserException
     {
         Model generatedModel = readPom( pom );
         if( null != generatedModel.getParent() )
@@ -190,9 +184,7 @@ public class DefaultPomManager
 
     public void mergePoms( File pom,
                            File temporaryPom )
-        throws
-        IOException,
-        XmlPullParserException
+        throws IOException, XmlPullParserException
     {
         Model model = readPom( pom );
         Model generatedModel = readPom( temporaryPom );
@@ -269,9 +261,7 @@ public class DefaultPomManager
     }
 
     public Model readPom( final File pomFile )
-        throws
-        IOException,
-        XmlPullParserException
+        throws IOException, XmlPullParserException
     { // TODO ensure correct encoding by using default one from method argument !!!
 
         Model model;
@@ -303,9 +293,7 @@ public class DefaultPomManager
 
 
     public Model readPom( InputStream pomStream )
-        throws
-        IOException,
-        XmlPullParserException
+        throws IOException, XmlPullParserException
     { // TODO ensure correct encoding by using default one from method argument !!!
 
         Model model;
@@ -338,8 +326,7 @@ public class DefaultPomManager
     public void writePom( final Model model,
                           final File pomFile,
                           final File initialPomFile )
-        throws
-        IOException
+        throws IOException
     {
         InputStream inputStream = null;
         Writer outputStreamWriter = null;

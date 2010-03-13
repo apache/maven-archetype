@@ -24,7 +24,7 @@ public class ArchetypeGenerationResult
 {
     private Exception cause;
 
-    public Exception getCause( )
+    public Exception getCause()
     {
         return cause;
     }
