@@ -56,11 +56,13 @@ public class ArchetypeCreationRequest
 
     private String postPhase;
 
-    public String getPostPhase() {
+    public String getPostPhase()
+    {
         return postPhase;
     }
 
-    public ArchetypeCreationRequest setPostPhase(String postPhase) {
+    public ArchetypeCreationRequest setPostPhase( String postPhase )
+    {
         this.postPhase = postPhase;
 
         return this;

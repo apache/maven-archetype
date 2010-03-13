@@ -94,11 +94,10 @@ public interface Archetype
      *
      * @throws java.io.IOException
      */
-    File archiveArchetype(
-        File archetypeDirectory,
-        File outputDirectory,
-        String finalName )
+    File archiveArchetype( File archetypeDirectory, File outputDirectory, String finalName )
         throws DependencyResolutionRequiredException, IOException;
+
     void updateLocalCatalog(org.apache.maven.archetype.catalog.Archetype archetype, String path);
+
     void updateLocalCatalog(org.apache.maven.archetype.catalog.Archetype archetype);
 }
