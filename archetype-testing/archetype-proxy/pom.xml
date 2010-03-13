@@ -30,9 +30,9 @@ under the License.
   </parent>
 
   <artifactId>archetype-proxy</artifactId>
+  <packaging>war</packaging>
 
   <name>Maven Archetype Webapp Proxy</name>
-  <packaging>war</packaging>
 
   <dependencies>
     <dependency>

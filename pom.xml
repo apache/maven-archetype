@@ -44,11 +44,6 @@ under the License.
     <module>archetype-packaging</module>
   </modules>
 
-  <properties>
-    <mavenVersion>2.0.8</mavenVersion><!-- with 2.0.9 proxy test fails-->
-    <netbeans.hint.useExternalMaven>true</netbeans.hint.useExternalMaven>
-  </properties>
-
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/maven/archetype/trunk</connection>
     <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/trunk</developerConnection>
@@ -58,6 +53,11 @@ under the License.
     <system>jira</system>
     <url>http://jira.codehaus.org/browse/ARCHETYPE</url>
   </issueManagement>
+
+  <properties>
+    <mavenVersion>2.0.8</mavenVersion><!-- with 2.0.9 proxy test fails-->
+    <netbeans.hint.useExternalMaven>true</netbeans.hint.useExternalMaven>
+  </properties>
 
   <dependencyManagement>
     <dependencies>

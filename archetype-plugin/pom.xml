@@ -36,10 +36,10 @@ under the License.
   -->
   <groupId>org.apache.maven.plugins</groupId>
   <artifactId>maven-archetype-plugin</artifactId>
+  <packaging>maven-plugin</packaging>
 
   <name>Maven Archetype Plugin</name>
   <url>http://maven.apache.org/plugins/maven-archetype-plugin</url>
-  <packaging>maven-plugin</packaging>
 
   <prerequisites>
     <maven>2.0.7</maven>
@@ -51,6 +51,14 @@ under the License.
     <url>http://svn.apache.org/viewvc/maven/archetype/trunk/archetype-plugin</url>
   </scm>
 
+  <distributionManagement>
+    <site>
+      <id>apache.website</id>
+      <!-- The stage plugin don't propagate correctly the menu item's links -->
+      <!--url>scp://people.apache.org/home/rafale/public_html/site/maven-archetype-plugin</url-->
+      <url>scp://people.apache.org/www/maven.apache.org/plugins/maven-archetype-plugin</url>
+    </site>
+  </distributionManagement>
 
   <dependencies>
     <dependency>
@@ -89,7 +97,7 @@ under the License.
   </dependencies>
 
   <properties>
-      <pluginPluginVersion>2.4.3</pluginPluginVersion>
+    <pluginPluginVersion>2.4.3</pluginPluginVersion>
   </properties>
 
   <build>
@@ -162,13 +170,4 @@ under the License.
       </build>
     </profile>
   </profiles>
-
-  <distributionManagement>
-    <site>
-      <id>apache.website</id>
-      <!-- The stage plugin don't propagate correctly the menu item's links -->
-      <!--url>scp://people.apache.org/home/rafale/public_html/site/maven-archetype-plugin</url-->
-      <url>scp://people.apache.org/www/maven.apache.org/plugins/maven-archetype-plugin</url>
-    </site>
-  </distributionManagement>
 </project>
