@@ -88,11 +88,11 @@ public class JarMojo
         }
         catch ( DependencyResolutionRequiredException ex )
         {
-            throw new MojoExecutionException( ex.getMessage(  ), ex );
+            throw new MojoExecutionException( ex.getMessage(), ex );
         }
         catch ( IOException ex )
         {
-            throw new MojoExecutionException( ex.getMessage(  ), ex );
+            throw new MojoExecutionException( ex.getMessage(), ex );
         }
     }
 }

@@ -33,8 +33,8 @@ import java.util.Properties;
  * @plexus.component
  */
 public class DefaultArchetypeFactory
-extends AbstractLogEnabled
-implements ArchetypeFactory
+    extends AbstractLogEnabled
+    implements ArchetypeFactory
 {
     public ArchetypeConfiguration createArchetypeConfiguration( ArchetypeDefinition archetypeDefinition,
         Properties properties )

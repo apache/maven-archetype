@@ -122,7 +122,7 @@ public class CreateProjectFromArchetypeMojo
      * @readonly
      */
     private ArtifactRepository localRepository;
-    
+
     /**
      * List of Remote Repositories used by the resolver.
      *
@@ -171,7 +171,7 @@ public class CreateProjectFromArchetypeMojo
 
         try
         {
-            if( interactiveMode.booleanValue() )
+            if ( interactiveMode.booleanValue() )
             {
                 getLog().info( "Generating project in Interactive mode" );
             }
@@ -186,7 +186,7 @@ public class CreateProjectFromArchetypeMojo
 
             ArchetypeGenerationResult generationResult =
                 archetype.generateProjectFromArchetype( request );
-            if( generationResult.getCause() != null )
+            if ( generationResult.getCause() != null )
             {
                 throw new MojoFailureException(
                     generationResult.getCause(),

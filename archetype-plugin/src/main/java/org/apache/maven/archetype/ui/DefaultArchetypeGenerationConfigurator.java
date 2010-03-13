@@ -50,8 +50,8 @@ import org.codehaus.plexus.util.StringUtils;
  * @plexus.component
  */
 public class DefaultArchetypeGenerationConfigurator
-extends AbstractLogEnabled
-implements ArchetypeGenerationConfigurator
+    extends AbstractLogEnabled
+    implements ArchetypeGenerationConfigurator
 {
     /**
      * @plexus.requirement

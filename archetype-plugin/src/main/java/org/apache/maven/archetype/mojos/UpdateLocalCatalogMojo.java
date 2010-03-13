@@ -47,7 +47,7 @@ public class UpdateLocalCatalogMojo
 {
     /** @component */
     private org.apache.maven.archetype.Archetype archetyper;
-    
+
     /** @component role="org.apache.maven.archetype.source.ArchetypeDataSource" */
     private Map archetypeSources;
 
@@ -78,30 +78,30 @@ public class UpdateLocalCatalogMojo
      */
     private Settings settings;
 
-    public void execute( )
+    public void execute()
         throws MojoExecutionException
     {
-        Archetype archetype = new Archetype(  );
-        archetype.setGroupId( project.getGroupId(  ) );
-        archetype.setArtifactId( project.getArtifactId(  ) );
-        archetype.setVersion( project.getVersion(  ) );
-        if (StringUtils.isNotEmpty(project.getDescription()))
+        Archetype archetype = new Archetype();
+        archetype.setGroupId( project.getGroupId() );
+        archetype.setArtifactId( project.getArtifactId() );
+        archetype.setVersion( project.getVersion() );
+        if ( StringUtils.isNotEmpty( project.getDescription() ) )
         {
-            archetype.setDescription(project.getDescription());
+            archetype.setDescription( project.getDescription() );
         }
         else
         {
-            archetype.setDescription(project.getName());
+            archetype.setDescription( project.getName() );
         }
-//        archetype.setRepository( localRepository.toString(  ) );
-//            archetype.setGoals(project.get);
-//            archetype.setProperties(project.get);
-        
-        archetyper.updateLocalCatalog(archetype);
+//        archetype.setRepository( localRepository.toString() );
+//            archetype.setGoals( project.get );
+//            archetype.setProperties( project.get );
+
+        archetyper.updateLocalCatalog( archetype );
         /*
         File archetypeCatalogPropertiesFile = new File( System.getProperty( "user.home" ), ".m2/archetype-catalog.properties" );
 
-        if ( archetypeCatalogPropertiesFile.exists(  ) )
+        if ( archetypeCatalogPropertiesFile.exists() )
         {
             Properties archetypeCatalogProperties = PropertyUtils.loadProperties( archetypeCatalogPropertiesFile );
 
@@ -115,19 +115,19 @@ public class UpdateLocalCatalogMojo
 
                 try
                 {
-                    getLog(  ).debug( "Updating catalog " + sourceRoleHint );
+                    getLog().debug( "Updating catalog " + sourceRoleHint );
 
                     ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( sourceRoleHint );
 
                     source.updateCatalog( getArchetypeSourceProperties( sourceRoleHint, archetypeCatalogProperties ), archetype, settings );
 
-                    getLog(  ).
-                        info( "Updated " + sourceRoleHint + " using repository " + localRepository.toString(  ) );
+                    getLog().
+                        info( "Updated " + sourceRoleHint + " using repository " + localRepository.toString() );
                 }
                 catch ( ArchetypeDataSourceException ex )
                 {
-                    getLog(  ).
-                        warn( "Can't update " + sourceRoleHint + " using repository " + localRepository.toString(  ) );
+                    getLog().
+                        warn( "Can't update " + sourceRoleHint + " using repository " + localRepository.toString() );
                 }
             }
         }
@@ -142,13 +142,13 @@ public class UpdateLocalCatalogMojo
     {
         Properties p = new Properties(  );
 
-        for ( Iterator i = archetypeCatalogProperties.keySet(  ).iterator(  ); i.hasNext(  ); )
+        for ( Iterator i = archetypeCatalogProperties.keySet().iterator(); i.hasNext(); )
         {
             String key = (String) i.next();
 
             if ( key.startsWith( sourceRoleHint ) )
             {
-                String k = key.substring( sourceRoleHint.length(  ) + 1 );
+                String k = key.substring( sourceRoleHint.length() + 1 );
 
                 p.setProperty( k, archetypeCatalogProperties.getProperty( key ) );
             }

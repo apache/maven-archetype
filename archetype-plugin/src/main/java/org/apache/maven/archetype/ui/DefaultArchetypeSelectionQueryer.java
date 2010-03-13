@@ -97,13 +97,13 @@ public class DefaultArchetypeSelectionQueryer
         {
             String catalog = (String) catalogIterator.next();
 
-            Iterator archetypeIterator = ((List) catalogs.get( catalog )).iterator();
+            Iterator archetypeIterator = ( (List) catalogs.get( catalog ) ).iterator();
             while ( archetypeIterator.hasNext() )
             {
                 org.apache.maven.archetype.catalog.Archetype archetype = (org.apache.maven.archetype.catalog.Archetype) archetypeIterator.next();
                 String mapKey = ""+counter;
-                String archetypeKey = archetype.getGroupId()+":"+archetype.getArtifactId();
-                if( reversedArchetypeAnswerMap.containsKey( archetypeKey ) )
+                String archetypeKey = archetype.getGroupId() + ":" + archetype.getArtifactId();
+                if ( reversedArchetypeAnswerMap.containsKey( archetypeKey ) )
                 {
                     mapKey = (String) reversedArchetypeAnswerMap.get( archetypeKey );
                     archetypeVersions = (List) archetypeAnswerMap.get( mapKey );
@@ -112,7 +112,7 @@ public class DefaultArchetypeSelectionQueryer
                 {
                     archetypeVersions = new ArrayList();
                     archetypeAnswerMap.put( mapKey, archetypeVersions );
-                    reversedArchetypeAnswerMap.put(archetypeKey, mapKey);
+                    reversedArchetypeAnswerMap.put( archetypeKey, mapKey );
                     query +=
                         mapKey + ": " + catalog +
                         " -> " + archetype.getArtifactId() + " (" + archetype.getDescription() + ")\n";
