@@ -170,81 +170,25 @@ under the License.
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-maven-plugin</artifactId>
         <version>1.0-alpha-21</version>
+        <configuration>
+          <version>1.0.0</version>
+          <models>
+            <model>src/main/mdo/archetype-common.mdo</model>
+            <model>src/main/mdo/archetype-registry.mdo</model>
+            <model>src/main/mdo/archetype-descriptor.mdo</model>
+            <model>src/main/mdo/archetype-catalog.mdo</model>
+            <model>src/main/mdo/archetype.mdo</model>
+          </models>
+        </configuration>
         <executions>
           <execution>
-            <id>archetype-common</id>
+            <id>default</id>
             <goals>
               <goal>java</goal>
               <goal>xsd</goal>
               <goal>xpp3-reader</goal>
               <goal>xpp3-writer</goal>
             </goals>
-            <configuration>
-              <version>1.0.0</version>
-              <models>
-                <model>src/main/mdo/archetype-common.mdo</model>
-              </models>
-            </configuration>
-          </execution>
-          <execution>
-            <id>archetype-registry</id>
-            <goals>
-              <goal>java</goal>
-              <goal>xsd</goal>
-              <goal>xpp3-reader</goal>
-              <goal>xpp3-writer</goal>
-            </goals>
-            <configuration>
-              <version>1.0.0</version>
-              <models>
-                <model>src/main/mdo/archetype-registry.mdo</model>
-              </models>
-            </configuration>
-          </execution>
-          <execution>
-            <id>archetype-descriptor</id>
-            <goals>
-              <goal>java</goal>
-              <goal>xsd</goal>
-              <goal>xpp3-reader</goal>
-              <goal>xpp3-writer</goal>
-            </goals>
-            <configuration>
-              <version>1.0.0</version>
-              <models>
-                <model>src/main/mdo/archetype-descriptor.mdo</model>
-              </models>
-            </configuration>
-          </execution>
-          <execution>
-            <id>archetype-catalog</id>
-            <goals>
-              <goal>java</goal>
-              <goal>xsd</goal>
-              <goal>xpp3-reader</goal>
-              <goal>xpp3-writer</goal>
-            </goals>
-            <configuration>
-              <version>1.0.0</version>
-              <models>
-                <model>src/main/mdo/archetype-catalog.mdo</model>
-              </models>
-            </configuration>
-          </execution>
-          <execution>
-            <id>archetype-old</id>
-            <goals>
-              <goal>java</goal>
-              <goal>xsd</goal>
-              <goal>xpp3-reader</goal>
-              <goal>xpp3-writer</goal>
-            </goals>
-            <configuration>
-              <version>1.0.0</version>
-              <models>
-                <model>src/main/mdo/archetype.mdo</model>
-              </models>
-            </configuration>
           </execution>
         </executions>
       </plugin>
