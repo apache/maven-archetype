@@ -30,13 +30,13 @@ import java.io.File;
 /**
  * Crawl a Maven 2 repository (Filesystem, not HTTP)
  * and creates a catalog file.
- * 
+ *
  * @author           rafale
  * @requiresProject  false
  * @goal             crawl
  */
 public class CrawlRepositoryMojo
-extends AbstractMojo
+    extends AbstractMojo
 {
     /**
      * The archetype's catalog to update.

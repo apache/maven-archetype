@@ -291,7 +291,7 @@ public class DefaultArchetypeCreationConfigurator
             getLogger().info( "Setting default version: " + project.getVersion() );
             properties.setProperty( Constants.VERSION, project.getVersion() );
         }
-        
+
         if ( StringUtils.isEmpty( properties.getProperty( Constants.ARCHETYPE_GROUP_ID ) ) )
         {
             getLogger().info( "Setting default archetype's groupId: " + project.getGroupId() );
@@ -393,7 +393,7 @@ public class DefaultArchetypeCreationConfigurator
             IOUtil.close( os );
         }
     }
-    
+
     private Properties initialiseArchetypeProperties(
         Properties commandLineProperties,
         File propertyFile
@@ -418,25 +418,24 @@ public class DefaultArchetypeCreationConfigurator
         return properties;
     }
 
-    private Properties removeDottedProperties(Properties properties) {
-        List toRemove=new ArrayList(0);
+    private Properties removeDottedProperties( Properties properties )
+    {
+        List toRemove = new ArrayList( 0 );
         Iterator keys = properties.keySet().iterator();
-        while (keys.hasNext())
+        while ( keys.hasNext() )
         {
             String key = (String) keys.next();
-            if (key.indexOf(".")>=0)
+            if ( key.indexOf( "." ) >= 0 )
             {
-                toRemove.add(key);
+                toRemove.add( key );
             }
         }
-        Iterator keysToRemove =toRemove.iterator();
-        while(keysToRemove.hasNext())
+        Iterator keysToRemove = toRemove.iterator();
+        while ( keysToRemove.hasNext() )
         {
             String key = (String) keysToRemove.next();
-            properties.remove(key);
+            properties.remove( key );
         }
         return properties;
-            
-        
     }
 }
