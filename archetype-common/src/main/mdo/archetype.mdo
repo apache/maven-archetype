@@ -3,16 +3,20 @@
  <!-- START SNIPPET: modello-model -->
 
 <model xmlns="http://modello.codehaus.org/MODELLO/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://modello.codehaus.org/MODELLO/1.0.0 http://modello.codehaus.org/xsd/modello-1.0.0.xsd">
+  xsi:schemaLocation="http://modello.codehaus.org/MODELLO/1.0.0 http://modello.codehaus.org/xsd/modello-1.0.0.xsd"
+  xml.namespace="http://maven.apache.org/plugins/maven-archetype-plugin/archetype/${version}"
+  xml.schemaLocation="http://maven.apache.org/xsd/archetype-${version}.xsd">
   <id>archetype</id>
   <name>Archetype</name>
   <description><![CDATA[Maven's model for the archetype descriptor.]]></description>
+
   <defaults>
     <default>
       <key>package</key>
       <value>org.apache.maven.archetype.model</value>
     </default>
   </defaults>
+
   <classes>
     <class rootElement="true" xml.tagName="archetype">
       <name>ArchetypeModel</name>

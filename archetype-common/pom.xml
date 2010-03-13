@@ -181,7 +181,9 @@ under the License.
             </goals>
             <configuration>
               <version>1.0.0</version>
-              <model>src/main/mdo/archetype-common.mdo</model>
+              <models>
+                <model>src/main/mdo/archetype-common.mdo</model>
+              </models>
             </configuration>
           </execution>
           <execution>
@@ -194,7 +196,9 @@ under the License.
             </goals>
             <configuration>
               <version>1.0.0</version>
-              <model>src/main/mdo/archetype-registry.mdo</model>
+              <models>
+                <model>src/main/mdo/archetype-registry.mdo</model>
+              </models>
             </configuration>
           </execution>
           <execution>
@@ -207,7 +211,9 @@ under the License.
             </goals>
             <configuration>
               <version>1.0.0</version>
-              <model>src/main/mdo/archetype-descriptor.mdo</model>
+              <models>
+                <model>src/main/mdo/archetype-descriptor.mdo</model>
+              </models>
             </configuration>
           </execution>
           <execution>
@@ -220,7 +226,9 @@ under the License.
             </goals>
             <configuration>
               <version>1.0.0</version>
-              <model>src/main/mdo/archetype-catalog.mdo</model>
+              <models>
+                <model>src/main/mdo/archetype-catalog.mdo</model>
+              </models>
             </configuration>
           </execution>
           <execution>
@@ -233,7 +241,9 @@ under the License.
             </goals>
             <configuration>
               <version>1.0.0</version>
-              <model>src/main/mdo/archetype.mdo</model>
+              <models>
+                <model>src/main/mdo/archetype.mdo</model>
+              </models>
             </configuration>
           </execution>
         </executions>

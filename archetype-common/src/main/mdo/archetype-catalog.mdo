@@ -18,7 +18,9 @@
   ~ under the License.
   -->
 <model xmlns="http://modello.codehaus.org/MODELLO/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://modello.codehaus.org/MODELLO/1.0.0 http://modello.codehaus.org/xsd/modello-1.0.0.xsd">
+  xsi:schemaLocation="http://modello.codehaus.org/MODELLO/1.0.0 http://modello.codehaus.org/xsd/modello-1.0.0.xsd"
+  xml.namespace="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-catalog/${version}"
+  xml.schemaLocation="http://maven.apache.org/xsd/archetype-catalog-${version}.xsd">
   <id>archetype-catalog</id>
   <name>ArchetypeCatalog</name>
   <description>
@@ -57,6 +59,7 @@
         </codeSegment>
       </codeSegments>
     </class>
+
     <class>
       <name>Archetype</name>
       <fields>
