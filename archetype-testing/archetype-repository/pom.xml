@@ -30,9 +30,9 @@ under the License.
   </parent>
 
   <artifactId>archetype-repository</artifactId>
+  <packaging>war</packaging>
 
   <name>Maven Archetype Webapp Repository</name>
-  <packaging>war</packaging>
 
   <dependencies>
     <dependency>

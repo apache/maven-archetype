@@ -28,9 +28,12 @@ under the License.
     <artifactId>maven-archetype</artifactId>
     <version>2.0-alpha-5-SNAPSHOT</version>
   </parent>
+
   <artifactId>archetype-common</artifactId>
-  <name>Maven Archetype Common</name>
   <packaging>jar</packaging>
+
+  <name>Maven Archetype Common</name>
+
   <dependencies>
     <dependency>
       <groupId>org.apache.maven</groupId>
@@ -408,6 +411,7 @@ under the License.
       </plugin>
     </plugins>
   </build>
+
   <reporting>
     <plugins>
       <plugin>
@@ -419,22 +423,22 @@ under the License.
   </reporting>
 
   <profiles>
-      <profile>
-          <id>internal-catalog</id>
-          <build>
-              <plugins>
-                  <plugin>
-                      <groupId>org.apache.maven.plugins</groupId>
-                      <artifactId>maven-surefire-plugin</artifactId>
-                      <configuration>
-                          <includes>
-                              <include>**/InternalCatalogFromWiki.java</include>
-                              <!--include>**/InternalCatalogArchetypesVerification.java</include-->
-                          </includes>
-                      </configuration>
-                  </plugin>
-              </plugins>
-          </build>
-      </profile>
+    <profile>
+      <id>internal-catalog</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <includes>
+                <include>**/InternalCatalogFromWiki.java</include>
+                <!--include>**/InternalCatalogArchetypesVerification.java</include-->
+              </includes>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
   </profiles>
 </project>
