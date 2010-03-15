@@ -20,13 +20,9 @@
 package org.apache.maven.archetype.generator;
 
 import org.apache.maven.archetype.old.OldArchetype;
-import org.apache.maven.archetype.old.ArchetypeDescriptorException;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
-import org.apache.maven.archetype.old.ArchetypeNotFoundException;
-import org.apache.maven.archetype.old.ArchetypeTemplateProcessingException;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
-import org.apache.maven.archetype.common.ArchetypeConfiguration;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 import org.apache.maven.archetype.exception.ArchetypeGenerationFailure;
 import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
@@ -48,7 +44,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 /** @plexus.component */
 public class DefaultArchetypeGenerator
@@ -224,8 +219,6 @@ public class DefaultArchetypeGenerator
         UnknownArchetype,
         ArchetypeGenerationFailure
     {
-        ArchetypeConfiguration archetypeConfiguration;
-
         org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor archetypeDescriptor =
             archetypeArtifactManager.getOldArchetypeDescriptor(
                 request.getArchetypeGroupId(),
