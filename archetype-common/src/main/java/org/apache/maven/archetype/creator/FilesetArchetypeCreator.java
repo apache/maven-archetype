@@ -54,16 +54,19 @@ import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
+import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -332,9 +335,18 @@ public class FilesetArchetypeCreator
                 pomReversedProperties, preserveCData, keepParent );
             getLogger().debug( "Created Archetype " + archetypeDescriptor.getName() + " pom" );
 
-            ArchetypeDescriptorXpp3Writer writer = new ArchetypeDescriptorXpp3Writer();
-            writer.write( new FileWriter( archetypeDescriptorFile ), archetypeDescriptor );
-            getLogger().debug( "Archetype " + archetypeDescriptor.getName() + " descriptor written" );
+            Writer out = null;
+            try
+            {
+                ArchetypeDescriptorXpp3Writer writer = new ArchetypeDescriptorXpp3Writer();
+                out = WriterFactory.newXmlWriter( archetypeDescriptorFile );
+                writer.write( out, archetypeDescriptor );
+                getLogger().debug( "Archetype " + archetypeDescriptor.getName() + " descriptor written" );
+            }
+            finally
+            {
+                IOUtil.close( out );
+            }
 
             OldArchetypeDescriptor oldDescriptor =
                 convertToOldDescriptor( archetypeDescriptor.getName(), packageName, basedir );
@@ -966,13 +978,27 @@ public class FilesetArchetypeCreator
 
             FileUtils.copyFile( initialPomFile, inputFile );
 
-            String initialcontent = FileUtils.fileRead( inputFile );
+            Reader in = null;
+            Writer out = null;
+            try
+            {
+                in = ReaderFactory.newXmlReader( inputFile );
 
-            String content = getReversedContent( initialcontent, pomReversedProperties );
+                String initialcontent = IOUtil.toString( in );
 
-            outputFile.getParentFile().mkdirs();
+                String content = getReversedContent( initialcontent, pomReversedProperties );
 
-            FileUtils.fileWrite( outputFile.getAbsolutePath(), content );
+                outputFile.getParentFile().mkdirs();
+
+                out = WriterFactory.newXmlWriter( outputFile );
+
+                IOUtil.copy( content, out );
+            }
+            finally
+            {
+                IOUtil.close( in );
+                IOUtil.close( out );
+            }
 
             inputFile.delete();
         }
@@ -994,18 +1020,28 @@ public class FilesetArchetypeCreator
             pomManager.writePom( pom, outputFile, initialPomFile );
         }
 
-        String initialcontent = FileUtils.fileRead( initialPomFile );
-        Iterator properties = pomReversedProperties.keySet().iterator();
-        while ( properties.hasNext() )
+        Reader in = null;
+        try
         {
-            String property = (String) properties.next();
+            in = ReaderFactory.newXmlReader( initialPomFile );
+            String initialcontent = IOUtil.toString( in );
 
-            if ( initialcontent.indexOf( "${" + property + "}" ) > 0 )
+            Iterator properties = pomReversedProperties.keySet().iterator();
+            while ( properties.hasNext() )
             {
-                getLogger().warn( "Archetype uses ${" + property +
-                    "} for internal processing, but file " + initialPomFile +
-                    " contains this property already" );
+                String property = (String) properties.next();
+
+                if ( initialcontent.indexOf( "${" + property + "}" ) > 0 )
+                {
+                    getLogger().warn( "Archetype uses ${" + property +
+                        "} for internal processing, but file " + initialPomFile +
+                        " contains this property already" );
+                }
             }
+        }
+        finally
+        {
+            IOUtil.close( in );
         }
     }
 
@@ -1244,13 +1280,28 @@ public class FilesetArchetypeCreator
                 FileUtils.resolveFile( archetypeFilesDirectory, Constants.ARCHETYPE_POM + ".tmp" );
 
             FileUtils.copyFile( initialPomFile, inputFile );
-            String initialcontent = FileUtils.fileRead( inputFile );
 
-            String content = getReversedContent( initialcontent, pomReversedProperties );
+            Reader in = null;
+            Writer out = null;
+            try
+            {
+                in = ReaderFactory.newXmlReader( inputFile );
 
-            outputFile.getParentFile().mkdirs();
+                String initialcontent = IOUtil.toString( in );
 
-            FileUtils.fileWrite( outputFile.getAbsolutePath(), content );
+                String content = getReversedContent( initialcontent, pomReversedProperties );
+
+                outputFile.getParentFile().mkdirs();
+
+                out = WriterFactory.newXmlWriter( outputFile );
+
+                IOUtil.copy( content, out );
+            }
+            finally
+            {
+                IOUtil.close( in );
+                IOUtil.close( out );
+            }
 
             inputFile.delete();
         }
@@ -1296,18 +1347,28 @@ public class FilesetArchetypeCreator
             pomManager.writePom( pom, outputFile, initialPomFile );
         }
 
-        String initialcontent = FileUtils.fileRead( initialPomFile );
-        Iterator properties = pomReversedProperties.keySet().iterator();
-        while ( properties.hasNext() )
+        Reader in = null;
+        try
         {
-            String property = (String) properties.next();
+            in = ReaderFactory.newXmlReader( initialPomFile );
+            String initialcontent = IOUtil.toString( in );
 
-            if ( initialcontent.indexOf( "${" + property + "}" ) > 0 )
+            Iterator properties = pomReversedProperties.keySet().iterator();
+            while ( properties.hasNext() )
             {
-                getLogger().warn( "OldArchetype uses ${" + property +
-                    "} for internal processing, but file " + initialPomFile +
-                    " contains this property already" );
+                String property = (String) properties.next();
+
+                if ( initialcontent.indexOf( "${" + property + "}" ) > 0 )
+                {
+                    getLogger().warn( "OldArchetype uses ${" + property +
+                        "} for internal processing, but file " + initialPomFile +
+                        " contains this property already" );
+                }
             }
+        }
+        finally
+        {
+            IOUtil.close( in );
         }
     }
 
@@ -2098,8 +2159,17 @@ public class FilesetArchetypeCreator
         throws
         IOException
     {
-        OldArchetypeDescriptorXpp3Writer writer = new OldArchetypeDescriptorXpp3Writer();
-        writer.write( new FileWriter( oldDescriptorFile ), oldDescriptor );
+        Writer out = null;
+        try
+        {
+            OldArchetypeDescriptorXpp3Writer writer = new OldArchetypeDescriptorXpp3Writer();
+            out = WriterFactory.newXmlWriter( oldDescriptorFile );
+            writer.write( out, oldDescriptor );
+        }
+        finally
+        {
+            IOUtil.close( out );
+        }
     }
 
     private static final String MAVEN_PROPERTIES = "META-INF/maven/org.apache.maven.archetype/archetype-common/pom.properties";
