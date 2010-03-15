@@ -25,10 +25,10 @@ import org.apache.maven.wagon.Wagon;
 import org.apache.maven.wagon.repository.Repository;
 
 import java.io.File;
-import java.io.FileReader;
 import java.util.List;
 import java.util.Properties;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
+import org.codehaus.plexus.util.ReaderFactory;
 
 /**
  * @plexus.component role-hint="remote-catalog"
@@ -56,10 +56,10 @@ public class RemoteCatalogArchetypeDataSource
         {
             if ( repository.endsWith( "/" ) )
             {
-                repository = repository.substring( 0, repository.length(  ) - 1 );
+                repository = repository.substring( 0, repository.length() - 1 );
             }
 
-            getLogger().debug("Searching for remote catalog: "+ repository +"/archetype-catalog.xml");
+            getLogger().debug( "Searching for remote catalog: " + repository + "/archetype-catalog.xml" );
             // We use wagon to take advantage of a Proxy that has already been setup in a Maven environment.
             Repository wagonRepository = new Repository( "archetype", repository );
             Wagon wagon = wagonManager.getWagon( wagonRepository );
@@ -73,20 +73,20 @@ public class RemoteCatalogArchetypeDataSource
             {
                 disconnectWagon( wagon );
             }
-            return readCatalog( new FileReader( catalog ) );
+            return readCatalog( ReaderFactory.newXmlReader( catalog ) );
         }
         catch ( ArchetypeDataSourceException e )
         {
             throw e;
         }
         catch ( Exception e )
-        {// When the default archetype catalog names doesn't works, we assume the repository is the URL to a file 
+        {// When the default archetype catalog names doesn't works, we assume the repository is the URL to a file
             try
             {
-                String repositoryPath = repository.substring(0, repository.lastIndexOf("/"));
-                String fileName = repository.substring(repository.lastIndexOf("/") + 1);
-                
-                getLogger().debug("Searching for remote catalog: "+ repositoryPath +"/"+fileName);
+                String repositoryPath = repository.substring( 0, repository.lastIndexOf( "/" ) );
+                String fileName = repository.substring( repository.lastIndexOf( "/" ) + 1 );
+
+                getLogger().debug( "Searching for remote catalog: " + repositoryPath + "/" + fileName );
                 // We use wagon to take advantage of a Proxy that has already been setup in a Maven environment.
                 Repository wagonRepository = new Repository( "archetype", repositoryPath );
                 Wagon wagon = wagonManager.getWagon( wagonRepository );
@@ -100,11 +100,11 @@ public class RemoteCatalogArchetypeDataSource
                 {
                     disconnectWagon( wagon );
                 }
-                return readCatalog( new FileReader( catalog ) );
+                return readCatalog( ReaderFactory.newXmlReader( catalog ) );
             }
             catch ( Exception ex )
             {
-                getLogger().warn( "Error reading archetype catalog "+ repository, ex );
+                getLogger().warn( "Error reading archetype catalog " + repository, ex );
                 return new ArchetypeCatalog();
             }
         }
@@ -124,7 +124,7 @@ public class RemoteCatalogArchetypeDataSource
         {
             if ( repository.endsWith( "/" ) )
             {
-                repository = repository.substring( 0, repository.length(  ) - 1 );
+                repository = repository.substring( 0, repository.length() - 1 );
             }
 
             // We use wagon to take advantage of a Proxy that has already been setup in a Maven environment.
@@ -141,7 +141,7 @@ public class RemoteCatalogArchetypeDataSource
 
             wagon.disconnect();
 
-            return createArchetypeMap( readCatalog( new FileReader( catalog ) ) );
+            return createArchetypeMap( readCatalog( ReaderFactory.newXmlReader( catalog ) ) );
         }
         catch ( Exception e )
         {
