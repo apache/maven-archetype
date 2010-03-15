@@ -46,6 +46,10 @@ import org.apache.maven.model.Profile;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.project.ProjectBuildingException;
+import org.apache.maven.shared.invoker.DefaultInvocationRequest;
+import org.apache.maven.shared.invoker.DefaultInvoker;
+import org.apache.maven.shared.invoker.InvocationRequest;
+import org.apache.maven.shared.invoker.Invoker;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.FileUtils;
@@ -70,10 +74,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import org.apache.maven.shared.invoker.DefaultInvocationRequest;
-import org.apache.maven.shared.invoker.DefaultInvoker;
-import org.apache.maven.shared.invoker.InvocationRequest;
-import org.apache.maven.shared.invoker.Invoker;
 
 /** @plexus.component role-hint="fileset" */
 public class FilesetArchetypeCreator
@@ -103,13 +103,13 @@ public class FilesetArchetypeCreator
 
         Properties properties = new Properties();
         Properties configurationProperties = new Properties();
-        if( request.getProperties() != null )
+        if ( request.getProperties() != null )
         {
             properties.putAll( request.getProperties() );
             configurationProperties.putAll( request.getProperties() );
         }
 
-        if( !properties.containsKey( Constants.GROUP_ID ) )
+        if ( !properties.containsKey( Constants.GROUP_ID ) )
         {
             properties.setProperty( Constants.GROUP_ID, project.getGroupId() );
         }
@@ -118,7 +118,7 @@ public class FilesetArchetypeCreator
             properties.getProperty( Constants.GROUP_ID )
         );
 
-        if( !properties.containsKey( Constants.ARTIFACT_ID ) )
+        if ( !properties.containsKey( Constants.ARTIFACT_ID ) )
         {
             properties.setProperty( Constants.ARTIFACT_ID, project.getArtifactId() );
         }
@@ -127,7 +127,7 @@ public class FilesetArchetypeCreator
             properties.getProperty( Constants.ARTIFACT_ID )
         );
 
-        if( !properties.containsKey( Constants.VERSION ) )
+        if ( !properties.containsKey( Constants.VERSION ) )
         {
             properties.setProperty( Constants.VERSION, project.getVersion() );
         }
@@ -136,11 +136,11 @@ public class FilesetArchetypeCreator
             properties.getProperty( Constants.VERSION )
         );
 
-        if( request.getPackageName() != null )
+        if ( request.getPackageName() != null )
         {
             properties.setProperty( Constants.PACKAGE, request.getPackageName() );
         }
-        else if( !properties.containsKey( Constants.PACKAGE ) )
+        else if ( !properties.containsKey( Constants.PACKAGE ) )
         {
             properties.setProperty( Constants.PACKAGE, project.getGroupId() );
         }
@@ -148,7 +148,7 @@ public class FilesetArchetypeCreator
             Constants.PACKAGE,
             properties.getProperty( Constants.PACKAGE )
         );
-           
+
         File basedir = project.getBasedir();
         File generatedSourcesDirectory =
             FileUtils.resolveFile( basedir, getGeneratedSourcesDirectory() );
@@ -157,11 +157,11 @@ public class FilesetArchetypeCreator
 
         Model model = new Model();
         model.setModelVersion( "4.0.0" );
-        model.setGroupId( configurationProperties.getProperty(Constants.ARCHETYPE_GROUP_ID, project.getGroupId() ) );// these values should be retrieve from the requst with sensible defaults
-        model.setArtifactId( configurationProperties.getProperty(Constants.ARCHETYPE_ARTIFACT_ID, project.getArtifactId() ) );
-        model.setVersion( configurationProperties.getProperty(Constants.ARCHETYPE_VERSION, project.getVersion() ) );
+        model.setGroupId( configurationProperties.getProperty( Constants.ARCHETYPE_GROUP_ID, project.getGroupId() ) );// these values should be retrieved from the request with sensible defaults
+        model.setArtifactId( configurationProperties.getProperty( Constants.ARCHETYPE_ARTIFACT_ID, project.getArtifactId() ) );
+        model.setVersion( configurationProperties.getProperty( Constants.ARCHETYPE_VERSION, project.getVersion() ) );
         model.setPackaging( "maven-archetype" );
-        model.setName( configurationProperties.getProperty(Constants.ARCHETYPE_ARTIFACT_ID, project.getArtifactId() ) );
+        model.setName( configurationProperties.getProperty( Constants.ARCHETYPE_ARTIFACT_ID, project.getArtifactId() ) );
 
         Build build = new Build();
         model.setBuild( build );
@@ -250,10 +250,10 @@ public class FilesetArchetypeCreator
 
         addRequiredProperties( archetypeDescriptor, properties );
 
-        // TODO ensure reversedproperties contains NO dotted properties
+        // TODO ensure reverseProperties contains NO dotted properties
         Properties reverseProperties = getRequiredProperties( archetypeDescriptor, properties );
         //reverseProperties.remove( Constants.GROUP_ID );
-        
+
         // TODO ensure pomReversedProperties contains NO dotted properties
         Properties pomReversedProperties = getRequiredProperties( archetypeDescriptor, properties );
         //pomReversedProperties.remove( Constants.PACKAGE );
@@ -348,13 +348,13 @@ public class FilesetArchetypeCreator
             getLogger().debug(
                 "Archetype " + archetypeDescriptor.getName() + " old descriptor written"
             );
-            
+
             InvocationRequest internalRequest = new DefaultInvocationRequest();
             internalRequest.setPomFile( archetypePomFile );
             internalRequest.setGoals( Collections.singletonList( request.getPostPhase() ) );
 
             Invoker invoker = new DefaultInvoker();
-            invoker.execute(internalRequest);
+            invoker.execute( internalRequest );
         }
         catch ( Exception e )
         {
@@ -510,8 +510,7 @@ public class FilesetArchetypeCreator
                                     String groupId )
     {
         // rewrite Dependencies
-        if ( pom.getDependencies() != null && !pom.getDependencies().
-            isEmpty() )
+        if ( pom.getDependencies() != null && !pom.getDependencies().isEmpty() )
         {
             Iterator dependencies = pom.getDependencies().iterator();
             while ( dependencies.hasNext() )
@@ -519,31 +518,28 @@ public class FilesetArchetypeCreator
                 Dependency dependency =
                     (Dependency) dependencies.next();
 
-                if ( dependency.getArtifactId() != null &&
-                    dependency.getArtifactId().indexOf( rootArtifactId ) >= 0 )
+                if ( dependency.getArtifactId() != null
+                    && dependency.getArtifactId().indexOf( rootArtifactId ) >= 0 )
                 {
                     if ( dependency.getGroupId() != null )
                     {
                         dependency.setGroupId( StringUtils.replace( dependency.getGroupId(),
-                            groupId,
-                            "${" +
-                                Constants.GROUP_ID + "}" ) );
+                            groupId, "${" + Constants.GROUP_ID + "}" ) );
                     }
                     dependency.setArtifactId( StringUtils.replace( dependency.getArtifactId(),
                         rootArtifactId, "${rootArtifactId}" ) );
                     if ( dependency.getVersion() != null )
                     {
-                        dependency.setVersion( "${" +
-                            Constants.VERSION + "}" );
+                        dependency.setVersion( "${" + Constants.VERSION + "}" );
                     }
                 }
             }
         }
 
         // rewrite DependencyManagement
-        if ( pom.getDependencyManagement() != null &&
-            pom.getDependencyManagement().getDependencies() != null &&
-            !pom.getDependencyManagement().getDependencies().isEmpty() )
+        if ( pom.getDependencyManagement() != null
+            && pom.getDependencyManagement().getDependencies() != null
+            && !pom.getDependencyManagement().getDependencies().isEmpty() )
         {
             Iterator dependencies =
                 pom.getDependencyManagement().getDependencies().iterator();
@@ -552,87 +548,76 @@ public class FilesetArchetypeCreator
                 Dependency dependency =
                     (Dependency) dependencies.next();
 
-                if ( dependency.getArtifactId() != null &&
-                    dependency.getArtifactId().indexOf( rootArtifactId ) >= 0 )
+                if ( dependency.getArtifactId() != null
+                    && dependency.getArtifactId().indexOf( rootArtifactId ) >= 0 )
                 {
                     if ( dependency.getGroupId() != null )
                     {
                         dependency.setGroupId( StringUtils.replace( dependency.getGroupId(),
-                            groupId,
-                            "${" +
-                                Constants.GROUP_ID + "}" ) );
+                            groupId, "${" + Constants.GROUP_ID + "}" ) );
                     }
                     dependency.setArtifactId( StringUtils.replace( dependency.getArtifactId(),
                         rootArtifactId, "${rootArtifactId}" ) );
                     if ( dependency.getVersion() != null )
                     {
-                        dependency.setVersion( "${" +
-                            Constants.VERSION + "}" );
+                        dependency.setVersion( "${" + Constants.VERSION + "}" );
                     }
                 }
             }
         }
 
         // rewrite Plugins
-        if ( pom.getBuild() != null && pom.getBuild().getPlugins() !=
-            null && !pom.getBuild().getPlugins().isEmpty() )
+        if ( pom.getBuild() != null && pom.getBuild().getPlugins() != null
+            && !pom.getBuild().getPlugins().isEmpty() )
         {
             Iterator plugins = pom.getBuild().getPlugins().iterator();
             while ( plugins.hasNext() )
             {
                 Plugin plugin = (Plugin) plugins.next();
 
-                if ( plugin.getArtifactId() != null &&
-                    plugin.getArtifactId().indexOf( rootArtifactId ) >= 0 )
+                if ( plugin.getArtifactId() != null
+                    && plugin.getArtifactId().indexOf( rootArtifactId ) >= 0 )
                 {
                     if ( plugin.getGroupId() != null )
                     {
                         plugin.setGroupId( StringUtils.replace( plugin.getGroupId(),
-                            groupId,
-                            "${" +
-                                Constants.GROUP_ID + "}" ) );
+                            groupId, "${" + Constants.GROUP_ID + "}" ) );
                     }
                     plugin.setArtifactId( StringUtils.replace( plugin.getArtifactId(),
                         rootArtifactId, "${rootArtifactId}" ) );
                     if ( plugin.getVersion() != null )
                     {
-                        plugin.setVersion( "${" +
-                            Constants.VERSION + "}" );
+                        plugin.setVersion( "${" + Constants.VERSION + "}" );
                     }
                 }
             }
         }
 
         // rewrite PluginManagement
-        if ( pom.getBuild() != null &&
-            pom.getBuild().getPluginManagement() != null &&
-            pom.getBuild().getPluginManagement().getPlugins() != null &&
-            !pom.getBuild().getPluginManagement().getPlugins().
-                isEmpty() )
+        if ( pom.getBuild() != null
+            && pom.getBuild().getPluginManagement() != null
+            && pom.getBuild().getPluginManagement().getPlugins() != null
+            && !pom.getBuild().getPluginManagement().getPlugins().isEmpty() )
         {
             Iterator plugins =
-                pom.getBuild().getPluginManagement().getPlugins().
-                    iterator();
+                pom.getBuild().getPluginManagement().getPlugins().iterator();
             while ( plugins.hasNext() )
             {
                 Plugin plugin = (Plugin) plugins.next();
 
-                if ( plugin.getArtifactId() != null &&
-                    plugin.getArtifactId().indexOf( rootArtifactId ) >= 0 )
+                if ( plugin.getArtifactId() != null
+                    && plugin.getArtifactId().indexOf( rootArtifactId ) >= 0 )
                 {
                     if ( plugin.getGroupId() != null )
                     {
                         plugin.setGroupId( StringUtils.replace( plugin.getGroupId(),
-                            groupId,
-                            "${" +
-                                Constants.GROUP_ID + "}" ) );
+                            groupId, "${" + Constants.GROUP_ID + "}" ) );
                     }
                     plugin.setArtifactId( StringUtils.replace( plugin.getArtifactId(),
                         rootArtifactId, "${rootArtifactId}" ) );
                     if ( plugin.getVersion() != null )
                     {
-                        plugin.setVersion( "${" +
-                            Constants.VERSION + "}" );
+                        plugin.setVersion( "${" + Constants.VERSION + "}" );
                     }
                 }
             }
@@ -646,142 +631,118 @@ public class FilesetArchetypeCreator
                 Profile profile = (Profile) profiles.next();
 
                 // rewrite Dependencies
-                if ( profile.getDependencies() != null &&
-                    !profile.getDependencies().isEmpty() )
+                if ( profile.getDependencies() != null
+                    && !profile.getDependencies().isEmpty() )
                 {
-                    Iterator dependencies = profile.getDependencies().
-                        iterator();
+                    Iterator dependencies = profile.getDependencies().iterator();
                     while ( dependencies.hasNext() )
                     {
                         Dependency dependency =
                             (Dependency) dependencies.next();
 
-                        if ( dependency.getArtifactId() != null &&
-                            dependency.getArtifactId().
-                                indexOf( rootArtifactId ) >= 0 )
+                        if ( dependency.getArtifactId() != null
+                            && dependency.getArtifactId().indexOf( rootArtifactId ) >= 0 )
                         {
                             if ( dependency.getGroupId() != null )
                             {
                                 dependency.setGroupId( StringUtils.replace( dependency.getGroupId(),
-                                    groupId,
-                                    "${" +
-                                        Constants.GROUP_ID + "}" ) );
+                                    groupId, "${" + Constants.GROUP_ID + "}" ) );
                             }
                             dependency.setArtifactId( StringUtils.replace( dependency.getArtifactId(),
                                 rootArtifactId, "${rootArtifactId}" ) );
                             if ( dependency.getVersion() != null )
                             {
-                                dependency.setVersion( "${" +
-                                    Constants.VERSION + "}" );
+                                dependency.setVersion( "${" + Constants.VERSION + "}" );
                             }
                         }
                     }
                 }
 
                 // rewrite DependencyManagement
-                if ( profile.getDependencyManagement() != null &&
-                    profile.getDependencyManagement().getDependencies() !=
-                        null &&
-                    !profile.getDependencyManagement().getDependencies().
-                        isEmpty() )
+                if ( profile.getDependencyManagement() != null
+                    && profile.getDependencyManagement().getDependencies() != null
+                    && !profile.getDependencyManagement().getDependencies().isEmpty() )
                 {
                     Iterator dependencies =
-                        profile.getDependencyManagement().getDependencies().
-                            iterator();
+                        profile.getDependencyManagement().getDependencies().iterator();
                     while ( dependencies.hasNext() )
                     {
                         Dependency dependency =
                             (Dependency) dependencies.next();
 
-                        if ( dependency.getArtifactId() != null &&
-                            dependency.getArtifactId().
-                                indexOf( rootArtifactId ) >= 0 )
+                        if ( dependency.getArtifactId() != null
+                            && dependency.getArtifactId().indexOf( rootArtifactId ) >= 0 )
                         {
                             if ( dependency.getGroupId() != null )
                             {
                                 dependency.setGroupId( StringUtils.replace( dependency.getGroupId(),
-                                    groupId,
-                                    "${" +
-                                        Constants.GROUP_ID + "}" ) );
+                                    groupId, "${" + Constants.GROUP_ID + "}" ) );
                             }
                             dependency.setArtifactId( StringUtils.replace( dependency.getArtifactId(),
                                 rootArtifactId, "${rootArtifactId}" ) );
                             if ( dependency.getVersion() != null )
                             {
-                                dependency.setVersion( "${" +
-                                    Constants.VERSION + "}" );
+                                dependency.setVersion( "${" + Constants.VERSION + "}" );
                             }
                         }
                     }
                 }
 
                 // rewrite Plugins
-                if ( profile.getBuild() != null &&
-                    profile.getBuild().getPlugins() != null &&
-                    !profile.getBuild().getPlugins().isEmpty() )
+                if ( profile.getBuild() != null
+                    && profile.getBuild().getPlugins() != null
+                    && !profile.getBuild().getPlugins().isEmpty() )
                 {
-                    Iterator plugins = profile.getBuild().getPlugins().
-                        iterator();
+                    Iterator plugins = profile.getBuild().getPlugins().iterator();
                     while ( plugins.hasNext() )
                     {
                         Plugin plugin =
                             (Plugin) plugins.next();
 
-                        if ( plugin.getArtifactId() != null &&
-                            plugin.getArtifactId().indexOf( rootArtifactId ) >=
-                                0 )
+                        if ( plugin.getArtifactId() != null
+                            && plugin.getArtifactId().indexOf( rootArtifactId ) >= 0 )
                         {
                             if ( plugin.getGroupId() != null )
                             {
                                 plugin.setGroupId( StringUtils.replace( plugin.getGroupId(),
-                                    groupId,
-                                    "${" +
-                                        Constants.GROUP_ID + "}" ) );
+                                    groupId, "${" + Constants.GROUP_ID + "}" ) );
                             }
                             plugin.setArtifactId( StringUtils.replace( plugin.getArtifactId(),
                                 rootArtifactId, "${rootArtifactId}" ) );
                             if ( plugin.getVersion() != null )
                             {
-                                plugin.setVersion( "${" +
-                                    Constants.VERSION + "}" );
+                                plugin.setVersion( "${" + Constants.VERSION + "}" );
                             }
                         }
                     }
                 }
 
                 // rewrite PluginManagement
-                if ( profile.getBuild() != null &&
-                    profile.getBuild().getPluginManagement() != null &&
-                    profile.getBuild().getPluginManagement().getPlugins() !=
-                        null &&
-                    !profile.getBuild().getPluginManagement().getPlugins().
-                        isEmpty() )
+                if ( profile.getBuild() != null
+                    && profile.getBuild().getPluginManagement() != null
+                    && profile.getBuild().getPluginManagement().getPlugins() != null
+                    && !profile.getBuild().getPluginManagement().getPlugins().isEmpty() )
                 {
                     Iterator plugins =
-                        profile.getBuild().getPluginManagement().
-                            getPlugins().iterator();
+                        profile.getBuild().getPluginManagement().getPlugins().iterator();
                     while ( plugins.hasNext() )
                     {
                         Plugin plugin =
                             (Plugin) plugins.next();
 
-                        if ( plugin.getArtifactId() != null &&
-                            plugin.getArtifactId().indexOf( rootArtifactId ) >=
-                                0 )
+                        if ( plugin.getArtifactId() != null
+                            && plugin.getArtifactId().indexOf( rootArtifactId ) >= 0 )
                         {
                             if ( plugin.getGroupId() != null )
                             {
                                 plugin.setGroupId( StringUtils.replace( plugin.getGroupId(),
-                                    groupId,
-                                    "${" +
-                                        Constants.GROUP_ID + "}" ) );
+                                    groupId, "${" + Constants.GROUP_ID + "}" ) );
                             }
                             plugin.setArtifactId( StringUtils.replace( plugin.getArtifactId(),
                                 rootArtifactId, "${rootArtifactId}" ) );
                             if ( plugin.getVersion() != null )
                             {
-                                plugin.setVersion( "${" +
-                                    Constants.VERSION + "}" );
+                                plugin.setVersion( "${" + Constants.VERSION + "}" );
                             }
                         }
                     }
@@ -929,7 +890,7 @@ public class FilesetArchetypeCreator
         getLogger().debug(
             "Creating Archetype/Module files from " + basedir + " to " + archetypeFilesDirectory
         );
-        
+
         Iterator iterator = fileSets.iterator();
 
         while ( iterator.hasNext() )
@@ -1303,8 +1264,8 @@ public class FilesetArchetypeCreator
                         pomReversedProperties.getProperty( Constants.GROUP_ID ),
                         "${" + Constants.GROUP_ID + "}" )
                 );
-                if ( pom.getParent().getArtifactId() != null &&
-                    pom.getParent().getArtifactId().indexOf( rootArtifactId ) >= 0 )
+                if ( pom.getParent().getArtifactId() != null
+                    && pom.getParent().getArtifactId().indexOf( rootArtifactId ) >= 0 )
                 {
                     pom.getParent().setArtifactId( StringUtils.replace( pom.getParent().getArtifactId(), rootArtifactId, "${rootArtifactId}" ) );
                 }
@@ -1644,7 +1605,7 @@ public class FilesetArchetypeCreator
             Constants.PACKAGE_IN_PATH_FORMAT,
             getPackageInPathFormat(properties.getProperty( Constants.PACKAGE ))
         );
-        
+
         return reversedProperties;
     }
 
@@ -1769,14 +1730,7 @@ public class FilesetArchetypeCreator
             if ( !unfilteredFiles.isEmpty() )
             {
                 resolvedFileSets.addAll(
-                    createFileSets(
-                        unfilteredFiles,
-                        3,
-                        false,
-                        packageName,
-                        false,
-                        defaultEncoding
-                    )
+                    createFileSets( unfilteredFiles, 3, false, packageName, false, defaultEncoding )
                 );
             }
         }
@@ -1828,14 +1782,7 @@ public class FilesetArchetypeCreator
             if ( !unfilteredFiles.isEmpty() )
             {
                 resolvedFileSets.addAll(
-                    createFileSets(
-                        unfilteredFiles,
-                        3,
-                        false,
-                        packageName,
-                        false,
-                        defaultEncoding
-                    )
+                    createFileSets( unfilteredFiles, 3, false, packageName, false, defaultEncoding )
                 );
             }
         }
@@ -1860,14 +1807,7 @@ public class FilesetArchetypeCreator
             if ( !unfilteredFiles.isEmpty() )
             {
                 resolvedFileSets.addAll(
-                    createFileSets(
-                        unfilteredFiles,
-                        2,
-                        false,
-                        packageName,
-                        false,
-                        defaultEncoding
-                    )
+                    createFileSets( unfilteredFiles, 2, false, packageName, false, defaultEncoding )
                 );
             }
         }
@@ -2000,14 +1940,7 @@ public class FilesetArchetypeCreator
             if ( !unfilteredFiles.isEmpty() )
             {
                 resolvedFileSets.addAll(
-                    createFileSets(
-                        unfilteredFiles,
-                        2,
-                        false,
-                        packageName,
-                        false,
-                        defaultEncoding
-                    )
+                    createFileSets( unfilteredFiles, 2, false, packageName, false, defaultEncoding )
                 );
             }
         }
@@ -2033,14 +1966,7 @@ public class FilesetArchetypeCreator
             if ( !unfilteredFiles.isEmpty() )
             {
                 resolvedFileSets.addAll(
-                    createFileSets(
-                        unfilteredFiles,
-                        0,
-                        false,
-                        packageName,
-                        false,
-                        defaultEncoding
-                    )
+                    createFileSets( unfilteredFiles, 0, false, packageName, false, defaultEncoding )
                 );
             }
         }
@@ -2087,8 +2013,8 @@ public class FilesetArchetypeCreator
     private String getReversedContent( String content,
                                        Properties properties )
     {
-        String result = StringUtils.replace( 
-                StringUtils.replace( content, "$", "${symbol_dollar}" ), 
+        String result = StringUtils.replace(
+                StringUtils.replace( content, "$", "${symbol_dollar}" ),
                 "\\", "${symbol_escape}" );
         Iterator propertyIterator = properties.keySet().iterator();
         while ( propertyIterator.hasNext() )
@@ -2101,9 +2027,9 @@ public class FilesetArchetypeCreator
                     "${" + propertyKey + "}"
                 );
         }
-        //TODO: Replace velocity to a better engine... 
-        return "#set( $symbol_pound = '#' )\n" + "#set( $symbol_dollar = '$' )\n" + 
-               "#set( $symbol_escape = '\\' )\n" + 
+        //TODO: Replace velocity to a better engine...
+        return "#set( $symbol_pound = '#' )\n" + "#set( $symbol_dollar = '$' )\n" +
+               "#set( $symbol_escape = '\\' )\n" +
                StringUtils.replace( result, "#", "${symbol_pound}" );
     }
 
@@ -2175,17 +2101,17 @@ public class FilesetArchetypeCreator
         OldArchetypeDescriptorXpp3Writer writer = new OldArchetypeDescriptorXpp3Writer();
         writer.write( new FileWriter( oldDescriptorFile ), oldDescriptor );
     }
-    
+
     private static final String MAVEN_PROPERTIES = "META-INF/maven/org.apache.maven.archetype/archetype-common/pom.properties";
-    
+
     public String getArchetypeVersion()
     {
         InputStream is = null;
-        
+
         // This should actually come from the pom.properties at testing but it's not generated and put into the JAR, it happens
         // as part of the JAR plugin which is crap as it makes testing inconsistent.
         String version = "version";
-        
+
         try
         {
             Properties properties = new Properties();
