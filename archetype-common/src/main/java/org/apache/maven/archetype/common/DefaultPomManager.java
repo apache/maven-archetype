@@ -19,7 +19,6 @@
 
 package org.apache.maven.archetype.common;
 
-import org.apache.maven.archetype.common.util.FileCharsetDetector;
 import org.apache.maven.archetype.common.util.Format;
 import org.apache.maven.archetype.exception.InvalidPackaging;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
@@ -37,6 +36,7 @@ import org.apache.maven.model.Plugin;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
+import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.codehaus.plexus.util.xml.Xpp3DomUtils;
@@ -54,10 +54,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringWriter;
@@ -76,11 +74,11 @@ public class DefaultPomManager
         boolean found = false;
 
         StringWriter writer = new StringWriter();
-        Reader fileReader = new FileReader( pom );
+        Reader fileReader = null;
 
         try
         {
-            fileReader = new FileReader( pom );
+            fileReader = ReaderFactory.newXmlReader( pom );
 
             SAXReader reader = new SAXReader();
             Document document = reader.read( fileReader );
@@ -262,31 +260,20 @@ public class DefaultPomManager
 
     public Model readPom( final File pomFile )
         throws IOException, XmlPullParserException
-    { // TODO ensure correct encoding by using default one from method argument !!!
-
+    {
         Model model;
         Reader pomReader = null;
         try
         {
-            FileCharsetDetector detector = new FileCharsetDetector( pomFile );
-
-            String fileEncoding = detector.isFound() ? detector.getCharset() : "UTF-8";
-
-            pomReader = new InputStreamReader( new FileInputStream( pomFile ), fileEncoding );
+            pomReader = ReaderFactory.newXmlReader( pomFile );
 
             MavenXpp3Reader reader = new MavenXpp3Reader();
 
             model = reader.read( pomReader );
-
-            if ( StringUtils.isEmpty( model.getModelEncoding() ) )
-            {
-                model.setModelEncoding( fileEncoding );
-            }
         }
         finally
         {
             IOUtil.close( pomReader );
-            pomReader = null;
         }
         return model;
     }
@@ -294,33 +281,12 @@ public class DefaultPomManager
 
     public Model readPom( InputStream pomStream )
         throws IOException, XmlPullParserException
-    { // TODO ensure correct encoding by using default one from method argument !!!
+    {
+        Reader pomReader = ReaderFactory.newXmlReader( pomStream );
 
-        Model model;
-        Reader pomReader = null;
-        try
-        {
-//            FileCharsetDetector detector = new FileCharsetDetector( pomStream );
+        MavenXpp3Reader reader = new MavenXpp3Reader();
 
-            String fileEncoding = /*detector.isFound() ? detector.getCharset() :*/ "UTF-8";
-
-            pomReader = new InputStreamReader( pomStream, fileEncoding );
-
-            MavenXpp3Reader reader = new MavenXpp3Reader();
-
-            model = reader.read( pomReader );
-
-            if ( StringUtils.isEmpty( model.getModelEncoding() ) )
-            {
-                model.setModelEncoding( fileEncoding );
-            }
-        }
-        finally
-        {
-            IOUtil.close( pomReader );
-            pomReader = null;
-        }
-        return model;
+        return reader.read( pomReader );
     }
 
     public void writePom( final Model model,
@@ -330,7 +296,6 @@ public class DefaultPomManager
     {
         InputStream inputStream = null;
         Writer outputStreamWriter = null;
-//        FileCharsetDetector detector = new FileCharsetDetector ( pomFile );
 
         String fileEncoding =
             StringUtils.isEmpty( model.getModelEncoding() ) ? model.getModelEncoding() : "UTF-8";
@@ -352,8 +317,6 @@ public class DefaultPomManager
 
             Format form = Format.getRawFormat().setEncoding( fileEncoding );
             writer.write( model, doc, outputStreamWriter, form );
-            outputStreamWriter.close();
-            outputStreamWriter = null;
         }
         catch ( JDOMException exc )
         {
@@ -367,14 +330,11 @@ public class DefaultPomManager
 
             try
             {
-//                pomWriter = new FileWriter ( pomFile );
                 pomWriter =
                     new OutputStreamWriter( new FileOutputStream( pomFile ), fileEncoding );
 
                 MavenXpp3Writer writer = new MavenXpp3Writer();
                 writer.write( pomWriter, model );
-                pomWriter.close();
-                pomWriter = null;
             }
             finally
             {
