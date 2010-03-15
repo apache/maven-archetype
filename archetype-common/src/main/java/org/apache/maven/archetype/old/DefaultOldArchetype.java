@@ -33,7 +33,9 @@ import org.apache.velocity.context.Context;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
+import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.codehaus.plexus.velocity.VelocityComponent;
 import org.dom4j.Document;
@@ -45,8 +47,6 @@ import org.dom4j.io.XMLWriter;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -116,8 +116,8 @@ public class DefaultOldArchetype
 
 //        try
 //        {
-            archetype = archetypeArtifactManager.getArchetypeFile( 
-                archetypeGroupId, archetypeArtifactId, archetypeVersion, 
+            archetype = archetypeArtifactManager.getArchetypeFile(
+                archetypeGroupId, archetypeArtifactId, archetypeVersion,
                 archetypeRepository, localRepository, remoteRepositories );
 //        }
 //        catch ( UnknownArchetype e )
@@ -296,11 +296,11 @@ public class DefaultOldArchetype
         {
             if ( parentPomFile.exists() )
             {
-                FileReader fileReader = null;
+                Reader fileReader = null;
 
                 try
                 {
-                    fileReader = new FileReader( parentPomFile );
+                    fileReader = ReaderFactory.newXmlReader( parentPomFile );
                     MavenXpp3Reader reader = new MavenXpp3Reader();
                     parentModel = reader.read( fileReader );
                     if ( !"pom".equals( parentModel.getPackaging() ) )
@@ -358,12 +358,12 @@ public class DefaultOldArchetype
                 IOUtil.close( fileWriter );
             }
 */
-            FileReader fileReader = null;
+            Reader fileReader = null;
             boolean added;
             StringWriter w = new StringWriter();
             try
             {
-                fileReader = new FileReader( parentPomFile );
+                fileReader = ReaderFactory.newXmlReader( parentPomFile );
                 added = addModuleToParentPom( artifactId, fileReader, w );
             }
             catch ( IOException e )
@@ -381,13 +381,19 @@ public class DefaultOldArchetype
 
             if ( added )
             {
+                Writer out = null;
                 try
                 {
-                    FileUtils.fileWrite( parentPomFile.getAbsolutePath(), w.toString() );
+                    out = WriterFactory.newXmlWriter( parentPomFile );
+                    IOUtil.copy( w.toString(), out );
                 }
                 catch ( IOException e )
                 {
                     throw new ArchetypeTemplateProcessingException( "Unable to rewrite parent POM", e );
+                }
+                finally
+                {
+                    IOUtil.close( out );
                 }
             }
         }
@@ -488,10 +494,10 @@ public class DefaultOldArchetype
         // ---------------------------------------------------------------------
 
         Model generatedModel;
-        FileReader pomReader = null;
+        Reader pomReader = null;
         try
         {
-            pomReader = new FileReader( pomFile );
+            pomReader = ReaderFactory.newXmlReader( pomFile );
 
             MavenXpp3Reader reader = new MavenXpp3Reader();
 
@@ -526,10 +532,10 @@ public class DefaultOldArchetype
             }
             generatedModel.setParent( parent );
 
-            FileWriter pomWriter = null;
+            Writer pomWriter = null;
             try
             {
-                pomWriter = new FileWriter( pomFile );
+                pomWriter = WriterFactory.newXmlWriter( pomFile );
 
                 MavenXpp3Writer writer = new MavenXpp3Writer();
                 writer.write( pomWriter, generatedModel );
