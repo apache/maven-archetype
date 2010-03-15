@@ -32,13 +32,13 @@ import org.apache.maven.model.Model;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.IOUtil;
+import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Reader;
 
 import java.net.MalformedURLException;
@@ -647,7 +647,7 @@ public class DefaultArchetypeArtifactManager
                 "The " + Constants.ARCHETYPE_DESCRIPTOR + " descriptor cannot be found."
             );
         }
-        return new InputStreamReader( is );
+        return ReaderFactory.newXmlReader( is );
     }
 
     private boolean isFileSetArchetype( ZipFile zipFile )
@@ -773,7 +773,7 @@ public class DefaultArchetypeArtifactManager
                 "The " + Constants.OLD_ARCHETYPE_DESCRIPTOR + " descriptor cannot be found."
             );
         }
-        return new InputStreamReader( is );
+        return ReaderFactory.newXmlReader( is );
     }
 
     private Reader getOlderArchetypeDescriptorReader( ZipFile zipFile )
@@ -812,6 +812,6 @@ public class DefaultArchetypeArtifactManager
             );
         }
 
-        return new InputStreamReader( is );
+        return ReaderFactory.newXmlReader( is );
     }
 }
