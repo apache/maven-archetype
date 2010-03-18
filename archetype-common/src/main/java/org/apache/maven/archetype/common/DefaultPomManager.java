@@ -298,7 +298,7 @@ public class DefaultPomManager
         Writer outputStreamWriter = null;
 
         String fileEncoding =
-            StringUtils.isEmpty( model.getModelEncoding() ) ? model.getModelEncoding() : "UTF-8";
+            StringUtils.isEmpty( model.getModelEncoding() ) ? "UTF-8" : model.getModelEncoding();
 
         try
         {
