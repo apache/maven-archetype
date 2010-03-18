@@ -47,7 +47,7 @@ under the License.
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/maven/archetype/trunk</connection>
     <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/trunk</developerConnection>
-    <url>http://svn.apache.org/viewcvs.cgi/maven/archetype/trunk</url>
+    <url>http://svn.apache.org/viewvc/maven/archetype/trunk</url>
   </scm>
   <issueManagement>
     <system>jira</system>
@@ -177,7 +177,6 @@ under the License.
       <plugins>
         <plugin>
           <artifactId>maven-release-plugin</artifactId>
-          <version>2.0-beta-9</version>
           <configuration>
             <tagBase>https://svn.apache.org/repos/asf/maven/archetype/tags</tagBase>
             <preparationGoals>clean install</preparationGoals>
@@ -193,32 +192,8 @@ under the License.
           <version>2.2</version>
         </plugin>
         <plugin>
-          <artifactId>maven-gpg-plugin</artifactId>
-          <version>1.0-alpha-4</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-javadoc-plugin</artifactId>
-          <version>2.5</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-deploy-plugin</artifactId>
-          <version>2.4</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>2.0.2</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-install-plugin</artifactId>
-          <version>2.2</version>
-        </plugin>
-        <plugin>
           <artifactId>maven-site-plugin</artifactId>
           <version>2.0-beta-7</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-source-plugin</artifactId>
-          <version>2.0.4</version>
         </plugin>
         <plugin>
           <artifactId>maven-resources-plugin</artifactId>
@@ -227,10 +202,6 @@ under the License.
         <plugin>
           <artifactId>maven-antrun-plugin</artifactId>
           <version>1.2</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-dependency-plugin</artifactId>
-          <version>2.0</version>
         </plugin>
         <plugin>
           <artifactId>maven-plugin-plugin</artifactId>
@@ -249,16 +220,8 @@ under the License.
     </pluginManagement>
     <plugins>
       <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.4</source>
-          <target>1.4</target>
-        </configuration>
-      </plugin>
-      <plugin>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-maven-plugin</artifactId>
-        <version>1.3.8</version>
         <executions>
           <execution>
             <goals>
