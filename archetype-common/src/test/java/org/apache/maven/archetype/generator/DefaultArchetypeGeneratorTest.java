@@ -19,8 +19,6 @@
 
 package org.apache.maven.archetype.generator;
 
-import org.apache.maven.archetype.common.DefaultArchetypeFilesResolver;
-import org.apache.maven.archetype.metadata.FileSet;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
 import org.apache.maven.artifact.repository.ArtifactRepository;
@@ -42,8 +40,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
 public class DefaultArchetypeGeneratorTest
@@ -775,43 +771,6 @@ public class DefaultArchetypeGeneratorTest
                     "Property property-without-default-4 is missing." )
             );
         }
-    }
-
-    public void testResourceFiltering()
-        throws Exception
-    {
-        FileSet fileSet = new FileSet();
-
-        fileSet.addInclude( "**/*.java" );
-
-        fileSet.setDirectory( "src/main/java" );
-        fileSet.setEncoding( "UTF-8" );
-        fileSet.setPackaged( true );
-        fileSet.setFiltered( true );
-
-        List archetypeResources = new ArrayList();
-
-        archetypeResources.add( "pom.xml" );
-        archetypeResources.add( "App.java" );
-        archetypeResources.add( "src/main/c/App.c" );
-        archetypeResources.add( "src/main/java/App.java" );
-        archetypeResources.add( "src/main/java/inner/package/App2.java" );
-        archetypeResources.add( "src/main/mdo/App.mdo" );
-        archetypeResources.add( "src/main/resources/App.properties" );
-        archetypeResources.add( "src/main/resources/inner/dir/App2.properties" );
-        archetypeResources.add( "src/test/c/AppTest.c" );
-        archetypeResources.add( "src/test/java/AppTest.java" );
-        archetypeResources.add( "src/test/mdo/AppTest.mdo" );
-        archetypeResources.add( "src/test/resources/AppTest.properties" );
-
-        System.out.println( "FileSet:" + fileSet );
-        System.out.println( "Resources:" + archetypeResources );
-
-        DefaultArchetypeFilesResolver resolver = new DefaultArchetypeFilesResolver();
-
-        List fileSetResources = resolver.filterFiles( "", fileSet, archetypeResources );
-        System.out.println( "Result:" + fileSetResources );
-        assertEquals( 2, fileSetResources.size() );
     }
 
     protected void tearDown()
