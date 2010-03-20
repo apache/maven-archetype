@@ -142,10 +142,10 @@ public class DefaultArchetypeArtifactManager
     public Model getArchetypePom( File jar )
         throws XmlPullParserException, UnknownArchetype, IOException
     {
-        String pomFileName = null;
         ZipFile zipFile = null;
         try
         {
+            String pomFileName = null;
             zipFile = getArchetypeZipFile( jar );
             Enumeration enumeration = zipFile.entries();
             while ( enumeration.hasMoreElements() )
@@ -378,12 +378,12 @@ public class DefaultArchetypeArtifactManager
         }
         catch ( DownloadException e )
         {
-            getLogger().debug( "Archetype don't exist", e );
+            getLogger().debug( "Archetype doesn't exist", e );
             return false;
         }
         catch ( DownloadNotFoundException e )
         {
-            getLogger().debug( "Archetype don't exist", e );
+            getLogger().debug( "Archetype doesn't exist", e );
             return false;
         }
     }
@@ -569,7 +569,7 @@ public class DefaultArchetypeArtifactManager
         }
         catch ( Exception e )
         {
-            getLogger().error( "Fail to close zipFile" );
+            getLogger().error( "Failed to close zipFile" );
         }
     }
 
@@ -683,12 +683,12 @@ public class DefaultArchetypeArtifactManager
         }
         catch ( IOException e )
         {
-            getLogger().debug( "Cant not read archetype descriptor", e );
+            getLogger().debug( "Cannot read archetype descriptor", e );
             throw e;
         }
         catch ( XmlPullParserException e )
         {
-            getLogger().error( "Cant not parse archetype descriptor", e );
+            getLogger().error( "Cannot parse archetype descriptor", e );
             throw e;
         }
         finally
@@ -713,11 +713,11 @@ public class DefaultArchetypeArtifactManager
         }
         catch ( IOException ex )
         {
-            getLogger().debug( "Can not load old archetype", ex );
+            getLogger().debug( "Cannot load old archetype", ex );
         }
         catch ( XmlPullParserException ex )
         {
-            getLogger().error( "Can not parse old archetype", ex );
+            getLogger().error( "Cannot parse old archetype", ex );
         }
         finally
         {
