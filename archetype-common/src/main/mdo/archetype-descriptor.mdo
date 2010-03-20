@@ -143,11 +143,6 @@
       <codeSegments>
         <codeSegment>
           <code><![CDATA[
-    {
-        filtered = true;
-        packaged = true;
-    }
-
     public String toString ()
     {
         return
