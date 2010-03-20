@@ -53,6 +53,8 @@ public class DefaultArchetypeGeneratorTest
 
     String remoteRepository;
 
+    ArchetypeGenerator instance;
+
     public void testArchetypeNotDefined()
         throws Exception
     {
@@ -61,10 +63,6 @@ public class DefaultArchetypeGeneratorTest
         String project = "generate-2";
 
         String basedir = getProjectDirectory( project );
-
-        DefaultArchetypeGenerator instance =
-            (DefaultArchetypeGenerator) lookup( ArchetypeGenerator.ROLE );
-        instanceDefined( instance );
 
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
         request.setLocalRepository( localRepository );
@@ -101,10 +99,6 @@ public class DefaultArchetypeGeneratorTest
 
         File projectDirectory = new File( basedir, "file-value" );
         assertDeleted( projectDirectory );
-
-        DefaultArchetypeGenerator instance =
-            (DefaultArchetypeGenerator) lookup( ArchetypeGenerator.ROLE );
-        instanceDefined( instance );
 
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
         request.setLocalRepository( localRepository );
@@ -192,10 +186,6 @@ public class DefaultArchetypeGeneratorTest
 
         assertDeleted( new File( basedir, "file-value" ) );
 
-        DefaultArchetypeGenerator instance =
-            (DefaultArchetypeGenerator) lookup( ArchetypeGenerator.ROLE );
-        instanceDefined( instance );
-
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
         request.setLocalRepository( localRepository );
         request.setArchetypeRepository( remoteRepository );
@@ -257,10 +247,6 @@ public class DefaultArchetypeGeneratorTest
 
         assertDeleted( new File( basedir, "file-value" + File.separator + "src" ) );
 
-        DefaultArchetypeGenerator instance =
-            (DefaultArchetypeGenerator) lookup( ArchetypeGenerator.ROLE );
-        instanceDefined( instance );
-
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
         request.setLocalRepository( localRepository );
         request.setArchetypeRepository( remoteRepository );
@@ -320,10 +306,6 @@ public class DefaultArchetypeGeneratorTest
         copy( projectFileSample, projectFile );
 
         assertDeleted( new File( basedir, "file-value" + File.separator + "src" ) );
-
-        DefaultArchetypeGenerator instance =
-            (DefaultArchetypeGenerator) lookup( ArchetypeGenerator.ROLE );
-        instanceDefined( instance );
 
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
         request.setLocalRepository( localRepository );
@@ -390,10 +372,6 @@ public class DefaultArchetypeGeneratorTest
 
         assertDeleted( new File( basedir, "src" ) );
 
-        DefaultArchetypeGenerator instance =
-            (DefaultArchetypeGenerator) lookup( ArchetypeGenerator.ROLE );
-        instanceDefined( instance );
-
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
         request.setLocalRepository( localRepository );
         request.setArchetypeRepository( remoteRepository );
@@ -445,10 +423,6 @@ public class DefaultArchetypeGeneratorTest
         File projectDirectory = new File( basedir, "file-value" );
         assertDeleted( projectDirectory );
 
-        DefaultArchetypeGenerator instance =
-            (DefaultArchetypeGenerator) lookup( ArchetypeGenerator.ROLE );
-        instanceDefined( instance );
-
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
         request.setLocalRepository( localRepository );
         request.setArchetypeRepository( remoteRepository );
@@ -487,10 +461,6 @@ public class DefaultArchetypeGeneratorTest
 
         File projectDirectory = new File( basedir, "file-value" );
         assertDeleted( projectDirectory );
-
-        DefaultArchetypeGenerator instance =
-            (DefaultArchetypeGenerator) lookup( ArchetypeGenerator.ROLE );
-        instanceDefined( instance );
 
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
         request.setLocalRepository( localRepository );
@@ -547,10 +517,6 @@ public class DefaultArchetypeGeneratorTest
 
         File projectDirectory = new File( basedir, "file-value" );
         assertDeleted( projectDirectory );
-
-        DefaultArchetypeGenerator instance =
-            (DefaultArchetypeGenerator) lookup( ArchetypeGenerator.ROLE );
-        instanceDefined( instance );
 
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
         request.setLocalRepository( localRepository );
@@ -737,10 +703,6 @@ public class DefaultArchetypeGeneratorTest
         File projectDirectory = new File( basedir, "file-value" );
         assertDeleted( projectDirectory );
 
-        DefaultArchetypeGenerator instance =
-            (DefaultArchetypeGenerator) lookup( ArchetypeGenerator.ROLE );
-        instanceDefined( instance );
-
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
         request.setLocalRepository( localRepository );
         request.setArchetypeRepository( remoteRepository );
@@ -787,10 +749,6 @@ public class DefaultArchetypeGeneratorTest
         String project = "generate-3";
 
         String basedir = getProjectDirectory( project );
-
-        DefaultArchetypeGenerator instance =
-            (DefaultArchetypeGenerator) lookup( ArchetypeGenerator.ROLE );
-        instanceDefined( instance );
 
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
         request.setLocalRepository( localRepository );
@@ -873,6 +831,12 @@ public class DefaultArchetypeGeneratorTest
             new DefaultArtifactRepository( "local", repositories + "/local", new DefaultRepositoryLayout() );
 
         remoteRepository = repositories + "/central";
+
+        instance = (ArchetypeGenerator) lookup( ArchetypeGenerator.ROLE );
+        assertNotNull( instance );
+        assertNotNull( getVariableValueFromObject( instance, "archetypeArtifactManager" ) );
+        assertNotNull( getVariableValueFromObject( instance, "oldArchetype" ) );
+        assertNotNull( getVariableValueFromObject( instance, "filesetGenerator" ) );
     }
 
     /**
@@ -975,15 +939,6 @@ public class DefaultArchetypeGeneratorTest
         IOUtil.copy( new FileReader( in ), new FileWriter( out ) );
         assertTrue( out.exists() );
         assertTrue( in.exists() );
-    }
-
-    private void instanceDefined( DefaultArchetypeGenerator instance )
-        throws IllegalAccessException
-    {
-        assertNotNull( instance );
-        assertNotNull( getVariableValueFromObject( instance, "archetypeArtifactManager" ) );
-        assertNotNull( getVariableValueFromObject( instance, "oldArchetype" ) );
-        assertNotNull( getVariableValueFromObject( instance, "filesetGenerator" ) );
     }
 
     private Properties loadProperties( File propertyFile )
