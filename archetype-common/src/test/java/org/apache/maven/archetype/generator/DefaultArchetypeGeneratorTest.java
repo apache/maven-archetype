@@ -51,15 +51,12 @@ public class DefaultArchetypeGeneratorTest
 {
     ArtifactRepository localRepository;
 
+    String remoteRepository;
+
     public void testArchetypeNotDefined()
-        throws
-        Exception
+        throws Exception
     {
         System.out.println( "testArchetypeNotDefined" );
-        String remoteRepository =
-                new File( getBasedir(), "target/test-classes/repositories/central" )
-                    .toURI().toString();
-        System.err.println("remoteRepository="+remoteRepository);
 
         String project = "generate-2";
 
@@ -77,8 +74,8 @@ public class DefaultArchetypeGeneratorTest
         request.setArchetypeGroupId( "archetypes" );
         request.setArchetypeVersion( "1.0" );
 
-        ArchetypeGenerationResult result=new ArchetypeGenerationResult();
-        instance.generateArchetype(request, result);
+        ArchetypeGenerationResult result = new ArchetypeGenerationResult();
+        instance.generateArchetype( request, result );
         if ( result.getCause() == null )
         {
             fail( "Exception must be thrown" );
@@ -94,14 +91,9 @@ public class DefaultArchetypeGeneratorTest
     }
 
     public void testGenerateArchetypeCompleteWithoutParent()
-        throws
-        Exception
+        throws Exception
     {
         System.out.println( "testGenerateArchetypeCompleteWithoutParent" );
-        String remoteRepository =
-                new File( getBasedir(), "target/test-classes/repositories/central" )
-                    .toURI().toString();
-        System.err.println("remoteRepository="+remoteRepository);
 
         String project = "generate-4";
 
@@ -139,13 +131,12 @@ public class DefaultArchetypeGeneratorTest
 
         ArchetypeGenerationResult result=new ArchetypeGenerationResult();
 
-        instance.generateArchetype(request, result);
+        instance.generateArchetype( request, result );
 
         if ( result.getCause() != null )
         {
-            fail( "No exception may be thrown: " + result.getCause().getMessage() );
-
             result.getCause().printStackTrace();
+            fail( "No exception may be thrown: " + result.getCause().getMessage() );
         }
 
         String template;
@@ -187,14 +178,9 @@ public class DefaultArchetypeGeneratorTest
     }
 
     public void testGenerateArchetypeCompleteWithParent()
-        throws
-        Exception
+        throws Exception
     {
         System.out.println( "testGenerateArchetypeCompleteWithParent" );
-        String remoteRepository =
-                new File( getBasedir(), "target/test-classes/repositories/central" )
-                    .toURI().toString();
-        System.err.println("remoteRepository="+remoteRepository);
 
         String project = "generate-5";
 
@@ -233,8 +219,8 @@ public class DefaultArchetypeGeneratorTest
         additionalProperties.setProperty( "property-with-default-3", "file-value" );
         additionalProperties.setProperty( "property-with-default-4", "file-value" );
 
-        ArchetypeGenerationResult result=new ArchetypeGenerationResult();
-        instance.generateArchetype(request, result);
+        ArchetypeGenerationResult result = new ArchetypeGenerationResult();
+        instance.generateArchetype( request, result );
         if ( result.getCause() != null )
         {
             fail( "No exception may be thrown: " + result.getCause().getMessage() );
@@ -253,14 +239,9 @@ public class DefaultArchetypeGeneratorTest
     }
 
     public void testGenerateArchetypePartialOnChild()
-        throws
-        Exception
+        throws Exception
     {
         System.out.println( "testGenerateArchetypePartialOnChild" );
-        String remoteRepository =
-                new File( getBasedir(), "target/test-classes/repositories/central" )
-                    .toURI().toString();
-        System.err.println("remoteRepository="+remoteRepository);
 
         String project = "generate-8";
 
@@ -303,8 +284,8 @@ public class DefaultArchetypeGeneratorTest
         additionalProperties.setProperty( "property-with-default-3", "file-value" );
         additionalProperties.setProperty( "property-with-default-4", "file-value" );
 
-        ArchetypeGenerationResult result=new ArchetypeGenerationResult();
-        instance.generateArchetype(request, result);
+        ArchetypeGenerationResult result = new ArchetypeGenerationResult();
+        instance.generateArchetype( request, result );
         if ( result.getCause() != null )
         {
             fail( "No exception may be thrown: " + result.getCause().getMessage() );
@@ -322,14 +303,9 @@ public class DefaultArchetypeGeneratorTest
     }
 
     public void testGenerateArchetypePartialOnChildDontOverride()
-        throws
-        Exception
+        throws Exception
     {
         System.out.println( "testGenerateArchetypePartialOnChildDontOverride" );
-        String remoteRepository =
-                new File( getBasedir(), "target/test-classes/repositories/central" )
-                    .toURI().toString();
-        System.err.println("remoteRepository="+remoteRepository);
 
         String project = "generate-9";
 
@@ -372,8 +348,8 @@ public class DefaultArchetypeGeneratorTest
         additionalProperties.setProperty( "property-with-default-3", "file-value" );
         additionalProperties.setProperty( "property-with-default-4", "file-value" );
 
-        ArchetypeGenerationResult result=new ArchetypeGenerationResult();
-        instance.generateArchetype(request, result);
+        ArchetypeGenerationResult result = new ArchetypeGenerationResult();
+        instance.generateArchetype( request, result );
         if ( result.getCause() != null )
         {
             fail( "No exception may be thrown: " + result.getCause().getMessage() );
@@ -400,14 +376,9 @@ public class DefaultArchetypeGeneratorTest
     }
 
     public void testGenerateArchetypePartialOnParent()
-        throws
-        Exception
+        throws Exception
     {
         System.out.println( "testGenerateArchetypePartialOnParent" );
-        String remoteRepository =
-                new File( getBasedir(), "target/test-classes/repositories/central" )
-                    .toURI().toString();
-        System.err.println("remoteRepository="+remoteRepository);
 
         String project = "generate-7";
 
@@ -446,8 +417,8 @@ public class DefaultArchetypeGeneratorTest
         additionalProperties.setProperty( "property-with-default-3", "file-value" );
         additionalProperties.setProperty( "property-with-default-4", "file-value" );
 
-        ArchetypeGenerationResult result=new ArchetypeGenerationResult();
-        instance.generateArchetype(request, result);
+        ArchetypeGenerationResult result = new ArchetypeGenerationResult();
+        instance.generateArchetype( request, result );
         if ( result.getCause() != null )
         {
             fail( "No exception may be thrown: " + result.getCause().getMessage() );
@@ -463,14 +434,9 @@ public class DefaultArchetypeGeneratorTest
     }
 
     public void testGenerateArchetypePartialWithoutPoms()
-        throws
-        Exception
+        throws Exception
     {
         System.out.println( "testGenerateArchetypePartialWithoutPoms" );
-        String remoteRepository =
-                new File( getBasedir(), "target/test-classes/repositories/central" )
-                    .toURI().toString();
-        System.err.println("remoteRepository="+remoteRepository);
 
         String project = "generate-6";
 
@@ -496,8 +462,8 @@ public class DefaultArchetypeGeneratorTest
         request.setVersion( "file-value" );
         request.setPackage( "file.value.package" );
 
-        ArchetypeGenerationResult result=new ArchetypeGenerationResult();
-        instance.generateArchetype(request, result);
+        ArchetypeGenerationResult result = new ArchetypeGenerationResult();
+        instance.generateArchetype( request, result );
         if ( result.getCause() != null )
         {
             fail( "No exception may be thrown: " + result.getCause().getMessage() );
@@ -511,14 +477,9 @@ public class DefaultArchetypeGeneratorTest
     }
 
     public void testGenerateArchetypeSite()
-        throws
-        Exception
+        throws Exception
     {
         System.out.println( "testGenerateArchetypeSite" );
-        String remoteRepository =
-                new File( getBasedir(), "target/test-classes/repositories/central" )
-                    .toURI().toString();
-        System.err.println("remoteRepository="+remoteRepository);
 
         String project = "generate-10";
 
@@ -554,8 +515,8 @@ public class DefaultArchetypeGeneratorTest
         additionalProperties.setProperty( "property-with-default-3", "file-value" );
         additionalProperties.setProperty( "property-with-default-4", "file-value" );
 
-        ArchetypeGenerationResult result=new ArchetypeGenerationResult();
-        instance.generateArchetype(request, result);
+        ArchetypeGenerationResult result = new ArchetypeGenerationResult();
+        instance.generateArchetype( request, result );
         if ( result.getCause() != null )
         {
             fail( "No exception may be thrown: " + result.getCause().getMessage() );
@@ -576,14 +537,9 @@ public class DefaultArchetypeGeneratorTest
     }
 
     public void testGenerateFileSetArchetype()
-        throws
-        Exception
+        throws Exception
     {
         System.out.println( "testGenerateFileSetArchetype" );
-        String remoteRepository =
-                new File( getBasedir(), "target/test-classes/repositories/central" )
-                    .toURI().toString();
-        System.err.println("remoteRepository="+remoteRepository);
 
         String project = "generate-12";
 
@@ -619,10 +575,11 @@ public class DefaultArchetypeGeneratorTest
         additionalProperties.setProperty( "property-with-default-3", "file-value" );
         additionalProperties.setProperty( "property-with-default-4", "file-value" );
 
-        ArchetypeGenerationResult result=new ArchetypeGenerationResult();
-        instance.generateArchetype(request, result);
+        ArchetypeGenerationResult result = new ArchetypeGenerationResult();
+        instance.generateArchetype( request, result );
         if ( result.getCause() != null )
-        {result.getCause().printStackTrace(System.err);
+        {
+            result.getCause().printStackTrace( System.err );
             fail( "No exception may be thrown: " + result.getCause().getMessage() );
         }
 
@@ -769,14 +726,9 @@ public class DefaultArchetypeGeneratorTest
     }
 
     public void testGenerateOldArchetype()
-        throws
-        Exception
+        throws Exception
     {
         System.out.println( "testGenerateOldArchetype" );
-        String remoteRepository =
-                new File( getBasedir(), "target/test-classes/repositories/central" )
-                    .toURI().toString();
-        System.err.println("remoteRepository="+remoteRepository);
 
         String project = "generate-11";
 
@@ -802,11 +754,11 @@ public class DefaultArchetypeGeneratorTest
         request.setVersion( "file-value" );
         request.setPackage( "file.value.package" );
 
-        ArchetypeGenerationResult result=new ArchetypeGenerationResult();
-        instance.generateArchetype(request, result);
+        ArchetypeGenerationResult result = new ArchetypeGenerationResult();
+        instance.generateArchetype( request, result );
         if ( result.getCause() != null )
         {
-            result.getCause().printStackTrace(System.err);
+            result.getCause().printStackTrace( System.err );
             fail( "No exception may be thrown: " + result.getCause().getMessage() );
         }
 
@@ -828,14 +780,9 @@ public class DefaultArchetypeGeneratorTest
     }
 
     public void testPropertiesNotDefined()
-        throws
-        Exception
+        throws Exception
     {
         System.out.println( "testPropertiesNotDefined" );
-        String remoteRepository =
-                new File( getBasedir(), "target/test-classes/repositories/central" )
-                    .toURI().toString();
-        System.err.println("remoteRepository="+remoteRepository);
 
         String project = "generate-3";
 
@@ -854,8 +801,8 @@ public class DefaultArchetypeGeneratorTest
         request.setArchetypeArtifactId( "basic" );
         request.setArchetypeVersion( "1.0" );
 
-        ArchetypeGenerationResult result=new ArchetypeGenerationResult();
-        instance.generateArchetype(request, result);
+        ArchetypeGenerationResult result = new ArchetypeGenerationResult();
+        instance.generateArchetype( request, result );
         if ( result.getCause() == null )
         {
             fail( "No exception may be thrown: " + result.getCause().getMessage() );
@@ -873,8 +820,7 @@ public class DefaultArchetypeGeneratorTest
     }
 
     public void testResourceFiltering()
-        throws
-        Exception
+        throws Exception
     {
         FileSet fileSet = new FileSet();
 
@@ -911,25 +857,22 @@ public class DefaultArchetypeGeneratorTest
     }
 
     protected void tearDown()
-        throws
-        Exception
+        throws Exception
     {
         super.tearDown();
     }
 
     protected void setUp()
-        throws
-        Exception
+        throws Exception
     {
         super.setUp();
 
+        String repositories = new File( getBasedir(), "target/test-classes/repositories" ).toURI().toString();
+
         localRepository =
-            new DefaultArtifactRepository(
-                "local",
-                new File( getBasedir(), "target/test-classes/repositories/local" ).toURI()
-                    .toString(),
-                new DefaultRepositoryLayout()
-            );
+            new DefaultArtifactRepository( "local", repositories + "/local", new DefaultRepositoryLayout() );
+
+        remoteRepository = repositories + "/central";
     }
 
     /**
@@ -973,10 +916,8 @@ public class DefaultArchetypeGeneratorTest
         }
     }
 
-    private void assertTemplateContent( final File projectDirectory,
-                                        final String template )
-        throws
-        IOException
+    private void assertTemplateContent( final File projectDirectory, final String template )
+        throws IOException
     {
         Properties properties = loadProperties( projectDirectory, template );
         assertEquals( "file-value", properties.getProperty( "groupId" ) );
@@ -993,13 +934,9 @@ public class DefaultArchetypeGeneratorTest
         assertEquals( "file-value", properties.getProperty( "property-without-default-4" ) );
     }
 
-    private void assertTemplateContentGeneratedWithFileSetArchetype(
-        File projectDirectory,
-        String template,
-        String artifactId
-    )
-        throws
-        IOException
+    private void assertTemplateContentGeneratedWithFileSetArchetype( File projectDirectory, String template,
+                                                                     String artifactId )
+        throws IOException
     {
         Properties properties = loadProperties( projectDirectory, template );
         assertEquals( "file-value", properties.getProperty( "groupId" ) );
@@ -1009,12 +946,8 @@ public class DefaultArchetypeGeneratorTest
         assertEquals( "file/value/package", properties.getProperty( "packageInPathFormat" ) );
     }
 
-    private void assertTemplateContentGeneratedWithOldArchetype(
-        final File projectDirectory,
-        final String template
-    )
-        throws
-        IOException
+    private void assertTemplateContentGeneratedWithOldArchetype( final File projectDirectory, final String template )
+        throws IOException
     {
         Properties properties = loadProperties( projectDirectory, template );
         assertEquals( "file-value", properties.getProperty( "groupId" ) );
@@ -1023,10 +956,8 @@ public class DefaultArchetypeGeneratorTest
         assertEquals( "file.value.package", properties.getProperty( "package" ) );
     }
 
-    private void assertTemplateCopiedWithFileSetArchetype( File projectDirectory,
-                                                           String template )
-        throws
-        IOException
+    private void assertTemplateCopiedWithFileSetArchetype( File projectDirectory, String template )
+        throws IOException
     {
         Properties properties = loadProperties( projectDirectory, template );
         assertEquals( "${groupId}", properties.getProperty( "groupId" ) );
@@ -1036,11 +967,8 @@ public class DefaultArchetypeGeneratorTest
         assertEquals( "${packageInPathFormat}", properties.getProperty( "packageInPathFormat" ) );
     }
 
-    private void copy( final File in,
-                       final File out )
-        throws
-        IOException,
-        FileNotFoundException
+    private void copy( final File in, final File out )
+        throws IOException, FileNotFoundException
     {
         assertTrue( !out.exists() || out.delete() );
         assertFalse( out.exists() );
@@ -1050,8 +978,7 @@ public class DefaultArchetypeGeneratorTest
     }
 
     private void instanceDefined( DefaultArchetypeGenerator instance )
-        throws
-        IllegalAccessException
+        throws IllegalAccessException
     {
         assertNotNull( instance );
         assertNotNull( getVariableValueFromObject( instance, "archetypeArtifactManager" ) );
@@ -1060,19 +987,15 @@ public class DefaultArchetypeGeneratorTest
     }
 
     private Properties loadProperties( File propertyFile )
-        throws
-        IOException,
-        FileNotFoundException
+        throws IOException, FileNotFoundException
     {
         Properties properties = new Properties();
         properties.load( new FileInputStream( propertyFile ) );
         return properties;
     }
 
-    private Properties loadProperties( final File projectDirectory,
-                                       final String template )
-        throws
-        IOException
+    private Properties loadProperties( final File projectDirectory, final String template )
+        throws IOException
     {
         File templateFile = new File( projectDirectory, template );
         if ( !templateFile.exists() )
@@ -1096,32 +1019,21 @@ public class DefaultArchetypeGeneratorTest
 
     private File getProjectSampleFile( String project )
     {
-        return
-            new File(
-                getProjectDirectory( project ), "/pom.xml.sample"
-            );
+        return new File( getProjectDirectory( project ), "/pom.xml.sample" );
     }
 
     private File getPropertiesFile( String project )
     {
-        return
-            new File(
-                getProjectDirectory( project ), "/archetype.properties"
-            );
+        return new File( getProjectDirectory( project ), "/archetype.properties" );
     }
 
     private File getPropertiesSampleFile( final String project )
     {
-        return
-            new File(
-                getProjectDirectory( project ), "/archetype.properties.sample"
-            );
+        return new File( getProjectDirectory( project ), "/archetype.properties.sample" );
     }
 
     private Model readPom( final File pomFile )
-        throws
-        IOException,
-        XmlPullParserException
+        throws IOException, XmlPullParserException
     {
         Model generatedModel;
         FileReader pomReader = null;
