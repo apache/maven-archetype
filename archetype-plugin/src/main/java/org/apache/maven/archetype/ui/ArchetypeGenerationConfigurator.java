@@ -33,15 +33,8 @@ public interface ArchetypeGenerationConfigurator
 {
     String ROLE = ArchetypeGenerationConfigurator.class.getName();
 
-    public void configureArchetype(
-        ArchetypeGenerationRequest request,
-        Boolean interactiveMode,
-        Properties commandLineProperties )
-        throws
-        ArchetypeNotDefined,
-        UnknownArchetype,
-        ArchetypeNotConfigured,
-        IOException,
-        PrompterException,
+    public void configureArchetype( ArchetypeGenerationRequest request, Boolean interactiveMode,
+                                    Properties commandLineProperties )
+        throws ArchetypeNotDefined, UnknownArchetype, ArchetypeNotConfigured, IOException, PrompterException,
         ArchetypeGenerationConfigurationFailure;
 }

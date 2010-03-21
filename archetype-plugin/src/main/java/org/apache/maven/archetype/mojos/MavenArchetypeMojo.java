@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The archetype creation goal looks for an archetype with a given groupId, 
+ * The archetype creation goal looks for an archetype with a given groupId,
  * artifactId, and version and retrieves it from the remote repository. Once the
  * archetype is retrieved, it is then processed against a set of user parameters
  * to create a working Maven project.
@@ -53,9 +53,9 @@ public class MavenArchetypeMojo
     extends AbstractMojo
 {
     /**
-     * Used to create the Archetype specified by the groupId, artifactId, and 
+     * Used to create the Archetype specified by the groupId, artifactId, and
      * version from the remote repository.
-     * 
+     *
      * @component
      */
     private OldArchetype archetype;
@@ -63,14 +63,14 @@ public class MavenArchetypeMojo
     /**
      * Used to create ArtifactRepository objects given the urls of the remote
      * repositories.
-     * 
+     *
      * @component
      */
     private ArtifactRepositoryFactory artifactRepositoryFactory;
 
     /**
      * Determines whether the layout is legacy or not.
-     * 
+     *
      * @component role="org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout" roleHint="default"
      */
     private ArtifactRepositoryLayout defaultArtifactRepositoryLayout;
@@ -78,7 +78,7 @@ public class MavenArchetypeMojo
 
     /**
      * Maven's local repository.
-     * 
+     *
      * @parameter expression="${localRepository}"
      * @required
      */
@@ -86,7 +86,7 @@ public class MavenArchetypeMojo
 
     /**
      * The Archetype Group Id to be used.
-     * 
+     *
      * @parameter expression="${archetypeGroupId}" default-value="org.apache.maven.archetypes"
      * @required
      */
@@ -94,7 +94,7 @@ public class MavenArchetypeMojo
 
     /**
      * The Archetype Artifact Id to be used.
-     * 
+     *
      * @parameter expression="${archetypeArtifactId}" default-value="maven-archetype-quickstart"
      * @required
      */
@@ -102,7 +102,7 @@ public class MavenArchetypeMojo
 
     /**
      * The Archetype Version to be used.
-     * 
+     *
      * @parameter expression="${archetypeVersion}" default-value="RELEASE"
      * @required
      */
@@ -110,21 +110,21 @@ public class MavenArchetypeMojo
 
     /**
      * The Group Id of the project to be build.
-     * 
+     *
      * @parameter expression="${groupId}"
      */
     private String groupId;
 
     /**
      * The Artifact Id of the project to be build.
-     * 
+     *
      * @parameter expression="${artifactId}"
      */
     private String artifactId;
 
     /**
      * The Version of the project to be build.
-     * 
+     *
      * @parameter expression="${version}" default-value="1.0-SNAPSHOT"
      * @required
      */
@@ -132,7 +132,7 @@ public class MavenArchetypeMojo
 
     /**
      * The Package Name of the project to be build.
-     * 
+     *
      * @parameter expression="${packageName}" alias="package"
      */
     private String packageName;
@@ -140,7 +140,7 @@ public class MavenArchetypeMojo
     /**
      * The remote repositories available for discovering dependencies and extensions as indicated
      * by the POM.
-     * 
+     *
      * @parameter expression="${project.remoteArtifactRepositories}"
      * @required
      */
@@ -148,14 +148,14 @@ public class MavenArchetypeMojo
 
     /**
      * Other remote repositories available for discovering dependencies and extensions.
-     * 
+     *
      * @parameter expression="${remoteRepositories}"
      */
     private String remoteRepositories;
 
     /**
      * The project to be created an archetype of.
-     * 
+     *
      * @parameter expression="${project}"
      */
     private MavenProject project;
@@ -195,19 +195,19 @@ public class MavenArchetypeMojo
         }
 
         // TODO: context mojo more appropriate?
-        Map map = new HashMap();
+        Map parameters = new HashMap();
 
-        map.put( "basedir", basedir );
+        parameters.put( "basedir", basedir );
 
-        map.put( "package", packageName );
+        parameters.put( "package", packageName );
 
-        map.put( "packageName", packageName );
+        parameters.put( "packageName", packageName );
 
-        map.put( "groupId", groupId );
+        parameters.put( "groupId", groupId );
 
-        map.put( "artifactId", artifactId );
+        parameters.put( "artifactId", artifactId );
 
-        map.put( "version", version );
+        parameters.put( "version", version );
 
         List archetypeRemoteRepositories = new ArrayList( pomRemoteRepositories );
 
@@ -227,16 +227,11 @@ public class MavenArchetypeMojo
 
         try
         {
-            archetype.createArchetype(
-                    archetypeGroupId, 
-                    archetypeArtifactId, 
-                    archetypeVersion, 
-                    createRepository("http://repo1.maven.org/maven2", "central"), 
-                    localRepository, 
-                    archetypeRemoteRepositories, 
-                    map);            
+            archetype.createArchetype( archetypeGroupId, archetypeArtifactId, archetypeVersion,
+                                       createRepository( "http://repo1.maven.org/maven2", "central" ), localRepository,
+                                       archetypeRemoteRepositories, parameters );
         }
-        catch (UnknownArchetype e) 
+        catch (UnknownArchetype e)
         {
             throw new MojoExecutionException( "Error creating from archetype", e );
         }

@@ -46,10 +46,10 @@ public class DefaultArchetypeFactory
         configuration.setArtifactId( archetypeDefinition.getArtifactId() );
         configuration.setVersion( archetypeDefinition.getVersion() );
 
-        Iterator propertiesIterator = properties.keySet().iterator();
-        while ( propertiesIterator.hasNext() )
+        for ( Iterator propertiesIterator = properties.keySet().iterator(); propertiesIterator.hasNext(); )
         {
             String property = (String) propertiesIterator.next();
+
             if ( !Constants.ARCHETYPE_GROUP_ID.equals( property ) && !Constants.ARCHETYPE_ARTIFACT_ID.equals( property )
                 && !Constants.ARCHETYPE_VERSION.equals( property ) )
             {
@@ -143,9 +143,8 @@ public class DefaultArchetypeFactory
 
         configuration.setName( archetypeDescriptor.getName() );
 
-        Iterator requiredProperties = archetypeDescriptor.getRequiredProperties().iterator();
-
-        while ( requiredProperties.hasNext() )
+        for ( Iterator requiredProperties = archetypeDescriptor.getRequiredProperties().iterator();
+            requiredProperties.hasNext(); )
         {
             org.apache.maven.archetype.metadata.RequiredProperty requiredProperty =
                 (org.apache.maven.archetype.metadata.RequiredProperty) requiredProperties.next();
@@ -167,7 +166,7 @@ public class DefaultArchetypeFactory
                 getLogger().debug( "Setting defaultProperty " + requiredProperty.getKey() + "="
                     + configuration.getDefaultValue( requiredProperty.getKey() ) );
             }
-        } // end while
+        }
 
         if ( !configuration.isConfigured( Constants.GROUP_ID )
                         && null == configuration.getDefaultValue( Constants.GROUP_ID ) )
@@ -185,6 +184,7 @@ public class DefaultArchetypeFactory
             getLogger().debug( "Setting property " + Constants.GROUP_ID + "="
                 + configuration.getProperty( Constants.GROUP_ID ) );
         }
+
         if ( !configuration.isConfigured( Constants.ARTIFACT_ID )
                         && null == configuration.getDefaultValue( Constants.ARTIFACT_ID ) )
         {
@@ -202,6 +202,7 @@ public class DefaultArchetypeFactory
             getLogger().debug( "Setting property " + Constants.ARTIFACT_ID + "="
                 + configuration.getProperty( Constants.ARTIFACT_ID ) );
         }
+
         if ( !configuration.isConfigured( Constants.VERSION )
                         && null == configuration.getDefaultValue( Constants.VERSION ) )
         {
@@ -222,6 +223,7 @@ public class DefaultArchetypeFactory
             getLogger().debug( "Setting property " + Constants.VERSION + "="
                 + configuration.getProperty( Constants.VERSION ) );
         }
+
         if ( !configuration.isConfigured( Constants.PACKAGE )
                         && null == configuration.getDefaultValue( Constants.PACKAGE ) )
         {

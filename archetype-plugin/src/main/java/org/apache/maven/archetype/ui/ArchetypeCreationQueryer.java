@@ -29,67 +29,55 @@ public interface ArchetypeCreationQueryer
     /**
      */
     String getArchetypeArtifactId( String defaultValue )
-        throws
-        PrompterException;
+        throws PrompterException;
 
     /**
      */
     String getArchetypeGroupId( String defaultValue )
-        throws
-        PrompterException;
+        throws PrompterException;
 
     /**
      */
     String getArchetypeVersion( String defaultValue )
-        throws
-        PrompterException;
+        throws PrompterException;
 
     /**
      */
     String getArtifactId( String defaultValue )
-        throws
-        PrompterException;
+        throws PrompterException;
 
     /**
      */
     boolean askAddAnotherProperty()
-        throws
-        PrompterException;
+        throws PrompterException;
 
     /**
      */
     String askNewPropertyKey()
-        throws
-        PrompterException;
+        throws PrompterException;
 
     /**
      */
-    String askReplacementValue( String propertyKey,
-                                String defaultValue )
-        throws
-        PrompterException;
+    String askReplacementValue( String propertyKey, String defaultValue )
+        throws PrompterException;
 
     /**
      */
     boolean confirmConfiguration( ArchetypeConfiguration archetypeConfiguration )
-        throws
-        PrompterException;
+        throws PrompterException;
 
     /**
      */
     String getGroupId( String defaultValue )
-        throws
-        PrompterException;
+        throws PrompterException;
 
     /**
      */
     String getPackage( String defaultValue )
-        throws
-        PrompterException;
+        throws PrompterException;
 
     /**
      */
     String getVersion( String defaultValue )
-        throws
-        PrompterException;
+        throws PrompterException;
 }

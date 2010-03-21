@@ -29,35 +29,27 @@ public interface ArchetypeFactory
 {
     String ROLE = ArchetypeFactory.class.getName();
 
+    /**
+     */
+    ArchetypeConfiguration createArchetypeConfiguration(
+                                                         org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor archetypeDescriptor,
+                                                         Properties properties );
 
     /**
      */
     ArchetypeConfiguration createArchetypeConfiguration(
-        org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor archetypeDescriptor,
-        Properties properties
-    );
+                                                         org.apache.maven.archetype.metadata.ArchetypeDescriptor archetypeDescriptor,
+                                                         Properties properties );
 
     /**
      */
-    ArchetypeConfiguration createArchetypeConfiguration(
-        org.apache.maven.archetype.metadata.ArchetypeDescriptor archetypeDescriptor,
-        Properties properties
-    );
-
-    /**
-     */
-    ArchetypeConfiguration createArchetypeConfiguration(
-        MavenProject project,
-        ArchetypeDefinition archetypeDefinition,
-        Properties properties
-    );
+    ArchetypeConfiguration createArchetypeConfiguration( MavenProject project, ArchetypeDefinition archetypeDefinition,
+                                                         Properties properties );
 
     /**
      */
     ArchetypeDefinition createArchetypeDefinition( Properties properties );
 
-    void updateArchetypeConfiguration(
-        ArchetypeConfiguration archetypeConfiguration,
-        ArchetypeDefinition archetypeDefinition
-    );
+    void updateArchetypeConfiguration( ArchetypeConfiguration archetypeConfiguration,
+                                       ArchetypeDefinition archetypeDefinition );
 }

@@ -55,8 +55,7 @@ public class AddArchetypeMetadataMojo
     private MavenProject project;
 
     public void execute()
-        throws
-        MojoExecutionException
+        throws MojoExecutionException
     {
         Artifact projectArtifact = project.getArtifact();
 
@@ -64,17 +63,11 @@ public class AddArchetypeMetadataMojo
         versioning.setLatest( projectArtifact.getVersion() );
         versioning.updateTimestamp();
 
-        ArtifactRepositoryMetadata metadata =
-            new ArtifactRepositoryMetadata( projectArtifact, versioning );
+        ArtifactRepositoryMetadata metadata = new ArtifactRepositoryMetadata( projectArtifact, versioning );
         projectArtifact.addMetadata( metadata );
 
-        GroupRepositoryMetadata groupMetadata =
-            new GroupRepositoryMetadata( project.getGroupId() );
-        groupMetadata.addPluginMapping(
-            getGoalPrefix(),
-            project.getArtifactId(),
-            project.getName()
-        );
+        GroupRepositoryMetadata groupMetadata = new GroupRepositoryMetadata( project.getGroupId() );
+        groupMetadata.addPluginMapping( getGoalPrefix(), project.getArtifactId(), project.getName() );
 
         projectArtifact.addMetadata( groupMetadata );
     }

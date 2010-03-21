@@ -36,8 +36,7 @@ public interface ArchetypeSelectionQueryer
         throws PrompterException;
 
     boolean confirmSelection( ArchetypeDefinition archetypeDefinition )
-        throws
-        PrompterException;
+        throws PrompterException;
 
 //    Archetype selectArchetype( List list )
 //        throws
@@ -61,7 +60,8 @@ public interface ArchetypeSelectionQueryer
      * @param archetypes the archetypes to choose from
      * @param defaultDefinition the default archetype, if present in the map
      * @return the selected archetype
-     * @throws org.codehaus.plexus.components.interactivity.PrompterException if there is a problem in making a selection
+     * @throws org.codehaus.plexus.components.interactivity.PrompterException if there is a problem in making a
+     *             selection
      */
     Archetype selectArchetype( Map archetypes, ArchetypeDefinition defaultDefinition )
         throws PrompterException;
