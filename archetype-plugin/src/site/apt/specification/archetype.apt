@@ -29,25 +29,25 @@
 
 What is an archetype?
 
-* A Maven 2 project 'en devenir'  
+* A Maven 2 project 'en devenir'
 
-    I.e. an abstract representation of a kind of project 
-    that can be instantiated into a concrete customised 
-    Maven 2 project. 
+    I.e. an abstract representation of a kind of project
+    that can be instantiated into a concrete customised
+    Maven 2 project.
 
-    An archetype knows which files will be part of the 
-    instantiated project and which properties to fill 
-    to properly customise the project. 
- 
-    Each archetype defines a set of common properties: 
+    An archetype knows which files will be part of the
+    instantiated project and which properties to fill
+    to properly customise the project.
 
-    * groupId which will be the groupId of the project 
+    Each archetype defines a set of common properties:
 
-    * artifactId which will be the artifactId of the project 
+    * <<<groupId>>> which will be the groupId of the project
 
-    * version which will be the version of the project 
+    * <<<artifactId>>> which will be the artifactId of the project
 
-    * package which will be the base package of all source files of the project
+    * <<<version>>> which will be the version of the project
+
+    * <<<package>>> which will be the base package of all source files of the project
 
     []
 
@@ -55,7 +55,7 @@ What is an archetype?
 
 * A jar file
 
-    The minimal content of the jar file: 
+    The minimal content of the jar file is:
 
 +---
 .
@@ -67,14 +67,14 @@ What is an archetype?
     `-- pom.xml                     [3]
 +---
 
-    [[1]] The metadata file that defines:  
+    [[1]] The metadata file that defines:
 
-        * the default values of the common properties, 
+        * the default values of the common properties,
 
-        * a set of additional properties with their default values, 
+        * a set of additional properties with their default values,
 
         * a set of archetype resources;
-        
+
         []
 
     [[2]] The resource files defined by the archetype metadata,
