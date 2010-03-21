@@ -37,14 +37,14 @@ Maven 2 Archetype Plugin
 
 * Usage
 
-  {{{usage.html}Instructions on how to use the Archetype Plugin to create a project}}
+  {{{./usage.html}Instructions on how to use the Archetype Plugin to create a project}}
   can be found on the usage page.
 
 ~~ TODO: The links in the following paragraph doesn't work
   The Archetype Plugin is embedded in IDEs {{{#}Eclipse}}, {{{#}NetBeans}},
   {{{#}IDEA}}.
 
-  {{{advanced-usage.html}Instructions on how to use the Archetype Plugin to create an archetype from an existing project}}
+  {{{./advanced-usage.html}Instructions on how to use the Archetype Plugin to create an archetype from an existing project}}
   can be found on the advanced usage page.
 
 
