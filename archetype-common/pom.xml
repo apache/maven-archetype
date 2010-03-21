@@ -33,6 +33,7 @@ under the License.
   <packaging>jar</packaging>
 
   <name>Maven Archetype Common</name>
+  <description>Core Archetype classes.</description>
 
   <dependencies>
     <dependency>

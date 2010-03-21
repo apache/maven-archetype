@@ -33,6 +33,7 @@ under the License.
   <packaging>pom</packaging>
 
   <name>Maven Archetype Testing</name>
+  <description>Tools used to test Maven Archetype.</description>
 
   <modules>
     <module>archetype-proxy</module>
