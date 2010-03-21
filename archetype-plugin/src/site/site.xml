@@ -20,42 +20,19 @@
  * under the License.
  */
   -->
-  <project name="Maven Archetype Plugin">
-  <bannerLeft>
-    <name>Maven Archetype Plugin</name>
-    <src>http://maven.apache.org/images/apache-maven-project-2.png</src>
-    <href>http://maven.apache.org/</href>
-  </bannerLeft>
-  <bannerRight>
-    <src>http://maven.apache.org/images/maven-logo-2.gif</src>
-  </bannerRight>
-  <skin>
-    <groupId>org.apache.maven.skins</groupId>
-    <artifactId>maven-stylus-skin</artifactId>
-  </skin>
-  <publishDate format="dd MMM yyyy" position="left" />
-  <version position="left" />
+<project name="Maven Archetype Plugin"
+  xmlns="http://maven.apache.org/DECORATION/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0 http://maven.apache.org/xsd/decoration-1.0.0.xsd">
   <body>
-    <links>
-      <item name="Apache" href="http://www.apache.org/"/>
-      <item name="Maven 1.x" href="http://maven.apache.org/maven-1.x"/>
-      <item name="Maven 2.x" href="http://maven.apache.org/"/>
-      <item name="Maven 2.x Plugins" href="http://maven.apache.org/plugins/"/>
-      <item name="SCM" href="http://maven.apache.org/scm"/>
-      <item name="Wagon" href="http://maven.apache.org/wagon"/>
-      <item name="JXR" href="http://maven.apache.org/jxr"/>
-      <item name="Doxia" href="http://maven.apache.org/doxia"/>
-    </links>
-
     <menu name="Overview">
       <item name="Introduction" href="/index.html"/>
       <item name="Usage" href="/usage.html"/>
       <item name="Advanced Usage" href="/advanced-usage.html"/>
-      <item name="Goals" href="/plugin-info.html"/>      
+      <item name="Goals" href="/plugin-info.html"/>
       <!--item name="FAQ" href="faq.html"/-->
       <item name="Specification" href="/specification/specification.html"/>
     </menu>
-    
+
     <!--menu name="Examples">
       <item name="Specifying the Remote Repositories" href="/examples/remote-repositories.html"/>
       <item name="Creating a Simple Java Application" href="/examples/simple.html"/>
@@ -66,7 +43,7 @@
       <item name="Creating a Mojo" href="/examples/mojo.html"/>
 	  <item name="Creating your own Archetype" href="/examples/archetype.html"/>
     </menu-->
-    
+
     <!--menu name="Specification">
       <item name="Introduction to archetype plugin" href="./main.html"/>
       <item name="What are archetypes ?" href="./archetypes.html"/>
@@ -76,7 +53,5 @@
       <item name="Mojos of the plugin" href="./mojos.html"/>
       <item name="Desing of the archetype plugin" href="./design.html"/>
     </menu-->
-    
-    <menu ref="reports"/>
   </body>
 </project>
