@@ -26,6 +26,5 @@ public interface ArchetypeCreator
 {
     String ROLE = ArchetypeCreator.class.getName();
 
-    void createArchetype( ArchetypeCreationRequest request,
-                          ArchetypeCreationResult result );
+    void createArchetype( ArchetypeCreationRequest request, ArchetypeCreationResult result );
 }
