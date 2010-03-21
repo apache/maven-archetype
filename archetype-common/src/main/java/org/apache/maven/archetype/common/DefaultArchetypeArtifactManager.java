@@ -27,7 +27,6 @@ import org.apache.maven.archetype.metadata.ArchetypeDescriptor;
 import org.apache.maven.archetype.metadata.io.xpp3.ArchetypeDescriptorXpp3Reader;
 import org.apache.maven.archetype.old.descriptor.ArchetypeDescriptorBuilder;
 import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.repository.metadata.RepositoryMetadataManager;
 import org.apache.maven.model.Model;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -59,7 +58,8 @@ import java.util.zip.ZipFile;
  */
 public class DefaultArchetypeArtifactManager
     extends AbstractLogEnabled
-    implements ArchetypeArtifactManager {
+    implements ArchetypeArtifactManager
+{
     /**
      * @plexus.requirement
      */
@@ -70,45 +70,24 @@ public class DefaultArchetypeArtifactManager
      */
     private PomManager pomManager;
 
-    /**
-     * @plexus.requirement
-     */
-    private RepositoryMetadataManager repositoryMetadataManager;
-
     private Map archetypeCache = new TreeMap();
 
-    public File getArchetypeFile(
-        final String groupId,
-        final String artifactId,
-        final String version,
-        ArtifactRepository archetypeRepository,
-        final ArtifactRepository localRepository,
-        final List repositories
-    )
+    public File getArchetypeFile( final String groupId, final String artifactId, final String version,
+                                  ArtifactRepository archetypeRepository, final ArtifactRepository localRepository,
+                                  final List repositories )
         throws UnknownArchetype
     {
         try
         {
-            File archetype = getArchetype(
-                groupId,
-                artifactId,
-                version );
+            File archetype = getArchetype( groupId, artifactId, version );
+
             if ( archetype == null )
             {
                 archetype =
-                    downloader.download(
-                        groupId,
-                        artifactId,
-                        version,
-                        archetypeRepository,
-                        localRepository,
-                        repositories
-                    );
-                setArchetype(
-                    groupId,
-                    artifactId,
-                    version,
-                    archetype );
+                    downloader.download( groupId, artifactId, version, archetypeRepository, localRepository,
+                                         repositories );
+
+                setArchetype( groupId, artifactId, version, archetype );
             }
             return archetype;
         }
@@ -164,8 +143,7 @@ public class DefaultArchetypeArtifactManager
                 return null;
             }
 
-            ZipEntry pom =
-                zipFile.getEntry( StringUtils.replace( pomFileName, File.separator, "/" ) );
+            ZipEntry pom = zipFile.getEntry( StringUtils.replace( pomFileName, File.separator, "/" ) );
             if ( pom == null )
             {
                 pom = zipFile.getEntry( StringUtils.replace( pomFileName, "/", File.separator ) );
@@ -226,47 +204,19 @@ public class DefaultArchetypeArtifactManager
         }
     }
 
-    public boolean isFileSetArchetype(
-        String groupId,
-        String artifactId,
-        String version,
-        ArtifactRepository archetypeRepository,
-        ArtifactRepository localRepository,
-        List repositories
-    )
+    public boolean isFileSetArchetype( String groupId, String artifactId, String version,
+                                       ArtifactRepository archetypeRepository, ArtifactRepository localRepository,
+                                       List repositories )
     {
-        ZipFile zipFile = null;
         try
         {
-            zipFile =
-                getArchetypeZipFile(
-                    getArchetypeFile(
-                        groupId,
-                        artifactId,
-                        version,
-                        archetypeRepository,
-                        localRepository,
-                        repositories
-                    )
-                );
-
-            return isFileSetArchetype( zipFile );
-        }
-        catch ( XmlPullParserException e )
-        {
-            return false;
-        }
-        catch ( IOException e )
-        {
-            return false;
+            File archetypeFile = getArchetypeFile( groupId, artifactId, version, archetypeRepository,
+                                                   localRepository, repositories );
+            return isFileSetArchetype( archetypeFile );
         }
         catch ( UnknownArchetype e )
         {
             return false;
-        }
-        finally
-        {
-            closeZipFile( zipFile );
         }
     }
 
@@ -297,29 +247,16 @@ public class DefaultArchetypeArtifactManager
         }
     }
 
-    public boolean isOldArchetype(
-        String groupId,
-        String artifactId,
-        String version,
-        ArtifactRepository archetypeRepository,
-        ArtifactRepository localRepository,
-        List repositories
-    )
+    public boolean isOldArchetype( String groupId, String artifactId, String version,
+                                   ArtifactRepository archetypeRepository, ArtifactRepository localRepository,
+                                   List repositories )
     {
         ZipFile zipFile = null;
         try
         {
             zipFile =
-                getArchetypeZipFile(
-                    getArchetypeFile(
-                        groupId,
-                        artifactId,
-                        version,
-                        archetypeRepository,
-                        localRepository,
-                        repositories
-                    )
-                );
+                getArchetypeZipFile( getArchetypeFile( groupId, artifactId, version, archetypeRepository,
+                                                       localRepository, repositories ) );
 
             return isOldArchetype( zipFile );
         }
@@ -341,49 +278,35 @@ public class DefaultArchetypeArtifactManager
         }
     }
 
-    public boolean exists(
-        String archetypeGroupId,
-        String archetypeArtifactId,
-        String archetypeVersion,
-        ArtifactRepository archetypeRepository,
-        ArtifactRepository localRepository,
-        List remoteRepositories
-    )
+    public boolean exists( String archetypeGroupId, String archetypeArtifactId, String archetypeVersion,
+                           ArtifactRepository archetypeRepository, ArtifactRepository localRepository,
+                           List remoteRepositories )
     {
         try
         {
-            File archetype = getArchetype(
-                archetypeGroupId,
-                archetypeArtifactId,
-                archetypeVersion );
+            File archetype = getArchetype( archetypeGroupId, archetypeArtifactId, archetypeVersion );
             if ( archetype == null )
             {
                 archetype =
-                    downloader.download(
-                        archetypeGroupId,
-                        archetypeArtifactId,
-                        archetypeVersion,
-                        archetypeRepository,
-                        localRepository,
-                        remoteRepositories
-                    );
-                setArchetype(
-                    archetypeGroupId,
-                    archetypeArtifactId,
-                    archetypeVersion,
-                    archetype );
+                    downloader.download( archetypeGroupId, archetypeArtifactId, archetypeVersion, archetypeRepository,
+                                         localRepository, remoteRepositories );
+                setArchetype( archetypeGroupId, archetypeArtifactId, archetypeVersion, archetype );
             }
 
             return archetype.exists();
         }
         catch ( DownloadException e )
         {
-            getLogger().debug( "Archetype doesn't exist", e );
+            getLogger().debug(
+                               "Archetype " + archetypeGroupId + ":" + archetypeArtifactId + ":" + archetypeVersion
+                                   + " doesn't exist", e );
             return false;
         }
         catch ( DownloadNotFoundException e )
         {
-            getLogger().debug( "Archetype doesn't exist", e );
+            getLogger().debug(
+                              "Archetype " + archetypeGroupId + ":" + archetypeArtifactId + ":" + archetypeVersion
+                                  + " doesn't exist", e );
             return false;
         }
     }
@@ -413,49 +336,24 @@ public class DefaultArchetypeArtifactManager
     }
 
     public org.apache.maven.archetype.metadata.ArchetypeDescriptor getFileSetArchetypeDescriptor(
-        String groupId,
-        String artifactId,
-        String version,
-        ArtifactRepository archetypeRepository,
-        ArtifactRepository localRepository,
-        List repositories
-    )
+                                                                                                  String groupId,
+                                                                                                  String artifactId,
+                                                                                                  String version,
+                                                                                                  ArtifactRepository archetypeRepository,
+                                                                                                  ArtifactRepository localRepository,
+                                                                                                  List repositories )
         throws UnknownArchetype
     {
-        ZipFile zipFile = null;
-        try
-        {
-            zipFile =
-                getArchetypeZipFile(
-                    getArchetypeFile(
-                        groupId,
-                        artifactId,
-                        version,
-                        archetypeRepository,
-                        localRepository,
-                        repositories
-                    )
-                );
+        File archetypeFile =
+            getArchetypeFile( groupId, artifactId, version, archetypeRepository, localRepository, repositories );
 
-            return loadFileSetArchetypeDescriptor( zipFile );
-        }
-        catch ( XmlPullParserException e )
-        {
-            throw new UnknownArchetype( e );
-        }
-        catch ( IOException e )
-        {
-            throw new UnknownArchetype( e );
-        }
-        finally
-        {
-            closeZipFile( zipFile );
-        }
+        return getFileSetArchetypeDescriptor( archetypeFile );
     }
 
     public List getFilesetArchetypeResources( File archetypeFile )
         throws UnknownArchetype
     {
+        getLogger().debug( "getFilesetArchetypeResources( \"" + archetypeFile.getAbsolutePath() + "\" )" );
         List archetypeResources = new ArrayList();
 
         ZipFile zipFile = null;
@@ -471,19 +369,14 @@ public class DefaultArchetypeArtifactManager
                 if ( !entry.isDirectory() && entry.getName().startsWith( Constants.ARCHETYPE_RESOURCES ) )
                 {
                     // not supposed to be file.seperator
-                    String resource =
-                        StringUtils.replace(
-                            entry.getName(),
-                            Constants.ARCHETYPE_RESOURCES + "/",
-                            ""
-                        );
-                    getLogger().debug( "Found resource " + resource );
+                    String resource = entry.getName().substring( Constants.ARCHETYPE_RESOURCES.length() + 1 );
+                    getLogger().debug( "  - found resource (" + Constants.ARCHETYPE_RESOURCES + "/)" + resource );
                     // TODO:FIXME
                     archetypeResources.add( resource );
                 }
                 else
                 {
-                    getLogger().debug( "Not resource " + entry.getName() );
+                    getLogger().debug( "  - ignored resource " + entry.getName() );
                 }
             }
             return archetypeResources;
@@ -494,9 +387,7 @@ public class DefaultArchetypeArtifactManager
         }
     }
 
-    public org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor getOldArchetypeDescriptor(
-        File archetypeFile
-    )
+    public org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor getOldArchetypeDescriptor( File archetypeFile )
         throws UnknownArchetype
     {
         ZipFile zipFile = null;
@@ -521,140 +412,47 @@ public class DefaultArchetypeArtifactManager
     }
 
     public org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor getOldArchetypeDescriptor(
-        String groupId,
-        String artifactId,
-        String version,
-        ArtifactRepository archetypeRepository,
-        ArtifactRepository localRepository,
-        List repositories
-    )
+                                                                                                    String groupId,
+                                                                                                    String artifactId,
+                                                                                                    String version,
+                                                                                                    ArtifactRepository archetypeRepository,
+                                                                                                    ArtifactRepository localRepository,
+                                                                                                    List repositories )
         throws UnknownArchetype
     {
-        ZipFile zipFile = null;
-        try
-        {
-            zipFile =
-                getArchetypeZipFile(
-                    getArchetypeFile(
-                        groupId,
-                        artifactId,
-                        version,
-                        archetypeRepository,
-                        localRepository,
-                        repositories
-                    )
-                );
+        File archetypeFile =
+            getArchetypeFile( groupId, artifactId, version, archetypeRepository, localRepository, repositories );
 
-            return loadOldArchetypeDescriptor( zipFile );
-        }
-        catch ( XmlPullParserException e )
-        {
-            throw new UnknownArchetype( e );
-        }
-        catch ( IOException e )
-        {
-            throw new UnknownArchetype( e );
-        }
-        finally
-        {
-            closeZipFile( zipFile );
-        }
+        return getOldArchetypeDescriptor( archetypeFile );
     }
 
-    private void closeZipFile( ZipFile zipFile )
-    {
-        try
-        {
-            zipFile.close();
-        }
-        catch ( Exception e )
-        {
-            getLogger().error( "Failed to close zipFile" );
-        }
-    }
-
-    private File getArchetype( String archetypeGroupId,
-                               String archetypeArtifactId,
-                               String archetypeVersion )
+    private File getArchetype( String archetypeGroupId, String archetypeArtifactId, String archetypeVersion )
     {
         String key = archetypeGroupId + ":" + archetypeArtifactId + ":" + archetypeVersion;
+
         if ( archetypeCache.containsKey( key ) )
         {
             getLogger().debug( "Found archetype " + key + " in cache: " + archetypeCache.get( key ) );
+
             return (File) archetypeCache.get( key );
         }
-        else
-        {
-            getLogger().debug( "Not found archetype " + key + " in cache" );
-            return null;
-        }
-    }
 
-    private void setArchetype( String archetypeGroupId,
-                               String archetypeArtifactId,
-                               String archetypeVersion,
-                               File archetype )
-    {
-        String key = archetypeGroupId + ":" + archetypeArtifactId + ":" + archetypeVersion;
-        archetypeCache.put( key, archetype );
-    }
-
-    private ZipEntry searchEntry( ZipFile zipFile, String searchString )
-    {
-        getLogger().debug( "Searching for " + searchString + " inside " + zipFile );
-        Enumeration enu = zipFile.entries();
-        while ( enu.hasMoreElements() )
-        {
-            ZipEntry entryfound = (ZipEntry) enu.nextElement();
-            getLogger().debug( "An ENTRY " + entryfound.getName() );
-            if ( searchString.equals( entryfound.getName() ) )
-            {
-                getLogger().error( "Found entry" );
-                return entryfound;
-            }
-        }
+        getLogger().debug( "Not found archetype " + key + " in cache" );
         return null;
     }
 
-    private Reader getArchetypeDescriptorReader( ZipFile zipFile )
-        throws IOException
+    private void setArchetype( String archetypeGroupId, String archetypeArtifactId, String archetypeVersion,
+                               File archetype )
     {
-        ZipEntry entry = searchEntry( zipFile,
-            StringUtils.replace( Constants.ARCHETYPE_DESCRIPTOR, File.separator, "/" ) );
+        String key = archetypeGroupId + ":" + archetypeArtifactId + ":" + archetypeVersion;
 
-
-        if ( entry == null )
-        {
-            getLogger().debug(
-                "Not found " + Constants.ARCHETYPE_DESCRIPTOR + " retrying with windows path"
-            );
-            entry = searchEntry( zipFile,
-                StringUtils.replace( Constants.ARCHETYPE_DESCRIPTOR, "/", File.separator )
-            );
-        }
-        if ( entry == null )
-        {
-            throw new IOException(
-                "The " + Constants.ARCHETYPE_DESCRIPTOR + " descriptor cannot be found."
-            );
-        }
-
-        InputStream is = zipFile.getInputStream( entry );
-
-        if ( is == null )
-        {
-            throw new IOException(
-                "The " + Constants.ARCHETYPE_DESCRIPTOR + " descriptor cannot be found."
-            );
-        }
-        return ReaderFactory.newXmlReader( is );
+        archetypeCache.put( key, archetype );
     }
 
     private boolean isFileSetArchetype( ZipFile zipFile )
         throws IOException, XmlPullParserException
     {
-        org.apache.maven.archetype.metadata.ArchetypeDescriptor descriptor =
-            loadFileSetArchetypeDescriptor( zipFile );
+        org.apache.maven.archetype.metadata.ArchetypeDescriptor descriptor = loadFileSetArchetypeDescriptor( zipFile );
 
         return descriptor.getName() != null;
     }
@@ -662,15 +460,12 @@ public class DefaultArchetypeArtifactManager
     private boolean isOldArchetype( ZipFile zipFile )
         throws IOException, XmlPullParserException
     {
-        org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor descriptor =
-            loadOldArchetypeDescriptor( zipFile );
+        org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor descriptor = loadOldArchetypeDescriptor( zipFile );
 
         return descriptor.getId() != null;
     }
 
-    private org.apache.maven.archetype.metadata.ArchetypeDescriptor loadFileSetArchetypeDescriptor(
-        ZipFile zipFile
-    )
+    private org.apache.maven.archetype.metadata.ArchetypeDescriptor loadFileSetArchetypeDescriptor( ZipFile zipFile )
         throws IOException, XmlPullParserException
     {
         Reader reader = getArchetypeDescriptorReader( zipFile );
@@ -741,77 +536,79 @@ public class DefaultArchetypeArtifactManager
         return descriptor;
     }
 
+    private Reader getArchetypeDescriptorReader( ZipFile zipFile )
+        throws IOException
+    {
+        return getDescriptorReader( zipFile, Constants.ARCHETYPE_DESCRIPTOR );
+    }
+
     private Reader getOldArchetypeDescriptorReader( ZipFile zipFile )
         throws IOException
     {
-        ZipEntry entry = searchEntry( zipFile,
-            StringUtils.replace( Constants.OLD_ARCHETYPE_DESCRIPTOR, File.separator, "/" )
-        );
-
-        if ( entry == null )
-        {
-            getLogger().debug(
-                "No found " + Constants.OLD_ARCHETYPE_DESCRIPTOR + " retrying with windows path"
-            );
-            entry = searchEntry( zipFile,
-                StringUtils.replace( Constants.OLD_ARCHETYPE_DESCRIPTOR, "/", File.separator )
-            );
-        }
-
-        if ( entry == null )
-        {
-            throw new IOException(
-                "The " + Constants.OLD_ARCHETYPE_DESCRIPTOR + " descriptor cannot be found."
-            );
-        }
-
-        InputStream is = zipFile.getInputStream( entry );
-
-        if ( is == null )
-        {
-            throw new IOException(
-                "The " + Constants.OLD_ARCHETYPE_DESCRIPTOR + " descriptor cannot be found."
-            );
-        }
-        return ReaderFactory.newXmlReader( is );
+        return getDescriptorReader( zipFile, Constants.OLD_ARCHETYPE_DESCRIPTOR );
     }
 
     private Reader getOlderArchetypeDescriptorReader( ZipFile zipFile )
         throws IOException
     {
-        ZipEntry entry = searchEntry( zipFile,
-            StringUtils.replace( Constants.OLDER_ARCHETYPE_DESCRIPTOR, File.separator, "/" )
-        );
+        return getDescriptorReader( zipFile, Constants.OLDER_ARCHETYPE_DESCRIPTOR );
+    }
+
+    private Reader getDescriptorReader( ZipFile zipFile, String descriptor )
+        throws IOException
+    {
+        ZipEntry entry = searchEntry( zipFile, StringUtils.replace( descriptor, File.separator, "/" ) );
 
         if ( entry == null )
         {
-            getLogger().debug(
-                "No found " + Constants.OLDER_ARCHETYPE_DESCRIPTOR + " retrying with windows path"
-            );
-            entry = searchEntry( zipFile,
-                StringUtils.replace(
-                    Constants.OLDER_ARCHETYPE_DESCRIPTOR,
-                    "/",
-                    File.separator
-                )
-            );
+            getLogger().debug( "No found " + descriptor + " retrying with windows path separator." );
+
+            entry = searchEntry( zipFile, StringUtils.replace( descriptor, "/", File.separator ) );
         }
+
         if ( entry == null )
         {
-            throw new IOException(
-                "The " + Constants.OLDER_ARCHETYPE_DESCRIPTOR + " descriptor cannot be found."
-            );
+            throw new IOException( "The " + descriptor + " descriptor cannot be found in " + zipFile.getName() + "." );
         }
 
         InputStream is = zipFile.getInputStream( entry );
 
         if ( is == null )
         {
-            throw new IOException(
-                "The " + Constants.OLDER_ARCHETYPE_DESCRIPTOR + " descriptor cannot be found."
-            );
+            throw new IOException( "The " + descriptor + " descriptor cannot be read in " + zipFile.getName() + "." );
         }
 
         return ReaderFactory.newXmlReader( is );
+    }
+
+    private ZipEntry searchEntry( ZipFile zipFile, String searchString )
+    {
+        getLogger().debug( "Searching for " + searchString + " inside " + zipFile.getName() );
+
+        Enumeration enu = zipFile.entries();
+        while ( enu.hasMoreElements() )
+        {
+            ZipEntry entryfound = (ZipEntry) enu.nextElement();
+            getLogger().debug( "  - " + entryfound.getName() );
+
+            if ( searchString.equals( entryfound.getName() ) )
+            {
+                getLogger().debug( "Entry found" );
+                return entryfound;
+            }
+        }
+        return null;
+    }
+
+    private void closeZipFile( ZipFile zipFile )
+    {
+        try
+        {
+            zipFile.close();
+        }
+        catch ( Exception e )
+        {
+            getLogger().error( "Failed to close zipFile" );
+        }
     }
 }
