@@ -85,6 +85,7 @@ public class UpdateLocalCatalogMojo
         archetype.setGroupId( project.getGroupId() );
         archetype.setArtifactId( project.getArtifactId() );
         archetype.setVersion( project.getVersion() );
+
         if ( StringUtils.isNotEmpty( project.getDescription() ) )
         {
             archetype.setDescription( project.getDescription() );
@@ -93,6 +94,7 @@ public class UpdateLocalCatalogMojo
         {
             archetype.setDescription( project.getName() );
         }
+
 //        archetype.setRepository( localRepository.toString() );
 //            archetype.setGoals( project.get );
 //            archetype.setProperties( project.get );
@@ -140,7 +142,7 @@ public class UpdateLocalCatalogMojo
 
     private Properties getArchetypeSourceProperties( String sourceRoleHint, Properties archetypeCatalogProperties )
     {
-        Properties p = new Properties(  );
+        Properties p = new Properties();
 
         for ( Iterator i = archetypeCatalogProperties.keySet().iterator(); i.hasNext(); )
         {

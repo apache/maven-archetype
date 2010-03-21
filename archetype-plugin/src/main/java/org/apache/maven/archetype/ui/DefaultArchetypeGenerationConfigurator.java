@@ -84,12 +84,8 @@ public class DefaultArchetypeGenerationConfigurator
     }
 
     public void configureArchetype( ArchetypeGenerationRequest request, Boolean interactiveMode,
-        Properties executionProperties )
-    throws ArchetypeNotDefined,
-        UnknownArchetype,
-        ArchetypeNotConfigured,
-        IOException,
-        PrompterException,
+                                    Properties executionProperties )
+        throws ArchetypeNotDefined, UnknownArchetype, ArchetypeNotConfigured, IOException, PrompterException,
         ArchetypeGenerationConfigurationFailure
     {
         ArtifactRepository localRepository = request.getLocalRepository();
@@ -121,8 +117,9 @@ public class DefaultArchetypeGenerationConfigurator
         }
         if ( request.getArchetypeRepository() != null )
         {
-            archetypeRepository = archetypeRegistryManager.createRepository( request.getArchetypeRepository(),
-                    ad.getArtifactId() + "-repo" );
+            archetypeRepository =
+                archetypeRegistryManager.createRepository( request.getArchetypeRepository(),
+                                                           ad.getArtifactId() + "-repo" );
             repositories.add( archetypeRepository );
         }
         if ( request.getRemoteArtifactRepositories() != null )
@@ -142,20 +139,22 @@ public class DefaultArchetypeGenerationConfigurator
         ArchetypeConfiguration archetypeConfiguration;
 
         if ( archetypeArtifactManager.isFileSetArchetype( ad.getGroupId(), ad.getArtifactId(), ad.getVersion(),
-                archetypeRepository, localRepository, repositories ) )
+                                                          archetypeRepository, localRepository, repositories ) )
         {
-            org.apache.maven.archetype.metadata.ArchetypeDescriptor archetypeDescriptor = archetypeArtifactManager
-                .getFileSetArchetypeDescriptor( ad.getGroupId(), ad.getArtifactId(), ad.getVersion(),
-                    archetypeRepository, localRepository, repositories );
+            org.apache.maven.archetype.metadata.ArchetypeDescriptor archetypeDescriptor =
+                archetypeArtifactManager.getFileSetArchetypeDescriptor( ad.getGroupId(), ad.getArtifactId(),
+                                                                        ad.getVersion(), archetypeRepository,
+                                                                        localRepository, repositories );
 
             archetypeConfiguration = archetypeFactory.createArchetypeConfiguration( archetypeDescriptor, properties );
         }
         else if ( archetypeArtifactManager.isOldArchetype( ad.getGroupId(), ad.getArtifactId(), ad.getVersion(),
-                archetypeRepository, localRepository, repositories ) )
+                                                           archetypeRepository, localRepository, repositories ) )
         {
-            org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor archetypeDescriptor = archetypeArtifactManager
-                .getOldArchetypeDescriptor( ad.getGroupId(), ad.getArtifactId(), ad.getVersion(), archetypeRepository,
-                    localRepository, repositories );
+            org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor archetypeDescriptor =
+                archetypeArtifactManager.getOldArchetypeDescriptor( ad.getGroupId(), ad.getArtifactId(),
+                                                                    ad.getVersion(), archetypeRepository,
+                                                                    localRepository, repositories );
 
             archetypeConfiguration = archetypeFactory.createArchetypeConfiguration( archetypeDescriptor, properties );
         }
@@ -174,49 +173,62 @@ public class DefaultArchetypeGenerationConfigurator
                 getLogger().debug( "Required properties before content sort: " + propertiesRequired );
                 Collections.sort( propertiesRequired, new RequiredPropertyComparator( archetypeConfiguration ) );
                 getLogger().debug( "Required properties after content sort: " + propertiesRequired );
-                    Iterator requiredProperties = propertiesRequired.iterator();
+
                 if ( !archetypeConfiguration.isConfigured() )
                 {
-                    while ( requiredProperties.hasNext() )
+                    for ( Iterator requiredProperties = propertiesRequired.iterator(); requiredProperties.hasNext(); )
                     {
                         String requiredProperty = (String) requiredProperties.next();
 
                         if ( !archetypeConfiguration.isConfigured( requiredProperty ) )
                         {
-                            if ( "package".equals(requiredProperty) )
+                            if ( "package".equals( requiredProperty ) )
                             {
                                 // if the asked property is 'package', then
                                 // use its default and if not defined,
                                 // use the 'groupId' property value.
                                 String packageDefault = archetypeConfiguration.getDefaultValue( requiredProperty );
-                                packageDefault = ( null == packageDefault || "".equals( packageDefault ) ) ?
-                                    archetypeConfiguration.getProperty( "groupId" ) :
-                                    archetypeConfiguration.getDefaultValue( requiredProperty );
+                                packageDefault =
+                                    ( null == packageDefault || "".equals( packageDefault ) ) ? archetypeConfiguration.getProperty( "groupId" )
+                                                    : archetypeConfiguration.getDefaultValue( requiredProperty );
 
-                                archetypeConfiguration.setProperty( requiredProperty,
-                                    archetypeGenerationQueryer.getPropertyValue( requiredProperty,
-                                        getTransitiveDefaultValue(packageDefault, archetypeConfiguration) ) );
+                                archetypeConfiguration.setProperty(
+                                                                    requiredProperty,
+                                                                    archetypeGenerationQueryer.getPropertyValue(
+                                                                                                                 requiredProperty,
+                                                                                                                 getTransitiveDefaultValue(
+                                                                                                                                            packageDefault,
+                                                                                                                                            archetypeConfiguration ) ) );
                             }
                             else
                             {
-                                archetypeConfiguration.setProperty( requiredProperty,
-                                    archetypeGenerationQueryer.getPropertyValue( requiredProperty,
-                                        getTransitiveDefaultValue( archetypeConfiguration.getDefaultValue( requiredProperty ), archetypeConfiguration ) ) );
+                                archetypeConfiguration.setProperty(
+                                                                    requiredProperty,
+                                                                    archetypeGenerationQueryer.getPropertyValue(
+                                                                                                                 requiredProperty,
+                                                                                                                 getTransitiveDefaultValue(
+                                                                                                                                            archetypeConfiguration.getDefaultValue( requiredProperty ),
+                                                                                                                                            archetypeConfiguration ) ) );
                             }
                         }
                         else
                         {
-                            getLogger().info( "Using property: " + requiredProperty + " = " + archetypeConfiguration.getProperty( requiredProperty) );
+                            getLogger().info(
+                                              "Using property: " + requiredProperty + " = "
+                                                  + archetypeConfiguration.getProperty( requiredProperty ) );
                         }
                     }
                 }
                 else
                 {
 
-                    while ( requiredProperties.hasNext() )
+                    for ( Iterator requiredProperties = propertiesRequired.iterator(); requiredProperties.hasNext(); )
                     {
                         String requiredProperty = (String) requiredProperties.next();
-                        getLogger().info( "Using property: " + requiredProperty + " = " + archetypeConfiguration.getProperty( requiredProperty) );
+
+                        getLogger().info(
+                                          "Using property: " + requiredProperty + " = "
+                                              + archetypeConfiguration.getProperty( requiredProperty ) );
                     }
                 }
 
@@ -242,9 +254,8 @@ public class DefaultArchetypeGenerationConfigurator
         {
             if ( !archetypeConfiguration.isConfigured() )
             {
-                Iterator requiredProperties = archetypeConfiguration.getRequiredProperties().iterator();
-
-                while ( requiredProperties.hasNext() )
+                for ( Iterator requiredProperties = archetypeConfiguration.getRequiredProperties().iterator();
+                    requiredProperties.hasNext(); )
                 {
                     String requiredProperty = (String) requiredProperties.next();
 
@@ -252,7 +263,7 @@ public class DefaultArchetypeGenerationConfigurator
                         && ( archetypeConfiguration.getDefaultValue( requiredProperty ) != null ) )
                     {
                         archetypeConfiguration.setProperty( requiredProperty,
-                            archetypeConfiguration.getDefaultValue( requiredProperty ) );
+                                                            archetypeConfiguration.getDefaultValue( requiredProperty ) );
                     }
                 }
 
@@ -269,18 +280,20 @@ public class DefaultArchetypeGenerationConfigurator
                     exceptionMessage.append( " is not configured" );
 
                     List missingProperties = new ArrayList( 0 );
-                    requiredProperties = archetypeConfiguration.getRequiredProperties().iterator();
-                    while ( requiredProperties.hasNext() )
+                    for ( Iterator requiredProperties = archetypeConfiguration.getRequiredProperties().iterator();
+                        requiredProperties.hasNext(); )
                     {
-                        String requiredProperty = (String)requiredProperties.next();
+                        String requiredProperty = (String) requiredProperties.next();
+
                         if ( !archetypeConfiguration.isConfigured( requiredProperty ) )
                         {
                             exceptionMessage.append( "\n\tProperty " );
                             exceptionMessage.append( requiredProperty );
                             missingProperties.add( requiredProperty );
                             exceptionMessage.append( " is missing." );
-                            getLogger().warn( "Property " + requiredProperty
-                                + " is missing. Add -D" + requiredProperty + "=someValue" );
+                            getLogger().warn(
+                                              "Property " + requiredProperty + " is missing. Add -D" + requiredProperty
+                                                  + "=someValue" );
                         }
                     }
 
@@ -309,10 +322,11 @@ public class DefaultArchetypeGenerationConfigurator
         {
             return null;
         }
-        Iterator requiredProperties = archetypeConfiguration.getRequiredProperties().iterator();
-        while ( requiredProperties.hasNext() )
+        for ( Iterator requiredProperties = archetypeConfiguration.getRequiredProperties().iterator();
+            requiredProperties.hasNext(); )
         {
             String property = (String) requiredProperties.next();
+
             if ( result.indexOf( "${" + property + "}" ) >= 0 )
             {
                 result = StringUtils.replace( result, "${" + property + "}",
@@ -327,10 +341,10 @@ public class DefaultArchetypeGenerationConfigurator
     {
         getLogger().debug( "Restoring command line properties" );
 
-        Iterator properties = archetypeConfiguration.getRequiredProperties().iterator();
-        while ( properties.hasNext() )
+        for ( Iterator properties = archetypeConfiguration.getRequiredProperties().iterator(); properties.hasNext(); )
         {
             String property = (String) properties.next();
+
             if ( executionProperties.containsKey( property ) )
             {
                 archetypeConfiguration.setProperty( property, executionProperties.getProperty( property ) );

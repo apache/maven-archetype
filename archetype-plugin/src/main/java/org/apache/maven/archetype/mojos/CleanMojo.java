@@ -31,7 +31,7 @@ import java.io.File;
  * @author rafale
  * @requiresProject false
  * //@ //goal clean
- * @deprecated 
+ * @deprecated
  */
 public class CleanMojo
     extends AbstractMojo
@@ -44,9 +44,7 @@ public class CleanMojo
     private File propertyFile;
 
     public void execute()
-        throws
-        MojoExecutionException,
-        MojoFailureException
+        throws MojoExecutionException, MojoFailureException
     {
         propertyFile.delete();
     }

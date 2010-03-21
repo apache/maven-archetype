@@ -14,11 +14,12 @@ import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.util.StringUtils;
 
 /**
- *
  * @author raphaelpieroni
  * @plexus.component role-hint="archetype"
  */
-public class ArchetypePrompter implements Prompter {
+public class ArchetypePrompter
+    implements Prompter
+{
 
     /**
      * @plexus.requirement
@@ -164,24 +165,11 @@ public class ArchetypePrompter implements Prompter {
         StringBuffer formatted = new StringBuffer( message.length() * 2 );
 
         formatted.append( message );
-        /*if ( possibleValues != null && !possibleValues.isEmpty() )
-        {
-        formatted.append( " (" );
-
-        for ( Iterator it = possibleValues.iterator(); it.hasNext(); )
-        {
-        String possibleValue = (String) it.next();
-
-        formatted.append( possibleValue );
-
-        if ( it.hasNext() )
-        {
-        formatted.append( '/' );
-        }
-        }
-
-        formatted.append( ')' );
-        }*/
+        /*
+         * if ( possibleValues != null && !possibleValues.isEmpty() ) { formatted.append( " (" ); for ( Iterator it =
+         * possibleValues.iterator(); it.hasNext(); ) { String possibleValue = (String) it.next(); formatted.append(
+         * possibleValue ); if ( it.hasNext() ) { formatted.append( '/' ); } } formatted.append( ')' ); }
+         */
 
         if ( defaultReply != null )
         {
@@ -210,6 +198,5 @@ public class ArchetypePrompter implements Prompter {
         }
 
     }
-
 
 }

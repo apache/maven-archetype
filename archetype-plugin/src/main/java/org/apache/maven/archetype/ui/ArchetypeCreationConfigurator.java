@@ -35,18 +35,8 @@ public interface ArchetypeCreationConfigurator
 {
     String ROLE = ArchetypeCreationConfigurator.class.getName();
 
-    Properties configureArchetypeCreation(
-        MavenProject project,
-        Boolean interactiveMode,
-        Properties commandLineProperties,
-        File propertyFile,
-        List languages
-    )
-        throws
-        FileNotFoundException,
-        IOException,
-        ArchetypeNotDefined,
-        ArchetypeNotConfigured,
-        PrompterException,
+    Properties configureArchetypeCreation( MavenProject project, Boolean interactiveMode,
+                                           Properties commandLineProperties, File propertyFile, List languages )
+        throws FileNotFoundException, IOException, ArchetypeNotDefined, ArchetypeNotConfigured, PrompterException,
         TemplateCreationException;
 }

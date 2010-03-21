@@ -37,14 +37,13 @@ public class DefaultArchetypeSelectionQueryer
     private Prompter prompter;
 
     public boolean confirmSelection( ArchetypeDefinition archetypeDefinition )
-        throws
-        PrompterException
+        throws PrompterException
     {
         String query =
-            "Confirm archetype selection: \n" + archetypeDefinition.getGroupId() + "/"
-                + archetypeDefinition.getName() + "\n";
+            "Confirm archetype selection: \n" + archetypeDefinition.getGroupId() + "/" + archetypeDefinition.getName()
+                + "\n";
 
-        String answer = prompter.prompt( query, Arrays.asList( new String[]{"Y", "N"} ), "Y" );
+        String answer = prompter.prompt( query, Arrays.asList( new String[] { "Y", "N" } ), "Y" );
 
         return "Y".equalsIgnoreCase( answer );
     }
@@ -55,11 +54,12 @@ public class DefaultArchetypeSelectionQueryer
         String query = "Choose archetype:\n";
         Map answerMap = new HashMap();
         List answers = new ArrayList();
-        Iterator archetypeIterator = archetypes.iterator();
         int counter = 1;
-        while ( archetypeIterator.hasNext() )
+
+        for ( Iterator archetypeIterator = archetypes.iterator(); archetypeIterator.hasNext(); )
         {
-            org.apache.maven.archetype.catalog.Archetype archetype = (org.apache.maven.archetype.catalog.Archetype) archetypeIterator.next();
+            org.apache.maven.archetype.catalog.Archetype archetype =
+                (org.apache.maven.archetype.catalog.Archetype) archetypeIterator.next();
 
             answerMap.put( "" + counter, archetype );
             query +=
@@ -90,18 +90,20 @@ public class DefaultArchetypeSelectionQueryer
         Map reversedArchetypeAnswerMap = new HashMap();
         List answers = new ArrayList();
         List archetypeVersions;
-        Iterator catalogIterator = catalogs.keySet().iterator();
         int counter = 1;
         int defaultSelection = 0;
-        while ( catalogIterator.hasNext() )
+
+        for ( Iterator catalogIterator = catalogs.keySet().iterator(); catalogIterator.hasNext(); )
         {
             String catalog = (String) catalogIterator.next();
 
-            Iterator archetypeIterator = ( (List) catalogs.get( catalog ) ).iterator();
-            while ( archetypeIterator.hasNext() )
+            for ( Iterator archetypeIterator = ( (List) catalogs.get( catalog ) ).iterator();
+                archetypeIterator.hasNext(); )
             {
-                org.apache.maven.archetype.catalog.Archetype archetype = (org.apache.maven.archetype.catalog.Archetype) archetypeIterator.next();
-                String mapKey = ""+counter;
+                org.apache.maven.archetype.catalog.Archetype archetype =
+                    (org.apache.maven.archetype.catalog.Archetype) archetypeIterator.next();
+
+                String mapKey = "" + counter;
                 String archetypeKey = archetype.getGroupId() + ":" + archetype.getArtifactId();
                 if ( reversedArchetypeAnswerMap.containsKey( archetypeKey ) )
                 {
@@ -119,8 +121,8 @@ public class DefaultArchetypeSelectionQueryer
                     answers.add( mapKey );
 
                     // the version is not tested. This is intentional.
-                    if ( defaultDefinition != null && archetype.getGroupId().equals( defaultDefinition.getGroupId() ) &&
-                        archetype.getArtifactId().equals( defaultDefinition.getArtifactId() ) )
+                    if ( defaultDefinition != null && archetype.getGroupId().equals( defaultDefinition.getGroupId() )
+                        && archetype.getArtifactId().equals( defaultDefinition.getArtifactId() ) )
                     {
                         defaultSelection = counter;
                     }
@@ -128,7 +130,6 @@ public class DefaultArchetypeSelectionQueryer
                     counter++;
                 }
                 archetypeVersions.add( archetype );
-
             }
 
         }
@@ -147,7 +148,7 @@ public class DefaultArchetypeSelectionQueryer
 
         archetypeVersions = (List) archetypeAnswerMap.get( answer );
 
-        if( archetypeVersions.size() == 1 )
+        if ( archetypeVersions.size() == 1 )
         {
             return (org.apache.maven.archetype.catalog.Archetype) archetypeVersions.get( 0 );
         }
@@ -156,28 +157,29 @@ public class DefaultArchetypeSelectionQueryer
             return selectVersion( archetypeVersions );
         }
     }
+
     private org.apache.maven.archetype.catalog.Archetype selectVersion( List archetypes )
-        throws
-        PrompterException
+        throws PrompterException
     {
         String query = "Choose version: \n";
         Map answerMap = new HashMap();
         List answers = new ArrayList();
 
-        Collections.sort(archetypes, new Comparator() {
-            public int compare( Object o1, Object o2 ) {
+        Collections.sort( archetypes, new Comparator()
+        {
+            public int compare( Object o1, Object o2 )
+            {
                 org.apache.maven.archetype.catalog.Archetype a1 = (org.apache.maven.archetype.catalog.Archetype) o1;
                 org.apache.maven.archetype.catalog.Archetype a2 = (org.apache.maven.archetype.catalog.Archetype) o2;
                 return a1.getVersion().compareTo( a2.getVersion() );
             }
-        });
+        } );
 
-        Iterator archetypeVersionsKeys = archetypes.iterator();
         int counter = 1;
-        org.apache.maven.archetype.catalog.Archetype archetype;
-        while ( archetypeVersionsKeys.hasNext() )
+        for ( Iterator archetypeVersionsKeys = archetypes.iterator(); archetypeVersionsKeys.hasNext(); )
         {
-            archetype = (org.apache.maven.archetype.catalog.Archetype) archetypeVersionsKeys.next();
+            org.apache.maven.archetype.catalog.Archetype archetype =
+                (org.apache.maven.archetype.catalog.Archetype) archetypeVersionsKeys.next();
             String archetypeVersion = archetype.getVersion();
 
             answerMap.put( "" + counter, archetype );

@@ -43,7 +43,7 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- * Generates sample project from archetype.
+ * Generates a new project from an archetype.
  *
  * @author rafale
  * @requiresProject false
@@ -101,13 +101,15 @@ public class CreateProjectFromArchetypeMojo
      * The archetype's catalogs.
      * It is a comma separated list of catalogs.
      * Catalogs use scheme:
-     * - 'file://...' with archetype-catalog.xml automatically appended when defining a directory
-     * - 'http://...' with archetype-catalog.xml always appended
-     * - 'local' which is the shortcut for 'file://~/.m2/archetype-catalog.xml'
-     * - 'remote' which is the shortcut for 'http://repo1.maven.org/maven2'
-     * - 'internal' which is an internal catalog
+     * <ul>
+     * <li>'<code>file://...</code>' with <code>archetype-catalog.xml</code> automatically appended when pointing to a directory</li>
+     * <li>'<code>http://...</code>' with <code>archetype-catalog.xml</code> always appended</li>
+     * <li>'<code>local</code>' which is the shortcut for '<code>file://~/.m2/archetype-catalog.xml</code>'</li>
+     * <li>'<code>remote</code>' which is the shortcut for '<code>http://repo1.maven.org/maven2</code>'</li>
+     * <li>'<code>internal</code>' which is an internal catalog</li>
+     * </ul>
      *
-     * Since 2.0-alpha-5, default value is no longer internal,local but remote,local
+     * Since 2.0-alpha-5, default value is no longer <code>internal,local</code> but <code>remote,local</code>.
      * This can only work if central has a catalog file at root.
      *
      * @parameter expression="${archetypeCatalog}" default-value="remote,local"
@@ -148,6 +150,7 @@ public class CreateProjectFromArchetypeMojo
      *  @readonly
      */
     private MavenSession session;
+
     /**
      * Additional goals that can be specified by the user during the creation of the archetype.
      *
@@ -184,15 +187,12 @@ public class CreateProjectFromArchetypeMojo
 
             configurator.configureArchetype( request, interactiveMode, executionProperties );
 
-            ArchetypeGenerationResult generationResult =
-                archetype.generateProjectFromArchetype( request );
+            ArchetypeGenerationResult generationResult = archetype.generateProjectFromArchetype( request );
+
             if ( generationResult.getCause() != null )
             {
-                throw new MojoFailureException(
-                    generationResult.getCause(),
-                    generationResult.getCause().getMessage(),
-                    generationResult.getCause().getMessage()
-                );
+                throw new MojoFailureException( generationResult.getCause(), generationResult.getCause().getMessage(),
+                                                generationResult.getCause().getMessage() );
             }
         }
         catch ( MojoFailureException ex )

@@ -47,11 +47,6 @@ public interface ArchetypeSelector
 //        ArchetypeSelectionFailure;
 
     void selectArchetype( ArchetypeGenerationRequest request, Boolean interactiveMode, String catalogs )
-        throws
-        ArchetypeNotDefined,
-        UnknownArchetype,
-        UnknownGroup,
-        IOException,
-        PrompterException,
+        throws ArchetypeNotDefined, UnknownArchetype, UnknownGroup, IOException, PrompterException,
         ArchetypeSelectionFailure;
 }

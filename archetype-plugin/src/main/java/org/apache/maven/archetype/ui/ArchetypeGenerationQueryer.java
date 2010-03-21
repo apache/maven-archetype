@@ -25,11 +25,8 @@ import org.codehaus.plexus.components.interactivity.PrompterException;
 public interface ArchetypeGenerationQueryer
 {
     boolean confirmConfiguration( ArchetypeConfiguration archetypeConfiguration )
-        throws
-        PrompterException;
+        throws PrompterException;
 
-    String getPropertyValue( String requiredProperty,
-                             String defaultValue )
-        throws
-        PrompterException;
+    String getPropertyValue( String requiredProperty, String defaultValue )
+        throws PrompterException;
 }

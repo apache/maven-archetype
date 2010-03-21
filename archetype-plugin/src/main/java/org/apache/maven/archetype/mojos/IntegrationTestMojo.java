@@ -75,23 +75,19 @@ public class IntegrationTestMojo
     private boolean skip = false;
 
     public void execute()
-        throws
-        MojoExecutionException,
-        MojoFailureException
+        throws MojoExecutionException, MojoFailureException
     {
         if ( !skip )
         {
             try
             {
-                File projectsDirectory =
-                    new File( project.getBasedir(), "target/test-classes/projects" );
+                File projectsDirectory = new File( project.getBasedir(), "target/test-classes/projects" );
 
                 if ( projectsDirectory.exists() )
                 {
                     File archetypeFile = project.getArtifact().getFile();
 
-                    List projectsGoalFiles =
-                        FileUtils.getFiles( projectsDirectory, "*/goal.txt", "" );
+                    List projectsGoalFiles = FileUtils.getFiles( projectsDirectory, "*/goal.txt", "" );
 
                     Iterator goalFiles = projectsGoalFiles.iterator();
 
@@ -106,10 +102,7 @@ public class IntegrationTestMojo
                         }
                         catch ( IntegrationTestFailure ex )
                         {
-                            errorWriter.write(
-                                "Test " + goalFile.getParentFile().getName() + " failed\n"
-                            );
-
+                            errorWriter.write( "Test " + goalFile.getParentFile().getName() + " failed\n" );
                             errorWriter.write( ex.getStackTrace() + "\n" );
                             errorWriter.write( ex.getMessage() + "\n" );
                             errorWriter.write( "\n" );
@@ -130,21 +123,16 @@ public class IntegrationTestMojo
         }
     }
 
-    private void assertTest( File reference,
-                             File basedir )
-        throws
-        IntegrationTestFailure,
-        IOException
+    private void assertTest( File reference, File basedir )
+        throws IntegrationTestFailure, IOException
     {
         List referenceFiles = FileUtils.getFileNames( reference, "**", null, false );
         List projectFiles = FileUtils.getFileNames( basedir, "**", null, false );
 
-        boolean fileNamesEquals =
-            CollectionUtils.isEqualCollection( referenceFiles, projectFiles );
+        boolean fileNamesEquals = CollectionUtils.isEqualCollection( referenceFiles, projectFiles );
 
         {
-            Iterator refs = referenceFiles.iterator();
-            while ( refs.hasNext() )
+            for ( Iterator refs = referenceFiles.iterator(); refs.hasNext(); )
             {
                 String ref = (String) refs.next();
 
@@ -167,8 +155,8 @@ public class IntegrationTestMojo
         }
 
         boolean contentEquals = true;
-        Iterator files = referenceFiles.iterator();
-        while ( files.hasNext() )
+
+        for ( Iterator files = referenceFiles.iterator(); files.hasNext(); )
         {
             String file = (String) files.next();
 
@@ -182,11 +170,7 @@ public class IntegrationTestMojo
             }
             else
             {
-                if ( !FileUtils.contentEquals(
-                    new File( reference, file ),
-                    new File( basedir, file )
-                )
-                    )
+                if ( !FileUtils.contentEquals( new File( reference, file ), new File( basedir, file ) ) )
                 {
                     getLog().warn( "Contents of file " + file + " are not equal" );
                     contentEquals = false;
@@ -200,9 +184,7 @@ public class IntegrationTestMojo
     }
 
     private Properties loadProperties( final File propertiesFile )
-        throws
-        IOException,
-        FileNotFoundException
+        throws IOException, FileNotFoundException
     {
         Properties properties = new Properties();
 
@@ -211,18 +193,14 @@ public class IntegrationTestMojo
         return properties;
     }
 
-    private boolean modelEquals( File referencePom,
-                                 File generatedPom )
-        throws
-        IOException
+    private boolean modelEquals( File referencePom, File generatedPom )
+        throws IOException
     {
         return FileUtils.contentEquals( referencePom, generatedPom );
     }
 
-    private void processIntegrationTest( File goalFile,
-                                         File archetypeFile )
-        throws
-        IntegrationTestFailure
+    private void processIntegrationTest( File goalFile, File archetypeFile )
+        throws IntegrationTestFailure
     {
         try
         {
@@ -233,15 +211,12 @@ public class IntegrationTestMojo
             String basedir = goalFile.getParentFile().getPath() + "/project";
 
             FileUtils.mkdir( basedir );
-//TODO: fix this to use request
+            // TODO: fix this to use request
             filesetGenerator.generateArchetype( null, archetypeFile, basedir );
 
             File reference = new File( goalFile.getParentFile(), "reference" );
 
-            assertTest(
-                reference,
-                new File( basedir, properties.getProperty( Constants.ARTIFACT_ID ) )
-            );
+            assertTest( reference, new File( basedir, properties.getProperty( Constants.ARTIFACT_ID ) ) );
         }
         catch ( ArchetypeNotConfigured ex )
         {
@@ -274,8 +249,7 @@ public class IntegrationTestMojo
     }
 
     private Properties getProperties( File goalFile )
-        throws
-        IOException
+        throws IOException
     {
         File propertiesFile = new File( goalFile.getParentFile(), "archetype.properties" );
 
@@ -283,8 +257,7 @@ public class IntegrationTestMojo
     }
 
     private Properties getTestProperties( File goalFile )
-        throws
-        IOException
+        throws IOException
     {
         return loadProperties( goalFile );
     }
@@ -307,8 +280,7 @@ public class IntegrationTestMojo
             super( cause );
         }
 
-        IntegrationTestFailure( String message,
-                                Throwable cause )
+        IntegrationTestFailure( String message, Throwable cause )
         {
             super( message, cause );
         }

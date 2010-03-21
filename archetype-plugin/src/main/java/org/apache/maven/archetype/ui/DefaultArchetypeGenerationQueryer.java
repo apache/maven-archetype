@@ -35,17 +35,15 @@ public class DefaultArchetypeGenerationQueryer
     private Prompter prompter;
 
     public boolean confirmConfiguration( ArchetypeConfiguration archetypeConfiguration )
-        throws
-        PrompterException
+        throws PrompterException
     {
         String query = "Confirm properties configuration:\n";
 
-        Iterator requiredPropertiesIter =
-            archetypeConfiguration.getRequiredProperties().iterator();
-
-        while ( requiredPropertiesIter.hasNext() )
+        for ( Iterator requiredPropertiesIter = archetypeConfiguration.getRequiredProperties().iterator();
+            requiredPropertiesIter.hasNext(); )
         {
             String property = (String) requiredPropertiesIter.next();
+
             query += property + ": " + archetypeConfiguration.getProperty( property ) + "\n";
         }
 
@@ -54,10 +52,8 @@ public class DefaultArchetypeGenerationQueryer
         return "Y".equalsIgnoreCase( answer );
     }
 
-    public String getPropertyValue( String requiredProperty,
-                                    String defaultValue )
-        throws
-        PrompterException
+    public String getPropertyValue( String requiredProperty, String defaultValue )
+        throws PrompterException
     {
         String query = "Define value for property '" + requiredProperty + "': ";
         String answer;

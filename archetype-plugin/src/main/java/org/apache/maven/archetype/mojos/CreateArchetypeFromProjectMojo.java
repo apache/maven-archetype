@@ -42,7 +42,7 @@ import org.apache.maven.execution.MavenSession;
 import org.codehaus.plexus.util.StringUtils;
 
 /**
- * Creates sample archetype from current project.
+ * Creates an archetype from the current project.
  *
  * @author rafale
  * @requiresProject true
@@ -105,8 +105,8 @@ public class CreateArchetypeFromProjectMojo
     private boolean partialArchetype = false;
 
     /**
-     * Create pom's velocity templates with CDATA preservasion. This uses the String replaceAll
-     * method and risk to have some overly replacement capabilities (beware of '1.0' value).
+     * Create pom's velocity templates with CDATA preservation. This uses the <code>String.replaceAll()</code>
+     * method and risks to have some overly replacement capabilities (beware of '1.0' value).
      *
      * @parameter expression="${archetype.preserveCData}"
      */
@@ -140,8 +140,8 @@ public class CreateArchetypeFromProjectMojo
     private File propertyFile;
 
     /**
-     * The property telling which phase call on the generated archetype.
-     * Interesting values are: package, install and deploy
+     * The property telling which phase to call on the generated archetype.
+     * Interesting values are: <code>package</code>, <code>install</code> and <code>deploy</code>
      *
      * @parameter expression="${archetype.postPhase}" default-value="package"
      */
@@ -163,9 +163,7 @@ public class CreateArchetypeFromProjectMojo
     private MavenSession session;
 
     public void execute()
-        throws
-        MojoExecutionException,
-        MojoFailureException
+        throws MojoExecutionException, MojoFailureException
     {
         Properties executionProperties = session.getExecutionProperties();
         try
@@ -177,19 +175,11 @@ public class CreateArchetypeFromProjectMojo
 
             List languages = getLanguages( archetypeLanguages, propertyFile );
 
-            Properties properties = configurator.configureArchetypeCreation(
-                project,
-                new Boolean( interactive ),
-                executionProperties,
-                propertyFile,
-                languages
-            );
+            Properties properties =
+                configurator.configureArchetypeCreation( project, Boolean.valueOf( interactive ), executionProperties,
+                                                         propertyFile, languages );
 
-            List filtereds =
-                getFilteredExtensions(
-                    archetypeFilteredExtentions,
-                    propertyFile
-                );
+            List filtereds = getFilteredExtensions( archetypeFilteredExtentions, propertyFile );
 
             ArchetypeCreationRequest request = new ArchetypeCreationRequest()
                 .setProject( project )
@@ -213,11 +203,8 @@ public class CreateArchetypeFromProjectMojo
 
             if ( result.getCause() != null )
             {
-                throw new MojoFailureException(
-                    result.getCause(),
-                    result.getCause().getMessage(),
-                    result.getCause().getMessage()
-                );
+                throw new MojoFailureException( result.getCause(), result.getCause().getMessage(),
+                                                result.getCause().getMessage() );
             }
 
             getLog().info( "Archetype created in target/generated-sources/archetype" );
@@ -252,10 +239,9 @@ public class CreateArchetypeFromProjectMojo
 
         if ( StringUtils.isNotEmpty( archetypeFilteredExtentions ) )
         {
-            filteredExtensions.addAll(
-                Arrays.asList( StringUtils.split( archetypeFilteredExtentions, "," ) )
-            );
-            getLog().debug("Found in command line extensions = " + filteredExtensions);
+            filteredExtensions.addAll( Arrays.asList( StringUtils.split( archetypeFilteredExtentions, "," ) ) );
+
+            getLog().debug( "Found in command line extensions = " + filteredExtensions );
         }
 
         if ( filteredExtensions.isEmpty() && propertyFile != null && propertyFile.exists() )
@@ -265,19 +251,17 @@ public class CreateArchetypeFromProjectMojo
                 Properties properties = new Properties();
                 properties.load( new FileInputStream( propertyFile ) );
 
-                String extensions =
-                    properties.getProperty( Constants.ARCHETYPE_FILTERED_EXTENSIONS );
+                String extensions = properties.getProperty( Constants.ARCHETYPE_FILTERED_EXTENSIONS );
                 if ( StringUtils.isNotEmpty( extensions ) )
                 {
-                    filteredExtensions.addAll(
-                        Arrays.asList( StringUtils.split( extensions, "," ) )
-                    );
+                    filteredExtensions.addAll( Arrays.asList( StringUtils.split( extensions, "," ) ) );
                 }
+
                 getLog().debug(
                                 "Found in propertyFile " + propertyFile.getName() + " extensions = "
                                     + filteredExtensions );
             }
-            catch( IOException e )
+            catch ( IOException e )
             {
                 getLog().warn( "Can not read " + propertyFile.getName() );
             }
@@ -286,6 +270,7 @@ public class CreateArchetypeFromProjectMojo
         if ( filteredExtensions.isEmpty() )
         {
             filteredExtensions.addAll( Constants.DEFAULT_FILTERED_EXTENSIONS );
+
             getLog().debug( "Using default extensions = " + filteredExtensions );
         }
 
@@ -299,6 +284,7 @@ public class CreateArchetypeFromProjectMojo
         if ( StringUtils.isNotEmpty( archetypeLanguages ) )
         {
             resultingLanguages.addAll( Arrays.asList( StringUtils.split( archetypeLanguages, "," ) ) );
+
             getLog().debug( "Found in command line languages = " + resultingLanguages );
         }
 
@@ -309,14 +295,12 @@ public class CreateArchetypeFromProjectMojo
                 Properties properties = new Properties();
                 properties.load( new FileInputStream( propertyFile ) );
 
-                String languages =
-                    properties.getProperty( Constants.ARCHETYPE_LANGUAGES );
-                if( StringUtils.isNotEmpty( languages ) )
+                String languages = properties.getProperty( Constants.ARCHETYPE_LANGUAGES );
+                if ( StringUtils.isNotEmpty( languages ) )
                 {
-                    resultingLanguages.addAll(
-                        Arrays.asList( StringUtils.split( languages, "," ) )
-                    );
+                    resultingLanguages.addAll( Arrays.asList( StringUtils.split( languages, "," ) ) );
                 }
+
                 getLog().debug(
                                 "Found in propertyFile " + propertyFile.getName() + " languages = "
                                     + resultingLanguages );
@@ -330,6 +314,7 @@ public class CreateArchetypeFromProjectMojo
         if ( resultingLanguages.isEmpty() )
         {
             resultingLanguages.addAll( Constants.DEFAULT_LANGUAGES );
+
             getLog().debug( "Using default languages = " + resultingLanguages );
         }
 
