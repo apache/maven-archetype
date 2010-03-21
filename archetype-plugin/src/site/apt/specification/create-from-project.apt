@@ -31,35 +31,34 @@ What is done during the creation of an archetype?
 
 * Property resolution
 
-    First the Archetype Plugin asks the user to provide the common properties' 
-    values (archetype.groupId, archetype.artifactId, archetype.version, groupId, 
-    artifactId, version, package).
+    First, the Archetype Plugin asks the user to provide the common properties'
+    values (<<<archetype.groupId>>>, <<<archetype.artifactId>>>, <<<archetype.version>>>,
+    <<<groupId>>>, <<<artifactId>>>, <<<version>>>, <<<package>>>).
 
     Then it asks for additional properties.
 
 * Archetype creation
 
-    Using the project's directory as sources, the properties filteredExtensions 
-    and languages, the module tree; the Archetype Plugin search for revelant 
+    Using the project's directory as sources, <<<filteredExtensions>>> and <<<languages>>>
+    properties, the module tree; the Archetype Plugin searches for revelant
     filesets indexed by module.
 
-    Using the revelant filesets, the module tree, the resolved properties; the 
+    Using the revelant filesets, the module tree, the resolved properties; the
     Archetype Plugin creates the archetype's resources.
 
-    Then it creates the archetype's descriptor using the the module tree, the 
-    revelant filesets, the resolved properties.
+    Then it creates the archetype's descriptor.
 
     Finishing by creating the pom for the archetype as a project.
 
 * Archetype installation
 
-    Optionally after creating the archetype, the Archetype Plugin installs the 
+    Optionally, after creating the archetype, the Archetype Plugin installs the
     archetype in the local repository. And it updates the local catalog.
 
 * Archetype deployment
 
-    Optionally after installing the archetype, the Archetype Plugin deploys the
-    archetype in the remote repository.
+    Optionally, after installing the archetype, the Archetype Plugin deploys the
+    archetype to the remote repository.
 
 * Interactive mode
 
@@ -68,16 +67,16 @@ What is done during the creation of an archetype?
 
 * Advanced batch mode
 
-    The additional properties in batch mode can only be defined using a property 
-    file. This file also can contain the other properties both the commons and 
-    the filteredExtensions and languages.
+    In batch mode, the additional properties can only be defined using a property
+    file. This file can also contain the other properties, both the commons and
+    <<<filteredExtensions>>> and <<<languages>>>.
 
 * Fileset resolution
 
-    In each module's directory and excluding submodules trees, the Archetype 
-    Plugin sorts the files by languages, fileteredExtensions and sensible 
-    default base pathes (src/main/<languages>, src/main/<siblings>, 
+    In each module's directory and excluding submodules trees, the Archetype
+    Plugin sorts the files by languages, fileteredExtensions and sensible
+    default base pathes (src/main/<languages>, src/main/<siblings>,
     src/test/<languages>, src/test/<siblings>, ...).
 
-    This defines a tri-dimensional matrix. Each sorted group (matrix' cases) 
+    This defines a tri-dimensional matrix. Each sorted group (matrix' cases)
     becomes a resolved fileset.
