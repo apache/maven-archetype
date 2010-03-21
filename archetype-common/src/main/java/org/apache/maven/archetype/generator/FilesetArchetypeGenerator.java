@@ -34,15 +34,8 @@ public interface FilesetArchetypeGenerator
 {
     String ROLE = FilesetArchetypeGenerator.class.getName();
 
-    void generateArchetype( ArchetypeGenerationRequest request,
-                            File archetypeFile,
-                            String basedir )
-        throws
-        UnknownArchetype,
-        ArchetypeNotConfigured,
-        ProjectDirectoryExists,
-        PomFileExists,
-        OutputFileExists,
+    void generateArchetype( ArchetypeGenerationRequest request, File archetypeFile, String basedir )
+        throws UnknownArchetype, ArchetypeNotConfigured, ProjectDirectoryExists, PomFileExists, OutputFileExists,
         ArchetypeGenerationFailure;
 
 //    Compile time deprecation ;-)
