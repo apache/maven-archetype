@@ -195,8 +195,17 @@ under the License.
             <phase>pre-site</phase>
             <goals>
               <goal>xdoc</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>site-xsd</id>
+            <phase>pre-site</phase>
+            <goals>
               <goal>xsd</goal>
             </goals>
+            <configuration>
+              <outputDirectory>${basedir}/target/generated-site/resources/xsd</outputDirectory>
+            </configuration>
           </execution>
         </executions>
       </plugin>
