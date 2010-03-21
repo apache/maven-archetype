@@ -23,6 +23,11 @@ under the License.
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0 http://maven.apache.org/xsd/decoration-1.0.0.xsd">
   <body>
+    <menu name="Reference">
+      <item name="Archetype Descriptor" href="./archetype-descriptor.html"/>
+      <item name="Archetype Catalog" href="./archetype-catalog.html"/>
+      <item name="Old Archetype Descriptor" href="./archetype.html"/>
+    </menu>
     <menu ref="parent" inherit="top" />
   </body>
 </project>
