@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.common;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,8 +22,6 @@
 /*
  * $Id$
  */
-
-package org.apache.maven.archetype.common;
 
 // ---------------------------------/
 // - Imported classes and packages -/

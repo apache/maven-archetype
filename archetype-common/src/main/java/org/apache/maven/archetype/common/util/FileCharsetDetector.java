@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.common.util;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -16,8 +18,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
-package org.apache.maven.archetype.common.util;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.mozilla.intl.chardet.nsDetector;

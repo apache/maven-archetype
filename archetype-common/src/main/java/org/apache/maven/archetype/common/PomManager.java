@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.common;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -16,8 +18,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
-package org.apache.maven.archetype.common;
 
 import org.apache.maven.archetype.exception.InvalidPackaging;
 import org.apache.maven.model.Model;
@@ -56,7 +56,7 @@ public interface PomManager
         throws
         IOException,
         XmlPullParserException;
-    
+
     Model readPom( InputStream pomStream )
         throws
         IOException,
