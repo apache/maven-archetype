@@ -174,7 +174,6 @@ under the License.
         <configuration>
           <version>1.0.0</version>
           <models>
-            <model>src/main/mdo/archetype-common.mdo</model>
             <model>src/main/mdo/archetype-registry.mdo</model>
             <model>src/main/mdo/archetype-descriptor.mdo</model>
             <model>src/main/mdo/archetype-catalog.mdo</model>
@@ -206,6 +205,17 @@ under the License.
             <configuration>
               <outputDirectory>${basedir}/target/generated-site/resources/xsd</outputDirectory>
             </configuration>
+          </execution>
+          <execution>
+            <id>java-only</id>
+            <configuration>
+              <models>
+                <model>src/main/mdo/archetype-common.mdo</model>
+              </models>
+            </configuration>
+            <goals>
+              <goal>java</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>
