@@ -49,7 +49,7 @@
           <name>name</name>
           <type>String</type>
           <required>true</required>
-          <description>Name of the Archetype, that will be displayed ti the user when choosing an archetype.</description>
+          <description>Name of the Archetype, that will be displayed to the user when choosing an archetype.</description>
         </field>
         <field xml.attribute="true">
           <name>partial</name>
@@ -59,7 +59,7 @@
         </field>
         <field>
           <name>requiredProperties</name>
-          <description>List of required properties to generated a project from this archetype.</description>
+          <description>List of required properties to generate a project from this archetype.</description>
           <association>
             <type>RequiredProperty</type>
             <multiplicity>*</multiplicity>
@@ -76,19 +76,19 @@
           <name>id</name>
           <type>String</type>
           <required>true</required>
-          <description>The module artifactId.</description>
+          <description>The module's artifactId.</description>
         </field>
         <field xml.attribute="true">
           <name>dir</name>
           <type>String</type>
           <required>true</required>
-          <description>The modules' directory.</description>
+          <description>The module's directory.</description>
         </field>
         <field xml.attribute="true">
           <name>name</name>
           <type>String</type>
           <required>true</required>
-          <description>The modules' name.</description>
+          <description>The module's name.</description>
         </field>
       </fields>
     </class>
@@ -156,7 +156,7 @@
             <multiplicity>*</multiplicity>
           </association>
           <required>false</required>
-          <description>Inclusion definition "Ã  la" Ant.</description>
+          <description>Inclusion definition "ˆ la" Ant.</description>
         </field>
         <field>
           <name>excludes</name>
@@ -165,7 +165,7 @@
             <multiplicity>*</multiplicity>
           </association>
           <required>false</required>
-          <description>Exclusion definition "Ã  la" Ant.</description>
+          <description>Exclusion definition "ˆ la" Ant.</description>
         </field>
       </fields>
       <codeSegments>
@@ -192,7 +192,7 @@
 
     <class>
       <name>RequiredProperty</name>
-      <description>Definition of a proerty required when generating a project from this archetype.</description>
+      <description>Definition of a property required when generating a project from this archetype.</description>
       <fields>
         <field xml.attribute="true">
           <name>key</name>
