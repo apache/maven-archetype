@@ -41,11 +41,10 @@ mvn archetype:create
 .
  |-- src
  |   `-- main
- |       `-- java
- |           |-- resources
- |           |-- webapp
- |           |   `-- WEB-INF
- |           |       `-- web.xml
+ |       |-- resources
+ |       |-- webapp
+ |           |-- WEB-INF
+ |           |   `-- web.xml
  |           `-- index.jsp
   `-- pom.xml
 +------+
