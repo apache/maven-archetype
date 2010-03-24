@@ -40,7 +40,7 @@ public class RemoteCatalogArchetypeDataSource
     /** @plexus.requirement */
     private WagonManager wagonManager;
 
-    public static String REPOSITORY_PROPERTY = "repository";
+    public static final String REPOSITORY_PROPERTY = "repository";
 
     public ArchetypeCatalog getArchetypeCatalog( Properties properties )
         throws ArchetypeDataSourceException
@@ -80,7 +80,7 @@ public class RemoteCatalogArchetypeDataSource
             throw e;
         }
         catch ( Exception e )
-        {// When the default archetype catalog names doesn't works, we assume the repository is the URL to a file
+        { // When the default archetype catalog names doesn't works, we assume the repository is the URL to a file
             try
             {
                 String repositoryPath = repository.substring( 0, repository.lastIndexOf( "/" ) );

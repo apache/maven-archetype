@@ -60,15 +60,18 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /** @plexus.component */
 public class DefaultPomManager
     extends AbstractLogEnabled
     implements PomManager
 {
-    public void addModule( File pom,
-                           String artifactId )
+    public void addModule( File pom, String artifactId )
         throws IOException, XmlPullParserException, DocumentException, InvalidPackaging
     {
         boolean found = false;
@@ -150,12 +153,11 @@ public class DefaultPomManager
         }
     }
 
-    public void addParent( File pom,
-                           File parentPom )
+    public void addParent( File pom, File parentPom )
         throws IOException, XmlPullParserException
     {
         Model generatedModel = readPom( pom );
-        if( null != generatedModel.getParent() )
+        if ( null != generatedModel.getParent() )
         {
             getLogger().info( "Parent element not overwrited in " + pom );
             return;
@@ -180,8 +182,7 @@ public class DefaultPomManager
         writePom( generatedModel, pom, pom );
     }
 
-    public void mergePoms( File pom,
-                           File temporaryPom )
+    public void mergePoms( File pom, File temporaryPom )
         throws IOException, XmlPullParserException
     {
         Model model = readPom( pom );
@@ -289,9 +290,7 @@ public class DefaultPomManager
         return reader.read( pomReader );
     }
 
-    public void writePom( final Model model,
-                          final File pomFile,
-                          final File initialPomFile )
+    public void writePom( final Model model, final File pomFile, final File initialPomFile )
         throws IOException
     {
         InputStream inputStream = null;
@@ -463,8 +462,7 @@ public class DefaultPomManager
         }
     }
 
-    private void mergeReportPlugins( Model model,
-                                     Model generatedModel )
+    private void mergeReportPlugins( Model model, Model generatedModel )
     {
         if ( generatedModel.getReporting() != null )
         {

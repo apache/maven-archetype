@@ -32,5 +32,5 @@ public interface RepositoryCrawler
 
     ArchetypeCatalog crawl ( File repository );
 
-    boolean writeCatalog (ArchetypeCatalog archetypeCatalog, File archetypeCatalogFile);
+    boolean writeCatalog( ArchetypeCatalog archetypeCatalog, File archetypeCatalogFile );
 }
