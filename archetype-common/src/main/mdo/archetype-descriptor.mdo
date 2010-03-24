@@ -105,7 +105,7 @@
           <required>true</required>
           <description>File sets definition.</description>
         </field>
-        <field>
+        <field xdoc.separator="blank">
           <name>modules</name>
           <association>
             <type>ModuleDescriptor</type>
