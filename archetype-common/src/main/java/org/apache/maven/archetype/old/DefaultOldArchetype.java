@@ -137,8 +137,8 @@ public class DefaultOldArchetype
             {
                 getLogger().info( "----------------------------------------------------------------------------" );
 
-                getLogger().info( "Using following parameters for creating OldArchetype: " + archetypeArtifactId + ":" +
-                    archetypeVersion );
+                getLogger().info( "Using following parameters for creating OldArchetype: " + archetypeArtifactId + ":"
+                    + archetypeVersion );
 
                 getLogger().info( "----------------------------------------------------------------------------" );
 
@@ -242,8 +242,8 @@ public class DefaultOldArchetype
                 }
                 else
                 {
-                    throw new ArchetypeTemplateProcessingException( "Directory " +
-                        outputDirectoryFile.getName() + " already exists - please run from a clean directory" );
+                    throw new ArchetypeTemplateProcessingException( "Directory "
+                        + outputDirectoryFile.getName() + " already exists - please run from a clean directory" );
                 }
             }
 
@@ -754,8 +754,8 @@ public class DefaultOldArchetype
     private String getOutputDirectory( String outputDirectory,
                                        String testResourceDirectory )
     {
-        return outputDirectory +
-            ( testResourceDirectory.startsWith( "/" ) ? testResourceDirectory : "/" + testResourceDirectory );
+        return outputDirectory
+            + ( testResourceDirectory.startsWith( "/" ) ? testResourceDirectory : "/" + testResourceDirectory );
     }
 
     // ----------------------------------------------------------------------

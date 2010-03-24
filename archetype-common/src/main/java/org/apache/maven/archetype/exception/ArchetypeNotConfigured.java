@@ -26,7 +26,8 @@ public class ArchetypeNotConfigured
 {
     private List missingProperties;
 
-    public List getMissingProperties() {
+    public List getMissingProperties()
+    {
         return missingProperties;
     }
 

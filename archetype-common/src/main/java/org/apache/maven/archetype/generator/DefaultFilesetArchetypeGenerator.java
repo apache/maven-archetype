@@ -312,7 +312,7 @@ public class DefaultFilesetArchetypeGenerator
             directory + "/" + ( packaged ? getPackageAsDirectory( packageName ) : "" ) + "/"
                 + templateName.substring( moduleOffset.length() );
 
-        if ( TOKEN_PATTERN.matcher(outputFileName).matches() )
+        if ( TOKEN_PATTERN.matcher( outputFileName ).matches() )
         {
             outputFileName = replaceFilenameTokens( outputFileName, context );
         }
