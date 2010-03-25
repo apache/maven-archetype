@@ -22,16 +22,19 @@ under the License.
 <project xmlns="http://maven.apache.org/POM/4.0.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
   <parent>
     <artifactId>maven-archetype-bundles</artifactId>
     <groupId>org.apache.maven.archetypes</groupId>
     <version>3</version>
   </parent>
-  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>maven-archetype-j2ee-simple</artifactId>
+  <version>1.1-SNAPSHOT</version>
+
+  <name>Maven Simple J2EE Archetype</name>
   <description>
     An archetype which contains a simplifed sample J2EE application.
-  </description>  
-  <artifactId>maven-archetype-j2ee-simple</artifactId>
-  <name>Maven Simple J2EE Archetype</name>
-  <version>1.1-SNAPSHOT</version>
+  </description>
 </project>
