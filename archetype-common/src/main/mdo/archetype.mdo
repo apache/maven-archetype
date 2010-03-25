@@ -8,7 +8,14 @@
   xml.schemaLocation="http://maven.apache.org/xsd/archetype-${version}.xsd">
   <id>archetype</id>
   <name>Archetype</name>
-  <description><![CDATA[Maven's model for the archetype descriptor.]]></description>
+  <description>
+    <![CDATA[Maven's model for the old archetype descriptor.
+    <p>The metadata about an archetype is stored in the <code>archetype.xml</code> file located
+    in the <code>META-INF/maven</code> directory of its jar file.</p>
+    <p>An XSD is available at
+    <a href="http://maven.apache.org/xsd/archetype-1.0.0.xsd">http://maven.apache.org/xsd/archetype-1.0.0.xsd</a>.
+    </p>]]>
+  </description>
 
   <defaults>
     <default>
