@@ -22,17 +22,20 @@ under the License.
 <project xmlns="http://maven.apache.org/POM/4.0.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
   <parent>
     <artifactId>maven-archetype-bundles</artifactId>
     <groupId>org.apache.maven.archetypes</groupId>
     <version>3</version>
   </parent>
-  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>maven-archetype-plugin-site</artifactId>
+  <version>1.1-SNAPSHOT</version>
+
+  <name>Maven Plugin Site Archetype</name>
   <description>
     An archetype which contains a sample Maven plugin site. This archetype can be layered upon an
     existing Maven plugin project.
   </description>
-  <artifactId>maven-archetype-plugin-site</artifactId>
-  <version>1.1-SNAPSHOT</version>
-  <name>Maven Plugin Site Archetype</name>
 </project>
