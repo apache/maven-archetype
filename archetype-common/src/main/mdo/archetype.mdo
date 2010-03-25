@@ -54,7 +54,7 @@
         <field>
           <name>testSources</name>
           <version>1.0.0</version>
-          <association>
+          <association xml.tagName="source">
             <type>String</type>
             <multiplicity>*</multiplicity>
           </association>
@@ -62,7 +62,7 @@
         <field>
           <name>testResources</name>
           <version>1.0.0</version>
-          <association>
+          <association xml.tagName="resource">
             <type>String</type>
             <multiplicity>*</multiplicity>
           </association>
@@ -70,7 +70,7 @@
         <field>
           <name>siteResources</name>
           <version>1.0.0</version>
-          <association>
+          <association xml.tagName="resource">
             <type>String</type>
             <multiplicity>*</multiplicity>
           </association>
