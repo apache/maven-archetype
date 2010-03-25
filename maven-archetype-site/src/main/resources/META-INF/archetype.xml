@@ -1,16 +1,17 @@
-<archetype>
+<archetype xmlns="http://maven.apache.org/plugins/maven-archetype-plugin/archetype/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/plugins/maven-archetype-plugin/archetype/1.0.0 http://maven.apache.org/xsd/archetype-1.0.0.xsd">
   <id>plugin</id>
   <allowPartial>true</allowPartial>
   <siteResources>
     <resource>src/site/site.xml</resource>
     <resource>src/site/site_fr.xml</resource>
     <resource>src/site/apt/index.apt</resource>
-    <resource>src/site/apt/format.apt</resource>    
+    <resource>src/site/apt/format.apt</resource>
     <resource>src/site/fml/faq.fml</resource>
-    <resource>src/site/xdoc/xdoc.xml</resource>    
+    <resource>src/site/xdoc/xdoc.xml</resource>
     <resource>src/site/fr/apt/index.apt</resource>
-    <resource>src/site/fr/apt/format.apt</resource>    
+    <resource>src/site/fr/apt/format.apt</resource>
     <resource>src/site/fr/fml/faq.fml</resource>
-    <resource>src/site/fr/xdoc/xdoc.xml</resource>    
+    <resource>src/site/fr/xdoc/xdoc.xml</resource>
   </siteResources>
 </archetype>
