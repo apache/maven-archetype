@@ -20,19 +20,23 @@ under the License.
 -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
   <parent>
     <artifactId>maven-archetype-parent</artifactId>
     <groupId>org.apache.maven.archetype</groupId>
     <version>2</version>
   </parent>
-  <modelVersion>4.0.0</modelVersion>
+
   <groupId>org.apache.maven.archetypes</groupId>
   <artifactId>maven-archetype-bundles</artifactId>
   <version>4-SNAPSHOT</version>
   <packaging>pom</packaging>
+
   <name>Maven Archetypes</name>
+
   <modules>
-    <module>maven-archetype-mojo</module> 
+    <module>maven-archetype-mojo</module>
     <module>maven-archetype-site</module>
     <module>maven-archetype-quickstart</module>
     <module>maven-archetype-simple</module>
@@ -42,7 +46,7 @@ under the License.
     <module>maven-archetype-j2ee-simple</module>
     <module>maven-archetype-portlet</module>
     <module>maven-archetype-plugin</module>
-    <module>maven-archetype-plugin-site</module> 
-    <module>maven-archetype-profiles</module>    
+    <module>maven-archetype-plugin-site</module>
+    <module>maven-archetype-profiles</module>
   </modules>
 </project>
