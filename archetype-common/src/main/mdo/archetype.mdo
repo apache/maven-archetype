@@ -35,7 +35,7 @@
           <required>true</required>
           <type>boolean</type>
         </field>
-        <field>
+        <field xdoc.separator="blank">
           <name>sources</name>
           <version>1.0.0</version>
           <association>
