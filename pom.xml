@@ -59,6 +59,13 @@ under the License.
     <url>http://jira.codehaus.org/browse/ARCHETYPE</url>
   </issueManagement>
 
+  <distributionManagement>
+    <site>
+      <id>apache.website</id>
+      <url>scp://people.apache.org/www/maven.apache.org/archetype/</url>
+    </site>
+  </distributionManagement>
+
   <properties>
     <mavenVersion>2.0.8</mavenVersion><!-- with 2.0.9 proxy test fails-->
     <netbeans.hint.useExternalMaven>true</netbeans.hint.useExternalMaven>
