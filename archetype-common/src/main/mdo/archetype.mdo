@@ -105,7 +105,8 @@
           <name>encoding</name>
           <version>1.0.0</version>
           <type>String</type>
-          <description><![CDATA[The encoding to be used when reading/writing this file.]]></description>
+          <description><![CDATA[The encoding to be used when reading/writing this file.
+            Platform encoding is used by default, or ISO-8859-1 when filename ends in <code>.properties</code>]]></description>
         </field>
       </fields>
     </class>
@@ -118,7 +119,8 @@
           <name>encoding</name>
           <version>1.0.0</version>
           <type>String</type>
-          <description><![CDATA[The encoding to be used when reading/writing this file.]]></description>
+          <description><![CDATA[The encoding to be used when reading/writing this file.
+            Platform encoding is used by default, or ISO-8859-1 when filename ends in <code>.properties</code>]]></description>
         </field>
         <field xml.attribute="true">
           <name>filtered</name>
