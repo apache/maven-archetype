@@ -9,7 +9,7 @@
   <id>archetype</id>
   <name>Archetype</name>
   <description>
-    <![CDATA[Maven's model for the old archetype descriptor.
+    <![CDATA[Maven's model for the old archetype descriptor (ie for Archetype 1.x).
     <p>The metadata about an archetype is stored in the <code>archetype.xml</code> file located
     in the <code>META-INF/maven</code> directory of its jar file.</p>
     <p>An XSD is available at
@@ -35,16 +35,19 @@
           <version>1.0.0</version>
           <required>true</required>
           <type>String</type>
+          <description><![CDATA[The value should be the same as the artifactId in the archetype <code>pom.xml</code>.]]></description>
         </field>
         <field>
           <name>allowPartial</name>
           <version>1.0.0</version>
-          <required>true</required>
           <type>boolean</type>
+          <description><![CDATA[Setting this option to <code>true</code> makes it possible to run the
+            <code>archetype:create</code> even on existing projects.]]></description>
         </field>
         <field xdoc.separator="blank">
           <name>sources</name>
           <version>1.0.0</version>
+          <description><![CDATA[Files that will go into <code>src/main/java</code>.]]></description>
           <association>
             <type>String</type>
             <multiplicity>*</multiplicity>
@@ -53,6 +56,7 @@
         <field>
           <name>resources</name>
           <version>1.0.0</version>
+          <description><![CDATA[Files that will go into <code>src/main/resources</code>.]]></description>
           <association>
             <type>String</type>
             <multiplicity>*</multiplicity>
@@ -61,6 +65,7 @@
         <field>
           <name>testSources</name>
           <version>1.0.0</version>
+          <description><![CDATA[Files that will go into <code>src/test/java</code>.]]></description>
           <association xml.tagName="source">
             <type>String</type>
             <multiplicity>*</multiplicity>
@@ -69,6 +74,7 @@
         <field>
           <name>testResources</name>
           <version>1.0.0</version>
+          <description><![CDATA[Files that will go into <code>src/test/resources</code>.]]></description>
           <association xml.tagName="resource">
             <type>String</type>
             <multiplicity>*</multiplicity>
@@ -77,6 +83,7 @@
         <field>
           <name>siteResources</name>
           <version>1.0.0</version>
+          <description><![CDATA[Files that will go into <code>src/site</code>.]]></description>
           <association xml.tagName="resource">
             <type>String</type>
             <multiplicity>*</multiplicity>
