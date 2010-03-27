@@ -20,11 +20,11 @@ Maven 2 SuperDuper Plugin
 
 * Usage
 
-  Instructions on how to use the SuperDuper Plugin can be found {{{usage.html}here}}.
+  Instructions on how to use the SuperDuper Plugin can be found {{{./usage.html}here}}.
 
 * Examples
 
   To provide you with better understanding of some usages of the SuperDuper Plugin,
   you can take a look at the following examples:
 
-  * {{{examples/sample-example.html}Sample Example}}
+  * {{{./examples/sample-example.html}Sample Example}}

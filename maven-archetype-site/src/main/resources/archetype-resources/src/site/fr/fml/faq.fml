@@ -1,8 +1,10 @@
 <?xml version="1.0"?>
-<faqs id="FAQ Général">
+<faqs xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/FML/1.0"
+  xsi:schemaLocation="http://maven.apache.org/FML/1.0 http://maven.apache.org/xsd/fml-1.0.xsd"
+  id="FAQ GÃ©nÃ©ral">
   <part id="General">
     <faq id="where">
-      <question>D'où vient Maven</question>
+      <question>D'oÃ¹ vient Maven ?</question>
       <answer>
         <p>
           Maven was created by a group of software developers who were tired
@@ -12,7 +14,7 @@
       </answer>
     </faq>
     <faq id="why">
-      <question>Pourquoi Maven est-il si populaire?</question>
+      <question>Pourquoi Maven est-il si populaire ?</question>
       <answer>
         <p>
           Maven saves you so much time in your software development efforts that

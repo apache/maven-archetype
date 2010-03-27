@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
-<faqs id="General FAQ">
+<faqs xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/FML/1.0"
+  xsi:schemaLocation="http://maven.apache.org/FML/1.0 http://maven.apache.org/xsd/fml-1.0.xsd"
+  id="General FAQ">
   <part id="General">
     <faq id="where">
       <question>Where did Maven come from?</question>
@@ -12,7 +14,7 @@
       </answer>
     </faq>
     <faq id="why">
-      <question>Why is maven so wildly popular?</question>
+      <question>Why is Maven so wildly popular?</question>
       <answer>
         <p>
           Maven saves you so much time in your software development efforts that
