@@ -19,59 +19,44 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
   <parent>
     <artifactId>maven-archetype</artifactId>
     <groupId>org.apache.maven.archetype</groupId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-  <modelVersion>4.0.0</modelVersion>
+
   <groupId>org.apache.maven.plugins</groupId>
   <artifactId>maven-archetype-plugin</artifactId>
   <packaging>maven-plugin</packaging>
+
   <name>Maven Archetype Plugin</name>
   <description>
 	The Maven Archetype Plugin builds archetype containers.
   </description>
   <url>http://maven.apache.org/plugins/maven-archetype-plugin/</url>
   <inceptionYear>2001</inceptionYear>
-  <mailingLists>
-    <mailingList>
-      <name>Maven User List</name>
-      <subscribe>users-subscribe@maven.apache.org</subscribe>
-      <unsubscribe>users-unsubscribe@maven.apache.org</unsubscribe>
-      <post>users@maven.apache.org</post>
-      <archive>http://mail-archives.apache.org/mod_mbox/maven-users</archive>
-      <otherArchives>
-        <otherArchive>http://www.mail-archive.com/users@maven.apache.org/</otherArchive>
-        <otherArchive>http://www.nabble.com/Maven---Users-f178.html</otherArchive>
-      </otherArchives>
-    </mailingList>
-    <mailingList>
-      <name>Maven Developer List</name>
-      <subscribe>dev-subscribe@maven.apache.org</subscribe>
-      <unsubscribe>dev-unsubscribe@maven.apache.org</unsubscribe>
-      <post>dev@maven.apache.org</post>
-      <archive>http://mail-archives.apache.org/mod_mbox/maven-dev</archive>
-    </mailingList>
-    <mailingList>
-      <name>Maven Commits List</name>
-      <subscribe>commits-subscribe@maven.apache.org</subscribe>
-      <unsubscribe>commits-unsubscribe@maven.apache.org</unsubscribe>
-      <post>commits@maven.apache.org</post>
-      <archive>http://mail-archives.apache.org/mod_mbox/maven-dev</archive>
-    </mailingList>
-  </mailingLists>
+
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/archetype/trunk/maven-archetype/maven-archetype-plugin/</connection>
-    <developerConnection>scm:svn:http://svn.apache.org/repos/asf/maven/archetype/trunk/maven-archetype/maven-archetype-plugin/</developerConnection>
-    <url>http://svn.apache.org/repos/asf/maven/archetype/trunk/maven-archetype/maven-archetype-plugin/</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/archetype/branches/archetype-1.0.x/maven-archetype/maven-archetype-plugin/</connection>
+    <developerConnection>scm:svn:http://svn.apache.org/repos/asf/maven/archetype/branches/archetype-1.0.x/maven-archetype/maven-archetype-plugin/</developerConnection>
+    <url>http://svn.apache.org/viewvc/maven/archetype/branches/archetype-1.0.x/maven-archetype/maven-archetype-plugin/</url>
   </scm>
+
+  <distributionManagement>
+    <site>
+      <id>apache.website</id>
+      <url>scp://people.apache.org/www/maven.apache.org/plugins/maven-archetype-plugin</url>
+    </site>
+  </distributionManagement>
+
   <prerequisites>
     <maven>2.0</maven>
   </prerequisites>
+
   <dependencies>
     <dependency>
       <groupId>org.apache.maven</groupId>
@@ -97,6 +82,7 @@ under the License.
       <artifactId>maven-archetype-creator</artifactId>
     </dependency>
   </dependencies>
+
   <reporting>
     <plugins>
       <plugin>
@@ -114,6 +100,7 @@ under the License.
       </plugin>
     </plugins>
   </reporting>
+
   <profiles>
     <profile>
       <id>ciProfile</id>
@@ -139,10 +126,4 @@ under the License.
       </build>
     </profile>
   </profiles>
-  <distributionManagement>
-    <site>
-      <id>apache.website</id>
-      <url>scp://people.apache.org/www/maven.apache.org/plugins/maven-archetype-plugin</url>
-    </site>
-  </distributionManagement>
 </project>
