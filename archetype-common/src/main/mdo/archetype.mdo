@@ -44,12 +44,13 @@
           <description><![CDATA[Setting this option to <code>true</code> makes it possible to run the
             <code>archetype:create</code> even on existing projects.]]></description>
         </field>
+
         <field xdoc.separator="blank">
           <name>sources</name>
           <version>1.0.0</version>
           <description><![CDATA[Files that will go into <code>src/main/java</code>.]]></description>
           <association>
-            <type>String</type>
+            <type>Source</type>
             <multiplicity>*</multiplicity>
           </association>
         </field>
@@ -58,16 +59,17 @@
           <version>1.0.0</version>
           <description><![CDATA[Files that will go into <code>src/main/resources</code>.]]></description>
           <association>
-            <type>String</type>
+            <type>Resource</type>
             <multiplicity>*</multiplicity>
           </association>
         </field>
-        <field>
+
+        <field xdoc.separator="blank">
           <name>testSources</name>
           <version>1.0.0</version>
           <description><![CDATA[Files that will go into <code>src/test/java</code>.]]></description>
           <association xml.tagName="source">
-            <type>String</type>
+            <type>Source</type>
             <multiplicity>*</multiplicity>
           </association>
         </field>
@@ -76,18 +78,55 @@
           <version>1.0.0</version>
           <description><![CDATA[Files that will go into <code>src/test/resources</code>.]]></description>
           <association xml.tagName="resource">
-            <type>String</type>
+            <type>Resource</type>
             <multiplicity>*</multiplicity>
           </association>
         </field>
-        <field>
+
+        <field xdoc.separator="blank">
           <name>siteResources</name>
           <version>1.0.0</version>
           <description><![CDATA[Files that will go into <code>src/site</code>.]]></description>
           <association xml.tagName="resource">
-            <type>String</type>
+            <type>Resource</type>
             <multiplicity>*</multiplicity>
           </association>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>Source</name>
+      <description>Describes a source file. Note that source files are always filtered, unlike resources that
+        can be non-filtered.</description>
+      <version>1.0.0</version>
+      <fields>
+        <field xml.attribute="true">
+          <name>encoding</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <description><![CDATA[The encoding to be used when reading/writing this file.]]></description>
+        </field>
+      </fields>
+    </class>
+    <class>
+      <name>Resource</name>
+      <description>Describes a resource file.</description>
+      <version>1.0.0</version>
+      <fields>
+        <field xml.attribute="true">
+          <name>encoding</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <description><![CDATA[The encoding to be used when reading/writing this file.]]></description>
+        </field>
+        <field xml.attribute="true">
+          <name>filtered</name>
+          <version>1.0.0</version>
+          <type>boolean</type>
+          <defaultValue>true</defaultValue>
+          <description>A resource can be filtered, which means the file will be used as Velocity template.
+          It can be non-filtered, which means the file will be copied without modification.</description>
         </field>
       </fields>
     </class>
