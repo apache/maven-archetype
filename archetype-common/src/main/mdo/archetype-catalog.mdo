@@ -30,7 +30,7 @@
     can be presented with a list of archetypes from any number of catalogs to generate new
     projects.</p>
     <p>The Archetype Plugin knows by default its internal catalog. It also knows
-    about the <code>local</code> and <code>remote<code> catalogs:</p>
+    about the <code>local</code> and <code>remote</code> catalogs:</p>
     <ul>
       <li><code>local</code> represents the <code>~/.m2/archetype-catalog.xml</code> catalog file,</li>
       <li><code>remote</code> represents the <code>http://repo1.maven.org/maven2/archetype-catalog.xml</code> catalog file.
