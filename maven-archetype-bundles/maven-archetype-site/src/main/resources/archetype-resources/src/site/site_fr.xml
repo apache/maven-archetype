@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<project name="Maven">
+
+<project name="Maven" xmlns="http://maven.apache.org/DECORATION/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0 http://maven.apache.org/xsd/decoration-1.0.0.xsd">
   <bannerLeft>
     <name>Maven</name>
     <src>http://maven.apache.org/images/apache-maven-project.png</src>
@@ -8,6 +10,7 @@
   <bannerRight>
     <src>http://maven.apache.org/images/maven-small.gif</src>
   </bannerRight>
+
   <body>
     <links>
       <item name="Apache" href="http://www.apache.org/" />
@@ -18,7 +21,7 @@
     <menu name="Maven 2.0">
       <item name="Format APT" href="format.html"/>
       <item name="FAQ" href="faq.html"/>
-      <item name="Exemple Xdoc" href="xdoc.html"/>      
+      <item name="Exemple Xdoc" href="xdoc.html"/>
     </menu>
   </body>
 </project>

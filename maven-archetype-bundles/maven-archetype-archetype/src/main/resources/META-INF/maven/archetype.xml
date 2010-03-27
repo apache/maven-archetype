@@ -1,9 +1,11 @@
-<archetype>
+<archetype xmlns="http://maven.apache.org/plugins/maven-archetype-plugin/archetype/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/plugins/maven-archetype-plugin/archetype/1.0.0 http://maven.apache.org/xsd/archetype-1.0.0.xsd">
   <id>archetype</id>
+
   <resources>
     <resource>src/main/resources/archetype-resources/pom.xml</resource>
     <resource>src/main/resources/archetype-resources/src/main/java/App.java</resource>
     <resource>src/main/resources/archetype-resources/src/test/java/AppTest.java</resource>
     <resource>src/main/resources/META-INF/maven/archetype.xml</resource>
-  </resources> 
+  </resources>
 </archetype>

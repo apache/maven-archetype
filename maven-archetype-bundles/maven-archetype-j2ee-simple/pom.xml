@@ -35,6 +35,6 @@ under the License.
 
   <name>Maven Simple J2EE Archetype</name>
   <description>
-    An archetype which contains a simplifed sample J2EE application.
+    An archetype which contains a simplified sample J2EE application.
   </description>
 </project>
