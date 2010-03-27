@@ -27,11 +27,11 @@
 ~~ http://maven.apache.org/doxia/references/apt-format.html
 
 
-How the Archetype Plugin knows about archetypes?
+How does the Archetype Plugin know about archetypes?
 
     Knowledge about archetypes are stored in catalogs.
 
-    The catalogs are xml files.
+    The catalogs are xml files: see the {{{/archetype/archetype-common/archetype-catalog.html}reference documentation}}.
 
     The Archetype Plugin comes bundled with an internal catalog.
     This one is used by default.
@@ -41,11 +41,12 @@ How the Archetype Plugin knows about archetypes?
 
 * Catalog file explained
 
-    A catalog is an xml file with such content:
+    A catalog is a xml file with such content:
 
 +---
 <?xml version="1.0" encoding="UTF-8"?>
-<archetype-catalog>
+<archetype-catalog  xmlns="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-catalog/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-catalog/1.0.0 http://maven.apache.org/xsd/archetype-catalog-1.0.0.xsd">
   <archetypes>
     <archetype>
 [1]    <groupId>org.appfuse.archetypes</groupId>
@@ -108,10 +109,10 @@ How the Archetype Plugin knows about archetypes?
     The Archetype Plugin knows by default its internal catalog. It also knows
     about the <<<local>>> and <<<remote>>> catalogs.
 
-    <<<local>>> represents the catalog file <<<~/.m2/archetype-catalog.xml>>>.
+    <<<local>>> represents the <<<~/.m2/archetype-catalog.xml>>> catalog file.
 
-    <<<remote>>> represents the catalog file <<<http://repo1.maven.org/maven2/archetype-catalog.xml>>>.
+    <<<remote>>> represents the <<<http://repo1.maven.org/maven2/archetype-catalog.xml>>> catalog file.
 
     The Archetype Plugin can also read catalogs from filesystem/HTTP by
-    providing the path/URL of a catalog file or of a directory containing the
+    providing the path/URL of a catalog file or of a directory containing an
     <<<archetype-catalog.xml>>> file.
