@@ -19,27 +19,40 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-    <parent>
+
+  <parent>
     <groupId>org.apache.maven</groupId>
     <artifactId>maven-parent</artifactId>
     <version>5</version>
     <relativePath>../pom/maven/pom.xml</relativePath>
   </parent>
+
   <groupId>org.apache.maven.archetype</groupId>
   <artifactId>maven-archetype-parent</artifactId>
   <version>3-SNAPSHOT</version>
   <packaging>pom</packaging>
+
   <name>Maven Archetype Parent</name>
+
   <issueManagement>
     <system>jira</system>
     <url>http://jira.codehaus.org/browse/ARCHETYPE</url>
-  </issueManagement>            
+  </issueManagement>
+
   <modules>
      <module>maven-archetype</module>
      <module>maven-archetype-bundles</module>
   </modules>
+
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/archetype/branches/archetype-1.0.x</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/branches/archetype-1.0.x</developerConnection>
+    <url>http://svn.apache.org/viewvc/maven/archetype/branches/archetype-1.0.x</url>
+  </scm>
+
   <build>
     <pluginManagement>
       <plugins>
@@ -52,10 +65,5 @@ under the License.
         </plugin>
       </plugins>
     </pluginManagement>
-  </build>               
-  <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/archetype/trunk</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/trunk</developerConnection>
-    <url>http://svn.apache.org/viewcvs.cgi/maven/archetype/trunk</url>
-  </scm>
+  </build>
 </project>
