@@ -23,9 +23,9 @@ under the License.
   xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0 http://maven.apache.org/xsd/decoration-1.0.0.xsd">
   <body>
     <breadcrumbs>
-      <item name="Maven" href="../../index.html" />
-      <item name="Maven Archetype" href="../index.html" />
-      <item name="Archetypes" href="./index.html" />
+      <item name="Maven" href="http://maven.apache.org/index.html" />
+      <item name="Maven Archetype" href="http://maven.apache.org/maven-archetype/index.html" />
+      <item name="Archetypes" href="http://maven.apache.org/archetype/maven-archetype-bundles/index.html" />
     </breadcrumbs>
 
     <menu ref="reports" inherit="bottom" />
