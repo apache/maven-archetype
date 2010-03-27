@@ -27,7 +27,7 @@ under the License.
   <parent>
     <artifactId>maven-archetype-bundles</artifactId>
     <groupId>org.apache.maven.archetypes</groupId>
-    <version>3</version>
+    <version>4-SNAPSHOT</version>
   </parent>
 
   <artifactId>maven-archetype-simple</artifactId>
@@ -37,6 +37,12 @@ under the License.
   <description>
     An archetype which contains a simple Maven project.
   </description>
+
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/archetype/branches/archetype-1.0.x/maven-archetype-bundles/maven-archetype-simple</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/branches/archetype-1.0.x/maven-archetype-bundles/maven-archetype-simple</developerConnection>
+    <url>http://svn.apache.org/viewvc/maven/archetype/branches/archetype-1.0.x/maven-archetype-bundles/maven-archetype-simple</url>
+  </scm>
 
   <dependencies>
     <dependency>

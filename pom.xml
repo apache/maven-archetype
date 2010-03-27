@@ -37,17 +37,23 @@ under the License.
   <name>Maven Archetypes</name>
 
   <modules>
-    <module>maven-archetype-mojo</module>
-    <module>maven-archetype-site</module>
-    <module>maven-archetype-quickstart</module>
-    <module>maven-archetype-simple</module>
-    <module>maven-archetype-site-simple</module>
-    <module>maven-archetype-webapp</module>
     <module>maven-archetype-archetype</module>
     <module>maven-archetype-j2ee-simple</module>
-    <module>maven-archetype-portlet</module>
+    <module>maven-archetype-mojo</module>
     <module>maven-archetype-plugin</module>
     <module>maven-archetype-plugin-site</module>
+    <module>maven-archetype-portlet</module>
     <module>maven-archetype-profiles</module>
+    <module>maven-archetype-quickstart</module>
+    <module>maven-archetype-simple</module>
+    <module>maven-archetype-site</module>
+    <module>maven-archetype-site-simple</module>
+    <module>maven-archetype-webapp</module>
   </modules>
+
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/archetype/branches/archetype-1.0.x/maven-archetype-bundles</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/branches/archetype-1.0.x/maven-archetype-bundles</developerConnection>
+    <url>http://svn.apache.org/viewvc/maven/archetype/branches/archetype-1.0.x/maven-archetype-bundles</url>
+  </scm>
 </project>
