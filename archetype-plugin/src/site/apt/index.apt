@@ -53,7 +53,7 @@ Maven 2 Archetype Plugin
   The archetype plugin has four goals:
 
   * {{{./create-mojo.html}archetype:create}} creates a Maven 2 project from an
-    archetype. It use the behaviour of the Archetype Plugin version 1.0-alpha-7.
+    archetype. It use the behaviour of the {{{../maven-archetype-plugin-1.0-alpha-7/}Archetype Plugin version 1.0-alpha-7}}.
 
   * {{{./generate-mojo.html}archetype:generate}} ask the user to choose an archetype
     from the archetype catalog, and retrieves it from the remote repository.
