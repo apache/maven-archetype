@@ -156,7 +156,7 @@
             <multiplicity>*</multiplicity>
           </association>
           <required>false</required>
-          <description>Inclusion definition "ˆ la" Ant.</description>
+          <description>Inclusion definition "Ã  la" Ant.</description>
         </field>
         <field>
           <name>excludes</name>
@@ -165,7 +165,7 @@
             <multiplicity>*</multiplicity>
           </association>
           <required>false</required>
-          <description>Exclusion definition "ˆ la" Ant.</description>
+          <description>Exclusion definition "Ã  la" Ant.</description>
         </field>
       </fields>
       <codeSegments>
