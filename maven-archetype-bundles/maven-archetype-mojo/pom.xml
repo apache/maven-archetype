@@ -34,7 +34,7 @@ under the License.
 
   <name>Maven Mojo Archetype</name>
   <description>
-    An archetype which contains a sample a sample Maven plugin.
+    An archetype which contains a sample Maven plugin.
   </description>
 
   <scm>
