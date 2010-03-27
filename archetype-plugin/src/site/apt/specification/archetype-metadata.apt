@@ -30,7 +30,8 @@
 How metadata on an archetype is stored?
 
     The metadata about an archetype is stored in the <<<archetype-metadata.xml>>> file
-    located in the directory <<<META-INF/maven>>> of its jar file.
+    located in the directory <<<META-INF/maven>>> of its jar file: see the
+    {{{/archetype/archetype-common/archetype-descriptor.html}reference documentation}}.
 
     The metadata file stores the additional properties, with corresponding
     default values.
