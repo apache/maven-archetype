@@ -19,15 +19,14 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <artifactId>maven-archetype-bundles</artifactId>
     <groupId>org.apache.maven.archetypes</groupId>
-    <version>3</version>
+    <version>4-SNAPSHOT</version>
   </parent>
 
   <artifactId>maven-archetype-plugin-site</artifactId>
@@ -38,4 +37,10 @@ under the License.
     An archetype which contains a sample Maven plugin site. This archetype can be layered upon an
     existing Maven plugin project.
   </description>
+
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/archetype/branches/archetype-1.0.x/maven-archetype-bundles/maven-archetype-plugin-site</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/branches/archetype-1.0.x/maven-archetype-bundles/maven-archetype-plugin-site</developerConnection>
+    <url>http://svn.apache.org/viewvc/maven/archetype/branches/archetype-1.0.x/maven-archetype-bundles/maven-archetype-plugin-site</url>
+  </scm>
 </project>
