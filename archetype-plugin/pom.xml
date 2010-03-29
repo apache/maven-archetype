@@ -19,7 +19,8 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
 
@@ -39,24 +40,10 @@ under the License.
   <packaging>maven-plugin</packaging>
 
   <name>Maven Archetype Plugin</name>
-  <url>http://maven.apache.org/plugins/maven-archetype-plugin</url>
 
   <prerequisites>
     <maven>2.0.7</maven>
   </prerequisites>
-
-  <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/archetype/trunk/archetype-plugin</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/trunk/archetype-plugin</developerConnection>
-    <url>http://svn.apache.org/viewvc/maven/archetype/trunk/archetype-plugin</url>
-  </scm>
-
-  <distributionManagement>
-    <site>
-      <id>apache.website</id>
-      <url>scp://people.apache.org/www/maven.apache.org/plugins/maven-archetype-plugin</url>
-    </site>
-  </distributionManagement>
 
   <dependencies>
     <dependency>
@@ -107,12 +94,6 @@ under the License.
             </goals>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <artifactId>maven-site-plugin</artifactId>
-        <configuration>
-          <stagingSiteURL>scp://people.apache.org/www/maven.apache.org/plugins/${project.artifactId}-${project.version}</stagingSiteURL>
-        </configuration>
       </plugin>
     </plugins>
   </build>
