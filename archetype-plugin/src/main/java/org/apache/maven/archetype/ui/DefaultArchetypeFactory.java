@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.ui;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -16,8 +18,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
-package org.apache.maven.archetype.ui;
 
 import org.apache.maven.archetype.common.ArchetypeConfiguration;
 import org.apache.maven.archetype.common.ArchetypeDefinition;
@@ -153,7 +153,7 @@ public class DefaultArchetypeFactory
             getLogger().debug( "Adding requiredProperty " + requiredProperty.getKey() );
 
             if ( null != properties.getProperty( requiredProperty.getKey(), requiredProperty.getDefaultValue() )
-                && !containsInnerProperty(requiredProperty.getDefaultValue()) )
+                && !containsInnerProperty( requiredProperty.getDefaultValue() ) )
             {
                 configuration.setProperty( requiredProperty.getKey(),
                     properties.getProperty( requiredProperty.getKey(), requiredProperty.getDefaultValue() ) );
@@ -231,14 +231,14 @@ public class DefaultArchetypeFactory
             getLogger().debug( "Adding requiredProperty " + Constants.PACKAGE );
             if ( null != properties.getProperty( Constants.PACKAGE,
                     configuration.getDefaultValue( Constants.PACKAGE ) )
-                && !containsInnerProperty(configuration.getDefaultValue( Constants.PACKAGE ) ) )
+                && !containsInnerProperty( configuration.getDefaultValue( Constants.PACKAGE ) ) )
             {
                 configuration.setProperty( Constants.PACKAGE,
                     properties.getProperty( Constants.PACKAGE, configuration.getDefaultValue( Constants.PACKAGE ) ) );
                 configuration.setDefaultProperty( Constants.PACKAGE, configuration.getProperty( Constants.PACKAGE ) );
             }
             else if ( null != configuration.getProperty( Constants.GROUP_ID )
-                && !containsInnerProperty(configuration.getDefaultValue( Constants.PACKAGE ) ) )
+                && !containsInnerProperty( configuration.getDefaultValue( Constants.PACKAGE ) ) )
             {
                 configuration.setProperty( Constants.PACKAGE, configuration.getProperty( Constants.GROUP_ID ) );
                 configuration.setDefaultProperty( Constants.PACKAGE, configuration.getProperty( Constants.PACKAGE ) );
@@ -262,9 +262,9 @@ public class DefaultArchetypeFactory
         ArchetypeConfiguration configuration = new ArchetypeConfiguration();
         getLogger().debug( "Creating ArchetypeConfiguration from ArchetypeDefinition, MavenProject and Properties" );
 
-        configuration.setGroupId( properties.getProperty(Constants.ARCHETYPE_GROUP_ID) );
-        configuration.setArtifactId( properties.getProperty(Constants.ARCHETYPE_ARTIFACT_ID) );
-        configuration.setVersion( properties.getProperty(Constants.ARCHETYPE_VERSION) );
+        configuration.setGroupId( properties.getProperty( Constants.ARCHETYPE_GROUP_ID ) );
+        configuration.setArtifactId( properties.getProperty( Constants.ARCHETYPE_ARTIFACT_ID ) );
+        configuration.setVersion( properties.getProperty( Constants.ARCHETYPE_VERSION ) );
 
         Iterator requiredProperties = properties.keySet().iterator();
 
@@ -362,7 +362,7 @@ public class DefaultArchetypeFactory
         archetypeConfiguration.setVersion( archetypeDefinition.getVersion() );
     }
 
-    private boolean containsInnerProperty(String defaultValue)
+    private boolean containsInnerProperty( String defaultValue )
     {
         if ( null == defaultValue )
         {

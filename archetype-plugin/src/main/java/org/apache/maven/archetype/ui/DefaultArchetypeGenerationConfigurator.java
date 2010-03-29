@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.ui;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,8 +19,6 @@
  * under the License.
  */
 
-package org.apache.maven.archetype.ui;
-
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
 import org.apache.maven.archetype.common.ArchetypeConfiguration;
@@ -34,6 +34,7 @@ import org.apache.maven.artifact.repository.ArtifactRepository;
 
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.util.StringUtils;
 
 import java.io.IOException;
 
@@ -43,7 +44,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
-import org.codehaus.plexus.util.StringUtils;
 
 // TODO: this seems to have more responsibilities than just a configurator
 /**
@@ -330,7 +330,7 @@ public class DefaultArchetypeGenerationConfigurator
             if ( result.indexOf( "${" + property + "}" ) >= 0 )
             {
                 result = StringUtils.replace( result, "${" + property + "}",
-                                              archetypeConfiguration.getProperty(property) );
+                                              archetypeConfiguration.getProperty( property ) );
             }
         }
         return result;
@@ -377,11 +377,11 @@ public class DefaultArchetypeGenerationConfigurator
                     return comparePropertyName( (String) left, (String) right );
                 }
                 else if ( leftDefault.indexOf( "${" + right + "}" ) >= 0 )
-                {//left contains right
+                { //left contains right
                     return 1;
                 }
                 else if ( rightDefault.indexOf( "${" + left + "}" ) >= 0 )
-                {//right contains left
+                { //right contains left
                     return -1;
                 }
                 else

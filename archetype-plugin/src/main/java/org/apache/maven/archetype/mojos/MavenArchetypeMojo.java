@@ -231,7 +231,7 @@ public class MavenArchetypeMojo
                                        createRepository( "http://repo1.maven.org/maven2", "central" ), localRepository,
                                        archetypeRemoteRepositories, parameters );
         }
-        catch (UnknownArchetype e)
+        catch ( UnknownArchetype e )
         {
             throw new MojoExecutionException( "Error creating from archetype", e );
         }

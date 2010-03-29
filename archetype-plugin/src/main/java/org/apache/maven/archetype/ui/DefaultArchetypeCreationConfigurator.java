@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.ui;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,8 +19,6 @@
  * under the License.
  */
 
-package org.apache.maven.archetype.ui;
-
 import org.apache.maven.archetype.common.ArchetypeConfiguration;
 import org.apache.maven.archetype.common.ArchetypeDefinition;
 import org.apache.maven.archetype.common.ArchetypeFilesResolver;
@@ -29,6 +29,7 @@ import org.apache.maven.archetype.exception.TemplateCreationException;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
@@ -42,7 +43,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
-import org.codehaus.plexus.util.IOUtil;
 
 /** @plexus.component */
 public class DefaultArchetypeCreationConfigurator
@@ -110,7 +110,7 @@ public class DefaultArchetypeCreationConfigurator
                     }
 
                     archetypeFactory.updateArchetypeConfiguration( archetypeConfiguration, archetypeDefinition );
-                }// </editor-fold>
+                } // </editor-fold>
 
                 if ( !archetypeConfiguration.isConfigured() )// <editor-fold text="...">
                 {
@@ -144,7 +144,7 @@ public class DefaultArchetypeCreationConfigurator
                                                             archetypeCreationQueryer.getPackage( StringUtils.isEmpty( resolvedPackage ) ? archetypeConfiguration.getDefaultValue( Constants.PACKAGE )
                                                                             : resolvedPackage ) );
                     }
-                }// </editor-fold>
+                } // </editor-fold>
 
                 boolean stopAddingProperties = false;
                 while ( !stopAddingProperties )
