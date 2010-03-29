@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.ui;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,16 +19,20 @@
  * under the License.
  */
 
-package org.apache.maven.archetype.ui;
-
-//import org.apache.maven.archetype.common.Archetype;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.common.ArchetypeDefinition;
 import org.codehaus.plexus.components.interactivity.Prompter;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /** @plexus.component */
 public class DefaultArchetypeSelectionQueryer
@@ -116,8 +122,8 @@ public class DefaultArchetypeSelectionQueryer
                     archetypeAnswerMap.put( mapKey, archetypeVersions );
                     reversedArchetypeAnswerMap.put( archetypeKey, mapKey );
                     query +=
-                        mapKey + ": " + catalog +
-                        " -> " + archetype.getArtifactId() + " (" + archetype.getDescription() + ")\n";
+                        mapKey + ": " + catalog
+                        + " -> " + archetype.getArtifactId() + " (" + archetype.getDescription() + ")\n";
                     answers.add( mapKey );
 
                     // the version is not tested. This is intentional.

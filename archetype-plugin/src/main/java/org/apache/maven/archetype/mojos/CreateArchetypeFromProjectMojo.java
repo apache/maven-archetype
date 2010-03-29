@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.mojos;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,29 +19,27 @@
  * under the License.
  */
 
-package org.apache.maven.archetype.mojos;
-
-import java.io.IOException;
 import org.apache.maven.archetype.ArchetypeCreationRequest;
 import org.apache.maven.archetype.ArchetypeCreationResult;
 import org.apache.maven.archetype.Archetype;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
+import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.ui.ArchetypeCreationConfigurator;
 import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-import org.apache.maven.archetype.common.Constants;
-import org.apache.maven.execution.MavenSession;
-import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Creates an archetype from the current project.
@@ -154,7 +154,7 @@ public class CreateArchetypeFromProjectMojo
     private boolean testMode;
 
     /** @parameter expression="${packageName}" */
-    private String packageName;//Find a better way to resolve the package!!! enforce usage of the configurator
+    private String packageName; //Find a better way to resolve the package!!! enforce usage of the configurator
 
     /**
      *  @parameter expression="${session}"
@@ -196,7 +196,7 @@ public class CreateArchetypeFromProjectMojo
                 .setArchetypeRegistryFile( archetypeRegistryFile )
                 .setLocalRepository( localRepository )
                 /*this should be resolved and asked for user to verify*/
-                .setPackageName(packageName)
+                .setPackageName( packageName )
                 .setPostPhase( archetypePostPhase );
 
             ArchetypeCreationResult result = archetype.createArchetypeFromProject( request );
@@ -305,7 +305,7 @@ public class CreateArchetypeFromProjectMojo
                                 "Found in propertyFile " + propertyFile.getName() + " languages = "
                                     + resultingLanguages );
             }
-            catch( IOException e )
+            catch ( IOException e )
             {
                 getLog().warn( "Can not read " + propertyFile.getName() );
             }

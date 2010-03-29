@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.mojos;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,20 +19,18 @@
  * under the License.
  */
 
-package org.apache.maven.archetype.mojos;
-
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.ContextEnabled;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.settings.Settings;
+import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
-import org.codehaus.plexus.util.StringUtils;
 
 
 /**

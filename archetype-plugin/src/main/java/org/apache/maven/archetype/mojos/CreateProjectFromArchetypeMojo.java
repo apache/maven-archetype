@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.mojos;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -16,8 +18,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
-package org.apache.maven.archetype.mojos;
 
 import org.apache.maven.archetype.Archetype;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
@@ -169,8 +169,8 @@ public class CreateProjectFromArchetypeMojo
             .setArchetypeVersion( archetypeVersion )
             .setOutputDirectory( basedir.getAbsolutePath() )
             .setLocalRepository( localRepository )
-            .setArchetypeRepository(archetypeRepository)
-            .setRemoteArtifactRepositories(remoteArtifactRepositories);
+            .setArchetypeRepository( archetypeRepository )
+            .setRemoteArtifactRepositories( remoteArtifactRepositories );
 
         try
         {
