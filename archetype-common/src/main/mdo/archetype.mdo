@@ -9,7 +9,7 @@
   <id>archetype</id>
   <name>Archetype</name>
   <description>
-    <![CDATA[Maven's model for the old archetype descriptor (ie for Archetype 1.x).
+    <![CDATA[Maven's model for the old archetype descriptor (ie for Archetype 1.0.x).
     <p>The metadata about an archetype is stored in the <code>archetype.xml</code> file located
     in the <code>META-INF/maven</code> directory of its jar file.</p>
     <p>An XSD is available at
