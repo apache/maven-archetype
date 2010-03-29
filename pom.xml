@@ -36,6 +36,7 @@ under the License.
 
   <name>Maven Archetypes</name>
   <description>Archetypes provided by Maven.</description>
+  <url>http://maven.apache.org/archetype/maven-archetype-bundles</url>
 
   <modules>
     <module>maven-archetype-archetype</module>
