@@ -40,6 +40,7 @@ under the License.
    An archetype knows which files will be part of the instantiated project and which properties to fill to properly customize
    the project.
   </description>
+  <url>http://maven.apache.org/archetype</url>
   <inceptionYear>2007</inceptionYear>
 
   <modules>
