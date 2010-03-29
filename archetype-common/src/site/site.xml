@@ -30,7 +30,7 @@ under the License.
       <item name="Archetype Descriptor" href="./archetype-descriptor.html"/>
       <item name="Archetype Catalog" href="./archetype-catalog.html"/>
       <item name="Archetype Registry" href="./archetype-registry.html"/>
-      <item name="Old Archetype Descriptor" href="./archetype.html"/>
+      <item name="Archetype 1.0.x Descriptor" href="./archetype.html"/>
     </menu>
     <menu ref="parent" inherit="top" />
   </body>
