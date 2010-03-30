@@ -171,6 +171,8 @@ public class DefaultOldArchetype
 
         URLClassLoader archetypeJarLoader;
 
+        InputStream is = null;
+
         try
         {
             URL[] urls = new URL[1];
@@ -179,7 +181,7 @@ public class DefaultOldArchetype
 
             archetypeJarLoader = new URLClassLoader( urls );
 
-            InputStream is = getStream( ARCHETYPE_DESCRIPTOR, archetypeJarLoader );
+            is = getStream( ARCHETYPE_DESCRIPTOR, archetypeJarLoader );
 
             if ( is == null )
             {
@@ -201,6 +203,10 @@ public class DefaultOldArchetype
         catch ( XmlPullParserException e )
         {
             throw new ArchetypeDescriptorException( "Error reading the " + ARCHETYPE_DESCRIPTOR + " descriptor.", e );
+        }
+        finally
+        {
+            IOUtil.close( is );
         }
 
         // ----------------------------------------------------------------------
