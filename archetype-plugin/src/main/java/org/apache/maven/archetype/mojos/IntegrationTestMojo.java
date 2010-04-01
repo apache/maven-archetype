@@ -20,14 +20,10 @@ package org.apache.maven.archetype.mojos;
  */
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.maven.archetype.ArchetypeGenerationRequest;
+import org.apache.maven.archetype.ArchetypeGenerationResult;
 import org.apache.maven.archetype.common.Constants;
-import org.apache.maven.archetype.exception.ArchetypeGenerationFailure;
-import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
-import org.apache.maven.archetype.exception.OutputFileExists;
-import org.apache.maven.archetype.exception.PomFileExists;
-import org.apache.maven.archetype.exception.ProjectDirectoryExists;
-import org.apache.maven.archetype.exception.UnknownArchetype;
-import org.apache.maven.archetype.generator.FilesetArchetypeGenerator;
+import org.apache.maven.archetype.generator.ArchetypeGenerator;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -55,7 +51,7 @@ public class IntegrationTestMojo
     extends AbstractMojo
 {
     /** @component */
-    FilesetArchetypeGenerator filesetGenerator;
+    ArchetypeGenerator archetypeGenerator;
 
     /**
      * The archetype project to execute the integration tests on.
@@ -212,39 +208,24 @@ public class IntegrationTestMojo
 
             FileUtils.mkdir( basedir );
             // TODO: fix this to use request
-            filesetGenerator.generateArchetype( null, archetypeFile, basedir );
+            ArchetypeGenerationRequest request = new ArchetypeGenerationRequest()
+                .setOutputDirectory( basedir );
+            ArchetypeGenerationResult result = new ArchetypeGenerationResult();
+
+            archetypeGenerator.generateArchetype( request, archetypeFile, result );
 
             File reference = new File( goalFile.getParentFile(), "reference" );
 
             assertTest( reference, new File( basedir, properties.getProperty( Constants.ARTIFACT_ID ) ) );
+
+            if ( result.getCause() != null )
+            {
+                throw new IntegrationTestFailure( result.getCause() );
+            }
         }
-        catch ( ArchetypeNotConfigured ex )
+        catch ( IOException ioe )
         {
-            throw new IntegrationTestFailure( ex );
-        }
-        catch ( UnknownArchetype ex )
-        {
-            throw new IntegrationTestFailure( ex );
-        }
-        catch ( PomFileExists ex )
-        {
-            throw new IntegrationTestFailure( ex );
-        }
-        catch ( ProjectDirectoryExists ex )
-        {
-            throw new IntegrationTestFailure( ex );
-        }
-        catch ( ArchetypeGenerationFailure ex )
-        {
-            throw new IntegrationTestFailure( ex );
-        }
-        catch ( IOException ex )
-        {
-            throw new IntegrationTestFailure( ex );
-        }
-        catch ( OutputFileExists ex )
-        {
-            throw new IntegrationTestFailure( ex );
+            throw new IntegrationTestFailure( ioe );
         }
     }
 

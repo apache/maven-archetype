@@ -46,12 +46,12 @@ public interface OldArchetype
     /**
      * Download an archetype then create a project from it.
      */
-    void createArchetype( ArchetypeGenerationRequest request, ArtifactRepository archetypeRepository, String basedir )
+    void createArchetype( ArchetypeGenerationRequest request, ArtifactRepository archetypeRepository )
         throws UnknownArchetype, ArchetypeNotFoundException, ArchetypeDescriptorException, ArchetypeTemplateProcessingException;
 
     /**
      * Create a project from an archetype file.
      */
-    void createArchetype( ArchetypeGenerationRequest request, File archetypeFile, String basedir )
+    void createArchetype( ArchetypeGenerationRequest request, File archetypeFile )
         throws ArchetypeDescriptorException, ArchetypeTemplateProcessingException;
 }

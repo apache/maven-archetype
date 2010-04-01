@@ -60,8 +60,7 @@ public class DefaultArchetypeGenerator
     /** @plexus.requirement */
     private OldArchetype oldArchetype;
 
-    private void generateArchetype( ArchetypeGenerationRequest request, ArtifactRepository localRepository,
-                                    String basedir )
+    private File getArchetypeFile( ArchetypeGenerationRequest request, ArtifactRepository localRepository )
         throws IOException, ArchetypeNotDefined, UnknownArchetype, ArchetypeNotConfigured, ProjectDirectoryExists,
         PomFileExists, OutputFileExists, XmlPullParserException, DocumentException, InvalidPackaging,
         ArchetypeGenerationFailure
@@ -94,14 +93,21 @@ public class DefaultArchetypeGenerator
             archetypeArtifactManager.getArchetypeFile( request.getArchetypeGroupId(), request.getArchetypeArtifactId(),
                                                        request.getArchetypeVersion(), remoteRepo, localRepository,
                                                        repos );
+        return archetypeFile;
+    }
 
+    private void generateArchetype( ArchetypeGenerationRequest request, File archetypeFile )
+        throws IOException, UnknownArchetype, ArchetypeNotConfigured, ProjectDirectoryExists,
+        PomFileExists, OutputFileExists, XmlPullParserException, DocumentException, InvalidPackaging,
+        ArchetypeGenerationFailure
+    {
         if ( archetypeArtifactManager.isFileSetArchetype( archetypeFile ) )
         {
-            processFileSetArchetype( request, archetypeFile, basedir );
+            processFileSetArchetype( request, archetypeFile );
         }
         else if ( archetypeArtifactManager.isOldArchetype( archetypeFile ) )
         {
-            processOldArchetype( request, archetypeFile, basedir );
+            processOldArchetype( request, archetypeFile );
         }
         else
         {
@@ -123,24 +129,84 @@ public class DefaultArchetypeGenerator
     }
 
     /** FileSetArchetype */
-    private void processFileSetArchetype( ArchetypeGenerationRequest request, File archetypeFile, String basedir )
+    private void processFileSetArchetype( ArchetypeGenerationRequest request, File archetypeFile )
         throws UnknownArchetype, ArchetypeNotConfigured, ProjectDirectoryExists, PomFileExists, OutputFileExists,
         ArchetypeGenerationFailure
     {
-        filesetGenerator.generateArchetype( request, archetypeFile, basedir );
+        filesetGenerator.generateArchetype( request, archetypeFile );
     }
 
-    private void processOldArchetype( ArchetypeGenerationRequest request, File archetypeFile, String basedir )
+    private void processOldArchetype( ArchetypeGenerationRequest request, File archetypeFile )
         throws UnknownArchetype, ArchetypeGenerationFailure
     {
-        oldArchetype.createArchetype( request, archetypeFile, basedir );
+        oldArchetype.createArchetype( request, archetypeFile );
+    }
+
+    public void generateArchetype( ArchetypeGenerationRequest request, File archetypeFile, ArchetypeGenerationResult result )
+    {
+        try
+        {
+            generateArchetype( request, archetypeFile );
+        }
+        catch ( IOException ex )
+        {
+            getLogger().error( ex.getMessage(), ex );
+            result.setCause( ex );
+        }
+        catch ( UnknownArchetype ex )
+        {
+            getLogger().error( ex.getMessage(), ex );
+            result.setCause( ex );
+        }
+        catch ( ArchetypeNotConfigured ex )
+        {
+            getLogger().error( ex.getMessage(), ex );
+            result.setCause( ex );
+        }
+        catch ( ProjectDirectoryExists ex )
+        {
+            getLogger().error( ex.getMessage(), ex );
+            result.setCause( ex );
+        }
+        catch ( PomFileExists ex )
+        {
+            getLogger().error( ex.getMessage(), ex );
+            result.setCause( ex );
+        }
+        catch ( OutputFileExists ex )
+        {
+            getLogger().error( ex.getMessage(), ex );
+            result.setCause( ex );
+        }
+        catch ( XmlPullParserException ex )
+        {
+            getLogger().error( ex.getMessage(), ex );
+            result.setCause( ex );
+        }
+        catch ( DocumentException ex )
+        {
+            getLogger().error( ex.getMessage(), ex );
+            result.setCause( ex );
+        }
+        catch ( InvalidPackaging ex )
+        {
+            getLogger().error( ex.getMessage(), ex );
+            result.setCause( ex );
+        }
+        catch ( ArchetypeGenerationFailure ex )
+        {
+            getLogger().error( ex.getMessage(), ex );
+            result.setCause( ex );
+        }
     }
 
     public void generateArchetype( ArchetypeGenerationRequest request, ArchetypeGenerationResult result )
     {
         try
         {
-            generateArchetype( request, request.getLocalRepository(), request.getOutputDirectory() );
+            File archetypeFile = getArchetypeFile( request, request.getLocalRepository() );
+
+            generateArchetype( request, archetypeFile, result );
         }
         catch ( IOException ex )
         {

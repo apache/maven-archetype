@@ -88,7 +88,7 @@ public class DefaultFilesetArchetypeGenerator
      */
     private static final Pattern TOKEN_PATTERN = Pattern.compile( ".*" + DELIMITER + ".*" + DELIMITER + ".*" );
 
-    public void generateArchetype( ArchetypeGenerationRequest request, File archetypeFile, String basedir )
+    public void generateArchetype( ArchetypeGenerationRequest request, File archetypeFile )
         throws UnknownArchetype, ArchetypeNotConfigured, ProjectDirectoryExists, PomFileExists, OutputFileExists,
         ArchetypeGenerationFailure
     {
@@ -134,8 +134,8 @@ public class DefaultFilesetArchetypeGenerator
 
             String packageName = request.getPackage();
             String artifactId = request.getArtifactId();
-            File outputDirectoryFile = new File( basedir, artifactId );
-            File basedirPom = new File( basedir, Constants.ARCHETYPE_POM );
+            File outputDirectoryFile = new File( request.getOutputDirectory(), artifactId );
+            File basedirPom = new File( request.getOutputDirectory(), Constants.ARCHETYPE_POM );
             File pom = new File( outputDirectoryFile, Constants.ARCHETYPE_POM );
 
             List archetypeResources =
@@ -175,7 +175,7 @@ public class DefaultFilesetArchetypeGenerator
 
                         processArchetypeTemplatesWithWarning( archetypeDescriptor, archetypeResources,
                                                               archetypeZipFile, "", context, packageName,
-                                                              new File( basedir ) );
+                                                              new File( request.getOutputDirectory() ) );
                     }
                     else
                     {
