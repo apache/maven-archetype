@@ -19,6 +19,7 @@ package org.apache.maven.archetype.mojos;
  * under the License.
  */
 
+import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.archetype.old.OldArchetype;
 import org.apache.maven.archetype.old.ArchetypeDescriptorException;
@@ -34,9 +35,7 @@ import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * The archetype creation goal looks for an archetype with a given groupId,
@@ -194,20 +193,6 @@ public class MavenArchetypeMojo
             packageName = groupId;
         }
 
-        // TODO: context mojo more appropriate?
-        Map parameters = new HashMap();
-
-        parameters.put( "basedir", basedir );
-
-        parameters.put( "package", packageName );
-
-        parameters.put( "packageName", packageName );
-
-        parameters.put( "groupId", groupId );
-
-        parameters.put( "artifactId", artifactId );
-
-        parameters.put( "version", version );
 
         List archetypeRemoteRepositories = new ArrayList( pomRemoteRepositories );
 
@@ -227,9 +212,18 @@ public class MavenArchetypeMojo
 
         try
         {
-            archetype.createArchetype( archetypeGroupId, archetypeArtifactId, archetypeVersion,
-                                       createRepository( "http://repo1.maven.org/maven2", "central" ), localRepository,
-                                       archetypeRemoteRepositories, parameters );
+            ArchetypeGenerationRequest request = new ArchetypeGenerationRequest()
+                .setPackage( packageName )
+                .setGroupId( groupId )
+                .setArtifactId( artifactId )
+                .setVersion( version )
+                .setArchetypeGroupId( archetypeGroupId )
+                .setArchetypeArtifactId( archetypeArtifactId )
+                .setArchetypeVersion( archetypeVersion )
+                .setLocalRepository( localRepository )
+                .setRemoteArtifactRepositories( archetypeRemoteRepositories );
+
+            archetype.createArchetype( request, createRepository( "http://repo1.maven.org/maven2", "central" ), basedir );
         }
         catch ( UnknownArchetype e )
         {

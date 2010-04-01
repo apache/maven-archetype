@@ -41,9 +41,7 @@ import org.dom4j.DocumentException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /** @plexus.component */
 public class DefaultArchetypeGenerator
@@ -92,19 +90,18 @@ public class DefaultArchetypeGenerator
                 + request.getArchetypeArtifactId() + ":" + request.getArchetypeVersion() + ")" );
         }
 
-        if ( archetypeArtifactManager.isFileSetArchetype( request.getArchetypeGroupId(),
-                                                          request.getArchetypeArtifactId(),
-                                                          request.getArchetypeVersion(), remoteRepo, localRepository,
-                                                          repos ) )
+        File archetypeFile =
+            archetypeArtifactManager.getArchetypeFile( request.getArchetypeGroupId(), request.getArchetypeArtifactId(),
+                                                       request.getArchetypeVersion(), remoteRepo, localRepository,
+                                                       repos );
+
+        if ( archetypeArtifactManager.isFileSetArchetype( archetypeFile ) )
         {
-            processFileSetArchetype( request, remoteRepo, localRepository, basedir, repos );
+            processFileSetArchetype( request, archetypeFile, basedir );
         }
-        else if ( archetypeArtifactManager.isOldArchetype( request.getArchetypeGroupId(),
-                                                           request.getArchetypeArtifactId(),
-                                                           request.getArchetypeVersion(), remoteRepo, localRepository,
-                                                           repos ) )
+        else if ( archetypeArtifactManager.isOldArchetype( archetypeFile ) )
         {
-            processOldArchetype( request, remoteRepo, localRepository, basedir, repos );
+            processOldArchetype( request, archetypeFile, basedir );
         }
         else
         {
@@ -126,65 +123,17 @@ public class DefaultArchetypeGenerator
     }
 
     /** FileSetArchetype */
-    private void processFileSetArchetype( final ArchetypeGenerationRequest request, ArtifactRepository remoteRepo,
-                                          final ArtifactRepository localRepository, final String basedir,
-                                          final List repositories )
+    private void processFileSetArchetype( ArchetypeGenerationRequest request, File archetypeFile, String basedir )
         throws UnknownArchetype, ArchetypeNotConfigured, ProjectDirectoryExists, PomFileExists, OutputFileExists,
         ArchetypeGenerationFailure
     {
-        //TODO: get rid of the property file usage.
-//        Properties properties = request.getProperties();
-//
-//        properties.setProperty( Constants.ARCHETYPE_GROUP_ID, request.getArchetypeGroupId() );
-//
-//        properties.setProperty( Constants.ARCHETYPE_ARTIFACT_ID, request.getArchetypeArtifactId() );
-//
-//        properties.setProperty( Constants.ARCHETYPE_VERSION, request.getArchetypeVersion() );
-//
-//        properties.setProperty( Constants.GROUP_ID, request.getGroupId(  ) );
-//
-//        properties.setProperty( Constants.ARTIFACT_ID, request.getArtifactId(  ) );
-//
-//        properties.setProperty( Constants.VERSION, request.getVersion() );
-//
-//        properties.setProperty( Constants.PACKAGE, request.getPackage(  ) );
-//
-//        properties.setProperty( Constants.ARCHETYPE_POST_GENERATION_GOALS, request.getArchetypeGoals() );
-
-        File archetypeFile =
-            archetypeArtifactManager.getArchetypeFile( request.getArchetypeGroupId(), request.getArchetypeArtifactId(),
-                                                       request.getArchetypeVersion(), remoteRepo, localRepository,
-                                                       repositories );
-
         filesetGenerator.generateArchetype( request, archetypeFile, basedir );
     }
 
-    private void processOldArchetype( ArchetypeGenerationRequest request, ArtifactRepository remoteRepo,
-                                      ArtifactRepository localRepository, String basedir, List repositories )
+    private void processOldArchetype( ArchetypeGenerationRequest request, File archetypeFile, String basedir )
         throws UnknownArchetype, ArchetypeGenerationFailure
     {
-        org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor archetypeDescriptor =
-            archetypeArtifactManager.getOldArchetypeDescriptor( request.getArchetypeGroupId(),
-                                                                request.getArchetypeArtifactId(),
-                                                                request.getArchetypeVersion(), remoteRepo,
-                                                                localRepository, repositories );
-
-        Map parameters = new HashMap();
-
-        parameters.put( "basedir", basedir );
-
-        parameters.put( "package", request.getPackage() );
-
-        parameters.put( "packageName", request.getPackage() );
-
-        parameters.put( "groupId", request.getGroupId() );
-
-        parameters.put( "artifactId", request.getArtifactId() );
-
-        parameters.put( "version", request.getVersion() );
-
-        oldArchetype.createArchetype( request.getArchetypeGroupId(), request.getArchetypeArtifactId(),
-                                      request.getArchetypeVersion(), remoteRepo, localRepository, repositories, parameters );
+        oldArchetype.createArchetype( request, archetypeFile, basedir );
     }
 
     public void generateArchetype( ArchetypeGenerationRequest request, ArchetypeGenerationResult result )
