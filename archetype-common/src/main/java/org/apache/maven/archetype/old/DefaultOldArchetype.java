@@ -19,6 +19,7 @@ package org.apache.maven.archetype.old;
  * under the License.
  */
 
+import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor;
 import org.apache.maven.archetype.old.descriptor.ArchetypeDescriptorBuilder;
 import org.apache.maven.archetype.old.descriptor.TemplateDescriptor;
@@ -60,8 +61,8 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -102,31 +103,36 @@ public class DefaultOldArchetype
     // artifactId = maven-foo-archetype
     // version = latest
 
-    public void createArchetype( String archetypeGroupId,
-                                 String archetypeArtifactId,
-                                 String archetypeVersion,
-                                 ArtifactRepository archetypeRepository,
-                                 ArtifactRepository localRepository,
-                                 List remoteRepositories,
-                                 Map parameters )
+    public void createArchetype( ArchetypeGenerationRequest request, ArtifactRepository archetypeRepository, String basedir )
         throws UnknownArchetype, ArchetypeNotFoundException, ArchetypeDescriptorException, ArchetypeTemplateProcessingException
     {
         // ----------------------------------------------------------------------
         // Download the archetype
         // ----------------------------------------------------------------------
 
-        File archetype;
+        File archetypeFile = archetypeArtifactManager.getArchetypeFile(
+                request.getArchetypeGroupId(), request.getArchetypeArtifactId(), request.getArchetypeVersion(),
+                archetypeRepository, request.getLocalRepository(), request.getRemoteArtifactRepositories() );
 
-//        try
-//        {
-            archetype = archetypeArtifactManager.getArchetypeFile(
-                archetypeGroupId, archetypeArtifactId, archetypeVersion,
-                archetypeRepository, localRepository, remoteRepositories );
-//        }
-//        catch ( UnknownArchetype e )
-//        {
-//            throw new ArchetypeDescriptorException( "Error attempting to download archetype.", e );
-//        }
+        createArchetype( request, archetypeFile, basedir );
+    }
+
+    public void createArchetype( ArchetypeGenerationRequest request, File archetypeFile, String basedir )
+        throws ArchetypeDescriptorException, ArchetypeTemplateProcessingException
+    {
+        Map parameters = new HashMap();
+
+        parameters.put( "basedir", basedir );
+
+        parameters.put( "package", request.getPackage() );
+
+        parameters.put( "packageName", request.getPackage() );
+
+        parameters.put( "groupId", request.getGroupId() );
+
+        parameters.put( "artifactId", request.getArtifactId() );
+
+        parameters.put( "version", request.getVersion() );
 
         // ---------------------------------------------------------------------
         // Get Logger and display all parameters used
@@ -137,8 +143,8 @@ public class DefaultOldArchetype
             {
                 getLogger().info( "----------------------------------------------------------------------------" );
 
-                getLogger().info( "Using following parameters for creating OldArchetype: " + archetypeArtifactId + ":"
-                    + archetypeVersion );
+                getLogger().info( "Using following parameters for creating OldArchetype: "
+                                      + request.getArchetypeArtifactId() + ":" + request.getArchetypeVersion() );
 
                 getLogger().info( "----------------------------------------------------------------------------" );
 
@@ -177,7 +183,7 @@ public class DefaultOldArchetype
         {
             URL[] urls = new URL[1];
 
-            urls[0] = archetype.toURL();
+            urls[0] = archetypeFile.toURL();
 
             archetypeJarLoader = new URLClassLoader( urls );
 
@@ -213,9 +219,7 @@ public class DefaultOldArchetype
         //
         // ----------------------------------------------------------------------
 
-        String basedir = (String) parameters.get( "basedir" );
-
-        String artifactId = (String) parameters.get( "artifactId" );
+        String artifactId = request.getArtifactId();
 
         File parentPomFile = new File( basedir, ARCHETYPE_POM );
 

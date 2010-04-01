@@ -16,6 +16,7 @@ package org.apache.maven.archetype.old;
  * limitations under the License.
  */
 
+import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.repository.ArtifactRepository;
@@ -61,20 +62,6 @@ public class ArchetypeTest
     {
         FileUtils.deleteDirectory( getTestFile( "target/quickstart" ) );
 
-        Map parameters = new HashMap();
-
-        parameters.put( "name", "jason" );
-
-        parameters.put( "groupId", "maven" );
-
-        parameters.put( "artifactId", "quickstart" );
-
-        parameters.put( "version", "1.0-alpha-1-SNAPSHOT" );
-
-        parameters.put( "package", "org.apache.maven.quickstart" );
-
-        parameters.put( "basedir", getTestFile( "target" ).getAbsolutePath() );
-
         // ----------------------------------------------------------------------
         // This needs to be encapsulated in a maven test case.
         // ----------------------------------------------------------------------
@@ -94,15 +81,33 @@ public class ArchetypeTest
 
         remoteRepositories.add( remoteRepository );
 
-        String archetypeGroupId = "org.apache.maven.archetypes";
-        String archetypeArtifactId = "maven-archetype-quickstart";
-        String archetypeVersion = "1.0-alpha-1-SNAPSHOT";
-        archetype.createArchetype( archetypeGroupId, archetypeArtifactId, archetypeVersion, remoteRepository, localRepository,
-                                   remoteRepositories, parameters );
+        ArchetypeGenerationRequest request = new ArchetypeGenerationRequest()
+            .setPackage( "org.apache.maven.quickstart" )
+            .setGroupId( "maven" )
+            .setArtifactId( "quickstart" )
+            .setVersion( "1.0-alpha-1-SNAPSHOT" )
+            .setArchetypeGroupId( "org.apache.maven.archetypes" )
+            .setArchetypeArtifactId( "maven-archetype-quickstart" )
+            .setArchetypeVersion( "1.0-alpha-1-SNAPSHOT" )
+            .setLocalRepository( localRepository )
+            .setRemoteArtifactRepositories( remoteRepositories );
+        //parameters.put( "name", "jason" );
+
+        String basedir = getTestFile( "target" ).getAbsolutePath();
+
+        archetype.createArchetype( request, remoteRepository, basedir );
 
         // ----------------------------------------------------------------------
         // Set up the Velocity context
         // ----------------------------------------------------------------------
+
+        Map parameters = new HashMap();
+        parameters.put( "basedir", basedir );
+        parameters.put( "package", request.getPackage() );
+        parameters.put( "packageName", request.getPackage() );
+        parameters.put( "groupId", request.getGroupId() );
+        parameters.put( "artifactId", request.getArtifactId() );
+        parameters.put( "version", request.getVersion() );
 
         Context context = new VelocityContext();
 
@@ -120,8 +125,8 @@ public class ArchetypeTest
         // ----------------------------------------------------------------------
 
         ArtifactFactory artifactFactory = (ArtifactFactory) lookup( ArtifactFactory.class.getName() );
-        Artifact archetypeArtifact = artifactFactory.createArtifact( archetypeGroupId, archetypeArtifactId,
-                                                                     archetypeVersion, Artifact.SCOPE_RUNTIME, "jar" );
+        Artifact archetypeArtifact = artifactFactory.createArtifact( request.getArchetypeGroupId(), request.getArchetypeArtifactId(),
+                                                                     request.getArchetypeVersion(), Artifact.SCOPE_RUNTIME, "jar" );
 
         StringWriter writer = new StringWriter();
 

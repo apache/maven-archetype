@@ -21,8 +21,9 @@ package org.apache.maven.archetype.old;
 
 import org.apache.maven.artifact.repository.ArtifactRepository;
 
-import java.util.List;
-import java.util.Map;
+import java.io.File;
+
+import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 
 /**
@@ -42,8 +43,15 @@ public interface OldArchetype
     // TODO: delete this, it probably should be project.getFile instead
     String ARCHETYPE_POM = "pom.xml";
 
-    void createArchetype( String archetypeGroupId, String archetypeArtifactId, String archetypeVersion,
-                          ArtifactRepository archetypeRepository,
-                          ArtifactRepository localRepository, List remoteRepositories, Map parameters )
+    /**
+     * Download an archetype then create a project from it.
+     */
+    void createArchetype( ArchetypeGenerationRequest request, ArtifactRepository archetypeRepository, String basedir )
         throws UnknownArchetype, ArchetypeNotFoundException, ArchetypeDescriptorException, ArchetypeTemplateProcessingException;
+
+    /**
+     * Create a project from an archetype file.
+     */
+    void createArchetype( ArchetypeGenerationRequest request, File archetypeFile, String basedir )
+        throws ArchetypeDescriptorException, ArchetypeTemplateProcessingException;
 }
