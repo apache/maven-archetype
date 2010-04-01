@@ -103,7 +103,7 @@ public class DefaultOldArchetype
     // artifactId = maven-foo-archetype
     // version = latest
 
-    public void createArchetype( ArchetypeGenerationRequest request, ArtifactRepository archetypeRepository, String basedir )
+    public void createArchetype( ArchetypeGenerationRequest request, ArtifactRepository archetypeRepository )
         throws UnknownArchetype, ArchetypeNotFoundException, ArchetypeDescriptorException, ArchetypeTemplateProcessingException
     {
         // ----------------------------------------------------------------------
@@ -114,15 +114,15 @@ public class DefaultOldArchetype
                 request.getArchetypeGroupId(), request.getArchetypeArtifactId(), request.getArchetypeVersion(),
                 archetypeRepository, request.getLocalRepository(), request.getRemoteArtifactRepositories() );
 
-        createArchetype( request, archetypeFile, basedir );
+        createArchetype( request, archetypeFile );
     }
 
-    public void createArchetype( ArchetypeGenerationRequest request, File archetypeFile, String basedir )
+    public void createArchetype( ArchetypeGenerationRequest request, File archetypeFile )
         throws ArchetypeDescriptorException, ArchetypeTemplateProcessingException
     {
         Map parameters = new HashMap();
 
-        parameters.put( "basedir", basedir );
+        parameters.put( "basedir", request.getOutputDirectory() );
 
         parameters.put( "package", request.getPackage() );
 
@@ -221,7 +221,7 @@ public class DefaultOldArchetype
 
         String artifactId = request.getArtifactId();
 
-        File parentPomFile = new File( basedir, ARCHETYPE_POM );
+        File parentPomFile = new File( request.getOutputDirectory(), ARCHETYPE_POM );
 
         File outputDirectoryFile;
 
@@ -229,7 +229,7 @@ public class DefaultOldArchetype
         File pomFile;
         if ( parentPomFile.exists() && descriptor.isAllowPartial() && artifactId == null )
         {
-            outputDirectoryFile = new File( basedir );
+            outputDirectoryFile = new File( request.getOutputDirectory() );
             creating = false;
             pomFile = parentPomFile;
         }
@@ -241,7 +241,7 @@ public class DefaultOldArchetype
                     "Artifact ID must be specified when creating a new project from an archetype." );
             }
 
-            outputDirectoryFile = new File( basedir, artifactId );
+            outputDirectoryFile = new File( request.getOutputDirectory(), artifactId );
             creating = true;
 
             if ( outputDirectoryFile.exists() )

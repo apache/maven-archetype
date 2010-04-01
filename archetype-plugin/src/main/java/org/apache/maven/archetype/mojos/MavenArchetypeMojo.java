@@ -221,9 +221,10 @@ public class MavenArchetypeMojo
                 .setArchetypeArtifactId( archetypeArtifactId )
                 .setArchetypeVersion( archetypeVersion )
                 .setLocalRepository( localRepository )
-                .setRemoteArtifactRepositories( archetypeRemoteRepositories );
+                .setRemoteArtifactRepositories( archetypeRemoteRepositories )
+                .setOutputDirectory( basedir );
 
-            archetype.createArchetype( request, createRepository( "http://repo1.maven.org/maven2", "central" ), basedir );
+            archetype.createArchetype( request, createRepository( "http://repo1.maven.org/maven2", "central" ) );
         }
         catch ( UnknownArchetype e )
         {

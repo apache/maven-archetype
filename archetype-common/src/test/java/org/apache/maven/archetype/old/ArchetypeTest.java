@@ -90,19 +90,18 @@ public class ArchetypeTest
             .setArchetypeArtifactId( "maven-archetype-quickstart" )
             .setArchetypeVersion( "1.0-alpha-1-SNAPSHOT" )
             .setLocalRepository( localRepository )
-            .setRemoteArtifactRepositories( remoteRepositories );
+            .setRemoteArtifactRepositories( remoteRepositories )
+            .setOutputDirectory( getTestFile( "target" ).getAbsolutePath() );
         //parameters.put( "name", "jason" );
 
-        String basedir = getTestFile( "target" ).getAbsolutePath();
-
-        archetype.createArchetype( request, remoteRepository, basedir );
+        archetype.createArchetype( request, remoteRepository );
 
         // ----------------------------------------------------------------------
         // Set up the Velocity context
         // ----------------------------------------------------------------------
 
         Map parameters = new HashMap();
-        parameters.put( "basedir", basedir );
+        parameters.put( "basedir", request.getOutputDirectory() );
         parameters.put( "package", request.getPackage() );
         parameters.put( "packageName", request.getPackage() );
         parameters.put( "groupId", request.getGroupId() );
