@@ -207,16 +207,25 @@ public class IntegrationTestMojo
             String basedir = goalFile.getParentFile().getPath() + "/project";
 
             FileUtils.mkdir( basedir );
-            // TODO: fix this to use request
+
             ArchetypeGenerationRequest request = new ArchetypeGenerationRequest()
-                .setOutputDirectory( basedir );
+                .setArchetypeGroupId( project.getGroupId() )
+                .setArchetypeArtifactId( project.getArtifactId() )
+                .setArchetypeVersion( project.getVersion() )
+                .setGroupId( properties.getProperty( Constants.GROUP_ID ) )
+                .setArtifactId( properties.getProperty( Constants.ARTIFACT_ID ) )
+                .setVersion( properties.getProperty( Constants.VERSION ) )
+                .setPackage( properties.getProperty( Constants.PACKAGE ) )
+                .setOutputDirectory( basedir )
+                .setProperties( properties );
+
             ArchetypeGenerationResult result = new ArchetypeGenerationResult();
 
             archetypeGenerator.generateArchetype( request, archetypeFile, result );
 
             File reference = new File( goalFile.getParentFile(), "reference" );
 
-            assertTest( reference, new File( basedir, properties.getProperty( Constants.ARTIFACT_ID ) ) );
+            assertTest( reference, new File( basedir, request.getArtifactId() ) );
 
             if ( result.getCause() != null )
             {
@@ -233,6 +242,7 @@ public class IntegrationTestMojo
         throws IOException
     {
         File propertiesFile = new File( goalFile.getParentFile(), "archetype.properties" );
+        System.out.println( propertiesFile );
 
         return loadProperties( propertiesFile );
     }
