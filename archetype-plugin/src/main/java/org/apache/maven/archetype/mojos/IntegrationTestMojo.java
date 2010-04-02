@@ -127,6 +127,7 @@ public class IntegrationTestMojo
 
         boolean fileNamesEquals = CollectionUtils.isEqualCollection( referenceFiles, projectFiles );
 
+        if ( !fileNamesEquals )
         {
             for ( Iterator refs = referenceFiles.iterator(); refs.hasNext(); )
             {
@@ -139,14 +140,11 @@ public class IntegrationTestMojo
                 }
                 else
                 {
-                    getLog().debug( "Not contained " + ref );
+                    getLog().error( "Not contained " + ref );
                 }
             }
-            getLog().debug( "Remains " + projectFiles );
-        }
+            getLog().error( "Remains " + projectFiles );
 
-        if ( !fileNamesEquals )
-        {
             throw new IntegrationTestFailure( "Reference and generated project differs" );
         }
 
@@ -225,7 +223,11 @@ public class IntegrationTestMojo
 
             File reference = new File( goalFile.getParentFile(), "reference" );
 
-            assertTest( reference, new File( basedir, request.getArtifactId() ) );
+            if ( reference.exists() )
+            {
+                // compare generated project with reference
+                assertTest( reference, new File( basedir, request.getArtifactId() ) );
+            }
 
             if ( result.getCause() != null )
             {
