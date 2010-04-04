@@ -25,6 +25,7 @@ import org.apache.maven.archetype.old.descriptor.ArchetypeDescriptorBuilder;
 import org.apache.maven.archetype.old.descriptor.TemplateDescriptor;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
+import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
@@ -124,15 +125,15 @@ public class DefaultOldArchetype
 
         parameters.put( "basedir", request.getOutputDirectory() );
 
-        parameters.put( "package", request.getPackage() );
+        parameters.put( Constants.PACKAGE, request.getPackage() );
 
         parameters.put( "packageName", request.getPackage() );
 
-        parameters.put( "groupId", request.getGroupId() );
+        parameters.put( Constants.GROUP_ID, request.getGroupId() );
 
-        parameters.put( "artifactId", request.getArtifactId() );
+        parameters.put( Constants.ARTIFACT_ID, request.getArtifactId() );
 
-        parameters.put( "version", request.getVersion() );
+        parameters.put( Constants.VERSION, request.getVersion() );
 
         // ---------------------------------------------------------------------
         // Get Logger and display all parameters used
@@ -262,13 +263,13 @@ public class DefaultOldArchetype
 
         if ( creating )
         {
-            if ( parameters.get( "groupId" ) == null )
+            if ( request.getGroupId() == null )
             {
                 throw new ArchetypeTemplateProcessingException(
                     "Group ID must be specified when creating a new project from an archetype." );
             }
 
-            if ( parameters.get( "version" ) == null )
+            if ( request.getVersion() == null )
             {
                 throw new ArchetypeTemplateProcessingException(
                     "Version must be specified when creating a new project from an archetype." );
@@ -277,7 +278,7 @@ public class DefaultOldArchetype
 
         String outputDirectory = outputDirectoryFile.getAbsolutePath();
 
-        String packageName = (String) parameters.get( "package" );
+        String packageName = request.getPackage();
 
         // ----------------------------------------------------------------------
         // Set up the Velocity context
@@ -285,7 +286,7 @@ public class DefaultOldArchetype
 
         Context context = new VelocityContext();
 
-        context.put( "package", packageName );
+        context.put( Constants.PACKAGE, packageName );
 
         for ( Iterator iterator = parameters.keySet().iterator(); iterator.hasNext(); )
         {
