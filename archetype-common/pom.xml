@@ -170,7 +170,7 @@ under the License.
       <plugin>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-maven-plugin</artifactId>
-        <version>1.1</version><!-- cannot use 1.2 due to MODELLO-234 -->
+        <version>1.3</version>
         <configuration>
           <version>1.0.0</version>
           <models>
