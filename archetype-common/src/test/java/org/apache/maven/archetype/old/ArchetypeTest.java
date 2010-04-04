@@ -235,46 +235,81 @@ public class ArchetypeTest
     public void testAddModuleToParentPOM()
         throws DocumentException, IOException, ArchetypeTemplateProcessingException
     {
-        String pom = "<project>\n  <packaging>pom</packaging>\n</project>";
+        String pom = "<project>\n"
+            + "  <packaging>pom</packaging>\n"
+            + "</project>";
 
         StringWriter out = new StringWriter();
         assertTrue( DefaultOldArchetype.addModuleToParentPom( "myArtifactId1", new StringReader( pom ), out ) );
 
-        assertEquals( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + "<project>\n" +
-            "  <packaging>pom</packaging>\n" + "  <modules>\n" + "    <module>myArtifactId1</module>\n" +
-            "  </modules>\n" + "</project>", out.toString() );
+        assertEquals(
+                     "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                     + "<project>\n"
+                     + "  <packaging>pom</packaging>\n"
+                     + "  <modules>\n"
+                     + "    <module>myArtifactId1</module>\n"
+                     + "  </modules>\n"
+                     + "</project>", out.toString() );
 
-        pom = "<project>\n  <modelVersion>4.0.0</modelVersion>\n" + "  <packaging>pom</packaging>\n" + "</project>";
+        pom = "<project>\n"
+            + "  <modelVersion>4.0.0</modelVersion>\n"
+            + "  <packaging>pom</packaging>\n"
+            + "</project>";
 
         out = new StringWriter();
         assertTrue( DefaultOldArchetype.addModuleToParentPom( "myArtifactId2", new StringReader( pom ), out ) );
 
-        assertEquals( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + "<project>\n" +
-            "  <modelVersion>4.0.0</modelVersion>\n" + "  <packaging>pom</packaging>\n" + "  <modules>\n" +
-            "    <module>myArtifactId2</module>\n" + "  </modules>\n" + "</project>", out.toString() );
+        assertEquals( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                      + "<project>\n"
+                      + "  <modelVersion>4.0.0</modelVersion>\n"
+                      + "  <packaging>pom</packaging>\n"
+                      + "  <modules>\n"
+                      + "    <module>myArtifactId2</module>\n"
+                      + "  </modules>\n"
+                      + "</project>", out.toString() );
 
-        pom = "<project><modelVersion>4.0.0</modelVersion>\n" + "  <packaging>pom</packaging>\n" + "  <modules>\n" +
-            "  </modules>\n" + "</project>";
+        pom = "<project><modelVersion>4.0.0</modelVersion>\n"
+            + "  <packaging>pom</packaging>\n"
+            + "  <modules>\n"
+            + "  </modules>\n"
+            + "</project>";
 
         out = new StringWriter();
         assertTrue( DefaultOldArchetype.addModuleToParentPom( "myArtifactId3", new StringReader( pom ), out ) );
 
-        assertEquals( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project><modelVersion>4.0.0</modelVersion>\n" +
-            "  <packaging>pom</packaging>\n" + "  <modules>\n" + "    <module>myArtifactId3</module>\n" +
-            "  </modules>\n" + "</project>", out.toString() );
+        assertEquals( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                      + "<project><modelVersion>4.0.0</modelVersion>\n"
+                      + "  <packaging>pom</packaging>\n"
+                      + "  <modules>\n"
+                      + "    <module>myArtifactId3</module>\n"
+                      + "  </modules>\n"
+                      + "</project>", out.toString() );
 
-        pom = "<project><modelVersion>4.0.0</modelVersion>\n" + "  <packaging>pom</packaging>\n" + "  <modules>\n" +
-            "    <module>myArtifactId3</module>\n" + "  </modules>\n" + "</project>";
+        pom = "<project><modelVersion>4.0.0</modelVersion>\n"
+            + "  <packaging>pom</packaging>\n"
+            + "  <modules>\n"
+            + "    <module>myArtifactId3</module>\n"
+            + "  </modules>\n"
+            + "</project>";
 
         out = new StringWriter();
         assertTrue( DefaultOldArchetype.addModuleToParentPom( "myArtifactId4", new StringReader( pom ), out ) );
 
-        assertEquals( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project><modelVersion>4.0.0</modelVersion>\n" +
-            "  <packaging>pom</packaging>\n" + "  <modules>\n" + "    <module>myArtifactId3</module>\n" +
-            "    <module>myArtifactId4</module>\n" + "  </modules>\n" + "</project>", out.toString() );
+        assertEquals( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                      + "<project><modelVersion>4.0.0</modelVersion>\n"
+                      + "  <packaging>pom</packaging>\n"
+                      + "  <modules>\n"
+                      + "    <module>myArtifactId3</module>\n"
+                      + "    <module>myArtifactId4</module>\n"
+                      + "  </modules>\n"
+                      + "</project>", out.toString() );
 
-        pom = "<project><modelVersion>4.0.0</modelVersion>\n" + "  <packaging>pom</packaging>\n" + "  <modules>\n" +
-            "    <module>myArtifactId3</module>\n" + "  </modules>\n" + "</project>";
+        pom = "<project><modelVersion>4.0.0</modelVersion>\n"
+            + "  <packaging>pom</packaging>\n"
+            + "  <modules>\n"
+            + "    <module>myArtifactId3</module>\n"
+            + "  </modules>\n"
+            + "</project>";
 
         out = new StringWriter();
         assertFalse( DefaultOldArchetype.addModuleToParentPom( "myArtifactId3", new StringReader( pom ), out ) );
