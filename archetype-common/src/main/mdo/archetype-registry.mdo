@@ -26,10 +26,7 @@
   <description>
     <![CDATA[
     <p>This is a reference for the Archetype Registry descriptor.</p>
-    <p>The registry is stored in <code>~/.m2/archetype.xml</code> file.</p>
-    <p>An XSD is available at
-    <a href="http://maven.apache.org/xsd/archetype-registry-1.0.0.xsd">http://maven.apache.org/xsd/archetype-registry-1.0.0.xsd</a>.
-    </p>]]>
+    <p>The registry is stored in <code>~/.m2/archetype.xml</code> file.</p>]]>
   </description>
 
   <defaults>
