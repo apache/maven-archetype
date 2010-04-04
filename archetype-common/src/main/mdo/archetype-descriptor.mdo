@@ -27,10 +27,7 @@
     <![CDATA[
     <p>This is a reference for the Archetype descriptor used to describe archetypes's metadata.</p>
     <p>The metadata about an archetype is stored in the <code>archetype-metadata.xml</code> file located
-    in the <code>META-INF/maven</code> directory of its jar file.</p>
-    <p>An XSD is available at
-    <a href="http://maven.apache.org/xsd/archetype-descriptor-1.0.0.xsd">http://maven.apache.org/xsd/archetype-descriptor-1.0.0.xsd</a>.
-    </p>]]>
+    in the <code>META-INF/maven</code> directory of its jar file.</p>]]>
   </description>
 
   <defaults>

@@ -36,10 +36,7 @@
       <li><code>remote</code> represents the <code>http://repo1.maven.org/maven2/archetype-catalog.xml</code> catalog file.</li>
     </ul>
     <p>The Archetype Plugin can also read catalogs from filesystem/HTTP by providing the path/URL of a catalog file or
-    of a directory containing an <code>archetype-catalog.xml</code> file.</p>
-    <p>An XSD is available at
-    <a href="http://maven.apache.org/xsd/archetype-catalog-1.0.0.xsd">http://maven.apache.org/xsd/archetype-catalog-1.0.0.xsd</a>.
-    </p>]]>
+    of a directory containing an <code>archetype-catalog.xml</code> file.</p>]]>
   </description>
 
   <defaults>
