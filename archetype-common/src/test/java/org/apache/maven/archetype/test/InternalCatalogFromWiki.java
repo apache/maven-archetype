@@ -33,6 +33,7 @@ import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
+import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.WriterFactory;
 
 import java.io.File;
@@ -146,6 +147,7 @@ public class InternalCatalogFromWiki
         int count = 1;
 
         List errors = new ArrayList();
+        List warnings = new ArrayList();
 
         for ( Iterator archetypes = ac.getArchetypes().iterator(); archetypes.hasNext(); )
         {
@@ -165,14 +167,14 @@ public class InternalCatalogFromWiki
                 ar.setRepository( CENTRAL );
             }
 
-            ArchetypeGenerationResult generationResult = testArchetype( count, ar );
+            ArchetypeGenerationResult releaseGenerationResult = testArchetype( count, ar );
 
-            if ( generationResult.getCause() != null )
+            if ( releaseGenerationResult.getCause() != null )
             {
                 // RELEASE version failed: try with the version specified in the Wiki
                 ar.setVersion( a.getVersion() );
 
-                generationResult = testArchetype( count, ar );
+                ArchetypeGenerationResult generationResult = testArchetype( count, ar );
 
                 if ( generationResult.getCause() == null )
                 {
@@ -180,20 +182,24 @@ public class InternalCatalogFromWiki
                         && !( ar.getVersion().indexOf( "snapshot" ) > 0 ) )
                     {
                         validArchetypes.add( ar );
-                    }
-                    else
-                    {
-                        System.err.println( "???????????" );
+
+                        warnings.add( "#" + count + ' ' + ar + ": RELEASE version not available - "
+                            + releaseGenerationResult.getCause().getMessage() );
                     }
                 }
                 else
                 {
-                    errors.add( ar + " " + generationResult.getCause().getMessage() );
+                    errors.add( "#" + count + ' ' + ar + ' ' + generationResult.getCause().getMessage() );
                 }
             }
             else
             {
                 validArchetypes.add( ar );
+
+                if ( !"RELEASE".equals( a.getVersion() ) )
+                {
+                    warnings.add( "#" + count + ' ' + ar + ": Wiki page mentions " + a.getVersion() +", should be empty since RELEASE is ok." );
+                }
             }
 
             if ( CENTRAL.equals( ar.getRepository() ) )
@@ -247,6 +253,16 @@ public class InternalCatalogFromWiki
             System.err.println();
             System.err.println( "Got " + errors.size() + " error message(s): " );
             for ( Iterator iterator = errors.iterator(); iterator.hasNext(); )
+            {
+                System.err.println( "  " + iterator.next() );
+            }
+        }
+
+        if ( warnings.size() > 0 )
+        {
+            System.err.println();
+            System.err.println( "Warnings: " );
+            for ( Iterator iterator = warnings.iterator(); iterator.hasNext(); )
             {
                 System.err.println( "  " + iterator.next() );
             }
