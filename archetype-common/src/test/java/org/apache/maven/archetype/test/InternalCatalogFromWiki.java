@@ -50,7 +50,7 @@ import java.util.Properties;
 public class InternalCatalogFromWiki
     extends PlexusTestCase
 {
-    private static final String CENTRAL = "http://repo1.apache.org/maven2";
+    private static final String CENTRAL = "http://repo1.maven.org/maven2";
 
     private ArtifactRepository localRepository;
 
@@ -182,7 +182,7 @@ public class InternalCatalogFromWiki
                     {
                         validArchetypes.add( ar );
 
-                        warnings.add( "#" + count + ' ' + ar + ": " + releaseGenerationResult.getCause().getMessage() );
+                        warnings.add( "#" + count + ' ' + ar + ": error for RELEASE - " + releaseGenerationResult.getCause().getMessage() );
                     }
                 }
                 else
