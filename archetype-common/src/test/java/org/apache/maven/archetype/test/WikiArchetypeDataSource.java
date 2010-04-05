@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.test;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -16,8 +18,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
-package org.apache.maven.archetype.test;
 
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
@@ -42,7 +42,7 @@ import java.util.regex.Pattern;
  * @plexus.component  role-hint="wiki"
  */
 public class WikiArchetypeDataSource
-implements ArchetypeDataSource
+    implements ArchetypeDataSource
 {
     private static String DEFAULT_ARCHETYPE_INVENTORY_PAGE =
         "http://docs.codehaus.org/pages/viewpagesrc.action?pageId=48400";
@@ -59,7 +59,7 @@ implements ArchetypeDataSource
     }
 
     public ArchetypeCatalog getArchetypeCatalog( Properties properties )
-    throws ArchetypeDataSourceException
+        throws ArchetypeDataSourceException
     {
         ArchetypeCatalog ac = new ArchetypeCatalog();
         ac.setArchetypes( getArchetypes( properties ) );
@@ -67,11 +67,11 @@ implements ArchetypeDataSource
     }
 
     public List getArchetypes( Properties properties )
-    throws ArchetypeDataSourceException
+        throws ArchetypeDataSourceException
     {
         String url = properties.getProperty( "url" );
 
-        if( url == null )
+        if ( url == null )
         {
             url = DEFAULT_ARCHETYPE_INVENTORY_PAGE;
         }
@@ -95,11 +95,9 @@ implements ArchetypeDataSource
                 sb.append( buffer, 0, len );
             }
         }
-        catch( IOException e )
+        catch ( IOException e )
         {
-            throw new ArchetypeDataSourceException(
-                "Error retrieving list of archetypes from " + url
-            );
+            throw new ArchetypeDataSourceException( "Error retrieving list of archetypes from " + url );
         }
 
         Pattern ptn =
@@ -109,7 +107,7 @@ implements ArchetypeDataSource
 
         Matcher m = ptn.matcher( sb.toString() );
 
-        while( m.find() )
+        while ( m.find() )
         {
             Archetype archetype = new Archetype();
 
@@ -119,7 +117,7 @@ implements ArchetypeDataSource
 
             String version = m.group( 3 ).trim();
 
-            if( version.equals( "" ) )
+            if ( version.equals( "" ) )
             {
                 version = "RELEASE";
             }
@@ -136,7 +134,7 @@ implements ArchetypeDataSource
     }
 
     public void updateCatalog( Properties properties, Archetype archetype )
-    throws ArchetypeDataSourceException
+        throws ArchetypeDataSourceException
     {
         throw new UnsupportedOperationException( "Not supported yet." );
     }
