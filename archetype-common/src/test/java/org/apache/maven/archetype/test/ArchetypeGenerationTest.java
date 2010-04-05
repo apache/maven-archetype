@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.test;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -16,8 +18,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
-package org.apache.maven.archetype.test;
 
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
@@ -49,7 +49,7 @@ public class ArchetypeGenerationTest
             new File( getBasedir(), "target/test-classes/repositories/local" )
                 .toURI().toURL().toExternalForm(), "local-repo" );
 
-        ArchetypeCatalog catalog = archetype.getLocalCatalog( 
+        ArchetypeCatalog catalog = archetype.getLocalCatalog(
             new File( getBasedir(), "target/test-classes/repositories/central" ).getAbsolutePath()
                  );
 
@@ -57,7 +57,7 @@ public class ArchetypeGenerationTest
         // Here I am just grabbing a OldArchetype but in a UI you would take the OldArchetype objects and present
         // them to the user.
 
-        org.apache.maven.archetype.catalog.Archetype selection = (org.apache.maven.archetype.catalog.Archetype) 
+        org.apache.maven.archetype.catalog.Archetype selection = (org.apache.maven.archetype.catalog.Archetype)
             catalog.getArchetypes().get( catalog.getArchetypes().size() - 1 );
 
         System.err.println( "Selected OldArchetype = " + selection );
@@ -74,7 +74,7 @@ public class ArchetypeGenerationTest
         // With the selected OldArchetype and the parameters you can create a generation request as follows:
         File outputDirectory = new File( getBasedir(), "target/test-classes/projects/archetyper-generate-1" );
         FileUtils.forceDelete(outputDirectory);
-        
+
         ArchetypeGenerationRequest agr = new ArchetypeGenerationRequest( selection )
             .setOutputDirectory( outputDirectory.getAbsolutePath() )
             .setLocalRepository( localRepository )
@@ -104,5 +104,5 @@ public class ArchetypeGenerationTest
             fail( result.getCause().getMessage() );
         }
     }
-    
+
 }

@@ -37,22 +37,22 @@ import org.codehaus.plexus.PlexusTestCase;
  * @author rafale
  */
 public class InternalCatalogArchetypesVerification
-        extends PlexusTestCase {
+    extends PlexusTestCase
+{
 
     public void testInternalCatalog()
-            throws Exception {
-        ArchetypeRegistryManager registryManager = (ArchetypeRegistryManager) lookup(ArchetypeRegistryManager.ROLE);
+        throws Exception
+    {
+        ArchetypeRegistryManager registryManager = (ArchetypeRegistryManager) lookup( ArchetypeRegistryManager.ROLE );
 
-        ArtifactRepository localRepository = registryManager.createRepository(new File(getBasedir(),
-                "target/test-classes/repositories/local").toURI().
-                toURL().
-                toExternalForm(),
+        ArtifactRepository localRepository = registryManager.createRepository( new File( getBasedir(),
+                "target/test-classes/repositories/local" ).toURI().toURL().toExternalForm(),
                 "local-repo");
 
-        File outputDirectory = new File(getBasedir(), "target/internal-archetypes-projects");
+        File outputDirectory = new File( getBasedir(), "target/internal-archetypes-projects" );
         outputDirectory.mkdirs();
 
-        Archetype archetype = (Archetype) lookup(Archetype.class.getName());
+        Archetype archetype = (Archetype) lookup( Archetype.class.getName() );
 
         ArchetypeCatalog result = archetype.getInternalCatalog();
 
@@ -60,45 +60,67 @@ public class InternalCatalogArchetypesVerification
         List archetypesRemoved = new ArrayList();
         Iterator archetypes = result.getArchetypes().iterator();
         int count = 1;
-        while (archetypes.hasNext()) {
+        while ( archetypes.hasNext() )
+        {
             org.apache.maven.archetype.catalog.Archetype a = (org.apache.maven.archetype.catalog.Archetype) archetypes.next();
             org.apache.maven.archetype.catalog.Archetype ar = new org.apache.maven.archetype.catalog.Archetype();
 
-            ar.setGroupId(a.getGroupId());
-            ar.setArtifactId(a.getArtifactId());
-            ar.setVersion("RELEASE");
-            ar.setDescription(a.getDescription());
-            ar.setGoals(a.getGoals());
-            ar.setProperties(a.getProperties());
-            ar.setRepository(a.getRepository());
-            if (ar.getRepository() == null) {
-                ar.setRepository("http://repo1.maven.org/maven2");
+            ar.setGroupId( a.getGroupId() );
+            ar.setArtifactId( a.getArtifactId() );
+            ar.setVersion( "RELEASE" );
+            ar.setDescription( a.getDescription() );
+            ar.setGoals( a.getGoals() );
+            ar.setProperties( a.getProperties() );
+            ar.setRepository( a.getRepository() );
+            if ( ar.getRepository() == null )
+            {
+                ar.setRepository( "http://repo1.maven.org/maven2" );
             }
-            System.err.println("\n\n\n\n\n\nTesting archetype " + ar);
-            ArchetypeGenerationRequest request = new ArchetypeGenerationRequest(ar).setGroupId("groupId" + count).setArtifactId("artifactId" + count).setVersion("version" + count).setPackage("package" + count).setOutputDirectory(outputDirectory.getPath()).setLocalRepository(localRepository);
-            ArchetypeGenerationResult generationResult = archetype.generateProjectFromArchetype(request);
-            if (generationResult != null && generationResult.getCause() != null) {
-                ar.setVersion(a.getVersion());
-                request = new ArchetypeGenerationRequest(ar).setGroupId("groupId" + count).setArtifactId("artifactId" + count).setVersion("version" + count).setPackage("package" + count).setOutputDirectory(outputDirectory.getPath()).setLocalRepository(localRepository);
-                generationResult = archetype.generateProjectFromArchetype(request);
-                if (generationResult != null && generationResult.getCause() != null) {
-                    archetypesRemoved.add(a);
-                } else {
-                    archetypesUsed.add(a);
+            System.err.println( "\n\n\n\n\n\nTesting archetype " + ar );
+            ArchetypeGenerationRequest request =
+                new ArchetypeGenerationRequest( ar )
+                .setGroupId( "groupId" + count )
+                .setArtifactId( "artifactId" + count )
+                .setVersion( "version" + count )
+                .setPackage( "package" + count )
+                .setOutputDirectory( outputDirectory.getPath() )
+                .setLocalRepository( localRepository );
+            ArchetypeGenerationResult generationResult = archetype.generateProjectFromArchetype( request );
+            if ( generationResult != null && generationResult.getCause() != null )
+            {
+                ar.setVersion( a.getVersion() );
+                request =
+                    new ArchetypeGenerationRequest( ar )
+                    .setGroupId( "groupId" + count )
+                    .setArtifactId( "artifactId" + count )
+                    .setVersion( "version" + count )
+                    .setPackage( "package" + count )
+                    .setOutputDirectory( outputDirectory.getPath() )
+                    .setLocalRepository( localRepository );
+                generationResult = archetype.generateProjectFromArchetype( request );
+                if ( generationResult != null && generationResult.getCause() != null )
+                {
+                    archetypesRemoved.add( a );
                 }
-            } else {
-                archetypesUsed.add(a);
+                else
+                {
+                    archetypesUsed.add( a );
+                }
+            }
+            else
+            {
+                archetypesUsed.add( a );
             }
             count++;
-            System.err.println("\n\n\n\n\n");
+            System.err.println( "\n\n\n\n\n" );
         }
-        result.setArchetypes(archetypesUsed);
+        result.setArchetypes( archetypesUsed );
 
         StringWriter sw = new StringWriter();
         ArchetypeCatalogXpp3Writer acxw = new ArchetypeCatalogXpp3Writer();
-        acxw.write(sw, result);
+        acxw.write( sw, result );
 
-        System.err.println("Resulting catalog is\n" + sw.toString());
-        System.err.println("Removed archetypes are \n" + archetypesRemoved);
+        System.err.println( "Resulting catalog is\n" + sw.toString() );
+        System.err.println( "Removed archetypes are \n" + archetypesRemoved );
     }
 }
