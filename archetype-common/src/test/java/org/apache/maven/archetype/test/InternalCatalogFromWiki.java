@@ -231,6 +231,17 @@ public class InternalCatalogFromWiki
             IOUtil.close( writer );
         }
 
+        if ( warnings.size() > 0 )
+        {
+            System.err.println();
+            System.err.println( "Warnings: " );
+            for ( Iterator iterator = warnings.iterator(); iterator.hasNext(); )
+            {
+                System.err.println( "  " + iterator.next() );
+            }
+        }
+
+        System.err.println();
         System.err.println( "Resulting catalog file: " + catalog );
 
         System.err.println( "This catalog contains " + fac.getArchetypes().size() + " archetypes." );
@@ -253,16 +264,6 @@ public class InternalCatalogFromWiki
             System.err.println();
             System.err.println( "Got " + errors.size() + " error message(s): " );
             for ( Iterator iterator = errors.iterator(); iterator.hasNext(); )
-            {
-                System.err.println( "  " + iterator.next() );
-            }
-        }
-
-        if ( warnings.size() > 0 )
-        {
-            System.err.println();
-            System.err.println( "Warnings: " );
-            for ( Iterator iterator = warnings.iterator(); iterator.hasNext(); )
             {
                 System.err.println( "  " + iterator.next() );
             }
