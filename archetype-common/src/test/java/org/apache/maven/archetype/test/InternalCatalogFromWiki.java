@@ -17,12 +17,6 @@ package org.apache.maven.archetype.test;
  *  under the License.
  */
 
-import java.io.File;
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
 import org.apache.maven.archetype.catalog.Archetype;
@@ -30,74 +24,131 @@ import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Writer;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
+import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.archetype.metadata.ArchetypeDescriptor;
 import org.apache.maven.archetype.metadata.RequiredProperty;
 import org.apache.maven.archetype.source.ArchetypeDataSource;
+import org.apache.maven.archetype.source.ArchetypeDataSourceException;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.util.FileUtils;
+
+import java.io.File;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Properties;
 
 /**
+ * Generate catalog content from Wiki to replace internal catalog.
  *
  * @author rafale
  */
 public class InternalCatalogFromWiki
     extends PlexusTestCase
 {
+    private static final String CENTRAL = "http://repo1.apache.org/maven2";
+
+    private ArtifactRepository localRepository;
+
+    private ArchetypeArtifactManager aam;
+
+    private ArchetypeRegistryManager arm;
+
+    private org.apache.maven.archetype.Archetype plexusarchetype;
+
+    private File outputDirectory;
+
+    private ArchetypeCatalog fetchArchetypeCatalogFromWiki()
+        throws ArchetypeDataSourceException
+    {
+        // ArchetypeDataSource ads =  (ArchetypeDataSource) lookup( ArchetypeDataSource.ROLE, "wiki" );
+        ArchetypeDataSource ads = new WikiArchetypeDataSource();
+
+        // fetch and parse Wiki page content
+        ArchetypeCatalog ac = ads.getArchetypeCatalog( new Properties() );
+
+        for ( Iterator archetypes = ac.getArchetypes().iterator(); archetypes.hasNext(); )
+        {
+            Archetype archetype = (Archetype) archetypes.next();
+
+            if ( archetype.getRepository() != null
+                && archetype.getRepository().indexOf( CENTRAL.substring( 7 ) ) >= 0 )
+            {
+                archetype.setRepository( null );
+            }
+        }
+
+        System.out.println( "found " + ac.getArchetypes().size() + " archetypes on http://docs.codehaus.org/display/MAVENUSER/Archetypes+List" );
+
+        for ( Iterator archetypes = ac.getArchetypes().iterator(); archetypes.hasNext(); )
+        {
+            Archetype archetype = (Archetype) archetypes.next();
+            System.out.println( "  " + archetype );
+        }
+
+        return ac;
+    }
+
+    private ArchetypeGenerationResult testArchetype( int count, Archetype archetype )
+        throws UnknownArchetype
+    {
+        System.out.println( "\n\nTesting archetype #" + count + ": " + archetype );
+
+        ArchetypeGenerationRequest request =
+            new ArchetypeGenerationRequest( archetype )
+            .setGroupId( "groupId" + count )
+            .setArtifactId( "artifactId" + count + "-" + archetype.getArtifactId() )
+            .setVersion( "version" + count )
+            .setPackage( "package" + count )
+            .setOutputDirectory( outputDirectory.getPath() )
+            .setLocalRepository( localRepository );
+
+        Properties properties = new Properties();
+
+        ArtifactRepository repository =
+            arm.createRepository( archetype.getRepository(), archetype.getRepository() + "-repo" );
+
+        if ( aam.isFileSetArchetype( archetype.getGroupId(), archetype.getArtifactId(), archetype.getVersion(),
+                                     repository, localRepository, new ArrayList( /* repositories */) ) )
+        {
+            ArchetypeDescriptor descriptor =
+                aam.getFileSetArchetypeDescriptor( archetype.getGroupId(), archetype.getArtifactId(),
+                                                   archetype.getVersion(), repository, localRepository,
+                                                   new ArrayList( /* repositories */) );
+
+            for ( Iterator required = descriptor.getRequiredProperties().iterator(); required.hasNext(); )
+            {
+                RequiredProperty prop = (RequiredProperty) required.next();
+
+                properties.setProperty( prop.getKey(), prop.getDefaultValue() != null
+                    && !"".equals( prop.getDefaultValue() ) ? prop.getDefaultValue() : "test-value" );
+            }
+
+        }
+        request.setProperties( properties );
+
+        return plexusarchetype.generateProjectFromArchetype( request );
+    }
 
     public void testInternalCatalog()
         throws Exception
     {
-        ArchetypeRegistryManager registryManager = (ArchetypeRegistryManager) lookup( ArchetypeRegistryManager.ROLE );
+        ArchetypeCatalog ac = fetchArchetypeCatalogFromWiki();
 
-        ArtifactRepository localRepository = registryManager.createRepository( new File( getBasedir(),
-                "target/test-classes/repositories/local" ).toURI().toURL().toExternalForm(),
-                "local-repo");
+        System.out.println( "Testing archetypes to " + outputDirectory.getPath() );
 
-        File outputDirectory = new File( getBasedir(), "target/internal-archetypes-projects" );
-        outputDirectory.mkdirs();
+        List validArchetypes = new ArrayList();
 
-        org.apache.maven.archetype.Archetype plexusarchetype =
-            (org.apache.maven.archetype.Archetype) lookup( org.apache.maven.archetype.Archetype.class.getName() );
-        ArchetypeArtifactManager aam = (ArchetypeArtifactManager) lookup( ArchetypeArtifactManager.class.getName() );
-        ArchetypeRegistryManager arm = (ArchetypeRegistryManager) lookup( ArchetypeRegistryManager.class.getName() );
-
-//        ArchetypeDataSource ads =  (ArchetypeDataSource) lookup( ArchetypeDataSource.ROLE, "wiki" );
-        ArchetypeDataSource ads = new WikiArchetypeDataSource();
-
-        ArchetypeCatalog ac = ads.getArchetypeCatalog( new Properties() );
-        List modifiedArchetypes = new ArrayList();
-        Iterator archetypes = ac.getArchetypes().iterator();
-        while ( archetypes.hasNext() )
-        {
-            Archetype archetype = (Archetype) archetypes.next();
-            if ( archetype.getRepository() != null
-                && archetype.getRepository().indexOf( "repo1.apache.org/maven2" ) >= 0 )
-            {
-                archetype.setRepository( null );
-            }
-            modifiedArchetypes.add( archetype );
-        }
-        ac.setArchetypes( modifiedArchetypes );
-
-        System.out.println( "AR=" + ac.getArchetypes() );
-
-        StringWriter sw = new StringWriter();
-
-        ArchetypeCatalogXpp3Writer acxw = new ArchetypeCatalogXpp3Writer();
-        acxw.write( sw, ac );
-
-        System.out.println( "AC=" + sw.toString() );
-
-        List archetypesUsed = new ArrayList();
-        List archetypesRemoved = new ArrayList();
-        archetypes = ac.getArchetypes().iterator();
         int count = 1;
 
-        while ( archetypes.hasNext() )
+        List errors = new ArrayList();
+
+        for ( Iterator archetypes = ac.getArchetypes().iterator(); archetypes.hasNext(); )
         {
-            org.apache.maven.archetype.catalog.Archetype a =
-                (org.apache.maven.archetype.catalog.Archetype) archetypes.next();
-            org.apache.maven.archetype.catalog.Archetype ar = new org.apache.maven.archetype.catalog.Archetype();
+            Archetype a = (Archetype) archetypes.next();
+            Archetype ar = new Archetype();
 
             ar.setGroupId( a.getGroupId() );
             ar.setArtifactId( a.getArtifactId() );
@@ -109,116 +160,104 @@ public class InternalCatalogFromWiki
 
             if ( ar.getRepository() == null )
             {
-                ar.setRepository( "http://repo1.maven.org/maven2" );
+                ar.setRepository( CENTRAL );
             }
-            System.err.println( "\n\n\n\n\n\nTesting archetype " + ar );
-            ArchetypeGenerationRequest request =
-                new ArchetypeGenerationRequest( ar )
-                .setGroupId( "groupId" + count )
-                .setArtifactId( "artifactId" + count )
-                .setVersion( "version" + count )
-                .setPackage( "package" + count )
-                .setOutputDirectory( outputDirectory.getPath() )
-                .setLocalRepository( localRepository );
 
-            Properties properties = new Properties();
-            if ( aam.isFileSetArchetype( a.getGroupId(), a.getArtifactId(), "RELEASE",
-                                         arm.createRepository( a.getRepository(), a.getRepository() + "-repo" ),
-                                         localRepository, new ArrayList( /* repositories */) ) )
+            ArchetypeGenerationResult generationResult = testArchetype( count, ar );
+
+            if ( generationResult.getCause() != null )
             {
-                ArchetypeDescriptor descriptor =
-                    aam.getFileSetArchetypeDescriptor( a.getGroupId(), a.getArtifactId(), "RELEASE",
-                                                       arm.createRepository( a.getRepository(), a.getRepository()
-                                                           + "-repo" ), localRepository,
-                                                       new ArrayList( /* repositories */) );
-
-                Iterator required = descriptor.getRequiredProperties().iterator();
-                while ( required.hasNext() )
-                {
-                    RequiredProperty prop = (RequiredProperty) required.next();
-
-                    properties.setProperty( prop.getKey(), prop.getDefaultValue() != null
-                        && !"".equals( prop.getDefaultValue() ) ? prop.getDefaultValue() : "test-value" );
-                }
-
-            }
-            request.setProperties( properties );
-            ArchetypeGenerationResult generationResult = plexusarchetype.generateProjectFromArchetype( request );
-            if ( generationResult != null && generationResult.getCause() != null )
-            {
+                // RELEASE version failed: try with the version specified in the Wiki
                 ar.setVersion( a.getVersion() );
-                request =
-                    new ArchetypeGenerationRequest( ar )
-                    .setGroupId( "groupId" + count )
-                    .setArtifactId( "artifactId" + count )
-                    .setVersion( "version" + count )
-                    .setPackage( "package" + count )
-                    .setOutputDirectory( outputDirectory.getPath() )
-                    .setLocalRepository( localRepository );
 
-                properties = new Properties();
-                if ( aam.isFileSetArchetype( a.getGroupId(), a.getArtifactId(), a.getVersion(),
-                                             arm.createRepository( a.getRepository(), a.getRepository() + "-repo" ),
-                                             localRepository, new ArrayList( /* repositories */) ) )
+                generationResult = testArchetype( count, ar );
+
+                if ( generationResult.getCause() == null )
                 {
-                    ArchetypeDescriptor descriptor =
-                        aam.getFileSetArchetypeDescriptor( a.getGroupId(), a.getArtifactId(), a.getVersion(),
-                                                           arm.createRepository( a.getRepository(), a.getRepository()
-                                                               + "-repo" ), localRepository,
-                                                           new ArrayList( /* repositories */) );
-
-                    Iterator required = descriptor.getRequiredProperties().iterator();
-                    while ( required.hasNext() )
-                    {
-                        RequiredProperty prop = (RequiredProperty) required.next();
-
-                        properties.setProperty( prop.getKey(), prop.getDefaultValue() != null
-                            && !"".equals( prop.getDefaultValue() ) ? prop.getDefaultValue() : "test-value" );
-                    }
-
-                }
-                request.setProperties( properties );
-                generationResult = plexusarchetype.generateProjectFromArchetype( request );
-                if ( generationResult != null && generationResult.getCause() != null )
-                {
-                    if ( "http://repo1.maven.org/maven2".equals( ar.getRepository() ) )
-                    {
-                        ar.setRepository( null );
-                    }
-                    // archetypesRemoved.add(ar);
-                }
-                else
-                {
-                    if ( "http://repo1.maven.org/maven2".equals( ar.getRepository() ) )
-                    {
-                        ar.setRepository( null );
-                    }
                     if ( !( ar.getVersion().indexOf( "SNAPSHOT" ) > 0 )
                         && !( ar.getVersion().indexOf( "snapshot" ) > 0 ) )
                     {
-                        archetypesUsed.add( ar );
+                        validArchetypes.add( ar );
                     }
+                    else
+                    {
+                        System.err.println( "???????????" );
+                    }
+                }
+                else
+                {
+                    errors.add( ar + " " + generationResult.getCause().getMessage() );
                 }
             }
             else
             {
-                if ( "http://repo1.maven.org/maven2".equals( ar.getRepository() ) )
-                {
-                    ar.setRepository( null );
-                }
-                archetypesUsed.add( ar );
+                validArchetypes.add( ar );
             }
-            count++;
-            System.err.println( "\n\n\n\n\n" );
-        }
-        ac = new ArchetypeCatalog();
-        ac.setArchetypes( archetypesUsed );
 
-        sw = new StringWriter();
-        acxw = new ArchetypeCatalogXpp3Writer();
-        acxw.write( sw, ac );
+            if ( CENTRAL.equals( ar.getRepository() ) )
+            {
+                ar.setRepository( null );
+            }
+
+            count++;
+
+            System.out.println( "\n\n" );
+        }
+
+        ArchetypeCatalog fac = new ArchetypeCatalog();
+        fac.setArchetypes( validArchetypes );
+
+        StringWriter sw = new StringWriter();
+        ArchetypeCatalogXpp3Writer acxw = new ArchetypeCatalogXpp3Writer();
+        acxw.write( sw, fac );
 
         System.err.println( "Resulting catalog is\n" + sw.toString() );
-        System.err.println( "Removed archetypes are \n" + archetypesRemoved );
+
+        System.err.println( "This catalog contains " + fac.getArchetypes().size() + " archetypes." );
+
+        if ( ac.getArchetypes().size() > fac.getArchetypes().size() )
+        {
+            System.err.println();
+            System.err.println( "Removed " + ( ac.getArchetypes().size() - fac.getArchetypes().size() )
+                + " archetype(s) from Wiki page:" );
+
+            List removedArchetypes = new ArrayList( ac.getArchetypes() );
+            removedArchetypes.removeAll( validArchetypes );
+
+            for ( Iterator archetypes = removedArchetypes.iterator(); archetypes.hasNext(); )
+            {
+                Archetype archetype = (Archetype) archetypes.next();
+                System.err.println( "  " + archetype );
+            }
+
+            System.err.println();
+            System.err.println( "Got " + errors.size() + " error message(s): " );
+            for ( Iterator iterator = errors.iterator(); iterator.hasNext(); )
+            {
+                System.err.println( "  " + iterator.next() );
+            }
+        }
+    }
+
+    public void setUp()
+        throws Exception
+    {
+        super.setUp();
+
+        ArchetypeRegistryManager registryManager = (ArchetypeRegistryManager) lookup( ArchetypeRegistryManager.ROLE );
+
+        File local = new File( getBasedir(), "target/test-classes/repositories/local" );
+        localRepository = registryManager.createRepository( local.toURI().toURL().toExternalForm(), "local-repo");
+
+        aam = (ArchetypeArtifactManager) lookup( ArchetypeArtifactManager.class.getName() );
+        arm = (ArchetypeRegistryManager) lookup( ArchetypeRegistryManager.class.getName() );
+
+        plexusarchetype =
+            (org.apache.maven.archetype.Archetype) lookup( org.apache.maven.archetype.Archetype.class.getName() );
+
+        outputDirectory = new File( getBasedir(), "target/internal-archetypes-projects" );
+        outputDirectory.mkdirs();
+
+        FileUtils.cleanDirectory( outputDirectory );
     }
 }
