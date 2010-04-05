@@ -183,8 +183,7 @@ public class InternalCatalogFromWiki
                     {
                         validArchetypes.add( ar );
 
-                        warnings.add( "#" + count + ' ' + ar + ": RELEASE version not available - "
-                            + releaseGenerationResult.getCause().getMessage() );
+                        warnings.add( "#" + count + ' ' + ar + ": " + releaseGenerationResult.getCause().getMessage() );
                     }
                 }
                 else
