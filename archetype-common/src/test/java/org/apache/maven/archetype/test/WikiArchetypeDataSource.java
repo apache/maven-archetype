@@ -23,11 +23,10 @@ import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.source.ArchetypeDataSource;
 import org.apache.maven.archetype.source.ArchetypeDataSourceException;
+import org.codehaus.plexus.util.IOUtil;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 
 import java.net.URL;
 
@@ -38,6 +37,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * An archetype data source getting its content from a Confluence Wiki page.
+ * By default, <a href="http://docs.codehaus.org/display/MAVENUSER/Archetypes+List">MAVENUSER/Archetypes List</a>
+ * is used.
+ *
  * @author            Jason van Zyl
  * @plexus.component  role-hint="wiki"
  */
@@ -78,34 +81,30 @@ public class WikiArchetypeDataSource
 
         List archetypes = new ArrayList();
 
-        StringBuffer sb = new StringBuffer();
-
+        String pageSource = "";
+        InputStream in = null;
         try
         {
-            InputStream in = new URL( cleanupUrl( url ) ).openStream();
+            in = new URL( cleanupUrl( url ) ).openStream();
 
-            BufferedReader reader = new BufferedReader( new InputStreamReader( in ) );
-
-            char[] buffer = new char[1024];
-
-            int len = 0;
-
-            while( ( len = reader.read( buffer ) ) > -1 )
-            {
-                sb.append( buffer, 0, len );
-            }
+            pageSource = IOUtil.toString( in );
         }
         catch ( IOException e )
         {
             throw new ArchetypeDataSourceException( "Error retrieving list of archetypes from " + url );
         }
+        finally
+        {
+            IOUtil.close( in );
+        }
 
+        // | ArtifactId | GroupId | Version | Repository | Description |
         Pattern ptn =
             Pattern.compile(
                 "<br>\\|([-a-zA-Z0-9_. ]+)\\|([-a-zA-Z0-9_. ]+)\\|([-a-zA-Z0-9_. ]+)\\|([-a-zA-Z0-9_.:/ \\[\\],]+)\\|([^|]+)\\|"
             );
 
-        Matcher m = ptn.matcher( sb.toString() );
+        Matcher m = ptn.matcher( pageSource );
 
         while ( m.find() )
         {
@@ -116,12 +115,10 @@ public class WikiArchetypeDataSource
             archetype.setGroupId( m.group( 2 ).trim() );
 
             String version = m.group( 3 ).trim();
-
             if ( version.equals( "" ) )
             {
                 version = "RELEASE";
             }
-
             archetype.setVersion( version );
 
             archetype.setRepository( cleanupUrl( m.group( 4 ).trim() ) );
