@@ -32,9 +32,11 @@ import org.apache.maven.archetype.source.ArchetypeDataSourceException;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.IOUtil;
+import org.codehaus.plexus.util.WriterFactory;
 
 import java.io.File;
-import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -207,11 +209,23 @@ public class InternalCatalogFromWiki
         ArchetypeCatalog fac = new ArchetypeCatalog();
         fac.setArchetypes( validArchetypes );
 
-        StringWriter sw = new StringWriter();
-        ArchetypeCatalogXpp3Writer acxw = new ArchetypeCatalogXpp3Writer();
-        acxw.write( sw, fac );
+        File catalog = new File( getBasedir(), "target/archetype-catalog.xml" );
+        Writer writer = null;
 
-        System.err.println( "Resulting catalog is\n" + sw.toString() );
+        try
+        {
+            writer = WriterFactory.newXmlWriter( catalog );
+
+            ArchetypeCatalogXpp3Writer acxw = new ArchetypeCatalogXpp3Writer();
+
+            acxw.write( writer, fac );
+        }
+        finally
+        {
+            IOUtil.close( writer );
+        }
+
+        System.err.println( "Resulting catalog file: " + catalog );
 
         System.err.println( "This catalog contains " + fac.getArchetypes().size() + " archetypes." );
 
