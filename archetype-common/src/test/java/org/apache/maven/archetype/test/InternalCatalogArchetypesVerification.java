@@ -23,9 +23,10 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import org.apache.maven.archetype.Archetype;
+import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
+import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Writer;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
@@ -52,7 +53,7 @@ public class InternalCatalogArchetypesVerification
         File outputDirectory = new File( getBasedir(), "target/internal-archetypes-projects" );
         outputDirectory.mkdirs();
 
-        Archetype archetype = (Archetype) lookup( Archetype.class.getName() );
+        ArchetypeManager archetype = (ArchetypeManager) lookup( ArchetypeManager.class.getName() );
 
         ArchetypeCatalog result = archetype.getInternalCatalog();
 
@@ -62,8 +63,8 @@ public class InternalCatalogArchetypesVerification
         int count = 1;
         while ( archetypes.hasNext() )
         {
-            org.apache.maven.archetype.catalog.Archetype a = (org.apache.maven.archetype.catalog.Archetype) archetypes.next();
-            org.apache.maven.archetype.catalog.Archetype ar = new org.apache.maven.archetype.catalog.Archetype();
+            Archetype a = (Archetype) archetypes.next();
+            Archetype ar = new Archetype();
 
             ar.setGroupId( a.getGroupId() );
             ar.setArtifactId( a.getArtifactId() );

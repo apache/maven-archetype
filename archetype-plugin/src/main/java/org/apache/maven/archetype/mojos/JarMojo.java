@@ -19,7 +19,7 @@ package org.apache.maven.archetype.mojos;
  * under the License.
  */
 
-import org.apache.maven.archetype.Archetype;
+import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -76,7 +76,7 @@ public class JarMojo
      *
      * @component
      */
-    private Archetype archetype;
+    private ArchetypeManager archetype;
 
     public void execute( )
         throws MojoExecutionException, MojoFailureException

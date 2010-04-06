@@ -21,6 +21,7 @@ package org.apache.maven.archetype.ui;
 
 import org.apache.commons.collections.iterators.ArrayIterator;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
+import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.common.ArchetypeDefinition;
 import org.apache.maven.archetype.exception.ArchetypeNotDefined;
@@ -52,7 +53,7 @@ public class DefaultArchetypeSelector
     /** @plexus.requirement */
     private ArchetypeSelectionQueryer archetypeSelectionQueryer;
     /** @plexus.requirement */
-    private org.apache.maven.archetype.Archetype archetype;
+    private ArchetypeManager archetype;
 
     public void selectArchetype( ArchetypeGenerationRequest request, Boolean interactiveMode, String catalogs )
         throws ArchetypeNotDefined, UnknownArchetype, UnknownGroup, IOException, PrompterException,
