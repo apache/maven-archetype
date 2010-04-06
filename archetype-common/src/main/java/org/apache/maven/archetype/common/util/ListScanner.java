@@ -138,6 +138,12 @@ public class ListScanner
             // Bazaar
             "**/.bzr", "**/.bzr/**",
 
+            // GIT
+            "**/.git", "**/.git/**",
+
+            // Mercurial
+            "**/.hg",  "**/.hg/**",
+
             // SurroundSCM
             "**/.MySCMServerInfo",
 
