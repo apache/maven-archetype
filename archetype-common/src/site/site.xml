@@ -23,8 +23,8 @@ under the License.
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0 http://maven.apache.org/xsd/decoration-1.0.0.xsd">
   <body>
-    <menu name="Links">
-      <item name="Archetypes List Wiki" href="http://docs.codehaus.org/display/MAVENUSER/Archetypes+List"/>
+    <menu name="Documentation">
+      <item name="Internal Catalog" href="./internal.html"/>
     </menu>
     <menu name="Reference">
       <item name="Archetype Descriptor" href="./archetype-descriptor.html"/>
