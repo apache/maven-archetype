@@ -19,6 +19,7 @@ package org.apache.maven.archetype.test;
 
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
+import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Writer;
@@ -58,7 +59,7 @@ public class InternalCatalogFromWiki
 
     private ArchetypeRegistryManager arm;
 
-    private org.apache.maven.archetype.Archetype plexusarchetype;
+    private ArchetypeManager plexusarchetype;
 
     private File outputDirectory;
 
@@ -282,7 +283,7 @@ public class InternalCatalogFromWiki
         arm = (ArchetypeRegistryManager) lookup( ArchetypeRegistryManager.class.getName() );
 
         plexusarchetype =
-            (org.apache.maven.archetype.Archetype) lookup( org.apache.maven.archetype.Archetype.class.getName() );
+            (org.apache.maven.archetype.ArchetypeManager) lookup( org.apache.maven.archetype.ArchetypeManager.class.getName() );
 
         outputDirectory = new File( getBasedir(), "target/internal-archetypes-projects" );
         outputDirectory.mkdirs();

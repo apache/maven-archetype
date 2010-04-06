@@ -19,6 +19,7 @@ package org.apache.maven.archetype.mojos;
  * under the License.
  */
 
+import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.ContextEnabled;
@@ -46,7 +47,7 @@ public class UpdateLocalCatalogMojo
     implements ContextEnabled
 {
     /** @component */
-    private org.apache.maven.archetype.Archetype archetyper;
+    private ArchetypeManager archetyper;
 
     /** @component role="org.apache.maven.archetype.source.ArchetypeDataSource" */
     private Map archetypeSources;

@@ -19,6 +19,7 @@ package org.apache.maven.archetype;
  * under the License.
  */
 
+import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.creator.ArchetypeCreator;
 import org.apache.maven.archetype.generator.ArchetypeGenerator;
@@ -41,9 +42,9 @@ import java.util.zip.ZipOutputStream;
  * @author Jason van Zyl
  * @plexus.component
  */
-public class DefaultArchetype
+public class DefaultArchetypeManager
     extends AbstractLogEnabled
-    implements Archetype
+    implements ArchetypeManager
 {
     /** @plexus.requirement role-hint="fileset" */
     private ArchetypeCreator creator;
@@ -199,12 +200,12 @@ public class DefaultArchetype
         }
     }
 
-    public void updateLocalCatalog( org.apache.maven.archetype.catalog.Archetype archetype )
+    public void updateLocalCatalog( Archetype archetype )
     {
         updateLocalCatalog( archetype, "${user.home}/.m2/archetype-catalog.xml" );
     }
 
-    public void updateLocalCatalog( org.apache.maven.archetype.catalog.Archetype archetype, String path )
+    public void updateLocalCatalog( Archetype archetype, String path )
     {
         try
         {

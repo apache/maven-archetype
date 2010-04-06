@@ -64,8 +64,7 @@ public class DefaultArchetypeSelectionQueryer
 
         for ( Iterator archetypeIterator = archetypes.iterator(); archetypeIterator.hasNext(); )
         {
-            org.apache.maven.archetype.catalog.Archetype archetype =
-                (org.apache.maven.archetype.catalog.Archetype) archetypeIterator.next();
+            Archetype archetype = (Archetype) archetypeIterator.next();
 
             answerMap.put( "" + counter, archetype );
             query +=
@@ -79,7 +78,7 @@ public class DefaultArchetypeSelectionQueryer
 
         String answer = prompter.prompt( query, answers );
 
-        return (org.apache.maven.archetype.catalog.Archetype) answerMap.get( answer );
+        return (Archetype) answerMap.get( answer );
     }
 
     public Archetype selectArchetype( Map catalogs )
@@ -106,8 +105,7 @@ public class DefaultArchetypeSelectionQueryer
             for ( Iterator archetypeIterator = ( (List) catalogs.get( catalog ) ).iterator();
                 archetypeIterator.hasNext(); )
             {
-                org.apache.maven.archetype.catalog.Archetype archetype =
-                    (org.apache.maven.archetype.catalog.Archetype) archetypeIterator.next();
+                Archetype archetype = (Archetype) archetypeIterator.next();
 
                 String mapKey = "" + counter;
                 String archetypeKey = archetype.getGroupId() + ":" + archetype.getArtifactId();
@@ -156,7 +154,7 @@ public class DefaultArchetypeSelectionQueryer
 
         if ( archetypeVersions.size() == 1 )
         {
-            return (org.apache.maven.archetype.catalog.Archetype) archetypeVersions.get( 0 );
+            return (Archetype) archetypeVersions.get( 0 );
         }
         else
         {
@@ -164,7 +162,7 @@ public class DefaultArchetypeSelectionQueryer
         }
     }
 
-    private org.apache.maven.archetype.catalog.Archetype selectVersion( List archetypes )
+    private Archetype selectVersion( List archetypes )
         throws PrompterException
     {
         String query = "Choose version: \n";
@@ -175,8 +173,8 @@ public class DefaultArchetypeSelectionQueryer
         {
             public int compare( Object o1, Object o2 )
             {
-                org.apache.maven.archetype.catalog.Archetype a1 = (org.apache.maven.archetype.catalog.Archetype) o1;
-                org.apache.maven.archetype.catalog.Archetype a2 = (org.apache.maven.archetype.catalog.Archetype) o2;
+                Archetype a1 = (Archetype) o1;
+                Archetype a2 = (Archetype) o2;
                 return a1.getVersion().compareTo( a2.getVersion() );
             }
         } );
@@ -184,8 +182,7 @@ public class DefaultArchetypeSelectionQueryer
         int counter = 1;
         for ( Iterator archetypeVersionsKeys = archetypes.iterator(); archetypeVersionsKeys.hasNext(); )
         {
-            org.apache.maven.archetype.catalog.Archetype archetype =
-                (org.apache.maven.archetype.catalog.Archetype) archetypeVersionsKeys.next();
+            Archetype archetype = (Archetype) archetypeVersionsKeys.next();
             String archetypeVersion = archetype.getVersion();
 
             answerMap.put( "" + counter, archetype );

@@ -19,10 +19,10 @@ package org.apache.maven.archetype;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.Writer;
 import java.net.URL;
 import org.apache.commons.io.IOUtils;
+import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Writer;
 import org.codehaus.cargo.container.deployable.DeployableType;
@@ -48,39 +48,31 @@ public class ArchetypeCatalogsTest
         throws Exception
     {
 
-        Archetype archetype = (Archetype) lookup( Archetype.class.getName() );
+        ArchetypeManager archetype = (ArchetypeManager) lookup( ArchetypeManager.class.getName() );
 
         ArchetypeCatalog result = archetype.getRemoteCatalog( "http://localhost:18881/repo/" );
 
         assertEquals( 1, result.getArchetypes().size() );
-        assertEquals( "groupId", ((org.apache.maven.archetype.catalog.Archetype) result.getArchetypes().
-            get( 0 )).getGroupId() );
-        assertEquals( "artifactId", ((org.apache.maven.archetype.catalog.Archetype) result.getArchetypes().
-            get( 0 )).getArtifactId() );
-        assertEquals( "1", ((org.apache.maven.archetype.catalog.Archetype) result.getArchetypes().
-            get( 0 )).getVersion() );
-        assertEquals( "http://localhost:18881/repo/", ((org.apache.maven.archetype.catalog.Archetype) result.getArchetypes().
-            get( 0 )).getRepository() );
+        assertEquals( "groupId", ( (Archetype) result.getArchetypes().get( 0 ) ).getGroupId() );
+        assertEquals( "artifactId", ( (Archetype) result.getArchetypes().get( 0 ) ).getArtifactId() );
+        assertEquals( "1", ( (Archetype) result.getArchetypes().get( 0 ) ).getVersion() );
+        assertEquals( "http://localhost:18881/repo/", ( (Archetype) result.getArchetypes().get( 0 ) ).getRepository() );
     }
 
     public void testLocalCatalog()
         throws Exception
     {
 
-        Archetype archetype = (Archetype) lookup( Archetype.class.getName() );
+        ArchetypeManager archetype = (ArchetypeManager) lookup( ArchetypeManager.class.getName() );
 
         ArchetypeCatalog result = archetype.getLocalCatalog( getTestFile( "target/test-classes/repositories/test-catalog" ).
             getAbsolutePath() );
 
         assertEquals( 1, result.getArchetypes().size() );
-        assertEquals( "groupId", ((org.apache.maven.archetype.catalog.Archetype) result.getArchetypes().
-            get( 0 )).getGroupId() );
-        assertEquals( "artifactId", ((org.apache.maven.archetype.catalog.Archetype) result.getArchetypes().
-            get( 0 )).getArtifactId() );
-        assertEquals( "1", ((org.apache.maven.archetype.catalog.Archetype) result.getArchetypes().
-            get( 0 )).getVersion() );
-        assertEquals( "http://localhost:18881/repo/", ((org.apache.maven.archetype.catalog.Archetype) result.getArchetypes().
-            get( 0 )).getRepository() );
+        assertEquals( "groupId", ( (Archetype) result.getArchetypes().get( 0 ) ).getGroupId() );
+        assertEquals( "artifactId", ( (Archetype) result.getArchetypes().get( 0 ) ).getArtifactId() );
+        assertEquals( "1", ( (Archetype) result.getArchetypes().get( 0 ) ).getVersion() );
+        assertEquals( "http://localhost:18881/repo/", ( (Archetype) result.getArchetypes().get( 0 ) ).getRepository() );
     }
 
     private Jetty6xEmbeddedLocalContainer cargo;
@@ -97,7 +89,7 @@ public class ArchetypeCatalogsTest
         getTestFile( "target/test-classes/repositories/test-catalog/dummy" ).createNewFile();
 
         ArchetypeCatalog catalog = new ArchetypeCatalog();
-        org.apache.maven.archetype.catalog.Archetype generatedArchetype = new org.apache.maven.archetype.catalog.Archetype();
+        Archetype generatedArchetype = new Archetype();
         generatedArchetype.setGroupId( "groupId" );
         generatedArchetype.setArtifactId( "artifactId" );
         generatedArchetype.setVersion( "1" );

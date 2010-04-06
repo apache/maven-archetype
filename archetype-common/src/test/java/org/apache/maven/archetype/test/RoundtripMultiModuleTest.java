@@ -24,7 +24,8 @@ import org.apache.maven.archetype.ArchetypeCreationRequest;
 import org.apache.maven.archetype.ArchetypeCreationResult;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
-import org.apache.maven.archetype.Archetype;
+import org.apache.maven.archetype.ArchetypeManager;
+import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Writer;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
@@ -65,7 +66,7 @@ public class RoundtripMultiModuleTest
         throws Exception
     {
 
-        Archetype archetype = (Archetype) lookup( Archetype.ROLE );
+        ArchetypeManager archetype = (ArchetypeManager) lookup( ArchetypeManager.ROLE );
 
         ArchetypeRegistryManager registryManager = (ArchetypeRegistryManager) lookup( ArchetypeRegistryManager.ROLE );
 
@@ -163,7 +164,7 @@ public class RoundtripMultiModuleTest
 
         // (4) create our own archetype catalog describing the archetype we just created
         ArchetypeCatalog catalog = new ArchetypeCatalog();
-        org.apache.maven.archetype.catalog.Archetype generatedArchetype = new org.apache.maven.archetype.catalog.Archetype();
+        Archetype generatedArchetype = new Archetype();
         generatedArchetype.setGroupId( generatedArchetypeProject.getGroupId() );
         generatedArchetype.setArtifactId( generatedArchetypeProject.getArtifactId() );
         generatedArchetype.setVersion( generatedArchetypeProject.getVersion() );

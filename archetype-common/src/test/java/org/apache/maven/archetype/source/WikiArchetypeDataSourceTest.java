@@ -4,7 +4,7 @@ import org.codehaus.plexus.PlexusTestCase;
 
 import java.util.List;
 import java.util.Properties;
-import org.apache.maven.archetype.Archetype;
+import org.apache.maven.archetype.ArchetypeManager;
 
 /** @author Jason van Zyl */
 public class WikiArchetypeDataSourceTest
@@ -19,8 +19,8 @@ public class WikiArchetypeDataSourceTest
 
         assertEquals( 47, archetypes.size() );
 
-        Archetype a = (Archetype) lookup(Archetype.class.getName());
-        archetypes=a.getInternalCatalog().getArchetypes();
+        ArchetypeManager a = (ArchetypeManager) lookup( ArchetypeManager.class.getName() );
+        archetypes = a.getInternalCatalog().getArchetypes();
 
         assertEquals( 47, archetypes.size() );
     }

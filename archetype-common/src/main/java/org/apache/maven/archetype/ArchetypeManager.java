@@ -19,16 +19,17 @@ package org.apache.maven.archetype;
  * under the License.
  */
 
+import org.apache.maven.archetype.catalog.Archetype;
+import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 
 import java.io.File;
 import java.io.IOException;
-import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 
 /** @author Jason van Zyl */
-public interface Archetype
+public interface ArchetypeManager
 {
-    String ROLE = Archetype.class.getName();
+    String ROLE = ArchetypeManager.class.getName();
 
     /**
      * A command to create an OldArchetype from an existing Maven project given the suppled
@@ -97,7 +98,7 @@ public interface Archetype
     File archiveArchetype( File archetypeDirectory, File outputDirectory, String finalName )
         throws DependencyResolutionRequiredException, IOException;
 
-    void updateLocalCatalog( org.apache.maven.archetype.catalog.Archetype archetype, String path );
+    void updateLocalCatalog( Archetype archetype, String path );
 
-    void updateLocalCatalog( org.apache.maven.archetype.catalog.Archetype archetype );
+    void updateLocalCatalog( Archetype archetype );
 }

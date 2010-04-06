@@ -19,7 +19,7 @@ package org.apache.maven.archetype.mojos;
  * under the License.
  */
 
-import org.apache.maven.archetype.Archetype;
+import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
 import org.apache.maven.archetype.generator.ArchetypeGenerator;
@@ -55,7 +55,7 @@ public class CreateProjectFromArchetypeMojo
     implements ContextEnabled
 {
     /** @component */
-    private Archetype archetype;
+    private ArchetypeManager archetype;
 
     /** @component */
     private ArchetypeSelector selector;
