@@ -76,8 +76,8 @@ public class InternalCatalogFromWiki
         {
             Archetype archetype = (Archetype) archetypes.next();
 
-            if ( archetype.getRepository() != null
-                && archetype.getRepository().indexOf( CENTRAL.substring( 7 ) ) >= 0 )
+            if ( "".equals( archetype.getRepository() )
+                || ( archetype.getRepository() != null && archetype.getRepository().indexOf( CENTRAL.substring( 7 ) ) >= 0 ) )
             {
                 archetype.setRepository( null );
             }
