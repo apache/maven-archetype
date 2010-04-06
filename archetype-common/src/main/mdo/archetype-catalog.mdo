@@ -106,7 +106,7 @@
           <required>false</required>
           <description>The description of the archetype.</description>
         </field>
-        <field>
+        <field xdoc.separator="blank">
           <name>goals</name>
           <association>
             <type>String</type>
