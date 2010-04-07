@@ -204,6 +204,8 @@ public class IntegrationTestMojo
 
             String basedir = goalFile.getParentFile().getPath() + "/project";
 
+            FileUtils.deleteDirectory( basedir );
+
             FileUtils.mkdir( basedir );
 
             ArchetypeGenerationRequest request = new ArchetypeGenerationRequest()
