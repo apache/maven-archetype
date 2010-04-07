@@ -43,3 +43,5 @@ mvn -P internal-catalog test
 ----
 
  Then merge <<<target/archetype-catalog.xml>>> with <<<src/main/resources/archetype-catalog.xml>>>.
+
+ If archetypes count has changed, modify <<<CatalogArchetypeDataSinkTest>>> and <<<WikiArchetypeDataSourceTest>>> assertions.
