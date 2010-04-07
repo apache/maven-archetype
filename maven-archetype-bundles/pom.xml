@@ -65,4 +65,21 @@ under the License.
       <url>scp://people.apache.org/www/maven.apache.org/archetype/maven-archetype-bundles</url>
     </site>
   </distributionManagement>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-archetype-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>it</id>
+            <phase>integration-test</phase>
+            <goals>
+              <goal>integration-test</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>
