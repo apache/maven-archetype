@@ -101,7 +101,7 @@ public class WikiArchetypeDataSource
         // | ArtifactId | GroupId | Version | Repository | Description |
         Pattern ptn =
             Pattern.compile(
-                "<br>\\|([-a-zA-Z0-9_. ]+)\\|([-a-zA-Z0-9_. ]+)\\|([-a-zA-Z0-9_. ]+)\\|([-a-zA-Z0-9_.:/ \\[\\],]+)\\|(.+) \\|"
+                "<br>\\|([-a-zA-Z0-9_. ]+)\\|([-a-zA-Z0-9_. ]+)\\|([-a-zA-Z0-9_. ]+)\\|([-a-zA-Z0-9_.:/ \\[\\],]+)\\|(.*) \\|"
             );
 
         Matcher m = ptn.matcher( pageSource );
