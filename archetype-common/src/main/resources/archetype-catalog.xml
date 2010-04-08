@@ -351,5 +351,17 @@
       <repository>http://maven.kungfuters.org/content/repositories/releases</repository>
       <description>Tellurium TestNG project archetype for the Tellurium Automated Testing Framework</description>
     </archetype>
+    <archetype>
+      <groupId>org.fusesource.scalate.tooling</groupId>
+      <artifactId>scalate-archetype-empty</artifactId>
+      <version>RELEASE</version>
+      <description>Generates a Scalate empty web application</description>
+    </archetype>
+    <archetype>
+      <groupId>org.fusesource.scalate.tooling</groupId>
+      <artifactId>scalate-archetype-guice</artifactId>
+      <version>RELEASE</version>
+      <description>Generates a Scalate Jog web application</description>
+    </archetype>
   </archetypes>
 </archetype-catalog>
