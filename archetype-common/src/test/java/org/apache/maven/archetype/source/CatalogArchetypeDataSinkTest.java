@@ -86,6 +86,6 @@ public class CatalogArchetypeDataSinkTest
 
         int catalogSize = catalog.getArchetypes().size();
 
-        assertEquals( 56, catalogSize );
+        assertEquals( WikiArchetypeDataSourceTest.ARCHETYPES_COUNT, catalogSize );
     }
 }
