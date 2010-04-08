@@ -10,6 +10,8 @@ import org.apache.maven.archetype.ArchetypeManager;
 public class WikiArchetypeDataSourceTest
     extends PlexusTestCase
 {
+    static final int ARCHETYPES_COUNT = 58;
+
     public void testWikiArchetypeDataSource()
         throws Exception
     {
@@ -17,11 +19,11 @@ public class WikiArchetypeDataSourceTest
         ArchetypeDataSource ads = new InternalCatalogArchetypeDataSource();
         List archetypes = ads.getArchetypeCatalog( p ).getArchetypes();
 
-        assertEquals( 56, archetypes.size() );
+        assertEquals( ARCHETYPES_COUNT, archetypes.size() );
 
         ArchetypeManager a = (ArchetypeManager) lookup( ArchetypeManager.class.getName() );
         archetypes = a.getInternalCatalog().getArchetypes();
 
-        assertEquals( 56, archetypes.size() );
+        assertEquals( ARCHETYPES_COUNT, archetypes.size() );
     }
 }

@@ -169,7 +169,7 @@
       <groupId>de.akquinet.jbosscc</groupId>
       <artifactId>jbosscc-seam-archetype</artifactId>
       <version>RELEASE</version>
-      <description>Maven Archetype to generate a Seam Application</description>
+      <description>Maven Archetype to generate a Seam Application- Documentation</description>
     </archetype>
     <archetype>
       <groupId>org.apache.maven.archetypes</groupId>
@@ -275,19 +275,19 @@
       <groupId>org.apache.cocoon</groupId>
       <artifactId>cocoon-22-archetype-block-plain</artifactId>
       <version>RELEASE</version>
-      <description>[http://cocoon.apache.org/2.2/maven-plugins/]</description>
+      <description>http://cocoon.apache.org/2.2/maven-plugins/</description>
     </archetype>
     <archetype>
       <groupId>org.apache.cocoon</groupId>
       <artifactId>cocoon-22-archetype-block</artifactId>
       <version>RELEASE</version>
-      <description>[http://cocoon.apache.org/2.2/maven-plugins/]</description>
+      <description>http://cocoon.apache.org/2.2/maven-plugins/</description>
     </archetype>
     <archetype>
       <groupId>org.apache.cocoon</groupId>
       <artifactId>cocoon-22-archetype-webapp</artifactId>
       <version>RELEASE</version>
-      <description>[http://cocoon.apache.org/2.2/maven-plugins/]</description>
+      <description>http://cocoon.apache.org/2.2/maven-plugins/</description>
     </archetype>
     <archetype>
       <groupId>org.apache.myfaces.buildtools</groupId>
