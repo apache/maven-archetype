@@ -1,4 +1,4 @@
-package org.apache.maven.archetype.test;
+package org.apache.maven.archetype.source;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
