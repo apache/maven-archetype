@@ -36,12 +36,11 @@ Maven Archetype Internal Catalog
  The source for internal catalog is hosted in the {{{http://docs.codehaus.org/display/MAVENUSER/Archetypes+List}Archetype List}}
  page of the Maven User Wiki.
 
- This page is transformed to a catalog XML file using following command in <<<archetype-common>>>:
+ This page is transformed to a catalog XML file using following command in <<<archetype-common>>> module directory:
 
 ----
 mvn -P internal-catalog test
 ----
 
- Then merge <<<target/archetype-catalog.xml>>> with <<<src/main/resources/archetype-catalog.xml>>>.
-
- If archetypes count has changed, modify <<<CatalogArchetypeDataSinkTest>>> and <<<WikiArchetypeDataSourceTest>>> assertions.
+ Then merge <<<target/archetype-catalog.xml>>> with
+ {{{http://svn.apache.org/viewvc/maven/archetype/trunk/archetype-common/src/main/resources/archetype-catalog.xml?view=markup}<<<src/main/resources/archetype-catalog.xml>>>}}.
