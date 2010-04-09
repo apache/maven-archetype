@@ -21,7 +21,6 @@ package org.apache.maven.archetype.source;
 
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
-import org.apache.maven.archetype.test.WikiArchetypeDataSource;
 import org.codehaus.plexus.PlexusTestCase;
 
 import java.io.File;
@@ -46,7 +45,7 @@ public class WikiArchetypeDataSourceTest
     public void testWikiArchetypeDataSource()
         throws Exception
     {
-        File wikiSource = new File( getBasedir(), "src/test/sources/wiki/wiki-source.txt" );
+        File wikiSource = new File( getBasedir(), "src/test/resources/wiki/wiki-source.txt" );
 
         assertTrue( wikiSource.exists() );
 

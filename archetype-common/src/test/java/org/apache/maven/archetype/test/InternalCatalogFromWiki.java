@@ -30,6 +30,7 @@ import org.apache.maven.archetype.metadata.ArchetypeDescriptor;
 import org.apache.maven.archetype.metadata.RequiredProperty;
 import org.apache.maven.archetype.source.ArchetypeDataSource;
 import org.apache.maven.archetype.source.ArchetypeDataSourceException;
+import org.apache.maven.archetype.source.WikiArchetypeDataSource;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
