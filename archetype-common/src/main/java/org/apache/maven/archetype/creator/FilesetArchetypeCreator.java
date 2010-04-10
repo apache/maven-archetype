@@ -27,8 +27,6 @@ import org.apache.maven.archetype.common.PomManager;
 import org.apache.maven.archetype.common.util.FileCharsetDetector;
 import org.apache.maven.archetype.common.util.ListScanner;
 import org.apache.maven.archetype.common.util.PathUtils;
-import org.apache.maven.archetype.creator.olddescriptor.OldArchetypeDescriptor;
-import org.apache.maven.archetype.creator.olddescriptor.OldArchetypeDescriptorXpp3Writer;
 import org.apache.maven.archetype.exception.TemplateCreationException;
 import org.apache.maven.archetype.metadata.ArchetypeDescriptor;
 import org.apache.maven.archetype.metadata.FileSet;
@@ -327,14 +325,6 @@ public class FilesetArchetypeCreator
             {
                 IOUtil.close( out );
             }
-
-            OldArchetypeDescriptor oldDescriptor =
-                convertToOldDescriptor( archetypeDescriptor.getName(), packageName, basedir );
-            File oldDescriptorFile =
-                FileUtils.resolveFile( archetypeResourcesDirectory, Constants.OLD_ARCHETYPE_DESCRIPTOR );
-            archetypeDescriptorFile.getParentFile().mkdirs();
-            writeOldDescriptor( oldDescriptor, oldDescriptorFile );
-            getLogger().debug( "Archetype " + archetypeDescriptor.getName() + " old descriptor written" );
 
             InvocationRequest internalRequest = new DefaultInvocationRequest();
             internalRequest.setPomFile( archetypePomFile );
@@ -702,55 +692,6 @@ public class FilesetArchetypeCreator
         }
 
         return result;
-    }
-
-    private OldArchetypeDescriptor convertToOldDescriptor( String id, String packageName, File basedir )
-        throws IOException
-    {
-        getLogger().debug( "Resolving OldArchetypeDescriptor files in " + basedir );
-
-        String excludes = "pom.xml,archetype.properties*,**/target/**";
-
-        for ( Iterator defaultExcludes = Arrays.asList( ListScanner.DEFAULTEXCLUDES ).iterator();
-            defaultExcludes.hasNext(); )
-        {
-            excludes += "," + (String) defaultExcludes.next() + "/**";
-        }
-
-        List fileNames = FileUtils.getFileNames( basedir, "**", excludes, false );
-
-        getLogger().debug( "Resolved " + fileNames.size() + " files" );
-
-        String packageAsDirectory = StringUtils.replace( packageName, '.', '/' ) + "/";
-
-        List sources = archetypeFilesResolver.findSourcesMainFiles( fileNames, "java/**" );
-        fileNames.removeAll( sources );
-        sources = removePackage( sources, packageAsDirectory );
-
-        List testSources = archetypeFilesResolver.findSourcesTestFiles( fileNames, "java/**" );
-        fileNames.removeAll( testSources );
-        testSources = removePackage( testSources, packageAsDirectory );
-
-        List resources = archetypeFilesResolver.findResourcesMainFiles( fileNames, "java/**" );
-        fileNames.removeAll( resources );
-
-        List testResources = archetypeFilesResolver.findResourcesTestFiles( fileNames, "java/**" );
-        fileNames.removeAll( testResources );
-
-        List siteResources = archetypeFilesResolver.findSiteFiles( fileNames, null );
-        fileNames.removeAll( siteResources );
-
-        resources.addAll( fileNames );
-
-        OldArchetypeDescriptor descriptor = new OldArchetypeDescriptor();
-        descriptor.setId( id );
-        descriptor.setSources( sources );
-        descriptor.setTestSources( testSources );
-        descriptor.setResources( resources );
-        descriptor.setTestResources( testResources );
-        descriptor.setSiteResources( siteResources );
-
-        return descriptor;
     }
 
     private void copyFiles( File basedir, File archetypeFilesDirectory, String directory, List fileSetResources,
@@ -1733,24 +1674,6 @@ public class FilesetArchetypeCreator
         }
 
         return createFileSet( excludes, false, filtered, group, includes, defaultEncoding );
-    }
-
-    private void writeOldDescriptor( OldArchetypeDescriptor oldDescriptor, File oldDescriptorFile )
-        throws IOException
-    {
-        Writer out = null;
-        try
-        {
-            OldArchetypeDescriptorXpp3Writer writer = new OldArchetypeDescriptorXpp3Writer();
-
-            out = WriterFactory.newXmlWriter( oldDescriptorFile );
-
-            writer.write( out, oldDescriptor );
-        }
-        finally
-        {
-            IOUtil.close( out );
-        }
     }
 
     private static final String MAVEN_PROPERTIES = "META-INF/maven/org.apache.maven.archetype/archetype-common/pom.properties";
