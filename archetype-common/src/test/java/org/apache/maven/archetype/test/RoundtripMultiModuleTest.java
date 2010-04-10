@@ -302,7 +302,6 @@ public class RoundtripMultiModuleTest
 
         assertExistDirectory( archetypeMetadataDirectory );
         assertExistFile( FileUtils.resolveFile( archetypeMetadataDirectory, "archetype-metadata.xml" ) );
-        assertExistFile( FileUtils.resolveFile( archetypeMetadataDirectory, "archetype.xml" ) );
         assertExistFile( FileUtils.resolveFile( archetypeSourcesDirectory, "pom.xml" ) );
 
     }
