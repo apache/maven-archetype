@@ -22,6 +22,9 @@ package org.apache.maven.archetype.creator;
 import org.apache.maven.archetype.ArchetypeCreationRequest;
 import org.apache.maven.archetype.ArchetypeCreationResult;
 
+/**
+ * Create an archetype from a project.
+ */
 public interface ArchetypeCreator
 {
     String ROLE = ArchetypeCreator.class.getName();

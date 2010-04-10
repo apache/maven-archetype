@@ -76,7 +76,11 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-/** @plexus.component role-hint="fileset" */
+/**
+ * Create a 2.0.x Archetype from a project.
+ *
+ *  @plexus.component role-hint="fileset"
+ */
 public class FilesetArchetypeCreator
     extends AbstractLogEnabled
     implements ArchetypeCreator
@@ -1090,35 +1094,6 @@ public class FilesetArchetypeCreator
         finally
         {
             IOUtil.close( in );
-        }
-    }
-
-    private void createReplicaFiles( List filesets, File basedir, File replicaFilesDirectory )
-        throws IOException
-    {
-        getLogger().debug(
-                           "Creating OldArchetype/Module replica files from " + basedir + " to "
-                               + replicaFilesDirectory );
-
-        copyPom( basedir, replicaFilesDirectory );
-
-        for ( Iterator iterator = filesets.iterator(); iterator.hasNext(); )
-        {
-            FileSet fileset = (FileSet) iterator.next();
-
-            DirectoryScanner scanner = new DirectoryScanner();
-            scanner.setBasedir( basedir );
-            scanner.setIncludes( (String[]) concatenateToList( fileset.getIncludes(), fileset.getDirectory() ).toArray( new String[fileset.getIncludes().size()] ) );
-            scanner.setExcludes( (String[]) fileset.getExcludes().toArray( new String[fileset.getExcludes().size()] ) );
-            scanner.addDefaultExcludes();
-            getLogger().debug( "Using fileset " + fileset );
-            scanner.scan();
-
-            List fileSetResources = Arrays.asList( scanner.getIncludedFiles() );
-
-            copyFiles( basedir, replicaFilesDirectory, fileset.getDirectory(), fileSetResources, false, null );
-
-            getLogger().debug( "Copied " + fileset.getDirectory() + " files" );
         }
     }
 
