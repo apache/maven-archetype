@@ -159,7 +159,7 @@ public class DefaultPomManager
         Model generatedModel = readPom( pom );
         if ( null != generatedModel.getParent() )
         {
-            getLogger().info( "Parent element not overwrited in " + pom );
+            getLogger().info( "Parent element not overwritten in " + pom );
             return;
         }
 
@@ -455,7 +455,7 @@ public class DefaultPomManager
                 getLogger().warn( "Can not override property: " + generatedDependencyId );
             }
 
-        // TODO: maybe warn, if a property key gets overriden?
+        // TODO: maybe warn, if a property key gets overridden?
         model.getProperties().putAll( generatedModel.getProperties() );
 
         // TODO: maybe merge more than just dependencies and properties...
