@@ -110,7 +110,7 @@ public class ArchetyperRoundtripWithProxyTest
 
         if ( creationResult.getCause() != null )
         {
-            fail( creationResult.getCause().getMessage() );
+            throw creationResult.getCause();
         }
 
         // (3) create our own archetype catalog properties in memory
@@ -191,7 +191,7 @@ public class ArchetyperRoundtripWithProxyTest
 
         if ( generationResult.getCause() != null )
         {
-            fail( generationResult.getCause().getMessage() );
+            throw generationResult.getCause();
         }
 
     }

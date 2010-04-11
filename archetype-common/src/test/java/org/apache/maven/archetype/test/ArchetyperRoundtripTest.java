@@ -110,7 +110,7 @@ public class ArchetyperRoundtripTest
 
         if ( creationResult.getCause() != null )
         {
-            fail( creationResult.getCause().getMessage() );
+            throw creationResult.getCause();
         }
 
         // (3) create our own archetype catalog properties in memory
@@ -179,7 +179,7 @@ public class ArchetyperRoundtripTest
 
         if ( generationResult.getCause() != null )
         {
-            fail( generationResult.getCause().getMessage() );
+            throw generationResult.getCause();
         }
 
         //ASSERT symbol_pound replacement (archetype-180 archetype-183)

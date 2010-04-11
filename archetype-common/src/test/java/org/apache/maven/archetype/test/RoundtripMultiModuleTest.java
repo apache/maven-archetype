@@ -114,7 +114,7 @@ public class RoundtripMultiModuleTest
 
         if ( creationResult.getCause() != null )
         {
-            fail( creationResult.getCause().getMessage() );
+            throw creationResult.getCause();
         }
         else
         {
