@@ -40,6 +40,7 @@ import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Extension;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
+import org.apache.maven.model.PluginManagement;
 import org.apache.maven.model.Profile;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
@@ -339,7 +340,10 @@ public class FilesetArchetypeCreator
         plugin.setArtifactId( "maven-archetype-plugin" );
         plugin.setVersion( getArchetypeVersion() );
         plugin.setExtensions( true );
-        model.getBuild().addPlugin( plugin );
+
+        PluginManagement pluginManagement = new PluginManagement();
+        pluginManagement.addPlugin( plugin );
+        model.getBuild().setPluginManagement( pluginManagement );
 
         getLogger().debug( "Creating archetype's pom" );
 
