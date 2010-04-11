@@ -105,12 +105,12 @@ public class CreateProjectFromArchetypeMojo
      * <li>'<code>file://...</code>' with <code>archetype-catalog.xml</code> automatically appended when pointing to a directory</li>
      * <li>'<code>http://...</code>' with <code>archetype-catalog.xml</code> always appended</li>
      * <li>'<code>local</code>' which is the shortcut for '<code>file://~/.m2/archetype-catalog.xml</code>'</li>
-     * <li>'<code>remote</code>' which is the shortcut for '<code>http://repo1.maven.org/maven2</code>'</li>
+     * <li>'<code>remote</code>' which is the shortcut for Maven Central repository, ie '<code>http://repo1.maven.org/maven2</code>'</li>
      * <li>'<code>internal</code>' which is an internal catalog</li>
      * </ul>
      *
      * Since 2.0-alpha-5, default value is no longer <code>internal,local</code> but <code>remote,local</code>.
-     * This can only work if central has a catalog file at root.
+     * If Maven Central repository catalog file is empty, <code>internal</code> catalog is used instead.
      *
      * @parameter expression="${archetypeCatalog}" default-value="remote,local"
      */
