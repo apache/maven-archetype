@@ -32,6 +32,7 @@ under the License.
 
   <artifactId>maven-archetype-simple</artifactId>
   <version>1.1-SNAPSHOT</version>
+  <packaging>maven-archetype</packaging>
 
   <name>Maven Simple Project Archetype</name>
   <description>
