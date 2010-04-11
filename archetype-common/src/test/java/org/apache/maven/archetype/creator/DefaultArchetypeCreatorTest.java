@@ -85,11 +85,11 @@ public class DefaultArchetypeCreatorTest
         {
             Object result = builder.buildWithDependencies( projectFile, localRepository, null );
             if ( result instanceof MavenProject )
-            { // Using maven 2.0.x / x >= 7
+            { // Using Maven 2.0.x / x >= 7
                 mavenProject = (MavenProject) result;
             }
             else if ( result instanceof MavenProjectBuildingResult )
-            { // Using maven 2.1
+            { // Using Maven 3
                 mavenProject = ( (MavenProjectBuildingResult) result ).getProject();
             }
             else
@@ -140,7 +140,7 @@ public class DefaultArchetypeCreatorTest
             .setPartialArchetype( false )
             .setPreserveCData( false )
             .setKeepParent( false )
-            .setPostPhase( "package" );
+            .setPostPhase( "verify" );
 
         ArchetypeCreationResult result = new ArchetypeCreationResult();
 

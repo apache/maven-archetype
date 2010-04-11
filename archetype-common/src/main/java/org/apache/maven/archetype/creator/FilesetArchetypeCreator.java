@@ -227,6 +227,8 @@ public class FilesetArchetypeCreator
                 IOUtil.close( out );
             }
 
+            createArchetypeBasicIt( archetypeDescriptor, generatedSourcesDirectory );
+
             InvocationRequest internalRequest = new DefaultInvocationRequest();
             internalRequest.setPomFile( archetypePomFile );
             internalRequest.setGoals( Collections.singletonList( request.getPostPhase() ) );
@@ -238,6 +240,51 @@ public class FilesetArchetypeCreator
         {
             result.setCause( e );
         }
+    }
+
+    /**
+     * Create an archetype IT, ie goals.txt and archetype.properties in src/test/resources/projects/basic.
+     *
+     * @param archetypeDescriptor
+     * @param generatedSourcesDirectory
+     * @throws IOException
+     */
+    private void createArchetypeBasicIt( ArchetypeDescriptor archetypeDescriptor, File generatedSourcesDirectory )
+        throws IOException
+    {
+        String basic = Constants.SRC + File.separator + Constants.TEST + File.separator + Constants.RESOURCES
+            + File.separator + "projects" + File.separator + "basic";
+        File basicItDirectory = new File( generatedSourcesDirectory, basic );
+        basicItDirectory.mkdirs();
+
+        InputStream in = null;
+        OutputStream out = null;
+
+        try
+        {
+            in = FilesetArchetypeCreator.class.getResourceAsStream( "archetype.properties" );
+
+            Properties archetypeProperties = new Properties();
+            archetypeProperties.load( in );
+
+            for ( Iterator iter = archetypeDescriptor.getRequiredProperties().iterator(); iter.hasNext(); )
+            {
+                RequiredProperty req = (RequiredProperty) iter.next();
+
+                archetypeProperties.put( req.getKey(), req.getDefaultValue() );
+            }
+
+            out = new FileOutputStream( new File( basicItDirectory, "archetype.properties" ) );
+            archetypeProperties.store( out, null );
+        }
+        finally
+        {
+            IOUtil.close( in );
+            IOUtil.close( out );
+        }
+        copyResource( "goal.txt", new File( basicItDirectory, "goal.txt" ) );
+
+        getLogger().debug( "Added basic integration test" );
     }
 
     private void extractPropertiesFromProject( MavenProject project, Properties properties,
@@ -351,12 +398,24 @@ public class FilesetArchetypeCreator
 
         archetypePomFile.getParentFile().mkdirs();
 
+        copyResource( "pom-prototype.xml", archetypePomFile );
+
+        pomManager.writePom( model, archetypePomFile, archetypePomFile );
+
+        return archetypePomFile;
+    }
+
+    private void copyResource( String name, File destination )
+        throws IOException
+    {
         InputStream in = null;
         OutputStream out = null;
+
         try
         {
-            in = FilesetArchetypeCreator.class.getResourceAsStream( "pom-prototype.xml" );
-            out = new FileOutputStream( archetypePomFile );
+            in = FilesetArchetypeCreator.class.getResourceAsStream( name );
+            out = new FileOutputStream( destination );
+
             IOUtil.copy( in, out );
         }
         finally
@@ -364,10 +423,6 @@ public class FilesetArchetypeCreator
             IOUtil.close( in );
             IOUtil.close( out );
         }
-
-        pomManager.writePom( model, archetypePomFile, archetypePomFile );
-
-        return archetypePomFile;
     }
 
     private void addRequiredProperties( ArchetypeDescriptor archetypeDescriptor, Properties properties )
