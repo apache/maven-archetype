@@ -14,7 +14,9 @@
     <extensions>
     </extensions>
 
-    <plugins>
-    </plugins>
+    <pluginManagement>
+      <plugins>
+      </plugins>
+    </pluginManagement>
   </build>
 </project>
