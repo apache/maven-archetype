@@ -63,6 +63,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -345,6 +346,20 @@ public class FilesetArchetypeCreator
         File archetypePomFile = new File( projectDir, Constants.ARCHETYPE_POM );
 
         archetypePomFile.getParentFile().mkdirs();
+
+        InputStream in = null;
+        OutputStream out = null;
+        try
+        {
+            in = FilesetArchetypeCreator.class.getResourceAsStream( "pom-prototype.xml" );
+            out = new FileOutputStream( archetypePomFile );
+            IOUtil.copy( in, out );
+        }
+        finally
+        {
+            IOUtil.close( in );
+            IOUtil.close( out );
+        }
 
         pomManager.writePom( model, archetypePomFile, archetypePomFile );
 
