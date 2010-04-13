@@ -31,4 +31,9 @@
   <name>Maven archetype Test Old archetype</name>
   <packaging>jar</packaging>
 
+  <!-- comment in prototype pom -->
+  <dependencies>
+    <!-- empty dependencies, with comments -->
+  </dependencies>
+
 </project>
