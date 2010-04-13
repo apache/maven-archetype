@@ -31,4 +31,13 @@
   <name>Maven archetype Test</name>
   <packaging>jar</packaging>
 
+  <properties>
+    <empty></empty>
+  </properties>
+
+  <!-- comment in prototype pom -->
+  <dependencies>
+    <!-- empty dependencies, with comments -->
+  </dependencies>
+
 </project>
