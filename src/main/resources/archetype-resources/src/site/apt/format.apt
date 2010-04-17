@@ -1,4 +1,10 @@
-
+ -----
+ The APT format
+ -----
+ The Maven Team
+ -----
+ -----
+
 The APT format
 ~~~~~~~~~~~~~~
 
@@ -26,7 +32,7 @@ The APT format
   First line of first paragraph.
   Second line of first paragraph.
   Third line of first paragraph.
-  
+
   Line 1 of paragraph 2 (separated from first paragraph by an open line).
   Line 2 of paragraph 2.
 +------------------------------------------------------------------------+
@@ -56,8 +62,8 @@ My section title (not indented).
 spaces. Then the author did even bother to indent the
 other lines of the paragraph.
 
-  Second paragraph contains several lines which are all 
-  indented by two spaces. This style is much nicer than 
+  Second paragraph contains several lines which are all
+  indented by two spaces. This style is much nicer than
   the one used for the previous paragraph.
 +-------------------------------------------------------+
 
@@ -166,7 +172,7 @@ Section title
       * List item 3.
 +---------------------------------------+
 
-  List items are indented and begin with a asterisk (<<<*>>>). 
+  List items are indented and begin with a asterisk (<<<*>>>).
 
   Plain paragraphs more indented than the first list item are nested in that
   list. Displays such as tables (not indented) are always nested in the
@@ -257,7 +263,7 @@ Verbatim text contained in list item 2, but not in sub-list item 2
 
 +----------------------------------------+
 ----------------------------------------
-Verbatim 
+Verbatim
 	 text,
 		preformatted,
 				escaped.
@@ -310,12 +316,12 @@ Verbatim
   similar line.
 
   The first line is not only used to recognize a table but also to specify
-  column justification. In the following example, 
+  column justification. In the following example,
 
       * the second asterisk (<<<*>>>) is used to specify that column 1 is
         centered,
 
-      * the plus sign (<<<+>>>) specifies that column 2 is left aligned, 
+      * the plus sign (<<<+>>>) specifies that column 2 is left aligned,
 
       * the colon (<<<:>>>) specifies that column 3 is right aligned.
 
@@ -396,7 +402,7 @@ Table caption
 ~~~~~~~~~~~~~~~~~~~
 
 +-----------------------------------------------------------------+
-  {Anchor}. Link to {{anchor}}. Link to {{http://www.pixware.fr}}. 
+  {Anchor}. Link to {{anchor}}. Link to {{http://www.pixware.fr}}.
   Link to {{{anchor}showing alternate text}}.
   Link to {{{http://www.pixware.fr}Pixware home page}}.
 +-----------------------------------------------------------------+
@@ -545,7 +551,7 @@ Verbatim text not contained in list item 3
 
 +-------------------------------+
 Verbatim text
-			in a box	
+			in a box
 +-------------------------------+
 
   --- instead of +-- suppresses the box around verbatim text.
@@ -577,7 +583,7 @@ Table caption
 
   <Italic> font. <<Bold>> font. <<<Monospaced>>> font.
 
-  {Anchor}. Link to {{anchor}}. Link to {{http://www.pixware.fr}}. 
+  {Anchor}. Link to {{anchor}}. Link to {{http://www.pixware.fr}}.
   Link to {{{anchor}showing alternate text}}.
   Link to {{{http://www.pixware.fr}Pixware home page}}.
 
