@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.creator;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,8 +19,6 @@
  * under the License.
  */
 
-package org.apache.maven.archetype.creator;
-
 import org.apache.maven.archetype.ArchetypeCreationRequest;
 import org.apache.maven.archetype.ArchetypeCreationResult;
 import org.apache.maven.archetype.common.Constants;
@@ -28,6 +28,7 @@ import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
+import org.apache.maven.project.MavenProjectBuildingResult;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.PropertyUtils;
@@ -42,7 +43,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-import org.apache.maven.project.MavenProjectBuildingResult;
 
 public class DefaultArchetypeCreatorTest
     extends AbstractMojoTestCase
@@ -55,8 +55,7 @@ public class DefaultArchetypeCreatorTest
     private List repositories;
 
     public void testCreateFilesetArchetype()
-        throws
-        Exception
+        throws Exception
     {
         System.out.println( "testCreateFilesetArchetype" );
 
@@ -86,24 +85,25 @@ public class DefaultArchetypeCreatorTest
         {
             Object result = builder.buildWithDependencies( projectFile, localRepository, null );
             if ( result instanceof MavenProject )
-            {// Using maven 2.0.x / x >= 7
+            { // Using Maven 2.0.x / x >= 7
                 mavenProject = (MavenProject) result;
             }
             else if ( result instanceof MavenProjectBuildingResult )
-            {// Using maven 2.1
-                mavenProject = ((MavenProjectBuildingResult) result).getProject();
+            { // Using Maven 3
+                mavenProject = ( (MavenProjectBuildingResult) result ).getProject();
             }
             else
             {
                 fail( "Wrong result class" );
             }
         }
-        catch( Exception e )
+        catch ( Exception e )
         {
             e.printStackTrace();
         }
 
-        FilesetArchetypeCreator instance = (FilesetArchetypeCreator) lookup( ArchetypeCreator.class.getName(), "fileset" );
+        FilesetArchetypeCreator instance =
+            (FilesetArchetypeCreator) lookup( ArchetypeCreator.class.getName(), "fileset" );
 
         languages = new ArrayList();
         languages.add( "java" );
@@ -140,16 +140,16 @@ public class DefaultArchetypeCreatorTest
             .setPartialArchetype( false )
             .setPreserveCData( false )
             .setKeepParent( false )
-            .setPostPhase( "package" );
+            .setPostPhase( "verify" );
 
         ArchetypeCreationResult result = new ArchetypeCreationResult();
 
         instance.createArchetype( request, result );
-        
-        if(result.getCause()!=null){
-            result.getCause().printStackTrace();
+
+        if ( result.getCause() != null )
+        {
+            throw result.getCause();
         }
-        assertNull( result.getCause() );
 
         File template;
 
@@ -322,45 +322,34 @@ public class DefaultArchetypeCreatorTest
     }
 
     protected void tearDown()
-        throws
-        Exception
+        throws Exception
     {
         super.tearDown();
     }
 
     protected void setUp()
-        throws
-        Exception
+        throws Exception
     {
         super.setUp();
 
-        localRepository =
-            new DefaultArtifactRepository(
-                "local",
-                new File( getBasedir(), "target/test-classes/repositories/local" ).toURI()
-                    .toString(),
-                new DefaultRepositoryLayout()
-            );
+        localRepository = new DefaultArtifactRepository( "local",
+           new File( getBasedir(), "target/test-classes/repositories/local" ).toURI().toString(),
+           new DefaultRepositoryLayout() );
 
         repositories =
             Arrays.asList(
                 new ArtifactRepository[]
                     {
-                        new DefaultArtifactRepository(
-                            "central",
-                            new File( getBasedir(), "target/test-classes/repositories/central" )
-                                .toURI().toString(),
+                        new DefaultArtifactRepository( "central",
+                            new File( getBasedir(), "target/test-classes/repositories/central" ).toURI().toString(),
                             new DefaultRepositoryLayout()
                         )
                     }
             );
     }
 
-    private boolean assertContent( File template,
-                                   String content )
-        throws
-        FileNotFoundException,
-        IOException
+    private boolean assertContent( File template, String content )
+        throws FileNotFoundException, IOException
     {
         String templateContent = IOUtil.toString( new FileReader( template ) );
         return StringUtils.countMatches( templateContent, content ) > 0;
@@ -371,20 +360,14 @@ public class DefaultArchetypeCreatorTest
         assertTrue( "File doesn't exist:" + file.getAbsolutePath(), file.exists() );
     }
 
-    private boolean assertNotContent( File template,
-                                      String content )
-        throws
-        FileNotFoundException,
-        IOException
+    private boolean assertNotContent( File template, String content )
+        throws FileNotFoundException, IOException
     {
         return !assertContent( template, content );
     }
 
-    private void copy( File in,
-                       File out )
-        throws
-        IOException,
-        FileNotFoundException
+    private void copy( File in, File out )
+        throws IOException, FileNotFoundException
     {
         assertTrue( !out.exists() || out.delete() );
         assertFalse( out.exists() );
@@ -404,14 +387,12 @@ public class DefaultArchetypeCreatorTest
             );
     }
 
-    private String getPath( String basedir,
-                            String child )
+    private String getPath( String basedir, String child )
     {
         return new File( basedir, child ).getPath();
     }
 
-    private File getFile( String project,
-                          String file )
+    private File getFile( String project, String file )
     {
         return new File( getBasedir(), "target/test-classes/projects/" + project + "/" + file );
     }
@@ -449,8 +430,7 @@ public class DefaultArchetypeCreatorTest
         return propertyFileSample;
     }
 
-    private File getTemplateFile( String project,
-                                  String template )
+    private File getTemplateFile( String project, String template )
     {
         return
             new File(

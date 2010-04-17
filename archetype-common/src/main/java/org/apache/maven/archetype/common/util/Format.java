@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.common.util;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -16,7 +18,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.maven.archetype.common.util;
 
 import org.jdom.output.EscapeStrategy;
 
@@ -38,9 +39,6 @@ import java.lang.reflect.Method;
 public class Format
     implements Cloneable
 {
-
-    private static final String CVS_ID =
-        "@(#) $RCSfile: Format.java,v $ $Revision: 1.10 $ $Date: 2004/09/07 06:37:20 $ $Name: jdom_1_0 $";
 
     /**
      * Returns a new Format object that performs no whitespace changes, uses
@@ -437,18 +435,18 @@ public class Format
 
         public DefaultEscapeStrategy( String encoding )
         {
-            if ( "UTF-8".equalsIgnoreCase( encoding ) ||
-                "UTF-16".equalsIgnoreCase( encoding ) )
+            if ( "UTF-8".equalsIgnoreCase( encoding )
+                || "UTF-16".equalsIgnoreCase( encoding ) )
             {
                 bits = 16;
             }
-            else if ( "ISO-8859-1".equalsIgnoreCase( encoding ) ||
-                "Latin1".equalsIgnoreCase( encoding ) )
+            else if ( "ISO-8859-1".equalsIgnoreCase( encoding )
+                || "Latin1".equalsIgnoreCase( encoding ) )
             {
                 bits = 8;
             }
-            else if ( "US-ASCII".equalsIgnoreCase( encoding ) ||
-                "ASCII".equalsIgnoreCase( encoding ) )
+            else if ( "US-ASCII".equalsIgnoreCase( encoding )
+                || "ASCII".equalsIgnoreCase( encoding ) )
             {
                 bits = 7;
             }
@@ -460,11 +458,11 @@ public class Format
                 {
                     Class charsetClass = Class.forName( "java.nio.charset.Charset" );
                     Class encoderClass = Class.forName( "java.nio.charset.CharsetEncoder" );
-                    Method forName = charsetClass.getMethod( "forName", new Class[]{String.class} );
-                    Object charsetObj = forName.invoke( null, new Object[]{encoding} );
+                    Method forName = charsetClass.getMethod( "forName", new Class[] { String.class } );
+                    Object charsetObj = forName.invoke( null, new Object[] { encoding } );
                     Method newEncoder = charsetClass.getMethod( "newEncoder", null );
                     encoder = newEncoder.invoke( charsetObj, null );
-                    canEncode = encoderClass.getMethod( "canEncode", new Class[]{char.class} );
+                    canEncode = encoderClass.getMethod( "canEncode", new Class[] { char.class } );
                 }
                 catch ( Exception ignored )
                 {
@@ -480,17 +478,11 @@ public class Format
             }
             if ( bits == 8 )
             {
-                if ( (int) ch > 255 )
-                    return true;
-                else
-                    return false;
+                return ( (int) ch > 255 );
             }
             if ( bits == 7 )
             {
-                if ( (int) ch > 127 )
-                    return true;
-                else
-                    return false;
+                return ( (int) ch > 127 );
             }
             else
             {
@@ -498,7 +490,7 @@ public class Format
                 {
                     try
                     {
-                        Boolean val = (Boolean) canEncode.invoke( encoder, new Object[]{new Character( ch )} );
+                        Boolean val = (Boolean) canEncode.invoke( encoder, new Object[] { new Character( ch ) } );
                         return !val.booleanValue();
                     }
                     catch ( Exception ignored )

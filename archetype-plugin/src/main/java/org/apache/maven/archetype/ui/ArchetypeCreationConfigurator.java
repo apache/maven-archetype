@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.ui;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,8 +19,6 @@
  * under the License.
  */
 
-package org.apache.maven.archetype.ui;
-
 import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
 import org.apache.maven.archetype.exception.ArchetypeNotDefined;
 import org.apache.maven.archetype.exception.TemplateCreationException;
@@ -35,18 +35,8 @@ public interface ArchetypeCreationConfigurator
 {
     String ROLE = ArchetypeCreationConfigurator.class.getName();
 
-    Properties configureArchetypeCreation(
-        MavenProject project,
-        Boolean interactiveMode,
-        Properties commandLineProperties,
-        File propertyFile,
-        List languages
-    )
-        throws
-        FileNotFoundException,
-        IOException,
-        ArchetypeNotDefined,
-        ArchetypeNotConfigured,
-        PrompterException,
+    Properties configureArchetypeCreation( MavenProject project, Boolean interactiveMode,
+                                           Properties commandLineProperties, File propertyFile, List languages )
+        throws FileNotFoundException, IOException, ArchetypeNotDefined, ArchetypeNotConfigured, PrompterException,
         TemplateCreationException;
 }

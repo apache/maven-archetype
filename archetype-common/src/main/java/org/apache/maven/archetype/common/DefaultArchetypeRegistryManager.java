@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.common;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -16,8 +18,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
-package org.apache.maven.archetype.common;
 
 import org.apache.maven.archetype.registry.ArchetypeRegistry;
 import org.apache.maven.archetype.registry.io.xpp3.ArchetypeRegistryXpp3Reader;
@@ -65,8 +65,7 @@ public class DefaultArchetypeRegistryManager
         String archetypeFilteredExtentions,
         File archetypeRegistryFile
     )
-        throws
-        IOException
+        throws IOException
     {
         List filteredExtensions = new ArrayList();
 
@@ -102,8 +101,7 @@ public class DefaultArchetypeRegistryManager
 
     public List getLanguages( String archetypeLanguages,
                               File archetypeRegistryFile )
-        throws
-        IOException
+        throws IOException
     {
         List languages = new ArrayList();
 
@@ -120,11 +118,11 @@ public class DefaultArchetypeRegistryManager
         }
         catch ( IOException e )
         {
-            getLogger().warn( "Can not read ~/m2/archetype.xml" );
+            getLogger().warn( "Can not read ~/.m2/archetype.xml" );
         }
         catch ( XmlPullParserException e )
         {
-            getLogger().warn( "Can not read ~/m2/archetype.xml" );
+            getLogger().warn( "Can not read ~/.m2/archetype.xml" );
         }
 
         if ( languages.isEmpty() )
@@ -136,9 +134,7 @@ public class DefaultArchetypeRegistryManager
     }
 
     public ArchetypeRegistry readArchetypeRegistry( File archetypeRegistryFile )
-        throws
-        IOException,
-        XmlPullParserException
+        throws IOException, XmlPullParserException
     {
         if ( !archetypeRegistryFile.exists() )
         {
@@ -151,9 +147,7 @@ public class DefaultArchetypeRegistryManager
     }
 
     public ArchetypeRegistry readArchetypeRegistry( Reader reader )
-        throws
-        IOException,
-        XmlPullParserException
+        throws IOException, XmlPullParserException
     {
         ArchetypeRegistryXpp3Reader xpp3Reader = new ArchetypeRegistryXpp3Reader();
 
@@ -171,8 +165,7 @@ public class DefaultArchetypeRegistryManager
         File archetypeRegistryFile,
         ArchetypeRegistry archetypeRegistry
     )
-        throws
-        IOException
+        throws IOException
     {
         ArchetypeRegistryXpp3Writer writer = new ArchetypeRegistryXpp3Writer();
         FileWriter fileWriter = new FileWriter( archetypeRegistryFile );

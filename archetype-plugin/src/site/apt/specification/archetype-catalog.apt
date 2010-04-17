@@ -27,25 +27,26 @@
 ~~ http://maven.apache.org/doxia/references/apt-format.html
 
 
-How the Archetype Plugin knows about archetypes?
+How does the Archetype Plugin know about archetypes?
 
     Knowledge about archetypes are stored in catalogs.
 
-    The catalogs are xml files.
+    The catalogs are xml files: see the {{{/archetype/archetype-common/archetype-catalog.html}reference documentation}}.
 
-    The Archetype Plugin comes bundled with an internal catalog. 
+    The Archetype Plugin comes bundled with an internal catalog.
     This one is used by default.
 
-    The Archetype Plugin can use catalogs from local filesystem and from HTTP 
+    The Archetype Plugin can use catalogs from local filesystem and from HTTP
     connections.
 
 * Catalog file explained
 
-    A catalog is an xml file with such content:
+    A catalog is a xml file with such content:
 
 +---
 <?xml version="1.0" encoding="UTF-8"?>
-<archetype-catalog>
+<archetype-catalog  xmlns="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-catalog/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-catalog/1.0.0 http://maven.apache.org/xsd/archetype-catalog-1.0.0.xsd">
   <archetypes>
     <archetype>
 [1]    <groupId>org.appfuse.archetypes</groupId>
@@ -65,54 +66,53 @@ How the Archetype Plugin knows about archetypes?
 
     [[3]] The version of the archetype. <<<RELEASE>>> is a valid version. <<REQUIRED>>
 
-    [[4]] The repository where to find the archetype. <<OPTIONAL>>. When 
-          ommitted, the archetype is searched for in the repository where the catalog 
+    [[4]] The repository where to find the archetype. <<OPTIONAL>>. When
+          ommitted, the archetype is searched for in the repository where the catalog
           comes from.
 
     [[5]] The description of the archetype. <<OPTIONAL>>
-    
+
 
 * Archetype selection explained
 
     During the creation of a project from an archetype, the Archetype Plugin
-    ask the user to choose an archetype from a list containing the archetypes
-    from each of the provided catalogs (Yes, there may be many).
+    asks the user to choose an archetype from a list containing the archetypes
+    from each of the provided catalogs (yes, there may be many).
 
-    For each archetype in the list the Archetype Plugin shows a line like:
+    For each archetype in the list, the Archetype Plugin shows a line like:
 
 +---
 1: internal -> appfuse-basic-jsf (AppFuse archetype for creating a web application with Hibernate, Spring and JSF)
 +---
 
-    * <<<1:>>> The index of the archetype in the aggregated list (starting from 
+    * <<<1:>>> The index of the archetype in the aggregated list (starting from
       1).
 
     * <<<internal>>> The name of the catalog where the archetype is originating.
 
     * <<<appfuse-basic-jsf>>> The artifactId of the archetype
 
-    * <<<(AppFuse archetype...)>>> The description of the archetype as found in 
+    * <<<(AppFuse archetype...)>>> The description of the archetype as found in
       the catalog.
 
 
 * Creating a catalog file
 
     At the end of the <<<create-from-project>>> behaviour, the Archetype Plugin
-    install/deploy the archetype, and update the local/remote catalog.
-    
-    The <<<crawl-repository>>> goal is used to create a catalog file by crawling 
-    a Maven 2 repository located in the filesystem. 
-    
+    installs/deploys the archetype, and updates the local/remote catalog.
+
+    The <<<crawl-repository>>> goal is used to create a catalog file by crawling
+    a Maven 2 repository located in the filesystem.
+
 * Location of catalog files
 
-    The Archetype Plugin knows by default its internal catalog. It also knows 
-    about the <<<local>>> and <<<remote>>> catalogs. 
+    The Archetype Plugin knows by default its internal catalog. It also knows
+    about the <<<local>>> and <<<remote>>> catalogs.
 
-    <<<local>>> represents the catalog file <<<~/.m2/archetype-catalog.xml>>>.
+    <<<local>>> represents the <<<~/.m2/archetype-catalog.xml>>> catalog file.
 
-    <<<remote>>> represents the catalog file <<<http://repo1.maven.org/maven2/archetype-catalog.xml>>>.
+    <<<remote>>> represents the <<<http://repo1.maven.org/maven2/archetype-catalog.xml>>> catalog file.
 
-    The Archetype Plugin can also read catalogs from filesystem/HTTP by 
-    providing the path/URL of a catalog file or of a directory containing the
+    The Archetype Plugin can also read catalogs from filesystem/HTTP by
+    providing the path/URL of a catalog file or of a directory containing an
     <<<archetype-catalog.xml>>> file.
-    

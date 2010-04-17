@@ -1,3 +1,5 @@
+package org.apache.maven.archetype;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -16,8 +18,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
-package org.apache.maven.archetype;
 
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.artifact.repository.ArtifactRepository;
@@ -43,13 +43,13 @@ public class ArchetypeGenerationRequest
 
     private ArtifactRepository localRepository;
 
-    private List remoteArtifactRepositories; 
-    
+    private List remoteArtifactRepositories;
+
     private Proxy activeProxy;
 
-    private List servers = new ArrayList(  );
+    private List servers = new ArrayList();
 
-    private List mirrors = new ArrayList(  );
+    private List mirrors = new ArrayList();
 
     // Archetype definition
     private String archetypeName;
@@ -73,24 +73,24 @@ public class ArchetypeGenerationRequest
 
     private String packageName;
 
-    private Properties properties = new Properties(  );
+    private Properties properties = new Properties();
 
-    public ArchetypeGenerationRequest( )
+    public ArchetypeGenerationRequest()
     {
     }
 
     public ArchetypeGenerationRequest( Archetype archetype )
     {
-        this.archetypeGroupId = archetype.getGroupId(  );
+        this.archetypeGroupId = archetype.getGroupId();
 
-        this.archetypeArtifactId = archetype.getArtifactId(  );
+        this.archetypeArtifactId = archetype.getArtifactId();
 
-        this.archetypeVersion = archetype.getVersion(  );
+        this.archetypeVersion = archetype.getVersion();
 
-        this.archetypeRepository = archetype.getRepository(  );
+        this.archetypeRepository = archetype.getRepository();
     }
 
-    public String getArchetypeGroupId( )
+    public String getArchetypeGroupId()
     {
         return archetypeGroupId;
     }
@@ -102,7 +102,7 @@ public class ArchetypeGenerationRequest
         return this;
     }
 
-    public String getArchetypeArtifactId( )
+    public String getArchetypeArtifactId()
     {
         return archetypeArtifactId;
     }
@@ -114,7 +114,7 @@ public class ArchetypeGenerationRequest
         return this;
     }
 
-    public String getArchetypeVersion( )
+    public String getArchetypeVersion()
     {
         return archetypeVersion;
     }
@@ -126,7 +126,7 @@ public class ArchetypeGenerationRequest
         return this;
     }
 
-    public String getArchetypeGoals( )
+    public String getArchetypeGoals()
     {
         return archetypeGoals;
     }
@@ -138,7 +138,7 @@ public class ArchetypeGenerationRequest
         return this;
     }
 
-    public String getArchetypeName( )
+    public String getArchetypeName()
     {
         return archetypeName;
     }
@@ -150,7 +150,7 @@ public class ArchetypeGenerationRequest
         return this;
     }
 
-    public String getArchetypeRepository( )
+    public String getArchetypeRepository()
     {
         return archetypeRepository;
     }
@@ -162,7 +162,7 @@ public class ArchetypeGenerationRequest
         return this;
     }
 
-    public String getArtifactId( )
+    public String getArtifactId()
     {
         return artifactId;
     }
@@ -174,7 +174,7 @@ public class ArchetypeGenerationRequest
         return this;
     }
 
-    public String getGroupId( )
+    public String getGroupId()
     {
         return groupId;
     }
@@ -186,7 +186,7 @@ public class ArchetypeGenerationRequest
         return this;
     }
 
-    public String getVersion( )
+    public String getVersion()
     {
         return version;
     }
@@ -198,7 +198,7 @@ public class ArchetypeGenerationRequest
         return this;
     }
 
-    public String getPackage( )
+    public String getPackage()
     {
         return packageName;
     }
@@ -210,7 +210,7 @@ public class ArchetypeGenerationRequest
         return this;
     }
 
-    public Properties getProperties( )
+    public Properties getProperties()
     {
         return properties;
     }
@@ -222,7 +222,7 @@ public class ArchetypeGenerationRequest
         return this;
     }
 
-    public ArtifactRepository getLocalRepository( )
+    public ArtifactRepository getLocalRepository()
     {
         return localRepository;
     }
@@ -234,7 +234,7 @@ public class ArchetypeGenerationRequest
         return this;
     }
 
-    public String getOutputDirectory( )
+    public String getOutputDirectory()
     {
         return outputDirectory;
     }
@@ -246,7 +246,7 @@ public class ArchetypeGenerationRequest
         return this;
     }
 
-    public boolean isInteractiveMode( )
+    public boolean isInteractiveMode()
     {
         return interactiveMode;
     }
@@ -258,7 +258,7 @@ public class ArchetypeGenerationRequest
         return this;
     }
 
-    public boolean isOffline( )
+    public boolean isOffline()
     {
         return offline;
     }
@@ -270,7 +270,7 @@ public class ArchetypeGenerationRequest
         return this;
     }
 
-    public TransferListener getTransferListener( )
+    public TransferListener getTransferListener()
     {
         return transferListener;
     }
@@ -282,7 +282,7 @@ public class ArchetypeGenerationRequest
         return this;
     }
 
-    public Proxy getActiveProxy( )
+    public Proxy getActiveProxy()
     {
         return activeProxy;
     }
@@ -301,7 +301,7 @@ public class ArchetypeGenerationRequest
         return this;
     }
 
-    public List getMirrors( )
+    public List getMirrors()
     {
         return mirrors;
     }
@@ -313,11 +313,11 @@ public class ArchetypeGenerationRequest
         return this;
     }
 
-    public List getServers( )
+    public List getServers()
     {
         return servers;
     }
-    
+
     public List getRemoteArtifactRepositories()
     {
         return remoteArtifactRepositories;

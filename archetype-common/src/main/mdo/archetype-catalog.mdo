@@ -18,13 +18,25 @@
   ~ under the License.
   -->
 <model xmlns="http://modello.codehaus.org/MODELLO/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://modello.codehaus.org/MODELLO/1.0.0 http://modello.codehaus.org/xsd/modello-1.0.0.xsd">
+  xsi:schemaLocation="http://modello.codehaus.org/MODELLO/1.0.0 http://modello.codehaus.org/xsd/modello-1.0.0.xsd"
+  xml.namespace="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-catalog/${version}"
+  xml.schemaLocation="http://maven.apache.org/xsd/archetype-catalog-${version}.xsd">
   <id>archetype-catalog</id>
   <name>ArchetypeCatalog</name>
   <description>
-    These are standard catalog files which contain information about Archetypes so that users
+    <![CDATA[
+    <p>This is a reference for the Archetype Catalog descriptor.</p>
+    <p>These are standard catalog files which contain information about Archetypes so that users
     can be presented with a list of archetypes from any number of catalogs to generate new
-    projects.
+    projects.</p>
+    <p>The Archetype Plugin knows by default its internal catalog. It also knows
+    about the <code>local</code> and <code>remote</code> catalogs:</p>
+    <ul>
+      <li><code>local</code> represents the <code>~/.m2/archetype-catalog.xml</code> catalog file,</li>
+      <li><code>remote</code> represents the <code>http://repo1.maven.org/maven2/archetype-catalog.xml</code> catalog file.</li>
+    </ul>
+    <p>The Archetype Plugin can also read catalogs from filesystem/HTTP by providing the path/URL of a catalog file or
+    of a directory containing an <code>archetype-catalog.xml</code> file.</p>]]>
   </description>
 
   <defaults>
@@ -44,6 +56,7 @@
             <type>Archetype</type>
             <multiplicity>*</multiplicity>
           </association>
+          <description>List of Acthetypes available in this catalog.</description>
         </field>
       </fields>
       <codeSegments>
@@ -57,35 +70,43 @@
         </codeSegment>
       </codeSegments>
     </class>
+
     <class>
       <name>Archetype</name>
+      <description>Informations to point to an Archetype referenced in the catalog.</description>
       <fields>
         <field>
           <name>groupId</name>
           <type>String</type>
           <required>true</required>
+          <description>The groupId of the archetype.</description>
         </field>
         <field>
           <name>artifactId</name>
           <type>String</type>
           <required>true</required>
+          <description>The artifactId of the archetype.</description>
         </field>
         <field>
           <name>version</name>
           <type>String</type>
           <required>true</required>
+          <description><![CDATA[The version of the archetype. <code>RELEASE</code> is a valid version.]]></description>
         </field>
         <field>
           <name>repository</name>
           <type>String</type>
-          <required>true</required>
+          <required>false</required>
+          <description>The repository where to find the archetype.
+           When omitted, the archetype is searched for in the repository where the catalog comes from.</description>
         </field>
         <field>
           <name>description</name>
           <type>String</type>
-          <required>true</required>
+          <required>false</required>
+          <description>The description of the archetype.</description>
         </field>
-        <field>
+        <field xdoc.separator="blank">
           <name>goals</name>
           <association>
             <type>String</type>

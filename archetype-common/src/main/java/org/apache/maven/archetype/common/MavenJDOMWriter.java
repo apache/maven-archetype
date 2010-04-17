@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.common;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,8 +22,6 @@
 /*
  * $Id$
  */
-
-package org.apache.maven.archetype.common;
 
 // ---------------------------------/
 // - Imported classes and packages -/
@@ -133,7 +133,7 @@ public class MavenJDOMWriter
 
         XMLOutputter outputter = new XMLOutputter();
         outputter.setFormat(
-            Format.getPrettyFormat().setIndent( "    " ).setLineSeparator(
+            Format.getPrettyFormat().setIndent( "  " ).setLineSeparator(
                 System.getProperty( "line.separator" )
             )
         );
@@ -399,7 +399,7 @@ public class MavenJDOMWriter
             String starter = lineSeparator;
             for ( int i = 0; i < counter.getDepth(); i++ )
             {
-                starter = starter + "    "; // TODO make settable?
+                starter = starter + "  "; // TODO make settable?
             }
             lastText = factory.text( starter );
         }
@@ -409,7 +409,7 @@ public class MavenJDOMWriter
             finalText.setText(
                 finalText.getText().substring(
                     0,
-                    finalText.getText().length() - "    ".length()
+                    finalText.getText().length() - "  ".length()
                 )
             );
             parent.addContent( contentIndex, finalText );

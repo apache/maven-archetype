@@ -18,9 +18,17 @@
   ~ under the License.
   -->
 <model xmlns="http://modello.codehaus.org/MODELLO/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://modello.codehaus.org/MODELLO/1.0.0 http://modello.codehaus.org/xsd/modello-1.0.0.xsd">
+  xsi:schemaLocation="http://modello.codehaus.org/MODELLO/1.0.0 http://modello.codehaus.org/xsd/modello-1.0.0.xsd"
+  xml.namespace="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/${version}"
+  xml.schemaLocation="http://maven.apache.org/xsd/archetype-descriptor-${version}.xsd">
   <id>archetype-descriptor</id>
   <name>ArchetypeDescriptor</name>
+  <description>
+    <![CDATA[
+    <p>This is a reference for the Archetype descriptor used to describe archetypes's metadata.</p>
+    <p>The metadata about an archetype is stored in the <code>archetype-metadata.xml</code> file located
+    in the <code>META-INF/maven</code> directory of its jar file.</p>]]>
+  </description>
 
   <defaults>
     <default>
@@ -28,6 +36,7 @@
       <value>org.apache.maven.archetype.metadata</value>
     </default>
   </defaults>
+
   <classes>
     <class rootElement="true" xml.tagName="archetype-descriptor">
       <name>ArchetypeDescriptor</name>
@@ -37,14 +46,17 @@
           <name>name</name>
           <type>String</type>
           <required>true</required>
+          <description>Name of the Archetype, that will be displayed to the user when choosing an archetype.</description>
         </field>
         <field xml.attribute="true">
           <name>partial</name>
           <type>boolean</type>
           <required>false</required>
+          <description>Is this archetype representing a full Maven 2 project or only parts?</description>
         </field>
         <field>
           <name>requiredProperties</name>
+          <description>List of required properties to generate a project from this archetype.</description>
           <association>
             <type>RequiredProperty</type>
             <multiplicity>*</multiplicity>
@@ -61,16 +73,19 @@
           <name>id</name>
           <type>String</type>
           <required>true</required>
+          <description>The module's artifactId.</description>
         </field>
         <field xml.attribute="true">
           <name>dir</name>
           <type>String</type>
           <required>true</required>
+          <description>The module's directory.</description>
         </field>
         <field xml.attribute="true">
           <name>name</name>
           <type>String</type>
           <required>true</required>
+          <description>The module's name.</description>
         </field>
       </fields>
     </class>
@@ -85,40 +100,51 @@
             <multiplicity>*</multiplicity>
           </association>
           <required>true</required>
+          <description>File sets definition.</description>
         </field>
-        <field>
+        <field xdoc.separator="blank">
           <name>modules</name>
           <association>
             <type>ModuleDescriptor</type>
             <multiplicity>*</multiplicity>
           </association>
           <required>false</required>
+          <description>Modules definition.</description>
         </field>
       </fields>
     </class>
 
     <class>
       <name>FileSet</name>
+      <description>A fileset defines the way the project's files located in the jar file are used by the Archetype Plugin to generate a project.</description>
       <fields>
         <field xml.attribute="true">
           <name>filtered</name>
           <type>boolean</type>
           <required>false</required>
+          <description>Filesets can be filtered, which means the selected files will be used as Velocity templates.
+          They can be non-filtered, which means the selected files will be copied without modification.</description>
         </field>
         <field xml.attribute="true">
           <name>packaged</name>
           <type>boolean</type>
           <required>false</required>
+          <description>Filesets can be packaged, which means the selected files will be generated/copied in a directory
+           structure that is prepended by the package property. They can be non-packaged, which means that the selected
+           files will be generated/copied without that prepend.</description>
         </field>
         <field xml.attribute="true">
           <name>encoding</name>
           <type>String</type>
           <required>false</required>
+          <description>Encoding to use when filtering content.</description>
         </field>
         <field>
           <name>directory</name>
           <type>String</type>
           <required>true</required>
+          <description>The directory where the files will be searched for, which is also the directory where the
+           project's files will be generated.</description>
         </field>
         <field>
           <name>includes</name>
@@ -127,6 +153,7 @@
             <multiplicity>*</multiplicity>
           </association>
           <required>false</required>
+          <description>Inclusion definition "à la" Ant.</description>
         </field>
         <field>
           <name>excludes</name>
@@ -135,16 +162,12 @@
             <multiplicity>*</multiplicity>
           </association>
           <required>false</required>
+          <description>Exclusion definition "à la" Ant.</description>
         </field>
       </fields>
       <codeSegments>
         <codeSegment>
           <code><![CDATA[
-    {
-        filtered = true;
-        packaged = true;
-    }
-
     public String toString ()
     {
         return
@@ -166,16 +189,19 @@
 
     <class>
       <name>RequiredProperty</name>
+      <description>Definition of a property required when generating a project from this archetype.</description>
       <fields>
         <field xml.attribute="true">
           <name>key</name>
           <type>String</type>
           <required>true</required>
+          <description>Key value of the property.</description>
         </field>
         <field>
           <name>defaultValue</name>
           <type>String</type>
           <required>false</required>
+          <description>Default value of the property.</description>
         </field>
       </fields>
     </class>

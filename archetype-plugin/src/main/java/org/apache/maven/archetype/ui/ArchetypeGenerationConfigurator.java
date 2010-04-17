@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.ui;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,8 +19,6 @@
  * under the License.
  */
 
-package org.apache.maven.archetype.ui;
-
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.exception.ArchetypeGenerationConfigurationFailure;
 import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
@@ -33,15 +33,8 @@ public interface ArchetypeGenerationConfigurator
 {
     String ROLE = ArchetypeGenerationConfigurator.class.getName();
 
-    public void configureArchetype(
-        ArchetypeGenerationRequest request,
-        Boolean interactiveMode,
-        Properties commandLineProperties )
-        throws
-        ArchetypeNotDefined,
-        UnknownArchetype,
-        ArchetypeNotConfigured,
-        IOException,
-        PrompterException,
+    void configureArchetype( ArchetypeGenerationRequest request, Boolean interactiveMode,
+                             Properties commandLineProperties )
+        throws ArchetypeNotDefined, UnknownArchetype, ArchetypeNotConfigured, IOException, PrompterException,
         ArchetypeGenerationConfigurationFailure;
 }

@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.creator;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,15 +19,15 @@
  * under the License.
  */
 
-package org.apache.maven.archetype.creator;
-
 import org.apache.maven.archetype.ArchetypeCreationRequest;
 import org.apache.maven.archetype.ArchetypeCreationResult;
 
+/**
+ * Create an archetype from a project.
+ */
 public interface ArchetypeCreator
 {
     String ROLE = ArchetypeCreator.class.getName();
 
-    void createArchetype( ArchetypeCreationRequest request,
-                          ArchetypeCreationResult result );
+    void createArchetype( ArchetypeCreationRequest request, ArchetypeCreationResult result );
 }

@@ -30,14 +30,15 @@
 How metadata on an archetype is stored?
 
     The metadata about an archetype is stored in the <<<archetype-metadata.xml>>> file
-    located in the directory <<<META-INF/maven>>> of its jar file.
+    located in the directory <<<META-INF/maven>>> of its jar file: see the
+    {{{/archetype/archetype-common/archetype-descriptor.html}reference documentation}}.
 
-    The metadata file stores the additional properties, with corresponding 
+    The metadata file stores the additional properties, with corresponding
     default values.
 
     It also stores the project's generated files in filesets.
 
-    Finally it also stores inner modules of the archetype, which enable the 
+    Finally it also stores inner modules of the archetype, which enable the
     creation of multi-module projects using a single archetype.
 
     A minimal <<<archetype-metadata.xml>>> file looks like:
@@ -57,21 +58,21 @@ How metadata on an archetype is stored?
 +---
 
     This example above shows:
-    
+
     * the archetype name is <<<basic>>>
 
-    * the archetype defines a single fileset: 
-    
+    * the archetype defines a single fileset:
+
       * the fileset will take all the files in <<<archetype-resources/src/main/java>>>
         that match the <<<**/*.java>>> pattern
 
-      * the selected files will be generated using the Velocity engine 
+      * the selected files will be generated using the Velocity engine
         (<<<filtered=true>>>)
 
-      * the files will be generated in the <<<src/main/java>>> directory of the 
-        generated project in the same directory as in the jar file, but with 
+      * the files will be generated in the <<<src/main/java>>> directory of the
+        generated project in the same directory as in the jar file, but with
         that directory prepended by the package property.
-      
+
       []
 
     []
@@ -81,7 +82,7 @@ How metadata on an archetype is stored?
 
     The main properties that are used by the Velocity engine during a project's file generation are groupId, artifactId, version and package.
 
-    It is possible to define additional properties that must be valued before the file generation. 
+    It is possible to define additional properties that must be valued before the file generation.
 
     These additional properties can be provided with default values, which enable not to ask the user for there values.
 
@@ -98,36 +99,36 @@ How metadata on an archetype is stored?
 ...
 </archetype-descriptor>
 +---
-    
+
     Here two additional properties are defined: <<<property-without-default>>>
     and <<<property-with-default>>>.
 
-    Be aware that the property keys can not contain any dots as they are 
+    Be aware that the property keys can not contain any dots as they are
     Velocity properties.
 
 
 * Defining specific filesets
 
     The filesets contained in the <<<archetype-metadata.xml>>> file defines the way
-    the project's files located in the jar file are used by the Archetype Plugin 
+    the project's files located in the jar file are used by the Archetype Plugin
     to generate a project.
 
-    Filesets must define the directory where the files will be searched for 
-    which is also the directory where the project's files will be generated. 
-    The first is the directory inside the archetype jar file, the second is the 
+    Filesets must define the directory where the files will be searched for
+    which is also the directory where the project's files will be generated.
+    The first is the directory inside the archetype jar file, the second is the
     directory in the generated project's tree.
 
-    Filesets also defines the inclusion/exclusion of files "à la " ant. 
-    This provide a powerful way to describe a large set of files to be selected 
+    Filesets also defines the inclusion/exclusion of files "<à la>" ant.
+    This provide a powerful way to describe a large set of files to be selected
     for the generation process.
 
-    Filesets can be filtered, which means the selected files will be used 
-    as Velocity templates. They can be non-filtered, which means the selected 
+    Filesets can be filtered, which means the selected files will be used
+    as Velocity templates. They can be non-filtered, which means the selected
     files will be copied without modification.
 
-    Filesets can be packaged, which means the selected files will be 
-    generated/copied in a directory structure that is prepended by the package 
-    property. They can be non-packaged, which means that the selected files 
+    Filesets can be packaged, which means the selected files will be
+    generated/copied in a directory structure that is prepended by the package
+    property. They can be non-packaged, which means that the selected files
     will be generated/copied without that prepend.
 
     A fileset is defined in the <<<archetype-metadata.xml>>> with this fragment:
@@ -148,16 +149,16 @@ How metadata on an archetype is stored?
 ...
 +---
 
-    This example shows a fileset that will select all the java files in the 
-    <<<src/test/java>>> directory of the archetype resources, except the 
+    This example shows a fileset that will select all the java files in the
+    <<<src/test/java>>> directory of the archetype resources, except the
     <<<AllTest.java>>> file that is located at the root of this directory.
 
-    This filset also is packaged and filtered.
+    This filset is also packaged and filtered.
 
 
 * Defining multi module in the archetype metadata
 
-    Inner modules of an archetype are used to create a multi module Maven 2 
+    Inner modules of an archetype are used to create a multi-module Maven 2
     project from a single archetype.
 
     Modules in the <<<archetype-metadata.xml>>> file are defined like:
@@ -177,28 +178,28 @@ How metadata on an archetype is stored?
 </archetype-descriptor>
 +---
 
-    In the example above, the archetype <<<multi-module>>> contains a module 
-    named <<<SubProject>>>. This module is located in the <<<sub-project>>> 
+    In the example above, the archetype <<<multi-module>>> contains a module
+    named <<<SubProject>>>. This module is located in the <<<sub-project>>>
     directory of the archetype. It also has the artifactId <<<subproject>>>.
 
-    The attributes name, id and dir of the module are used to determine the 
-    directory where to generate that module's files, they also are used to 
-    determine the artifactId of the Maven 2 project corresponding to this 
+    The attributes name, id and dir of the module are used to determine the
+    directory where to generate that module's files, they also are used to
+    determine the artifactId of the Maven 2 project corresponding to this
     module.
 
 
 * Putting it all together
 
-    The <<<\<requiredProperties\>>>> element is only allowed as a child of 
+    The <<<\<requiredProperties\>>>> element is only allowed as a child of
     <<<\<archetype-descriptor\>>>>.
 
-    Modules are allowed in <<<\<archetype-descriptor\>>>> and in <<<\<modules\>>>> (no limit is 
+    Modules are allowed in <<<\<archetype-descriptor\>>>> and in <<<\<modules\>>>> (no limit is
     given).
 
-    <<<\<archetype-descriptor\>>>> and <<<\<modules\>>>> must define at least one <<<\<fileSet\>>>> each to 
+    <<<\<archetype-descriptor\>>>> and <<<\<modules\>>>> must define at least one <<<\<fileSet\>>>> each to
     be valid.
 
-    It is possible to define default values for required properties by 
+    It is possible to define default values for required properties by
     defining say the groupId and giving it a default:
 
 +---

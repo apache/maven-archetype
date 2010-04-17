@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.common;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,9 +19,6 @@
  * under the License.
  */
 
-package org.apache.maven.archetype.common;
-
-import org.apache.maven.archetype.common.util.FileCharsetDetector;
 import org.apache.maven.archetype.common.util.Format;
 import org.apache.maven.archetype.exception.InvalidPackaging;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
@@ -37,6 +36,7 @@ import org.apache.maven.model.Plugin;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
+import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.codehaus.plexus.util.xml.Xpp3DomUtils;
@@ -54,37 +54,34 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /** @plexus.component */
 public class DefaultPomManager
     extends AbstractLogEnabled
     implements PomManager
 {
-    public void addModule( File pom,
-                           String artifactId )
-        throws
-        IOException,
-        XmlPullParserException,
-        DocumentException,
-        InvalidPackaging
+    public void addModule( File pom, String artifactId )
+        throws IOException, XmlPullParserException, DocumentException, InvalidPackaging
     {
         boolean found = false;
 
         StringWriter writer = new StringWriter();
-        Reader fileReader = new FileReader( pom );
+        Reader fileReader = null;
 
         try
         {
-            fileReader = new FileReader( pom );
+            fileReader = ReaderFactory.newXmlReader( pom );
 
             SAXReader reader = new SAXReader();
             Document document = reader.read( fileReader );
@@ -156,16 +153,13 @@ public class DefaultPomManager
         }
     }
 
-    public void addParent( File pom,
-                           File parentPom )
-        throws
-        IOException,
-        XmlPullParserException
+    public void addParent( File pom, File parentPom )
+        throws IOException, XmlPullParserException
     {
         Model generatedModel = readPom( pom );
-        if( null != generatedModel.getParent() )
+        if ( null != generatedModel.getParent() )
         {
-            getLogger().info( "Parent element not overwrited in " + pom );
+            getLogger().info( "Parent element not overwritten in " + pom );
             return;
         }
 
@@ -188,11 +182,8 @@ public class DefaultPomManager
         writePom( generatedModel, pom, pom );
     }
 
-    public void mergePoms( File pom,
-                           File temporaryPom )
-        throws
-        IOException,
-        XmlPullParserException
+    public void mergePoms( File pom, File temporaryPom )
+        throws IOException, XmlPullParserException
     {
         Model model = readPom( pom );
         Model generatedModel = readPom( temporaryPom );
@@ -269,84 +260,44 @@ public class DefaultPomManager
     }
 
     public Model readPom( final File pomFile )
-        throws
-        IOException,
-        XmlPullParserException
-    { // TODO ensure correct encoding by using default one from method argument !!!
-
+        throws IOException, XmlPullParserException
+    {
         Model model;
         Reader pomReader = null;
         try
         {
-            FileCharsetDetector detector = new FileCharsetDetector( pomFile );
-
-            String fileEncoding = detector.isFound() ? detector.getCharset() : "UTF-8";
-
-            pomReader = new InputStreamReader( new FileInputStream( pomFile ), fileEncoding );
+            pomReader = ReaderFactory.newXmlReader( pomFile );
 
             MavenXpp3Reader reader = new MavenXpp3Reader();
 
             model = reader.read( pomReader );
-
-            if ( StringUtils.isEmpty( model.getModelEncoding() ) )
-            {
-                model.setModelEncoding( fileEncoding );
-            }
         }
         finally
         {
             IOUtil.close( pomReader );
-            pomReader = null;
         }
         return model;
     }
 
 
     public Model readPom( InputStream pomStream )
-        throws
-        IOException,
-        XmlPullParserException
-    { // TODO ensure correct encoding by using default one from method argument !!!
+        throws IOException, XmlPullParserException
+    {
+        Reader pomReader = ReaderFactory.newXmlReader( pomStream );
 
-        Model model;
-        Reader pomReader = null;
-        try
-        {
-//            FileCharsetDetector detector = new FileCharsetDetector( pomStream );
+        MavenXpp3Reader reader = new MavenXpp3Reader();
 
-            String fileEncoding = /*detector.isFound() ? detector.getCharset() :*/ "UTF-8";
-
-            pomReader = new InputStreamReader( pomStream, fileEncoding );
-
-            MavenXpp3Reader reader = new MavenXpp3Reader();
-
-            model = reader.read( pomReader );
-
-            if ( StringUtils.isEmpty( model.getModelEncoding() ) )
-            {
-                model.setModelEncoding( fileEncoding );
-            }
-        }
-        finally
-        {
-            IOUtil.close( pomReader );
-            pomReader = null;
-        }
-        return model;
+        return reader.read( pomReader );
     }
 
-    public void writePom( final Model model,
-                          final File pomFile,
-                          final File initialPomFile )
-        throws
-        IOException
+    public void writePom( final Model model, final File pomFile, final File initialPomFile )
+        throws IOException
     {
         InputStream inputStream = null;
         Writer outputStreamWriter = null;
-//        FileCharsetDetector detector = new FileCharsetDetector ( pomFile );
 
         String fileEncoding =
-            StringUtils.isEmpty( model.getModelEncoding() ) ? model.getModelEncoding() : "UTF-8";
+            StringUtils.isEmpty( model.getModelEncoding() ) ? "UTF-8" : model.getModelEncoding();
 
         try
         {
@@ -365,8 +316,6 @@ public class DefaultPomManager
 
             Format form = Format.getRawFormat().setEncoding( fileEncoding );
             writer.write( model, doc, outputStreamWriter, form );
-            outputStreamWriter.close();
-            outputStreamWriter = null;
         }
         catch ( JDOMException exc )
         {
@@ -380,14 +329,11 @@ public class DefaultPomManager
 
             try
             {
-//                pomWriter = new FileWriter ( pomFile );
                 pomWriter =
                     new OutputStreamWriter( new FileOutputStream( pomFile ), fileEncoding );
 
                 MavenXpp3Writer writer = new MavenXpp3Writer();
                 writer.write( pomWriter, model );
-                pomWriter.close();
-                pomWriter = null;
             }
             finally
             {
@@ -509,15 +455,14 @@ public class DefaultPomManager
                 getLogger().warn( "Can not override property: " + generatedDependencyId );
             }
 
-        // TODO: maybe warn, if a property key gets overriden?
+        // TODO: maybe warn, if a property key gets overridden?
         model.getProperties().putAll( generatedModel.getProperties() );
 
         // TODO: maybe merge more than just dependencies and properties...
         }
     }
 
-    private void mergeReportPlugins( Model model,
-                                     Model generatedModel )
+    private void mergeReportPlugins( Model model, Model generatedModel )
     {
         if ( generatedModel.getReporting() != null )
         {

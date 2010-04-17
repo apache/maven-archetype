@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.mojos;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,17 +19,11 @@
  * under the License.
  */
 
-package org.apache.maven.archetype.mojos;
-
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.maven.archetype.ArchetypeGenerationRequest;
+import org.apache.maven.archetype.ArchetypeGenerationResult;
 import org.apache.maven.archetype.common.Constants;
-import org.apache.maven.archetype.exception.ArchetypeGenerationFailure;
-import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
-import org.apache.maven.archetype.exception.OutputFileExists;
-import org.apache.maven.archetype.exception.PomFileExists;
-import org.apache.maven.archetype.exception.ProjectDirectoryExists;
-import org.apache.maven.archetype.exception.UnknownArchetype;
-import org.apache.maven.archetype.generator.FilesetArchetypeGenerator;
+import org.apache.maven.archetype.generator.ArchetypeGenerator;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -55,7 +51,7 @@ public class IntegrationTestMojo
     extends AbstractMojo
 {
     /** @component */
-    FilesetArchetypeGenerator filesetGenerator;
+    ArchetypeGenerator archetypeGenerator;
 
     /**
      * The archetype project to execute the integration tests on.
@@ -75,23 +71,19 @@ public class IntegrationTestMojo
     private boolean skip = false;
 
     public void execute()
-        throws
-        MojoExecutionException,
-        MojoFailureException
+        throws MojoExecutionException, MojoFailureException
     {
         if ( !skip )
         {
             try
             {
-                File projectsDirectory =
-                    new File( project.getBasedir(), "target/test-classes/projects" );
+                File projectsDirectory = new File( project.getBasedir(), "target/test-classes/projects" );
 
                 if ( projectsDirectory.exists() )
                 {
                     File archetypeFile = project.getArtifact().getFile();
 
-                    List projectsGoalFiles =
-                        FileUtils.getFiles( projectsDirectory, "*/goal.txt", "" );
+                    List projectsGoalFiles = FileUtils.getFiles( projectsDirectory, "*/goal.txt", "" );
 
                     Iterator goalFiles = projectsGoalFiles.iterator();
 
@@ -106,10 +98,7 @@ public class IntegrationTestMojo
                         }
                         catch ( IntegrationTestFailure ex )
                         {
-                            errorWriter.write(
-                                "Test " + goalFile.getParentFile().getName() + " failed\n"
-                            );
-
+                            errorWriter.write( "Test " + goalFile.getParentFile().getName() + " failed\n" );
                             errorWriter.write( ex.getStackTrace() + "\n" );
                             errorWriter.write( ex.getMessage() + "\n" );
                             errorWriter.write( "\n" );
@@ -130,21 +119,17 @@ public class IntegrationTestMojo
         }
     }
 
-    private void assertTest( File reference,
-                             File basedir )
-        throws
-        IntegrationTestFailure,
-        IOException
+    private void assertTest( File reference, File basedir )
+        throws IntegrationTestFailure, IOException
     {
         List referenceFiles = FileUtils.getFileNames( reference, "**", null, false );
         List projectFiles = FileUtils.getFileNames( basedir, "**", null, false );
 
-        boolean fileNamesEquals =
-            CollectionUtils.isEqualCollection( referenceFiles, projectFiles );
+        boolean fileNamesEquals = CollectionUtils.isEqualCollection( referenceFiles, projectFiles );
 
+        if ( !fileNamesEquals )
         {
-            Iterator refs = referenceFiles.iterator();
-            while ( refs.hasNext() )
+            for ( Iterator refs = referenceFiles.iterator(); refs.hasNext(); )
             {
                 String ref = (String) refs.next();
 
@@ -155,20 +140,17 @@ public class IntegrationTestMojo
                 }
                 else
                 {
-                    getLog().debug( "Not contained " + ref );
+                    getLog().error( "Not contained " + ref );
                 }
             }
-            getLog().debug( "Remains " + projectFiles );
-        }
+            getLog().error( "Remains " + projectFiles );
 
-        if ( !fileNamesEquals )
-        {
             throw new IntegrationTestFailure( "Reference and generated project differs" );
         }
 
         boolean contentEquals = true;
-        Iterator files = referenceFiles.iterator();
-        while ( files.hasNext() )
+
+        for ( Iterator files = referenceFiles.iterator(); files.hasNext(); )
         {
             String file = (String) files.next();
 
@@ -182,11 +164,7 @@ public class IntegrationTestMojo
             }
             else
             {
-                if ( !FileUtils.contentEquals(
-                    new File( reference, file ),
-                    new File( basedir, file )
-                )
-                    )
+                if ( !FileUtils.contentEquals( new File( reference, file ), new File( basedir, file ) ) )
                 {
                     getLog().warn( "Contents of file " + file + " are not equal" );
                     contentEquals = false;
@@ -200,9 +178,7 @@ public class IntegrationTestMojo
     }
 
     private Properties loadProperties( final File propertiesFile )
-        throws
-        IOException,
-        FileNotFoundException
+        throws IOException, FileNotFoundException
     {
         Properties properties = new Properties();
 
@@ -211,18 +187,14 @@ public class IntegrationTestMojo
         return properties;
     }
 
-    private boolean modelEquals( File referencePom,
-                                 File generatedPom )
-        throws
-        IOException
+    private boolean modelEquals( File referencePom, File generatedPom )
+        throws IOException
     {
         return FileUtils.contentEquals( referencePom, generatedPom );
     }
 
-    private void processIntegrationTest( File goalFile,
-                                         File archetypeFile )
-        throws
-        IntegrationTestFailure
+    private void processIntegrationTest( File goalFile, File archetypeFile )
+        throws IntegrationTestFailure
     {
         try
         {
@@ -232,59 +204,55 @@ public class IntegrationTestMojo
 
             String basedir = goalFile.getParentFile().getPath() + "/project";
 
+            FileUtils.deleteDirectory( basedir );
+
             FileUtils.mkdir( basedir );
-//TODO: fix this to use request
-            filesetGenerator.generateArchetype( null, archetypeFile, basedir );
+
+            ArchetypeGenerationRequest request = new ArchetypeGenerationRequest()
+                .setArchetypeGroupId( project.getGroupId() )
+                .setArchetypeArtifactId( project.getArtifactId() )
+                .setArchetypeVersion( project.getVersion() )
+                .setGroupId( properties.getProperty( Constants.GROUP_ID ) )
+                .setArtifactId( properties.getProperty( Constants.ARTIFACT_ID ) )
+                .setVersion( properties.getProperty( Constants.VERSION ) )
+                .setPackage( properties.getProperty( Constants.PACKAGE ) )
+                .setOutputDirectory( basedir )
+                .setProperties( properties );
+
+            ArchetypeGenerationResult result = new ArchetypeGenerationResult();
+
+            archetypeGenerator.generateArchetype( request, archetypeFile, result );
 
             File reference = new File( goalFile.getParentFile(), "reference" );
 
-            assertTest(
-                reference,
-                new File( basedir, properties.getProperty( Constants.ARTIFACT_ID ) )
-            );
+            if ( reference.exists() )
+            {
+                // compare generated project with reference
+                assertTest( reference, new File( basedir, request.getArtifactId() ) );
+            }
+
+            if ( result.getCause() != null )
+            {
+                throw new IntegrationTestFailure( result.getCause() );
+            }
         }
-        catch ( ArchetypeNotConfigured ex )
+        catch ( IOException ioe )
         {
-            throw new IntegrationTestFailure( ex );
-        }
-        catch ( UnknownArchetype ex )
-        {
-            throw new IntegrationTestFailure( ex );
-        }
-        catch ( PomFileExists ex )
-        {
-            throw new IntegrationTestFailure( ex );
-        }
-        catch ( ProjectDirectoryExists ex )
-        {
-            throw new IntegrationTestFailure( ex );
-        }
-        catch ( ArchetypeGenerationFailure ex )
-        {
-            throw new IntegrationTestFailure( ex );
-        }
-        catch ( IOException ex )
-        {
-            throw new IntegrationTestFailure( ex );
-        }
-        catch ( OutputFileExists ex )
-        {
-            throw new IntegrationTestFailure( ex );
+            throw new IntegrationTestFailure( ioe );
         }
     }
 
     private Properties getProperties( File goalFile )
-        throws
-        IOException
+        throws IOException
     {
         File propertiesFile = new File( goalFile.getParentFile(), "archetype.properties" );
+        System.out.println( propertiesFile );
 
         return loadProperties( propertiesFile );
     }
 
     private Properties getTestProperties( File goalFile )
-        throws
-        IOException
+        throws IOException
     {
         return loadProperties( goalFile );
     }
@@ -307,8 +275,7 @@ public class IntegrationTestMojo
             super( cause );
         }
 
-        IntegrationTestFailure( String message,
-                                Throwable cause )
+        IntegrationTestFailure( String message, Throwable cause )
         {
             super( message, cause );
         }

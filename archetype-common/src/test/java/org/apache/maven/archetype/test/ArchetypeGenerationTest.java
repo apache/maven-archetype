@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.test;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,17 +19,17 @@
  * under the License.
  */
 
-package org.apache.maven.archetype.test;
-
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
-import org.apache.maven.archetype.Archetype;
+import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.codehaus.plexus.PlexusTestCase;
 
 import java.io.File;
 import java.util.Properties;
+
+import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.codehaus.plexus.util.FileUtils;
 
@@ -38,7 +40,7 @@ public class ArchetypeGenerationTest
     public void testProjectGenerationFromAnArchetype()
         throws Exception
     {
-        Archetype archetype = (Archetype) lookup( Archetype.ROLE );
+        ArchetypeManager archetype = (ArchetypeManager) lookup( ArchetypeManager.ROLE );
 
         // In the embedder the localRepository will be retrieved from the embedder itself and users won't
         // have to go through this muck.
@@ -49,7 +51,7 @@ public class ArchetypeGenerationTest
             new File( getBasedir(), "target/test-classes/repositories/local" )
                 .toURI().toURL().toExternalForm(), "local-repo" );
 
-        ArchetypeCatalog catalog = archetype.getLocalCatalog( 
+        ArchetypeCatalog catalog = archetype.getLocalCatalog(
             new File( getBasedir(), "target/test-classes/repositories/central" ).getAbsolutePath()
                  );
 
@@ -57,8 +59,7 @@ public class ArchetypeGenerationTest
         // Here I am just grabbing a OldArchetype but in a UI you would take the OldArchetype objects and present
         // them to the user.
 
-        org.apache.maven.archetype.catalog.Archetype selection = (org.apache.maven.archetype.catalog.Archetype) 
-            catalog.getArchetypes().get( catalog.getArchetypes().size() - 1 );
+        Archetype selection = (Archetype) catalog.getArchetypes().get( catalog.getArchetypes().size() - 1 );
 
         System.err.println( "Selected OldArchetype = " + selection );
         // Now you will present a dialog, or whatever, and grab the following values.
@@ -74,7 +75,7 @@ public class ArchetypeGenerationTest
         // With the selected OldArchetype and the parameters you can create a generation request as follows:
         File outputDirectory = new File( getBasedir(), "target/test-classes/projects/archetyper-generate-1" );
         FileUtils.forceDelete(outputDirectory);
-        
+
         ArchetypeGenerationRequest agr = new ArchetypeGenerationRequest( selection )
             .setOutputDirectory( outputDirectory.getAbsolutePath() )
             .setLocalRepository( localRepository )
@@ -104,5 +105,5 @@ public class ArchetypeGenerationTest
             fail( result.getCause().getMessage() );
         }
     }
-    
+
 }

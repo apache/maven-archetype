@@ -18,9 +18,16 @@
   ~ under the License.
   -->
 <model xmlns="http://modello.codehaus.org/MODELLO/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://modello.codehaus.org/MODELLO/1.0.0 http://modello.codehaus.org/xsd/modello-1.0.0.xsd">
+  xsi:schemaLocation="http://modello.codehaus.org/MODELLO/1.0.0 http://modello.codehaus.org/xsd/modello-1.0.0.xsd"
+  xml.namespace="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-registry/${version}"
+  xml.schemaLocation="http://maven.apache.org/xsd/archetype-registry-${version}.xsd">
   <id>archetype-registry</id>
   <name>ArchetypeRegistry</name>
+  <description>
+    <![CDATA[
+    <p>This is a reference for the Archetype Registry descriptor.</p>
+    <p>The registry is stored in <code>~/.m2/archetype.xml</code> file.</p>]]>
+  </description>
 
   <defaults>
     <default>

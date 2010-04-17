@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.source;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,11 +19,10 @@
  * under the License.
  */
 
-package org.apache.maven.archetype.source;
-
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
+import org.codehaus.plexus.util.ReaderFactory;
 
-import java.io.InputStreamReader;
+import java.io.IOException;
 import java.io.Reader;
 import java.util.List;
 import java.util.Properties;
@@ -37,19 +38,33 @@ public class InternalCatalogArchetypeDataSource
     public ArchetypeCatalog getArchetypeCatalog( Properties properties )
         throws ArchetypeDataSourceException
     {
-        Reader reader = new InputStreamReader(
-            getClass().getClassLoader().getResourceAsStream( "archetype-catalog.xml" ) );
+        try
+        {
+            Reader reader = ReaderFactory.newXmlReader(
+                getClass().getClassLoader().getResourceAsStream( "archetype-catalog.xml" ) );
 
-        return readCatalog( reader );
+            return readCatalog( reader );
+        }
+        catch ( IOException e )
+        {
+            throw new ArchetypeDataSourceException( "Error reading archetype catalog.", e );
+        }
     }
 
     public List getArchetypes( Properties properties )
         throws ArchetypeDataSourceException
     {
-        Reader reader = new InputStreamReader(
-            getClass().getClassLoader().getResourceAsStream( "archetype-catalog.xml" ) );
+        try
+        {
+            Reader reader = ReaderFactory.newXmlReader(
+                getClass().getClassLoader().getResourceAsStream( "archetype-catalog.xml" ) );
 
-        return createArchetypeMap( readCatalog( reader ) );
+            return createArchetypeMap( readCatalog( reader ) );
+        }
+        catch ( IOException e )
+        {
+            throw new ArchetypeDataSourceException( "Error reading archetype catalog.", e );
+        }
     }
 
 //    public void updateCatalog( Properties properties,

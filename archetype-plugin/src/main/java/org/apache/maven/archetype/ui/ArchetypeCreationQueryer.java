@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.ui;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,8 +19,6 @@
  * under the License.
  */
 
-package org.apache.maven.archetype.ui;
-
 import org.apache.maven.archetype.common.ArchetypeConfiguration;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 
@@ -29,67 +29,55 @@ public interface ArchetypeCreationQueryer
     /**
      */
     String getArchetypeArtifactId( String defaultValue )
-        throws
-        PrompterException;
+        throws PrompterException;
 
     /**
      */
     String getArchetypeGroupId( String defaultValue )
-        throws
-        PrompterException;
+        throws PrompterException;
 
     /**
      */
     String getArchetypeVersion( String defaultValue )
-        throws
-        PrompterException;
+        throws PrompterException;
 
     /**
      */
     String getArtifactId( String defaultValue )
-        throws
-        PrompterException;
+        throws PrompterException;
 
     /**
      */
     boolean askAddAnotherProperty()
-        throws
-        PrompterException;
+        throws PrompterException;
 
     /**
      */
     String askNewPropertyKey()
-        throws
-        PrompterException;
+        throws PrompterException;
 
     /**
      */
-    String askReplacementValue( String propertyKey,
-                                String defaultValue )
-        throws
-        PrompterException;
+    String askReplacementValue( String propertyKey, String defaultValue )
+        throws PrompterException;
 
     /**
      */
     boolean confirmConfiguration( ArchetypeConfiguration archetypeConfiguration )
-        throws
-        PrompterException;
+        throws PrompterException;
 
     /**
      */
     String getGroupId( String defaultValue )
-        throws
-        PrompterException;
+        throws PrompterException;
 
     /**
      */
     String getPackage( String defaultValue )
-        throws
-        PrompterException;
+        throws PrompterException;
 
     /**
      */
     String getVersion( String defaultValue )
-        throws
-        PrompterException;
+        throws PrompterException;
 }

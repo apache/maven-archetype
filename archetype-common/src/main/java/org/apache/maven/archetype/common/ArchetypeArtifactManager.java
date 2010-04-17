@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.common;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,8 +19,6 @@
  * under the License.
  */
 
-package org.apache.maven.archetype.common;
-
 import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.archetype.metadata.ArchetypeDescriptor;
 import org.apache.maven.artifact.repository.ArtifactRepository;
@@ -37,7 +37,7 @@ public interface ArchetypeArtifactManager
     String ROLE = ArchetypeArtifactManager.class.getName ();
 
     Model getArchetypePom ( File jar )
-    throws XmlPullParserException, UnknownArchetype, IOException;
+        throws XmlPullParserException, UnknownArchetype, IOException;
 
     /**
      */
@@ -49,17 +49,17 @@ public interface ArchetypeArtifactManager
         final ArtifactRepository localRepository,
         final List repositories
     )
-    throws UnknownArchetype;
+        throws UnknownArchetype;
 
     /**
      */
     ClassLoader getArchetypeJarLoader ( File archetypeFile )
-    throws UnknownArchetype;
+        throws UnknownArchetype;
 
     /**
      */
     ZipFile getArchetypeZipFile ( File archetypeFile )
-    throws UnknownArchetype;
+        throws UnknownArchetype;
 
     /**
      */
@@ -105,7 +105,7 @@ public interface ArchetypeArtifactManager
     /**
      */
     ArchetypeDescriptor getFileSetArchetypeDescriptor ( File archetypeFile )
-    throws UnknownArchetype;
+        throws UnknownArchetype;
 
     /**
      */
@@ -117,19 +117,19 @@ public interface ArchetypeArtifactManager
         ArtifactRepository localRepository,
         List repositories
     )
-    throws UnknownArchetype;
+        throws UnknownArchetype;
 
     /**
      */
     List getFilesetArchetypeResources ( File archetypeFile )
-    throws UnknownArchetype;
+        throws UnknownArchetype;
 
     /**
      */
     org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor getOldArchetypeDescriptor (
         File archetypeFile
     )
-    throws UnknownArchetype;
+        throws UnknownArchetype;
 
     /**
      */
@@ -141,5 +141,5 @@ public interface ArchetypeArtifactManager
         ArtifactRepository localRepository,
         List repositories
     )
-    throws UnknownArchetype;
+        throws UnknownArchetype;
 }

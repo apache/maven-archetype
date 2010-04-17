@@ -29,21 +29,21 @@
 
 Specification
 
-    The Specification of the Archetype Plugin aims to answer to the following 
+    The Specification of the Archetype Plugin aims to answer to the following
     questions:
 
-    * {{{archetype.html}What is an archetype?}}
+    * {{{./archetype.html}What is an archetype?}}
 
-    * {{{archetype-metadata.html}How metadata on an archetype is stored?}}
+    * {{{./archetype-metadata.html}How is metadata on an archetype stored?}}
 
-    * {{{generate.html}What is done during the creation of a project?}}
+    * {{{./generate.html}What is done during the creation of a project?}}
 
-    * {{{archetype-catalog.html}How the Archetype Plugin know about archetype?}}
+    * {{{./archetype-catalog.html}How does the Archetype Plugin know about archetype?}}
 
-~~    * {{{create-from-project.html}What is done during the creation of an archetype?}}
+    * {{{./create-from-project.html}What is done during the creation of an archetype?}}
 ~~
-~~    * {{{update-catalog.html}How the Archetype Plugin know about new archetypes?}}
+~~    * {{{./update-catalog.html}How does the Archetype Plugin know about new archetypes?}}
 ~~
-~~    * {{{crawl-repository.html}How archetype lists are created?}}
-    
+~~    * {{{./crawl-repository.html}How are archetype lists created?}}
+
     []

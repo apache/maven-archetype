@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.ui;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,10 +19,9 @@
  * under the License.
  */
 
-package org.apache.maven.archetype.ui;
-
 import org.apache.commons.collections.iterators.ArrayIterator;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
+import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.common.ArchetypeDefinition;
 import org.apache.maven.archetype.exception.ArchetypeNotDefined;
@@ -52,16 +53,10 @@ public class DefaultArchetypeSelector
     /** @plexus.requirement */
     private ArchetypeSelectionQueryer archetypeSelectionQueryer;
     /** @plexus.requirement */
-    private org.apache.maven.archetype.Archetype archetype;
+    private ArchetypeManager archetype;
 
-    public void selectArchetype( ArchetypeGenerationRequest request,
-            Boolean interactiveMode, String catalogs )
-        throws
-        ArchetypeNotDefined,
-        UnknownArchetype,
-        UnknownGroup,
-        IOException,
-        PrompterException,
+    public void selectArchetype( ArchetypeGenerationRequest request, Boolean interactiveMode, String catalogs )
+        throws ArchetypeNotDefined, UnknownArchetype, UnknownGroup, IOException, PrompterException,
         ArchetypeSelectionFailure
     {
         //This should be an internal class
@@ -71,115 +66,113 @@ public class DefaultArchetypeSelector
         definition.setArtifactId( request.getArchetypeArtifactId() );
         definition.setVersion( request.getArchetypeVersion() );
 
-        Map archetypes = getArchetypesByCatalog ( catalogs );
+        Map archetypes = getArchetypesByCatalog( catalogs );
 
-        if ( definition.isDefined ()
-            && StringUtils.isNotEmpty ( request.getArchetypeRepository () )
-        )
+        if ( definition.isDefined() && StringUtils.isNotEmpty( request.getArchetypeRepository() ) )
         {
-            getLogger ().info ( "Archetype defined by properties" );
+            getLogger().info( "Archetype defined by properties" );
         }
         else
         {
-            if ( definition.isDefined ()
-                && StringUtils.isEmpty ( request.getArchetypeRepository () )
-            )
+            if ( definition.isDefined() && StringUtils.isEmpty( request.getArchetypeRepository() ) )
             {
-                Iterator ca = new ArrayIterator ( StringUtils.split ( catalogs, "," ) );
+                Iterator ca = new ArrayIterator( StringUtils.split ( catalogs, "," ) );
                 boolean found = false;
-                while ( !found && ca.hasNext () )
+                while ( !found && ca.hasNext() )
                 {
-                    String catalogKey = (String) ca.next ();
-                    String[] keySplitted = catalogKey.split("-", 2);
-                    List catalog = (List) archetypes.get ( catalogKey );
-                    Archetype example = new Archetype ();
-                    example.setGroupId ( request.getArchetypeGroupId () );
-                    example.setArtifactId ( request.getArchetypeArtifactId () );
-                    if ( catalog.contains ( example ) )
+                    String catalogKey = (String) ca.next();
+
+                    String[] keySplitted = catalogKey.split( "-", 2 );
+
+                    List catalog = (List) archetypes.get( catalogKey );
+
+                    Archetype example = new Archetype();
+                    example.setGroupId( request.getArchetypeGroupId() );
+                    example.setArtifactId( request.getArchetypeArtifactId() );
+
+                    if ( catalog.contains( example ) )
                     {
                         found = true;
 
-                        Archetype foundArchetype =
-                            (Archetype) catalog.get ( catalog.indexOf ( example ) );
-                        definition.setName ( foundArchetype.getArtifactId () );
-                        if ( StringUtils.isNotEmpty( foundArchetype.getRepository () ) )
+                        Archetype foundArchetype = (Archetype) catalog.get( catalog.indexOf( example ) );
+                        definition.setName( foundArchetype.getArtifactId() );
+                        if ( StringUtils.isNotEmpty( foundArchetype.getRepository() ) )
                         {
-                            definition.setRepository ( foundArchetype.getRepository () );
+                            definition.setRepository( foundArchetype.getRepository() );
                         }
                         else if ( keySplitted.length > 1 )
                         {
-                            int lastIndex = catalogKey.lastIndexOf("/");
-                            String catalogBase = catalogKey.substring(0,
-                                    (lastIndex > 7 ? lastIndex : catalogKey.length()));
-                            definition.setRepository ( catalogBase );
+                            int lastIndex = catalogKey.lastIndexOf( "/" );
+                            String catalogBase =
+                                catalogKey.substring( 0, ( lastIndex > 7 ? lastIndex : catalogKey.length() ) );
+                            definition.setRepository( catalogBase );
                         }
 
-                        getLogger ().info (
-                            "Archetype repository missing. Using the one from " + foundArchetype
-                            + " found in catalog " + catalogKey
-                        );
+                        getLogger().info(
+                                          "Archetype repository missing. Using the one from " + foundArchetype
+                                              + " found in catalog " + catalogKey );
                     }
                 }
                 if ( !found )
                 {
-                    getLogger ().warn ( "No archetype repository found. Falling back to central repository (http://repo1.maven.org/maven2). " );
-                    getLogger ().warn ( "Use -DarchetypeRepository=<your repository> if archetype's repository is elsewhere." );
+                    getLogger().warn( "No archetype repository found. Falling back to central repository (http://repo1.maven.org/maven2). " );
+                    getLogger().warn( "Use -DarchetypeRepository=<your repository> if archetype's repository is elsewhere." );
 
-                    definition.setRepository("http://repo1.maven.org/maven2");
+                    definition.setRepository( "http://repo1.maven.org/maven2" );
                 }
             }
-            if ( !definition.isDefined () && definition.isPartiallyDefined () )
+            if ( !definition.isDefined() && definition.isPartiallyDefined() )
             {
-                Iterator ca = new ArrayIterator ( StringUtils.split ( catalogs, "," ) );
+                Iterator ca = new ArrayIterator( StringUtils.split( catalogs, "," ) );
                 boolean found = false;
-                while ( !found && ca.hasNext () )
+                while ( !found && ca.hasNext() )
                 {
-                    String catalogKey = (String) ca.next ();
-                    List catalog = (List) archetypes.get ( catalogKey );
-                    String[] keySplitted = catalogKey.split(":", 2);
-                    Archetype example = new Archetype ();
-                    example.setGroupId ( request.getArchetypeGroupId () );
-                    example.setArtifactId ( request.getArchetypeArtifactId () );
+                    String catalogKey = (String) ca.next();
+
+                    List catalog = (List) archetypes.get( catalogKey );
+
+                    String[] keySplitted = catalogKey.split( ":", 2 );
+
+                    Archetype example = new Archetype();
+                    example.setGroupId( request.getArchetypeGroupId() );
+                    example.setArtifactId( request.getArchetypeArtifactId() );
+
                     if ( catalog.contains ( example ) )
                     {
                         found = true;
 
-                        Archetype foundArchetype =
-                            (Archetype) catalog.get ( catalog.indexOf ( example ) );
-                        definition.setGroupId ( foundArchetype.getGroupId () );
-                        definition.setArtifactId ( foundArchetype.getArtifactId () );
-                        definition.setVersion ( foundArchetype.getVersion () );
-                        definition.setName ( foundArchetype.getArtifactId () );
-                        if ( StringUtils.isNotEmpty( foundArchetype.getRepository () ) )
+                        Archetype foundArchetype = (Archetype) catalog.get( catalog.indexOf( example ) );
+                        definition.setGroupId( foundArchetype.getGroupId() );
+                        definition.setArtifactId( foundArchetype.getArtifactId() );
+                        definition.setVersion( foundArchetype.getVersion() );
+                        definition.setName( foundArchetype.getArtifactId() );
+
+                        if ( StringUtils.isNotEmpty( foundArchetype.getRepository() ) )
                         {
-                            definition.setRepository ( foundArchetype.getRepository () );
+                            definition.setRepository( foundArchetype.getRepository() );
                         }
                         else if ( keySplitted.length > 1 )
                         {
-                            int lastIndex = catalogKey.lastIndexOf("/");
-                            String catalogBase = catalogKey.substring(0,
-                                    (lastIndex > 7 ? lastIndex : catalogKey.length()));
-                            definition.setRepository ( catalogBase );
+                            int lastIndex = catalogKey.lastIndexOf( "/" );
+                            String catalogBase =
+                                catalogKey.substring( 0, ( lastIndex > 7 ? lastIndex : catalogKey.length() ) );
+                            definition.setRepository( catalogBase );
                         }
 
-                        String goals =
-                            StringUtils.join ( foundArchetype.getGoals ().iterator (), "," );
-                        definition.setGoals ( goals );
+                        String goals = StringUtils.join( foundArchetype.getGoals().iterator(), "," );
+                        definition.setGoals( goals );
 
-                        getLogger ().info (
-                            "Archetype " + foundArchetype
-                            + " found in catalog " + catalogKey
-                        );
+                        getLogger().info( "Archetype " + foundArchetype + " found in catalog " + catalogKey );
                     }
                 }
                 if ( !found )
                 {
-                    getLogger ().warn ( "Specified archetype not found." );
-                    if ( interactiveMode.booleanValue () )
+                    getLogger().warn( "Specified archetype not found." );
+                    if ( interactiveMode.booleanValue() )
                     {
-                        definition.setVersion ( null );
-                        definition.setGroupId ( null );
-                        definition.setArtifactId ( null );
+                        definition.setVersion( null );
+                        definition.setGroupId( null );
+                        definition.setArtifactId( null );
                     }
                 }
             }
@@ -216,18 +209,18 @@ public class DefaultArchetypeSelector
                     definition.setArtifactId( selectedArchetype.getArtifactId() );
                     definition.setVersion( selectedArchetype.getVersion() );
                     definition.setName( selectedArchetype.getArtifactId() );
-                    String catalogKey = getCatalogKey ( archetypes, selectedArchetype );
-                    String[] keySplitted = catalogKey.split(":", 2);
-                    if ( StringUtils.isNotEmpty( selectedArchetype.getRepository () ) )
+                    String catalogKey = getCatalogKey( archetypes, selectedArchetype );
+                    String[] keySplitted = catalogKey.split( ":", 2 );
+                    if ( StringUtils.isNotEmpty( selectedArchetype.getRepository() ) )
                     {
-                        definition.setRepository ( selectedArchetype.getRepository () );
+                        definition.setRepository( selectedArchetype.getRepository() );
                     }
                     else if ( keySplitted.length > 1 )
                     {
-                        int lastIndex = catalogKey.lastIndexOf("/");
-                        String catalogBase = catalogKey.substring(0,
-                                (lastIndex > 7 ? lastIndex : catalogKey.length()));
-                        definition.setRepository ( catalogBase );
+                        int lastIndex = catalogKey.lastIndexOf( "/" );
+                        String catalogBase =
+                            catalogKey.substring( 0, ( lastIndex > 7 ? lastIndex : catalogKey.length() ) );
+                        definition.setRepository( catalogBase );
                     }
                     String goals = StringUtils.join( selectedArchetype.getGoals().iterator(), "," );
                     definition.setGoals( goals );
@@ -253,12 +246,14 @@ public class DefaultArchetypeSelector
 
         request.setArchetypeName( definition.getName() );
 
-        if (StringUtils.isNotEmpty(definition.getRepository())){
+        if ( StringUtils.isNotEmpty( definition.getRepository() ) )
+        {
             request.setArchetypeRepository( definition.getRepository() );
         }
     }
 
-    private Map getArchetypesByCatalog(String catalogs) {
+    private Map getArchetypesByCatalog( String catalogs )
+    {
         if ( catalogs == null )
         {
             throw new NullPointerException( "catalogs can not be null" );
@@ -266,40 +261,52 @@ public class DefaultArchetypeSelector
 
         Map archetypes = new HashMap();
 
-        Iterator ca = new ArrayIterator(StringUtils.split(catalogs, ","));
-        while (ca.hasNext()) {
+        for ( Iterator ca = new ArrayIterator( StringUtils.split( catalogs, "," ) ); ca.hasNext(); )
+        {
             String catalog = (String) ca.next();
 
-            if ("internal".equalsIgnoreCase(catalog)) {
-                archetypes.put("internal", archetype.getInternalCatalog().getArchetypes());
-            } else if ("local".equalsIgnoreCase(catalog)) {
-                archetypes.put("local", archetype.getDefaultLocalCatalog().getArchetypes());
-            } else if ("remote".equalsIgnoreCase(catalog)) {
+            if ( "internal".equalsIgnoreCase( catalog ) )
+            {
+                archetypes.put( "internal", archetype.getInternalCatalog().getArchetypes() );
+            }
+            else if ( "local".equalsIgnoreCase( catalog ) )
+            {
+                archetypes.put( "local", archetype.getDefaultLocalCatalog().getArchetypes() );
+            }
+            else if ( "remote".equalsIgnoreCase( catalog ) )
+            {
                 List archetypesFromRemote = archetype.getRemoteCatalog().getArchetypes();
-                if(archetypesFromRemote.size() > 0) {
-                    archetypes.put("remote", archetypesFromRemote);
-                } else {
-                    getLogger().warn("No archetype found in Remote catalog. Defaulting to internal Catalog");
-                    archetypes.put("internal", archetype.getInternalCatalog().getArchetypes());
+                if ( archetypesFromRemote.size() > 0 )
+                {
+                    archetypes.put( "remote", archetypesFromRemote );
                 }
-            } else if (catalog.startsWith("file://")) {
-                String path = catalog.substring(7);
-                archetypes.put(catalog, archetype.getLocalCatalog(path).getArchetypes());
-            } else if (catalog.startsWith("http://")) {
-                archetypes.put(catalog, archetype.getRemoteCatalog(catalog).getArchetypes());
+                else
+                {
+                    getLogger().warn( "No archetype found in Remote catalog. Defaulting to internal Catalog" );
+                    archetypes.put( "internal", archetype.getInternalCatalog().getArchetypes() );
+                }
+            }
+            else if ( catalog.startsWith( "file://" ) )
+            {
+                String path = catalog.substring( 7 );
+                archetypes.put( catalog, archetype.getLocalCatalog( path ).getArchetypes() );
+            }
+            else if ( catalog.startsWith( "http://" ) )
+            {
+                archetypes.put( catalog, archetype.getRemoteCatalog( catalog ).getArchetypes() );
             }
         }
 
-        if (archetypes.size() == 0) {
-            getLogger().info("No catalog defined. Using internal catalog");
+        if ( archetypes.size() == 0 )
+        {
+            getLogger().info( "No catalog defined. Using internal catalog" );
 
-            archetypes.put("internal", archetype.getInternalCatalog().getArchetypes());
+            archetypes.put( "internal", archetype.getInternalCatalog().getArchetypes() );
         }
         return archetypes;
     }
 
-    private Properties getArchetypeDataSourceProperties( String sourceRoleHint,
-                                                         Properties archetypeCatalogProperties )
+    private Properties getArchetypeDataSourceProperties( String sourceRoleHint, Properties archetypeCatalogProperties )
     {
         Properties p = new Properties();
 
@@ -323,11 +330,12 @@ public class DefaultArchetypeSelector
         this.archetypeSelectionQueryer = archetypeSelectionQueryer;
     }
 
-    private String getCatalogKey(Map archetypes, Archetype selectedArchetype) {
+    private String getCatalogKey( Map archetypes, Archetype selectedArchetype )
+    {
         String key = "";
         Iterator keys = archetypes.keySet().iterator();
         boolean found = false;
-        while ( keys.hasNext() && !found)
+        while ( keys.hasNext() && !found )
         {
             key = (String) keys.next();
             List catalog = (List) archetypes.get( key );

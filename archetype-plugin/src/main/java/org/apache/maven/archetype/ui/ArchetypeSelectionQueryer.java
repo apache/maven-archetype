@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.ui;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,8 +19,6 @@
  * under the License.
  */
 
-package org.apache.maven.archetype.ui;
-
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.common.ArchetypeDefinition;
 import org.codehaus.plexus.components.interactivity.PrompterException;
@@ -36,8 +36,7 @@ public interface ArchetypeSelectionQueryer
         throws PrompterException;
 
     boolean confirmSelection( ArchetypeDefinition archetypeDefinition )
-        throws
-        PrompterException;
+        throws PrompterException;
 
 //    Archetype selectArchetype( List list )
 //        throws
@@ -61,7 +60,8 @@ public interface ArchetypeSelectionQueryer
      * @param archetypes the archetypes to choose from
      * @param defaultDefinition the default archetype, if present in the map
      * @return the selected archetype
-     * @throws org.codehaus.plexus.components.interactivity.PrompterException if there is a problem in making a selection
+     * @throws org.codehaus.plexus.components.interactivity.PrompterException if there is a problem in making a
+     *             selection
      */
     Archetype selectArchetype( Map archetypes, ArchetypeDefinition defaultDefinition )
         throws PrompterException;

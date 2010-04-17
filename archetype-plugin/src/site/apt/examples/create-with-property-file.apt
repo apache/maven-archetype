@@ -271,6 +271,6 @@ public class App
        jsp, gsp, vm, html, xhtml, properties, .classpath, .project>>>. Notice
        the dotted filtered extensions that contains the complete file names.
 
-    * <<<archetype.fillteredExtensions>>> have: <<<java, groovy, csharp, aspectj>>>.
+    * <<<archetype.filteredExtensions>>> have: <<<java, groovy, csharp, aspectj>>>.
 
     []

@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.test;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -16,18 +18,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.maven.archetype.test;
-
 
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.archetype.ArchetypeCreationRequest;
 import org.apache.maven.archetype.ArchetypeCreationResult;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
-import org.apache.maven.archetype.Archetype;
+import org.apache.maven.archetype.ArchetypeManager;
+import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Writer;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
+import org.apache.maven.artifact.manager.WagonManager;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
@@ -52,7 +54,6 @@ import java.io.OutputStream;
 import java.io.Writer;
 import java.net.URL;
 import java.util.Properties;
-import org.apache.maven.artifact.manager.WagonManager;
 
 /** @author Jason van Zyl */
 public class ArchetyperRoundtripWithProxyTest
@@ -64,22 +65,20 @@ public class ArchetyperRoundtripWithProxyTest
     public void testArchetyper()
         throws Exception
     {
-        Archetype archetype = (Archetype) lookup( Archetype.ROLE );
+        ArchetypeManager archetype = (ArchetypeManager) lookup( ArchetypeManager.ROLE );
 
         ArchetypeRegistryManager registryManager = (ArchetypeRegistryManager) lookup( ArchetypeRegistryManager.ROLE );
 
         MavenProjectBuilder projectBuilder = (MavenProjectBuilder) lookup( MavenProjectBuilder.ROLE );
 
-        ArtifactRepository localRepository = registryManager.createRepository( new File( getBasedir(),
-            "target"+File.separator+"test-classes"+File.separator+"repositories"+File.separator+"local" ).toURI().
-            toURL().
-            toExternalForm(),
-            "local-repo" );
-        ArtifactRepository centralRepository = registryManager.createRepository( new File( getBasedir(),
-            "target"+File.separator+"test-classes"+File.separator+"repositories"+File.separator+"central" ).toURI().
-            toURL().
-            toExternalForm(),
-            "central-repo" );
+        ArtifactRepository localRepository =
+            registryManager.createRepository( new File( getBasedir(), "target" + File.separator + "test-classes"
+                + File.separator + "repositories" + File.separator + "local" ).toURI().toURL().toExternalForm(),
+                                              "local-repo" );
+        ArtifactRepository centralRepository =
+            registryManager.createRepository( new File( getBasedir(), "target" + File.separator + "test-classes"
+                + File.separator + "repositories" + File.separator + "central" ).toURI().toURL().toExternalForm(),
+                                              "central-repo" );
 
         // (1) create a project from scratch
         // (2) create an archetype from the project
@@ -93,9 +92,10 @@ public class ArchetyperRoundtripWithProxyTest
         // (1) create a project from scratch
 //        File sourceProject = new File( getBasedir(  ), "target/test-classes/projects/roundtrip-1-project" );
 
-        File workingProject = new File( getBasedir(),
-            "target"+File.separator+"test-classes"+File.separator+"projects"+File.separator+"roundtrip-2-project" );
-        FileUtils.forceDelete(new File(workingProject, "target"));
+        File workingProject =
+            new File( getBasedir(), "target" + File.separator + "test-classes" + File.separator + "projects"
+                + File.separator + "roundtrip-2-project" );
+        FileUtils.forceDelete( new File( workingProject, "target" ) );
 
         // (2) create an archetype from the project
         File pom = new File( workingProject, "pom.xml" );
@@ -110,11 +110,11 @@ public class ArchetyperRoundtripWithProxyTest
 
         if ( creationResult.getCause() != null )
         {
-            fail( creationResult.getCause().getMessage() );
+            throw creationResult.getCause();
         }
 
         // (3) create our own archetype catalog properties in memory
-        File catalogDirectory = new File( getBasedir(), "target"+File.separator+"catalog" );
+        File catalogDirectory = new File( getBasedir(), "target" + File.separator + "catalog" );
 
         File catalogFile = new File( catalogDirectory, "archetype-catalog.xml" );
 
@@ -130,34 +130,35 @@ public class ArchetyperRoundtripWithProxyTest
         p.store( os, "Generated catalog properties" );
 
         // (5) install the archetype we just created
-        File generatedArchetypeDirectory = new File( project.getBasedir(),
-            "target"+File.separator+"generated-sources"+File.separator+"archetype" );
+        File generatedArchetypeDirectory =
+            new File( project.getBasedir(), "target" + File.separator + "generated-sources" + File.separator
+                + "archetype" );
         File generatedArchetypePom = new File( generatedArchetypeDirectory, "pom.xml" );
         MavenProject generatedArchetypeProject = projectBuilder.build( generatedArchetypePom,
             localRepository, null );
 
-        File archetypeDirectory = new File( generatedArchetypeDirectory,
-            "src"+File.separator+"main"+File.separator+"resources" );
+        File archetypeDirectory =
+            new File( generatedArchetypeDirectory, "src" + File.separator + "main" + File.separator + "resources" );
 
         File archetypeArchive = archetype.archiveArchetype( archetypeDirectory,
             new File( generatedArchetypeProject.getBuild().getDirectory() ),
             generatedArchetypeProject.getBuild().getFinalName() );
 
-        File archetypeInRepository = new File( centralRepository.getBasedir(),
-            StringUtils.replace(
-            generatedArchetypeProject.getGroupId(), ".",
-            File.separator ) +File.separator+
-            generatedArchetypeProject.getArtifactId() +File.separator+
-            generatedArchetypeProject.getVersion() +File.separator+
-            generatedArchetypeProject.getBuild().
-            getFinalName() +
-            ".jar" );
+        File archetypeInRepository =
+            new File( centralRepository.getBasedir(), StringUtils.replace( generatedArchetypeProject.getGroupId(), ".",
+                                                                           File.separator )
+                + File.separator
+                + generatedArchetypeProject.getArtifactId()
+                + File.separator
+                + generatedArchetypeProject.getVersion()
+                + File.separator
+                + generatedArchetypeProject.getBuild().getFinalName() + ".jar" );
         archetypeInRepository.getParentFile().mkdirs();
         FileUtils.copyFile( archetypeArchive, archetypeInRepository );
 
         // (4) create our own archetype catalog describing the archetype we just created
         ArchetypeCatalog catalog = new ArchetypeCatalog();
-        org.apache.maven.archetype.catalog.Archetype generatedArchetype = new org.apache.maven.archetype.catalog.Archetype();
+        Archetype generatedArchetype = new Archetype();
         generatedArchetype.setGroupId( generatedArchetypeProject.getGroupId() );
         generatedArchetype.setArtifactId( generatedArchetypeProject.getArtifactId() );
         generatedArchetype.setVersion( generatedArchetypeProject.getVersion() );
@@ -170,12 +171,13 @@ public class ArchetyperRoundtripWithProxyTest
         IOUtils.closeQuietly( writer );
 
         // (6) create a project form the archetype we just created
-        String outputDirectory = new File( getBasedir(),
-            "target"+File.separator+"test-classes"+File.separator+"projects"+File.separator+"roundtrip-2-recreatedproject" ).getAbsolutePath();
-        FileUtils.forceDelete(outputDirectory);
+        String outputDirectory =
+            new File( getBasedir(), "target" + File.separator + "test-classes" + File.separator + "projects"
+                + File.separator + "roundtrip-2-recreatedproject" ).getAbsolutePath();
+        FileUtils.forceDelete( outputDirectory );
 
-        WagonManager manager = (WagonManager) lookup(WagonManager.class.getName());
-        manager.addProxy("http", "localhost", 18882, null, null, null);
+        WagonManager manager = (WagonManager) lookup( WagonManager.class.getName() );
+        manager.addProxy( "http", "localhost", 18882, null, null, null );
 
         ArchetypeGenerationRequest agr =
             new ArchetypeGenerationRequest().setArchetypeGroupId(
@@ -189,7 +191,7 @@ public class ArchetyperRoundtripWithProxyTest
 
         if ( generationResult.getCause() != null )
         {
-            fail( generationResult.getCause().getMessage() );
+            throw generationResult.getCause();
         }
 
     }
@@ -221,8 +223,8 @@ public class ArchetyperRoundtripWithProxyTest
         deployer.deploy( war,
             new URLDeployableMonitor( new URL( "http://localhost:18882/dummy" ) ) );
         deployer.start( war );
-        
-        
+
+
         Jetty6xEmbeddedStandaloneLocalConfiguration configuration2 =
             new Jetty6xEmbeddedStandaloneLocalConfiguration( "target/repository-webapp" );
         configuration2.setProperty( ServletPropertySet.PORT, "18881" );

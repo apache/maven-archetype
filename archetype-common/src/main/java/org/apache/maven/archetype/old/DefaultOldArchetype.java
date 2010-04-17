@@ -1,26 +1,31 @@
 package org.apache.maven.archetype.old;
 
 /*
- * Copyright 2004-2006 The Apache Software Foundation.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
+import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor;
 import org.apache.maven.archetype.old.descriptor.ArchetypeDescriptorBuilder;
 import org.apache.maven.archetype.old.descriptor.TemplateDescriptor;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
+import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
@@ -33,7 +38,9 @@ import org.apache.velocity.context.Context;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
+import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.codehaus.plexus.velocity.VelocityComponent;
 import org.dom4j.Document;
@@ -45,8 +52,6 @@ import org.dom4j.io.XMLWriter;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -57,8 +62,8 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -99,31 +104,36 @@ public class DefaultOldArchetype
     // artifactId = maven-foo-archetype
     // version = latest
 
-    public void createArchetype( String archetypeGroupId,
-                                 String archetypeArtifactId,
-                                 String archetypeVersion,
-                                 ArtifactRepository archetypeRepository,
-                                 ArtifactRepository localRepository,
-                                 List remoteRepositories,
-                                 Map parameters )
+    public void createArchetype( ArchetypeGenerationRequest request, ArtifactRepository archetypeRepository )
         throws UnknownArchetype, ArchetypeNotFoundException, ArchetypeDescriptorException, ArchetypeTemplateProcessingException
     {
         // ----------------------------------------------------------------------
         // Download the archetype
         // ----------------------------------------------------------------------
 
-        File archetype;
+        File archetypeFile = archetypeArtifactManager.getArchetypeFile(
+                request.getArchetypeGroupId(), request.getArchetypeArtifactId(), request.getArchetypeVersion(),
+                archetypeRepository, request.getLocalRepository(), request.getRemoteArtifactRepositories() );
 
-//        try
-//        {
-            archetype = archetypeArtifactManager.getArchetypeFile( 
-                archetypeGroupId, archetypeArtifactId, archetypeVersion, 
-                archetypeRepository, localRepository, remoteRepositories );
-//        }
-//        catch ( UnknownArchetype e )
-//        {
-//            throw new ArchetypeDescriptorException( "Error attempting to download archetype.", e );
-//        }
+        createArchetype( request, archetypeFile );
+    }
+
+    public void createArchetype( ArchetypeGenerationRequest request, File archetypeFile )
+        throws ArchetypeDescriptorException, ArchetypeTemplateProcessingException
+    {
+        Map parameters = new HashMap();
+
+        parameters.put( "basedir", request.getOutputDirectory() );
+
+        parameters.put( Constants.PACKAGE, request.getPackage() );
+
+        parameters.put( "packageName", request.getPackage() );
+
+        parameters.put( Constants.GROUP_ID, request.getGroupId() );
+
+        parameters.put( Constants.ARTIFACT_ID, request.getArtifactId() );
+
+        parameters.put( Constants.VERSION, request.getVersion() );
 
         // ---------------------------------------------------------------------
         // Get Logger and display all parameters used
@@ -134,8 +144,8 @@ public class DefaultOldArchetype
             {
                 getLogger().info( "----------------------------------------------------------------------------" );
 
-                getLogger().info( "Using following parameters for creating OldArchetype: " + archetypeArtifactId + ":" +
-                    archetypeVersion );
+                getLogger().info( "Using following parameters for creating OldArchetype: "
+                                      + request.getArchetypeArtifactId() + ":" + request.getArchetypeVersion() );
 
                 getLogger().info( "----------------------------------------------------------------------------" );
 
@@ -168,15 +178,17 @@ public class DefaultOldArchetype
 
         URLClassLoader archetypeJarLoader;
 
+        InputStream is = null;
+
         try
         {
             URL[] urls = new URL[1];
 
-            urls[0] = archetype.toURL();
+            urls[0] = archetypeFile.toURL();
 
             archetypeJarLoader = new URLClassLoader( urls );
 
-            InputStream is = getStream( ARCHETYPE_DESCRIPTOR, archetypeJarLoader );
+            is = getStream( ARCHETYPE_DESCRIPTOR, archetypeJarLoader );
 
             if ( is == null )
             {
@@ -199,16 +211,18 @@ public class DefaultOldArchetype
         {
             throw new ArchetypeDescriptorException( "Error reading the " + ARCHETYPE_DESCRIPTOR + " descriptor.", e );
         }
+        finally
+        {
+            IOUtil.close( is );
+        }
 
         // ----------------------------------------------------------------------
         //
         // ----------------------------------------------------------------------
 
-        String basedir = (String) parameters.get( "basedir" );
+        String artifactId = request.getArtifactId();
 
-        String artifactId = (String) parameters.get( "artifactId" );
-
-        File parentPomFile = new File( basedir, ARCHETYPE_POM );
+        File parentPomFile = new File( request.getOutputDirectory(), ARCHETYPE_POM );
 
         File outputDirectoryFile;
 
@@ -216,7 +230,7 @@ public class DefaultOldArchetype
         File pomFile;
         if ( parentPomFile.exists() && descriptor.isAllowPartial() && artifactId == null )
         {
-            outputDirectoryFile = new File( basedir );
+            outputDirectoryFile = new File( request.getOutputDirectory() );
             creating = false;
             pomFile = parentPomFile;
         }
@@ -228,7 +242,7 @@ public class DefaultOldArchetype
                     "Artifact ID must be specified when creating a new project from an archetype." );
             }
 
-            outputDirectoryFile = new File( basedir, artifactId );
+            outputDirectoryFile = new File( request.getOutputDirectory(), artifactId );
             creating = true;
 
             if ( outputDirectoryFile.exists() )
@@ -239,8 +253,8 @@ public class DefaultOldArchetype
                 }
                 else
                 {
-                    throw new ArchetypeTemplateProcessingException( "Directory " +
-                        outputDirectoryFile.getName() + " already exists - please run from a clean directory" );
+                    throw new ArchetypeTemplateProcessingException( "Directory "
+                        + outputDirectoryFile.getName() + " already exists - please run from a clean directory" );
                 }
             }
 
@@ -249,13 +263,13 @@ public class DefaultOldArchetype
 
         if ( creating )
         {
-            if ( parameters.get( "groupId" ) == null )
+            if ( request.getGroupId() == null )
             {
                 throw new ArchetypeTemplateProcessingException(
                     "Group ID must be specified when creating a new project from an archetype." );
             }
 
-            if ( parameters.get( "version" ) == null )
+            if ( request.getVersion() == null )
             {
                 throw new ArchetypeTemplateProcessingException(
                     "Version must be specified when creating a new project from an archetype." );
@@ -264,7 +278,7 @@ public class DefaultOldArchetype
 
         String outputDirectory = outputDirectoryFile.getAbsolutePath();
 
-        String packageName = (String) parameters.get( "package" );
+        String packageName = request.getPackage();
 
         // ----------------------------------------------------------------------
         // Set up the Velocity context
@@ -272,7 +286,7 @@ public class DefaultOldArchetype
 
         Context context = new VelocityContext();
 
-        context.put( "package", packageName );
+        context.put( Constants.PACKAGE, packageName );
 
         for ( Iterator iterator = parameters.keySet().iterator(); iterator.hasNext(); )
         {
@@ -296,11 +310,11 @@ public class DefaultOldArchetype
         {
             if ( parentPomFile.exists() )
             {
-                FileReader fileReader = null;
+                Reader fileReader = null;
 
                 try
                 {
-                    fileReader = new FileReader( parentPomFile );
+                    fileReader = ReaderFactory.newXmlReader( parentPomFile );
                     MavenXpp3Reader reader = new MavenXpp3Reader();
                     parentModel = reader.read( fileReader );
                     if ( !"pom".equals( parentModel.getPackaging() ) )
@@ -358,12 +372,12 @@ public class DefaultOldArchetype
                 IOUtil.close( fileWriter );
             }
 */
-            FileReader fileReader = null;
+            Reader fileReader = null;
             boolean added;
             StringWriter w = new StringWriter();
             try
             {
-                fileReader = new FileReader( parentPomFile );
+                fileReader = ReaderFactory.newXmlReader( parentPomFile );
                 added = addModuleToParentPom( artifactId, fileReader, w );
             }
             catch ( IOException e )
@@ -381,13 +395,19 @@ public class DefaultOldArchetype
 
             if ( added )
             {
+                Writer out = null;
                 try
                 {
-                    FileUtils.fileWrite( parentPomFile.getAbsolutePath(), w.toString() );
+                    out = WriterFactory.newXmlWriter( parentPomFile );
+                    IOUtil.copy( w.toString(), out );
                 }
                 catch ( IOException e )
                 {
                     throw new ArchetypeTemplateProcessingException( "Unable to rewrite parent POM", e );
+                }
+                finally
+                {
+                    IOUtil.close( out );
                 }
             }
         }
@@ -488,10 +508,10 @@ public class DefaultOldArchetype
         // ---------------------------------------------------------------------
 
         Model generatedModel;
-        FileReader pomReader = null;
+        Reader pomReader = null;
         try
         {
-            pomReader = new FileReader( pomFile );
+            pomReader = ReaderFactory.newXmlReader( pomFile );
 
             MavenXpp3Reader reader = new MavenXpp3Reader();
 
@@ -526,10 +546,10 @@ public class DefaultOldArchetype
             }
             generatedModel.setParent( parent );
 
-            FileWriter pomWriter = null;
+            Writer pomWriter = null;
             try
             {
-                pomWriter = new FileWriter( pomFile );
+                pomWriter = WriterFactory.newXmlWriter( pomFile );
 
                 MavenXpp3Writer writer = new MavenXpp3Writer();
                 writer.write( pomWriter, generatedModel );
@@ -745,8 +765,8 @@ public class DefaultOldArchetype
     private String getOutputDirectory( String outputDirectory,
                                        String testResourceDirectory )
     {
-        return outputDirectory +
-            ( testResourceDirectory.startsWith( "/" ) ? testResourceDirectory : "/" + testResourceDirectory );
+        return outputDirectory
+            + ( testResourceDirectory.startsWith( "/" ) ? testResourceDirectory : "/" + testResourceDirectory );
     }
 
     // ----------------------------------------------------------------------

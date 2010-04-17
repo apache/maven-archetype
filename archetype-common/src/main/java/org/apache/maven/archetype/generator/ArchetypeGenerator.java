@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.generator;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,7 +19,7 @@
  * under the License.
  */
 
-package org.apache.maven.archetype.generator;
+import java.io.File;
 
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
@@ -26,8 +28,9 @@ public interface ArchetypeGenerator
 {
     String ROLE = ArchetypeGenerator.class.getName();
 
-    void generateArchetype( ArchetypeGenerationRequest request,
-                            ArchetypeGenerationResult result );
+    void generateArchetype( ArchetypeGenerationRequest request, ArchetypeGenerationResult result );
+
+    void generateArchetype( ArchetypeGenerationRequest request, File archetypeFile, ArchetypeGenerationResult result );
 
 //    void generateArchetype(
 //        File propertyFile,

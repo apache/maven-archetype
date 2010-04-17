@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.source;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,23 +19,22 @@
  * under the License.
  */
 
-package org.apache.maven.archetype.source;
-
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Reader;
 import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Writer;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.IOUtil;
+import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -77,13 +78,17 @@ public class CatalogArchetypeDataSource
 
             try
             {
-                ArchetypeCatalog catalog = readCatalog( new FileReader( catalogFile ) );
+                ArchetypeCatalog catalog = readCatalog( ReaderFactory.newXmlReader( catalogFile ) );
 
                 return createArchetypeMap( catalog );
             }
             catch ( FileNotFoundException e )
             {
                 throw new ArchetypeDataSourceException( "The specific archetype catalog does not exist.", e );
+            }
+            catch ( IOException e )
+            {
+                throw new ArchetypeDataSourceException( "Error reading archetype catalog.", e );
             }
         }
         else
@@ -110,12 +115,16 @@ public class CatalogArchetypeDataSource
             try
             {
                 getLogger().debug( "Reading the catalog " + catalogFile );
-                catalog = readCatalog( new FileReader( catalogFile ) );
+                catalog = readCatalog( ReaderFactory.newXmlReader( catalogFile ) );
             }
             catch ( FileNotFoundException ex )
             {
                 getLogger().debug( "Catalog file don't exist" );
                 catalog = new ArchetypeCatalog();
+            }
+            catch ( IOException e )
+            {
+                throw new ArchetypeDataSourceException( "Error reading archetype catalog.", e );
             }
         }
         else
@@ -155,10 +164,10 @@ public class CatalogArchetypeDataSource
                                       File catalogFile )
         throws ArchetypeDataSourceException
     {
-        FileWriter writer = null;
+        Writer writer = null;
         try
         {
-            writer = new FileWriter( catalogFile );
+            writer = WriterFactory.newXmlWriter( catalogFile );
             catalogWriter.write( writer, catalog );
         }
         catch ( IOException e )
@@ -226,13 +235,17 @@ public class CatalogArchetypeDataSource
 
             try
             {
-                return readCatalog( new FileReader( catalogFile ) );
+                return readCatalog( ReaderFactory.newXmlReader( catalogFile ) );
 
             }
             catch ( FileNotFoundException e )
             {
                 throw new ArchetypeDataSourceException( "The specific archetype catalog does not exist.",
                     e );
+            }
+            catch ( IOException e )
+            {
+                throw new ArchetypeDataSourceException( "Error reading archetype catalog.", e );
             }
         }
         else

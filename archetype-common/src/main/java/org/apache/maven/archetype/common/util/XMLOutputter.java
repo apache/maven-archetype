@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.common.util;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -16,7 +18,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.maven.archetype.common.util;
 
 import org.jdom.Attribute;
 import org.jdom.CDATA;
@@ -960,8 +961,8 @@ public class XMLOutputter
     {
         String str = ( currentFormat.mode == Format.TextMode.NORMALIZE )
             ? cdata.getTextNormalize()
-            : ( ( currentFormat.mode == Format.TextMode.TRIM ) ?
-            cdata.getText().trim() : cdata.getText() );
+            : ( ( currentFormat.mode == Format.TextMode.TRIM )
+                ? cdata.getText().trim() : cdata.getText() );
         out.write( "<![CDATA[" );
         out.write( str );
         out.write( "]]>" );
@@ -980,8 +981,8 @@ public class XMLOutputter
     {
         String str = ( currentFormat.mode == Format.TextMode.NORMALIZE )
             ? text.getTextNormalize()
-            : ( ( currentFormat.mode == Format.TextMode.TRIM ) ?
-            text.getText().trim() : text.getText() );
+            : ( ( currentFormat.mode == Format.TextMode.TRIM )
+                ? text.getText().trim() : text.getText() );
         out.write( escapeElementEntities( str ) );
     }
 
@@ -1061,7 +1062,9 @@ public class XMLOutputter
 
         // Print out attributes
         if ( attributes != null )
+        {
             printAttributes( out, attributes, element, namespaces );
+        }
 
         // Depending on the settings (newlines, textNormalize, etc), we may
         // or may not want to print all of the content, so determine the
@@ -1166,7 +1169,9 @@ public class XMLOutputter
                 if ( first < index )
                 {
                     if ( !firstNode )
+                    {
                         newline( out );
+                    }
                     indent( out, level );
                     printTextRange( out, content, first, index );
                 }
@@ -1259,8 +1264,7 @@ public class XMLOutputter
                 }
                 else
                 {
-                    throw new IllegalStateException( "Should see only " +
-                        "CDATA, Text, or EntityRef" );
+                    throw new IllegalStateException( "Should see only CDATA, Text, or EntityRef" );
                 }
 
                 // This may save a little time
@@ -1273,11 +1277,11 @@ public class XMLOutputter
                 // only need in trim or normalizing mode)
                 if ( previous != null )
                 { // Not 1st node
-                    if ( currentFormat.mode == Format.TextMode.NORMALIZE ||
-                        currentFormat.mode == Format.TextMode.TRIM )
+                    if ( currentFormat.mode == Format.TextMode.NORMALIZE
+                        || currentFormat.mode == Format.TextMode.TRIM )
                     {
-                        if ( ( endsWithWhite( previous ) ) ||
-                            ( startsWithWhite( next ) ) )
+                        if ( ( endsWithWhite( previous ) )
+                            || ( startsWithWhite( next ) ) )
                         {
                             out.write( " " );
                         }
@@ -1360,8 +1364,8 @@ public class XMLOutputter
         {
             Attribute attribute = (Attribute) attributes.get( i );
             Namespace ns = attribute.getNamespace();
-            if ( ( ns != Namespace.NO_NAMESPACE ) &&
-                ( ns != Namespace.XML_NAMESPACE ) )
+            if ( ( ns != Namespace.NO_NAMESPACE )
+                && ( ns != Namespace.XML_NAMESPACE ) )
             {
                 printNamespace( out, ns, namespaces );
             }
@@ -1391,8 +1395,8 @@ public class XMLOutputter
         {
             return;
         }
-        if ( !( ( ns == Namespace.NO_NAMESPACE ) &&
-            ( namespaces.getURI( "" ) == null ) ) )
+        if ( !( ( ns == Namespace.NO_NAMESPACE )
+            && ( namespaces.getURI( "" ) == null ) ) )
         {
             printNamespace( out, ns, namespaces );
         }
@@ -1446,8 +1450,8 @@ public class XMLOutputter
         throws
         IOException
     {
-        if ( currentFormat.indent == null ||
-            currentFormat.indent.equals( "" ) )
+        if ( currentFormat.indent == null
+            || currentFormat.indent.equals( "" ) )
         {
             return;
         }
@@ -1509,7 +1513,9 @@ public class XMLOutputter
             while ( index >= 0 )
             {
                 if ( !isAllWhitespace( content.get( index - 1 ) ) )
+                {
                     break;
+                }
                 --index;
             }
         }
@@ -1567,7 +1573,9 @@ public class XMLOutputter
         for ( int i = 0; i < str.length(); i++ )
         {
             if ( !isWhitespace( str.charAt( i ) ) )
+            {
                 return false;
+            }
         }
         return true;
     }
@@ -1575,36 +1583,20 @@ public class XMLOutputter
     // Determine if a string starts with a XML whitespace.
     private boolean startsWithWhite( String str )
     {
-        if ( ( str != null ) &&
-            ( str.length() > 0 ) &&
-            isWhitespace( str.charAt( 0 ) ) )
-        {
-            return true;
-        }
-        return false;
+        return ( ( str != null ) && ( str.length() > 0 ) && isWhitespace( str.charAt( 0 ) ) );
     }
 
     // Determine if a string ends with a XML whitespace.
     private boolean endsWithWhite( String str )
     {
-        if ( ( str != null ) &&
-            ( str.length() > 0 ) &&
-            isWhitespace( str.charAt( str.length() - 1 ) ) )
-        {
-            return true;
-        }
-        return false;
+        return ( ( str != null ) && ( str.length() > 0 ) && isWhitespace( str.charAt( str.length() - 1 ) ) );
     }
 
     // Determine if a character is a XML whitespace.
     // XXX should this method be in Verifier
     private static boolean isWhitespace( char c )
     {
-        if ( c == ' ' || c == '\n' || c == '\t' || c == '\r' )
-        {
-            return true;
-        }
-        return false;
+        return ( c == ' ' || c == '\n' || c == '\t' || c == '\r' );
     }
 
     /**
@@ -1711,7 +1703,10 @@ public class XMLOutputter
      */
     public String escapeElementEntities( String str )
     {
-        if ( escapeOutput == false ) return str;
+        if ( escapeOutput == false )
+        {
+            return str;
+        }
 
         StringBuffer buffer;
         char ch;
@@ -1834,13 +1829,13 @@ public class XMLOutputter
         }
 
         return (
-            "XMLOutputter[omitDeclaration = " + userFormat.omitDeclaration + ", " +
-                "encoding = " + userFormat.encoding + ", " +
-                "omitEncoding = " + userFormat.omitEncoding + ", " +
-                "indent = '" + userFormat.indent + "'" + ", " +
-                "expandEmptyElements = " + userFormat.expandEmptyElements + ", " +
-                "lineSeparator = '" + buffer.toString() + "', " +
-                "textMode = " + userFormat.mode + "]"
+            "XMLOutputter[omitDeclaration = " + userFormat.omitDeclaration + ", "
+                + "encoding = " + userFormat.encoding + ", "
+                + "omitEncoding = " + userFormat.omitEncoding + ", "
+                + "indent = '" + userFormat.indent + "'" + ", "
+                + "expandEmptyElements = " + userFormat.expandEmptyElements + ", "
+                + "lineSeparator = '" + buffer.toString() + "', "
+                + "textMode = " + userFormat.mode + "]"
         );
     }
 

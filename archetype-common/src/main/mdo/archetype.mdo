@@ -3,16 +3,24 @@
  <!-- START SNIPPET: modello-model -->
 
 <model xmlns="http://modello.codehaus.org/MODELLO/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://modello.codehaus.org/MODELLO/1.0.0 http://modello.codehaus.org/xsd/modello-1.0.0.xsd">
+  xsi:schemaLocation="http://modello.codehaus.org/MODELLO/1.0.0 http://modello.codehaus.org/xsd/modello-1.0.0.xsd"
+  xml.namespace="http://maven.apache.org/plugins/maven-archetype-plugin/archetype/${version}"
+  xml.schemaLocation="http://maven.apache.org/xsd/archetype-${version}.xsd">
   <id>archetype</id>
   <name>Archetype</name>
-  <description><![CDATA[Maven's model for the archetype descriptor.]]></description>
+  <description>
+    <![CDATA[Maven's model for the old archetype descriptor (ie for Archetype 1.0.x).
+    <p>The metadata about an archetype is stored in the <code>archetype.xml</code> file located
+    in the <code>META-INF/maven</code> directory of its jar file.</p>]]>
+  </description>
+
   <defaults>
     <default>
       <key>package</key>
       <value>org.apache.maven.archetype.model</value>
     </default>
   </defaults>
+
   <classes>
     <class rootElement="true" xml.tagName="archetype">
       <name>ArchetypeModel</name>
@@ -24,52 +32,100 @@
           <version>1.0.0</version>
           <required>true</required>
           <type>String</type>
+          <description><![CDATA[The value should be the same as the artifactId in the archetype <code>pom.xml</code>.]]></description>
         </field>
         <field>
           <name>allowPartial</name>
           <version>1.0.0</version>
-          <required>true</required>
           <type>boolean</type>
+          <description><![CDATA[Setting this option to <code>true</code> makes it possible to run the
+            <code>archetype:create</code> even on existing projects.]]></description>
         </field>
-        <field>
+
+        <field xdoc.separator="blank">
           <name>sources</name>
           <version>1.0.0</version>
+          <description><![CDATA[Files that will go into <code>src/main/java</code>.]]></description>
           <association>
-            <type>String</type>
+            <type>Source</type>
             <multiplicity>*</multiplicity>
           </association>
         </field>
         <field>
           <name>resources</name>
           <version>1.0.0</version>
+          <description><![CDATA[Files that will go into <code>src/main/resources</code>.]]></description>
           <association>
-            <type>String</type>
+            <type>Resource</type>
             <multiplicity>*</multiplicity>
           </association>
         </field>
-        <field>
+
+        <field xdoc.separator="blank">
           <name>testSources</name>
           <version>1.0.0</version>
-          <association>
-            <type>String</type>
+          <description><![CDATA[Files that will go into <code>src/test/java</code>.]]></description>
+          <association xml.tagName="source">
+            <type>Source</type>
             <multiplicity>*</multiplicity>
           </association>
         </field>
         <field>
           <name>testResources</name>
           <version>1.0.0</version>
-          <association>
-            <type>String</type>
+          <description><![CDATA[Files that will go into <code>src/test/resources</code>.]]></description>
+          <association xml.tagName="resource">
+            <type>Resource</type>
             <multiplicity>*</multiplicity>
           </association>
         </field>
-        <field>
+
+        <field xdoc.separator="blank">
           <name>siteResources</name>
           <version>1.0.0</version>
-          <association>
-            <type>String</type>
+          <description><![CDATA[Files that will go into <code>src/site</code>.]]></description>
+          <association xml.tagName="resource">
+            <type>Resource</type>
             <multiplicity>*</multiplicity>
           </association>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>Source</name>
+      <description>Describes a source file. Note that source files are always filtered, unlike resources that
+        can be non-filtered.</description>
+      <version>1.0.0</version>
+      <fields>
+        <field xml.attribute="true">
+          <name>encoding</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <description><![CDATA[The encoding to be used when reading/writing this file.
+            Platform encoding is used by default, or ISO-8859-1 when filename ends in <code>.properties</code>]]></description>
+        </field>
+      </fields>
+    </class>
+    <class>
+      <name>Resource</name>
+      <description>Describes a resource file.</description>
+      <version>1.0.0</version>
+      <fields>
+        <field xml.attribute="true">
+          <name>encoding</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <description><![CDATA[The encoding to be used when reading/writing this file.
+            Platform encoding is used by default, or ISO-8859-1 when filename ends in <code>.properties</code>]]></description>
+        </field>
+        <field xml.attribute="true">
+          <name>filtered</name>
+          <version>1.0.0</version>
+          <type>boolean</type>
+          <defaultValue>true</defaultValue>
+          <description>A resource can be filtered, which means the file will be used as Velocity template.
+          It can be non-filtered, which means the file will be copied without modification.</description>
         </field>
       </fields>
     </class>

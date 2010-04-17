@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.repositorycrawler;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,8 +19,6 @@
  * under the License.
  */
 
-package org.apache.maven.archetype.repositorycrawler;
-
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 
 import java.io.File;
@@ -31,6 +31,6 @@ public interface RepositoryCrawler
     String ROLE = RepositoryCrawler.class.getName ();
 
     ArchetypeCatalog crawl ( File repository );
-    
-    boolean writeCatalog (ArchetypeCatalog archetypeCatalog, File archetypeCatalogFile);
+
+    boolean writeCatalog( ArchetypeCatalog archetypeCatalog, File archetypeCatalogFile );
 }

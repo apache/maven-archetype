@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.repositorycrawler;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,10 +19,7 @@
  * under the License.
  */
 
-package org.apache.maven.archetype.repositorycrawler;
-
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
@@ -30,12 +29,14 @@ import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.model.Model;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 
 import java.util.Iterator;
 
@@ -164,12 +165,12 @@ implements RepositoryCrawler
 
     public boolean writeCatalog ( ArchetypeCatalog archetypeCatalog, File archetypeCatalogFile )
     {
-        FileWriter fileWriter = null;
+        Writer fileWriter = null;
         try
         {
             ArchetypeCatalogXpp3Writer catalogWriter = new ArchetypeCatalogXpp3Writer ();
 
-            fileWriter = new FileWriter ( archetypeCatalogFile );
+            fileWriter = WriterFactory.newXmlWriter ( archetypeCatalogFile );
             catalogWriter.write ( fileWriter, archetypeCatalog );
             return true;
         }
@@ -180,7 +181,7 @@ implements RepositoryCrawler
         }
         finally
         {
-            IOUtils.closeQuietly(fileWriter);
+            IOUtil.close( fileWriter );
         }
     }
 }

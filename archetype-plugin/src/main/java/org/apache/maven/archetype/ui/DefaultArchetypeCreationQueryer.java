@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.ui;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,8 +19,6 @@
  * under the License.
  */
 
-package org.apache.maven.archetype.ui;
-
 import org.apache.maven.archetype.common.ArchetypeConfiguration;
 import org.apache.maven.archetype.common.Constants;
 import org.codehaus.plexus.components.interactivity.Prompter;
@@ -36,36 +36,31 @@ public class DefaultArchetypeCreationQueryer
     private Prompter prompter;
 
     public String getArchetypeArtifactId( String defaultValue )
-        throws
-        PrompterException
+        throws PrompterException
     {
         return getValue( Constants.ARCHETYPE_ARTIFACT_ID, defaultValue );
     }
 
     public String getArchetypeGroupId( String defaultValue )
-        throws
-        PrompterException
+        throws PrompterException
     {
         return getValue( Constants.ARCHETYPE_GROUP_ID, defaultValue );
     }
 
     public String getArchetypeVersion( String defaultValue )
-        throws
-        PrompterException
+        throws PrompterException
     {
         return getValue( Constants.ARCHETYPE_VERSION, defaultValue );
     }
 
     public String getArtifactId( String defaultValue )
-        throws
-        PrompterException
+        throws PrompterException
     {
         return getValue( Constants.ARTIFACT_ID, defaultValue );
     }
 
     public boolean askAddAnotherProperty()
-        throws
-        PrompterException
+        throws PrompterException
     {
         String query = "Add a new custom property";
 
@@ -75,8 +70,7 @@ public class DefaultArchetypeCreationQueryer
     }
 
     public String askNewPropertyKey()
-        throws
-        PrompterException
+        throws PrompterException
     {
         String query = "Define property key";
 
@@ -85,27 +79,23 @@ public class DefaultArchetypeCreationQueryer
         return answer;
     }
 
-    public String askReplacementValue( String propertyKey,
-                                       String defaultValue )
-        throws
-        PrompterException
+    public String askReplacementValue( String propertyKey, String defaultValue )
+        throws PrompterException
     {
         return getValue( propertyKey, defaultValue );
     }
 
     public boolean confirmConfiguration( ArchetypeConfiguration archetypeConfiguration )
-        throws
-        PrompterException
+        throws PrompterException
     {
-        String query = "Confirm archetype configuration:\n";
-        query += Constants.ARCHETYPE_GROUP_ID + "=" + archetypeConfiguration.getGroupId() + "\n";
-        query +=
-            Constants.ARCHETYPE_ARTIFACT_ID + "=" + archetypeConfiguration.getArtifactId() + "\n";
-        query += Constants.ARCHETYPE_VERSION + "=" + archetypeConfiguration.getVersion() + "\n";
+        String query =
+            "Confirm archetype configuration:\n" + Constants.ARCHETYPE_GROUP_ID + "="
+                + archetypeConfiguration.getGroupId() + "\n" + Constants.ARCHETYPE_ARTIFACT_ID + "="
+                + archetypeConfiguration.getArtifactId() + "\n" + Constants.ARCHETYPE_VERSION + "="
+                + archetypeConfiguration.getVersion() + "\n";
 
-        Iterator propertiesIter = archetypeConfiguration.getProperties().keySet().iterator();
-
-        while ( propertiesIter.hasNext() )
+        for ( Iterator propertiesIter = archetypeConfiguration.getProperties().keySet().iterator();
+            propertiesIter.hasNext(); )
         {
             String property = (String) propertiesIter.next();
             query += property + "=" + archetypeConfiguration.getProperty( property ) + "\n";
@@ -117,30 +107,25 @@ public class DefaultArchetypeCreationQueryer
     }
 
     public String getGroupId( String defaultValue )
-        throws
-        PrompterException
+        throws PrompterException
     {
         return getValue( Constants.GROUP_ID, defaultValue );
     }
 
     public String getPackage( String defaultValue )
-        throws
-        PrompterException
+        throws PrompterException
     {
         return getValue( Constants.PACKAGE, defaultValue );
     }
 
     public String getVersion( String defaultValue )
-        throws
-        PrompterException
+        throws PrompterException
     {
         return getValue( Constants.VERSION, defaultValue );
     }
 
-    private String getValue( String requiredProperty,
-                             String defaultValue )
-        throws
-        PrompterException
+    private String getValue( String requiredProperty, String defaultValue )
+        throws PrompterException
     {
         String query = "Define value for " + requiredProperty + ": ";
         String answer;

@@ -1,59 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<archetype-catalog>
+<archetype-catalog xsi:schemaLocation="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-catalog/1.0.0 http://maven.apache.org/xsd/archetype-catalog-1.0.0.xsd"
+    xmlns="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-catalog/1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <archetypes>
     <archetype>
       <groupId>org.appfuse.archetypes</groupId>
       <artifactId>appfuse-basic-jsf</artifactId>
-      <version>RELEASE</version>
+      <version>2.0</version>
       <description>AppFuse archetype for creating a web application with Hibernate, Spring and JSF</description>
     </archetype>
     <archetype>
       <groupId>org.appfuse.archetypes</groupId>
       <artifactId>appfuse-basic-spring</artifactId>
-      <version>RELEASE</version>
+      <version>2.0</version>
       <description>AppFuse archetype for creating a web application with Hibernate, Spring and Spring MVC</description>
     </archetype>
     <archetype>
       <groupId>org.appfuse.archetypes</groupId>
       <artifactId>appfuse-basic-struts</artifactId>
-      <version>RELEASE</version>
+      <version>2.0</version>
       <description>AppFuse archetype for creating a web application with Hibernate, Spring and Struts 2</description>
     </archetype>
     <archetype>
       <groupId>org.appfuse.archetypes</groupId>
       <artifactId>appfuse-basic-tapestry</artifactId>
-      <version>RELEASE</version>
+      <version>2.0</version>
       <description>AppFuse archetype for creating a web application with Hibernate, Spring and Tapestry 4</description>
     </archetype>
     <archetype>
       <groupId>org.appfuse.archetypes</groupId>
       <artifactId>appfuse-core</artifactId>
-      <version>RELEASE</version>
+      <version>2.0</version>
       <description>AppFuse archetype for creating a jar application with Hibernate and Spring and XFire</description>
     </archetype>
     <archetype>
       <groupId>org.appfuse.archetypes</groupId>
       <artifactId>appfuse-modular-jsf</artifactId>
-      <version>RELEASE</version>
+      <version>2.0</version>
       <description>AppFuse archetype for creating a modular application with Hibernate, Spring and JSF</description>
     </archetype>
     <archetype>
       <groupId>org.appfuse.archetypes</groupId>
       <artifactId>appfuse-modular-spring</artifactId>
-      <version>RELEASE</version>
+      <version>2.0</version>
       <description>AppFuse archetype for creating a modular application with Hibernate, Spring and Spring MVC</description>
     </archetype>
     <archetype>
       <groupId>org.appfuse.archetypes</groupId>
       <artifactId>appfuse-modular-struts</artifactId>
-      <version>RELEASE</version>
+      <version>2.0</version>
       <description>AppFuse archetype for creating a modular application with Hibernate, Spring and Struts 2</description>
     </archetype>
     <archetype>
       <groupId>org.appfuse.archetypes</groupId>
       <artifactId>appfuse-modular-tapestry</artifactId>
-      <version>RELEASE</version>
+      <version>2.0</version>
       <description>AppFuse archetype for creating a modular application with Hibernate, Spring and Tapestry 4</description>
+    </archetype>
+    <archetype>
+      <groupId>org.makumba</groupId>
+      <artifactId>makumba-archetype</artifactId>
+      <version>RELEASE</version>
+      <description>Archetype for a simple Makumba application</description>
     </archetype>
     <archetype>
       <groupId>org.apache.maven.archetypes</groupId>
@@ -110,6 +118,12 @@
       <description>A simple Java web application</description>
     </archetype>
     <archetype>
+      <groupId>net.databinder</groupId>
+      <artifactId>data-app</artifactId>
+      <version>1.0</version>
+      <description>A new Databinder application with sources and resources.</description>
+    </archetype>
+    <archetype>
       <groupId>org.apache.camel.archetypes</groupId>
       <artifactId>camel-archetype-component</artifactId>
       <version>RELEASE</version>
@@ -140,10 +154,22 @@
       <description>Creates a new Camel project with added Spring DSL support</description>
     </archetype>
     <archetype>
+      <groupId>org.apache.camel.archetypes</groupId>
+      <artifactId>camel-archetype-war</artifactId>
+      <version>RELEASE</version>
+      <description>Creates a new Camel project that deploys the Camel Web Console, REST API, and your routes as a WAR</description>
+    </archetype>
+    <archetype>
       <groupId>org.jini.maven-jini-plugin</groupId>
       <artifactId>jini-service-archetype</artifactId>
       <version>2.0</version>
       <description>Archetype for Jini service project creation</description>
+    </archetype>
+    <archetype>
+      <groupId>de.akquinet.jbosscc</groupId>
+      <artifactId>jbosscc-seam-archetype</artifactId>
+      <version>RELEASE</version>
+      <description>Maven Archetype to generate a Seam Application- Documentation</description>
     </archetype>
     <archetype>
       <groupId>org.apache.maven.archetypes</groupId>
@@ -176,8 +202,15 @@
     <archetype>
       <groupId>org.springframework.osgi</groupId>
       <artifactId>spring-osgi-bundle-archetype</artifactId>
-      <version>1.0.2</version>
+      <version>RELEASE</version>
       <description>Spring-OSGi archetype</description>
+    </archetype>
+    <archetype>
+      <groupId>com.atlassian.maven.archetypes</groupId>
+      <artifactId>bamboo-plugin-archetype</artifactId>
+      <version>3.0.1</version>
+      <repository>https://maven.atlassian.com/public</repository>
+      <description>Atlassian Bamboo plugin archetype</description>
     </archetype>
     <archetype>
       <groupId>com.atlassian.maven.archetypes</groupId>
@@ -185,6 +218,13 @@
       <version>RELEASE</version>
       <repository>https://maven.atlassian.com/public</repository>
       <description>Atlassian Confluence plugin archetype</description>
+    </archetype>
+    <archetype>
+      <groupId>com.atlassian.maven.archetypes</groupId>
+      <artifactId>jira-plugin-archetype</artifactId>
+      <version>3.0.6</version>
+      <repository>https://maven.atlassian.com/public</repository>
+      <description>Atlassian JIRA plugin archetype</description>
     </archetype>
     <archetype>
       <groupId>net.sf.maven-har</groupId>
@@ -203,6 +243,12 @@
       <artifactId>wicket-archetype-quickstart</artifactId>
       <version>1.3.2</version>
       <description>A simple Apache Wicket project</description>
+    </archetype>
+    <archetype>
+      <groupId>org.apache.tapestry</groupId>
+      <artifactId>quickstart</artifactId>
+      <version>RELEASE</version>
+      <description>A simple Apache Tapestry 5 Project</description>
     </archetype>
     <archetype>
       <groupId>org.scala-tools.archetypes</groupId>
@@ -229,19 +275,19 @@
       <groupId>org.apache.cocoon</groupId>
       <artifactId>cocoon-22-archetype-block-plain</artifactId>
       <version>RELEASE</version>
-      <description>[http://cocoon.apache.org/2.2/maven-plugins/]</description>
+      <description>http://cocoon.apache.org/2.2/maven-plugins/</description>
     </archetype>
     <archetype>
       <groupId>org.apache.cocoon</groupId>
       <artifactId>cocoon-22-archetype-block</artifactId>
       <version>RELEASE</version>
-      <description>[http://cocoon.apache.org/2.2/maven-plugins/]</description>
+      <description>http://cocoon.apache.org/2.2/maven-plugins/</description>
     </archetype>
     <archetype>
       <groupId>org.apache.cocoon</groupId>
       <artifactId>cocoon-22-archetype-webapp</artifactId>
       <version>RELEASE</version>
-      <description>[http://cocoon.apache.org/2.2/maven-plugins/]</description>
+      <description>http://cocoon.apache.org/2.2/maven-plugins/</description>
     </archetype>
     <archetype>
       <groupId>org.apache.myfaces.buildtools</groupId>
@@ -268,13 +314,13 @@
       <description>A simple archetype for create custom JSF components using MyFaces</description>
     </archetype>
     <archetype>
-      <groupId>org.codehaus.groovy.maven.archetypes</groupId>
+      <groupId>org.codehaus.gmaven.archetypes</groupId>
       <artifactId>gmaven-archetype-basic</artifactId>
       <version>RELEASE</version>
       <description>Groovy basic archetype</description>
     </archetype>
     <archetype>
-      <groupId>org.codehaus.groovy.maven.archetypes</groupId>
+      <groupId>org.codehaus.gmaven.archetypes</groupId>
       <artifactId>gmaven-archetype-mojo</artifactId>
       <version>RELEASE</version>
       <description>Groovy mojo archetype</description>
@@ -284,6 +330,38 @@
       <artifactId>struts2-archetype-starter</artifactId>
       <version>RELEASE</version>
       <description>Struts 2 Starter Archetype</description>
+    </archetype>
+    <archetype>
+      <groupId>org.tynamo</groupId>
+      <artifactId>tynamo-archetype</artifactId>
+      <version>RELEASE</version>
+      <description>Creates a CRUD web application based on Tapestry 5 and Tynamo, a model-driven Java web framework</description>
+    </archetype>
+    <archetype>
+      <groupId>tellurium</groupId>
+      <artifactId>tellurium-junit-archetype</artifactId>
+      <version>RELEASE</version>
+      <repository>http://maven.kungfuters.org/content/repositories/releases</repository>
+      <description>Tellurium JUnit project archetype for the Tellurium Automated Testing Framework</description>
+    </archetype>
+    <archetype>
+      <groupId>tellurium</groupId>
+      <artifactId>tellurium-testng-archetype</artifactId>
+      <version>RELEASE</version>
+      <repository>http://maven.kungfuters.org/content/repositories/releases</repository>
+      <description>Tellurium TestNG project archetype for the Tellurium Automated Testing Framework</description>
+    </archetype>
+    <archetype>
+      <groupId>org.fusesource.scalate.tooling</groupId>
+      <artifactId>scalate-archetype-empty</artifactId>
+      <version>RELEASE</version>
+      <description>Generates a Scalate empty web application</description>
+    </archetype>
+    <archetype>
+      <groupId>org.fusesource.scalate.tooling</groupId>
+      <artifactId>scalate-archetype-guice</artifactId>
+      <version>RELEASE</version>
+      <description>Generates a Scalate Jog web application</description>
     </archetype>
   </archetypes>
 </archetype-catalog>

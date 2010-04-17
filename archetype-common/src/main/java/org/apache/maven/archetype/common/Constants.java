@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.common;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -16,8 +18,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
-package org.apache.maven.archetype.common;
 
 import java.util.Arrays;
 import java.util.List;
@@ -45,7 +45,7 @@ public interface Constants
     String ARTIFACT_ID = "artifactId";
 
     String ARCHETYPE_FILTERED_EXTENSIONS = "archetype.filteredExtensions";
-    
+
     String ARCHETYPE_LANGUAGES = "archetype.languages";
 
     List DEFAULT_FILTERED_EXTENSIONS =
@@ -58,7 +58,7 @@ public interface Constants
         );
 
     List DEFAULT_LANGUAGES =
-        Arrays.asList( new String[]{"java", "groovy", "csharp", "aspectj"} );
+        Arrays.asList( new String[]{ "java", "groovy", "csharp", "aspectj" } );
 
     String GROUP_ID = "groupId";
 

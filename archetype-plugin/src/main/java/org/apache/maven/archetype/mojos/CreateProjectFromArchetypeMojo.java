@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.mojos;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,9 +19,7 @@
  * under the License.
  */
 
-package org.apache.maven.archetype.mojos;
-
-import org.apache.maven.archetype.Archetype;
+import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
 import org.apache.maven.archetype.generator.ArchetypeGenerator;
@@ -43,7 +43,7 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- * Generates sample project from archetype.
+ * Generates a new project from an archetype.
  *
  * @author rafale
  * @requiresProject false
@@ -55,7 +55,7 @@ public class CreateProjectFromArchetypeMojo
     implements ContextEnabled
 {
     /** @component */
-    private Archetype archetype;
+    private ArchetypeManager archetype;
 
     /** @component */
     private ArchetypeSelector selector;
@@ -101,14 +101,16 @@ public class CreateProjectFromArchetypeMojo
      * The archetype's catalogs.
      * It is a comma separated list of catalogs.
      * Catalogs use scheme:
-     * - 'file://...' with archetype-catalog.xml automatically appended when defining a directory
-     * - 'http://...' with archetype-catalog.xml always appended
-     * - 'local' which is the shortcut for 'file://~/.m2/archetype-catalog.xml'
-     * - 'remote' which is the shortcut for 'http://repo1.maven.org/maven2'
-     * - 'internal' which is an internal catalog
+     * <ul>
+     * <li>'<code>file://...</code>' with <code>archetype-catalog.xml</code> automatically appended when pointing to a directory</li>
+     * <li>'<code>http://...</code>' with <code>archetype-catalog.xml</code> always appended</li>
+     * <li>'<code>local</code>' which is the shortcut for '<code>file://~/.m2/archetype-catalog.xml</code>'</li>
+     * <li>'<code>remote</code>' which is the shortcut for Maven Central repository, ie '<code>http://repo1.maven.org/maven2</code>'</li>
+     * <li>'<code>internal</code>' which is an internal catalog</li>
+     * </ul>
      *
-     * Since 2.0-alpha-5, default value is no longer internal,local but remote,local
-     * This can only work if central has a catalog file at root.
+     * Since 2.0-alpha-5, default value is no longer <code>internal,local</code> but <code>remote,local</code>.
+     * If Maven Central repository catalog file is empty, <code>internal</code> catalog is used instead.
      *
      * @parameter expression="${archetypeCatalog}" default-value="remote,local"
      */
@@ -122,7 +124,7 @@ public class CreateProjectFromArchetypeMojo
      * @readonly
      */
     private ArtifactRepository localRepository;
-    
+
     /**
      * List of Remote Repositories used by the resolver.
      *
@@ -148,6 +150,7 @@ public class CreateProjectFromArchetypeMojo
      *  @readonly
      */
     private MavenSession session;
+
     /**
      * Additional goals that can be specified by the user during the creation of the archetype.
      *
@@ -166,12 +169,12 @@ public class CreateProjectFromArchetypeMojo
             .setArchetypeVersion( archetypeVersion )
             .setOutputDirectory( basedir.getAbsolutePath() )
             .setLocalRepository( localRepository )
-            .setArchetypeRepository(archetypeRepository)
-            .setRemoteArtifactRepositories(remoteArtifactRepositories);
+            .setArchetypeRepository( archetypeRepository )
+            .setRemoteArtifactRepositories( remoteArtifactRepositories );
 
         try
         {
-            if( interactiveMode.booleanValue() )
+            if ( interactiveMode.booleanValue() )
             {
                 getLog().info( "Generating project in Interactive mode" );
             }
@@ -184,15 +187,12 @@ public class CreateProjectFromArchetypeMojo
 
             configurator.configureArchetype( request, interactiveMode, executionProperties );
 
-            ArchetypeGenerationResult generationResult =
-                archetype.generateProjectFromArchetype( request );
-            if( generationResult.getCause() != null )
+            ArchetypeGenerationResult generationResult = archetype.generateProjectFromArchetype( request );
+
+            if ( generationResult.getCause() != null )
             {
-                throw new MojoFailureException(
-                    generationResult.getCause(),
-                    generationResult.getCause().getMessage(),
-                    generationResult.getCause().getMessage()
-                );
+                throw new MojoFailureException( generationResult.getCause(), generationResult.getCause().getMessage(),
+                                                generationResult.getCause().getMessage() );
             }
         }
         catch ( MojoFailureException ex )

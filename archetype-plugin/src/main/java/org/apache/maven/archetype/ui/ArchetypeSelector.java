@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.ui;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -16,8 +18,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
-package org.apache.maven.archetype.ui;
 
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.exception.ArchetypeNotDefined;
@@ -47,11 +47,6 @@ public interface ArchetypeSelector
 //        ArchetypeSelectionFailure;
 
     void selectArchetype( ArchetypeGenerationRequest request, Boolean interactiveMode, String catalogs )
-        throws
-        ArchetypeNotDefined,
-        UnknownArchetype,
-        UnknownGroup,
-        IOException,
-        PrompterException,
+        throws ArchetypeNotDefined, UnknownArchetype, UnknownGroup, IOException, PrompterException,
         ArchetypeSelectionFailure;
 }

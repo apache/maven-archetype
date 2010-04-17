@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.test;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -16,15 +18,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.maven.archetype.test;
-
 
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.archetype.ArchetypeCreationRequest;
 import org.apache.maven.archetype.ArchetypeCreationResult;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
-import org.apache.maven.archetype.Archetype;
+import org.apache.maven.archetype.ArchetypeManager;
+import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Writer;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
@@ -65,22 +66,20 @@ public class RoundtripMultiModuleTest
         throws Exception
     {
 
-        Archetype archetype = (Archetype) lookup( Archetype.ROLE );
+        ArchetypeManager archetype = (ArchetypeManager) lookup( ArchetypeManager.ROLE );
 
         ArchetypeRegistryManager registryManager = (ArchetypeRegistryManager) lookup( ArchetypeRegistryManager.ROLE );
 
         MavenProjectBuilder projectBuilder = (MavenProjectBuilder) lookup( MavenProjectBuilder.ROLE );
 
         ArtifactRepository localRepository = registryManager.createRepository( new File( getBasedir(),
-            "target"+File.separator+"test-classes"+File.separator+"repositories"+File.separator+"local" ).toURI().
-            toURL().
-            toExternalForm(),
+            "target" + File.separator + "test-classes" + File.separator + "repositories" + File.separator + "local" )
+            .toURI().toURL().toExternalForm(),
             "local-repo" );
 
         ArtifactRepository centralRepository = registryManager.createRepository( new File( getBasedir(),
-            "target"+File.separator+"test-classes"+File.separator+"repositories"+File.separator+"central" ).toURI().
-            toURL().
-            toExternalForm(),
+            "target" + File.separator + "test-classes" + File.separator + "repositories" + File.separator + "central" )
+            .toURI().toURL().toExternalForm(),
             "central-repo" );
 
         // (1) create a project from scratch
@@ -96,39 +95,38 @@ public class RoundtripMultiModuleTest
 //        File sourceProject = new File( getBasedir(  ), "target/test-classes/projects/roundtrip-1-project" );
 
         File workingProject = new File( getBasedir(),
-            "target"+File.separator+"test-classes"+File.separator+"projects"+File.separator+"roundtrip-multi" );
-        FileUtils.forceDelete(new File(workingProject, "target"));
+            "target" + File.separator + "test-classes" + File.separator + "projects" + File.separator + "roundtrip-multi" );
+        FileUtils.forceDelete( new File( workingProject, "target" ) );
 
         // (2) create an archetype from the project
         File pom = new File( workingProject, "pom.xml" );
 
         MavenProject project = projectBuilder.build( pom, localRepository, null );
 
-        ArchetypeCreationRequest acr = new ArchetypeCreationRequest().setProject( project ).
-            setLocalRepository( localRepository )
+        ArchetypeCreationRequest acr = new ArchetypeCreationRequest()
+            .setProject( project )
+            .setLocalRepository( localRepository )
             .setFiltereds(Constants.DEFAULT_FILTERED_EXTENSIONS)
             .setLanguages(Constants.DEFAULT_LANGUAGES)
-            .setPostPhase( "package" )
-            ;
+            .setPostPhase( "package" );
 
         ArchetypeCreationResult creationResult = archetype.createArchetypeFromProject( acr );
 
         if ( creationResult.getCause() != null )
         {
-            fail( creationResult.getCause().getMessage() );
+            throw creationResult.getCause();
         }
         else
         {
-            assertArchetypeCreated(workingProject);
+            assertArchetypeCreated( workingProject );
         }
 
         // (3) create our own archetype catalog properties in memory
-        File catalogDirectory = new File( getBasedir(), "target"+File.separator+"catalog" );
+        File catalogDirectory = new File( getBasedir(), "target" + File.separator + "catalog" );
 
         File catalogFile = new File( catalogDirectory, "archetype-catalog.xml" );
 
-        File catalogProperties = new File( catalogDirectory,
-            "archetype-catalog.properties" );
+        File catalogProperties = new File( catalogDirectory, "archetype-catalog.properties" );
 
         catalogDirectory.mkdirs();
 
@@ -139,34 +137,34 @@ public class RoundtripMultiModuleTest
         p.store( os, "Generated catalog properties" );
 
         // (5) install the archetype we just created
-        File generatedArchetypeDirectory = new File( project.getBasedir(),
-            "target"+File.separator+"generated-sources"+File.separator+"archetype" );
+        File generatedArchetypeDirectory =
+            new File( project.getBasedir(), "target" + File.separator + "generated-sources" + File.separator
+                + "archetype" );
         File generatedArchetypePom = new File( generatedArchetypeDirectory, "pom.xml" );
-        MavenProject generatedArchetypeProject = projectBuilder.build( generatedArchetypePom,
-            localRepository, null );
+        MavenProject generatedArchetypeProject = projectBuilder.build( generatedArchetypePom, localRepository, null );
 
-        File archetypeDirectory = new File( generatedArchetypeDirectory,
-            "src"+File.separator+"main"+File.separator+"resources" );
+        File archetypeDirectory =
+            new File( generatedArchetypeDirectory, "src" + File.separator + "main" + File.separator + "resources" );
 
         File archetypeArchive = archetype.archiveArchetype( archetypeDirectory,
             new File( generatedArchetypeProject.getBuild().getDirectory() ),
             generatedArchetypeProject.getBuild().getFinalName() );
 
-        File archetypeInRepository = new File( centralRepository.getBasedir(),
-            StringUtils.replace(
-            generatedArchetypeProject.getGroupId(), ".",
-            File.separator ) +File.separator+
-            generatedArchetypeProject.getArtifactId() +File.separator+
-            generatedArchetypeProject.getVersion() +File.separator+
-            generatedArchetypeProject.getBuild().
-            getFinalName() +
-            ".jar" );
+        File archetypeInRepository =
+            new File( centralRepository.getBasedir(), StringUtils.replace( generatedArchetypeProject.getGroupId(), ".",
+                                                                           File.separator )
+                + File.separator
+                + generatedArchetypeProject.getArtifactId()
+                + File.separator
+                + generatedArchetypeProject.getVersion()
+                + File.separator
+                + generatedArchetypeProject.getBuild().getFinalName() + ".jar" );
         archetypeInRepository.getParentFile().mkdirs();
         FileUtils.copyFile( archetypeArchive, archetypeInRepository );
 
         // (4) create our own archetype catalog describing the archetype we just created
         ArchetypeCatalog catalog = new ArchetypeCatalog();
-        org.apache.maven.archetype.catalog.Archetype generatedArchetype = new org.apache.maven.archetype.catalog.Archetype();
+        Archetype generatedArchetype = new Archetype();
         generatedArchetype.setGroupId( generatedArchetypeProject.getGroupId() );
         generatedArchetype.setArtifactId( generatedArchetypeProject.getArtifactId() );
         generatedArchetype.setVersion( generatedArchetypeProject.getVersion() );
@@ -179,38 +177,45 @@ public class RoundtripMultiModuleTest
         IOUtils.closeQuietly( writer );
 
         // (6) create a project form the archetype we just created
-        String outputDirectory = new File( getBasedir(),
-            "target"+File.separator+"test-classes"+File.separator+"projects"+File.separator+"roundtrip-multi-recreated" ).getAbsolutePath();
+        String outputDirectory =
+            new File( getBasedir(), "target" + File.separator + "test-classes" + File.separator + "projects"
+                + File.separator + "roundtrip-multi-recreated" ).getAbsolutePath();
         FileUtils.forceDelete(outputDirectory);
 
         ArchetypeGenerationRequest agr =
-            new ArchetypeGenerationRequest().setArchetypeGroupId(
-            generatedArchetypeProject.getGroupId() ).
-            setArchetypeArtifactId( generatedArchetypeProject.getArtifactId() ).
-            setArchetypeVersion( generatedArchetypeProject.getVersion() ).
-            setGroupId( "com.mycompany" ).setArtifactId( "myapp" ).setVersion( "1.0-SNAPSHOT" ).
-            setPackage( "com.mycompany.myapp" ).setOutputDirectory( outputDirectory ).
-            setLocalRepository( localRepository ).setArchetypeRepository( "http://localhost:18881/repo/" );
+            new ArchetypeGenerationRequest()
+            .setArchetypeGroupId( generatedArchetypeProject.getGroupId() )
+            .setArchetypeArtifactId( generatedArchetypeProject.getArtifactId() )
+            .setArchetypeVersion( generatedArchetypeProject.getVersion() )
+            .setGroupId( "com.mycompany" )
+            .setArtifactId( "myapp" )
+            .setVersion( "1.0-SNAPSHOT" )
+            .setPackage( "com.mycompany.myapp" )
+            .setOutputDirectory( outputDirectory )
+            .setLocalRepository( localRepository )
+            .setArchetypeRepository( "http://localhost:18881/repo/" );
         ArchetypeGenerationResult generationResult = archetype.generateProjectFromArchetype( agr );
 
         if ( generationResult.getCause() != null )
         {
             fail( generationResult.getCause().getMessage() );
         }
-        
-        assertTrue(new File(outputDirectory + File.separator + "myapp" + File.separator + "myapp-api", ".classpath").exists());
-        assertTrue(new File(outputDirectory + File.separator + "myapp" + File.separator + "myapp-cli", ".classpath").exists());
-        assertTrue(new File(outputDirectory + File.separator + "myapp" + File.separator + "myapp-core", ".classpath").exists());
-        assertTrue(new File(outputDirectory + File.separator + "myapp" + File.separator + "myapp-model", ".classpath").exists());
-        assertTrue(new File(outputDirectory + File.separator + "myapp" + File.separator + "myapp-stores" + File.separator + "myapp-store-memory", ".classpath").exists());
-        assertTrue(new File(outputDirectory + File.separator + "myapp" + File.separator + "myapp-stores" + File.separator + "myapp-store-xstream", ".classpath").exists());
 
-        assertTrue(new File(outputDirectory + File.separator + "myapp" + File.separator + "myapp-api", ".checkstyle").exists());
-        assertTrue(new File(outputDirectory + File.separator + "myapp" + File.separator + "myapp-cli", ".checkstyle").exists());
-        assertTrue(new File(outputDirectory + File.separator + "myapp" + File.separator + "myapp-core", ".checkstyle").exists());
-        assertTrue(new File(outputDirectory + File.separator + "myapp" + File.separator + "myapp-model", ".checkstyle").exists());
-        assertTrue(new File(outputDirectory + File.separator + "myapp" + File.separator + "myapp-stores" + File.separator + "myapp-store-memory", ".checkstyle").exists());
-        assertTrue(new File(outputDirectory + File.separator + "myapp" + File.separator + "myapp-stores" + File.separator + "myapp-store-xstream", ".checkstyle").exists());
+        String myapp = outputDirectory + File.separator + "myapp" + File.separator;
+        assertTrue( new File( myapp + "myapp-api", ".classpath" ).exists() );
+        assertTrue( new File( myapp + "myapp-cli", ".classpath" ).exists() );
+        assertTrue( new File( myapp + "myapp-core", ".classpath" ).exists() );
+        assertTrue( new File( myapp + "myapp-model", ".classpath" ).exists() );
+        assertTrue( new File( myapp + File.separator + "myapp-stores" + File.separator + "myapp-store-memory",
+                              ".classpath" ).exists() );
+        assertTrue( new File( myapp + "myapp-stores" + File.separator + "myapp-store-xstream", ".classpath" ).exists() );
+
+        assertTrue( new File( myapp + "myapp-api", ".checkstyle" ).exists() );
+        assertTrue( new File( myapp + "myapp-cli", ".checkstyle" ).exists() );
+        assertTrue( new File( myapp + "myapp-core", ".checkstyle" ).exists() );
+        assertTrue( new File( myapp + "myapp-model", ".checkstyle" ).exists() );
+        assertTrue( new File( myapp + "myapp-stores" + File.separator + "myapp-store-memory", ".checkstyle" ).exists() );
+        assertTrue( new File( myapp + "myapp-stores" + File.separator + "myapp-store-xstream", ".checkstyle" ).exists() );
 
     }
 
@@ -253,54 +258,63 @@ public class RoundtripMultiModuleTest
         jettyContainer.stop();
     }
 
-    private void assertArchetypeCreated(File workingProject) {
-        File archetypeSourcesDirectory = FileUtils.resolveFile(workingProject, "target/generated-sources/archetype");
-        File archetypeResourcesDirectory = FileUtils.resolveFile(archetypeSourcesDirectory, "src/main/resources/archetype-resources");
-        File archetypeMetadataDirectory = FileUtils.resolveFile(archetypeSourcesDirectory, "src/main/resources/META-INF/maven");
-        
-        
-        Iterator i =org.apache.commons.io.FileUtils.iterateFiles(archetypeSourcesDirectory, null, true);
-        while(i.hasNext())
+    private void assertArchetypeCreated( File workingProject )
+    {
+        File archetypeSourcesDirectory = FileUtils.resolveFile( workingProject, "target/generated-sources/archetype" );
+        File archetypeResourcesDirectory =
+            FileUtils.resolveFile( archetypeSourcesDirectory, "src/main/resources/archetype-resources" );
+        File archetypeMetadataDirectory =
+            FileUtils.resolveFile( archetypeSourcesDirectory, "src/main/resources/META-INF/maven" );
+
+        Iterator i = org.apache.commons.io.FileUtils.iterateFiles( archetypeSourcesDirectory, null, true );
+        while ( i.hasNext() )
         {
-            File f=(File) i.next();
-            System.err.println(f.getPath());
-        }        
-        
-        assertExistDirectory(FileUtils.resolveFile(archetypeResourcesDirectory, "__rootArtifactId__-api"));
-        assertExistFile(FileUtils.resolveFile(FileUtils.resolveFile(archetypeResourcesDirectory, "__rootArtifactId__-api"), "pom.xml"));
-        assertExistDirectory(FileUtils.resolveFile(archetypeResourcesDirectory, "__rootArtifactId__-cli"));
-        assertExistFile(FileUtils.resolveFile(FileUtils.resolveFile(archetypeResourcesDirectory, "__rootArtifactId__-cli"), "pom.xml"));
-        assertExistDirectory(FileUtils.resolveFile(archetypeResourcesDirectory, "__rootArtifactId__-core"));
-        assertExistFile(FileUtils.resolveFile(FileUtils.resolveFile(archetypeResourcesDirectory, "__rootArtifactId__-core"), "pom.xml"));
-        assertExistDirectory(FileUtils.resolveFile(archetypeResourcesDirectory, "__rootArtifactId__-model"));
-        assertExistFile(FileUtils.resolveFile(FileUtils.resolveFile(archetypeResourcesDirectory, "__rootArtifactId__-model"), "pom.xml"));
-        assertExistDirectory(FileUtils.resolveFile(archetypeResourcesDirectory, "__rootArtifactId__-stores"));
-        assertExistFile(FileUtils.resolveFile(FileUtils.resolveFile(archetypeResourcesDirectory, "__rootArtifactId__-stores"), "pom.xml"));
-        assertExistDirectory(FileUtils.resolveFile(FileUtils.resolveFile(archetypeResourcesDirectory, "__rootArtifactId__-stores"), "__rootArtifactId__-store-memory"));
-        assertExistFile(FileUtils.resolveFile(FileUtils.resolveFile(FileUtils.resolveFile(archetypeResourcesDirectory, "__rootArtifactId__-stores"), "__rootArtifactId__-store-memory"), "pom.xml"));
-        assertExistDirectory(FileUtils.resolveFile(FileUtils.resolveFile(archetypeResourcesDirectory, "__rootArtifactId__-stores"), "__rootArtifactId__-store-xstream"));
-        assertExistFile(FileUtils.resolveFile(FileUtils.resolveFile(FileUtils.resolveFile(archetypeResourcesDirectory, "__rootArtifactId__-stores"), "__rootArtifactId__-store-xstream"), "pom.xml"));
-        assertExistFile(FileUtils.resolveFile(archetypeResourcesDirectory, "pom.xml"));
-        
-        
-        assertExistDirectory(archetypeMetadataDirectory);
-        assertExistFile(FileUtils.resolveFile(archetypeMetadataDirectory, "archetype-metadata.xml"));
-        assertExistFile(FileUtils.resolveFile(archetypeMetadataDirectory, "archetype.xml"));
-        assertExistFile(FileUtils.resolveFile(archetypeSourcesDirectory, "pom.xml"));
-        
+            File f = (File) i.next();
+            System.err.println( f.getPath() );
+        }
+
+        File api = FileUtils.resolveFile( archetypeResourcesDirectory, "__rootArtifactId__-api" );
+        assertExistDirectory( api );
+        assertExistFile( FileUtils.resolveFile( api, "pom.xml" ) );
+
+        File cli = FileUtils.resolveFile( archetypeResourcesDirectory, "__rootArtifactId__-cli" );
+        assertExistDirectory( cli );
+        assertExistFile( FileUtils.resolveFile( cli, "pom.xml" ) );
+
+        File core = FileUtils.resolveFile( archetypeResourcesDirectory, "__rootArtifactId__-core" );
+        assertExistDirectory( core );
+        assertExistFile( FileUtils.resolveFile( core, "pom.xml" ) );
+
+        File model = FileUtils.resolveFile( archetypeResourcesDirectory, "__rootArtifactId__-model" );
+        assertExistDirectory( model );
+        assertExistFile( FileUtils.resolveFile( model, "pom.xml" ) );
+
+        File stores = FileUtils.resolveFile( archetypeResourcesDirectory, "__rootArtifactId__-stores" );
+        assertExistDirectory( stores );
+        assertExistFile( FileUtils.resolveFile( stores, "pom.xml" ) );
+        assertExistDirectory( FileUtils.resolveFile( stores, "__rootArtifactId__-store-memory" ) );
+        assertExistFile( FileUtils.resolveFile( FileUtils.resolveFile( stores, "__rootArtifactId__-store-memory" ),
+                                                "pom.xml" ) );
+        assertExistDirectory( FileUtils.resolveFile( stores, "__rootArtifactId__-store-xstream" ) );
+        assertExistFile( FileUtils.resolveFile( FileUtils.resolveFile( stores, "__rootArtifactId__-store-xstream" ),
+                                                "pom.xml" ) );
+        assertExistFile( FileUtils.resolveFile( archetypeResourcesDirectory, "pom.xml" ) );
+
+        assertExistDirectory( archetypeMetadataDirectory );
+        assertExistFile( FileUtils.resolveFile( archetypeMetadataDirectory, "archetype-metadata.xml" ) );
+        assertExistFile( FileUtils.resolveFile( archetypeSourcesDirectory, "pom.xml" ) );
+
     }
 
-    private void assertExistDirectory(File resolveFile) {
-        assertTrue("resolveFile " +resolveFile+
-            " !exists", resolveFile.exists());
-        assertTrue("resolveFile " +resolveFile+
-            " !isDirectory", resolveFile.isDirectory());
+    private void assertExistDirectory( File resolveFile )
+    {
+        assertTrue( "resolveFile " + resolveFile + " !exists", resolveFile.exists() );
+        assertTrue( "resolveFile " + resolveFile + " !isDirectory", resolveFile.isDirectory() );
     }
 
-    private void assertExistFile(File resolveFile) {
-        assertTrue("resolveFile " +resolveFile+
-            " !exists", resolveFile.exists());
-        assertTrue("resolveFile " +resolveFile+
-            " !isFile", resolveFile.isFile());
+    private void assertExistFile( File resolveFile )
+    {
+        assertTrue( "resolveFile " + resolveFile + " !exists", resolveFile.exists() );
+        assertTrue( "resolveFile " + resolveFile + " !isFile", resolveFile.isFile() );
     }
 }

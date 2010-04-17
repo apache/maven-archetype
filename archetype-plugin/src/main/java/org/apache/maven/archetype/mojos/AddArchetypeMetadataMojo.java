@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.mojos;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -16,8 +18,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
-package org.apache.maven.archetype.mojos;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.repository.metadata.ArtifactRepositoryMetadata;
@@ -55,8 +55,7 @@ public class AddArchetypeMetadataMojo
     private MavenProject project;
 
     public void execute()
-        throws
-        MojoExecutionException
+        throws MojoExecutionException
     {
         Artifact projectArtifact = project.getArtifact();
 
@@ -64,17 +63,11 @@ public class AddArchetypeMetadataMojo
         versioning.setLatest( projectArtifact.getVersion() );
         versioning.updateTimestamp();
 
-        ArtifactRepositoryMetadata metadata =
-            new ArtifactRepositoryMetadata( projectArtifact, versioning );
+        ArtifactRepositoryMetadata metadata = new ArtifactRepositoryMetadata( projectArtifact, versioning );
         projectArtifact.addMetadata( metadata );
 
-        GroupRepositoryMetadata groupMetadata =
-            new GroupRepositoryMetadata( project.getGroupId() );
-        groupMetadata.addPluginMapping(
-            getGoalPrefix(),
-            project.getArtifactId(),
-            project.getName()
-        );
+        GroupRepositoryMetadata groupMetadata = new GroupRepositoryMetadata( project.getGroupId() );
+        groupMetadata.addPluginMapping( getGoalPrefix(), project.getArtifactId(), project.getName() );
 
         projectArtifact.addMetadata( groupMetadata );
     }

@@ -29,80 +29,81 @@
 
 What is done during the creation of a project?
 
-* Archetype selection 
+* Archetype selection
 
-    First the Archetype Plugin asks the user to select an archetype from a list
+    First, the Archetype Plugin asks the user to select an archetype from a list
     of known archetypes. Archetypes are known using archetype catalogs.
 
 * Archetype configuration
 
-    Then the Archetype Plugin ask the user to provide values for each of the 
-    four main required properties. Which are the project's groupId, artifactId,
-    version and package. 
+    Then the Archetype Plugin asks the user to provide values for each of the
+    four main required properties, which are the project's groupId, artifactId,
+    version and package.
 
     It also ask for values of the additional required properties defined in the
     archetype's metadata file.
 
 * Project generation
 
-    Finally, the Archetype Plugin generates the Maven 2 project from the 
+    Finally, the Archetype Plugin generates the Maven 2 project from the
     selected/configured archetype.
 
-    The archetype used to generate the project can be single or multi module.
+    The archetype used to generate the project can be single or multi-module.
 
-    The archetype used to generate the project can be partial, which means it 
+    The archetype used to generate the project can be partial, which means it
     enhances an existing project instead of creating a new one.
 
-    If the Archetype Plugin is called from an existing project, using a 
-    complete (not partial) archetype, then it generates a sub module in the 
+    If the Archetype Plugin is called from an existing project, using a
+    complete (not partial) archetype, then it generates a sub module in the
     existing project.
 
-    If the Archetype Plugin is configured to create a project in an existing 
-    directory, it first check for the existence of a <<<pom.xml>>> file before 
+    If the Archetype Plugin is configured to create a project in an existing
+    directory, it first checks for the existence of a <<<pom.xml>>> file before
     failing the generation.
 
 * Batch mode
 
-    It is possible to call the Archetype Plugin to generate project in batch 
-    mode (to get rid of the prompting). This is achieved by providing the 
+    It is possible to call the Archetype Plugin to generate project in batch
+    mode (to get rid of the prompting). This is achieved by providing the
     Archetype Plugin with all the needed values as system properties.
 
     * <<<archetypeCatalog>>> which defaults to internal specifies the catalog(s)
-       The valid catalogs are: internal (the default), local, remote, file://path, http://url. 
+       The valid catalogs are: <<<internal>>> (the default), <<<local>>>, <<<remote>>>,
+       <<<file://path>>>, <<<http://url>>>.
 
-       * <<<internal>>> uses an internal catalog 
+       * <<<internal>>> uses an internal catalog
 
-       * <<<local>>> uses the ~/.m2/archetype-catalog.xml file 
+       * <<<local>>> uses the <<<~/.m2/archetype-catalog.xml>>> file
 
-       * <<<remote>>> uses the http://repo1.maven.org/maven2/archetype-catalog.xml 
-         file 
+       * <<<remote>>> uses the <<<http://repo1.maven.org/maven2/archetype-catalog.xml>>>
+         file
 
-       * <<<file://path>>> uses the catalog file defined by path (or the 
-         <<<archetype-catalog.xml>>> file located in path directory) 
+       * <<<file://path>>> uses the catalog file defined by path (or the
+         <<<archetype-catalog.xml>>> file located in path directory)
 
-       * <<<http://url>>> uses the catalog file defined by url (or the 
+       * <<<http://url>>> uses the catalog file defined by url (or the
          <<<archetype-catalog.xml>>> file located in url web directory)
 
        []
-  
+
     * <<<archetypeGroupId>>> specifies the groupId of the archetype to use
-  
+
     * <<<archetypeArtifactId>>> specifies the artifactId of the archetype to use
-  
+
     * <<<archetypeVersion>>> specifies the version of the archetype to use
-  
+
     * <<<archetypeRepository>>> specifies the repository in which the archetype
       resides
-  
+
     * <<<groupId>>> specifies the groupId of the generated project
-  
+
     * <<<artifactId>>> specifies the artifactId of the generated project
-  
+
     * <<<version>>> specifies the version of the generated project
-  
-    * <<<package>>> specifies the package for the sources of the generated 
+
+    * <<<package>>> specifies the package for the sources of the generated
       project
-  
+
     * <<<anotherVelocityProperty>>> specifies any other required property
 
     []

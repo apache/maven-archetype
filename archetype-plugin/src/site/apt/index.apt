@@ -32,37 +32,37 @@ Maven 2 Archetype Plugin
  The Archetype Plugin allows the user to create a Maven 2 project
  from an existing template called an archetype.
 
- It also allows the user to create an archetype from an existing project. 
+ It also allows the user to create an archetype from an existing project.
 
 
 * Usage
 
-  {{{usage.html}Instructions on how to use the Archetype Plugin to create a project}}
+  {{{./usage.html}Instructions on how to use the Archetype Plugin to create a project}}
   can be found on the usage page.
 
 ~~ TODO: The links in the following paragraph doesn't work
-  The Archetype Plugin is embedded in IDEs {{{#}Eclipse}}, {{{#}NetBeans}}, 
+  The Archetype Plugin is embedded in IDEs {{{#}Eclipse}}, {{{#}NetBeans}},
   {{{#}IDEA}}.
 
-  {{{advanced-usage.html}Instructions on how to use the Archetype Plugin to create an archetype from an existing project}}
+  {{{./advanced-usage.html}Instructions on how to use the Archetype Plugin to create an archetype from an existing project}}
   can be found on the advanced usage page.
 
 
 * Goals Overview
 
   The archetype plugin has four goals:
-  
-  * {{{create-mojo.html}archetype:create}} creates a Maven 2 project from an 
-    archetype. It use the behaviour of the Archetype Plugin version 1.0-alpha-7.
-  
-  * {{{generate-mojo.html}archetype:generate}} ask the user to choose an archetype 
+
+  * {{{./create-mojo.html}archetype:create}} creates a Maven 2 project from an
+    archetype. It use the behaviour of the {{{/plugins/maven-archetype-plugin-1.0-alpha-7/}Archetype Plugin version 1.0-alpha-7}}.
+
+  * {{{./generate-mojo.html}archetype:generate}} ask the user to choose an archetype
     from the archetype catalog, and retrieves it from the remote repository.
     Once retrieved, it is processed to create a working Maven project.
 
-  * {{{create-from-project-mojo.html}archetype:create-from-project}} creates
+  * {{{./create-from-project-mojo.html}archetype:create-from-project}} creates
     an archetype from an existing project.
 
-  * {{{crawl-mojo.html}archetype:crawl}} search a repository 
+  * {{{./crawl-mojo.html}archetype:crawl}} search a repository
     for archetypes and updates a catalog.
 
   []
@@ -70,33 +70,29 @@ Maven 2 Archetype Plugin
 
 * Examples
 
-   The following examples show how to use the Archetype Plugin in more advanced 
+   The following examples show how to use the Archetype Plugin in more advanced
    usecases:
 
-   * {{{examples/generate-batch.html}Generate projects in batch mode}}
+   * {{{./examples/generate-batch.html}Generate projects in batch mode}}
 
-   * {{{examples/generate-alternative-catalog.html}Generate project using an alternative catalog}}
+   * {{{./examples/generate-alternative-catalog.html}Generate project using an alternative catalog}}
 
-   * {{{examples/create-multi-module-project.html}Create an archetype from a multi module project}}
+   * {{{./examples/create-multi-module-project.html}Create an archetype from a multi module project}}
 
-   * {{{examples/create-with-property-file.html}Create an archetype with a property file}}
+   * {{{./examples/create-with-property-file.html}Create an archetype with a property file}}
 
-~~ TODO: The link on the following line doesn't work
    * {{{#}Handcrafting an archetype}} or features available to an archetype
      when not created by <<<create-from-project>>> - TBD
 
-~~ TODO: The link on the following line doesn't work
    * {{{#}Generate a sub module from an archetype}} - TBD
 
-~~ TODO: The link on the following line doesn't work
    * {{{#}Create an archetype in interactive mode}} - TBD
 
   []
 
 
 * Specification
- 
-    The specification page contains 
-    {{{specification/specification.html}the specification of the main parts of the Archetype Plugin}}.
- 
- 
+
+    The specification page contains
+    {{{./specification/specification.html}the specification of the main parts of the Archetype Plugin}}.
+

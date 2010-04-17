@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.generator;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,8 +19,6 @@
  * under the License.
  */
 
-package org.apache.maven.archetype.generator;
-
 import org.apache.maven.archetype.exception.ArchetypeGenerationFailure;
 import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
 import org.apache.maven.archetype.exception.OutputFileExists;
@@ -34,15 +34,8 @@ public interface FilesetArchetypeGenerator
 {
     String ROLE = FilesetArchetypeGenerator.class.getName();
 
-    void generateArchetype( ArchetypeGenerationRequest request,
-                            File archetypeFile,
-                            String basedir )
-        throws
-        UnknownArchetype,
-        ArchetypeNotConfigured,
-        ProjectDirectoryExists,
-        PomFileExists,
-        OutputFileExists,
+    void generateArchetype( ArchetypeGenerationRequest request, File archetypeFile )
+        throws UnknownArchetype, ArchetypeNotConfigured, ProjectDirectoryExists, PomFileExists, OutputFileExists,
         ArchetypeGenerationFailure;
 
 //    Compile time deprecation ;-)

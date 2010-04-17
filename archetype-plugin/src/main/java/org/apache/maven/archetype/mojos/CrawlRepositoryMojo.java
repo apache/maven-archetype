@@ -1,3 +1,5 @@
+package org.apache.maven.archetype.mojos;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,8 +19,6 @@
  * under the License.
  */
 
-package org.apache.maven.archetype.mojos;
-
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.repositorycrawler.RepositoryCrawler;
 import org.apache.maven.plugin.AbstractMojo;
@@ -28,15 +28,14 @@ import org.apache.maven.plugin.MojoFailureException;
 import java.io.File;
 
 /**
- * Crawl a Maven 2 repository (Filesystem, not HTTP)
- * and creates a catalog file.
- * 
+ * Crawl a Maven 2 repository (filesystem, not HTTP) and creates a catalog file.
+ *
  * @author           rafale
  * @requiresProject  false
  * @goal             crawl
  */
 public class CrawlRepositoryMojo
-extends AbstractMojo
+    extends AbstractMojo
 {
     /**
      * The archetype's catalog to update.
@@ -58,22 +57,23 @@ extends AbstractMojo
     private File repository;
 
     public void execute ()
-    throws MojoExecutionException, MojoFailureException
+        throws MojoExecutionException, MojoFailureException
     {
         System.err.println ( "repository " + repository );
         System.err.println ( "catalogFile " + catalogFile );
+
         if ( repository == null )
         {
-            throw new MojoFailureException (
-                "The repository is not defined. Use -Drepository=/path/to/repository"
-            );
+            throw new MojoFailureException( "The repository is not defined. Use -Drepository=/path/to/repository" );
         }
 
         ArchetypeCatalog catalog = crawler.crawl ( repository );
+
         if ( catalogFile == null )
         {
             catalogFile = new File ( repository, "archetype-catalog.xml" );
         }
+
         crawler.writeCatalog ( catalog, catalogFile );
     }
 }
