@@ -24,12 +24,11 @@ under the License.
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <artifactId>maven-archetype-parent</artifactId>
     <groupId>org.apache.maven.archetype</groupId>
-    <version>3-SNAPSHOT</version>
+    <artifactId>maven-archetype</artifactId>
+    <version>2.0-alpha-5-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.apache.maven.archetypes</groupId>
   <artifactId>maven-archetype-bundles</artifactId>
   <version>4-SNAPSHOT</version>
   <packaging>pom</packaging>
@@ -52,19 +51,6 @@ under the License.
     <module>maven-archetype-site-simple</module>
     <module>maven-archetype-webapp</module>
   </modules>
-
-  <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/archetype/branches/archetype-1.0.x/maven-archetype-bundles</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/branches/archetype-1.0.x/maven-archetype-bundles</developerConnection>
-    <url>http://svn.apache.org/viewvc/maven/archetype/branches/archetype-1.0.x/maven-archetype-bundles</url>
-  </scm>
-
-  <distributionManagement>
-    <site>
-      <id>apache.website</id>
-      <url>scp://people.apache.org/www/maven.apache.org/archetype/maven-archetype-bundles</url>
-    </site>
-  </distributionManagement>
 
   <build>
     <extensions>
