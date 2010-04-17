@@ -19,30 +19,69 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
   <parent>
     <artifactId>maven-archetype-parent</artifactId>
     <groupId>org.apache.maven.archetype</groupId>
-    <version>2</version>
+    <version>3-SNAPSHOT</version>
   </parent>
-  <modelVersion>4.0.0</modelVersion>
+
   <groupId>org.apache.maven.archetypes</groupId>
   <artifactId>maven-archetype-bundles</artifactId>
   <version>4-SNAPSHOT</version>
   <packaging>pom</packaging>
+
   <name>Maven Archetypes</name>
+  <description>Archetypes provided by Maven.</description>
+  <url>http://maven.apache.org/archetype/maven-archetype-bundles</url>
+
   <modules>
-    <module>maven-archetype-mojo</module> 
-    <module>maven-archetype-site</module>
-    <module>maven-archetype-quickstart</module>
-    <module>maven-archetype-simple</module>
-    <module>maven-archetype-site-simple</module>
-    <module>maven-archetype-webapp</module>
     <module>maven-archetype-archetype</module>
     <module>maven-archetype-j2ee-simple</module>
-    <module>maven-archetype-portlet</module>
+    <module>maven-archetype-mojo</module>
     <module>maven-archetype-plugin</module>
-    <module>maven-archetype-plugin-site</module> 
-    <module>maven-archetype-profiles</module>    
+    <module>maven-archetype-plugin-site</module>
+    <module>maven-archetype-portlet</module>
+    <module>maven-archetype-profiles</module>
+    <module>maven-archetype-quickstart</module>
+    <module>maven-archetype-simple</module>
+    <module>maven-archetype-site</module>
+    <module>maven-archetype-site-simple</module>
+    <module>maven-archetype-webapp</module>
   </modules>
+
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/archetype/branches/archetype-1.0.x/maven-archetype-bundles</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/branches/archetype-1.0.x/maven-archetype-bundles</developerConnection>
+    <url>http://svn.apache.org/viewvc/maven/archetype/branches/archetype-1.0.x/maven-archetype-bundles</url>
+  </scm>
+
+  <distributionManagement>
+    <site>
+      <id>apache.website</id>
+      <url>scp://people.apache.org/www/maven.apache.org/archetype/maven-archetype-bundles</url>
+    </site>
+  </distributionManagement>
+
+  <build>
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.archetype</groupId>
+        <artifactId>archetype-packaging</artifactId>
+        <version>2.0-alpha-5-SNAPSHOT</version>
+      </extension>
+    </extensions>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-archetype-plugin</artifactId>
+          <version>2.0-alpha-5-SNAPSHOT</version>
+          <extensions>true</extensions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
 </project>

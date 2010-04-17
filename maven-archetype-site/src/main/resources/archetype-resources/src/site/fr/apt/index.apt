@@ -1,17 +1,17 @@
  -----
  Le Site
  -----
- L'équipe Maven
+ L'Ã©quipe Maven
  -----
 
 Site Maven pour votre projet
 
- Félicitations!  Si vous regardez cette page alors vous avez
- généré avec succès un modèle de site en utilisant l'archétype
- de site et vous avez lancé :
-  
+ FÃ©licitations!  Si vous regardez cette page alors vous avez
+ gÃ©nÃ©rÃ© avec succÃ¨s un modÃ¨le de site en utilisant l'archÃ©type
+ de site et vous avez lancÃ© :
+
 +-----+
 
-m2 site:site
+mvn site
 
 +-----+
