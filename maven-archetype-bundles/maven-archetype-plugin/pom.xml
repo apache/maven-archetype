@@ -39,8 +39,8 @@ under the License.
   </description>
 
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/archetype/branches/archetype-1.0.x/maven-archetype-bundles/maven-archetype-plugin</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/branches/archetype-1.0.x/maven-archetype-bundles/maven-archetype-plugin</developerConnection>
-    <url>http://svn.apache.org/viewvc/maven/archetype/branches/archetype-1.0.x/maven-archetype-bundles/maven-archetype-plugin</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/archetype/trunk/maven-archetype-bundles/maven-archetype-plugin</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/trunk/maven-archetype-bundles/maven-archetype-plugin</developerConnection>
+    <url>http://svn.apache.org/viewvc/maven/archetype/trunk/maven-archetype-bundles/maven-archetype-plugin</url>
   </scm>
 </project>
