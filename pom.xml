@@ -36,7 +36,6 @@ under the License.
 
   <name>Maven Archetypes</name>
   <description>Archetypes provided by Maven.</description>
-  <url>http://maven.apache.org/archetype/maven-archetype-bundles</url>
 
   <modules>
     <module>maven-archetype-archetype</module>
@@ -51,6 +50,12 @@ under the License.
     <module>maven-archetype-site-simple</module>
     <module>maven-archetype-webapp</module>
   </modules>
+
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/archetype/trunk/maven-archetype-bundles</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/trunk/maven-archetype-bundles</developerConnection>
+    <url>http://svn.apache.org/viewvc/maven/archetype/trunk/maven-archetype-bundles</url>
+  </scm>
 
   <build>
     <extensions>
@@ -69,4 +74,33 @@ under the License.
       </plugins>
     </pluginManagement>
   </build>
+
+  <profiles>
+    <profile>
+      <id>parent-release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-release-plugin</artifactId>
+            <configuration>
+              <arguments>-N -Papache-release</arguments>
+            </configuration>
+          </plugin>
+          <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>source-release-assembly</id>
+                <configuration>
+                  <descriptorRefs>
+                    <descriptorRef>src</descriptorRef>
+                  </descriptorRefs>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
