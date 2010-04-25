@@ -29,6 +29,7 @@ under the License.
     <version>2.0-alpha-5</version>
   </parent>
 
+  <groupId>org.apache.maven.archetypes</groupId>
   <artifactId>maven-archetype-bundles</artifactId>
   <version>4-SNAPSHOT</version>
   <packaging>pom</packaging>
