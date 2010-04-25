@@ -144,7 +144,7 @@ public class DefaultOldArchetype
             {
                 getLogger().info( "----------------------------------------------------------------------------" );
 
-                getLogger().info( "Using following parameters for creating OldArchetype: "
+                getLogger().info( "Using following parameters for creating project from Old (1.x) Archetype: "
                                       + request.getArchetypeArtifactId() + ":" + request.getArchetypeVersion() );
 
                 getLogger().info( "----------------------------------------------------------------------------" );

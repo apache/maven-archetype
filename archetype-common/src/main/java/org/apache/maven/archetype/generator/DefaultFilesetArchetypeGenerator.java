@@ -622,7 +622,7 @@ public class DefaultFilesetArchetypeGenerator
             templateFileName = localTemplateFileName;
         }
 
-        getLogger().debug( "Prosessing template " + templateFileName );
+        getLogger().debug( "Processing template " + templateFileName );
 
         if ( outFile.exists() )
         {
