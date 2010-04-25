@@ -164,7 +164,7 @@ public class DefaultOldArchetype
             }
             else
             {
-                getLogger().info( "No Parameters found for creating OldArchetype" );
+                getLogger().info( "No Parameters found for creating project from Old (1.x) Archetype" );
             }
         }
 
@@ -417,14 +417,12 @@ public class DefaultOldArchetype
         // ----------------------------------------------------------------------
         if ( getLogger().isInfoEnabled() )
         {
-            getLogger().info( "OldArchetype created in dir: " + outputDirectory );
+            getLogger().info( "project created from Old (1.x) Arhetype in dir: " + outputDirectory );
         }
 
     }
 
-    static boolean addModuleToParentPom( String artifactId,
-                                         Reader fileReader,
-                                         Writer fileWriter )
+    static boolean addModuleToParentPom( String artifactId, Reader fileReader, Writer fileWriter )
         throws DocumentException, IOException, ArchetypeTemplateProcessingException
     {
         SAXReader reader = new SAXReader();
@@ -490,12 +488,8 @@ public class DefaultOldArchetype
         return !found;
     }
 
-    private void processTemplates( File pomFile,
-                                   String outputDirectory,
-                                   Context context,
-                                   ArchetypeDescriptor descriptor,
-                                   String packageName,
-                                   Model parentModel )
+    private void processTemplates( File pomFile, String outputDirectory, Context context,
+                                   ArchetypeDescriptor descriptor, String packageName, Model parentModel )
         throws ArchetypeTemplateProcessingException
     {
         if ( !pomFile.exists() )
@@ -751,19 +745,14 @@ public class DefaultOldArchetype
         }
     }
 
-    private void processTemplate( String outputDirectory,
-                                  Context context,
-                                  String template,
-                                  TemplateDescriptor descriptor,
-                                  boolean packageInFileName,
-                                  String packageName )
+    private void processTemplate( String outputDirectory, Context context, String template,
+                                  TemplateDescriptor descriptor, boolean packageInFileName, String packageName )
         throws ArchetypeTemplateProcessingException
     {
         processTemplate( outputDirectory, context, template, descriptor, packageInFileName, packageName, null );
     }
 
-    private String getOutputDirectory( String outputDirectory,
-                                       String testResourceDirectory )
+    private String getOutputDirectory( String outputDirectory, String testResourceDirectory )
     {
         return outputDirectory
             + ( testResourceDirectory.startsWith( "/" ) ? testResourceDirectory : "/" + testResourceDirectory );
@@ -773,11 +762,8 @@ public class DefaultOldArchetype
     //
     // ----------------------------------------------------------------------
 
-    protected void processSources( String outputDirectory,
-                                   Context context,
-                                   ArchetypeDescriptor descriptor,
-                                   String packageName,
-                                   String sourceDirectory )
+    protected void processSources( String outputDirectory, Context context, ArchetypeDescriptor descriptor,
+                                   String packageName, String sourceDirectory )
         throws ArchetypeTemplateProcessingException
     {
         for ( Iterator i = descriptor.getSources().iterator(); i.hasNext(); )
@@ -789,11 +775,8 @@ public class DefaultOldArchetype
         }
     }
 
-    protected void processTestSources( String outputDirectory,
-                                       Context context,
-                                       ArchetypeDescriptor descriptor,
-                                       String packageName,
-                                       String testSourceDirectory )
+    protected void processTestSources( String outputDirectory, Context context, ArchetypeDescriptor descriptor,
+                                       String packageName, String testSourceDirectory )
         throws ArchetypeTemplateProcessingException
     {
         for ( Iterator i = descriptor.getTestSources().iterator(); i.hasNext(); )
@@ -805,9 +788,7 @@ public class DefaultOldArchetype
         }
     }
 
-    protected void processResources( String outputDirectory,
-                                     Context context,
-                                     ArchetypeDescriptor descriptor,
+    protected void processResources( String outputDirectory, Context context, ArchetypeDescriptor descriptor,
                                      String packageName )
         throws ArchetypeTemplateProcessingException
     {
@@ -820,9 +801,7 @@ public class DefaultOldArchetype
         }
     }
 
-    protected void processTestResources( String outputDirectory,
-                                         Context context,
-                                         ArchetypeDescriptor descriptor,
+    protected void processTestResources( String outputDirectory, Context context, ArchetypeDescriptor descriptor,
                                          String packageName )
         throws ArchetypeTemplateProcessingException
     {
@@ -835,9 +814,7 @@ public class DefaultOldArchetype
         }
     }
 
-    protected void processSiteResources( String outputDirectory,
-                                         Context context,
-                                         ArchetypeDescriptor descriptor,
+    protected void processSiteResources( String outputDirectory, Context context, ArchetypeDescriptor descriptor,
                                          String packageName )
         throws ArchetypeTemplateProcessingException
     {
@@ -850,12 +827,8 @@ public class DefaultOldArchetype
         }
     }
 
-    protected void processTemplate( String outputDirectory,
-                                    Context context,
-                                    String template,
-                                    TemplateDescriptor descriptor,
-                                    boolean packageInFileName,
-                                    String packageName,
+    protected void processTemplate( String outputDirectory, Context context, String template,
+                                    TemplateDescriptor descriptor, boolean packageInFileName, String packageName,
                                     String sourceDirectory )
         throws ArchetypeTemplateProcessingException
     {
@@ -958,8 +931,7 @@ public class DefaultOldArchetype
     {
     }
 
-    private InputStream getStream( String name,
-                                   ClassLoader loader )
+    private InputStream getStream( String name, ClassLoader loader )
     {
         if ( loader == null )
         {
