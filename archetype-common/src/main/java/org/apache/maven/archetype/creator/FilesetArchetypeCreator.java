@@ -386,7 +386,6 @@ public class FilesetArchetypeCreator
         plugin.setGroupId( "org.apache.maven.plugins" );
         plugin.setArtifactId( "maven-archetype-plugin" );
         plugin.setVersion( getArchetypeVersion() );
-        plugin.setExtensions( true );
 
         PluginManagement pluginManagement = new PluginManagement();
         pluginManagement.addPlugin( plugin );
