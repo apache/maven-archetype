@@ -37,16 +37,4 @@ public interface FilesetArchetypeGenerator
     void generateArchetype( ArchetypeGenerationRequest request, File archetypeFile )
         throws UnknownArchetype, ArchetypeNotConfigured, ProjectDirectoryExists, PomFileExists, OutputFileExists,
         ArchetypeGenerationFailure;
-
-//    Compile time deprecation ;-)
-//    void generateArchetype( Properties properties,
-//                            File archetypeFile,
-//                            String basedir )
-//        throws
-//        UnknownArchetype,
-//        ArchetypeNotConfigured,
-//        ProjectDirectoryExists,
-//        PomFileExists,
-//        OutputFileExists,
-//        ArchetypeGenerationFailure;
 }
