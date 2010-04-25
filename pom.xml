@@ -41,7 +41,6 @@ under the License.
   <modules>
     <module>maven-archetype-archetype</module>
     <module>maven-archetype-j2ee-simple</module>
-    <module>maven-archetype-mojo</module>
     <module>maven-archetype-plugin</module>
     <module>maven-archetype-plugin-site</module>
     <module>maven-archetype-portlet</module>
