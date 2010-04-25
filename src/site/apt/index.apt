@@ -17,7 +17,7 @@ Maven Archetypes
 *-----------------------------------------------------------------+----------------+
 | {{{./maven-archetype-j2ee-simple/}maven-archetype-j2ee-simple}} | An archetype which contains a simplifed sample J2EE application. |
 *-----------------------------------------------------------------+----------------+
-| {{{./maven-archetype-mojo/}maven-archetype-mojo}}               | An archetype which contains a sample a sample Maven plugin. |
+| maven-archetype-mojo (deprecated)                               | Deprecated in favour of maven-archetype-plugin, which has a better name. |
 *-----------------------------------------------------------------+----------------+
 | {{{./maven-archetype-plugin/}maven-archetype-plugin}}           | An archetype which contains a sample Maven plugin. |
 *-----------------------------------------------------------------+----------------+
