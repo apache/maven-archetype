@@ -1,0 +1,26 @@
+ ------
+ Maven Plugin Site Archetype
+ ------
+ Hervé Boutemy
+ ------
+ 2010-04-26
+ ------
+
+Maven Plugin Site Archetype
+
+ <<<maven-archetype-plugin-site>>> is an archetype which contains a sample Maven plugin's site:
+
++----+
+
+project
+|-- pom.xml
+`-- src
+    `-- site
+        |-- apt
+        |   |-- examples
+        |   |   `-- example.apt
+        |   |-- index.apt
+        |   `-- usage.apt
+        `-- site.xml
+
++----+
