@@ -1,0 +1,22 @@
+ ------
+ Maven Plugin Archetype
+ ------
+ Hervé Boutemy
+ ------
+ 2010-04-26
+ ------
+
+Maven Plugin Archetype
+
+ <<<maven-archetype-plugin>>> is an archetype which contains a sample Maven plugin:
+
++----+
+
+project
+|-- pom.xml
+`-- src
+    `-- main
+        `-- java
+            `-- MyMojo.java
+
++----+
