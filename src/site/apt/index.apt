@@ -1,0 +1,37 @@
+ ------
+ Maven Site Archetype
+ ------
+ Hervé Boutemy
+ ------
+ 2010-04-26
+ ------
+
+Maven Site Archetype
+
+ <<<maven-archetype-site>>> is an archetype which contains a sample Maven site:
+
++----+
+
+project
+|-- pom.xml
+`-- src
+    `-- site
+        |-- apt
+        |   |-- format.apt
+        |   `-- index.apt
+        |-- fml
+        |   `-- faq.fml
+        |-- fr
+        |   |-- apt
+        |   |   |-- format.apt
+        |   |   `-- index.apt
+        |   |-- fml
+        |   |   `-- faq.fml
+        |   `-- xdoc
+        |       `-- xdoc.xml
+        |-- xdoc
+        |   `-- xdoc.xml
+        |-- site_fr.xml
+        `-- site.xml
+
++----+
