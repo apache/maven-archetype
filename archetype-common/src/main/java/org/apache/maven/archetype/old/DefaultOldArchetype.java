@@ -417,7 +417,7 @@ public class DefaultOldArchetype
         // ----------------------------------------------------------------------
         if ( getLogger().isInfoEnabled() )
         {
-            getLogger().info( "project created from Old (1.x) Arhetype in dir: " + outputDirectory );
+            getLogger().info( "project created from Old (1.x) Archetype in dir: " + outputDirectory );
         }
 
     }
