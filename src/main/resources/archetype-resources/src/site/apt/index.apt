@@ -14,7 +14,7 @@ Maven 2 SuperDuper Plugin
 
 * Goals Overview
 
-  * {{{superduper-transform.html}superduper:transform}} performs the miraculous build transformation.
+  * {{{./superduper-transform.html}superduper:transform}} performs the miraculous build transformation.
 
   []
 
