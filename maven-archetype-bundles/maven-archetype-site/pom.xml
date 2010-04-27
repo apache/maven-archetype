@@ -19,8 +19,7 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -30,7 +29,7 @@ under the License.
   </parent>
 
   <artifactId>maven-archetype-site</artifactId>
-  <version>1.1-SNAPSHOT</version>
+  <version>1.1</version>
   <packaging>maven-archetype</packaging>
 
   <name>Maven Site Archetype</name>
@@ -41,8 +40,8 @@ under the License.
   </description>
 
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/archetype/trunk/maven-archetype-bundles/maven-archetype-site</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/trunk/maven-archetype-bundles/maven-archetype-site</developerConnection>
-    <url>http://svn.apache.org/viewvc/maven/archetype/trunk/maven-archetype-bundles/maven-archetype-site</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/archetype/tags/maven-archetype-site-1.1</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/tags/maven-archetype-site-1.1</developerConnection>
+    <url>http://svn.apache.org/viewvc/maven/archetype/tags/maven-archetype-site-1.1</url>
   </scm>
 </project>
