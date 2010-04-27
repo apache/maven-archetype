@@ -8,7 +8,8 @@
 
 Maven Site Archetype
 
- <<<maven-archetype-site>>> is an archetype which contains a sample Maven site:
+ <<<maven-archetype-site>>> is an archetype which contains a sample Maven site which demonstrates
+ some of the supported document types like APT, XDoc, and FML and demonstrates how to i18n your site:
 
 +----+
 
@@ -35,3 +36,5 @@ project
         `-- site.xml
 
 +----+
+
+ This archetype can be layered upon an existing Maven project.
