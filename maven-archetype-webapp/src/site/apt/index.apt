@@ -1,0 +1,24 @@
+ ------
+ Maven Webapp Archetype
+ ------
+ Hervé Boutemy
+ ------
+ 2010-04-27
+ ------
+
+Maven Webapp Archetype
+
+ <<<maven-archetype-webapp>>> is an archetype which contains a sample Maven webapp project:
+
++----+
+
+project
+|-- pom.xml
+`-- src
+    `-- main
+        `-- webapp
+            |-- WEB-INF
+            |   `-- web.xml
+            `-- index.jsp
+
++----+
