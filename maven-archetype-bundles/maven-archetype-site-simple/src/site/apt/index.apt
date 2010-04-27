@@ -1,0 +1,23 @@
+ ------
+ Maven Simple Site Archetype
+ ------
+ Hervé Boutemy
+ ------
+ 2010-04-27
+ ------
+
+Maven Simple Site Archetype
+
+ <<<maven-archetype-site-simple>>> is an archetype which contains a sample Maven simple site:
+
++----+
+
+project
+|-- pom.xml
+`-- src
+    `-- site
+        |-- apt
+        |   `-- index.apt
+        `-- site.xml
+
++----+
