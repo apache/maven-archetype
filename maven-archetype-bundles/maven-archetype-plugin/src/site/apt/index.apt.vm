@@ -20,3 +20,13 @@ project
             `-- MyMojo.java
 
 +----+
+
+* Usage
+
+ To create a new project from this archetype, type:
+
++----+
+
+mvn archetype:generate -DarchetypeGroupId=${project.groupId} -DarchetypeArtifactId=${project.artifactId} -DarchetypeVersion=${project.version}
+
++----+
