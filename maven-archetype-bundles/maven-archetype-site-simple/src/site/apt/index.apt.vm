@@ -21,3 +21,15 @@ project
         `-- site.xml
 
 +----+
+
+ This archetype can be layered upon an existing Maven project.
+
+* Usage
+
+ To create a new project or update an existing project from this archetype, type:
+
++----+
+
+mvn archetype:generate -DarchetypeGroupId=${project.groupId} -DarchetypeArtifactId=${project.artifactId} -DarchetypeVersion=${project.version}
+
++----+
