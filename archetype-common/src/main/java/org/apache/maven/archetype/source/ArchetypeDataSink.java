@@ -26,12 +26,9 @@ import java.util.Properties;
 /** @author Jason van Zyl */
 public interface ArchetypeDataSink
 {
-    void putArchetypes( List archetypes,
-                        Writer writer )
+    void putArchetypes( List archetypes, Writer writer )
         throws ArchetypeDataSinkException;
 
-    void putArchetypes( ArchetypeDataSource source,
-                        Properties properties,
-                        Writer writer )
+    void putArchetypes( ArchetypeDataSource source, Properties properties, Writer writer )
         throws ArchetypeDataSourceException, ArchetypeDataSinkException;
 }

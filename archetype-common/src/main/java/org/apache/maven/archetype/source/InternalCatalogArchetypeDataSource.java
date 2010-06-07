@@ -23,8 +23,8 @@ import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.codehaus.plexus.util.ReaderFactory;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Reader;
-import java.util.List;
 import java.util.Properties;
 
 /**
@@ -40,8 +40,8 @@ public class InternalCatalogArchetypeDataSource
     {
         try
         {
-            Reader reader = ReaderFactory.newXmlReader(
-                getClass().getClassLoader().getResourceAsStream( "archetype-catalog.xml" ) );
+            InputStream in = getClass().getClassLoader().getResourceAsStream( ARCHETYPE_CATALOG_FILENAME );
+            Reader reader = ReaderFactory.newXmlReader( in );
 
             return readCatalog( reader );
         }
@@ -50,28 +50,4 @@ public class InternalCatalogArchetypeDataSource
             throw new ArchetypeDataSourceException( "Error reading archetype catalog.", e );
         }
     }
-
-    public List getArchetypes( Properties properties )
-        throws ArchetypeDataSourceException
-    {
-        try
-        {
-            Reader reader = ReaderFactory.newXmlReader(
-                getClass().getClassLoader().getResourceAsStream( "archetype-catalog.xml" ) );
-
-            return createArchetypeMap( readCatalog( reader ) );
-        }
-        catch ( IOException e )
-        {
-            throw new ArchetypeDataSourceException( "Error reading archetype catalog.", e );
-        }
-    }
-
-//    public void updateCatalog( Properties properties,
-//                               Archetype archetype,
-//                               Settings settings )
-//        throws ArchetypeDataSourceException
-//    {
-//        throw new ArchetypeDataSourceException( "Not supported yet." );
-//    }
 }
