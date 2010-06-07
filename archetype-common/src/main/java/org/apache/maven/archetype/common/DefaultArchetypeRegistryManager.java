@@ -28,14 +28,15 @@ import org.apache.maven.artifact.repository.ArtifactRepositoryPolicy;
 import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.IOUtil;
+import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -45,8 +46,6 @@ public class DefaultArchetypeRegistryManager
     extends AbstractLogEnabled
     implements ArchetypeRegistryManager
 {
-//    private static File DEFAULT_REGISTRY = new File( System.getProperty( "user.home" ), ".m2/archetype.xml" );
-
     /**
      * Used to create ArtifactRepository objects given the urls of the remote repositories.
      *
@@ -61,19 +60,14 @@ public class DefaultArchetypeRegistryManager
      */
     private ArtifactRepositoryLayout defaultArtifactRepositoryLayout;
 
-    public List getFilteredExtensions(
-        String archetypeFilteredExtentions,
-        File archetypeRegistryFile
-    )
+    public List getFilteredExtensions( String archetypeFilteredExtentions, File archetypeRegistryFile )
         throws IOException
     {
         List filteredExtensions = new ArrayList();
 
         if ( StringUtils.isNotEmpty( archetypeFilteredExtentions ) )
         {
-            filteredExtensions.addAll(
-                Arrays.asList( StringUtils.split( archetypeFilteredExtentions, "," ) )
-            );
+            filteredExtensions.addAll( Arrays.asList( StringUtils.split( archetypeFilteredExtentions, "," ) ) );
         }
 
         try
@@ -84,11 +78,11 @@ public class DefaultArchetypeRegistryManager
         }
         catch ( IOException e )
         {
-            getLogger().warn( "Can not read ~/m2/archetype.xml" );
+            getLogger().warn( "Cannot read ~/.m2/archetype.xml" );
         }
         catch ( XmlPullParserException e )
         {
-            getLogger().warn( "Can not read ~/m2/archetype.xml" );
+            getLogger().warn( "Cannot read ~/.m2/archetype.xml" );
         }
 
         if ( filteredExtensions.isEmpty() )
@@ -99,8 +93,7 @@ public class DefaultArchetypeRegistryManager
         return filteredExtensions;
     }
 
-    public List getLanguages( String archetypeLanguages,
-                              File archetypeRegistryFile )
+    public List getLanguages( String archetypeLanguages, File archetypeRegistryFile )
         throws IOException
     {
         List languages = new ArrayList();
@@ -142,7 +135,7 @@ public class DefaultArchetypeRegistryManager
         }
         else
         {
-            return readArchetypeRegistry( new FileReader( archetypeRegistryFile ) );
+            return readArchetypeRegistry( ReaderFactory.newXmlReader( archetypeRegistryFile ) );
         }
     }
 
@@ -161,22 +154,19 @@ public class DefaultArchetypeRegistryManager
         }
     }
 
-    public void writeArchetypeRegistry(
-        File archetypeRegistryFile,
-        ArchetypeRegistry archetypeRegistry
-    )
+    public void writeArchetypeRegistry( File archetypeRegistryFile, ArchetypeRegistry archetypeRegistry )
         throws IOException
     {
         ArchetypeRegistryXpp3Writer writer = new ArchetypeRegistryXpp3Writer();
-        FileWriter fileWriter = new FileWriter( archetypeRegistryFile );
+        Writer out = WriterFactory.newXmlWriter( archetypeRegistryFile );
 
         try
         {
-            writer.write( fileWriter, archetypeRegistry );
+            writer.write( out, archetypeRegistry );
         }
         finally
         {
-            IOUtil.close( fileWriter );
+            IOUtil.close( out );
         }
     }
 
@@ -184,8 +174,7 @@ public class DefaultArchetypeRegistryManager
      * Code stealed from MavenArchetypeMojo
      * (org.apache.maven.plugins:maven-archetype-plugin:1.0-alpha4).
      */
-    public ArtifactRepository createRepository( String url,
-                                                String repositoryId )
+    public ArtifactRepository createRepository( String url, String repositoryId )
     {
         // snapshots vs releases
         // offline = to turning the update policy off
@@ -202,14 +191,8 @@ public class DefaultArchetypeRegistryManager
         ArtifactRepositoryPolicy releasesPolicy =
             new ArtifactRepositoryPolicy( true, updatePolicyFlag, checksumPolicyFlag );
 
-        return
-            artifactRepositoryFactory.createArtifactRepository(
-                repositoryId,
-                url,
-                defaultArtifactRepositoryLayout,
-                snapshotsPolicy,
-                releasesPolicy
-            );
+        return artifactRepositoryFactory.createArtifactRepository( repositoryId, url, defaultArtifactRepositoryLayout,
+                                                                   snapshotsPolicy, releasesPolicy );
     }
 
     public ArchetypeRegistry getDefaultArchetypeRegistry()

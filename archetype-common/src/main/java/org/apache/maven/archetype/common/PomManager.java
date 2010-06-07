@@ -32,39 +32,21 @@ public interface PomManager
 {
     String ROLE = PomManager.class.getName();
 
-    void addModule( File basedirPom,
-                    String artifactId )
-        throws
-        IOException,
-        XmlPullParserException,
-        DocumentException,
-        InvalidPackaging;
+    void addModule( File basedirPom, String artifactId )
+        throws IOException, XmlPullParserException, DocumentException, InvalidPackaging;
 
-    void addParent( File pom,
-                    File basedirPom )
-        throws
-        IOException,
-        XmlPullParserException;
+    void addParent( File pom, File basedirPom )
+        throws IOException, XmlPullParserException;
 
-    void mergePoms( File pom,
-                    File temporaryPom )
-        throws
-        IOException,
-        XmlPullParserException;
+    void mergePoms( File pom, File temporaryPom )
+        throws IOException, XmlPullParserException;
 
     Model readPom( File pomFile )
-        throws
-        IOException,
-        XmlPullParserException;
+        throws IOException, XmlPullParserException;
 
     Model readPom( InputStream pomStream )
-        throws
-        IOException,
-        XmlPullParserException;
+        throws IOException, XmlPullParserException;
 
-    void writePom( Model model,
-                   File pomFile,
-                   File initialPomFile )
-        throws
-        IOException;
+    void writePom( Model model, File pomFile, File initialPomFile )
+        throws IOException;
 }
