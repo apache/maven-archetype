@@ -35,11 +35,11 @@ under the License.
   <name>Maven Archetype Common</name>
   <description>Core Archetype classes.</description>
 
+  <properties>
+    <cargoVersion>1.0-alpha-6</cargoVersion>
+  </properties>
+
   <dependencies>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-core</artifactId>
-    </dependency>
     <dependency>
       <groupId>net.sourceforge.jchardet</groupId>
       <artifactId>jchardet</artifactId>
@@ -90,41 +90,27 @@ under the License.
       <artifactId>velocity</artifactId>
     </dependency>
     <dependency>
-      <groupId>commons-collections</groupId>
-      <artifactId>commons-collections</artifactId>
-    </dependency>
-    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
+      <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>org.codehaus.cargo</groupId>
       <artifactId>cargo-core-api-container</artifactId>
-      <version>1.0-alpha-6</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.cargo</groupId>
-      <artifactId>cargo-core-api-util</artifactId>
-      <version>1.0-alpha-6</version>
+      <version>${cargoVersion}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.codehaus.cargo</groupId>
       <artifactId>cargo-core-api-generic</artifactId>
-      <version>1.0-alpha-6</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.cargo</groupId>
-      <artifactId>cargo-core-api-module</artifactId>
-      <version>1.0-alpha-6</version>
+      <version>${cargoVersion}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.codehaus.cargo</groupId>
       <artifactId>cargo-core-container-jetty</artifactId>
-      <version>1.0-alpha-6</version>
+      <version>${cargoVersion}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -133,9 +119,11 @@ under the License.
       <version>6.1.11</version>
       <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>org.apache.maven.wagon</groupId>
       <artifactId>wagon-file</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.wagon</groupId>
@@ -143,6 +131,7 @@ under the License.
       <version>1.0-beta-2</version><!-- with 1.0-beta-4 some tests fail -->
       <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>archetype-repository</artifactId>
