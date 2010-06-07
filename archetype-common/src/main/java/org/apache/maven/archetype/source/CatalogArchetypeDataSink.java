@@ -38,8 +38,7 @@ public class CatalogArchetypeDataSink
 {
     private ArchetypeCatalogXpp3Writer catalogWriter = new ArchetypeCatalogXpp3Writer();
 
-    public void putArchetypes( List archetypes,
-                               Writer writer )
+    public void putArchetypes( List archetypes, Writer writer )
         throws ArchetypeDataSinkException
     {
         ArchetypeCatalog catalog = new ArchetypeCatalog();
@@ -65,9 +64,7 @@ public class CatalogArchetypeDataSink
         }
     }
 
-    public void putArchetypes( ArchetypeDataSource source,
-                               Properties properties,
-                               Writer writer )
+    public void putArchetypes( ArchetypeDataSource source, Properties properties, Writer writer )
         throws ArchetypeDataSourceException, ArchetypeDataSinkException
     {
         List archetypes = source.getArchetypeCatalog( properties ).getArchetypes();

@@ -31,7 +31,6 @@ import org.codehaus.plexus.util.ReaderFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.Properties;
 
 /**
@@ -92,33 +91,6 @@ public class RemoteCatalogArchetypeDataSource
         }
     }
 
-    public List getArchetypes( Properties properties )
-        throws ArchetypeDataSourceException
-    {
-        String repository = properties.getProperty( REPOSITORY_PROPERTY );
-
-        if ( repository == null )
-        {
-            throw new ArchetypeDataSourceException( "To use the remote catalog you must specify the 'remote-catalog.repository' property correctly in your ~/.m2/archetype-catalog.properties file." );
-        }
-
-        if ( repository.endsWith( "/" ) )
-        {
-            repository = repository.substring( 0, repository.length() - 1 );
-        }
-
-        try
-        {
-            ArchetypeCatalog catalog = downloadCatalog( repository, ARCHETYPE_CATALOG_FILENAME );
-
-            return createArchetypeMap( catalog );
-        }
-        catch ( Exception e )
-        {
-            throw new ArchetypeDataSourceException( "Error reading archetype registry.", e );
-        }
-    }
-
     public void updateCatalog( Properties properties, Archetype archetype )
         throws ArchetypeDataSourceException
     {
@@ -142,12 +114,14 @@ public class RemoteCatalogArchetypeDataSource
         {
             wagon.connect( wagonRepository, authInfo, proxyInfo );
             wagon.get( filename, catalog );
+
+            return readCatalog( ReaderFactory.newXmlReader( catalog ) );
         }
         finally
         {
             disconnectWagon( wagon );
+            catalog.delete();
         }
-        return readCatalog( ReaderFactory.newXmlReader( catalog ) );
     }
 
     private void disconnectWagon( Wagon wagon )

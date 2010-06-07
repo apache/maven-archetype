@@ -23,15 +23,14 @@ package org.apache.maven.archetype.source;
 public class ArchetypeDataSourceException
     extends Exception
 {
-    public ArchetypeDataSourceException( String s )
+    public ArchetypeDataSourceException( String message )
     {
-        super( s );
+        super( message );
     }
 
-    public ArchetypeDataSourceException( String s,
-                                         Throwable throwable )
+    public ArchetypeDataSourceException( String message, Throwable throwable )
     {
-        super( s, throwable );
+        super( message, throwable );
     }
 
     public ArchetypeDataSourceException( Throwable throwable )

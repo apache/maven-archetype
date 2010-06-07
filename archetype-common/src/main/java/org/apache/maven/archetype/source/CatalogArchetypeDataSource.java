@@ -35,9 +35,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Properties;
 
 /**
@@ -52,53 +50,13 @@ public class CatalogArchetypeDataSource
 
     public static final String ARCHETYPE_CATALOG_FILENAME = "archetype-catalog.xml";
 
-    private ArchetypeCatalogXpp3Reader catalogReader = new ArchetypeCatalogXpp3Reader();
-
-    private ArchetypeCatalogXpp3Writer catalogWriter = new ArchetypeCatalogXpp3Writer();
-
     public static final File USER_HOME = new File( System.getProperty( "user.home" ) );
 
     public static final File MAVEN_CONFIGURATION = new File( USER_HOME, ".m2" );
 
     public static final File DEFAULT_ARCHETYPE_CATALOG = new File( MAVEN_CONFIGURATION, ARCHETYPE_CATALOG_FILENAME );
 
-    public List getArchetypes( Properties properties )
-        throws ArchetypeDataSourceException
-    {
-        String s = properties.getProperty( ARCHETYPE_CATALOG_PROPERTY );
-
-        s = StringUtils.replace( s, "${user.home}", System.getProperty( "user.home" ) );
-
-        getLogger().debug( "Using catalog " + s );
-
-        File catalogFile = new File( s );
-
-        if ( catalogFile.exists() )
-        {
-
-            try
-            {
-                ArchetypeCatalog catalog = readCatalog( ReaderFactory.newXmlReader( catalogFile ) );
-
-                return createArchetypeMap( catalog );
-            }
-            catch ( FileNotFoundException e )
-            {
-                throw new ArchetypeDataSourceException( "The specific archetype catalog does not exist.", e );
-            }
-            catch ( IOException e )
-            {
-                throw new ArchetypeDataSourceException( "Error reading archetype catalog.", e );
-            }
-        }
-        else
-        {
-            return new ArrayList();
-        }
-    }
-
-    public void updateCatalog( Properties properties,
-                               Archetype archetype )
+    public void updateCatalog( Properties properties, Archetype archetype )
         throws ArchetypeDataSourceException
     {
         String s = properties.getProperty( ARCHETYPE_CATALOG_PROPERTY );
@@ -139,8 +97,8 @@ public class CatalogArchetypeDataSource
         while ( !found && archetypes.hasNext() )
         {
             Archetype a = (Archetype) archetypes.next();
-            if ( a.getGroupId().equals( archetype.getGroupId() ) && a.getArtifactId().
-                equals( archetype.getArtifactId() ) )
+            if ( a.getGroupId().equals( archetype.getGroupId() )
+                && a.getArtifactId().equals( archetype.getArtifactId() ) )
             {
                 newArchetype = a;
                 found = true;
@@ -160,62 +118,6 @@ public class CatalogArchetypeDataSource
         writeLocalCatalog( catalog, catalogFile );
     }
 
-    protected void writeLocalCatalog( ArchetypeCatalog catalog,
-                                      File catalogFile )
-        throws ArchetypeDataSourceException
-    {
-        Writer writer = null;
-        try
-        {
-            writer = WriterFactory.newXmlWriter( catalogFile );
-            catalogWriter.write( writer, catalog );
-        }
-        catch ( IOException e )
-        {
-            throw new ArchetypeDataSourceException( "Error writing archetype catalog.", e );
-        }
-        finally
-        {
-            IOUtil.close( writer );
-        }
-    }
-
-    protected List createArchetypeMap( ArchetypeCatalog archetypeCatalog )
-        throws ArchetypeDataSourceException
-    {
-        List archetypes = new ArrayList();
-
-        for ( Iterator i = archetypeCatalog.getArchetypes().iterator(); i.hasNext(); )
-        {
-            Archetype archetype = (Archetype) i.next();
-
-            archetypes.add( archetype );
-        }
-
-        return archetypes;
-    }
-
-    protected ArchetypeCatalog readCatalog( Reader reader )
-        throws ArchetypeDataSourceException
-    {
-        try
-        {
-            return catalogReader.read( reader );
-        }
-        catch ( IOException e )
-        {
-            throw new ArchetypeDataSourceException( "Error reading archetype catalog.", e );
-        }
-        catch ( XmlPullParserException e )
-        {
-            throw new ArchetypeDataSourceException( "Error parsing archetype catalog.", e );
-        }
-        finally
-        {
-            IOUtil.close( reader );
-        }
-    }
-
     public ArchetypeCatalog getArchetypeCatalog( Properties properties )
         throws ArchetypeDataSourceException
     {
@@ -232,16 +134,13 @@ public class CatalogArchetypeDataSource
 
         if ( catalogFile.exists() )
         {
-
             try
             {
                 return readCatalog( ReaderFactory.newXmlReader( catalogFile ) );
-
             }
             catch ( FileNotFoundException e )
             {
-                throw new ArchetypeDataSourceException( "The specific archetype catalog does not exist.",
-                    e );
+                throw new ArchetypeDataSourceException( "The specific archetype catalog does not exist.", e );
             }
             catch ( IOException e )
             {
@@ -254,13 +153,48 @@ public class CatalogArchetypeDataSource
         }
     }
 
-//    public ArchetypeDataSourceDescriptor getDescriptor()
-//    {
-//        ArchetypeDataSourceDescriptor d = new ArchetypeDataSourceDescriptor();
-//
-//        d.addParameter( ARCHETYPE_CATALOG_PROPERTY, String.class, DEFAULT_ARCHETYPE_CATALOG.getAbsolutePath(),
-//            "The repository URL where the archetype catalog resides." );
-//
-//        return d;
-//    }
+    protected void writeLocalCatalog( ArchetypeCatalog catalog, File catalogFile )
+        throws ArchetypeDataSourceException
+    {
+        Writer writer = null;
+        try
+        {
+            writer = WriterFactory.newXmlWriter( catalogFile );
+
+            ArchetypeCatalogXpp3Writer catalogWriter = new ArchetypeCatalogXpp3Writer();
+
+            catalogWriter.write( writer, catalog );
+        }
+        catch ( IOException e )
+        {
+            throw new ArchetypeDataSourceException( "Error writing archetype catalog.", e );
+        }
+        finally
+        {
+            IOUtil.close( writer );
+        }
+    }
+
+    protected ArchetypeCatalog readCatalog( Reader reader )
+        throws ArchetypeDataSourceException
+    {
+        try
+        {
+            ArchetypeCatalogXpp3Reader catalogReader = new ArchetypeCatalogXpp3Reader();
+
+            return catalogReader.read( reader );
+        }
+        catch ( IOException e )
+        {
+            throw new ArchetypeDataSourceException( "Error reading archetype catalog.", e );
+        }
+        catch ( XmlPullParserException e )
+        {
+            throw new ArchetypeDataSourceException( "Error parsing archetype catalog.", e );
+        }
+        finally
+        {
+            IOUtil.close( reader );
+        }
+    }
 }

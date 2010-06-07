@@ -23,15 +23,14 @@ package org.apache.maven.archetype.source;
 public class ArchetypeDataSinkException
     extends Exception
 {
-    public ArchetypeDataSinkException( String s )
+    public ArchetypeDataSinkException( String message )
     {
-        super( s );
+        super( message );
     }
 
-    public ArchetypeDataSinkException( String s,
-                                       Throwable throwable )
+    public ArchetypeDataSinkException( String message, Throwable throwable )
     {
-        super( s, throwable );
+        super( message, throwable );
     }
 
     public ArchetypeDataSinkException( Throwable throwable )

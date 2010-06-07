@@ -37,14 +37,9 @@ public interface ArchetypeDataSource
 {
     String ROLE = ArchetypeDataSource.class.getName();
 
-//    List getArchetypes( Properties properties )
-//        throws ArchetypeDataSourceException;
-
     ArchetypeCatalog getArchetypeCatalog( Properties properties )
         throws ArchetypeDataSourceException;
 
     void updateCatalog( Properties properties, Archetype archetype )
         throws ArchetypeDataSourceException;
-
-//    ArchetypeDataSourceDescriptor getDescriptor();
 }
