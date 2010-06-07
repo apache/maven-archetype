@@ -32,44 +32,20 @@ public interface ArchetypeRegistryManager
 {
     String ROLE = ArchetypeRegistryManager.class.getName();
 
-    List getFilteredExtensions( String archetypeFilteredExtentions,
-                                File archetypeRegistryFile )
-        throws
-        IOException;
+    List getFilteredExtensions( String archetypeFilteredExtentions, File archetypeRegistryFile )
+        throws IOException;
 
-    List getLanguages( String archetypeLanguages,
-                       File archetypeRegistryFile )
-        throws
-        IOException;
+    List getLanguages( String archetypeLanguages, File archetypeRegistryFile )
+        throws IOException;
 
     ArchetypeRegistry readArchetypeRegistry( Reader reader )
-        throws
-        IOException,
-        XmlPullParserException;
+        throws IOException, XmlPullParserException;
 
     ArchetypeRegistry readArchetypeRegistry( File archetypeRegistryFile )
-        throws
-        IOException,
-        XmlPullParserException;
+        throws IOException, XmlPullParserException;
 
-//    ArchetypeRegistry readArchetypeRegistry()
-//        throws
-//        IOException,
-//        XmlPullParserException;
-
-//    List getRepositories(
-//        List pomRemoteRepositories,
-//        String remoteRepositories,
-//        File archetypeRegistryFile
-//    )
-//        throws
-//        IOException,
-//        XmlPullParserException;
-
-    void writeArchetypeRegistry( File archetypeRegistryFile,
-                                 ArchetypeRegistry archetypeRegistry )
-        throws
-        IOException;
+    void writeArchetypeRegistry( File archetypeRegistryFile, ArchetypeRegistry archetypeRegistry )
+        throws IOException;
 
     ArchetypeRegistry getDefaultArchetypeRegistry();
 
