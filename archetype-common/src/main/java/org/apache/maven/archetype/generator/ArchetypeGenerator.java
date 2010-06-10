@@ -24,6 +24,9 @@ import java.io.File;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
 
+/**
+ * Create a Maven project from an archetype.
+ */
 public interface ArchetypeGenerator
 {
     String ROLE = ArchetypeGenerator.class.getName();

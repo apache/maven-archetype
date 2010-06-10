@@ -186,10 +186,8 @@ public class XMLOutputter
      * @param out <code>OutputStream</code> to use.
      * @throws IOException - if there's any problem writing.
      */
-    public void output( Document doc,
-                        OutputStream out )
-        throws
-        IOException
+    public void output( Document doc, OutputStream out )
+        throws IOException
     {
         Writer writer = makeWriter( out );
         output( doc, writer );  // output() flushes
@@ -201,10 +199,8 @@ public class XMLOutputter
      * @param doctype <code>DocType</code> to output.
      * @param out     <code>OutputStream</code> to use.
      */
-    public void output( DocType doctype,
-                        OutputStream out )
-        throws
-        IOException
+    public void output( DocType doctype, OutputStream out )
+        throws IOException
     {
         Writer writer = makeWriter( out );
         output( doctype, writer );  // output() flushes
@@ -218,10 +214,8 @@ public class XMLOutputter
      * @param element <code>Element</code> to output.
      * @param out     <code>Writer</code> to use.
      */
-    public void output( Element element,
-                        OutputStream out )
-        throws
-        IOException
+    public void output( Element element, OutputStream out )
+        throws IOException
     {
         Writer writer = makeWriter( out );
         output( element, writer );  // output() flushes
@@ -237,10 +231,8 @@ public class XMLOutputter
      * @param element <code>Element</code> to output.
      * @param out     <code>OutputStream</code> to use.
      */
-    public void outputElementContent( Element element,
-                                      OutputStream out )
-        throws
-        IOException
+    public void outputElementContent( Element element, OutputStream out )
+        throws IOException
     {
         Writer writer = makeWriter( out );
         outputElementContent( element, writer );  // output() flushes
@@ -255,10 +247,8 @@ public class XMLOutputter
      * @param list <code>List</code> of nodes.
      * @param out  <code>OutputStream</code> to use.
      */
-    public void output( List list,
-                        OutputStream out )
-        throws
-        IOException
+    public void output( List list, OutputStream out )
+        throws IOException
     {
         Writer writer = makeWriter( out );
         output( list, writer );  // output() flushes
@@ -270,10 +260,8 @@ public class XMLOutputter
      * @param cdata <code>CDATA</code> to output.
      * @param out   <code>OutputStream</code> to use.
      */
-    public void output( CDATA cdata,
-                        OutputStream out )
-        throws
-        IOException
+    public void output( CDATA cdata, OutputStream out )
+        throws IOException
     {
         Writer writer = makeWriter( out );
         output( cdata, writer );  // output() flushes
@@ -286,10 +274,8 @@ public class XMLOutputter
      * @param text <code>Text</code> to output.
      * @param out  <code>OutputStream</code> to use.
      */
-    public void output( Text text,
-                        OutputStream out )
-        throws
-        IOException
+    public void output( Text text, OutputStream out )
+        throws IOException
     {
         Writer writer = makeWriter( out );
         output( text, writer );  // output() flushes
@@ -301,10 +287,8 @@ public class XMLOutputter
      * @param comment <code>Comment</code> to output.
      * @param out     <code>OutputStream</code> to use.
      */
-    public void output( Comment comment,
-                        OutputStream out )
-        throws
-        IOException
+    public void output( Comment comment, OutputStream out )
+        throws IOException
     {
         Writer writer = makeWriter( out );
         output( comment, writer );  // output() flushes
@@ -316,10 +300,8 @@ public class XMLOutputter
      * @param pi  <code>ProcessingInstruction</code> to output.
      * @param out <code>OutputStream</code> to use.
      */
-    public void output( ProcessingInstruction pi,
-                        OutputStream out )
-        throws
-        IOException
+    public void output( ProcessingInstruction pi, OutputStream out )
+        throws IOException
     {
         Writer writer = makeWriter( out );
         output( pi, writer );  // output() flushes
@@ -331,10 +313,8 @@ public class XMLOutputter
      * @param entity <code>EntityRef</code> to output.
      * @param out    <code>OutputStream</code> to use.
      */
-    public void output( EntityRef entity,
-                        OutputStream out )
-        throws
-        IOException
+    public void output( EntityRef entity, OutputStream out )
+        throws IOException
     {
         Writer writer = makeWriter( out );
         output( entity, writer );  // output() flushes
@@ -345,17 +325,14 @@ public class XMLOutputter
      * (see {@link Format#setEncoding}).
      */
     private Writer makeWriter( OutputStream out )
-        throws
-        java.io.UnsupportedEncodingException
+        throws java.io.UnsupportedEncodingException
     {
         return makeWriter( out, userFormat.encoding );
     }
 
     /** Get an OutputStreamWriter, use specified encoding. */
-    private static Writer makeWriter( OutputStream out,
-                                      String enc )
-        throws
-        java.io.UnsupportedEncodingException
+    private static Writer makeWriter( OutputStream out, String enc )
+        throws java.io.UnsupportedEncodingException
     {
         // "UTF-8" is not recognized before JDK 1.1.6, so we'll translate
         // into "UTF8" which works with all JDKs.
@@ -364,10 +341,7 @@ public class XMLOutputter
             enc = "UTF8";
         }
 
-        Writer writer = new BufferedWriter(
-            ( new OutputStreamWriter(
-                new BufferedOutputStream( out ), enc )
-            ) );
+        Writer writer = new BufferedWriter( ( new OutputStreamWriter( new BufferedOutputStream( out ), enc ) ) );
         return writer;
     }
 
@@ -388,10 +362,8 @@ public class XMLOutputter
      * @param out <code>Writer</code> to use.
      * @throws IOException - if there's any problem writing.
      */
-    public void output( Document doc,
-                        Writer out )
-        throws
-        IOException
+    public void output( Document doc, Writer out )
+        throws IOException
     {
 
         printDeclaration( out, doc, userFormat.encoding );
@@ -407,8 +379,7 @@ public class XMLOutputter
 
             if ( obj instanceof Element )
             {
-                printElement( out, doc.getRootElement(), 0,
-                    createNamespaceStack() );
+                printElement( out, doc.getRootElement(), 0, createNamespaceStack() );
             }
             else if ( obj instanceof Comment )
             {
@@ -448,10 +419,8 @@ public class XMLOutputter
      * @param doctype <code>DocType</code> to output.
      * @param out     <code>Writer</code> to use.
      */
-    public void output( DocType doctype,
-                        Writer out )
-        throws
-        IOException
+    public void output( DocType doctype, Writer out )
+        throws IOException
     {
         printDocType( out, doctype );
         out.flush();
@@ -465,10 +434,8 @@ public class XMLOutputter
      * @param element <code>Element</code> to output.
      * @param out     <code>Writer</code> to use.
      */
-    public void output( Element element,
-                        Writer out )
-        throws
-        IOException
+    public void output( Element element, Writer out )
+        throws IOException
     {
         // If this is the root element we could pre-initialize the
         // namespace stack with the namespaces
@@ -486,10 +453,8 @@ public class XMLOutputter
      * @param element <code>Element</code> to output.
      * @param out     <code>Writer</code> to use.
      */
-    public void outputElementContent( Element element,
-                                      Writer out )
-        throws
-        IOException
+    public void outputElementContent( Element element, Writer out )
+        throws IOException
     {
         List content = element.getContent();
         printContentRange( out, content, 0, content.size(),
@@ -506,13 +471,10 @@ public class XMLOutputter
      * @param list <code>List</code> of nodes.
      * @param out  <code>Writer</code> to use.
      */
-    public void output( List list,
-                        Writer out )
-        throws
-        IOException
+    public void output( List list, Writer out )
+        throws IOException
     {
-        printContentRange( out, list, 0, list.size(),
-            0, createNamespaceStack() );
+        printContentRange( out, list, 0, list.size(), 0, createNamespaceStack() );
         out.flush();
     }
 
@@ -522,10 +484,8 @@ public class XMLOutputter
      * @param cdata <code>CDATA</code> to output.
      * @param out   <code>Writer</code> to use.
      */
-    public void output( CDATA cdata,
-                        Writer out )
-        throws
-        IOException
+    public void output( CDATA cdata, Writer out )
+        throws IOException
     {
         printCDATA( out, cdata );
         out.flush();
@@ -538,10 +498,8 @@ public class XMLOutputter
      * @param text <code>Text</code> to output.
      * @param out  <code>Writer</code> to use.
      */
-    public void output( Text text,
-                        Writer out )
-        throws
-        IOException
+    public void output( Text text, Writer out )
+        throws IOException
     {
         printText( out, text );
         out.flush();
@@ -553,10 +511,8 @@ public class XMLOutputter
      * @param comment <code>Comment</code> to output.
      * @param out     <code>Writer</code> to use.
      */
-    public void output( Comment comment,
-                        Writer out )
-        throws
-        IOException
+    public void output( Comment comment, Writer out )
+        throws IOException
     {
         printComment( out, comment );
         out.flush();
@@ -568,10 +524,8 @@ public class XMLOutputter
      * @param pi  <code>ProcessingInstruction</code> to output.
      * @param out <code>Writer</code> to use.
      */
-    public void output( ProcessingInstruction pi,
-                        Writer out )
-        throws
-        IOException
+    public void output( ProcessingInstruction pi, Writer out )
+        throws IOException
     {
         boolean currentEscapingPolicy = currentFormat.ignoreTrAXEscapingPIs;
 
@@ -589,10 +543,8 @@ public class XMLOutputter
      * @param entity <code>EntityRef</code> to output.
      * @param out    <code>Writer</code> to use.
      */
-    public void output( EntityRef entity,
-                        Writer out )
-        throws
-        IOException
+    public void output( EntityRef entity, Writer out )
+        throws IOException
     {
         printEntityRef( out, entity );
         out.flush();
@@ -792,11 +744,8 @@ public class XMLOutputter
      * @param out      <code>Writer</code> to use.
      * @param encoding The encoding to add to the declaration
      */
-    protected void printDeclaration( Writer out,
-                                     Document doc,
-                                     String encoding )
-        throws
-        IOException
+    protected void printDeclaration( Writer out, Document doc, String encoding )
+        throws IOException
     {
 
         // Only print the declaration if it's not being omitted
@@ -823,10 +772,8 @@ public class XMLOutputter
      * @param docType <code>Document</code> whose declaration to write.
      * @param out     <code>Writer</code> to use.
      */
-    protected void printDocType( Writer out,
-                                 DocType docType )
-        throws
-        IOException
+    protected void printDocType( Writer out, DocType docType )
+        throws IOException
     {
 
         String publicID = docType.getPublicID();
@@ -869,10 +816,8 @@ public class XMLOutputter
      * @param comment <code>Comment</code> to write.
      * @param out     <code>Writer</code> to use.
      */
-    protected void printComment( Writer out,
-                                 Comment comment )
-        throws
-        IOException
+    protected void printComment( Writer out, Comment comment )
+        throws IOException
     {
         out.write( "<!--" );
         out.write( comment.getText() );
@@ -885,11 +830,8 @@ public class XMLOutputter
      * @param pi  <code>ProcessingInstruction</code> to write.
      * @param out <code>Writer</code> to use.
      */
-    protected void printProcessingInstruction( Writer out,
-                                               ProcessingInstruction pi
-    )
-        throws
-        IOException
+    protected void printProcessingInstruction( Writer out, ProcessingInstruction pi )
+        throws IOException
     {
         String target = pi.getTarget();
         boolean piProcessed = false;
@@ -938,10 +880,8 @@ public class XMLOutputter
      * @param entity <code>EntityRef</code> to output.
      * @param out    <code>Writer</code> to use.
      */
-    protected void printEntityRef( Writer out,
-                                   EntityRef entity )
-        throws
-        IOException
+    protected void printEntityRef( Writer out, EntityRef entity )
+        throws IOException
     {
         out.write( "&" );
         out.write( entity.getName() );
@@ -954,15 +894,13 @@ public class XMLOutputter
      * @param cdata <code>CDATA</code> to output.
      * @param out   <code>Writer</code> to use.
      */
-    protected void printCDATA( Writer out,
-                               CDATA cdata )
-        throws
-        IOException
+    protected void printCDATA( Writer out, CDATA cdata )
+        throws IOException
     {
-        String str = ( currentFormat.mode == Format.TextMode.NORMALIZE )
-            ? cdata.getTextNormalize()
-            : ( ( currentFormat.mode == Format.TextMode.TRIM )
-                ? cdata.getText().trim() : cdata.getText() );
+        String str =
+            ( currentFormat.mode == Format.TextMode.NORMALIZE ) ? cdata.getTextNormalize()
+                            : ( ( currentFormat.mode == Format.TextMode.TRIM ) ? cdata.getText().trim()
+                                            : cdata.getText() );
         out.write( "<![CDATA[" );
         out.write( str );
         out.write( "]]>" );
@@ -974,15 +912,12 @@ public class XMLOutputter
      * @param text <code>Text</code> to write.
      * @param out  <code>Writer</code> to use.
      */
-    protected void printText( Writer out,
-                              Text text )
-        throws
-        IOException
+    protected void printText( Writer out, Text text )
+        throws IOException
     {
-        String str = ( currentFormat.mode == Format.TextMode.NORMALIZE )
-            ? text.getTextNormalize()
-            : ( ( currentFormat.mode == Format.TextMode.TRIM )
-                ? text.getText().trim() : text.getText() );
+        String str =
+            ( currentFormat.mode == Format.TextMode.NORMALIZE ) ? text.getTextNormalize()
+                            : ( ( currentFormat.mode == Format.TextMode.TRIM ) ? text.getText().trim() : text.getText() );
         out.write( escapeElementEntities( str ) );
     }
 
@@ -990,10 +925,8 @@ public class XMLOutputter
      * This will handle printing a string.  Escapes the element entities,
      * trims interior whitespace, etc. if necessary.
      */
-    private void printString( Writer out,
-                              String str )
-        throws
-        IOException
+    private void printString( Writer out, String str )
+        throws IOException
     {
         if ( currentFormat.mode == Format.TextMode.NORMALIZE )
         {
@@ -1016,12 +949,8 @@ public class XMLOutputter
      * @param level      <code>int</code> level of indention.
      * @param namespaces <code>List</code> stack of Namespaces in scope.
      */
-    protected void printElement( Writer out,
-                                 Element element,
-                                 int level,
-                                 NamespaceStack namespaces )
-        throws
-        IOException
+    protected void printElement( Writer out, Element element, int level, NamespaceStack namespaces )
+        throws IOException
     {
 
         List attributes = element.getAttributes();
@@ -1031,8 +960,7 @@ public class XMLOutputter
         String space = null;
         if ( attributes != null )
         {
-            space = element.getAttributeValue( "space",
-                Namespace.XML_NAMESPACE );
+            space = element.getAttributeValue( "space", Namespace.XML_NAMESPACE );
         }
 
         Format previousFormat = currentFormat;
@@ -1137,14 +1065,8 @@ public class XMLOutputter
      * @param level      <code>int</code> level of indentation.
      * @param namespaces <code>List</code> stack of Namespaces in scope.
      */
-    private void printContentRange( Writer out,
-                                    List content,
-                                    int start,
-                                    int end,
-                                    int level,
-                                    NamespaceStack namespaces )
-        throws
-        IOException
+    private void printContentRange( Writer out, List content, int start, int end, int level, NamespaceStack namespaces )
+        throws IOException
     {
         boolean firstNode; // Flag for 1st node in content
         Object next;       // Node we're about to print
@@ -1221,13 +1143,8 @@ public class XMLOutputter
      * @param end     index of last content node (exclusive).
      * @param out     <code>Writer</code> to use.
      */
-    private void printTextRange( Writer out,
-                                 List content,
-                                 int start,
-                                 int end
-    )
-        throws
-        IOException
+    private void printTextRange( Writer out, List content, int start, int end )
+        throws IOException
     {
         String previous; // Previous text printed
         Object node;     // Next node to print
@@ -1314,11 +1231,8 @@ public class XMLOutputter
      * @param ns  <code>Namespace</code> to print definition of
      * @param out <code>Writer</code> to use.
      */
-    private void printNamespace( Writer out,
-                                 Namespace ns,
-                                 NamespaceStack namespaces )
-        throws
-        IOException
+    private void printNamespace( Writer out, Namespace ns, NamespaceStack namespaces )
+        throws IOException
     {
         String prefix = ns.getPrefix();
         String uri = ns.getURI();
@@ -1347,12 +1261,8 @@ public class XMLOutputter
      * @param attributes <code>List</code> of Attribute objcts
      * @param out        <code>Writer</code> to use
      */
-    protected void printAttributes( Writer out,
-                                    List attributes,
-                                    Element parent,
-                                    NamespaceStack namespaces )
-        throws
-        IOException
+    protected void printAttributes( Writer out, List attributes, Element parent, NamespaceStack namespaces )
+        throws IOException
     {
 
         // I do not yet handle the case where the same prefix maps to
@@ -1364,8 +1274,7 @@ public class XMLOutputter
         {
             Attribute attribute = (Attribute) attributes.get( i );
             Namespace ns = attribute.getNamespace();
-            if ( ( ns != Namespace.NO_NAMESPACE )
-                && ( ns != Namespace.XML_NAMESPACE ) )
+            if ( ( ns != Namespace.NO_NAMESPACE ) && ( ns != Namespace.XML_NAMESPACE ) )
             {
                 printNamespace( out, ns, namespaces );
             }
@@ -1380,11 +1289,8 @@ public class XMLOutputter
         }
     }
 
-    private void printElementNamespace( Writer out,
-                                        Element element,
-                                        NamespaceStack namespaces )
-        throws
-        IOException
+    private void printElementNamespace( Writer out, Element element, NamespaceStack namespaces )
+        throws IOException
     {
         // Add namespace decl only if it's not the XML namespace and it's
         // not the NO_NAMESPACE with the prefix "" not yet mapped
@@ -1395,18 +1301,14 @@ public class XMLOutputter
         {
             return;
         }
-        if ( !( ( ns == Namespace.NO_NAMESPACE )
-            && ( namespaces.getURI( "" ) == null ) ) )
+        if ( !( ( ns == Namespace.NO_NAMESPACE ) && ( namespaces.getURI( "" ) == null ) ) )
         {
             printNamespace( out, ns, namespaces );
         }
     }
 
-    private void printAdditionalNamespaces( Writer out,
-                                            Element element,
-                                            NamespaceStack namespaces )
-        throws
-        IOException
+    private void printAdditionalNamespaces( Writer out, Element element, NamespaceStack namespaces )
+        throws IOException
     {
         List list = element.getAdditionalNamespaces();
         if ( list != null )
@@ -1429,8 +1331,7 @@ public class XMLOutputter
      * @param out <code>Writer</code> to use
      */
     private void newline( Writer out )
-        throws
-        IOException
+        throws IOException
     {
         if ( currentFormat.indent != null )
         {
@@ -1445,13 +1346,10 @@ public class XMLOutputter
      * @param out   <code>Writer</code> to use
      * @param level current indent level (number of tabs)
      */
-    private void indent( Writer out,
-                         int level )
-        throws
-        IOException
+    private void indent( Writer out, int level )
+        throws IOException
     {
-        if ( currentFormat.indent == null
-            || currentFormat.indent.equals( "" ) )
+        if ( currentFormat.indent == null || currentFormat.indent.equals( "" ) )
         {
             return;
         }
@@ -1466,8 +1364,7 @@ public class XMLOutputter
     // index = content.size() is returned if content contains
     // all whitespace.
     // @param start index to begin search (inclusive)
-    private int skipLeadingWhite( List content,
-                                  int start )
+    private int skipLeadingWhite( List content, int start )
     {
         if ( start < 0 )
         {
@@ -1496,8 +1393,7 @@ public class XMLOutputter
     // Text node,  index < 0 is returned
     // if content contains all whitespace.
     // @param start index to begin search (exclusive)
-    private int skipTrailingWhite( List content,
-                                   int start )
+    private int skipTrailingWhite( List content, int start )
     {
         int size = content.size();
         if ( start > size )
@@ -1526,8 +1422,7 @@ public class XMLOutputter
     // index = content.size() is returned if there is no more non-CDATA,
     // non-Text, or non-EntiryRef nodes
     // @param start index to begin search (inclusive)
-    private static int nextNonText( List content,
-                                    int start )
+    private static int nextNonText( List content, int start )
     {
         if ( start < 0 )
         {
@@ -1865,10 +1760,8 @@ public class XMLOutputter
 
     // Support method to print a name without using elt.getQualifiedName()
     // and thus avoiding a StringBuffer creation and memory churn
-    private void printQualifiedName( Writer out,
-                                     Element e )
-        throws
-        IOException
+    private void printQualifiedName( Writer out, Element e )
+        throws IOException
     {
         if ( e.getNamespace().getPrefix().length() == 0 )
         {
@@ -1884,10 +1777,8 @@ public class XMLOutputter
 
     // Support method to print a name without using att.getQualifiedName()
     // and thus avoiding a StringBuffer creation and memory churn
-    private void printQualifiedName( Writer out,
-                                     Attribute a )
-        throws
-        IOException
+    private void printQualifiedName( Writer out, Attribute a )
+        throws IOException
     {
         String prefix = a.getNamespace().getPrefix();
         if ( ( prefix != null ) && ( !prefix.equals( "" ) ) )

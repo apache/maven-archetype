@@ -32,20 +32,20 @@ public interface ArchetypeManager
     String ROLE = ArchetypeManager.class.getName();
 
     /**
-     * A command to create an OldArchetype from an existing Maven project given the suppled
+     * A command to create an archetype from an existing Maven project given the supplied
      * creation request.
      *
      * @param request
-     * @return The result of creating the archetype from the existing project. It contains any errors that might have occured.
+     * @return The result of creating the archetype from the existing project. It contains any errors that might have occurred.
      */
     ArchetypeCreationResult createArchetypeFromProject( ArchetypeCreationRequest request );
 
     /**
-     * A command to generate a Maven project from an OldArchetype given the suppled
+     * A command to generate a Maven project from an archetype given the supplied
      * generation request.
      *
      * @param request
-     * @return The result of creating the proejct from the existing archetype. It contains any errors that might have occured.
+     * @return The result of creating the project from the existing archetype. It contains any errors that might have occurred.
      */
     ArchetypeGenerationResult generateProjectFromArchetype( ArchetypeGenerationRequest request );
 
@@ -56,7 +56,7 @@ public interface ArchetypeManager
     ArchetypeCatalog getInternalCatalog();
 
     /**
-     * Gives the catalog of archetypes located in $user.home/.m2/repository/archetype-catalog.xml.
+     * Gives the catalog of archetypes located in <code>${user.home}/.m2/repository/archetype-catalog.xml</code>.
      * @return the catalog.
      */
     ArchetypeCatalog getDefaultLocalCatalog();
@@ -71,14 +71,14 @@ public interface ArchetypeManager
     ArchetypeCatalog getLocalCatalog( String path );
 
     /**
-     * Gives the catalog of archetypes located at http://repo1.maven.org/maven2/archetype-catalog.xml.
+     * Gives the catalog of archetypes located at <code>http://repo1.maven.org/maven2/archetype-catalog.xml</code>.
      * @return the catalog.
      */
     ArchetypeCatalog getRemoteCatalog();
 
     /**
      * Gives the catalog of archetypes located at the given url.
-     * if the url doesn't define a catalog, then 'archetype-catalog.xml' is appended to it for search.
+     * if the url doesn't define a catalog, then <code>'archetype-catalog.xml'</code> is appended to it for search.
      * @param url the catalog url or base url containing the catalog file.
      * @return the catalog.
      */

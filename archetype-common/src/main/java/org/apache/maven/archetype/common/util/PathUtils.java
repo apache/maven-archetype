@@ -40,8 +40,7 @@ public class PathUtils
         return StringUtils.replace( path, "\\", File.separator );
     }
 
-    public static String getDirectory( String file,
-                                       int level )
+    public static String getDirectory( String file, int level )
     {
         file = convertPathForOS( file );
 
@@ -54,9 +53,6 @@ public class PathUtils
         }
 
         return
-            StringUtils.join(
-                directoryAsArray.toArray( new String[directoryAsArray.size()] ),
-                File.separator
-            );
+ StringUtils.join( directoryAsArray.toArray( new String[directoryAsArray.size()] ), File.separator );
     }
 }

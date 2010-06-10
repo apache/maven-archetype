@@ -40,9 +40,7 @@ public class FileCharsetDetector
     private boolean found = false;
 
     public FileCharsetDetector( File detectedFile )
-        throws
-        FileNotFoundException,
-        IOException
+        throws FileNotFoundException, IOException
     {
         nsDetector det = new nsDetector( nsPSMDetector.ALL );
 
@@ -98,9 +96,7 @@ public class FileCharsetDetector
     }
 
     public FileCharsetDetector( InputStream detectedStream )
-        throws
-        FileNotFoundException,
-        IOException
+        throws FileNotFoundException, IOException
     {
         nsDetector det = new nsDetector( nsPSMDetector.ALL );
 

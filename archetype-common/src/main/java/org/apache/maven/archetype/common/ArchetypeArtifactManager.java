@@ -48,17 +48,17 @@ public interface ArchetypeArtifactManager
 
     /**
      */
-    ClassLoader getArchetypeJarLoader ( File archetypeFile )
+    ClassLoader getArchetypeJarLoader( File archetypeFile )
         throws UnknownArchetype;
 
     /**
      */
-    ZipFile getArchetypeZipFile ( File archetypeFile )
+    ZipFile getArchetypeZipFile( File archetypeFile )
         throws UnknownArchetype;
 
     /**
      */
-    boolean isFileSetArchetype ( File archetypeFile );
+    boolean isFileSetArchetype( File archetypeFile );
 
     /**
      */
@@ -68,7 +68,7 @@ public interface ArchetypeArtifactManager
 
     /**
      */
-    boolean isOldArchetype ( File archetypeFile );
+    boolean isOldArchetype( File archetypeFile );
 
     /**
      */
@@ -82,7 +82,7 @@ public interface ArchetypeArtifactManager
 
     /**
      */
-    ArchetypeDescriptor getFileSetArchetypeDescriptor ( File archetypeFile )
+    ArchetypeDescriptor getFileSetArchetypeDescriptor( File archetypeFile )
         throws UnknownArchetype;
 
     /**
@@ -94,7 +94,7 @@ public interface ArchetypeArtifactManager
 
     /**
      */
-    List getFilesetArchetypeResources ( File archetypeFile )
+    List getFilesetArchetypeResources( File archetypeFile )
         throws UnknownArchetype;
 
     /**
@@ -104,7 +104,7 @@ public interface ArchetypeArtifactManager
 
     /**
      */
-    org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor getOldArchetypeDescriptor (
+    org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor getOldArchetypeDescriptor(
             String groupId, String artifactId, String version,
             ArtifactRepository archetypeRepository, ArtifactRepository localRepository, List repositories )
         throws UnknownArchetype;
