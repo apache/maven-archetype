@@ -28,9 +28,9 @@ import java.io.File;
  */
 public interface RepositoryCrawler
 {
-    String ROLE = RepositoryCrawler.class.getName ();
+    String ROLE = RepositoryCrawler.class.getName();
 
-    ArchetypeCatalog crawl ( File repository );
+    ArchetypeCatalog crawl( File repository );
 
     boolean writeCatalog( ArchetypeCatalog archetypeCatalog, File archetypeCatalogFile );
 }

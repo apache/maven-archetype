@@ -73,9 +73,7 @@ public class DefaultArchetypeManager
         return result;
     }
 
-    public File archiveArchetype( File archetypeDirectory,
-                                  File outputDirectory,
-                                  String finalName )
+    public File archiveArchetype( File archetypeDirectory, File outputDirectory, String finalName )
         throws DependencyResolutionRequiredException, IOException
     {
         File jarFile = new File( outputDirectory, finalName + ".jar" );
@@ -85,10 +83,7 @@ public class DefaultArchetypeManager
         return jarFile;
     }
 
-    //i need to make maven artifact compatible
-
-    public void zip( File sourceDirectory,
-                     File archive )
+    public void zip( File sourceDirectory, File archive )
         throws IOException
     {
         if ( !archive.getParentFile().exists() )
@@ -105,9 +100,7 @@ public class DefaultArchetypeManager
         zos.close();
     }
 
-    private void zipper( ZipOutputStream zos,
-                         int offset,
-                         File currentSourceDirectory )
+    private void zipper( ZipOutputStream zos, int offset, File currentSourceDirectory )
         throws IOException
     {
         File[] files = currentSourceDirectory.listFiles();

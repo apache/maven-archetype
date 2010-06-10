@@ -27,6 +27,8 @@ import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 
 /**
+ * Create a Maven project from an old archetype.
+ *
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  * @version $Id$
  */

@@ -493,6 +493,7 @@ public class DefaultPomManager
             }
         }
     }
+
     private void mergeBuildPlugins( BuildBase modelBuild, BuildBase generatedModelBuild )
     {
         Map pluginsByIds = modelBuild.getPluginsAsMap();

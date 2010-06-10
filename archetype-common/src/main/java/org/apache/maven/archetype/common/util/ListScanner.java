@@ -188,8 +188,7 @@ public class ListScanner
      * @return <code>true</code> if the string matches against the pattern, or <code>false</code>
      *         otherwise.
      */
-    public static boolean match( String pattern,
-                                 String str )
+    public static boolean match( String pattern, String str )
     {
         // default matches the SelectorUtils default
         return match( pattern, str, true );
@@ -208,9 +207,7 @@ public class ListScanner
      * @return <code>true</code> if the string matches against the pattern, or <code>false</code>
      *         otherwise.
      */
-    protected static boolean match( String pattern,
-                                    String str,
-                                    boolean isCaseSensitive )
+    protected static boolean match( String pattern, String str, boolean isCaseSensitive )
     {
         return SelectorUtils.match( pattern, str, isCaseSensitive );
     }
@@ -223,8 +220,7 @@ public class ListScanner
      * @return <code>true</code> if the pattern matches against the string, or <code>false</code>
      *         otherwise.
      */
-    protected static boolean matchPath( String pattern,
-                                        String str )
+    protected static boolean matchPath( String pattern, String str )
     {
         // default matches the SelectorUtils default
         return matchPath( pattern, str, true );
@@ -239,16 +235,10 @@ public class ListScanner
      * @return <code>true</code> if the pattern matches against the string, or <code>false</code>
      *         otherwise.
      */
-    protected static boolean matchPath( String pattern,
-                                        String str,
-                                        boolean isCaseSensitive )
+    protected static boolean matchPath( String pattern, String str, boolean isCaseSensitive )
     {
-        return
-            SelectorUtils.matchPath(
-                PathUtils.convertPathForOS( pattern ),
-                PathUtils.convertPathForOS( str ),
-                isCaseSensitive
-            );
+        return SelectorUtils.matchPath( PathUtils.convertPathForOS( pattern ), PathUtils.convertPathForOS( str ),
+                                        isCaseSensitive );
     }
 
     /**
@@ -263,8 +253,7 @@ public class ListScanner
      * @return whether or not a given path matches the start of a given pattern up to the first
      *         "**".
      */
-    protected static boolean matchPatternStart( String pattern,
-                                                String str )
+    protected static boolean matchPatternStart( String pattern, String str )
     {
         // default matches SelectorUtils default
         return matchPatternStart( pattern, str, true );
@@ -283,18 +272,10 @@ public class ListScanner
      * @return whether or not a given path matches the start of a given pattern up to the first
      *         "**".
      */
-    protected static boolean matchPatternStart(
-        String pattern,
-        String str,
-        boolean isCaseSensitive
-    )
+    protected static boolean matchPatternStart( String pattern, String str, boolean isCaseSensitive )
     {
-        return
-            SelectorUtils.matchPatternStart(
-                PathUtils.convertPathForOS( pattern ),
-                PathUtils.convertPathForOS( str ),
-                isCaseSensitive
-            );
+        return SelectorUtils.matchPatternStart( PathUtils.convertPathForOS( pattern ),
+                                                PathUtils.convertPathForOS( str ), isCaseSensitive );
     }
 
     /** Adds default exclusions to the current exclusions set. */
@@ -310,10 +291,7 @@ public class ListScanner
         for ( int i = 0; i < DEFAULTEXCLUDES.length; i++ )
         {
             newExcludes[i + excludesLength] =
-                DEFAULTEXCLUDES[i].replace( '/', File.separatorChar ).replace(
-                    '\\',
-                    File.separatorChar
-                );
+                DEFAULTEXCLUDES[i].replace( '/', File.separatorChar ).replace( '\\', File.separatorChar );
         }
         excludes = newExcludes;
     }
@@ -502,8 +480,7 @@ public class ListScanner
      * @return <code>true</code> when the name matches against at least one include pattern, or
      *         <code>false</code> otherwise.
      */
-    protected boolean matchesPatterns( String name,
-                                       String[] patterns )
+    protected boolean matchesPatterns( String name, String[] patterns )
     {
         // avoid extra object creation in the loop
         String path = null;
