@@ -48,7 +48,7 @@ public interface Constants
 
     String ARCHETYPE_LANGUAGES = "archetype.languages";
 
-    List DEFAULT_FILTERED_EXTENSIONS =
+    List<String> DEFAULT_FILTERED_EXTENSIONS =
         Arrays.asList(
             new String[]
                 {
@@ -57,7 +57,7 @@ public interface Constants
                 }
         );
 
-    List DEFAULT_LANGUAGES =
+    List<String> DEFAULT_LANGUAGES =
         Arrays.asList( new String[]{ "java", "groovy", "csharp", "aspectj" } );
 
     String GROUP_ID = "groupId";

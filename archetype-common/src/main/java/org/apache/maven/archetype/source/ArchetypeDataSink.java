@@ -23,10 +23,12 @@ import java.io.Writer;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.maven.archetype.catalog.Archetype;
+
 /** @author Jason van Zyl */
 public interface ArchetypeDataSink
 {
-    void putArchetypes( List archetypes, Writer writer )
+    void putArchetypes( List<Archetype> archetypes, Writer writer )
         throws ArchetypeDataSinkException;
 
     void putArchetypes( ArchetypeDataSource source, Properties properties, Writer writer )

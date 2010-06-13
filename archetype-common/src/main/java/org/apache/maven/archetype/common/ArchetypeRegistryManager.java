@@ -32,10 +32,10 @@ public interface ArchetypeRegistryManager
 {
     String ROLE = ArchetypeRegistryManager.class.getName();
 
-    List getFilteredExtensions( String archetypeFilteredExtentions, File archetypeRegistryFile )
+    List<String> getFilteredExtensions( String archetypeFilteredExtentions, File archetypeRegistryFile )
         throws IOException;
 
-    List getLanguages( String archetypeLanguages, File archetypeRegistryFile )
+    List<String> getLanguages( String archetypeLanguages, File archetypeRegistryFile )
         throws IOException;
 
     ArchetypeRegistry readArchetypeRegistry( Reader reader )

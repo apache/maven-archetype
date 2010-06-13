@@ -48,12 +48,12 @@ public class DefaultDownloader
     private ArtifactFactory artifactFactory;
 
     public File download( String groupId, String artifactId, String version, ArtifactRepository archetypeRepository,
-                          ArtifactRepository localRepository, List remoteRepositories )
+                          ArtifactRepository localRepository, List<ArtifactRepository> remoteRepositories )
         throws DownloadException, DownloadNotFoundException
    {
         Artifact artifact = artifactFactory.createArtifact( groupId, artifactId, version, Artifact.SCOPE_RUNTIME, "jar" );
 
-        List repositories = new ArrayList( remoteRepositories );
+        List<ArtifactRepository> repositories = new ArrayList<ArtifactRepository>( remoteRepositories );
         if ( repositories.isEmpty() && archetypeRepository != null )
         {
             repositories.add( archetypeRepository );
@@ -61,7 +61,6 @@ public class DefaultDownloader
         else if ( repositories.isEmpty() && localRepository != null )
         {
             repositories.add( localRepository );
-
         }
 
         ArtifactRepository localRepo = localRepository;
@@ -82,7 +81,7 @@ public class DefaultDownloader
     }
 
     public File downloadOld( String groupId, String artifactId, String version, ArtifactRepository archetypeRepository,
-                             ArtifactRepository localRepository, List remoteRepositories )
+                             ArtifactRepository localRepository, List<ArtifactRepository> remoteRepositories )
         throws DownloadException, DownloadNotFoundException
    {
         Artifact artifact = artifactFactory.createArtifact( groupId, artifactId, version, Artifact.SCOPE_RUNTIME, "jar" );

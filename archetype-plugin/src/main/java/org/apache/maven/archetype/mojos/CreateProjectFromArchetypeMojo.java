@@ -132,7 +132,7 @@ public class CreateProjectFromArchetypeMojo
      * @readonly
      * @required
      */
-    private List remoteArtifactRepositories;
+    private List<ArtifactRepository> remoteArtifactRepositories;
 
     /**
      * User settings use to check the interactiveMode.

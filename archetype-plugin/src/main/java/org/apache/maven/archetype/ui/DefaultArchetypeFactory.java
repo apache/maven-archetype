@@ -22,6 +22,7 @@ package org.apache.maven.archetype.ui;
 import org.apache.maven.archetype.common.ArchetypeConfiguration;
 import org.apache.maven.archetype.common.ArchetypeDefinition;
 import org.apache.maven.archetype.common.Constants;
+import org.apache.maven.archetype.metadata.RequiredProperty;
 import org.apache.maven.project.MavenProject;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -143,12 +144,8 @@ public class DefaultArchetypeFactory
 
         configuration.setName( archetypeDescriptor.getName() );
 
-        for ( Iterator requiredProperties = archetypeDescriptor.getRequiredProperties().iterator();
-            requiredProperties.hasNext(); )
+        for ( RequiredProperty requiredProperty : archetypeDescriptor.getRequiredProperties() )
         {
-            org.apache.maven.archetype.metadata.RequiredProperty requiredProperty =
-                (org.apache.maven.archetype.metadata.RequiredProperty) requiredProperties.next();
-
             configuration.addRequiredProperty( requiredProperty.getKey() );
             getLogger().debug( "Adding requiredProperty " + requiredProperty.getKey() );
 

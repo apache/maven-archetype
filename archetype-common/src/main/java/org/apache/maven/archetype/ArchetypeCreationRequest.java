@@ -36,9 +36,9 @@ public class ArchetypeCreationRequest
 
 //    private File propertyFile;
 
-    private List languages = new ArrayList();
+    private List<String> languages = new ArrayList<String>();
 
-    private List filtereds = new ArrayList();
+    private List<String> filtereds = new ArrayList<String>();
 
     private String defaultEncoding = "UTF-8";
 
@@ -104,24 +104,24 @@ public class ArchetypeCreationRequest
 //        return this;
 //    }
 
-    public List getLanguages()
+    public List<String> getLanguages()
     {
         return languages;
     }
 
-    public ArchetypeCreationRequest setLanguages( List languages )
+    public ArchetypeCreationRequest setLanguages( List<String> languages )
     {
         this.languages = languages;
 
         return this;
     }
 
-    public List getFiltereds()
+    public List<String> getFiltereds()
     {
         return filtereds;
     }
 
-    public ArchetypeCreationRequest setFiltereds( List filtereds )
+    public ArchetypeCreationRequest setFiltereds( List<String> filtereds )
     {
         this.filtereds = filtereds;
 

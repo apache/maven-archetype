@@ -70,11 +70,11 @@ public class DefaultArchetypeArtifactManager
      */
     private PomManager pomManager;
 
-    private Map archetypeCache = new TreeMap();
+    private Map<String, File> archetypeCache = new TreeMap<String, File>();
 
     public File getArchetypeFile( final String groupId, final String artifactId, final String version,
                                   ArtifactRepository archetypeRepository, final ArtifactRepository localRepository,
-                                  final List repositories )
+                                  final List<ArtifactRepository> repositories )
         throws UnknownArchetype
     {
         try
@@ -126,7 +126,7 @@ public class DefaultArchetypeArtifactManager
         {
             String pomFileName = null;
             zipFile = getArchetypeZipFile( jar );
-            Enumeration enumeration = zipFile.entries();
+            Enumeration<? extends ZipEntry> enumeration = zipFile.entries();
             while ( enumeration.hasMoreElements() )
             {
                 ZipEntry el = (ZipEntry) enumeration.nextElement();
@@ -206,7 +206,7 @@ public class DefaultArchetypeArtifactManager
 
     public boolean isFileSetArchetype( String groupId, String artifactId, String version,
                                        ArtifactRepository archetypeRepository, ArtifactRepository localRepository,
-                                       List repositories )
+                                       List<ArtifactRepository> repositories )
     {
         try
         {
@@ -249,7 +249,7 @@ public class DefaultArchetypeArtifactManager
 
     public boolean isOldArchetype( String groupId, String artifactId, String version,
                                    ArtifactRepository archetypeRepository, ArtifactRepository localRepository,
-                                   List repositories )
+                                   List<ArtifactRepository> repositories )
     {
         ZipFile zipFile = null;
         try
@@ -280,7 +280,7 @@ public class DefaultArchetypeArtifactManager
 
     public boolean exists( String archetypeGroupId, String archetypeArtifactId, String archetypeVersion,
                            ArtifactRepository archetypeRepository, ArtifactRepository localRepository,
-                           List remoteRepositories )
+                           List<ArtifactRepository> remoteRepositories )
     {
         try
         {
@@ -336,12 +336,8 @@ public class DefaultArchetypeArtifactManager
     }
 
     public org.apache.maven.archetype.metadata.ArchetypeDescriptor getFileSetArchetypeDescriptor(
-                                                                                                  String groupId,
-                                                                                                  String artifactId,
-                                                                                                  String version,
-                                                                                                  ArtifactRepository archetypeRepository,
-                                                                                                  ArtifactRepository localRepository,
-                                                                                                  List repositories )
+            String groupId, String artifactId, String version, ArtifactRepository archetypeRepository,
+            ArtifactRepository localRepository, List<ArtifactRepository> repositories )
         throws UnknownArchetype
     {
         File archetypeFile =
@@ -350,18 +346,18 @@ public class DefaultArchetypeArtifactManager
         return getFileSetArchetypeDescriptor( archetypeFile );
     }
 
-    public List getFilesetArchetypeResources( File archetypeFile )
+    public List<String> getFilesetArchetypeResources( File archetypeFile )
         throws UnknownArchetype
     {
         getLogger().debug( "getFilesetArchetypeResources( \"" + archetypeFile.getAbsolutePath() + "\" )" );
-        List archetypeResources = new ArrayList();
+        List<String> archetypeResources = new ArrayList<String>();
 
         ZipFile zipFile = null;
         try
         {
             zipFile = getArchetypeZipFile( archetypeFile );
 
-            Enumeration enumeration = zipFile.entries();
+            Enumeration<? extends ZipEntry> enumeration = zipFile.entries();
             while ( enumeration.hasMoreElements() )
             {
                 ZipEntry entry = (ZipEntry) enumeration.nextElement();
@@ -412,12 +408,8 @@ public class DefaultArchetypeArtifactManager
     }
 
     public org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor getOldArchetypeDescriptor(
-                                                                                                    String groupId,
-                                                                                                    String artifactId,
-                                                                                                    String version,
-                                                                                                    ArtifactRepository archetypeRepository,
-                                                                                                    ArtifactRepository localRepository,
-                                                                                                    List repositories )
+            String groupId, String artifactId, String version, ArtifactRepository archetypeRepository,
+            ArtifactRepository localRepository, List<ArtifactRepository> repositories )
         throws UnknownArchetype
     {
         File archetypeFile =
@@ -434,7 +426,7 @@ public class DefaultArchetypeArtifactManager
         {
             getLogger().debug( "Found archetype " + key + " in cache: " + archetypeCache.get( key ) );
 
-            return (File) archetypeCache.get( key );
+            return archetypeCache.get( key );
         }
 
         getLogger().debug( "Not found archetype " + key + " in cache" );
@@ -585,7 +577,7 @@ public class DefaultArchetypeArtifactManager
     {
         getLogger().debug( "Searching for " + searchString + " inside " + zipFile.getName() );
 
-        Enumeration enu = zipFile.entries();
+        Enumeration<? extends ZipEntry> enu = zipFile.entries();
         while ( enu.hasMoreElements() )
         {
             ZipEntry entryfound = (ZipEntry) enu.nextElement();

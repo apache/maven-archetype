@@ -24,7 +24,6 @@ import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -340,9 +339,9 @@ public class ListScanner
      *                 files should be excluded. If a non-<code>null</code> list is given, all
      *                 elements must be non-<code>null</code>.
      */
-    public void setExcludes( List excludesList )
+    public void setExcludes( List<String> excludesList )
     {
-        String[] excludes = (String[]) excludesList.toArray( new String[excludesList.size()] );
+        String[] excludes = excludesList.toArray( new String[excludesList.size()] );
         if ( excludes == null )
         {
             this.excludes = null;
@@ -376,9 +375,9 @@ public class ListScanner
      *                 files should be included. If a non-<code>null</code> list is given, all
      *                 elements must be non-<code>null</code>.
      */
-    public void setIncludes( List includesList )
+    public void setIncludes( List<String> includesList )
     {
-        String[] includes = (String[]) includesList.toArray( new String[includesList.size()] );
+        String[] includes = includesList.toArray( new String[includesList.size()] );
         if ( includes == null )
         {
             this.includes = null;
@@ -408,7 +407,7 @@ public class ListScanner
      * @throws IllegalStateException if the base directory was set incorrectly (i.e. if it is
      *                               <code>null</code>, doesn't exist, or isn't a directory).
      */
-    public List scan( List files )
+    public List<String> scan( List<String> files )
         throws
         IllegalStateException
     {
@@ -432,12 +431,10 @@ public class ListScanner
             excludes = new String[0];
         }
 
-        List result = new ArrayList();
+        List<String> result = new ArrayList<String>();
 
-        Iterator iterator = files.iterator();
-        while ( iterator.hasNext() )
+        for ( String fileName : files )
         {
-            String fileName = (String) iterator.next();
 //            System.err.println("Checking "+(isIncluded ( fileName )?"I":"-")+(isExcluded ( fileName )?"E":"-")+fileName);
             if ( isIncluded( fileName ) && !isExcluded( fileName ) )
             {

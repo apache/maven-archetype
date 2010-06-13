@@ -30,32 +30,32 @@ public interface ArchetypeFilesResolver
 {
     String ROLE = ArchetypeFilesResolver.class.getName();
 
-    List getFilesWithExtension( List files, String extension );
+    List<String> getFilesWithExtension( List<String> files, String extension );
 
-    List getFilteredFiles( List files, String filtered );
+    List<String> getFilteredFiles( List<String> files, String filtered );
 
-    List filterFiles( String moduleOffset, FileSet fileSet, List archetypeResources );
+    List<String> filterFiles( String moduleOffset, FileSet fileSet, List<String> archetypeResources );
 
-    List findOtherResources( int level, List files, String languages );
+    List<String> findOtherResources( int level, List<String> files, String languages );
 
-    List findOtherResources( int level, List files, List sourcesFiles, String languages );
+    List<String> findOtherResources( int level, List<String> files, List<String> sourcesFiles, String languages );
 
-    List findOtherSources( int level, List files, String languages );
+    List<String> findOtherSources( int level, List<String> files, String languages );
 
-    List findResourcesMainFiles( List files, String languages );
+    List<String> findResourcesMainFiles( List<String> files, String languages );
 
-    List findResourcesTestFiles( List files, String languages );
+    List<String> findResourcesTestFiles( List<String> files, String languages );
 
-    List findSiteFiles( List files, String languages );
+    List<String> findSiteFiles( List<String> files, String languages );
 
-    List findSourcesMainFiles( List files, String languages );
+    List<String> findSourcesMainFiles( List<String> files, String languages );
 
-    List findSourcesTestFiles( List files, String languages );
+    List<String> findSourcesTestFiles( List<String> files, String languages );
 
-    List getPackagedFiles( List files, String packageName );
+    List<String> getPackagedFiles( List<String> files, String packageName );
 
-    String resolvePackage( File file, List languages )
+    String resolvePackage( File file, List<String> languages )
         throws IOException;
 
-    List getUnpackagedFiles( List files, String packageName );
+    List<String> getUnpackagedFiles( List<String> files, String packageName );
 }

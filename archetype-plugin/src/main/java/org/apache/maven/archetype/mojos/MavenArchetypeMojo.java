@@ -143,7 +143,7 @@ public class MavenArchetypeMojo
      * @parameter expression="${project.remoteArtifactRepositories}"
      * @required
      */
-    private List pomRemoteRepositories;
+    private List<ArtifactRepository> pomRemoteRepositories;
 
     /**
      * Other remote repositories available for discovering dependencies and extensions.
@@ -194,13 +194,13 @@ public class MavenArchetypeMojo
         }
 
 
-        List archetypeRemoteRepositories = new ArrayList( pomRemoteRepositories );
+        List<ArtifactRepository> archetypeRemoteRepositories = new ArrayList<ArtifactRepository>( pomRemoteRepositories );
 
         if ( remoteRepositories != null )
         {
             getLog().info( "We are using command line specified remote repositories: " + remoteRepositories );
 
-            archetypeRemoteRepositories = new ArrayList();
+            archetypeRemoteRepositories = new ArrayList<ArtifactRepository>();
 
             String[] s = StringUtils.split( remoteRepositories, "," );
 

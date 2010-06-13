@@ -24,8 +24,6 @@ import org.codehaus.plexus.components.interactivity.Prompter;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
-import java.util.Iterator;
-
 /** @plexus.component */
 public class DefaultArchetypeGenerationQueryer
     extends AbstractLogEnabled
@@ -39,11 +37,8 @@ public class DefaultArchetypeGenerationQueryer
     {
         String query = "Confirm properties configuration:\n";
 
-        for ( Iterator requiredPropertiesIter = archetypeConfiguration.getRequiredProperties().iterator();
-            requiredPropertiesIter.hasNext(); )
+        for ( String property : archetypeConfiguration.getRequiredProperties() )
         {
-            String property = (String) requiredPropertiesIter.next();
-
             query += property + ": " + archetypeConfiguration.getProperty( property ) + "\n";
         }
 

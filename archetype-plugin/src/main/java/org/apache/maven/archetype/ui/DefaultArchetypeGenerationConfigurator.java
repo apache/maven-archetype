@@ -41,7 +41,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -92,7 +91,7 @@ public class DefaultArchetypeGenerationConfigurator
 
         ArtifactRepository archetypeRepository = null;
 
-        List repositories = new ArrayList();
+        List<ArtifactRepository> repositories = new ArrayList<ArtifactRepository>();
 
         Properties properties = new Properties( executionProperties );
 
@@ -169,17 +168,15 @@ public class DefaultArchetypeGenerationConfigurator
 
             while ( !confirmed )
             {
-                List propertiesRequired = archetypeConfiguration.getRequiredProperties();
+                List<String> propertiesRequired = archetypeConfiguration.getRequiredProperties();
                 getLogger().debug( "Required properties before content sort: " + propertiesRequired );
                 Collections.sort( propertiesRequired, new RequiredPropertyComparator( archetypeConfiguration ) );
                 getLogger().debug( "Required properties after content sort: " + propertiesRequired );
 
                 if ( !archetypeConfiguration.isConfigured() )
                 {
-                    for ( Iterator requiredProperties = propertiesRequired.iterator(); requiredProperties.hasNext(); )
+                    for ( String requiredProperty : propertiesRequired )
                     {
-                        String requiredProperty = (String) requiredProperties.next();
-
                         if ( !archetypeConfiguration.isConfigured( requiredProperty ) )
                         {
                             if ( "package".equals( requiredProperty ) )
@@ -192,23 +189,21 @@ public class DefaultArchetypeGenerationConfigurator
                                     ( null == packageDefault || "".equals( packageDefault ) ) ? archetypeConfiguration.getProperty( "groupId" )
                                                     : archetypeConfiguration.getDefaultValue( requiredProperty );
 
-                                archetypeConfiguration.setProperty(
-                                                                    requiredProperty,
-                                                                    archetypeGenerationQueryer.getPropertyValue(
-                                                                                                                 requiredProperty,
-                                                                                                                 getTransitiveDefaultValue(
-                                                                                                                                            packageDefault,
-                                                                                                                                            archetypeConfiguration ) ) );
+                                String value = getTransitiveDefaultValue( packageDefault, archetypeConfiguration );
+
+                                value = archetypeGenerationQueryer.getPropertyValue( requiredProperty, value );
+
+                                archetypeConfiguration.setProperty( requiredProperty, value );
                             }
                             else
                             {
-                                archetypeConfiguration.setProperty(
-                                                                    requiredProperty,
-                                                                    archetypeGenerationQueryer.getPropertyValue(
-                                                                                                                 requiredProperty,
-                                                                                                                 getTransitiveDefaultValue(
-                                                                                                                                            archetypeConfiguration.getDefaultValue( requiredProperty ),
-                                                                                                                                            archetypeConfiguration ) ) );
+                                String value = archetypeConfiguration.getDefaultValue( requiredProperty );
+
+                                value = getTransitiveDefaultValue( value, archetypeConfiguration );
+
+                                value = archetypeGenerationQueryer.getPropertyValue( requiredProperty, value );
+
+                                archetypeConfiguration.setProperty( requiredProperty, value );
                             }
                         }
                         else
@@ -222,10 +217,8 @@ public class DefaultArchetypeGenerationConfigurator
                 else
                 {
 
-                    for ( Iterator requiredProperties = propertiesRequired.iterator(); requiredProperties.hasNext(); )
+                    for ( String requiredProperty : propertiesRequired )
                     {
-                        String requiredProperty = (String) requiredProperties.next();
-
                         getLogger().info(
                                           "Using property: " + requiredProperty + " = "
                                               + archetypeConfiguration.getProperty( requiredProperty ) );
@@ -254,11 +247,8 @@ public class DefaultArchetypeGenerationConfigurator
         {
             if ( !archetypeConfiguration.isConfigured() )
             {
-                for ( Iterator requiredProperties = archetypeConfiguration.getRequiredProperties().iterator();
-                    requiredProperties.hasNext(); )
+                for ( String requiredProperty : archetypeConfiguration.getRequiredProperties() )
                 {
-                    String requiredProperty = (String) requiredProperties.next();
-
                     if ( !archetypeConfiguration.isConfigured( requiredProperty )
                         && ( archetypeConfiguration.getDefaultValue( requiredProperty ) != null ) )
                     {
@@ -279,12 +269,9 @@ public class DefaultArchetypeGenerationConfigurator
                     exceptionMessage.append( request.getArchetypeVersion() );
                     exceptionMessage.append( " is not configured" );
 
-                    List missingProperties = new ArrayList( 0 );
-                    for ( Iterator requiredProperties = archetypeConfiguration.getRequiredProperties().iterator();
-                        requiredProperties.hasNext(); )
+                    List<String> missingProperties = new ArrayList<String>( 0 );
+                    for ( String requiredProperty : archetypeConfiguration.getRequiredProperties() )
                     {
-                        String requiredProperty = (String) requiredProperties.next();
-
                         if ( !archetypeConfiguration.isConfigured( requiredProperty ) )
                         {
                             exceptionMessage.append( "\n\tProperty " );
@@ -322,11 +309,8 @@ public class DefaultArchetypeGenerationConfigurator
         {
             return null;
         }
-        for ( Iterator requiredProperties = archetypeConfiguration.getRequiredProperties().iterator();
-            requiredProperties.hasNext(); )
+        for ( String property : archetypeConfiguration.getRequiredProperties() )
         {
-            String property = (String) requiredProperties.next();
-
             if ( result.indexOf( "${" + property + "}" ) >= 0 )
             {
                 result = StringUtils.replace( result, "${" + property + "}",
@@ -337,14 +321,12 @@ public class DefaultArchetypeGenerationConfigurator
     }
 
     private void restoreCommandLineProperties( ArchetypeConfiguration archetypeConfiguration,
-        Properties executionProperties )
+                                               Properties executionProperties )
     {
         getLogger().debug( "Restoring command line properties" );
 
-        for ( Iterator properties = archetypeConfiguration.getRequiredProperties().iterator(); properties.hasNext(); )
+        for ( String property : archetypeConfiguration.getRequiredProperties() )
         {
-            String property = (String) properties.next();
-
             if ( executionProperties.containsKey( property ) )
             {
                 archetypeConfiguration.setProperty( property, executionProperties.getProperty( property ) );
@@ -353,7 +335,7 @@ public class DefaultArchetypeGenerationConfigurator
         }
     }
 
-    public static class RequiredPropertyComparator implements Comparator
+    public static class RequiredPropertyComparator implements Comparator<String>
     {
         private final ArchetypeConfiguration archetypeConfiguration;
 
@@ -362,32 +344,25 @@ public class DefaultArchetypeGenerationConfigurator
             this.archetypeConfiguration = archetypeConfiguration;
         }
 
-        public int compare( Object left, Object right )
+        public int compare( String left, String right )
         {
-            if ( !( left instanceof String ) || !( right instanceof String ) )
+            String leftDefault = archetypeConfiguration.getDefaultValue( left );
+            String rightDefault = archetypeConfiguration.getDefaultValue( right );
+            if ( null == leftDefault || null == rightDefault )
             {
-                return 0;
+                return comparePropertyName( (String) left, (String) right );
+            }
+            else if ( leftDefault.indexOf( "${" + right + "}" ) >= 0 )
+            { //left contains right
+                return 1;
+            }
+            else if ( rightDefault.indexOf( "${" + left + "}" ) >= 0 )
+            { //right contains left
+                return -1;
             }
             else
             {
-                String leftDefault = archetypeConfiguration.getDefaultValue( (String) left );
-                String rightDefault = archetypeConfiguration.getDefaultValue( (String) right );
-                if ( null == leftDefault || null == rightDefault )
-                {
-                    return comparePropertyName( (String) left, (String) right );
-                }
-                else if ( leftDefault.indexOf( "${" + right + "}" ) >= 0 )
-                { //left contains right
-                    return 1;
-                }
-                else if ( rightDefault.indexOf( "${" + left + "}" ) >= 0 )
-                { //right contains left
-                    return -1;
-                }
-                else
-                {
-                    return comparePropertyName( (String) left, (String) right );
-                }
+                return comparePropertyName( left, right );
             }
         }
 

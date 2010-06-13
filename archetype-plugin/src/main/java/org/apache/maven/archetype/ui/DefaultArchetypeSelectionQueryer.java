@@ -30,7 +30,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -54,23 +53,21 @@ public class DefaultArchetypeSelectionQueryer
         return "Y".equalsIgnoreCase( answer );
     }
 
-    public Archetype selectArchetype( List archetypes )
+    public Archetype selectArchetype( List<Archetype> archetypes )
         throws PrompterException
     {
         String query = "Choose archetype:\n";
-        Map answerMap = new HashMap();
-        List answers = new ArrayList();
+        Map<String, Archetype> answerMap = new HashMap<String, Archetype>();
+        List<String> answers = new ArrayList<String>();
         int counter = 1;
 
-        for ( Iterator archetypeIterator = archetypes.iterator(); archetypeIterator.hasNext(); )
+        for ( Archetype archetype : archetypes )
         {
-            Archetype archetype = (Archetype) archetypeIterator.next();
-
-            answerMap.put( "" + counter, archetype );
+            answerMap.put( String.valueOf( counter ), archetype );
             query +=
-                "" + counter + ": " + archetype.getArtifactId() + " (" + archetype.getDescription() + ":"
+                String.valueOf( counter ) + ": " + archetype.getArtifactId() + " (" + archetype.getDescription() + ":"
                     + archetype.getArtifactId() + ")\n";
-            answers.add( "" + counter );
+            answers.add( String.valueOf( counter ) );
 
             counter++;
         }
@@ -81,42 +78,39 @@ public class DefaultArchetypeSelectionQueryer
         return (Archetype) answerMap.get( answer );
     }
 
-    public Archetype selectArchetype( Map catalogs )
+    public Archetype selectArchetype( Map<String, List<Archetype>> catalogs )
         throws PrompterException
     {
         return selectArchetype( catalogs, null );
     }
 
-    public Archetype selectArchetype( Map catalogs, ArchetypeDefinition defaultDefinition )
+    public Archetype selectArchetype( Map<String, List<Archetype>> catalogs, ArchetypeDefinition defaultDefinition )
         throws PrompterException
     {
         String query = "Choose archetype:\n";
-        Map archetypeAnswerMap = new HashMap();
-        Map reversedArchetypeAnswerMap = new HashMap();
-        List answers = new ArrayList();
-        List archetypeVersions;
+        Map<String, List<Archetype>> archetypeAnswerMap = new HashMap<String, List<Archetype>>();
+        Map<String, String> reversedArchetypeAnswerMap = new HashMap<String, String>();
+        List<String> answers = new ArrayList<String>();
+        List<Archetype> archetypeVersions;
         int counter = 1;
         int defaultSelection = 0;
 
-        for ( Iterator catalogIterator = catalogs.keySet().iterator(); catalogIterator.hasNext(); )
+        for ( Map.Entry<String, List<Archetype>> entry : catalogs.entrySet() )
         {
-            String catalog = (String) catalogIterator.next();
+            String catalog = entry.getKey();
 
-            for ( Iterator archetypeIterator = ( (List) catalogs.get( catalog ) ).iterator();
-                archetypeIterator.hasNext(); )
+            for ( Archetype archetype : entry.getValue() )
             {
-                Archetype archetype = (Archetype) archetypeIterator.next();
-
-                String mapKey = "" + counter;
+                String mapKey = String.valueOf( counter );
                 String archetypeKey = archetype.getGroupId() + ":" + archetype.getArtifactId();
                 if ( reversedArchetypeAnswerMap.containsKey( archetypeKey ) )
                 {
-                    mapKey = (String) reversedArchetypeAnswerMap.get( archetypeKey );
-                    archetypeVersions = (List) archetypeAnswerMap.get( mapKey );
+                    mapKey = reversedArchetypeAnswerMap.get( archetypeKey );
+                    archetypeVersions = archetypeAnswerMap.get( mapKey );
                 }
                 else
                 {
-                    archetypeVersions = new ArrayList();
+                    archetypeVersions = new ArrayList<Archetype>();
                     archetypeAnswerMap.put( mapKey, archetypeVersions );
                     reversedArchetypeAnswerMap.put( archetypeKey, mapKey );
                     query +=
@@ -150,11 +144,11 @@ public class DefaultArchetypeSelectionQueryer
             answer = prompter.prompt( query, answers, Integer.toString( defaultSelection ) );
         }
 
-        archetypeVersions = (List) archetypeAnswerMap.get( answer );
+        archetypeVersions = archetypeAnswerMap.get( answer );
 
         if ( archetypeVersions.size() == 1 )
         {
-            return (Archetype) archetypeVersions.get( 0 );
+            return archetypeVersions.get( 0 );
         }
         else
         {
@@ -162,32 +156,29 @@ public class DefaultArchetypeSelectionQueryer
         }
     }
 
-    private Archetype selectVersion( List archetypes )
+    private Archetype selectVersion( List<Archetype> archetypes )
         throws PrompterException
     {
         String query = "Choose version: \n";
-        Map answerMap = new HashMap();
-        List answers = new ArrayList();
+        Map<String, Archetype> answerMap = new HashMap<String, Archetype>();
+        List<String> answers = new ArrayList<String>();
 
-        Collections.sort( archetypes, new Comparator()
+        Collections.sort( archetypes, new Comparator<Archetype>()
         {
-            public int compare( Object o1, Object o2 )
+            public int compare( Archetype a1, Archetype a2 )
             {
-                Archetype a1 = (Archetype) o1;
-                Archetype a2 = (Archetype) o2;
                 return a1.getVersion().compareTo( a2.getVersion() );
             }
         } );
 
         int counter = 1;
-        for ( Iterator archetypeVersionsKeys = archetypes.iterator(); archetypeVersionsKeys.hasNext(); )
+        for ( Archetype archetype : archetypes )
         {
-            Archetype archetype = (Archetype) archetypeVersionsKeys.next();
             String archetypeVersion = archetype.getVersion();
 
-            answerMap.put( "" + counter, archetype );
-            query += "" + counter + ": " + archetypeVersion + "\n";
-            answers.add( "" + counter );
+            answerMap.put( String.valueOf( counter ), archetype );
+            query += String.valueOf( counter ) + ": " + archetypeVersion + "\n";
+            answers.add( String.valueOf( counter ) );
 
             counter++;
         }
