@@ -60,10 +60,10 @@ public class DefaultArchetypeRegistryManager
      */
     private ArtifactRepositoryLayout defaultArtifactRepositoryLayout;
 
-    public List getFilteredExtensions( String archetypeFilteredExtentions, File archetypeRegistryFile )
+    public List<String> getFilteredExtensions( String archetypeFilteredExtentions, File archetypeRegistryFile )
         throws IOException
     {
-        List filteredExtensions = new ArrayList();
+        List<String> filteredExtensions = new ArrayList<String>();
 
         if ( StringUtils.isNotEmpty( archetypeFilteredExtentions ) )
         {
@@ -93,10 +93,10 @@ public class DefaultArchetypeRegistryManager
         return filteredExtensions;
     }
 
-    public List getLanguages( String archetypeLanguages, File archetypeRegistryFile )
+    public List<String> getLanguages( String archetypeLanguages, File archetypeRegistryFile )
         throws IOException
     {
-        List languages = new ArrayList();
+        List<String> languages = new ArrayList<String>();
 
         if ( StringUtils.isNotEmpty( archetypeLanguages ) )
         {

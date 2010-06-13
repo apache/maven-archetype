@@ -40,16 +40,16 @@ class NamespaceStack
         "@(#) $RCSfile: NamespaceStack.java,v $ $Revision: 1.13 $ $Date: 2004/02/06 09:28:32 $ $Name: jdom_1_0 $";
 
     /** The prefixes available */
-    private Stack prefixes;
+    private Stack<String> prefixes;
 
     /** The URIs available */
-    private Stack uris;
+    private Stack<String> uris;
 
     /** This creates the needed storage. */
     NamespaceStack()
     {
-        prefixes = new Stack();
-        uris = new Stack();
+        prefixes = new Stack<String>();
+        uris = new Stack<String>();
     }
 
     /**

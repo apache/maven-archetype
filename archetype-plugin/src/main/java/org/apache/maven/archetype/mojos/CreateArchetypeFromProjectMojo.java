@@ -173,13 +173,13 @@ public class CreateArchetypeFromProjectMojo
                 propertyFile.getParentFile().mkdirs();
             }
 
-            List languages = getLanguages( archetypeLanguages, propertyFile );
+            List<String> languages = getLanguages( archetypeLanguages, propertyFile );
 
             Properties properties =
                 configurator.configureArchetypeCreation( project, Boolean.valueOf( interactive ), executionProperties,
                                                          propertyFile, languages );
 
-            List filtereds = getFilteredExtensions( archetypeFilteredExtentions, propertyFile );
+            List<String> filtereds = getFilteredExtensions( archetypeFilteredExtentions, propertyFile );
 
             ArchetypeCreationRequest request = new ArchetypeCreationRequest()
                 .setProject( project )
@@ -233,9 +233,9 @@ public class CreateArchetypeFromProjectMojo
         }
     }
 
-    private List getFilteredExtensions( String archetypeFilteredExtentions, File propertyFile )
+    private List<String> getFilteredExtensions( String archetypeFilteredExtentions, File propertyFile )
     {
-        List filteredExtensions = new ArrayList();
+        List<String> filteredExtensions = new ArrayList<String>();
 
         if ( StringUtils.isNotEmpty( archetypeFilteredExtentions ) )
         {
@@ -277,9 +277,9 @@ public class CreateArchetypeFromProjectMojo
         return filteredExtensions;
     }
 
-    private List getLanguages( String archetypeLanguages, File propertyFile )
+    private List<String> getLanguages( String archetypeLanguages, File propertyFile )
     {
-        List resultingLanguages = new ArrayList();
+        List<String> resultingLanguages = new ArrayList<String>();
 
         if ( StringUtils.isNotEmpty( archetypeLanguages ) )
         {

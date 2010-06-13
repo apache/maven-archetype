@@ -65,7 +65,6 @@ import java.net.URLClassLoader;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @plexus.component
@@ -121,7 +120,7 @@ public class DefaultOldArchetype
     public void createArchetype( ArchetypeGenerationRequest request, File archetypeFile )
         throws ArchetypeDescriptorException, ArchetypeTemplateProcessingException
     {
-        Map parameters = new HashMap();
+        Map<String, String> parameters = new HashMap<String, String>();
 
         parameters.put( "basedir", request.getOutputDirectory() );
 
@@ -149,15 +148,11 @@ public class DefaultOldArchetype
 
                 getLogger().info( "----------------------------------------------------------------------------" );
 
-                Set keys = parameters.keySet();
-
-                Iterator it = keys.iterator();
-
-                while ( it.hasNext() )
+                for ( Map.Entry<String, String> entry : parameters.entrySet() )
                 {
-                    String parameterName = (String) it.next();
+                    String parameterName = entry.getKey();
 
-                    String parameterValue = (String) parameters.get( parameterName );
+                    String parameterValue = entry.getValue();
 
                     getLogger().info( "Parameter: " + parameterName + ", Value: " + parameterValue );
                 }
@@ -288,13 +283,9 @@ public class DefaultOldArchetype
 
         context.put( Constants.PACKAGE, packageName );
 
-        for ( Iterator iterator = parameters.keySet().iterator(); iterator.hasNext(); )
+        for ( Map.Entry<String, String> entry : parameters.entrySet() )
         {
-            String key = (String) iterator.next();
-
-            Object value = parameters.get( key );
-
-            context.put( key, value );
+            context.put( entry.getKey(), entry.getValue() );
         }
 
         // ----------------------------------------------------------------------
@@ -766,10 +757,8 @@ public class DefaultOldArchetype
                                    String packageName, String sourceDirectory )
         throws ArchetypeTemplateProcessingException
     {
-        for ( Iterator i = descriptor.getSources().iterator(); i.hasNext(); )
+        for ( String template : descriptor.getSources() )
         {
-            String template = (String) i.next();
-
             processTemplate( outputDirectory, context, template, descriptor.getSourceDescriptor( template ), true,
                              packageName, sourceDirectory );
         }
@@ -779,10 +768,8 @@ public class DefaultOldArchetype
                                        String packageName, String testSourceDirectory )
         throws ArchetypeTemplateProcessingException
     {
-        for ( Iterator i = descriptor.getTestSources().iterator(); i.hasNext(); )
+        for ( String template : descriptor.getTestSources() )
         {
-            String template = (String) i.next();
-
             processTemplate( outputDirectory, context, template, descriptor.getTestSourceDescriptor( template ), true,
                              packageName, testSourceDirectory );
         }
@@ -792,10 +779,8 @@ public class DefaultOldArchetype
                                      String packageName )
         throws ArchetypeTemplateProcessingException
     {
-        for ( Iterator i = descriptor.getResources().iterator(); i.hasNext(); )
+        for ( String template : descriptor.getResources() )
         {
-            String template = (String) i.next();
-
             processTemplate( outputDirectory, context, template, descriptor.getResourceDescriptor( template ), false,
                              packageName );
         }
@@ -805,10 +790,8 @@ public class DefaultOldArchetype
                                          String packageName )
         throws ArchetypeTemplateProcessingException
     {
-        for ( Iterator i = descriptor.getTestResources().iterator(); i.hasNext(); )
+        for ( String template : descriptor.getTestResources() )
         {
-            String template = (String) i.next();
-
             processTemplate( outputDirectory, context, template, descriptor.getTestResourceDescriptor( template ),
                              false, packageName );
         }
@@ -818,10 +801,8 @@ public class DefaultOldArchetype
                                          String packageName )
         throws ArchetypeTemplateProcessingException
     {
-        for ( Iterator i = descriptor.getSiteResources().iterator(); i.hasNext(); )
+        for ( String template : descriptor.getSiteResources() )
         {
-            String template = (String) i.next();
-
             processTemplate( outputDirectory, context, template, descriptor.getSiteResourceDescriptor( template ),
                              false, packageName );
         }

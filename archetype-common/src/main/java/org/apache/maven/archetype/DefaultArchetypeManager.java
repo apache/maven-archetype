@@ -53,7 +53,7 @@ public class DefaultArchetypeManager
     private ArchetypeGenerator generator;
 
     /** @plexus.requirement role="org.apache.maven.archetype.source.ArchetypeDataSource" */
-    private Map archetypeSources;
+    private Map<String,ArchetypeDataSource> archetypeSources;
 
     public ArchetypeCreationResult createArchetypeFromProject( ArchetypeCreationRequest request )
     {
@@ -141,7 +141,7 @@ public class DefaultArchetypeManager
     {
         try
         {
-            ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( "internal-catalog" );
+            ArchetypeDataSource source = archetypeSources.get( "internal-catalog" );
 
             return source.getArchetypeCatalog( new Properties() );
         }
@@ -162,7 +162,7 @@ public class DefaultArchetypeManager
         {
             Properties properties = new Properties();
             properties.setProperty( "file", path );
-            ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( "catalog" );
+            ArchetypeDataSource source = archetypeSources.get( "catalog" );
 
             return source.getArchetypeCatalog( properties );
         }
@@ -183,7 +183,7 @@ public class DefaultArchetypeManager
         {
             Properties properties = new Properties();
             properties.setProperty( "repository", url );
-            ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( "remote-catalog" );
+            ArchetypeDataSource source = archetypeSources.get( "remote-catalog" );
 
             return source.getArchetypeCatalog( properties );
         }
@@ -204,7 +204,7 @@ public class DefaultArchetypeManager
         {
             Properties properties = new Properties();
             properties.setProperty( "file", path );
-            ArchetypeDataSource source = (ArchetypeDataSource) archetypeSources.get( "catalog" );
+            ArchetypeDataSource source = archetypeSources.get( "catalog" );
 
             source.updateCatalog( properties, archetype );
         }

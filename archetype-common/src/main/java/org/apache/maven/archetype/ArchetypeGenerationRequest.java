@@ -43,13 +43,13 @@ public class ArchetypeGenerationRequest
 
     private ArtifactRepository localRepository;
 
-    private List remoteArtifactRepositories;
+    private List<ArtifactRepository> remoteArtifactRepositories;
 
     private Proxy activeProxy;
 
-    private List servers = new ArrayList();
+    private List<Server> servers = new ArrayList<Server>();
 
-    private List mirrors = new ArrayList();
+    private List<Mirror> mirrors = new ArrayList<Mirror>();
 
     // Archetype definition
     private String archetypeName;
@@ -301,7 +301,7 @@ public class ArchetypeGenerationRequest
         return this;
     }
 
-    public List getMirrors()
+    public List<Mirror> getMirrors()
     {
         return mirrors;
     }
@@ -313,17 +313,17 @@ public class ArchetypeGenerationRequest
         return this;
     }
 
-    public List getServers()
+    public List<Server> getServers()
     {
         return servers;
     }
 
-    public List getRemoteArtifactRepositories()
+    public List<ArtifactRepository> getRemoteArtifactRepositories()
     {
         return remoteArtifactRepositories;
     }
 
-    public ArchetypeGenerationRequest setRemoteArtifactRepositories( List remoteArtifactRepositories )
+    public ArchetypeGenerationRequest setRemoteArtifactRepositories( List<ArtifactRepository>  remoteArtifactRepositories )
     {
         this.remoteArtifactRepositories = remoteArtifactRepositories;
 

@@ -112,12 +112,9 @@ public class DefaultFilesetArchetypeGenerator
                         + request.getArchetypeArtifactId() + ":" + request.getArchetypeVersion()
                         + " is not configured" );
 
-                    List missingProperties = new ArrayList( 0 );
-                    for ( Iterator requiredProperties = archetypeDescriptor.getRequiredProperties().iterator();
-                        requiredProperties.hasNext(); )
+                    List<String> missingProperties = new ArrayList<String>( 0 );
+                    for ( RequiredProperty requiredProperty : archetypeDescriptor.getRequiredProperties() )
                     {
-                        RequiredProperty requiredProperty = (RequiredProperty) requiredProperties.next();
-
                         if ( StringUtils.isEmpty( request.getProperties().getProperty( requiredProperty.getKey() ) ) )
                         {
                             exceptionMessage.append( "\n\tProperty " + requiredProperty.getKey() + " is missing." );
@@ -138,7 +135,7 @@ public class DefaultFilesetArchetypeGenerator
             File basedirPom = new File( request.getOutputDirectory(), Constants.ARCHETYPE_POM );
             File pom = new File( outputDirectoryFile, Constants.ARCHETYPE_POM );
 
-            List archetypeResources =
+            List<String> archetypeResources =
                 archetypeArtifactManager.getFilesetArchetypeResources( archetypeFile );
 
             ZipFile archetypeZipFile =
@@ -275,17 +272,13 @@ public class DefaultFilesetArchetypeGenerator
         }
     }
 
-    private void copyFiles( String directory, List fileSetResources, boolean packaged, String packageName,
+    private void copyFiles( String directory, List<String> fileSetResources, boolean packaged, String packageName,
                             File outputDirectoryFile, ZipFile archetypeZipFile, String moduleOffset,
                             boolean failIfExists, Context context )
         throws OutputFileExists, FileNotFoundException, IOException
     {
-        Iterator iterator = fileSetResources.iterator();
-
-        while ( iterator.hasNext() )
+        for ( String template : fileSetResources )
         {
-            String template = (String) iterator.next();
-
             File outputFile =
                 getOutputFile( template, directory, outputDirectoryFile, packaged, packageName, moduleOffset, context );
 
@@ -399,19 +392,15 @@ public class DefaultFilesetArchetypeGenerator
 
     private boolean isArchetypeConfigured( ArchetypeDescriptor archetypeDescriptor, ArchetypeGenerationRequest request )
     {
-        boolean configured = true;
-
-        Iterator requiredProperties = archetypeDescriptor.getRequiredProperties().iterator();
-
-        while ( configured && requiredProperties.hasNext() )
+        for ( RequiredProperty requiredProperty : archetypeDescriptor.getRequiredProperties() )
         {
-            RequiredProperty requiredProperty = (RequiredProperty) requiredProperties.next();
-
-            configured =
-                configured && StringUtils.isNotEmpty( request.getProperties().getProperty( requiredProperty.getKey() ) );
+            if ( StringUtils.isEmpty( request.getProperties().getProperty( requiredProperty.getKey() ) ) )
+            {
+                return false;
+            }
         }
 
-        return configured;
+        return true;
     }
 
     private void setParentArtifactId( Context context, String artifactId )
@@ -439,9 +428,10 @@ public class DefaultFilesetArchetypeGenerator
         return context;
     }
 
-    private void processArchetypeTemplates( AbstractArchetypeDescriptor archetypeDescriptor, List archetypeResources,
-                                            ZipFile archetypeZipFile, String moduleOffset, Context context,
-                                            String packageName, File outputDirectoryFile )
+    private void processArchetypeTemplates( AbstractArchetypeDescriptor archetypeDescriptor,
+                                            List<String> archetypeResources, ZipFile archetypeZipFile,
+                                            String moduleOffset, Context context, String packageName,
+                                            File outputDirectoryFile )
         throws OutputFileExists, ArchetypeGenerationFailure, FileNotFoundException, IOException
     {
         processTemplates( packageName, outputDirectoryFile, context, archetypeDescriptor, archetypeResources,
@@ -450,7 +440,7 @@ public class DefaultFilesetArchetypeGenerator
 
     private void processArchetypeTemplatesWithWarning(
                                                        org.apache.maven.archetype.metadata.ArchetypeDescriptor archetypeDescriptor,
-                                                       List archetypeResources, ZipFile archetypeZipFile,
+                                                       List<String> archetypeResources, ZipFile archetypeZipFile,
                                                        String moduleOffset, Context context, String packageName,
                                                        File outputDirectoryFile )
         throws OutputFileExists, ArchetypeGenerationFailure, FileNotFoundException, IOException
@@ -459,15 +449,13 @@ public class DefaultFilesetArchetypeGenerator
                           archetypeZipFile, moduleOffset, true );
     }
 
-    private void processFileSet( String directory, List fileSetResources, boolean packaged, String packageName,
+    private void processFileSet( String directory, List<String> fileSetResources, boolean packaged, String packageName,
                                  Context context, File outputDirectoryFile, String moduleOffset,
                                  String archetypeEncoding, boolean failIfExists )
         throws OutputFileExists, ArchetypeGenerationFailure
     {
-        for ( Iterator iterator = fileSetResources.iterator(); iterator.hasNext(); )
+        for ( String template : fileSetResources )
         {
-            String template = (String) iterator.next();
-
             File outputFile =
                 getOutputFile( template, directory, outputDirectoryFile, packaged, packageName, moduleOffset, context );
 
@@ -476,7 +464,7 @@ public class DefaultFilesetArchetypeGenerator
         }
     }
 
-    private void processFilesetModule( String rootArtifactId, String artifactId, final List archetypeResources,
+    private void processFilesetModule( String rootArtifactId, String artifactId, final List<String> archetypeResources,
                                        File pom, final ZipFile archetypeZipFile, String moduleOffset, File basedirPom,
                                        File outputDirectoryFile, final String packageName,
                                        final AbstractArchetypeDescriptor archetypeDescriptor, final Context context )
@@ -497,7 +485,7 @@ public class DefaultFilesetArchetypeGenerator
 
         String parentArtifactId = (String) context.get( Constants.PARENT_ARTIFACT_ID );
 
-        Iterator subprojects = archetypeDescriptor.getModules().iterator();
+        Iterator<ModuleDescriptor> subprojects = archetypeDescriptor.getModules().iterator();
 
         if ( subprojects.hasNext() )
         {
@@ -508,7 +496,7 @@ public class DefaultFilesetArchetypeGenerator
 
         while ( subprojects.hasNext() )
         {
-            ModuleDescriptor project = (ModuleDescriptor) subprojects.next();
+            ModuleDescriptor project = subprojects.next();
 
             artifactId = project.getId();
 
@@ -534,9 +522,9 @@ public class DefaultFilesetArchetypeGenerator
     }
 
     private void processFilesetProject( final AbstractArchetypeDescriptor archetypeDescriptor, final String moduleId,
-                                        final List archetypeResources, final File pom, final ZipFile archetypeZipFile,
-                                        String moduleOffset, final Context context, final String packageName,
-                                        final File outputDirectoryFile, final File basedirPom )
+                                        final List<String> archetypeResources, final File pom,
+                                        final ZipFile archetypeZipFile, String moduleOffset, final Context context,
+                                        final String packageName, final File outputDirectoryFile, final File basedirPom )
         throws DocumentException, XmlPullParserException, ArchetypeGenerationFailure, InvalidPackaging, IOException,
         FileNotFoundException, OutputFileExists
     {
@@ -666,11 +654,11 @@ public class DefaultFilesetArchetypeGenerator
     }
 
     private void processTemplates( String packageName, File outputDirectoryFile, Context context,
-                                   AbstractArchetypeDescriptor archetypeDescriptor, List archetypeResources,
+                                   AbstractArchetypeDescriptor archetypeDescriptor, List<String> archetypeResources,
                                    ZipFile archetypeZipFile, String moduleOffset, boolean failIfExists )
         throws OutputFileExists, ArchetypeGenerationFailure, FileNotFoundException, IOException
     {
-        Iterator iterator = archetypeDescriptor.getFileSets().iterator();
+        Iterator<FileSet> iterator = archetypeDescriptor.getFileSets().iterator();
         if ( iterator.hasNext() )
         {
             getLogger().debug( "Processing filesets" );
@@ -678,9 +666,10 @@ public class DefaultFilesetArchetypeGenerator
 
         while ( iterator.hasNext() )
         {
-            FileSet fileSet = (FileSet) iterator.next();
+            FileSet fileSet = iterator.next();
 
-            List fileSetResources = archetypeFilesResolver.filterFiles( moduleOffset, fileSet, archetypeResources );
+            List<String> fileSetResources =
+                archetypeFilesResolver.filterFiles( moduleOffset, fileSet, archetypeResources );
 
             // This creates an empty directory, even if there is no file to process
             // Fix for ARCHETYPE-57

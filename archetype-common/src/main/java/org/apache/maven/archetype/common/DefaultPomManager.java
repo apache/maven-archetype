@@ -108,9 +108,9 @@ public class DefaultPomManager
                 project.addText( "\n" );
             }
             // TODO: change to while loop
-            for ( Iterator i = modules.elementIterator( "module" ); i.hasNext() && !found; )
+            for ( Iterator<Element> i = modules.elementIterator( "module" ); i.hasNext() && !found; )
             {
-                Element module = (Element) i.next();
+                Element module = i.next();
                 if ( module.getText().equals( artifactId ) )
                 {
                     found = true;
@@ -119,9 +119,9 @@ public class DefaultPomManager
             if ( !found )
             {
                 Node lastTextNode = null;
-                for ( Iterator i = modules.nodeIterator(); i.hasNext(); )
+                for ( Iterator<Node> i = modules.nodeIterator(); i.hasNext(); )
                 {
-                    Node node = (Node) i.next();
+                    Node node = i.next();
                     if ( node.getNodeType() == Node.ELEMENT_NODE )
                     {
                         lastTextNode = null;
@@ -347,18 +347,12 @@ public class DefaultPomManager
         }
     }
 
-    private Map createDependencyMap( List dependencies )
+    private Map<String, Dependency> createDependencyMap( List<Dependency> dependencies )
     {
-        Map dependencyMap = new HashMap();
-        Iterator dependenciesIterator = dependencies.iterator();
-        while ( dependenciesIterator.hasNext() )
+        Map<String, Dependency> dependencyMap = new HashMap<String, Dependency>();
+        for ( Dependency dependency : dependencies )
         {
-            Dependency dependency = (Dependency) dependenciesIterator.next();
-
-            dependencyMap.put(
-                dependency.getManagementKey(),
-                dependency
-            );
+            dependencyMap.put( dependency.getManagementKey(), dependency );
         }
 
         return dependencyMap;
@@ -379,31 +373,27 @@ public class DefaultPomManager
 
     private void mergeProfiles( Model model, Model generatedModel )
     {
-        List generatedProfiles = generatedModel.getProfiles();
+        List<Profile> generatedProfiles = generatedModel.getProfiles();
         if ( generatedProfiles != null && generatedProfiles.size() > 0 )
         {
-            List modelProfiles = model.getProfiles();
-            Map modelProfileIdMap = new HashMap();
+            List<Profile> modelProfiles = model.getProfiles();
+            Map<String,Profile> modelProfileIdMap = new HashMap<String,Profile>();
             if ( modelProfiles == null )
             {
-                modelProfiles = new ArrayList();
+                modelProfiles = new ArrayList<Profile>();
                 model.setProfiles( modelProfiles );
             }
             else if ( modelProfiles.size() > 0 )
             {
                 // add profile ids from the model for later lookups to the modelProfileIds set
-                Iterator modelProfilesIterator = modelProfiles.iterator();
-                while ( modelProfilesIterator.hasNext() )
+                for ( Profile modelProfile : modelProfiles )
                 {
-                    Profile modelProfile = (Profile) modelProfilesIterator.next();
                     modelProfileIdMap.put( modelProfile.getId(), modelProfile );
                 }
             }
 
-            Iterator generatedProfilesIterator = generatedProfiles.iterator();
-            while ( generatedProfilesIterator.hasNext() )
+            for ( Profile generatedProfile : generatedProfiles )
             {
-                Profile generatedProfile = (Profile) generatedProfilesIterator.next();
                 String generatedProfileId = generatedProfile.getId();
                 if ( !modelProfileIdMap.containsKey( generatedProfileId ) )
                 {
@@ -436,19 +426,14 @@ public class DefaultPomManager
     {
         // ModelBase can be a Model or a Profile...
 
-        Map dependenciesByIds = createDependencyMap( model.getDependencies() );
-        Map generatedDependenciesByIds = createDependencyMap( generatedModel.getDependencies() );
+        Map<String, Dependency> dependenciesByIds = createDependencyMap( model.getDependencies() );
+        Map<String, Dependency> generatedDependenciesByIds = createDependencyMap( generatedModel.getDependencies() );
 
-        Iterator generatedDependencyIds = generatedDependenciesByIds.keySet().iterator();
-        while ( generatedDependencyIds.hasNext() )
+        for ( String generatedDependencyId : generatedDependenciesByIds.keySet() )
         {
-            String generatedDependencyId = (String) generatedDependencyIds.next();
-
             if ( !dependenciesByIds.containsKey( generatedDependencyId ) )
             {
-                model.addDependency(
-                    (Dependency) generatedDependenciesByIds.get( generatedDependencyId )
-                );
+                model.addDependency( (Dependency) generatedDependenciesByIds.get( generatedDependencyId ) );
             }
             else
             {
@@ -471,20 +456,15 @@ public class DefaultPomManager
                 model.setReporting( new Reporting() );
             }
 
-            Map reportPluginsByIds = model.getReporting().getReportPluginsAsMap();
-            Map generatedReportPluginsByIds =
+            Map<String, ReportPlugin> reportPluginsByIds = model.getReporting().getReportPluginsAsMap();
+            Map<String, ReportPlugin> generatedReportPluginsByIds =
                 generatedModel.getReporting().getReportPluginsAsMap();
 
-            Iterator generatedReportPluginsIds = generatedReportPluginsByIds.keySet().iterator();
-            while ( generatedReportPluginsIds.hasNext() )
+            for ( String generatedReportPluginsId : generatedReportPluginsByIds.keySet() )
             {
-                String generatedReportPluginsId = (String) generatedReportPluginsIds.next();
-
                 if ( !reportPluginsByIds.containsKey( generatedReportPluginsId ) )
                 {
-                    model.getReporting().addPlugin(
-                        (ReportPlugin) generatedReportPluginsByIds.get( generatedReportPluginsId )
-                    );
+                    model.getReporting().addPlugin( generatedReportPluginsByIds.get( generatedReportPluginsId ) );
                 }
                 else
                 {
@@ -496,13 +476,11 @@ public class DefaultPomManager
 
     private void mergeBuildPlugins( BuildBase modelBuild, BuildBase generatedModelBuild )
     {
-        Map pluginsByIds = modelBuild.getPluginsAsMap();
-        List generatedPlugins = generatedModelBuild.getPlugins();
+        Map<String, Plugin> pluginsByIds = modelBuild.getPluginsAsMap();
+        List<Plugin> generatedPlugins = generatedModelBuild.getPlugins();
 
-        Iterator generatedPluginsIterator = generatedPlugins.iterator();
-        while ( generatedPluginsIterator.hasNext() )
+        for ( Plugin generatedPlugin : generatedPlugins )
         {
-            Plugin generatedPlugin = (Plugin) generatedPluginsIterator.next();
             String generatedPluginsId = generatedPlugin.getKey();
 
             if ( !pluginsByIds.containsKey( generatedPluginsId ) )

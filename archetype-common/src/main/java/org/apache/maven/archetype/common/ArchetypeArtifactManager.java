@@ -43,7 +43,7 @@ public interface ArchetypeArtifactManager
      */
     File getArchetypeFile( String groupId, String artifactId, String version,
                            ArtifactRepository archetypeRepository, ArtifactRepository localRepository,
-                           List repositories )
+                           List<ArtifactRepository> repositories )
         throws UnknownArchetype;
 
     /**
@@ -64,7 +64,7 @@ public interface ArchetypeArtifactManager
      */
     boolean isFileSetArchetype( String groupId, String artifactId, String version,
                                 ArtifactRepository archetypeRepository, ArtifactRepository localRepository,
-                                List repositories );
+                                List<ArtifactRepository> repositories );
 
     /**
      */
@@ -73,12 +73,13 @@ public interface ArchetypeArtifactManager
     /**
      */
     boolean isOldArchetype( String groupId, String artifactId, String version, ArtifactRepository archetypeRepository,
-                            ArtifactRepository localRepository, List repositories );
+                            ArtifactRepository localRepository, List<ArtifactRepository> repositories );
 
     /**
      */
     boolean exists( String archetypeGroupId, String archetypeArtifactId, String archetypeVersion,
-                    ArtifactRepository archetypeRepository, ArtifactRepository localRepository, List repos );
+                    ArtifactRepository archetypeRepository, ArtifactRepository localRepository,
+                    List<ArtifactRepository> repos );
 
     /**
      */
@@ -89,12 +90,13 @@ public interface ArchetypeArtifactManager
      */
     ArchetypeDescriptor getFileSetArchetypeDescriptor( String groupId, String artifactId, String version,
                                                        ArtifactRepository archetypeRepository,
-                                                       ArtifactRepository localRepository, List repositories )
+                                                       ArtifactRepository localRepository,
+                                                       List<ArtifactRepository> repositories )
         throws UnknownArchetype;
 
     /**
      */
-    List getFilesetArchetypeResources( File archetypeFile )
+    List<String> getFilesetArchetypeResources( File archetypeFile )
         throws UnknownArchetype;
 
     /**
@@ -105,7 +107,7 @@ public interface ArchetypeArtifactManager
     /**
      */
     org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor getOldArchetypeDescriptor(
-            String groupId, String artifactId, String version,
-            ArtifactRepository archetypeRepository, ArtifactRepository localRepository, List repositories )
+            String groupId, String artifactId, String version, ArtifactRepository archetypeRepository,
+            ArtifactRepository localRepository, List<ArtifactRepository> repositories )
         throws UnknownArchetype;
 }

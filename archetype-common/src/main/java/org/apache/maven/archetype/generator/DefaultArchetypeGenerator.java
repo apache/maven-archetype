@@ -70,7 +70,7 @@ public class DefaultArchetypeGenerator
             throw new ArchetypeNotDefined( "The archetype is not defined" );
         }
 
-        List repos = new ArrayList/* repositories */();
+        List<ArtifactRepository> repos = new ArrayList<ArtifactRepository>();
 
         ArtifactRepository remoteRepo = null;
         if ( request != null && request.getArchetypeRepository() != null )

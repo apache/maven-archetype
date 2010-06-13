@@ -59,7 +59,8 @@ public class DefaultArchetypeCreationConfigurator
     private ArchetypeFilesResolver archetypeFilesResolver;
 
     public Properties configureArchetypeCreation( MavenProject project, Boolean interactiveMode,
-                                                  Properties commandLineProperties, File propertyFile, List languages )
+                                                  Properties commandLineProperties, File propertyFile,
+                                                  List<String> languages )
         throws IOException, ArchetypeNotDefined, ArchetypeNotConfigured, PrompterException, TemplateCreationException
     {
         Properties properties = initialiseArchetypeProperties( commandLineProperties, propertyFile );
@@ -348,7 +349,7 @@ public class DefaultArchetypeCreationConfigurator
 
     private Properties removeDottedProperties( Properties properties )
     {
-        List toRemove = new ArrayList( 0 );
+        List<String> toRemove = new ArrayList<String>( 0 );
 
         for ( Iterator keys = properties.keySet().iterator(); keys.hasNext(); )
         {
@@ -359,10 +360,8 @@ public class DefaultArchetypeCreationConfigurator
             }
         }
 
-        for ( Iterator keysToRemove = toRemove.iterator(); keysToRemove.hasNext(); )
+        for ( String key : toRemove )
         {
-            String key = (String) keysToRemove.next();
-
             properties.remove( key );
         }
         return properties;

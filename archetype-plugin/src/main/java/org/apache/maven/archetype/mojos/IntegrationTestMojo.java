@@ -36,7 +36,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -83,15 +82,11 @@ public class IntegrationTestMojo
                 {
                     File archetypeFile = project.getArtifact().getFile();
 
-                    List projectsGoalFiles = FileUtils.getFiles( projectsDirectory, "*/goal.txt", "" );
-
-                    Iterator goalFiles = projectsGoalFiles.iterator();
+                    List<File> projectsGoalFiles = FileUtils.getFiles( projectsDirectory, "*/goal.txt", "" );
 
                     StringWriter errorWriter = new StringWriter();
-                    while ( goalFiles.hasNext() )
+                    for ( File goalFile : projectsGoalFiles )
                     {
-                        File goalFile = (File) goalFiles.next();
-
                         try
                         {
                             processIntegrationTest( goalFile, archetypeFile );
@@ -122,17 +117,15 @@ public class IntegrationTestMojo
     private void assertTest( File reference, File basedir )
         throws IntegrationTestFailure, IOException
     {
-        List referenceFiles = FileUtils.getFileNames( reference, "**", null, false );
-        List projectFiles = FileUtils.getFileNames( basedir, "**", null, false );
+        List<String> referenceFiles = FileUtils.getFileNames( reference, "**", null, false );
+        List<String> projectFiles = FileUtils.getFileNames( basedir, "**", null, false );
 
         boolean fileNamesEquals = CollectionUtils.isEqualCollection( referenceFiles, projectFiles );
 
         if ( !fileNamesEquals )
         {
-            for ( Iterator refs = referenceFiles.iterator(); refs.hasNext(); )
+            for ( String ref : referenceFiles )
             {
-                String ref = (String) refs.next();
-
                 if ( projectFiles.contains( ref ) )
                 {
                     projectFiles.remove( ref );
@@ -150,10 +143,8 @@ public class IntegrationTestMojo
 
         boolean contentEquals = true;
 
-        for ( Iterator files = referenceFiles.iterator(); files.hasNext(); )
+        for ( String file : referenceFiles )
         {
-            String file = (String) files.next();
-
             if ( file.endsWith( "pom.xml" ) )
             {
                 if ( !modelEquals( new File( reference, file ), new File( basedir, file ) ) )
