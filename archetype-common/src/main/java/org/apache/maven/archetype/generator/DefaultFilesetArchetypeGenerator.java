@@ -49,6 +49,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -264,11 +265,23 @@ public class DefaultFilesetArchetypeGenerator
             ZipEntry input =
                 archetypeZipFile.getEntry( Constants.ARCHETYPE_RESOURCES + "/" + template );
 
-            InputStream inputStream = archetypeZipFile.getInputStream( input );
+            InputStream inputStream = null;
+            OutputStream out = null;
+            try
+            {
+                inputStream = archetypeZipFile.getInputStream( input );
 
-            outFile.getParentFile().mkdirs();
+                outFile.getParentFile().mkdirs();
 
-            IOUtil.copy( inputStream, new FileOutputStream( outFile ) );
+                out = new FileOutputStream( outFile );
+
+                IOUtil.copy( inputStream, out );
+            }
+            finally
+            {
+                IOUtil.close( inputStream );
+                IOUtil.close( out );
+            }
         }
     }
 
