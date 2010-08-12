@@ -205,7 +205,7 @@ under the License.
         </plugin>
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.3</version><!--With 2.4 2.4.1 2.4.2 2.4.3 test with proxy fails-->
+          <version>2.6</version><!--With 2.4 2.4.1 2.4.2 2.4.3 test with proxy fails-->
         </plugin>
         <plugin>
           <artifactId>maven-resources-plugin</artifactId>
