@@ -466,7 +466,7 @@ public class DefaultArchetypeArtifactManager
 
         try
         {
-            return archetypeReader.read( reader, true );
+            return archetypeReader.read( reader, false );
         }
         catch ( IOException e )
         {
