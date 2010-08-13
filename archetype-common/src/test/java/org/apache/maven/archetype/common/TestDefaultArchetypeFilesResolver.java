@@ -41,7 +41,7 @@ public class TestDefaultArchetypeFilesResolver
         fileSet.setPackaged( true );
         fileSet.setFiltered( true );
 
-        List archetypeResources = new ArrayList();
+        List<String> archetypeResources = new ArrayList<String>();
 
         archetypeResources.add( "pom.xml" );
         archetypeResources.add( "App.java" );
@@ -61,7 +61,7 @@ public class TestDefaultArchetypeFilesResolver
 
         ArchetypeFilesResolver resolver = new DefaultArchetypeFilesResolver();
 
-        List fileSetResources = resolver.filterFiles( "", fileSet, archetypeResources );
+        List<String> fileSetResources = resolver.filterFiles( "", fileSet, archetypeResources );
 
         System.out.println( "Result:" + fileSetResources );
 

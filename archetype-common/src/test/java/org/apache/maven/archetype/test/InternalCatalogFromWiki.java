@@ -40,7 +40,6 @@ import org.codehaus.plexus.util.WriterFactory;
 import java.io.File;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -73,10 +72,8 @@ public class InternalCatalogFromWiki
         // fetch and parse Wiki page content
         ArchetypeCatalog ac = ads.getArchetypeCatalog( new Properties() );
 
-        for ( Iterator archetypes = ac.getArchetypes().iterator(); archetypes.hasNext(); )
+        for ( Archetype archetype : ac.getArchetypes() )
         {
-            Archetype archetype = (Archetype) archetypes.next();
-
             if ( "".equals( archetype.getRepository() )
                 || ( archetype.getRepository() != null && archetype.getRepository().indexOf( CENTRAL.substring( 7 ) ) >= 0 ) )
             {
@@ -86,9 +83,8 @@ public class InternalCatalogFromWiki
 
         System.out.println( "found " + ac.getArchetypes().size() + " archetypes on http://docs.codehaus.org/display/MAVENUSER/Archetypes+List" );
 
-        for ( Iterator archetypes = ac.getArchetypes().iterator(); archetypes.hasNext(); )
+        for ( Archetype archetype : ac.getArchetypes() )
         {
-            Archetype archetype = (Archetype) archetypes.next();
             System.out.println( "  " + archetype );
         }
 
@@ -115,17 +111,15 @@ public class InternalCatalogFromWiki
             arm.createRepository( archetype.getRepository(), archetype.getRepository() + "-repo" );
 
         if ( aam.isFileSetArchetype( archetype.getGroupId(), archetype.getArtifactId(), archetype.getVersion(),
-                                     repository, localRepository, new ArrayList( /* repositories */) ) )
+                                     repository, localRepository, new ArrayList<ArtifactRepository>() ) )
         {
             ArchetypeDescriptor descriptor =
                 aam.getFileSetArchetypeDescriptor( archetype.getGroupId(), archetype.getArtifactId(),
                                                    archetype.getVersion(), repository, localRepository,
-                                                   new ArrayList( /* repositories */) );
+                                                   new ArrayList<ArtifactRepository>() );
 
-            for ( Iterator required = descriptor.getRequiredProperties().iterator(); required.hasNext(); )
+            for ( RequiredProperty prop : descriptor.getRequiredProperties() )
             {
-                RequiredProperty prop = (RequiredProperty) required.next();
-
                 properties.setProperty( prop.getKey(), prop.getDefaultValue() != null
                     && !"".equals( prop.getDefaultValue() ) ? prop.getDefaultValue() : "test-value" );
             }
@@ -143,16 +137,15 @@ public class InternalCatalogFromWiki
 
         System.out.println( "Testing archetypes to " + outputDirectory.getPath() );
 
-        List validArchetypes = new ArrayList();
+        List<Archetype> validArchetypes = new ArrayList<Archetype>();
 
         int count = 1;
 
-        List errors = new ArrayList();
-        List warnings = new ArrayList();
+        List<String> errors = new ArrayList<String>();
+        List<String> warnings = new ArrayList<String>();
 
-        for ( Iterator archetypes = ac.getArchetypes().iterator(); archetypes.hasNext(); )
+        for ( Archetype a : ac.getArchetypes() )
         {
-            Archetype a = (Archetype) archetypes.next();
             Archetype ar = new Archetype();
 
             ar.setGroupId( a.getGroupId() );
@@ -235,9 +228,9 @@ public class InternalCatalogFromWiki
         {
             System.err.println();
             System.err.println( "Warnings: " );
-            for ( Iterator iterator = warnings.iterator(); iterator.hasNext(); )
+            for ( String warning : warnings )
             {
-                System.err.println( "  " + iterator.next() );
+                System.err.println( "  " + warning );
             }
         }
 
@@ -252,20 +245,19 @@ public class InternalCatalogFromWiki
             System.err.println( "Removed " + ( ac.getArchetypes().size() - fac.getArchetypes().size() )
                 + " archetype(s) from Wiki page:" );
 
-            List removedArchetypes = new ArrayList( ac.getArchetypes() );
+            List<Archetype> removedArchetypes = new ArrayList<Archetype>( ac.getArchetypes() );
             removedArchetypes.removeAll( validArchetypes );
 
-            for ( Iterator archetypes = removedArchetypes.iterator(); archetypes.hasNext(); )
+            for ( Archetype archetype : removedArchetypes )
             {
-                Archetype archetype = (Archetype) archetypes.next();
                 System.err.println( "  " + archetype );
             }
 
             System.err.println();
             System.err.println( "Got " + errors.size() + " error message(s): " );
-            for ( Iterator iterator = errors.iterator(); iterator.hasNext(); )
+            for ( String error : errors )
             {
-                System.err.println( "  " + iterator.next() );
+                System.err.println( "  " + error );
             }
         }
     }

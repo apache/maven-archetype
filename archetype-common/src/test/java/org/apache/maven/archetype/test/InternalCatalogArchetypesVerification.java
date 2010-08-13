@@ -22,7 +22,6 @@ package org.apache.maven.archetype.test;
 import java.io.File;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
@@ -58,13 +57,11 @@ public class InternalCatalogArchetypesVerification
 
         ArchetypeCatalog result = archetype.getInternalCatalog();
 
-        List archetypesUsed = new ArrayList();
-        List archetypesRemoved = new ArrayList();
-        Iterator archetypes = result.getArchetypes().iterator();
+        List<Archetype> archetypesUsed = new ArrayList<Archetype>();
+        List<Archetype> archetypesRemoved = new ArrayList<Archetype>();
         int count = 1;
-        while ( archetypes.hasNext() )
+        for ( Archetype a : result.getArchetypes() )
         {
-            Archetype a = (Archetype) archetypes.next();
             Archetype ar = new Archetype();
 
             ar.setGroupId( a.getGroupId() );

@@ -30,7 +30,7 @@ public class TestListScanner
 {
     public void testUnixPaths()
     {
-        List archetypeResources = new ArrayList();
+        List<String> archetypeResources = new ArrayList<String>();
 
         archetypeResources.add( "pom.xml" );
         archetypeResources.add( "App.java" );
@@ -50,7 +50,7 @@ public class TestListScanner
         scanner.setIncludes( "**/*.java" );
         scanner.setCaseSensitive( true );
 
-        List result = scanner.scan( archetypeResources );
+        List<String> result = scanner.scan( archetypeResources );
 
         assertEquals( 2, result.size() );
         assertTrue( result.contains( "src/main/java/App.java" ) );
@@ -59,7 +59,7 @@ public class TestListScanner
 
     public void testWindowsPaths()
     {
-        List archetypeResources = new ArrayList();
+        List<String> archetypeResources = new ArrayList<String>();
 
         archetypeResources.add( "pom.xml" );
         archetypeResources.add( "App.java" );
@@ -79,7 +79,7 @@ public class TestListScanner
         scanner.setIncludes( "**\\*.java" );
         scanner.setCaseSensitive( true );
 
-        List result = scanner.scan( archetypeResources );
+        List<String> result = scanner.scan( archetypeResources );
 
         assertEquals( 2, result.size() );
         assertTrue( result.contains( "src\\main\\java\\App.java" ) );
