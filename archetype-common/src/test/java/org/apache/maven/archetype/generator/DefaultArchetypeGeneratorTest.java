@@ -49,9 +49,37 @@ public class DefaultArchetypeGeneratorTest
 
     String remoteRepository;
 
-    ArchetypeGenerator instance;
+    ArchetypeGenerator generator;
 
     String outputDirectory;
+
+    private void generateProjectFromArchetype( ArchetypeGenerationRequest request )
+        throws Exception
+    {
+        ArchetypeGenerationResult result = new ArchetypeGenerationResult();
+
+        generator.generateArchetype( request, result );
+
+        if ( result.getCause() != null )
+        {
+            throw result.getCause();
+        }
+    }
+
+    private ArchetypeGenerationResult generateProjectFromArchetypeWithFailure( ArchetypeGenerationRequest request )
+        throws Exception
+    {
+        ArchetypeGenerationResult result = new ArchetypeGenerationResult();
+
+        generator.generateArchetype( request, result );
+
+        if ( result.getCause() == null )
+        {
+            fail( "Exception must be thrown." );
+        }
+
+        return result;
+    }
 
     public void testArchetypeNotDefined()
         throws Exception
@@ -59,14 +87,9 @@ public class DefaultArchetypeGeneratorTest
         System.out.println( "testArchetypeNotDefined" );
 
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest( "generate-2", "archetypes", null, "1.0" );
-        ArchetypeGenerationResult result = new ArchetypeGenerationResult();
 
-        instance.generateArchetype( request, result );
+        ArchetypeGenerationResult result = generateProjectFromArchetypeWithFailure( request );
 
-        if ( result.getCause() == null )
-        {
-            fail( "Exception must be thrown" );
-        }
         assertEquals( "Exception not correct", "The archetype is not defined", result.getCause().getMessage() );
     }
 
@@ -96,15 +119,7 @@ public class DefaultArchetypeGeneratorTest
         File projectDirectory = new File( outputDirectory, "file-value" );
         assertDeleted( projectDirectory );
 
-        ArchetypeGenerationResult result = new ArchetypeGenerationResult();
-
-        instance.generateArchetype( request, result );
-
-        if ( result.getCause() != null )
-        {
-            result.getCause().printStackTrace();
-            fail( "No exception may be thrown: " + result.getCause().getMessage() );
-        }
+        generateProjectFromArchetype( request );
 
         assertTemplateContent( projectDirectory, "src/main/java/file/value/package/App.java" );
         assertTemplateContent( projectDirectory, "src/main/java/file/value/package/inner/package/App2.java" );
@@ -154,13 +169,7 @@ public class DefaultArchetypeGeneratorTest
         File projectDirectory = new File( outputDirectory, "file-value" );
         assertDeleted( projectDirectory );
 
-        ArchetypeGenerationResult result = new ArchetypeGenerationResult();
-
-        instance.generateArchetype( request, result );
-        if ( result.getCause() != null )
-        {
-            fail( "No exception may be thrown: " + result.getCause().getMessage() );
-        }
+        generateProjectFromArchetype( request );
 
         Model model = readPom( new File( projectDirectory, "pom.xml" ) );
         assertEquals( "org.apache.maven.archetype", model.getParent().getGroupId() );
@@ -208,14 +217,7 @@ public class DefaultArchetypeGeneratorTest
 
         assertDeleted( new File( projectDirectory, "src" ) );
 
-        ArchetypeGenerationResult result = new ArchetypeGenerationResult();
-
-        instance.generateArchetype( request, result );
-
-        if ( result.getCause() != null )
-        {
-            fail( "No exception may be thrown: " + result.getCause().getMessage() );
-        }
+        generateProjectFromArchetype( request );
 
         Model model = readPom( projectFile );
         assertNotNull( model.getParent() );
@@ -258,12 +260,7 @@ public class DefaultArchetypeGeneratorTest
 
         assertDeleted( new File( projectDirectory, "src" ) );
 
-        ArchetypeGenerationResult result = new ArchetypeGenerationResult();
-        instance.generateArchetype( request, result );
-        if ( result.getCause() != null )
-        {
-            fail( "No exception may be thrown: " + result.getCause().getMessage() );
-        }
+        generateProjectFromArchetype( request );
 
         Model model = readPom( projectFile );
         assertNotNull( model.getParent() );
@@ -308,13 +305,7 @@ public class DefaultArchetypeGeneratorTest
 
         assertDeleted( new File( outputDirectory, "src" ) );
 
-        ArchetypeGenerationResult result = new ArchetypeGenerationResult();
-
-        instance.generateArchetype( request, result );
-        if ( result.getCause() != null )
-        {
-            fail( "No exception may be thrown: " + result.getCause().getMessage() );
-        }
+        generateProjectFromArchetype( request );
 
         Model model = readPom( getProjectFile() );
         assertNull( model.getParent() );
@@ -342,13 +333,7 @@ public class DefaultArchetypeGeneratorTest
 
         assertDeleted( projectDirectory );
 
-        ArchetypeGenerationResult result = new ArchetypeGenerationResult();
-
-        instance.generateArchetype( request, result );
-        if ( result.getCause() != null )
-        {
-            fail( "No exception may be thrown: " + result.getCause().getMessage() );
-        }
+        generateProjectFromArchetype( request );
 
         Model model = readPom( projectFile );
         assertNull( model.getParent() );
@@ -385,13 +370,7 @@ public class DefaultArchetypeGeneratorTest
 
         assertDeleted( projectDirectory );
 
-        ArchetypeGenerationResult result = new ArchetypeGenerationResult();
-
-        instance.generateArchetype( request, result );
-        if ( result.getCause() != null )
-        {
-            fail( "No exception may be thrown: " + result.getCause().getMessage() );
-        }
+        generateProjectFromArchetype( request );
 
         assertTemplateContent( projectDirectory, "src/site/site.xml" );
         assertTemplateContent( projectDirectory, "src/site/apt/test.apt" );
@@ -431,14 +410,7 @@ public class DefaultArchetypeGeneratorTest
 
         assertDeleted( projectDirectory );
 
-        ArchetypeGenerationResult result = new ArchetypeGenerationResult();
-
-        instance.generateArchetype( request, result );
-        if ( result.getCause() != null )
-        {
-            result.getCause().printStackTrace( System.err );
-            fail( "No exception may be thrown: " + result.getCause().getMessage() );
-        }
+        generateProjectFromArchetype( request );
 
         assertTemplateContentGeneratedWithFileSetArchetype( projectDirectory,
                                                             "src/main/java/file/value/package/App.java", "file-value" );
@@ -530,14 +502,7 @@ public class DefaultArchetypeGeneratorTest
 
         assertDeleted( projectDirectory );
 
-        ArchetypeGenerationResult result = new ArchetypeGenerationResult();
-
-        instance.generateArchetype( request, result );
-        if ( result.getCause() != null )
-        {
-            result.getCause().printStackTrace( System.err );
-            fail( "No exception may be thrown: " + result.getCause().getMessage() );
-        }
+        generateProjectFromArchetype( request );
 
         assertTemplateContentGeneratedWithOldArchetype( projectDirectory, "src/main/java/file/value/package/App.java" );
         assertTemplateContentGeneratedWithOldArchetype( projectDirectory, "src/main/resources/App.properties" );
@@ -557,13 +522,7 @@ public class DefaultArchetypeGeneratorTest
 
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest( "generate-3", "archetypes", "basic", "1.0" );
 
-        ArchetypeGenerationResult result = new ArchetypeGenerationResult();
-
-        instance.generateArchetype( request, result );
-        if ( result.getCause() == null )
-        {
-            fail( "No exception may be thrown: " + result.getCause().getMessage() );
-        }
+        ArchetypeGenerationResult result = generateProjectFromArchetypeWithFailure( request );
 
         assertTrue( "Exception not correct",
                     result.getCause().getMessage().startsWith( "Archetype archetypes:basic:1.0 is not configured" )
@@ -590,11 +549,11 @@ public class DefaultArchetypeGeneratorTest
 
         remoteRepository = repositories + "/central";
 
-        instance = (ArchetypeGenerator) lookup( ArchetypeGenerator.ROLE );
-        assertNotNull( instance );
-        assertNotNull( getVariableValueFromObject( instance, "archetypeArtifactManager" ) );
-        assertNotNull( getVariableValueFromObject( instance, "oldArchetype" ) );
-        assertNotNull( getVariableValueFromObject( instance, "filesetGenerator" ) );
+        generator = (ArchetypeGenerator) lookup( ArchetypeGenerator.ROLE );
+        assertNotNull( generator );
+        assertNotNull( getVariableValueFromObject( generator, "archetypeArtifactManager" ) );
+        assertNotNull( getVariableValueFromObject( generator, "oldArchetype" ) );
+        assertNotNull( getVariableValueFromObject( generator, "filesetGenerator" ) );
     }
 
     private ArchetypeGenerationRequest createArchetypeGenerationRequest( String project, String groupId,
