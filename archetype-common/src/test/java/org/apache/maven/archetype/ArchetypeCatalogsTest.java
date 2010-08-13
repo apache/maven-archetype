@@ -1,3 +1,5 @@
+package org.apache.maven.archetype;
+
 /*
  *  Copyright 2007 rafale.
  *
@@ -14,8 +16,6 @@
  *  limitations under the License.
  *  under the License.
  */
-package org.apache.maven.archetype;
-
 
 import java.io.File;
 import java.io.FileWriter;
