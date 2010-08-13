@@ -319,8 +319,10 @@ public class DefaultPomManager
         }
         catch ( JDOMException exc )
         {
-            throw new IOException( "Cannot parse the POM by JDOM while reading " + initialPomFile + ": "
-                + exc.getMessage(), exc );
+            IOException ioe = new IOException( "Cannot parse the POM by JDOM while reading " + initialPomFile + ": "
+                                               + exc.getMessage() );
+            ioe.initCause( exc );
+            throw ioe;
         }
         catch ( FileNotFoundException e )
         {
