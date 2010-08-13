@@ -134,7 +134,7 @@ public class DefaultArchetypeGeneratorTest
         request.setProperties( ADDITIONAL_PROPERTIES );
 
         File projectDirectory = new File( outputDirectory, "file-value" );
-        assertDeleted( projectDirectory );
+        FileUtils.forceDelete( projectDirectory );
 
         generateProjectFromArchetype( request );
 
@@ -175,7 +175,7 @@ public class DefaultArchetypeGeneratorTest
         copy( projectFileSample, projectFile );
 
         File projectDirectory = new File( outputDirectory, "file-value" );
-        assertDeleted( projectDirectory );
+        FileUtils.forceDelete( projectDirectory );
 
         generateProjectFromArchetype( request );
 
@@ -214,7 +214,7 @@ public class DefaultArchetypeGeneratorTest
         File projectFileSample = new File( projectDirectory, "pom.xml.sample" );
         copy( projectFileSample, projectFile );
 
-        assertDeleted( new File( projectDirectory, "src" ) );
+        FileUtils.forceDelete( new File( projectDirectory, "src" ) );
 
         generateProjectFromArchetype( request );
 
@@ -248,7 +248,7 @@ public class DefaultArchetypeGeneratorTest
         File projectFileSample = new File( projectDirectory, "pom.xml.sample" );
         copy( projectFileSample, projectFile );
 
-        assertDeleted( new File( projectDirectory, "src" ) );
+        FileUtils.forceDelete( new File( projectDirectory, "src" ) );
 
         generateProjectFromArchetype( request );
 
@@ -284,7 +284,7 @@ public class DefaultArchetypeGeneratorTest
         File projectFileSample = new File( outputDirectory, "pom.xml.sample" );
         copy( projectFileSample, projectFile );
 
-        assertDeleted( new File( outputDirectory, "src" ) );
+        FileUtils.forceDelete( new File( outputDirectory, "src" ) );
 
         generateProjectFromArchetype( request );
 
@@ -312,7 +312,7 @@ public class DefaultArchetypeGeneratorTest
         File projectDirectory = new File( outputDirectory, "file-value" );
         File projectFile = new File( projectDirectory, "pom.xml" );
 
-        assertDeleted( projectDirectory );
+        FileUtils.forceDelete( projectDirectory );
 
         generateProjectFromArchetype( request );
 
@@ -340,7 +340,7 @@ public class DefaultArchetypeGeneratorTest
         File projectDirectory = new File( outputDirectory, "file-value" );
         File projectFile = new File( projectDirectory, "pom.xml" );
 
-        assertDeleted( projectDirectory );
+        FileUtils.forceDelete( projectDirectory );
 
         generateProjectFromArchetype( request );
 
@@ -371,7 +371,7 @@ public class DefaultArchetypeGeneratorTest
         File projectDirectory = new File( outputDirectory, "file-value" );
         File projectFile = new File( projectDirectory, "pom.xml" );
 
-        assertDeleted( projectDirectory );
+        FileUtils.forceDelete( projectDirectory );
 
         generateProjectFromArchetype( request );
 
@@ -463,7 +463,7 @@ public class DefaultArchetypeGeneratorTest
         File projectDirectory = new File( outputDirectory, "file-value" );
         File projectFile = new File( projectDirectory, "pom.xml" );
 
-        assertDeleted( projectDirectory );
+        FileUtils.forceDelete( projectDirectory );
 
         generateProjectFromArchetype( request );
 
@@ -533,47 +533,6 @@ public class DefaultArchetypeGeneratorTest
         request.setArchetypeVersion( archetype.version );
 
         return request;
-    }
-
-    /**
-     * This method attempts to delete a directory or file if it exists. If the file exists after
-     * deletion, it throws a failure.
-     *
-     * @param file to delete.
-     */
-    private void assertDeleted( File file )
-    {
-        if ( file.exists() )
-        {
-            if ( file.isDirectory() )
-            {
-                try
-                {
-                    FileUtils.deleteDirectory( file );
-                }
-                catch ( IOException e )
-                {
-                    fail( "Unable to delete directory:" + file + ":" + e.getLocalizedMessage() );
-                }
-            }
-        }
-        else
-        {
-            try
-            {
-                FileUtils.forceDelete( file );
-            }
-            catch ( IOException e )
-            {
-                fail( "Unable to delete file:" + file + ":" + e.getLocalizedMessage() );
-                e.printStackTrace();
-            }
-        }
-
-        if ( file.exists() )
-        {
-            fail( "File not deleted:" + file );
-        }
     }
 
     private void assertTemplateContent( final File projectDirectory, final String template )
