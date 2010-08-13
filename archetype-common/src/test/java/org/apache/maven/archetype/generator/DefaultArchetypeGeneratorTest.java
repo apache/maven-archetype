@@ -77,6 +77,8 @@ public class DefaultArchetypeGeneratorTest
 
     String outputDirectory;
 
+    File projectDirectory;
+
     private void generateProjectFromArchetype( ArchetypeGenerationRequest request )
         throws Exception
     {
@@ -126,21 +128,20 @@ public class DefaultArchetypeGeneratorTest
 
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest( "generate-4", ARCHETYPE_BASIC );
 
-        File projectDirectory = new File( outputDirectory, "file-value" );
         FileUtils.forceDelete( projectDirectory );
 
         generateProjectFromArchetype( request );
 
-        assertTemplateContent( projectDirectory, "src/main/java/file/value/package/App.java" );
-        assertTemplateContent( projectDirectory, "src/main/java/file/value/package/inner/package/App2.java" );
-        assertTemplateContent( projectDirectory, "src/main/c/file/value/package/App.c" );
-        assertTemplateContent( projectDirectory, "src/test/java/file/value/package/AppTest.java" );
-        assertTemplateContent( projectDirectory, "src/test/c/file/value/package/AppTest.c" );
-        assertTemplateContent( projectDirectory, "src/main/resources/App.properties" );
-        assertTemplateContent( projectDirectory, "src/main/resources/inner/dir/App2.properties" );
-        assertTemplateContent( projectDirectory, "src/main/mdo/App.mdo" );
-        assertTemplateContent( projectDirectory, "src/test/resources/AppTest.properties" );
-        assertTemplateContent( projectDirectory, "src/test/mdo/AppTest.mdo" );
+        assertTemplateContent( "src/main/java/file/value/package/App.java" );
+        assertTemplateContent( "src/main/java/file/value/package/inner/package/App2.java" );
+        assertTemplateContent( "src/main/c/file/value/package/App.c" );
+        assertTemplateContent( "src/test/java/file/value/package/AppTest.java" );
+        assertTemplateContent( "src/test/c/file/value/package/AppTest.c" );
+        assertTemplateContent( "src/main/resources/App.properties" );
+        assertTemplateContent( "src/main/resources/inner/dir/App2.properties" );
+        assertTemplateContent( "src/main/mdo/App.mdo" );
+        assertTemplateContent( "src/test/resources/AppTest.properties" );
+        assertTemplateContent( "src/test/mdo/AppTest.mdo" );
 
         Model model = readPom( new File( projectDirectory, "pom.xml" ) );
         assertNull( model.getParent() );
@@ -156,13 +157,10 @@ public class DefaultArchetypeGeneratorTest
 
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest( "generate-5", ARCHETYPE_BASIC );
 
-        request.setProperties( ADDITIONAL_PROPERTIES );
-
         File projectFile = getProjectFile();
         File projectFileSample = getProjectSampleFile();
         copy( projectFileSample, projectFile );
 
-        File projectDirectory = new File( outputDirectory, "file-value" );
         FileUtils.forceDelete( projectDirectory );
 
         generateProjectFromArchetype( request );
@@ -190,9 +188,6 @@ public class DefaultArchetypeGeneratorTest
         File parentProjectFileSample = getProjectSampleFile();
         copy( parentProjectFileSample, parentProjectFile );
 
-        request.setProperties( ADDITIONAL_PROPERTIES );
-
-        File projectDirectory = new File( outputDirectory, "file-value" );
         File projectFile = new File( projectDirectory, "pom.xml" );
         File projectFileSample = new File( projectDirectory, "pom.xml.sample" );
         copy( projectFileSample, projectFile );
@@ -219,9 +214,6 @@ public class DefaultArchetypeGeneratorTest
 
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest( "generate-9", ARCHETYPE_PARTIAL );
 
-        request.setProperties( ADDITIONAL_PROPERTIES );
-
-        File projectDirectory = new File( outputDirectory, "file-value" );
         File projectFile = new File( projectDirectory, "pom.xml" );
         File projectFileSample = new File( projectDirectory, "pom.xml.sample" );
         copy( projectFileSample, projectFile );
@@ -251,8 +243,6 @@ public class DefaultArchetypeGeneratorTest
 
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest( "generate-7", ARCHETYPE_PARTIAL );
 
-        request.setProperties( ADDITIONAL_PROPERTIES );
-
         File projectFile = new File( outputDirectory, "pom.xml" );
         File projectFileSample = new File( outputDirectory, "pom.xml.sample" );
         copy( projectFileSample, projectFile );
@@ -277,7 +267,6 @@ public class DefaultArchetypeGeneratorTest
 
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest( "generate-6", ARCHETYPE_PARTIAL );
 
-        File projectDirectory = new File( outputDirectory, "file-value" );
         File projectFile = new File( projectDirectory, "pom.xml" );
 
         FileUtils.forceDelete( projectDirectory );
@@ -298,17 +287,14 @@ public class DefaultArchetypeGeneratorTest
 
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest( "generate-10", ARCHETYPE_SITE );
 
-        request.setProperties( ADDITIONAL_PROPERTIES );
-
-        File projectDirectory = new File( outputDirectory, "file-value" );
         File projectFile = new File( projectDirectory, "pom.xml" );
 
         FileUtils.forceDelete( projectDirectory );
 
         generateProjectFromArchetype( request );
 
-        assertTemplateContent( projectDirectory, "src/site/site.xml" );
-        assertTemplateContent( projectDirectory, "src/site/apt/test.apt" );
+        assertTemplateContent( "src/site/site.xml" );
+        assertTemplateContent( "src/site/apt/test.apt" );
 
         Model model = readPom( projectFile );
         assertNull( model.getParent() );
@@ -324,37 +310,30 @@ public class DefaultArchetypeGeneratorTest
 
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest( "generate-12", ARCHETYPE_FILESET );
 
-        request.setProperties( ADDITIONAL_PROPERTIES );
-
-        File projectDirectory = new File( outputDirectory, "file-value" );
         File projectFile = new File( projectDirectory, "pom.xml" );
 
         FileUtils.forceDelete( projectDirectory );
 
         generateProjectFromArchetype( request );
 
-        assertTemplateContentGeneratedWithFileSetArchetype( projectDirectory,
-                                                            "src/main/java/file/value/package/App.java", "file-value" );
-        assertTemplateContentGeneratedWithFileSetArchetype( projectDirectory,
-                                                            "src/main/java/file/value/package/inner/package/App2.java",
+        assertTemplateContentGeneratedWithFileSetArchetype( "src/main/java/file/value/package/App.java", "file-value" );
+        assertTemplateContentGeneratedWithFileSetArchetype( "src/main/java/file/value/package/inner/package/App2.java",
                                                             "file-value" );
 
-        assertTemplateCopiedWithFileSetArchetype( projectDirectory, "src/main/java/file/value/package/App.ogg" );
+        assertTemplateCopiedWithFileSetArchetype( "src/main/java/file/value/package/App.ogg" );
 
-        assertTemplateContentGeneratedWithFileSetArchetype( projectDirectory, "src/main/resources/App.properties",
+        assertTemplateContentGeneratedWithFileSetArchetype( "src/main/resources/App.properties",
                                                             "file-value" );
-        assertTemplateContentGeneratedWithFileSetArchetype( projectDirectory,
-                                                            "src/main/resources/file-value/touch.txt", "file-value" );
-        assertTemplateContentGeneratedWithFileSetArchetype( projectDirectory,
-                                                            "src/main/resources/file-value/touch_root.txt",
+        assertTemplateContentGeneratedWithFileSetArchetype( "src/main/resources/file-value/touch.txt", "file-value" );
+        assertTemplateContentGeneratedWithFileSetArchetype( "src/main/resources/file-value/touch_root.txt",
                                                             "file-value" );
 
-        assertTemplateCopiedWithFileSetArchetype( projectDirectory, "src/main/resources/some-dir/App.png" );
+        assertTemplateCopiedWithFileSetArchetype( "src/main/resources/some-dir/App.png" );
 
-        assertTemplateContentGeneratedWithFileSetArchetype( projectDirectory, "src/site/site.xml", "file-value" );
-        assertTemplateContentGeneratedWithFileSetArchetype( projectDirectory, "src/site/apt/usage.apt", "file-value" );
-        assertTemplateContentGeneratedWithFileSetArchetype( projectDirectory, ".classpath", "file-value" );
-        assertTemplateContentGeneratedWithFileSetArchetype( projectDirectory, "profiles.xml", "file-value" );
+        assertTemplateContentGeneratedWithFileSetArchetype( "src/site/site.xml", "file-value" );
+        assertTemplateContentGeneratedWithFileSetArchetype( "src/site/apt/usage.apt", "file-value" );
+        assertTemplateContentGeneratedWithFileSetArchetype( ".classpath", "file-value" );
+        assertTemplateContentGeneratedWithFileSetArchetype( "profiles.xml", "file-value" );
 
         Model model = readPom( projectFile );
         assertNull( model.getParent() );
@@ -362,8 +341,7 @@ public class DefaultArchetypeGeneratorTest
         assertEquals( "file-value", model.getArtifactId() );
         assertEquals( "file-value", model.getVersion() );
 
-        assertTemplateContentGeneratedWithFileSetArchetype( projectDirectory,
-                                                            "subproject/src/main/java/file/value/package/App.java",
+        assertTemplateContentGeneratedWithFileSetArchetype( "subproject/src/main/java/file/value/package/App.java",
                                                             "subproject" );
 
         model = readPom( new File( projectDirectory, "subproject/pom.xml" ) );
@@ -375,23 +353,19 @@ public class DefaultArchetypeGeneratorTest
         assertEquals( "subproject", model.getArtifactId() );
         assertEquals( "file-value", model.getVersion() );
 
-        assertTemplateContentGeneratedWithFileSetArchetype( projectDirectory,
-                                                            "subproject/subsubproject/src/main/java/file/value/package/App.java",
+        assertTemplateContentGeneratedWithFileSetArchetype( "subproject/subsubproject/src/main/java/file/value/package/App.java",
                                                             "subsubproject" );
 
-        assertTemplateContentGeneratedWithFileSetArchetype( projectDirectory,
-                                                            "subproject/subsubproject/src/main/java/file/value/package/"
+        assertTemplateContentGeneratedWithFileSetArchetype( "subproject/subsubproject/src/main/java/file/value/package/"
                                                                 + "file-value/inner/subsubproject/innest/Somefile-valueClasssubsubproject.java",
                                                             "subsubproject" );
 
-        assertTemplateContentGeneratedWithFileSetArchetype( projectDirectory,
-                                                            "subproject/subsubproject/src/main/java/file/value/package/"
+        assertTemplateContentGeneratedWithFileSetArchetype( "subproject/subsubproject/src/main/java/file/value/package/"
                                                             /* + "file-value/inner/subsubproject/innest/" + */
                                                             + "ArbitraryProperty-file-value.java", "subsubproject" );
 
         // Test that undefined properties are safely ignored (and skipped)
-        assertTemplateContentGeneratedWithFileSetArchetype( projectDirectory,
-                                                            "subproject/subsubproject/src/main/java/file/value/package/"
+        assertTemplateContentGeneratedWithFileSetArchetype( "subproject/subsubproject/src/main/java/file/value/package/"
                                                             /* + "file-value/inner/subsubproject/innest/" + */
                                                             + "SkipsUndefinedProperty-__undefined-property__-file-value.java",
                                                             "subsubproject" );
@@ -413,16 +387,15 @@ public class DefaultArchetypeGeneratorTest
 
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest( "generate-11", ARCHETYPE_OLD );
 
-        File projectDirectory = new File( outputDirectory, "file-value" );
         File projectFile = new File( projectDirectory, "pom.xml" );
 
         FileUtils.forceDelete( projectDirectory );
 
         generateProjectFromArchetype( request );
 
-        assertTemplateContentGeneratedWithOldArchetype( projectDirectory, "src/main/java/file/value/package/App.java" );
-        assertTemplateContentGeneratedWithOldArchetype( projectDirectory, "src/main/resources/App.properties" );
-        assertTemplateContentGeneratedWithOldArchetype( projectDirectory, "src/site/site.xml" );
+        assertTemplateContentGeneratedWithOldArchetype( "src/main/java/file/value/package/App.java" );
+        assertTemplateContentGeneratedWithOldArchetype( "src/main/resources/App.properties" );
+        assertTemplateContentGeneratedWithOldArchetype( "src/site/site.xml" );
 
         Model model = readPom( projectFile );
         assertNull( model.getParent() );
@@ -478,6 +451,8 @@ public class DefaultArchetypeGeneratorTest
     {
         outputDirectory = getBasedir() + "/target/test-classes/projects/" + project;
 
+        projectDirectory = new File( outputDirectory, "file-value" );
+
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
         request.setLocalRepository( localRepository );
         request.setArchetypeRepository( remoteRepository );
@@ -497,10 +472,10 @@ public class DefaultArchetypeGeneratorTest
         return request;
     }
 
-    private void assertTemplateContent( final File projectDirectory, final String template )
+    private void assertTemplateContent( final String template )
         throws IOException
     {
-        Properties properties = loadProperties( projectDirectory, template );
+        Properties properties = loadProperties( template );
         assertEquals( "file-value", properties.getProperty( "groupId" ) );
         assertEquals( "file-value", properties.getProperty( "artifactId" ) );
         assertEquals( "file-value", properties.getProperty( "version" ) );
@@ -515,11 +490,10 @@ public class DefaultArchetypeGeneratorTest
         assertEquals( "file-value", properties.getProperty( "property-without-default-4" ) );
     }
 
-    private void assertTemplateContentGeneratedWithFileSetArchetype( File projectDirectory, String template,
-                                                                     String artifactId )
+    private void assertTemplateContentGeneratedWithFileSetArchetype( String template, String artifactId )
         throws IOException
     {
-        Properties properties = loadProperties( projectDirectory, template );
+        Properties properties = loadProperties( template );
         assertEquals( "file-value", properties.getProperty( "groupId" ) );
         assertEquals( artifactId, properties.getProperty( "artifactId" ) );
         assertEquals( "file-value", properties.getProperty( "version" ) );
@@ -527,20 +501,20 @@ public class DefaultArchetypeGeneratorTest
         assertEquals( "file/value/package", properties.getProperty( "packageInPathFormat" ) );
     }
 
-    private void assertTemplateContentGeneratedWithOldArchetype( final File projectDirectory, final String template )
+    private void assertTemplateContentGeneratedWithOldArchetype( final String template )
         throws IOException
     {
-        Properties properties = loadProperties( projectDirectory, template );
+        Properties properties = loadProperties( template );
         assertEquals( "file-value", properties.getProperty( "groupId" ) );
         assertEquals( "file-value", properties.getProperty( "artifactId" ) );
         assertEquals( "file-value", properties.getProperty( "version" ) );
         assertEquals( "file.value.package", properties.getProperty( "package" ) );
     }
 
-    private void assertTemplateCopiedWithFileSetArchetype( File projectDirectory, String template )
+    private void assertTemplateCopiedWithFileSetArchetype( String template )
         throws IOException
     {
-        Properties properties = loadProperties( projectDirectory, template );
+        Properties properties = loadProperties( template );
         assertEquals( "${groupId}", properties.getProperty( "groupId" ) );
         assertEquals( "${artifactId}", properties.getProperty( "artifactId" ) );
         assertEquals( "${version}", properties.getProperty( "version" ) );
@@ -568,7 +542,7 @@ public class DefaultArchetypeGeneratorTest
         return properties;
     }
 
-    private Properties loadProperties( final File projectDirectory, final String template )
+    private Properties loadProperties( final String template )
         throws IOException
     {
         File templateFile = new File( projectDirectory, template );
