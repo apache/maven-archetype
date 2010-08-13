@@ -126,13 +126,6 @@ public class DefaultArchetypeGeneratorTest
 
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest( "generate-4", ARCHETYPE_BASIC );
 
-        request.setGroupId( "file-value" );
-        request.setArtifactId( "file-value" );
-        request.setVersion( "file-value" );
-        request.setPackage( "file.value.package" );
-
-        request.setProperties( ADDITIONAL_PROPERTIES );
-
         File projectDirectory = new File( outputDirectory, "file-value" );
         FileUtils.forceDelete( projectDirectory );
 
@@ -162,11 +155,6 @@ public class DefaultArchetypeGeneratorTest
         System.out.println( "testGenerateArchetypeCompleteWithParent" );
 
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest( "generate-5", ARCHETYPE_BASIC );
-
-        request.setGroupId( "file-value" );
-        request.setArtifactId( "file-value" );
-        request.setVersion( "file-value" );
-        request.setPackage( "file.value.package" );
 
         request.setProperties( ADDITIONAL_PROPERTIES );
 
@@ -202,11 +190,6 @@ public class DefaultArchetypeGeneratorTest
         File parentProjectFileSample = getProjectSampleFile();
         copy( parentProjectFileSample, parentProjectFile );
 
-        request.setGroupId( "file-value" );
-        request.setArtifactId( "file-value" );
-        request.setVersion( "file-value" );
-        request.setPackage( "file.value.package" );
-
         request.setProperties( ADDITIONAL_PROPERTIES );
 
         File projectDirectory = new File( outputDirectory, "file-value" );
@@ -235,11 +218,6 @@ public class DefaultArchetypeGeneratorTest
         System.out.println( "testGenerateArchetypePartialOnChildDontOverride" );
 
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest( "generate-9", ARCHETYPE_PARTIAL );
-
-        request.setGroupId( "file-value" );
-        request.setArtifactId( "file-value" );
-        request.setVersion( "file-value" );
-        request.setPackage( "file.value.package" );
 
         request.setProperties( ADDITIONAL_PROPERTIES );
 
@@ -273,11 +251,6 @@ public class DefaultArchetypeGeneratorTest
 
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest( "generate-7", ARCHETYPE_PARTIAL );
 
-        request.setGroupId( "file-value" );
-        request.setArtifactId( "file-value" );
-        request.setVersion( "file-value" );
-        request.setPackage( "file.value.package" );
-
         request.setProperties( ADDITIONAL_PROPERTIES );
 
         File projectFile = new File( outputDirectory, "pom.xml" );
@@ -304,11 +277,6 @@ public class DefaultArchetypeGeneratorTest
 
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest( "generate-6", ARCHETYPE_PARTIAL );
 
-        request.setGroupId( "file-value" );
-        request.setArtifactId( "file-value" );
-        request.setVersion( "file-value" );
-        request.setPackage( "file.value.package" );
-
         File projectDirectory = new File( outputDirectory, "file-value" );
         File projectFile = new File( projectDirectory, "pom.xml" );
 
@@ -329,11 +297,6 @@ public class DefaultArchetypeGeneratorTest
         System.out.println( "testGenerateArchetypeSite" );
 
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest( "generate-10", ARCHETYPE_SITE );
-
-        request.setGroupId( "file-value" );
-        request.setArtifactId( "file-value" );
-        request.setVersion( "file-value" );
-        request.setPackage( "file.value.package" );
 
         request.setProperties( ADDITIONAL_PROPERTIES );
 
@@ -360,11 +323,6 @@ public class DefaultArchetypeGeneratorTest
         System.out.println( "testGenerateFileSetArchetype" );
 
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest( "generate-12", ARCHETYPE_FILESET );
-
-        request.setGroupId( "file-value" );
-        request.setArtifactId( "file-value" );
-        request.setVersion( "file-value" );
-        request.setPackage( "file.value.package" );
 
         request.setProperties( ADDITIONAL_PROPERTIES );
 
@@ -455,11 +413,6 @@ public class DefaultArchetypeGeneratorTest
 
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest( "generate-11", ARCHETYPE_OLD );
 
-        request.setGroupId( "file-value" );
-        request.setArtifactId( "file-value" );
-        request.setVersion( "file-value" );
-        request.setPackage( "file.value.package" );
-
         File projectDirectory = new File( outputDirectory, "file-value" );
         File projectFile = new File( projectDirectory, "pom.xml" );
 
@@ -484,6 +437,8 @@ public class DefaultArchetypeGeneratorTest
         System.out.println( "testPropertiesNotDefined" );
 
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest( "generate-3", ARCHETYPE_BASIC );
+        
+        request.setProperties( new Properties() );
 
         ArchetypeGenerationResult result = generateProjectFromArchetypeWithFailure( request );
 
@@ -531,6 +486,13 @@ public class DefaultArchetypeGeneratorTest
         request.setArchetypeGroupId( archetype.groupId );
         request.setArchetypeArtifactId( archetype.artifactId );
         request.setArchetypeVersion( archetype.version );
+
+        request.setGroupId( "file-value" );
+        request.setArtifactId( "file-value" );
+        request.setVersion( "file-value" );
+        request.setPackage( "file.value.package" );
+
+        request.setProperties( ADDITIONAL_PROPERTIES );
 
         return request;
     }
