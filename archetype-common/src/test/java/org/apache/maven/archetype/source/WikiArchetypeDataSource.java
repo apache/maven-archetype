@@ -69,7 +69,7 @@ public class WikiArchetypeDataSource
         return ac;
     }
 
-    public List getArchetypes( Properties properties )
+    public List<Archetype> getArchetypes( Properties properties )
         throws ArchetypeDataSourceException
     {
         String url = properties.getProperty( "url" );
@@ -79,7 +79,7 @@ public class WikiArchetypeDataSource
             url = DEFAULT_ARCHETYPE_INVENTORY_PAGE;
         }
 
-        List archetypes = new ArrayList();
+        List<Archetype> archetypes = new ArrayList<Archetype>();
 
         String pageSource = "";
         InputStream in = null;

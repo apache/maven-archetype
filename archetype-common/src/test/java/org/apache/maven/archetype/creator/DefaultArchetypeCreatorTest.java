@@ -22,7 +22,6 @@ package org.apache.maven.archetype.creator;
 import org.apache.maven.archetype.ArchetypeCreationRequest;
 import org.apache.maven.archetype.ArchetypeCreationResult;
 import org.apache.maven.archetype.common.Constants;
-import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.DefaultArtifactRepository;
 import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
@@ -40,19 +39,17 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
 public class DefaultArchetypeCreatorTest
     extends AbstractMojoTestCase
 {
-    private List filtereds;
+    private List<String> filtereds;
 
-    private List languages;
+    private List<String> languages;
+
     private DefaultArtifactRepository localRepository;
-
-    private List repositories;
 
     public void testCreateFilesetArchetype()
         throws Exception
@@ -81,7 +78,6 @@ public class DefaultArchetypeCreatorTest
 
         MavenProject mavenProject = null;
 
-        try
         {
             Object result = builder.buildWithDependencies( projectFile, localRepository, null );
             if ( result instanceof MavenProject )
@@ -97,22 +93,18 @@ public class DefaultArchetypeCreatorTest
                 fail( "Wrong result class" );
             }
         }
-        catch ( Exception e )
-        {
-            e.printStackTrace();
-        }
 
         FilesetArchetypeCreator instance =
             (FilesetArchetypeCreator) lookup( ArchetypeCreator.class.getName(), "fileset" );
 
-        languages = new ArrayList();
+        languages = new ArrayList<String>();
         languages.add( "java" );
         languages.add( "aspectj" );
         languages.add( "csharp" );
         languages.add( "groovy" );
         languages.add( "resources" );
 
-        filtereds = new ArrayList();
+        filtereds = new ArrayList<String>();
         filtereds.add( "java" );
         filtereds.add( "xml" );
         filtereds.add( "txt" );
@@ -335,17 +327,6 @@ public class DefaultArchetypeCreatorTest
         localRepository = new DefaultArtifactRepository( "local",
            new File( getBasedir(), "target/test-classes/repositories/local" ).toURI().toString(),
            new DefaultRepositoryLayout() );
-
-        repositories =
-            Arrays.asList(
-                new ArtifactRepository[]
-                    {
-                        new DefaultArtifactRepository( "central",
-                            new File( getBasedir(), "target/test-classes/repositories/central" ).toURI().toString(),
-                            new DefaultRepositoryLayout()
-                        )
-                    }
-            );
     }
 
     private boolean assertContent( File template, String content )
@@ -378,18 +359,7 @@ public class DefaultArchetypeCreatorTest
 
     private File getDescriptorFile( String project )
     {
-        return
-            new File(
-                getBasedir(),
-                "target/test-classes/projects/" + project + "/target/generated-sources/archetype/"
-                    + "src/main/resources/"
-                    + "META-INF/maven/archetype.xml"
-            );
-    }
-
-    private String getPath( String basedir, String child )
-    {
-        return new File( basedir, child ).getPath();
+        return getFile( project, "target/generated-sources/archetype/src/main/resources/META-INF/maven/archetype.xml" );
     }
 
     private File getFile( String project, String file )
@@ -399,45 +369,27 @@ public class DefaultArchetypeCreatorTest
 
     private File getProjectFile( String project )
     {
-        return new File( getBasedir(), "target/test-classes/projects/" + project + "/pom.xml" );
+        return getFile( project, "pom.xml" );
     }
 
     private File getProjectSampleFile( String project )
     {
-        return
-            new File(
-                getBasedir(),
-                "target/test-classes/projects/" + project + "/pom.xml.sample"
-            );
+        return getFile( project, "pom.xml.sample" );
     }
 
     private File getPropertiesFile( String project )
     {
-        return
-            new File(
-                getBasedir(),
-                "target/test-classes/projects/" + project + "/archetype.properties"
-            );
+        return getFile( project, "archetype.properties" );
     }
 
     private File getPropertiesSampleFile( final String project )
     {
-        File propertyFileSample =
-            new File(
-                getBasedir(),
-                "target/test-classes/projects/" + project + "/archetype.properties.sample"
-            );
-        return propertyFileSample;
+        return getFile( project, "archetype.properties.sample" );
     }
 
     private File getTemplateFile( String project, String template )
     {
-        return
-            new File(
-                getBasedir(),
-                "target/test-classes/projects/" + project + "/target/generated-sources/archetype/"
-                    + "src/main/resources/"
-                    + "archetype-resources/" + template
-            );
+        return getFile( project, "target/generated-sources/archetype/src/main/resources/archetype-resources/"
+            + template );
     }
 }

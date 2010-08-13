@@ -49,7 +49,7 @@ public class CatalogArchetypeDataSinkTest
 
         a0.setRepository( "http://magicbunny.com/maven2" );
 
-        List archetypes = new ArrayList();
+        List<Archetype> archetypes = new ArrayList<Archetype>();
 
         archetypes.add( a0 );
 

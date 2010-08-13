@@ -44,7 +44,6 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -73,7 +72,7 @@ public class ArchetypeTest
 
         ArtifactRepository localRepository = new DefaultArtifactRepository( "local", mavenRepoLocal, layout );
 
-        List remoteRepositories = new ArrayList();
+        List<ArtifactRepository> remoteRepositories = new ArrayList<ArtifactRepository>();
 
         String mavenRepoRemote = getTestFile( "src/test/repository" ).toURL().toString();
 
@@ -100,7 +99,7 @@ public class ArchetypeTest
         // Set up the Velocity context
         // ----------------------------------------------------------------------
 
-        Map parameters = new HashMap();
+        Map<String, Object> parameters = new HashMap<String, Object>();
         parameters.put( "basedir", request.getOutputDirectory() );
         parameters.put( "package", request.getPackage() );
         parameters.put( "packageName", request.getPackage() );
@@ -110,13 +109,9 @@ public class ArchetypeTest
 
         Context context = new VelocityContext();
 
-        for ( Iterator iterator = parameters.keySet().iterator(); iterator.hasNext(); )
+        for ( Map.Entry<String, Object> entry : parameters.entrySet() )
         {
-            String key = (String) iterator.next();
-
-            Object value = parameters.get( key );
-
-            context.put( key, value );
+            context.put( entry.getKey(), entry.getValue() );
         }
 
         // ----------------------------------------------------------------------
@@ -197,7 +192,7 @@ public class ArchetypeTest
 
     // Gets the classloader for this artifact's file.
     private ClassLoader getContextClassloader( Artifact archetypeArtifact, ArtifactRepository localRepository,
-                                               List remoteRepositories )
+                                               List<ArtifactRepository> remoteRepositories )
         throws Exception
     {
         ArtifactResolver artifactResolver = (ArtifactResolver) lookup( ArtifactResolver.class.getName() );
