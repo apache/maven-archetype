@@ -56,6 +56,19 @@ public class DefaultArchetypeGeneratorTest
 
     private final static Archetype ARCHETYPE_OLD = new Archetype( "archetypes", "old", "1.0" );
 
+    private final static Properties ADDITIONAL_PROPERTIES = new Properties();
+    static
+    {
+        ADDITIONAL_PROPERTIES.setProperty( "property-without-default-1", "file-value" );
+        ADDITIONAL_PROPERTIES.setProperty( "property-without-default-2", "file-value" );
+        ADDITIONAL_PROPERTIES.setProperty( "property-without-default-3", "file-value" );
+        ADDITIONAL_PROPERTIES.setProperty( "property-without-default-4", "file-value" );
+        ADDITIONAL_PROPERTIES.setProperty( "property-with-default-1", "file-value" );
+        ADDITIONAL_PROPERTIES.setProperty( "property-with-default-2", "file-value" );
+        ADDITIONAL_PROPERTIES.setProperty( "property-with-default-3", "file-value" );
+        ADDITIONAL_PROPERTIES.setProperty( "property-with-default-4", "file-value" );
+    }
+
     ArtifactRepository localRepository;
 
     String remoteRepository;
@@ -118,16 +131,7 @@ public class DefaultArchetypeGeneratorTest
         request.setVersion( "file-value" );
         request.setPackage( "file.value.package" );
 
-        Properties additionalProperties = new Properties();
-        additionalProperties.setProperty( "property-without-default-1", "file-value" );
-        additionalProperties.setProperty( "property-without-default-2", "file-value" );
-        additionalProperties.setProperty( "property-without-default-3", "file-value" );
-        additionalProperties.setProperty( "property-without-default-4", "file-value" );
-        additionalProperties.setProperty( "property-with-default-1", "file-value" );
-        additionalProperties.setProperty( "property-with-default-2", "file-value" );
-        additionalProperties.setProperty( "property-with-default-3", "file-value" );
-        additionalProperties.setProperty( "property-with-default-4", "file-value" );
-        request.setProperties( additionalProperties );
+        request.setProperties( ADDITIONAL_PROPERTIES );
 
         File projectDirectory = new File( outputDirectory, "file-value" );
         assertDeleted( projectDirectory );
@@ -164,16 +168,7 @@ public class DefaultArchetypeGeneratorTest
         request.setVersion( "file-value" );
         request.setPackage( "file.value.package" );
 
-        Properties additionalProperties = new Properties();
-        additionalProperties.setProperty( "property-without-default-1", "file-value" );
-        additionalProperties.setProperty( "property-without-default-2", "file-value" );
-        additionalProperties.setProperty( "property-without-default-3", "file-value" );
-        additionalProperties.setProperty( "property-without-default-4", "file-value" );
-        additionalProperties.setProperty( "property-with-default-1", "file-value" );
-        additionalProperties.setProperty( "property-with-default-2", "file-value" );
-        additionalProperties.setProperty( "property-with-default-3", "file-value" );
-        additionalProperties.setProperty( "property-with-default-4", "file-value" );
-        request.setProperties( additionalProperties );
+        request.setProperties( ADDITIONAL_PROPERTIES );
 
         File projectFile = getProjectFile();
         File projectFileSample = getProjectSampleFile();
@@ -212,16 +207,7 @@ public class DefaultArchetypeGeneratorTest
         request.setVersion( "file-value" );
         request.setPackage( "file.value.package" );
 
-        Properties additionalProperties = new Properties();
-        additionalProperties.setProperty( "property-without-default-1", "file-value" );
-        additionalProperties.setProperty( "property-without-default-2", "file-value" );
-        additionalProperties.setProperty( "property-without-default-3", "file-value" );
-        additionalProperties.setProperty( "property-without-default-4", "file-value" );
-        additionalProperties.setProperty( "property-with-default-1", "file-value" );
-        additionalProperties.setProperty( "property-with-default-2", "file-value" );
-        additionalProperties.setProperty( "property-with-default-3", "file-value" );
-        additionalProperties.setProperty( "property-with-default-4", "file-value" );
-        request.setProperties( additionalProperties );
+        request.setProperties( ADDITIONAL_PROPERTIES );
 
         File projectDirectory = new File( outputDirectory, "file-value" );
         File projectFile = new File( projectDirectory, "pom.xml" );
@@ -255,16 +241,7 @@ public class DefaultArchetypeGeneratorTest
         request.setVersion( "file-value" );
         request.setPackage( "file.value.package" );
 
-        Properties additionalProperties = new Properties();
-        additionalProperties.setProperty( "property-without-default-1", "file-value" );
-        additionalProperties.setProperty( "property-without-default-2", "file-value" );
-        additionalProperties.setProperty( "property-without-default-3", "file-value" );
-        additionalProperties.setProperty( "property-without-default-4", "file-value" );
-        additionalProperties.setProperty( "property-with-default-1", "file-value" );
-        additionalProperties.setProperty( "property-with-default-2", "file-value" );
-        additionalProperties.setProperty( "property-with-default-3", "file-value" );
-        additionalProperties.setProperty( "property-with-default-4", "file-value" );
-        request.setProperties( additionalProperties );
+        request.setProperties( ADDITIONAL_PROPERTIES );
 
         File projectDirectory = new File( outputDirectory, "file-value" );
         File projectFile = new File( projectDirectory, "pom.xml" );
@@ -301,16 +278,7 @@ public class DefaultArchetypeGeneratorTest
         request.setVersion( "file-value" );
         request.setPackage( "file.value.package" );
 
-        Properties additionalProperties = new Properties();
-        additionalProperties.setProperty( "property-without-default-1", "file-value" );
-        additionalProperties.setProperty( "property-without-default-2", "file-value" );
-        additionalProperties.setProperty( "property-without-default-3", "file-value" );
-        additionalProperties.setProperty( "property-without-default-4", "file-value" );
-        additionalProperties.setProperty( "property-with-default-1", "file-value" );
-        additionalProperties.setProperty( "property-with-default-2", "file-value" );
-        additionalProperties.setProperty( "property-with-default-3", "file-value" );
-        additionalProperties.setProperty( "property-with-default-4", "file-value" );
-        request.setProperties( additionalProperties );
+        request.setProperties( ADDITIONAL_PROPERTIES );
 
         File projectFile = new File( outputDirectory, "pom.xml" );
         File projectFileSample = new File( outputDirectory, "pom.xml.sample" );
@@ -367,16 +335,7 @@ public class DefaultArchetypeGeneratorTest
         request.setVersion( "file-value" );
         request.setPackage( "file.value.package" );
 
-        Properties additionalProperties = new Properties();
-        additionalProperties.setProperty( "property-without-default-1", "file-value" );
-        additionalProperties.setProperty( "property-without-default-2", "file-value" );
-        additionalProperties.setProperty( "property-without-default-3", "file-value" );
-        additionalProperties.setProperty( "property-without-default-4", "file-value" );
-        additionalProperties.setProperty( "property-with-default-1", "file-value" );
-        additionalProperties.setProperty( "property-with-default-2", "file-value" );
-        additionalProperties.setProperty( "property-with-default-3", "file-value" );
-        additionalProperties.setProperty( "property-with-default-4", "file-value" );
-        request.setProperties( additionalProperties );
+        request.setProperties( ADDITIONAL_PROPERTIES );
 
         File projectDirectory = new File( outputDirectory, "file-value" );
         File projectFile = new File( projectDirectory, "pom.xml" );
@@ -407,16 +366,7 @@ public class DefaultArchetypeGeneratorTest
         request.setVersion( "file-value" );
         request.setPackage( "file.value.package" );
 
-        Properties additionalProperties = new Properties();
-        additionalProperties.setProperty( "property-without-default-1", "file-value" );
-        additionalProperties.setProperty( "property-without-default-2", "file-value" );
-        additionalProperties.setProperty( "property-without-default-3", "file-value" );
-        additionalProperties.setProperty( "property-without-default-4", "file-value" );
-        additionalProperties.setProperty( "property-with-default-1", "file-value" );
-        additionalProperties.setProperty( "property-with-default-2", "file-value" );
-        additionalProperties.setProperty( "property-with-default-3", "file-value" );
-        additionalProperties.setProperty( "property-with-default-4", "file-value" );
-        request.setProperties( additionalProperties );
+        request.setProperties( ADDITIONAL_PROPERTIES );
 
         File projectDirectory = new File( outputDirectory, "file-value" );
         File projectFile = new File( projectDirectory, "pom.xml" );
