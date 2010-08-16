@@ -89,7 +89,7 @@ public class DefaultArchetypeSelector
                 {
                     found = true;
 
-                    Archetype foundArchetype = (Archetype) catalog.get( catalog.indexOf( example ) );
+                    Archetype foundArchetype = catalog.get( catalog.indexOf( example ) );
                     definition.setName( foundArchetype.getArtifactId() );
                     if ( StringUtils.isNotEmpty( foundArchetype.getRepository() ) )
                     {
@@ -191,32 +191,29 @@ public class DefaultArchetypeSelector
                 definition.setArtifactId( DEFAULT_ARCHETYPE_ARTIFACTID );
             }
 
-            if ( interactiveMode.booleanValue() )
+            if ( interactiveMode.booleanValue() && ( archetypes.size() > 0 ) )
             {
-                if ( archetypes.size() > 0 )
-                {
-                    Archetype selectedArchetype = archetypeSelectionQueryer.selectArchetype( archetypes, definition );
+                Archetype selectedArchetype = archetypeSelectionQueryer.selectArchetype( archetypes, definition );
 
-                    definition.setGroupId( selectedArchetype.getGroupId() );
-                    definition.setArtifactId( selectedArchetype.getArtifactId() );
-                    definition.setVersion( selectedArchetype.getVersion() );
-                    definition.setName( selectedArchetype.getArtifactId() );
-                    String catalogKey = getCatalogKey( archetypes, selectedArchetype );
-                    String[] keySplitted = catalogKey.split( ":", 2 );
-                    if ( StringUtils.isNotEmpty( selectedArchetype.getRepository() ) )
-                    {
-                        definition.setRepository( selectedArchetype.getRepository() );
-                    }
-                    else if ( keySplitted.length > 1 )
-                    {
-                        int lastIndex = catalogKey.lastIndexOf( "/" );
-                        String catalogBase =
-                            catalogKey.substring( 0, ( lastIndex > 7 ? lastIndex : catalogKey.length() ) );
-                        definition.setRepository( catalogBase );
-                    }
-                    String goals = StringUtils.join( selectedArchetype.getGoals().iterator(), "," );
-                    definition.setGoals( goals );
+                definition.setGroupId( selectedArchetype.getGroupId() );
+                definition.setArtifactId( selectedArchetype.getArtifactId() );
+                definition.setVersion( selectedArchetype.getVersion() );
+                definition.setName( selectedArchetype.getArtifactId() );
+                String catalogKey = getCatalogKey( archetypes, selectedArchetype );
+                String[] keySplitted = catalogKey.split( ":", 2 );
+                if ( StringUtils.isNotEmpty( selectedArchetype.getRepository() ) )
+                {
+                    definition.setRepository( selectedArchetype.getRepository() );
                 }
+                else if ( keySplitted.length > 1 )
+                {
+                    int lastIndex = catalogKey.lastIndexOf( "/" );
+                    String catalogBase =
+                        catalogKey.substring( 0, ( lastIndex > 7 ? lastIndex : catalogKey.length() ) );
+                    definition.setRepository( catalogBase );
+                }
+                String goals = StringUtils.join( selectedArchetype.getGoals().iterator(), "," );
+                definition.setGoals( goals );
             }
         }
 
