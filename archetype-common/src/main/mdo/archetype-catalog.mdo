@@ -62,7 +62,7 @@
       <codeSegments>
         <codeSegment>
           <code><![CDATA[
-    public String toString ()
+    public String toString()
     {
         return archetypes.toString();
     }
@@ -130,25 +130,25 @@
       <codeSegments>
         <codeSegment>
           <code><![CDATA[
-    public String toString ()
+    public String toString()
     {
-        return "[" + groupId + ":" + artifactId + ":" + version + (repository != null ? " -> " + repository : "") + "]";
+        return "[" + groupId + ":" + artifactId + ":" + version + ( repository != null ? " -> " + repository : "" ) + "]";
     }
-    public int hashCode ()
+    public int hashCode()
     {
-        return groupId.hashCode () + 17 * artifactId.hashCode ();
+        return groupId.hashCode() + 17 * artifactId.hashCode();
     }
-    public boolean equals (Object object)
+    public boolean equals( Object object )
     {
-        if (object == null || !(object instanceof Archetype) )
+        if ( object == null || !( object instanceof Archetype ) )
         {
             return false;
         }
         else
         {
             Archetype a = (Archetype) object;
-            return org.codehaus.plexus.util.StringUtils.equals( groupId, a.getGroupId () ) &&
-                   org.codehaus.plexus.util.StringUtils.equals( artifactId, a.getArtifactId () );
+            return org.codehaus.plexus.util.StringUtils.equals( groupId, a.getGroupId() )
+                   && org.codehaus.plexus.util.StringUtils.equals( artifactId, a.getArtifactId() );
         }
     }
           ]]></code>

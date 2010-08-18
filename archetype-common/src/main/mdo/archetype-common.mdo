@@ -35,19 +35,19 @@
       <name>ArchetypeDefinition</name>
       <fields>
         <field>
-          <name>GroupId</name>
+          <name>groupId</name>
           <type>String</type>
         </field>
         <field>
-          <name>ArtifactId</name>
+          <name>artifactId</name>
           <type>String</type>
         </field>
         <field>
-          <name>Version</name>
+          <name>version</name>
           <type>String</type>
         </field>
         <field>
-          <name>Name</name>
+          <name>name</name>
           <type>String</type>
         </field>
         <field>
@@ -62,36 +62,36 @@
       <codeSegments>
         <codeSegment>
           <code><![CDATA[
-    public void reset ()
+    public void reset()
     {
-        setGroupId ( null );
-        setArtifactId ( null );
-        setVersion ( null );
+        setGroupId( null );
+        setArtifactId( null );
+        setVersion( null );
     }
 
-    public boolean isArtifactDefined ()
+    public boolean isArtifactDefined()
     {
-        return org.codehaus.plexus.util.StringUtils.isNotEmpty( getArtifactId () );
+        return org.codehaus.plexus.util.StringUtils.isNotEmpty( getArtifactId() );
     }
 
-    public boolean isDefined ()
+    public boolean isDefined()
     {
-        return isPartiallyDefined () && isVersionDefined ();
+        return isPartiallyDefined() && isVersionDefined();
     }
 
-    public boolean isGroupDefined ()
+    public boolean isGroupDefined()
     {
-        return org.codehaus.plexus.util.StringUtils.isNotEmpty( getGroupId () );
+        return org.codehaus.plexus.util.StringUtils.isNotEmpty( getGroupId() );
     }
 
-    public boolean isPartiallyDefined ()
+    public boolean isPartiallyDefined()
     {
-        return isGroupDefined () && isArtifactDefined ();
+        return isGroupDefined() && isArtifactDefined();
     }
 
-    public boolean isVersionDefined ()
+    public boolean isVersionDefined()
     {
-        return org.codehaus.plexus.util.StringUtils.isNotEmpty( getVersion () );
+        return org.codehaus.plexus.util.StringUtils.isNotEmpty( getVersion() );
     }
                     ]]></code>
         </codeSegment>
@@ -102,19 +102,19 @@
       <name>ArchetypeConfiguration</name>
       <fields>
         <field>
-          <name>GroupId</name>
+          <name>groupId</name>
           <type>String</type>
         </field>
         <field>
-          <name>ArtifactId</name>
+          <name>artifactId</name>
           <type>String</type>
         </field>
         <field>
-          <name>Version</name>
+          <name>version</name>
           <type>String</type>
         </field>
         <field>
-          <name>Name</name>
+          <name>name</name>
           <type>String</type>
         </field>
         <field>
@@ -122,7 +122,7 @@
           <type>String</type>
         </field>
         <field>
-          <name>RequiredProperties</name>
+          <name>requiredProperties</name>
           <association>
             <type>String</type>
             <multiplicity>*</multiplicity>
@@ -132,91 +132,87 @@
       <codeSegments>
         <codeSegment>
           <code><![CDATA[
-    public void reset ()
+    public void reset()
     {
-        properties.clear ();
+        properties.clear();
     }
 
-    private java.util.Properties properties = new java.util.Properties ();
+    private java.util.Properties properties = new java.util.Properties();
 
-    public void setProperty ( String requiredProperty, String propertyValue )
+    public void setProperty( String requiredProperty, String propertyValue )
     {
-        properties.setProperty ( requiredProperty, propertyValue );
+        properties.setProperty( requiredProperty, propertyValue );
     }
 
-    public String getProperty (String property)
+    public String getProperty( String property )
     {
-        return properties.getProperty ( property, null );
+        return properties.getProperty( property, null );
     }
 
-    public java.util.Properties getProperties ()
+    public java.util.Properties getProperties()
     {
         return properties;
     }
 
-    public java.util.Properties toProperties ()
+    public java.util.Properties toProperties()
     {
-        java.util.Properties result = new java.util.Properties ();
-        result.putAll ( properties );
-        result.setProperty (
+        java.util.Properties result = new java.util.Properties();
+        result.putAll( properties );
+        result.setProperty(
             Constants.ARCHETYPE_GROUP_ID,
-            (org.codehaus.plexus.util.StringUtils.isNotEmpty( getGroupId () ) ? getGroupId () : "" )
+            org.codehaus.plexus.util.StringUtils.isNotEmpty( getGroupId() ) ? getGroupId() : ""
         );
-        result.setProperty (
+        result.setProperty(
             Constants.ARCHETYPE_ARTIFACT_ID,
-            (org.codehaus.plexus.util.StringUtils.isNotEmpty( getArtifactId () ) ? getArtifactId () : "" )
+            org.codehaus.plexus.util.StringUtils.isNotEmpty( getArtifactId() ) ? getArtifactId() : ""
         );
-        result.setProperty (
+        result.setProperty(
             Constants.ARCHETYPE_VERSION,
-            (org.codehaus.plexus.util.StringUtils.isNotEmpty( getVersion () ) ? getVersion () : "" )
+            org.codehaus.plexus.util.StringUtils.isNotEmpty( getVersion() ) ? getVersion() : ""
         );
 
-        properties.setProperty (
+        properties.setProperty(
             Constants.ARCHETYPE_POST_GENERATION_GOALS,
-            (org.codehaus.plexus.util.StringUtils.isNotEmpty( getGoals() ) ? getGoals() : "" )
+            org.codehaus.plexus.util.StringUtils.isNotEmpty( getGoals() ) ? getGoals() : ""
         );
 
         return result;
     }
 
-    public boolean isConfigured ()
+    public boolean isConfigured()
     {
         boolean configured = true;
 
         java.util.Iterator requiredProperties = getRequiredProperties().iterator();
-        while ( configured && requiredProperties.hasNext () )
+        while ( configured && requiredProperties.hasNext() )
         {
-            String requiredProperty = (String) requiredProperties.next ();
+            String requiredProperty = (String) requiredProperties.next();
 
-            configured = configured &&
-                org.codehaus.plexus.util.StringUtils.isNotEmpty(
-                    properties.getProperty ( requiredProperty )
-                );
+            configured =
+                org.codehaus.plexus.util.StringUtils.isNotEmpty( properties.getProperty( requiredProperty ) );
         }
 
         return configured;
     }
 
-    public boolean isConfigured ( String requiredProperties )
+    public boolean isConfigured( String requiredProperties )
     {
-        return org.codehaus.plexus.util.StringUtils.isNotEmpty (
-                    properties.getProperty ( requiredProperties )
-                );
+        return org.codehaus.plexus.util.StringUtils.isNotEmpty( properties.getProperty( requiredProperties ) );
     }
 
-    private java.util.Properties defaultProperties = new java.util.Properties ();
+    private java.util.Properties defaultProperties = new java.util.Properties();
 
-    public void setDefaultProperty ( String requiredProperty, String propertyValue )
+    public void setDefaultProperty( String requiredProperty, String propertyValue )
     {
-        defaultProperties.setProperty ( requiredProperty, propertyValue );
+        defaultProperties.setProperty( requiredProperty, propertyValue );
     }
 
-    public String getDefaultValue (String requiredProperty)
+    public String getDefaultValue( String requiredProperty )
     {
-        return defaultProperties.getProperty ( requiredProperty, null );
+        return defaultProperties.getProperty( requiredProperty, null );
     }
 
-    public java.util.Properties getDefaultValues ()
+    public java.util.Properties getDefaultValues()
     {
         return defaultProperties;
     }
