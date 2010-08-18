@@ -20,8 +20,6 @@ package org.apache.maven.archetype.ui;
  */
 
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.archetype.common.ArchetypeConfiguration;
-import org.apache.maven.archetype.common.ArchetypeDefinition;
 
 import java.util.Properties;
 
@@ -29,25 +27,15 @@ public interface ArchetypeFactory
 {
     String ROLE = ArchetypeFactory.class.getName();
 
-    /**
-     */
-    ArchetypeConfiguration createArchetypeConfiguration(
-                                                         org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor archetypeDescriptor,
+    ArchetypeConfiguration createArchetypeConfiguration( org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor archetypeDescriptor,
                                                          Properties properties );
 
-    /**
-     */
-    ArchetypeConfiguration createArchetypeConfiguration(
-                                                         org.apache.maven.archetype.metadata.ArchetypeDescriptor archetypeDescriptor,
+    ArchetypeConfiguration createArchetypeConfiguration( org.apache.maven.archetype.metadata.ArchetypeDescriptor archetypeDescriptor,
                                                          Properties properties );
 
-    /**
-     */
     ArchetypeConfiguration createArchetypeConfiguration( MavenProject project, ArchetypeDefinition archetypeDefinition,
                                                          Properties properties );
 
-    /**
-     */
     ArchetypeDefinition createArchetypeDefinition( Properties properties );
 
     void updateArchetypeConfiguration( ArchetypeConfiguration archetypeConfiguration,

@@ -20,7 +20,6 @@ package org.apache.maven.archetype.ui;
  */
 
 import org.apache.maven.archetype.catalog.Archetype;
-import org.apache.maven.archetype.common.ArchetypeDefinition;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.components.interactivity.Prompter;
 import org.codehaus.plexus.components.interactivity.PrompterException;
@@ -50,7 +49,7 @@ public class DefaultArchetypeSelectionQueryerTest
     public void testDefaultArchetypeInMapOtherSelection()
         throws PrompterException
     {
-        Map map = createDefaultArchetypeCatalog();
+        Map<String, List<Archetype>> map = createDefaultArchetypeCatalog();
 
         MockControl control = MockControl.createControl( Prompter.class );
         Prompter prompter = (Prompter) control.getMock();
@@ -77,7 +76,7 @@ public class DefaultArchetypeSelectionQueryerTest
     public void testDefaultArchetypeInMapDefaultSelection()
         throws PrompterException
     {
-        Map map = createDefaultArchetypeCatalog();
+        Map<String, List<Archetype>> map = createDefaultArchetypeCatalog();
 
         MockControl control = MockControl.createControl( Prompter.class );
         Prompter prompter = (Prompter) control.getMock();
@@ -104,7 +103,7 @@ public class DefaultArchetypeSelectionQueryerTest
     public void testDefaultArchetypeNotInMap()
         throws PrompterException
     {
-        Map map = createDefaultArchetypeCatalog();
+        Map<String, List<Archetype>> map = createDefaultArchetypeCatalog();
 
         MockControl control = MockControl.createControl( Prompter.class );
         Prompter prompter = (Prompter) control.getMock();
@@ -131,7 +130,7 @@ public class DefaultArchetypeSelectionQueryerTest
     public void testNoDefaultArchetype()
         throws PrompterException
     {
-        Map map = createDefaultArchetypeCatalog();
+        Map<String, List<Archetype>> map = createDefaultArchetypeCatalog();
 
         MockControl control = MockControl.createControl( Prompter.class );
         Prompter prompter = (Prompter) control.getMock();
@@ -151,9 +150,9 @@ public class DefaultArchetypeSelectionQueryerTest
         assertEquals( "set-version", archetype.getVersion() );
     }
 
-    private static Map createDefaultArchetypeCatalog()
+    private static Map<String, List<Archetype>> createDefaultArchetypeCatalog()
     {
-        List list = new ArrayList();
+        List<Archetype> list = new ArrayList<Archetype>();
         list.add( createArchetype( "set-groupId", "set-artifactId", "set-version" ) );
         list.add( createArchetype( "default-groupId", "default-artifactId", "default-version" ) );
         return Collections.singletonMap( "internal", list );
