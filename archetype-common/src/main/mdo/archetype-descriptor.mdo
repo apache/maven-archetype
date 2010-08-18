@@ -168,18 +168,18 @@
       <codeSegments>
         <codeSegment>
           <code><![CDATA[
-    public String toString ()
+    public String toString()
     {
         return
-            getDirectory () + " (" +
-                (isFiltered () ? "Filtered" : "Copied") +
-                "-" +
-                (isPackaged () ? "Packaged" : "Flat") +
-            ") [" +
-                org.codehaus.plexus.util.StringUtils.join ( getIncludes ().iterator (), ", " ) +
-                " -- " +
-                org.codehaus.plexus.util.StringUtils.join ( getExcludes ().iterator (), ", " ) +
-            "]";
+            getDirectory() + " ("
+                + ( isFiltered() ? "Filtered" : "Copied" )
+                + "-"
+                + ( isPackaged() ? "Packaged" : "Flat" )
+            + ") ["
+                + org.codehaus.plexus.util.StringUtils.join( getIncludes().iterator(), ", " )
+                + " -- "
+                + org.codehaus.plexus.util.StringUtils.join( getExcludes().iterator(), ", " )
+            + "]";
 
     }
                     ]]></code>
