@@ -19,8 +19,6 @@ package org.apache.maven.archetype.ui;
  * under the License.
  */
 
-import org.apache.maven.archetype.common.ArchetypeConfiguration;
-import org.apache.maven.archetype.common.ArchetypeDefinition;
 import org.apache.maven.archetype.common.ArchetypeFilesResolver;
 import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.exception.ArchetypeNotConfigured;

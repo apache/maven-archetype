@@ -21,8 +21,6 @@ package org.apache.maven.archetype.ui;
 
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
-import org.apache.maven.archetype.common.ArchetypeConfiguration;
-import org.apache.maven.archetype.common.ArchetypeDefinition;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.exception.ArchetypeGenerationConfigurationFailure;

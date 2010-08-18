@@ -19,7 +19,6 @@ package org.apache.maven.archetype.ui;
  * under the License.
  */
 
-import org.apache.maven.archetype.common.ArchetypeConfiguration;
 import org.apache.maven.archetype.common.Constants;
 import org.codehaus.plexus.components.interactivity.Prompter;
 import org.codehaus.plexus.components.interactivity.PrompterException;
