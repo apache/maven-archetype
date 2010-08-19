@@ -32,10 +32,9 @@ import org.codehaus.plexus.util.StringUtils;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 /** @plexus.component */
 public class DefaultArchetypeSelector
@@ -72,32 +71,23 @@ public class DefaultArchetypeSelector
         }
         else if ( definition.isDefined() )
         {
-            boolean found = false;
-            for ( String catalogKey : StringUtils.split ( catalogs, "," ) )
+            Map.Entry<String, Archetype> found =
+                findArchetype( archetypes, request.getArchetypeGroupId(), request.getArchetypeArtifactId() );
+
+            if ( found != null )
             {
-                List<Archetype> catalog = archetypes.get( catalogKey );
+                String catalogKey = found.getKey();
+                Archetype archetype = found.getValue();
 
-                Archetype example = new Archetype();
-                example.setGroupId( request.getArchetypeGroupId() );
-                example.setArtifactId( request.getArchetypeArtifactId() );
+                definition.setName( archetype.getArtifactId() );
+                updateRepository( definition, archetype.getRepository(), catalogKey );
 
-                if ( catalog.contains( example ) )
-                {
-                    found = true;
-
-                    Archetype foundArchetype = catalog.get( catalog.indexOf( example ) );
-
-                    definition.setName( foundArchetype.getArtifactId() );
-                    updateRepository( definition, foundArchetype.getRepository(), catalogKey );
-
-                    getLogger().info( "Archetype repository missing. Using the one from " + foundArchetype
-                                          + " found in catalog " + catalogKey );
-                    break;
-                }
+                getLogger().info( "Archetype repository missing. Using the one from " + archetype
+                                      + " found in catalog " + catalogKey );
             }
-            if ( !found )
+            else
             {
-                getLogger().warn( "No archetype repository found. Falling back to central repository (http://repo1.maven.org/maven2). " );
+                getLogger().warn( "No archetype repository found. Falling back to central repository (http://repo1.maven.org/maven2)." );
                 getLogger().warn( "Use -DarchetypeRepository=<your repository> if archetype's repository is elsewhere." );
 
                 definition.setRepository( "http://repo1.maven.org/maven2" );
@@ -105,35 +95,26 @@ public class DefaultArchetypeSelector
         }
         else if ( definition.isPartiallyDefined() )
         {
-            boolean found = false;
-            for ( String catalogKey : StringUtils.split( catalogs, "," ) )
+            Map.Entry<String, Archetype> found =
+                findArchetype( archetypes, request.getArchetypeGroupId(), request.getArchetypeArtifactId() );
+
+            if ( found != null )
             {
-                List<Archetype> catalog = archetypes.get( catalogKey );
+                String catalogKey = found.getKey();
+                Archetype archetype = found.getValue();
 
-                Archetype example = new Archetype();
-                example.setGroupId( request.getArchetypeGroupId() );
-                example.setArtifactId( request.getArchetypeArtifactId() );
+                definition.setGroupId( archetype.getGroupId() );
+                definition.setArtifactId( archetype.getArtifactId() );
+                definition.setVersion( archetype.getVersion() );
+                definition.setName( archetype.getArtifactId() );
+                updateRepository( definition, archetype.getRepository(), catalogKey );
 
-                if ( catalog.contains( example ) )
-                {
-                    found = true;
+                String goals = StringUtils.join( archetype.getGoals().iterator(), "," );
+                definition.setGoals( goals );
 
-                    Archetype foundArchetype = catalog.get( catalog.indexOf( example ) );
-
-                    definition.setGroupId( foundArchetype.getGroupId() );
-                    definition.setArtifactId( foundArchetype.getArtifactId() );
-                    definition.setVersion( foundArchetype.getVersion() );
-                    definition.setName( foundArchetype.getArtifactId() );
-                    updateRepository( definition, foundArchetype.getRepository(), catalogKey );
-
-                    String goals = StringUtils.join( foundArchetype.getGoals().iterator(), "," );
-                    definition.setGoals( goals );
-
-                    getLogger().info( "Archetype " + foundArchetype + " found in catalog " + catalogKey );
-                    break;
-                }
+                getLogger().info( "Archetype " + archetype + " found in catalog " + catalogKey );
             }
-            if ( !found )
+            else
             {
                 getLogger().warn( "Specified archetype not found." );
                 if ( interactiveMode.booleanValue() )
@@ -157,7 +138,7 @@ public class DefaultArchetypeSelector
 
         if ( !definition.isDefined() && !definition.isPartiallyDefined() )
         {
-            // if artifact ID is set to it's default, we still prompt to confirm
+            // if artifact ID is set to its default, we still prompt to confirm
             if ( definition.getArtifactId() == null )
             {
                 getLogger().info( "No archetype defined. Using " + DEFAULT_ARCHETYPE_ARTIFACTID + " ("
@@ -212,10 +193,10 @@ public class DefaultArchetypeSelector
     {
         if ( catalogs == null )
         {
-            throw new NullPointerException( "catalogs can not be null" );
+            throw new NullPointerException( "catalogs cannot be null" );
         }
 
-        Map<String, List<Archetype>> archetypes = new HashMap<String, List<Archetype>>();
+        Map<String, List<Archetype>> archetypes = new LinkedHashMap<String, List<Archetype>>();
 
         for ( String catalog : StringUtils.split( catalogs, "," ) )
         {
@@ -236,7 +217,7 @@ public class DefaultArchetypeSelector
                 }
                 else
                 {
-                    getLogger().warn( "No archetype found in Remote catalog. Defaulting to internal Catalog" );
+                    getLogger().warn( "No archetype found in remote catalog. Defaulting to internal catalog" );
                     archetypes.put( "internal", archetypeManager.getInternalCatalog().getArchetypes() );
                 }
             }
@@ -275,25 +256,6 @@ public class DefaultArchetypeSelector
         }
     }
 
-    private Properties getArchetypeDataSourceProperties( String sourceRoleHint, Properties archetypeCatalogProperties )
-    {
-        Properties p = new Properties();
-
-        for ( Iterator i = archetypeCatalogProperties.keySet().iterator(); i.hasNext(); )
-        {
-            String key = (String) i.next();
-
-            if ( key.startsWith( sourceRoleHint ) )
-            {
-                String k = key.substring( sourceRoleHint.length() + 1 );
-
-                p.setProperty( k, archetypeCatalogProperties.getProperty( key ) );
-            }
-        }
-
-        return p;
-    }
-
     public void setArchetypeSelectionQueryer( ArchetypeSelectionQueryer archetypeSelectionQueryer )
     {
         this.archetypeSelectionQueryer = archetypeSelectionQueryer;
@@ -311,5 +273,31 @@ public class DefaultArchetypeSelector
             }
         }
         return "";
+    }
+
+    private Map.Entry<String, Archetype> findArchetype( Map<String, List<Archetype>> archetypes, String groupId,
+                                                        String artifactId )
+    {
+        Archetype example = new Archetype();
+        example.setGroupId( groupId );
+        example.setArtifactId( artifactId );
+
+        for ( Map.Entry<String, List<Archetype>> entry : archetypes.entrySet() )
+        {
+            List<Archetype> catalog = entry.getValue();
+
+            if ( catalog.contains( example ) )
+            {
+                String catalogKey = entry.getKey();
+                Archetype archetype = catalog.get( catalog.indexOf( example ) );
+
+                Map<String, Archetype> map = new HashMap<String, Archetype>( 1 );
+                map.put( catalogKey, archetype );
+
+                return map.entrySet().iterator().next();
+            }
+        }
+
+        return null;
     }
 }
