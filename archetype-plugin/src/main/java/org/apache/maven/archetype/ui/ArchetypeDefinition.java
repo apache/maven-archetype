@@ -139,4 +139,21 @@ public class ArchetypeDefinition
         return StringUtils.isNotEmpty( getVersion() );
     }
 
+    public void updateRequest( ArchetypeGenerationRequest request )
+    {
+        request.setArchetypeGroupId( getGroupId() );
+
+        request.setArchetypeArtifactId( getArtifactId() );
+
+        request.setArchetypeVersion( getVersion() );
+
+        request.setArchetypeGoals( getGoals() );
+
+        request.setArchetypeName( getName() );
+
+        if ( StringUtils.isNotEmpty( getRepository() ) )
+        {
+            request.setArchetypeRepository( getRepository() );
+        }
+    }
 }

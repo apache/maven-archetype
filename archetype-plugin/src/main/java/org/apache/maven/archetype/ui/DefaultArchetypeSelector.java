@@ -153,20 +153,8 @@ public class DefaultArchetypeSelector
             throw new ArchetypeSelectionFailure( "No valid archetypes could be found to choose." );
         }
 
-        request.setArchetypeGroupId( definition.getGroupId() );
-
-        request.setArchetypeArtifactId( definition.getArtifactId() );
-
-        request.setArchetypeVersion( definition.getVersion() );
-
-        request.setArchetypeGoals( definition.getGoals() );
-
-        request.setArchetypeName( definition.getName() );
-
-        if ( StringUtils.isNotEmpty( definition.getRepository() ) )
-        {
-            request.setArchetypeRepository( definition.getRepository() );
-        }
+        // finally update the request with gathered information
+        definition.updateRequest( request );
     }
 
     private Map<String, List<Archetype>> getArchetypesByCatalog( String catalogs )
