@@ -75,8 +75,7 @@ public class DefaultArchetypeSelector
                 String catalogKey = found.getKey();
                 Archetype archetype = found.getValue();
 
-                definition.setName( archetype.getArtifactId() );
-                updateRepository( definition, archetype.getRepository(), catalogKey );
+                updateDefinition( definition, archetype, catalogKey );
 
                 getLogger().info( "Archetype repository missing. Using the one from " + archetype
                                       + " found in catalog " + catalogKey );
@@ -99,14 +98,7 @@ public class DefaultArchetypeSelector
                 String catalogKey = found.getKey();
                 Archetype archetype = found.getValue();
 
-                definition.setGroupId( archetype.getGroupId() );
-                definition.setArtifactId( archetype.getArtifactId() );
-                definition.setVersion( archetype.getVersion() );
-                definition.setName( archetype.getArtifactId() );
-                updateRepository( definition, archetype.getRepository(), catalogKey );
-
-                String goals = StringUtils.join( archetype.getGoals().iterator(), "," );
-                definition.setGoals( goals );
+                updateDefinition( definition, archetype, catalogKey );
 
                 getLogger().info( "Archetype " + archetype + " found in catalog " + catalogKey );
             }
@@ -147,17 +139,9 @@ public class DefaultArchetypeSelector
             {
                 Archetype selectedArchetype = archetypeSelectionQueryer.selectArchetype( archetypes, definition );
 
-                definition.setGroupId( selectedArchetype.getGroupId() );
-                definition.setArtifactId( selectedArchetype.getArtifactId() );
-                definition.setVersion( selectedArchetype.getVersion() );
-                definition.setName( selectedArchetype.getArtifactId() );
-
                 String catalogKey = getCatalogKey( archetypes, selectedArchetype );
 
-                updateRepository( definition, selectedArchetype.getRepository(), catalogKey );
-
-                String goals = StringUtils.join( selectedArchetype.getGoals().iterator(), "," );
-                definition.setGoals( goals );
+                updateDefinition( definition, selectedArchetype, catalogKey );
             }
         }
 
@@ -237,8 +221,14 @@ public class DefaultArchetypeSelector
         return archetypes;
     }
 
-    private void updateRepository( ArchetypeDefinition definition, String repository, String catalogKey )
+    private void updateDefinition( ArchetypeDefinition definition, Archetype archetype, String catalogKey )
     {
+        definition.setGroupId( archetype.getGroupId() );
+        definition.setArtifactId( archetype.getArtifactId() );
+        definition.setVersion( archetype.getVersion() );
+        definition.setName( archetype.getArtifactId() );
+
+        String repository = archetype.getRepository();
         if ( StringUtils.isNotEmpty( repository ) )
         {
             definition.setRepository( repository );
@@ -250,6 +240,8 @@ public class DefaultArchetypeSelector
             String catalogBase = catalogKey.substring( 0, ( lastIndex > 7 ? lastIndex : catalogKey.length() ) );
             definition.setRepository( catalogBase );
         }
+
+        definition.setGoals( StringUtils.join( archetype.getGoals().iterator(), "," ) );
     }
 
     public void setArchetypeSelectionQueryer( ArchetypeSelectionQueryer archetypeSelectionQueryer )
