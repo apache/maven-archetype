@@ -124,7 +124,7 @@ public class DefaultArchetypeSelector
             definition.setVersion( DEFAULT_ARCHETYPE_VERSION );
         }
 
-        if ( !definition.isDefined() && !definition.isPartiallyDefined() )
+        if ( !definition.isPartiallyDefined() )
         {
             // if artifact ID is set to its default, we still prompt to confirm
             if ( definition.getArtifactId() == null )
@@ -143,14 +143,13 @@ public class DefaultArchetypeSelector
 
                 updateDefinition( definition, selectedArchetype, catalogKey );
             }
-        }
 
-        // Make sure the groupId and artifactId are valid, the version may just default to
-        // the latest release.
-
-        if ( !definition.isPartiallyDefined() )
-        {
-            throw new ArchetypeSelectionFailure( "No valid archetypes could be found to choose." );
+            // Make sure the groupId and artifactId are valid, the version may just default to
+            // the latest release.
+            if ( !definition.isPartiallyDefined() )
+            {
+                throw new ArchetypeSelectionFailure( "No valid archetypes could be found to choose." );
+            }
         }
 
         // finally update the request with gathered information
