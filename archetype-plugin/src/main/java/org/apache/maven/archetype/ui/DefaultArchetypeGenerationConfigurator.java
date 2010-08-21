@@ -93,13 +93,7 @@ public class DefaultArchetypeGenerationConfigurator
 
         Properties properties = new Properties( executionProperties );
 
-        ArchetypeDefinition ad = new ArchetypeDefinition();
-
-        ad.setGroupId( request.getArchetypeGroupId() );
-
-        ad.setArtifactId( request.getArchetypeArtifactId() );
-
-        ad.setVersion( request.getArchetypeVersion() );
+        ArchetypeDefinition ad = new ArchetypeDefinition( request );
 
         if ( !ad.isDefined() )
         {

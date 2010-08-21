@@ -57,11 +57,7 @@ public class DefaultArchetypeSelector
         throws ArchetypeNotDefined, UnknownArchetype, UnknownGroup, IOException, PrompterException,
         ArchetypeSelectionFailure
     {
-        ArchetypeDefinition definition = new ArchetypeDefinition();
-
-        definition.setGroupId( request.getArchetypeGroupId() );
-        definition.setArtifactId( request.getArchetypeArtifactId() );
-        definition.setVersion( request.getArchetypeVersion() );
+        ArchetypeDefinition definition = new ArchetypeDefinition( request );
 
         Map<String, List<Archetype>> archetypes = getArchetypesByCatalog( catalogs );
 

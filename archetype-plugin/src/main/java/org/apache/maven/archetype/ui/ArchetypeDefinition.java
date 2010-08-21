@@ -19,6 +19,7 @@ package org.apache.maven.archetype.ui;
  * under the License.
  */
 
+import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.codehaus.plexus.util.StringUtils;
 
 public class ArchetypeDefinition
@@ -34,6 +35,17 @@ public class ArchetypeDefinition
     private String repository;
 
     private String goals;
+
+    public ArchetypeDefinition()
+    {
+    }
+
+    public ArchetypeDefinition( ArchetypeGenerationRequest request )
+    {
+        setGroupId( request.getArchetypeGroupId() );
+        setArtifactId( request.getArchetypeArtifactId() );
+        setVersion( request.getArchetypeVersion() );
+    }
 
     public String getArtifactId()
     {
