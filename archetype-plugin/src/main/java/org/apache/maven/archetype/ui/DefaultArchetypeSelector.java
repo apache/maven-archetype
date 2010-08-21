@@ -276,16 +276,20 @@ public class DefaultArchetypeSelector
 
             if ( catalog.contains( example ) )
             {
-                String catalogKey = entry.getKey();
                 Archetype archetype = catalog.get( catalog.indexOf( example ) );
 
-                Map<String, Archetype> map = new HashMap<String, Archetype>( 1 );
-                map.put( catalogKey, archetype );
-
-                return map.entrySet().iterator().next();
+                return newMapEntry( entry.getKey(), archetype );
             }
         }
 
         return null;
+    }
+    
+    private static <K, V> Map.Entry<K, V> newMapEntry( K key, V value )
+    {
+        Map<K, V> map = new HashMap<K, V>( 1 );
+        map.put( key, value );
+
+        return map.entrySet().iterator().next();
     }
 }
