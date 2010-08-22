@@ -34,14 +34,14 @@ public class DefaultArchetypeGenerationQueryer
     public boolean confirmConfiguration( ArchetypeConfiguration archetypeConfiguration )
         throws PrompterException
     {
-        String query = "Confirm properties configuration:\n";
+        StringBuilder query = new StringBuilder( "Confirm properties configuration:\n" );
 
         for ( String property : archetypeConfiguration.getRequiredProperties() )
         {
-            query += property + ": " + archetypeConfiguration.getProperty( property ) + "\n";
+            query.append( property + ": " + archetypeConfiguration.getProperty( property ) + "\n" );
         }
 
-        String answer = prompter.prompt( query, "Y" );
+        String answer = prompter.prompt( query.toString(), "Y" );
 
         return "Y".equalsIgnoreCase( answer );
     }

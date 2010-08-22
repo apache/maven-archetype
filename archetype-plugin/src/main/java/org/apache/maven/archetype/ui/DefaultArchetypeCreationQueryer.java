@@ -87,20 +87,20 @@ public class DefaultArchetypeCreationQueryer
     public boolean confirmConfiguration( ArchetypeConfiguration archetypeConfiguration )
         throws PrompterException
     {
-        String query =
-            "Confirm archetype configuration:\n" + Constants.ARCHETYPE_GROUP_ID + "="
+        StringBuilder query =
+            new StringBuilder( "Confirm archetype configuration:\n" + Constants.ARCHETYPE_GROUP_ID + "="
                 + archetypeConfiguration.getGroupId() + "\n" + Constants.ARCHETYPE_ARTIFACT_ID + "="
                 + archetypeConfiguration.getArtifactId() + "\n" + Constants.ARCHETYPE_VERSION + "="
-                + archetypeConfiguration.getVersion() + "\n";
+                + archetypeConfiguration.getVersion() + "\n" );
 
         for ( Iterator propertiesIter = archetypeConfiguration.getProperties().keySet().iterator();
             propertiesIter.hasNext(); )
         {
             String property = (String) propertiesIter.next();
-            query += property + "=" + archetypeConfiguration.getProperty( property ) + "\n";
+            query.append( property + "=" + archetypeConfiguration.getProperty( property ) + "\n" );
         }
 
-        String answer = prompter.prompt( query, "Y" );
+        String answer = prompter.prompt( query.toString(), "Y" );
 
         return "Y".equalsIgnoreCase( answer );
     }
