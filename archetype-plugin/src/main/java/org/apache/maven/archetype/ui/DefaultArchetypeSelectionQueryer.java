@@ -55,26 +55,29 @@ public class DefaultArchetypeSelectionQueryer
     public Archetype selectArchetype( List<Archetype> archetypes )
         throws PrompterException
     {
-        String query = "Choose archetype:\n";
+        StringBuilder query = new StringBuilder( "Choose archetype:\n" );
+
         Map<String, Archetype> answerMap = new HashMap<String, Archetype>();
         List<String> answers = new ArrayList<String>();
         int counter = 1;
 
         for ( Archetype archetype : archetypes )
         {
-            answerMap.put( String.valueOf( counter ), archetype );
-            query +=
-                String.valueOf( counter ) + ": " + archetype.getArtifactId() + " (" + archetype.getDescription() + ":"
-                    + archetype.getArtifactId() + ")\n";
-            answers.add( String.valueOf( counter ) );
+            String mapKey = String.valueOf( counter );
+            answerMap.put( mapKey, archetype );
+            answers.add( mapKey );
+
+            query.append( mapKey + ": " + archetype.getArtifactId() + " ("
+                + archetype.getDescription() + ":" + archetype.getArtifactId() + ")\n" );
 
             counter++;
         }
-        query += "Choose a number: ";
 
-        String answer = prompter.prompt( query, answers );
+        query.append( "Choose a number: " );
 
-        return (Archetype) answerMap.get( answer );
+        String answer = prompter.prompt( query.toString(), answers );
+
+        return answerMap.get( answer );
     }
 
     public Archetype selectArchetype( Map<String, List<Archetype>> catalogs )
@@ -86,7 +89,8 @@ public class DefaultArchetypeSelectionQueryer
     public Archetype selectArchetype( Map<String, List<Archetype>> catalogs, ArchetypeDefinition defaultDefinition )
         throws PrompterException
     {
-        String query = "Choose archetype:\n";
+        StringBuilder query = new StringBuilder( "Choose archetype:\n" );
+
         Map<String, List<Archetype>> archetypeAnswerMap = new HashMap<String, List<Archetype>>();
         Map<String, String> reversedArchetypeAnswerMap = new HashMap<String, String>();
         List<String> answers = new ArrayList<String>();
@@ -101,7 +105,9 @@ public class DefaultArchetypeSelectionQueryer
             for ( Archetype archetype : entry.getValue() )
             {
                 String mapKey = String.valueOf( counter );
+
                 String archetypeKey = archetype.getGroupId() + ":" + archetype.getArtifactId();
+
                 if ( reversedArchetypeAnswerMap.containsKey( archetypeKey ) )
                 {
                     mapKey = reversedArchetypeAnswerMap.get( archetypeKey );
@@ -112,9 +118,10 @@ public class DefaultArchetypeSelectionQueryer
                     archetypeVersions = new ArrayList<Archetype>();
                     archetypeAnswerMap.put( mapKey, archetypeVersions );
                     reversedArchetypeAnswerMap.put( archetypeKey, mapKey );
-                    query +=
-                        mapKey + ": " + catalog
-                        + " -> " + archetype.getArtifactId() + " (" + archetype.getDescription() + ")\n";
+
+                    query.append( mapKey + ": " + catalog + " -> " + archetype.getArtifactId() + " ("
+                        + archetype.getDescription() + ")\n" );
+
                     answers.add( mapKey );
 
                     // the version is not tested. This is intentional.
@@ -126,21 +133,22 @@ public class DefaultArchetypeSelectionQueryer
 
                     counter++;
                 }
+
                 archetypeVersions.add( archetype );
             }
 
         }
 
-        query += "Choose a number: ";
+        query.append( "Choose a number: " );
 
         String answer;
         if ( defaultSelection == 0 )
         {
-            answer = prompter.prompt( query, answers );
+            answer = prompter.prompt( query.toString(), answers );
         }
         else
         {
-            answer = prompter.prompt( query, answers, Integer.toString( defaultSelection ) );
+            answer = prompter.prompt( query.toString(), answers, Integer.toString( defaultSelection ) );
         }
 
         archetypeVersions = archetypeAnswerMap.get( answer );
@@ -158,7 +166,8 @@ public class DefaultArchetypeSelectionQueryer
     private Archetype selectVersion( List<Archetype> archetypes )
         throws PrompterException
     {
-        String query = "Choose version: \n";
+        StringBuilder query = new StringBuilder( "Choose version: \n" );
+
         Map<String, Archetype> answerMap = new HashMap<String, Archetype>();
         List<String> answers = new ArrayList<String>();
 
@@ -173,102 +182,24 @@ public class DefaultArchetypeSelectionQueryer
         int counter = 1;
         for ( Archetype archetype : archetypes )
         {
+            String mapKey = String.valueOf( counter );
             String archetypeVersion = archetype.getVersion();
 
-            answerMap.put( String.valueOf( counter ), archetype );
-            query += String.valueOf( counter ) + ": " + archetypeVersion + "\n";
-            answers.add( String.valueOf( counter ) );
+            answerMap.put( mapKey, archetype );
+
+            query.append( mapKey + ": " + archetypeVersion + "\n" );
+
+            answers.add( mapKey );
 
             counter++;
         }
-        query += "Choose a number: ";
 
-        String answer = prompter.prompt( query, answers );
+        query.append( "Choose a number: " );
 
-        return  (Archetype) answerMap.get( answer );
+        String answer = prompter.prompt( query.toString(), answers );
+
+        return answerMap.get( answer );
     }
-
-//
-//    public String selectGroup( List groups )
-//        throws
-//        PrompterException
-//    {
-//        String query = "Choose group:\n";
-//        Map answerMap = new HashMap();
-//        List answers = new ArrayList();
-//        Iterator groupIterator = groups.iterator();
-//        int counter = 1;
-//        while ( groupIterator.hasNext() )
-//        {
-//            String group = (String) groupIterator.next();
-//
-//            answerMap.put( "" + counter, group );
-//            query += "" + counter + ": " + group + "\n";
-//            answers.add( "" + counter );
-//
-//            counter++;
-//        }
-//        query += "Choose a number: ";
-//
-//        String answer = prompter.prompt( query, answers );
-//
-//        return (String) answerMap.get( answer );
-//    }
-//
-//    public Archetype selectArtifact( List archetypes )
-//        throws
-//        PrompterException
-//    {
-//        String query = "Choose archetype:\n";
-//        Map answerMap = new HashMap();
-//        List answers = new ArrayList();
-//        Iterator archetypeIterator = archetypes.iterator();
-//        int counter = 1;
-//        while ( archetypeIterator.hasNext() )
-//        {
-//            Archetype archetype = (Archetype) archetypeIterator.next();
-//
-//            answerMap.put( "" + counter, archetype );
-//            query +=
-//                "" + counter + ": " + archetype.getName() + " (" + archetype.getGroupId() + ":"
-//                    + archetype.getArtifactId() + ")\n";
-//            answers.add( "" + counter );
-//
-//            counter++;
-//        }
-//        query += "Choose a number: ";
-//
-//        String answer = prompter.prompt( query, answers );
-//
-//        return (Archetype) answerMap.get( answer );
-//    }
-//
-//    public String selectVersion( List archetypeVersions )
-//        throws
-//        PrompterException
-//    {
-//        String query = "Choose version: \n";
-//        Map answerMap = new HashMap();
-//        List answers = new ArrayList();
-//
-//        Iterator archetypeVersionsKeys = archetypeVersions.iterator();
-//        int counter = 1;
-//        while ( archetypeVersionsKeys.hasNext() )
-//        {
-//            String archetypeVersion = (String) archetypeVersionsKeys.next();
-//
-//            answerMap.put( "" + counter, archetypeVersion );
-//            query += "" + counter + ": " + archetypeVersion + "\n";
-//            answers.add( "" + counter );
-//
-//            counter++;
-//        }
-//        query += "Choose a number: ";
-//
-//        String answer = prompter.prompt( query, answers );
-//
-//        return (String) answerMap.get( answer );
-//    }
 
     public void setPrompter( Prompter prompter )
     {
