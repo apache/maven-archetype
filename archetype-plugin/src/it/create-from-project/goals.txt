@@ -1,0 +1,1 @@
+clean archetype:create-from-project
