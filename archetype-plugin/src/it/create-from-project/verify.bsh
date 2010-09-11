@@ -20,19 +20,10 @@
 
 import java.io.*;
 
-try
+File target = new File( basedir, "target/generated-sources/archetype/pom.xml" );
+if ( !target.isFile() )
 {
-    File target = new File( basedir, "target/generated-sources/archetype/pom.xml" );
-    if ( !target.exists() || !target.isFile() )
-    {
-        System.err.println( target + " file is missing or not a file." );
-        return false;
-    }
-}
-catch( IOException e )
-{
-    e.printStackTrace();
-    return false;
+    throw new Exception( target + " file is missing or not a file." );
 }
 
 return true;
