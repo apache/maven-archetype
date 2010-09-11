@@ -52,34 +52,6 @@ public class DefaultArchetypeSelectionQueryer
         return "Y".equalsIgnoreCase( answer );
     }
 
-    public Archetype selectArchetype( List<Archetype> archetypes )
-        throws PrompterException
-    {
-        StringBuilder query = new StringBuilder( "Choose archetype:\n" );
-
-        Map<String, Archetype> answerMap = new HashMap<String, Archetype>();
-        List<String> answers = new ArrayList<String>();
-        int counter = 1;
-
-        for ( Archetype archetype : archetypes )
-        {
-            String mapKey = String.valueOf( counter );
-            answerMap.put( mapKey, archetype );
-            answers.add( mapKey );
-
-            query.append( mapKey + ": " + archetype.getArtifactId() + " ("
-                + archetype.getDescription() + ":" + archetype.getArtifactId() + ")\n" );
-
-            counter++;
-        }
-
-        query.append( "Choose a number: " );
-
-        String answer = prompter.prompt( query.toString(), answers );
-
-        return answerMap.get( answer );
-    }
-
     public Archetype selectArchetype( Map<String, List<Archetype>> catalogs )
         throws PrompterException
     {
@@ -119,8 +91,14 @@ public class DefaultArchetypeSelectionQueryer
                     archetypeAnswerMap.put( mapKey, archetypeVersions );
                     reversedArchetypeAnswerMap.put( archetypeKey, mapKey );
 
+                    String description = archetype.getDescription();
+                    if ( description == null )
+                    {
+                        description = "-";
+                    }
+
                     query.append( mapKey + ": " + catalog + " -> " + archetype.getArtifactId() + " ("
-                        + archetype.getDescription() + ")\n" );
+                        + description + ")\n" );
 
                     answers.add( mapKey );
 
