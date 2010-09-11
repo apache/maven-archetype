@@ -3,7 +3,7 @@
  ------
  Raphaël Piéroni
  ------
- 09 September 2008
+ 2010-09-11
  ------
 
 ~~ Licensed to the Apache Software Foundation (ASF) under one
@@ -38,15 +38,15 @@ Generate project using an alternative catalog
    * <<<remote>>> to use the maven's remote catalog. No catalog is currently provided.
 
    * <<<file://path/to/archetype-catalog.xml>>> to use a specific local catalog.
-     When the catalog file is named <<<archetype-catalog.xml>>>, it can be omited.
+     When the catalog file is named <<<archetype-catalog.xml>>>, it can be omitted.
 
    * <<<http://url/to/archetype-catalog.xml>>> to use a specific remote catalog.
-     When the catalog file is named <<<archetype-catalog.xml>>>, it can be omited.
+     When the catalog file is named <<<archetype-catalog.xml>>>, it can be omitted.
 
    []
 
-   The default value is <<<local,internal>>>. Thus the internal catalog is shown
-   just after the local one.
+   The default value is <<<remote,local>>>. Thus the local catalog is shown
+   just after the remote one.
 
 +--
 $ mvn archetype:generate -DarchetypeCatalog=http://cocoon.apache.org
