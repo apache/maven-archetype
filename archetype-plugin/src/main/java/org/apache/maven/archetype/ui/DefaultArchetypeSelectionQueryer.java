@@ -20,17 +20,21 @@ package org.apache.maven.archetype.ui;
  */
 
 import org.apache.maven.archetype.catalog.Archetype;
+import org.apache.maven.artifact.versioning.ArtifactVersion;
+import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.codehaus.plexus.components.interactivity.Prompter;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 /** @plexus.component */
 public class DefaultArchetypeSelectionQueryer
@@ -63,10 +67,10 @@ public class DefaultArchetypeSelectionQueryer
     {
         StringBuilder query = new StringBuilder( "Choose archetype:\n" );
 
-        Map<String, List<Archetype>> archetypeAnswerMap = new HashMap<String, List<Archetype>>();
-        Map<String, String> reversedArchetypeAnswerMap = new HashMap<String, String>();
+        Set<String> archetypeKeys = new HashSet<String>();
         List<String> answers = new ArrayList<String>();
-        List<Archetype> archetypeVersions;
+        Map<String, Archetype> archetypeAnswerMap = new HashMap<String, Archetype>();
+
         int counter = 1;
         int defaultSelection = 0;
 
@@ -76,43 +80,36 @@ public class DefaultArchetypeSelectionQueryer
 
             for ( Archetype archetype : entry.getValue() )
             {
-                String mapKey = String.valueOf( counter );
-
                 String archetypeKey = archetype.getGroupId() + ":" + archetype.getArtifactId();
 
-                if ( reversedArchetypeAnswerMap.containsKey( archetypeKey ) )
+                if ( !archetypeKeys.add( archetypeKey ) )
                 {
-                    mapKey = reversedArchetypeAnswerMap.get( archetypeKey );
-                    archetypeVersions = archetypeAnswerMap.get( mapKey );
-                }
-                else
-                {
-                    archetypeVersions = new ArrayList<Archetype>();
-                    archetypeAnswerMap.put( mapKey, archetypeVersions );
-                    reversedArchetypeAnswerMap.put( archetypeKey, mapKey );
-
-                    String description = archetype.getDescription();
-                    if ( description == null )
-                    {
-                        description = "-";
-                    }
-
-                    query.append( mapKey + ": " + catalog + " -> " + archetype.getArtifactId() + " ("
-                        + description + ")\n" );
-
-                    answers.add( mapKey );
-
-                    // the version is not tested. This is intentional.
-                    if ( defaultDefinition != null && archetype.getGroupId().equals( defaultDefinition.getGroupId() )
-                        && archetype.getArtifactId().equals( defaultDefinition.getArtifactId() ) )
-                    {
-                        defaultSelection = counter;
-                    }
-
-                    counter++;
+                    continue;
                 }
 
-                archetypeVersions.add( archetype );
+                String description = archetype.getDescription();
+                if ( description == null )
+                {
+                    description = "-";
+                }
+
+                String answer = String.valueOf( counter );
+
+                query.append( answer + ": " + catalog + " -> " + archetype.getArtifactId() + " ("
+                    + description + ")\n" );
+
+                answers.add( answer );
+
+                archetypeAnswerMap.put( answer, archetype );
+
+                // the version is not tested. This is intentional.
+                if ( defaultDefinition != null && archetype.getGroupId().equals( defaultDefinition.getGroupId() )
+                    && archetype.getArtifactId().equals( defaultDefinition.getArtifactId() ) )
+                {
+                    defaultSelection = counter;
+                }
+
+                counter++;
             }
 
         }
@@ -129,52 +126,68 @@ public class DefaultArchetypeSelectionQueryer
             answer = prompter.prompt( query.toString(), answers, Integer.toString( defaultSelection ) );
         }
 
-        archetypeVersions = archetypeAnswerMap.get( answer );
+        Archetype selection = archetypeAnswerMap.get( answer );
 
-        if ( archetypeVersions.size() == 1 )
-        {
-            return archetypeVersions.get( 0 );
-        }
-        else
-        {
-            return selectVersion( archetypeVersions );
-        }
+        return selectVersion( catalogs, selection.getGroupId(), selection.getArtifactId() );
     }
 
-    private Archetype selectVersion( List<Archetype> archetypes )
+    private Archetype selectVersion( Map<String, List<Archetype>> catalogs, String groupId, String artifactId )
         throws PrompterException
     {
+        SortedMap<ArtifactVersion, Archetype> archetypeVersionsMap = new TreeMap<ArtifactVersion, Archetype>();
+
+        for ( Map.Entry<String, List<Archetype>> entry : catalogs.entrySet() )
+        {
+            for ( Archetype archetype : entry.getValue() )
+            {
+                if ( !groupId.equals( archetype.getGroupId() ) || !artifactId.equals( archetype.getArtifactId() ) )
+                {
+                    continue;
+                }
+
+                ArtifactVersion version = new DefaultArtifactVersion( archetype.getVersion() );
+
+                // don't override the first catalog containing a defined version of the artifact
+                if ( !archetypeVersionsMap.containsKey( version ) )
+                {
+                    archetypeVersionsMap.put( version, archetype );
+                }
+            }
+        }
+
+        if ( archetypeVersionsMap.size() == 1 )
+        {
+            return archetypeVersionsMap.values().iterator().next();
+        }
+
+        // let the user choose between available versions
         StringBuilder query = new StringBuilder( "Choose version: \n" );
 
-        Map<String, Archetype> answerMap = new HashMap<String, Archetype>();
         List<String> answers = new ArrayList<String>();
-
-        Collections.sort( archetypes, new Comparator<Archetype>()
-        {
-            public int compare( Archetype a1, Archetype a2 )
-            {
-                return a1.getVersion().compareTo( a2.getVersion() );
-            }
-        } );
+        Map<String, Archetype> answerMap = new HashMap<String, Archetype>();
 
         int counter = 1;
-        for ( Archetype archetype : archetypes )
+        String mapKey = null;
+
+        for ( Map.Entry<ArtifactVersion, Archetype> entry : archetypeVersionsMap.entrySet() )
         {
-            String mapKey = String.valueOf( counter );
-            String archetypeVersion = archetype.getVersion();
+            ArtifactVersion version = entry.getKey();
+            Archetype archetype = entry.getValue();
 
-            answerMap.put( mapKey, archetype );
+            mapKey = String.valueOf( counter );
 
-            query.append( mapKey + ": " + archetypeVersion + "\n" );
+            query.append( mapKey + ": " + version + "\n" );
 
             answers.add( mapKey );
+
+            answerMap.put( mapKey, archetype );
 
             counter++;
         }
 
         query.append( "Choose a number: " );
 
-        String answer = prompter.prompt( query.toString(), answers );
+        String answer = prompter.prompt( query.toString(), answers, mapKey );
 
         return answerMap.get( answer );
     }
