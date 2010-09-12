@@ -147,7 +147,11 @@ public class CreateArchetypeFromProjectMojo
      */
     private String archetypePostPhase;
 
-    /** @parameter expression="${project.build.directory}" */
+    /**
+     * The directory where the archetype should be created.
+     * 
+     * @parameter expression="${project.build.directory}/generated-sources/archetype"
+     */
     private File outputDirectory;
 
     /** @parameter expression="${testMode}" */
@@ -183,21 +187,22 @@ public class CreateArchetypeFromProjectMojo
 
             ArchetypeCreationRequest request = new ArchetypeCreationRequest()
                 .setProject( project )
-                /*Used when in interactive mode*/
+                /* Used when in interactive mode */
                 .setProperties( properties )
                 .setLanguages( languages )
-                /*Should be refactored to use some ant patterns*/
+                /* Should be refactored to use some ant patterns */
                 .setFiltereds( filtereds )
-                /*This should be correctly handled*/
+                /* This should be correctly handled */
                 .setPreserveCData( preserveCData )
                 .setKeepParent( keepParent )
                 .setPartialArchetype( partialArchetype )
-                /*This should be used before there and use only languages and filtereds*/
+                /* This should be used before there and use only languages and filtereds */
                 .setArchetypeRegistryFile( archetypeRegistryFile )
                 .setLocalRepository( localRepository )
-                /*this should be resolved and asked for user to verify*/
+                /* this should be resolved and asked for user to verify */
                 .setPackageName( packageName )
-                .setPostPhase( archetypePostPhase );
+                .setPostPhase( archetypePostPhase )
+                .setOutputDirectory( outputDirectory );
 
             ArchetypeCreationResult result = archetype.createArchetypeFromProject( request );
 
@@ -207,7 +212,7 @@ public class CreateArchetypeFromProjectMojo
                                                 result.getCause().getMessage() );
             }
 
-            getLog().info( "Archetype created in target/generated-sources/archetype" );
+            getLog().info( "Archetype created in " + outputDirectory );
 
             if ( testMode )
             {

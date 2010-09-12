@@ -56,6 +56,8 @@ public class ArchetypeCreationRequest
 
     private String postPhase;
 
+    private File outputDirectory;
+
     public String getPostPhase()
     {
         return postPhase;
@@ -208,6 +210,18 @@ public class ArchetypeCreationRequest
     public ArchetypeCreationRequest setPackageName( String packageName )
     {
         this.packageName = packageName;
+
+        return this;
+    }
+
+    public File getOutputDirectory()
+    {
+        return outputDirectory;
+    }
+
+    public ArchetypeCreationRequest setOutputDirectory( File outputDirectory )
+    {
+        this.outputDirectory = outputDirectory;
 
         return this;
     }
