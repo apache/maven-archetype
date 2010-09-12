@@ -87,6 +87,9 @@ public class FilesetArchetypeCreator
     extends AbstractLogEnabled
     implements ArchetypeCreator
 {
+    private final static String DEFAULT_OUTPUT_DIRECTORY = "target" + File.separator + "generated-sources"
+        + File.separator + "archetype";
+
     /** @plexus.requirement */
     private ArchetypeFilesResolver archetypeFilesResolver;
 
@@ -106,6 +109,8 @@ public class FilesetArchetypeCreator
         boolean keepParent = request.isKeepParent();
         boolean partialArchetype = request.isPartialArchetype();
         ArtifactRepository localRepository = request.getLocalRepository();
+        File outputDirectory = request.getOutputDirectory();
+        File basedir = project.getBasedir();
 
         Properties properties = new Properties();
         Properties configurationProperties = new Properties();
@@ -117,18 +122,21 @@ public class FilesetArchetypeCreator
 
         extractPropertiesFromProject( project, properties, configurationProperties, request.getPackageName() );
 
-        File basedir = project.getBasedir();
-        File generatedSourcesDirectory = FileUtils.resolveFile( basedir, getGeneratedSourcesDirectory() );
-        generatedSourcesDirectory.mkdirs();
+        if ( outputDirectory == null )
+        {
+            getLogger().debug( "No output directory defined, using default: " + DEFAULT_OUTPUT_DIRECTORY );
+            outputDirectory = FileUtils.resolveFile( basedir, DEFAULT_OUTPUT_DIRECTORY );
+        }
+        outputDirectory.mkdirs();
 
-        getLogger().debug( "Creating archetype in " + generatedSourcesDirectory );
+        getLogger().debug( "Creating archetype in " + outputDirectory );
 
         try
         {
             File archetypePomFile =
-                createArchetypeProjectPom( project, localRepository, configurationProperties, generatedSourcesDirectory );
+                createArchetypeProjectPom( project, localRepository, configurationProperties, outputDirectory );
 
-            File archetypeResourcesDirectory = new File( generatedSourcesDirectory, getTemplateOutputDirectory() );
+            File archetypeResourcesDirectory = new File( outputDirectory, getTemplateOutputDirectory() );
 
             File archetypeFilesDirectory = new File( archetypeResourcesDirectory, Constants.ARCHETYPE_RESOURCES );
             getLogger().debug( "Archetype's files output directory " + archetypeFilesDirectory );
@@ -227,7 +235,7 @@ public class FilesetArchetypeCreator
                 IOUtil.close( out );
             }
 
-            createArchetypeBasicIt( archetypeDescriptor, generatedSourcesDirectory );
+            createArchetypeBasicIt( archetypeDescriptor, outputDirectory );
 
             InvocationRequest internalRequest = new DefaultInvocationRequest();
             internalRequest.setPomFile( archetypePomFile );
@@ -1166,11 +1174,6 @@ public class FilesetArchetypeCreator
         }
 
         return extensions;
-    }
-
-    private String getGeneratedSourcesDirectory()
-    {
-        return "target" + File.separator + "generated-sources" + File.separator + "archetype";
     }
 
     private Map<String, List<String>> getGroupsMap( final List<String> files, final int level )
