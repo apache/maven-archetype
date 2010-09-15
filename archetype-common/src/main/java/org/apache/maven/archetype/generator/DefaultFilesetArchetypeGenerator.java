@@ -51,6 +51,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -649,9 +650,13 @@ public class DefaultFilesetArchetypeGenerator
 
             try
             {
+                StringWriter stringWriter = new StringWriter();
+
+                velocity.getEngine().mergeTemplate( templateFileName, encoding, context, stringWriter );
+
                 writer = new OutputStreamWriter( new FileOutputStream( outFile ), encoding );
 
-                velocity.getEngine().mergeTemplate( templateFileName, encoding, context, writer );
+                writer.write( StringUtils.unifyLineSeparators( stringWriter.toString() ) );
 
                 writer.flush();
             }

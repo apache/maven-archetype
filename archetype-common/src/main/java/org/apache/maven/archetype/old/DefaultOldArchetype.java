@@ -866,11 +866,15 @@ public class DefaultOldArchetype
             Writer writer = null;
             try
             {
-                writer = new OutputStreamWriter( new FileOutputStream( f ), descriptor.getEncoding() );
+                StringWriter stringWriter = new StringWriter();
 
                 template = ARCHETYPE_RESOURCES + "/" + template;
 
-                velocity.getEngine().mergeTemplate( template, descriptor.getEncoding(), context, writer );
+                velocity.getEngine().mergeTemplate( template, descriptor.getEncoding(), context, stringWriter );
+
+                writer = new OutputStreamWriter( new FileOutputStream( f ), descriptor.getEncoding() );
+
+                writer.write( StringUtils.unifyLineSeparators( stringWriter.toString() ) );
 
                 writer.flush();
             }
