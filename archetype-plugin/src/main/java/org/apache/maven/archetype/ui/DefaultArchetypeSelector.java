@@ -59,13 +59,15 @@ public class DefaultArchetypeSelector
     {
         ArchetypeDefinition definition = new ArchetypeDefinition( request );
 
-        Map<String, List<Archetype>> archetypes = getArchetypesByCatalog( catalogs );
-
         if ( definition.isDefined() && StringUtils.isNotEmpty( request.getArchetypeRepository() ) )
         {
             getLogger().info( "Archetype defined by properties" );
+            return;
         }
-        else if ( definition.isDefined() )
+
+        Map<String, List<Archetype>> archetypes = getArchetypesByCatalog( catalogs );
+
+        if ( definition.isDefined() )
         {
             Map.Entry<String, Archetype> found =
                 findArchetype( archetypes, request.getArchetypeGroupId(), request.getArchetypeArtifactId() );
