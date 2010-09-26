@@ -46,7 +46,7 @@ under the License.
   <modules>
     <module>archetype-testing</module>
     <module>archetype-common</module>
-    <module>archetype-plugin</module>
+    <module>maven-archetype-plugin</module>
     <module>archetype-packaging</module>
   </modules>
 
