@@ -182,6 +182,8 @@ public class DefaultArchetypeArtifactManager
         ZipFile zipFile = null;
         try
         {
+            getLogger().debug( "checking fileset archetype status on " + archetypeFile );
+
             zipFile = getArchetypeZipFile( archetypeFile );
 
             return isFileSetArchetype( zipFile );
@@ -212,6 +214,7 @@ public class DefaultArchetypeArtifactManager
         {
             File archetypeFile = getArchetypeFile( groupId, artifactId, version, archetypeRepository,
                                                    localRepository, repositories );
+
             return isFileSetArchetype( archetypeFile );
         }
         catch ( UnknownArchetype e )
@@ -225,6 +228,8 @@ public class DefaultArchetypeArtifactManager
         ZipFile zipFile = null;
         try
         {
+            getLogger().debug( "checking old archetype status on " + archetypeFile );
+
             zipFile = getArchetypeZipFile( archetypeFile );
 
             return isOldArchetype( zipFile );
@@ -251,30 +256,16 @@ public class DefaultArchetypeArtifactManager
                                    ArtifactRepository archetypeRepository, ArtifactRepository localRepository,
                                    List<ArtifactRepository> repositories )
     {
-        ZipFile zipFile = null;
         try
         {
-            zipFile =
-                getArchetypeZipFile( getArchetypeFile( groupId, artifactId, version, archetypeRepository,
-                                                       localRepository, repositories ) );
+            File archetypeFile = getArchetypeFile( groupId, artifactId, version, archetypeRepository,
+                                                   localRepository, repositories );
 
-            return isOldArchetype( zipFile );
-        }
-        catch ( XmlPullParserException e )
-        {
-            return false;
-        }
-        catch ( IOException e )
-        {
-            return false;
+            return isOldArchetype( archetypeFile );
         }
         catch ( UnknownArchetype e )
         {
             return false;
-        }
-        finally
-        {
-            closeZipFile( zipFile );
         }
     }
 
