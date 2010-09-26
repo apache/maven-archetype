@@ -150,17 +150,20 @@ public class RoundtripMultiModuleTest
             new File( generatedArchetypeProject.getBuild().getDirectory() ),
             generatedArchetypeProject.getBuild().getFinalName() );
 
+        String baseName = StringUtils.replace( generatedArchetypeProject.getGroupId(), ".", File.separator )
+                        + File.separator
+                        + generatedArchetypeProject.getArtifactId()
+                        + File.separator
+                        + generatedArchetypeProject.getVersion()
+                        + File.separator
+                        + generatedArchetypeProject.getBuild().getFinalName();
         File archetypeInRepository =
-            new File( centralRepository.getBasedir(), StringUtils.replace( generatedArchetypeProject.getGroupId(), ".",
-                                                                           File.separator )
-                + File.separator
-                + generatedArchetypeProject.getArtifactId()
-                + File.separator
-                + generatedArchetypeProject.getVersion()
-                + File.separator
-                + generatedArchetypeProject.getBuild().getFinalName() + ".jar" );
+            new File( centralRepository.getBasedir(), baseName + ".jar" );
+        File archetypePomInRepository =
+            new File( centralRepository.getBasedir(), baseName + ".pom" );
         archetypeInRepository.getParentFile().mkdirs();
         FileUtils.copyFile( archetypeArchive, archetypeInRepository );
+        FileUtils.copyFile( generatedArchetypePom, archetypePomInRepository );
 
         // (4) create our own archetype catalog describing the archetype we just created
         ArchetypeCatalog catalog = new ArchetypeCatalog();
