@@ -46,7 +46,7 @@ extends AbstractMojoTestCase
         System.err.println ( "result = " + result );
         assertTrue (
             ( 5 <= result.getArchetypes ().size () )
-            && ( result.getArchetypes ().size () >= 7 )
+            && ( result.getArchetypes ().size () <= 8 )
         );
         
         // TODO: should write to another directory 

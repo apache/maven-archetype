@@ -52,6 +52,7 @@ public class DefaultDownloader
         throws DownloadException, DownloadNotFoundException
    {
         Artifact artifact = artifactFactory.createArtifact( groupId, artifactId, version, Artifact.SCOPE_RUNTIME, "jar" );
+        Artifact artifactPom = artifactFactory.createArtifact( groupId, artifactId, version, Artifact.SCOPE_RUNTIME, "pom" );
 
         List<ArtifactRepository> repositories = new ArrayList<ArtifactRepository>( remoteRepositories );
         if ( repositories.isEmpty() && archetypeRepository != null )
@@ -75,6 +76,18 @@ public class DefaultDownloader
         catch ( ArtifactNotFoundException e )
         {
             throw new DownloadNotFoundException( "Requested " + artifact.getId() + " download does not exist.", e );
+        }
+        try
+        {
+            artifactResolver.resolve( artifactPom, repositories, localRepo );
+        }
+        catch ( ArtifactResolutionException e )
+        {
+            throw new DownloadException( "Error downloading POM for " + artifact.getId() + ".", e );
+        }
+        catch ( ArtifactNotFoundException e )
+        {
+            throw new DownloadNotFoundException( "Requested " + artifact.getId() + " download's POM does not exist.", e );
         }
 
         return artifact.getFile();
