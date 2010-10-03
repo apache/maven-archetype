@@ -29,18 +29,28 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.List;
 import java.util.Properties;
 
 /**
- * Execute the archetype integration tests.
+ * Execute the archetype integration tests, consisting of a creation of a project from the current archetype with
+ * defined properties and optional comparison with reference copy. An IT consists of a directory in
+ * <code>src/test/resources/projects</code> containing:
+ * <ul>
+ * <li><code>goal.txt</code> (content actually not used, but future version should interpret it as a goal to run against
+ * the generated project: see <a href="http://http://jira.codehaus.org/browse/ARCHETYPE-334/">ARCHETYPE-334</a>),</li>
+ * <li><code>archetype.properties</code> with properties for project generation,</li>
+ * <li>optional <code>reference/</code> directory containing a reference copy of the expected project created from the IT.</li>
+ * </ul>
  *
  * @author rafale
  * @requiresProject true
@@ -72,45 +82,49 @@ public class IntegrationTestMojo
     public void execute()
         throws MojoExecutionException, MojoFailureException
     {
-        if ( !skip )
+        if ( skip )
         {
-            try
+            return;
+        }
+
+        File projectsDirectory = new File( project.getBasedir(), "target/test-classes/projects" );
+
+        if ( !projectsDirectory.exists() )
+        {
+            return;
+        }
+
+        try
+        {
+            List<File> projectsGoalFiles = FileUtils.getFiles( projectsDirectory, "*/goal.txt", "" );
+
+            File archetypeFile = project.getArtifact().getFile();
+
+            StringWriter errorWriter = new StringWriter();
+            for ( File goalFile : projectsGoalFiles )
             {
-                File projectsDirectory = new File( project.getBasedir(), "target/test-classes/projects" );
-
-                if ( projectsDirectory.exists() )
+                try
                 {
-                    File archetypeFile = project.getArtifact().getFile();
-
-                    List<File> projectsGoalFiles = FileUtils.getFiles( projectsDirectory, "*/goal.txt", "" );
-
-                    StringWriter errorWriter = new StringWriter();
-                    for ( File goalFile : projectsGoalFiles )
-                    {
-                        try
-                        {
-                            processIntegrationTest( goalFile, archetypeFile );
-                        }
-                        catch ( IntegrationTestFailure ex )
-                        {
-                            errorWriter.write( "Test " + goalFile.getParentFile().getName() + " failed\n" );
-                            errorWriter.write( ex.getStackTrace() + "\n" );
-                            errorWriter.write( ex.getMessage() + "\n" );
-                            errorWriter.write( "\n" );
-                        }
-                    }
-
-                    String errors = errorWriter.toString();
-                    if ( !StringUtils.isEmpty( errors ) )
-                    {
-                        throw new MojoExecutionException( errors );
-                    }
+                    processIntegrationTest( goalFile, archetypeFile );
+                }
+                catch ( IntegrationTestFailure ex )
+                {
+                    errorWriter.write( "Test " + goalFile.getParentFile().getName() + " failed\n" );
+                    errorWriter.write( ex.getStackTrace() + "\n" );
+                    errorWriter.write( ex.getMessage() + "\n" );
+                    errorWriter.write( "\n" );
                 }
             }
-            catch ( IOException ex )
+
+            String errors = errorWriter.toString();
+            if ( !StringUtils.isEmpty( errors ) )
             {
-                throw new MojoFailureException( ex, ex.getMessage(), ex.getMessage() );
+                throw new MojoExecutionException( errors );
             }
+        }
+        catch ( IOException ex )
+        {
+            throw new MojoFailureException( ex, ex.getMessage(), ex.getMessage() );
         }
     }
 
@@ -173,7 +187,17 @@ public class IntegrationTestMojo
     {
         Properties properties = new Properties();
 
-        properties.load( new FileInputStream( propertiesFile ) );
+        InputStream in = null;
+        try
+        {
+            in = new FileInputStream( propertiesFile );
+
+            properties.load( in );
+        }
+        finally
+        {
+            IOUtil.close( in );
+        }
 
         return properties;
     }
@@ -189,8 +213,6 @@ public class IntegrationTestMojo
     {
         try
         {
-            Properties testProperties = getTestProperties( goalFile );
-
             Properties properties = getProperties( goalFile );
 
             String basedir = goalFile.getParentFile().getPath() + "/project";
@@ -214,17 +236,17 @@ public class IntegrationTestMojo
 
             archetypeGenerator.generateArchetype( request, archetypeFile, result );
 
+            if ( result.getCause() != null )
+            {
+                throw new IntegrationTestFailure( result.getCause() );
+            }
+
             File reference = new File( goalFile.getParentFile(), "reference" );
 
             if ( reference.exists() )
             {
                 // compare generated project with reference
                 assertTest( reference, new File( basedir, request.getArtifactId() ) );
-            }
-
-            if ( result.getCause() != null )
-            {
-                throw new IntegrationTestFailure( result.getCause() );
             }
         }
         catch ( IOException ioe )
@@ -237,15 +259,8 @@ public class IntegrationTestMojo
         throws IOException
     {
         File propertiesFile = new File( goalFile.getParentFile(), "archetype.properties" );
-        System.out.println( propertiesFile );
 
         return loadProperties( propertiesFile );
-    }
-
-    private Properties getTestProperties( File goalFile )
-        throws IOException
-    {
-        return loadProperties( goalFile );
     }
 
     class IntegrationTestFailure
