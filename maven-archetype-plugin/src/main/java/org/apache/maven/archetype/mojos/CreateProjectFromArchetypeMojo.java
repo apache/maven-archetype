@@ -201,7 +201,7 @@ public class CreateProjectFromArchetypeMojo
         }
         catch ( Exception ex )
         {
-            throw new MojoFailureException( ex.getMessage() );
+            throw (MojoFailureException) new MojoFailureException( ex.getMessage() ).initCause( ex );
         }
 
         String artifactId = request.getArtifactId();
