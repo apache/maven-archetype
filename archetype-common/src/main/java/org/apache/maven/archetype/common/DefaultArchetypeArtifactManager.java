@@ -32,7 +32,6 @@ import org.apache.maven.model.Model;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.ReaderFactory;
-import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import java.io.File;
@@ -126,6 +125,7 @@ public class DefaultArchetypeArtifactManager
         {
             String pomFileName = null;
             zipFile = getArchetypeZipFile( jar );
+
             Enumeration<? extends ZipEntry> enumeration = zipFile.entries();
             while ( enumeration.hasMoreElements() )
             {
@@ -143,11 +143,8 @@ public class DefaultArchetypeArtifactManager
                 return null;
             }
 
-            ZipEntry pom = zipFile.getEntry( StringUtils.replace( pomFileName, File.separator, "/" ) );
-            if ( pom == null )
-            {
-                pom = zipFile.getEntry( StringUtils.replace( pomFileName, "/", File.separator ) );
-            }
+            ZipEntry pom = zipFile.getEntry( pomFileName );
+
             if ( pom == null )
             {
                 return null;
@@ -188,16 +185,14 @@ public class DefaultArchetypeArtifactManager
 
             return isFileSetArchetype( zipFile );
         }
-        catch ( XmlPullParserException e )
-        {
-            return false;
-        }
         catch ( IOException e )
         {
+            getLogger().debug( e.toString() );
             return false;
         }
         catch ( UnknownArchetype e )
         {
+            getLogger().debug( e.toString() );
             return false;
         }
         finally
@@ -219,6 +214,7 @@ public class DefaultArchetypeArtifactManager
         }
         catch ( UnknownArchetype e )
         {
+            getLogger().debug( e.toString() );
             return false;
         }
     }
@@ -234,16 +230,14 @@ public class DefaultArchetypeArtifactManager
 
             return isOldArchetype( zipFile );
         }
-        catch ( XmlPullParserException e )
-        {
-            return false;
-        }
         catch ( IOException e )
         {
+            getLogger().debug( e.toString() );
             return false;
         }
         catch ( UnknownArchetype e )
         {
+            getLogger().debug( e.toString() );
             return false;
         }
         finally
@@ -265,6 +259,7 @@ public class DefaultArchetypeArtifactManager
         }
         catch ( UnknownArchetype e )
         {
+            getLogger().debug( e.toString() );
             return false;
         }
     }
@@ -433,40 +428,59 @@ public class DefaultArchetypeArtifactManager
     }
 
     private boolean isFileSetArchetype( ZipFile zipFile )
-        throws IOException, XmlPullParserException
+        throws IOException
     {
-        org.apache.maven.archetype.metadata.ArchetypeDescriptor descriptor = loadFileSetArchetypeDescriptor( zipFile );
+        Reader reader = null;
+        try
+        {
+            reader = getArchetypeDescriptorReader( zipFile );
 
-        return descriptor.getName() != null;
+            return ( reader != null );
+        }
+        finally
+        {
+            IOUtil.close( reader );
+        }
     }
 
     private boolean isOldArchetype( ZipFile zipFile )
-        throws IOException, XmlPullParserException
+        throws IOException
     {
-        org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor descriptor = loadOldArchetypeDescriptor( zipFile );
+        Reader reader = null;
+        try
+        {
+            reader = getOldArchetypeDescriptorReader( zipFile );
 
-        return descriptor.getId() != null;
+            return ( reader != null );
+        }
+        finally
+        {
+            IOUtil.close( reader );
+        }
     }
 
     private org.apache.maven.archetype.metadata.ArchetypeDescriptor loadFileSetArchetypeDescriptor( ZipFile zipFile )
         throws IOException, XmlPullParserException
     {
-        Reader reader = getArchetypeDescriptorReader( zipFile );
-
-        ArchetypeDescriptorXpp3Reader archetypeReader = new ArchetypeDescriptorXpp3Reader();
-
+        Reader reader = null;
         try
         {
+            reader = getArchetypeDescriptorReader( zipFile );
+
+            if ( reader == null )
+            {
+                return null;
+            }
+
+            ArchetypeDescriptorXpp3Reader archetypeReader = new ArchetypeDescriptorXpp3Reader();
             return archetypeReader.read( reader, false );
         }
         catch ( IOException e )
         {
-            getLogger().debug( "Cannot read archetype descriptor", e );
             throw e;
         }
         catch ( XmlPullParserException e )
         {
-            getLogger().error( "Cannot parse archetype descriptor", e );
             throw e;
         }
         finally
@@ -478,45 +492,31 @@ public class DefaultArchetypeArtifactManager
     private org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor loadOldArchetypeDescriptor( ZipFile zipFile )
         throws IOException, XmlPullParserException
     {
-        ArchetypeDescriptorBuilder builder = new ArchetypeDescriptorBuilder();
-
-        org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor descriptor = null;
-
         Reader reader = null;
         try
         {
             reader = getOldArchetypeDescriptorReader( zipFile );
 
-            descriptor = builder.build( reader );
+            if ( reader == null )
+            {
+                return null;
+            }
+
+            ArchetypeDescriptorBuilder builder = new ArchetypeDescriptorBuilder();
+            return builder.build( reader );
         }
         catch ( IOException ex )
         {
-            getLogger().debug( "Cannot load old archetype", ex );
+            throw ex;
         }
         catch ( XmlPullParserException ex )
         {
-            getLogger().error( "Cannot parse old archetype", ex );
+            throw ex;
         }
         finally
         {
             IOUtil.close( reader );
         }
-
-        if ( descriptor == null )
-        {
-            try
-            {
-                reader = getOlderArchetypeDescriptorReader( zipFile );
-
-                descriptor = builder.build( reader );
-            }
-            finally
-            {
-                IOUtil.close( reader );
-            }
-        }
-
-        return descriptor;
     }
 
     private Reader getArchetypeDescriptorReader( ZipFile zipFile )
@@ -528,30 +528,24 @@ public class DefaultArchetypeArtifactManager
     private Reader getOldArchetypeDescriptorReader( ZipFile zipFile )
         throws IOException
     {
-        return getDescriptorReader( zipFile, Constants.OLD_ARCHETYPE_DESCRIPTOR );
-    }
+        Reader reader = getDescriptorReader( zipFile, Constants.OLD_ARCHETYPE_DESCRIPTOR );
 
-    private Reader getOlderArchetypeDescriptorReader( ZipFile zipFile )
-        throws IOException
-    {
-        return getDescriptorReader( zipFile, Constants.OLDER_ARCHETYPE_DESCRIPTOR );
+        if ( reader == null )
+        {
+            reader = getDescriptorReader( zipFile, Constants.OLDER_ARCHETYPE_DESCRIPTOR );
+        }
+
+        return reader;
     }
 
     private Reader getDescriptorReader( ZipFile zipFile, String descriptor )
         throws IOException
     {
-        ZipEntry entry = searchEntry( zipFile, StringUtils.replace( descriptor, File.separator, "/" ) );
+        ZipEntry entry = searchEntry( zipFile, descriptor );
 
         if ( entry == null )
         {
-            getLogger().debug( "No found " + descriptor + " retrying with windows path separator." );
-
-            entry = searchEntry( zipFile, StringUtils.replace( descriptor, "/", File.separator ) );
-        }
-
-        if ( entry == null )
-        {
-            throw new IOException( "The " + descriptor + " descriptor cannot be found in " + zipFile.getName() + "." );
+            return null;
         }
 
         InputStream is = zipFile.getInputStream( entry );
@@ -591,7 +585,7 @@ public class DefaultArchetypeArtifactManager
         }
         catch ( Exception e )
         {
-            getLogger().error( "Failed to close zipFile" );
+            getLogger().error( "Failed to close " + zipFile.getName() + " zipFile." );
         }
     }
 }
