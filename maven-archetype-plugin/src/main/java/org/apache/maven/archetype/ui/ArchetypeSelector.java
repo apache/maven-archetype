@@ -30,21 +30,10 @@ import java.io.IOException;
 
 //TODO: We should need any remote repositories here, we should simply be doing selection, any remote catalogs
 //      should be validating correctness, and if it so happens we get a crap entry then the generation mechanism
-
 //      should take care of reporting the error. The selector should not be downloading anything.
 public interface ArchetypeSelector
 {
     String ROLE = ArchetypeSelector.class.getName();
-
-//    void selectArchetype( ArchetypeGenerationRequest request,
-//                          Boolean interactiveMode )
-//        throws
-//        ArchetypeNotDefined,
-//        UnknownArchetype,
-//        UnknownGroup,
-//        IOException,
-//        PrompterException,
-//        ArchetypeSelectionFailure;
 
     void selectArchetype( ArchetypeGenerationRequest request, Boolean interactiveMode, String catalogs )
         throws ArchetypeNotDefined, UnknownArchetype, UnknownGroup, IOException, PrompterException,

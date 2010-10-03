@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @todo this interface is bound to it's implementation through the prompter exception
+ * @todo this interface is bound to its implementation through the prompter exception
  */
 public interface ArchetypeSelectionQueryer
 {
@@ -37,22 +37,6 @@ public interface ArchetypeSelectionQueryer
 
     boolean confirmSelection( ArchetypeDefinition archetypeDefinition )
         throws PrompterException;
-
-//    Archetype selectArchetype( List list )
-//        throws
-//        PrompterException;
-
-//    Archetype selectArtifact( List list )
-//        throws
-//        PrompterException;
-//
-//    String selectGroup( List list )
-//        throws
-//        PrompterException;
-//
-//    String selectVersion( List list )
-//        throws
-//        PrompterException;
 
     /**
      * Select an archetype from the given map.
