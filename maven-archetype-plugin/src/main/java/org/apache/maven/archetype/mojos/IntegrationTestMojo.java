@@ -47,7 +47,7 @@ import java.util.Properties;
  * <code>src/test/resources/projects</code> containing:
  * <ul>
  * <li><code>goal.txt</code> (content actually not used, but future version should interpret it as a goal to run against
- * the generated project: see <a href="http://http://jira.codehaus.org/browse/ARCHETYPE-334/">ARCHETYPE-334</a>),</li>
+ * the generated project: see <a href="http://jira.codehaus.org/browse/ARCHETYPE-334/">ARCHETYPE-334</a>),</li>
  * <li><code>archetype.properties</code> with properties for project generation,</li>
  * <li>optional <code>reference/</code> directory containing a reference copy of the expected project created from the IT.</li>
  * </ul>
