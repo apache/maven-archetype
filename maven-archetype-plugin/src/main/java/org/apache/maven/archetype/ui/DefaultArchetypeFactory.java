@@ -53,9 +53,9 @@ public class DefaultArchetypeFactory
         {
             if ( initPropertyWithDefault )
             {
-                configuration.setProperty( key, property );
+                configuration.setProperty( key, defaultValue );
             }
-            configuration.setDefaultProperty( key, property );
+            configuration.setDefaultProperty( key, defaultValue );
         }
 
         getLogger().debug( "Setting property " + key + "=" + configuration.getProperty( key ) );
