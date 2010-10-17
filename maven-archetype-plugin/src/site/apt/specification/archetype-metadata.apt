@@ -158,7 +158,7 @@ How metadata on an archetype is stored?
 
 * Defining multi module in the archetype metadata
 
-    Inner modules of an archetype are used to create a multi-module Maven 2
+    Inner modules of an archetype are used to create a multi-module Maven
     project from a single archetype.
 
     Modules in the <<<archetype-metadata.xml>>> file are defined like:
@@ -184,7 +184,7 @@ How metadata on an archetype is stored?
 
     The attributes name, id and dir of the module are used to determine the
     directory where to generate that module's files, they also are used to
-    determine the artifactId of the Maven 2 project corresponding to this
+    determine the artifactId of the Maven project corresponding to this
     module.
 
 

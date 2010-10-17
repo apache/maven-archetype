@@ -52,7 +52,7 @@
           <name>partial</name>
           <type>boolean</type>
           <required>false</required>
-          <description>Is this archetype representing a full Maven 2 project or only parts?</description>
+          <description>Is this archetype representing a full Maven project or only parts?</description>
         </field>
         <field>
           <name>requiredProperties</name>

@@ -36,7 +36,7 @@ under the License.
 
   <name>Maven Archetype</name>
   <description>Maven Archetype is a set of tools to deal with archetypes, i.e. an abstract representation of a kind of project
-   that can be instantiated into a concrete customized Maven 2 project.
+   that can be instantiated into a concrete customized Maven project.
    An archetype knows which files will be part of the instantiated project and which properties to fill to properly customize
    the project.
   </description>
