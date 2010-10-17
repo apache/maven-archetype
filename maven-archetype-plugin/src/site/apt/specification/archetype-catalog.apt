@@ -102,7 +102,7 @@ How does the Archetype Plugin know about archetypes?
     installs/deploys the archetype, and updates the local/remote catalog.
 
     The <<<crawl-repository>>> goal is used to create a catalog file by crawling
-    a Maven 2 repository located in the filesystem.
+    a Maven repository located in the filesystem.
 
 * Location of catalog files
 

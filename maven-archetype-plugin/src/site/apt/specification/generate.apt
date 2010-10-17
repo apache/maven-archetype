@@ -45,7 +45,7 @@ What is done during the creation of a project?
 
 * Project generation
 
-    Finally, the Archetype Plugin generates the Maven 2 project from the
+    Finally, the Archetype Plugin generates the Maven project from the
     selected/configured archetype.
 
     The archetype used to generate the project can be single or multi-module.

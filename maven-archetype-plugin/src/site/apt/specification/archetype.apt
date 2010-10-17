@@ -29,11 +29,11 @@
 
 What is an archetype?
 
-* A Maven 2 project 'en devenir'
+* A Maven project 'en devenir'
 
     I.e. an abstract representation of a kind of project
     that can be instantiated into a concrete customised
-    Maven 2 project.
+    Maven project.
 
     An archetype knows which files will be part of the
     instantiated project and which properties to fill
@@ -79,7 +79,7 @@ What is an archetype?
 
     [[2]] The resource files defined by the archetype metadata,
 
-    [[3]] The POM file of a Maven 2 project.
+    [[3]] The POM file of a Maven project.
 
     []
 
