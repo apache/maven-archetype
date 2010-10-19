@@ -31,6 +31,7 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.util.PropertyUtils;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
@@ -251,25 +252,15 @@ public class CreateArchetypeFromProjectMojo
 
         if ( filteredExtensions.isEmpty() && propertyFile != null && propertyFile.exists() )
         {
-            try
-            {
-                Properties properties = new Properties();
-                properties.load( new FileInputStream( propertyFile ) );
+            Properties properties = PropertyUtils.loadProperties( propertyFile );
 
-                String extensions = properties.getProperty( Constants.ARCHETYPE_FILTERED_EXTENSIONS );
-                if ( StringUtils.isNotEmpty( extensions ) )
-                {
-                    filteredExtensions.addAll( Arrays.asList( StringUtils.split( extensions, "," ) ) );
-                }
-
-                getLog().debug(
-                                "Found in propertyFile " + propertyFile.getName() + " extensions = "
-                                    + filteredExtensions );
-            }
-            catch ( IOException e )
+            String extensions = properties.getProperty( Constants.ARCHETYPE_FILTERED_EXTENSIONS );
+            if ( StringUtils.isNotEmpty( extensions ) )
             {
-                getLog().warn( "Can not read " + propertyFile.getName() );
+                filteredExtensions.addAll( Arrays.asList( StringUtils.split( extensions, "," ) ) );
             }
+
+            getLog().debug( "Found in propertyFile " + propertyFile.getName() + " extensions = " + filteredExtensions );
         }
 
         if ( filteredExtensions.isEmpty() )
@@ -295,25 +286,15 @@ public class CreateArchetypeFromProjectMojo
 
         if ( resultingLanguages.isEmpty() && propertyFile != null && propertyFile.exists() )
         {
-            try
-            {
-                Properties properties = new Properties();
-                properties.load( new FileInputStream( propertyFile ) );
+            Properties properties = PropertyUtils.loadProperties( propertyFile );
 
-                String languages = properties.getProperty( Constants.ARCHETYPE_LANGUAGES );
-                if ( StringUtils.isNotEmpty( languages ) )
-                {
-                    resultingLanguages.addAll( Arrays.asList( StringUtils.split( languages, "," ) ) );
-                }
-
-                getLog().debug(
-                                "Found in propertyFile " + propertyFile.getName() + " languages = "
-                                    + resultingLanguages );
-            }
-            catch ( IOException e )
+            String languages = properties.getProperty( Constants.ARCHETYPE_LANGUAGES );
+            if ( StringUtils.isNotEmpty( languages ) )
             {
-                getLog().warn( "Cannot read " + propertyFile.getName() );
+                resultingLanguages.addAll( Arrays.asList( StringUtils.split( languages, "," ) ) );
             }
+
+            getLog().debug( "Found in propertyFile " + propertyFile.getName() + " languages = " + resultingLanguages );
         }
 
         if ( resultingLanguages.isEmpty() )
