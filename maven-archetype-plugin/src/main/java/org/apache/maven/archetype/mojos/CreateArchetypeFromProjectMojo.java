@@ -124,7 +124,7 @@ public class CreateArchetypeFromProjectMojo
     private boolean keepParent = true;
 
     /**
-     * The maven Project to create an archetype from.
+     * The Maven Project to create an archetype from.
      *
      * @parameter expression="${project}"
      * @required
@@ -141,7 +141,7 @@ public class CreateArchetypeFromProjectMojo
 
     /**
      * The property telling which phase to call on the generated archetype.
-     * Interesting values are: <code>package</code>, <code>install</code> and <code>deploy</code>
+     * Interesting values are: <code>package</code>, <code>integration-test</code>, <code>install</code> and <code>deploy</code>
      *
      * @parameter expression="${archetype.postPhase}" default-value="package"
      */
@@ -312,7 +312,7 @@ public class CreateArchetypeFromProjectMojo
             }
             catch ( IOException e )
             {
-                getLog().warn( "Can not read " + propertyFile.getName() );
+                getLog().warn( "Cannot read " + propertyFile.getName() );
             }
         }
 
