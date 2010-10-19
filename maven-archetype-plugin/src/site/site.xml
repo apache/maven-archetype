@@ -29,7 +29,7 @@
       <item name="Usage" href="/usage.html"/>
       <item name="Advanced Usage" href="/advanced-usage.html"/>
       <item name="Goals" href="/plugin-info.html"/>
-      <!--item name="FAQ" href="faq.html"/-->
+      <item name="FAQ" href="faq.html"/>
       <item name="Specification" href="/specification/specification.html"/>
     </menu>
 
