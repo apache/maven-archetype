@@ -15,6 +15,15 @@
       </answer>
     </faq>
 
+    <faq id="authentication">
+      <question>How to generate a project from an archetype in an authenticated repository?</question>
+      <answer>
+        <p>The server id used to download the artifact is <code><i>[archetypeArtifactId]</i>-repo</code>: you have to
+        <a href="http://maven.apache.org/settings.html#Servers">define corresponding server configuration in
+        <code>settings.xml</code></a> with this id.</p>
+      </answer>
+    </faq>
+
   </part>
 
 </faqs>
