@@ -117,7 +117,7 @@ public class CreateProjectFromArchetypeMojo
     private String archetypeCatalog;
 
     /**
-     * Local maven repository.
+     * Local Maven repository.
      *
      * @parameter expression="${localRepository}"
      * @required
@@ -126,7 +126,7 @@ public class CreateProjectFromArchetypeMojo
     private ArtifactRepository localRepository;
 
     /**
-     * List of Remote Repositories used by the resolver.
+     * List of remote repositories used by the resolver.
      *
      * @parameter  expression="${project.remoteArtifactRepositories}"
      * @readonly

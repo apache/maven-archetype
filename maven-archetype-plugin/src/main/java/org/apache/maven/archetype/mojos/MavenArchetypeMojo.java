@@ -43,7 +43,7 @@ import java.util.List;
  * archetype is retrieved, it is then processed against a set of user parameters
  * to create a working Maven project.
  *
- * @description Creates archetype containers.
+ * @description Creates a project from an archetype.
  * @requiresProject false
  * @goal create
  * @deprecated Please use the generate mojo instead.
@@ -245,8 +245,8 @@ public class MavenArchetypeMojo
     }
 
     //TODO: this should be put in John's artifact utils and used from there instead of being repeated here. Creating
-    // artifact repositories is someowhat cumbersome atm.
-    public ArtifactRepository createRepository( String url, String repositoryId )
+    // artifact repositories is somewhat cumbersome atm.
+    private ArtifactRepository createRepository( String url, String repositoryId )
     {
         // snapshots vs releases
         // offline = to turning the update policy off
