@@ -28,7 +28,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import java.io.File;
 
 /**
- * Crawl a Maven 2 repository (filesystem, not HTTP) and creates a catalog file.
+ * Crawl a Maven repository (filesystem, not HTTP) and creates a catalog file.
  *
  * @author           rafale
  * @requiresProject  false
@@ -56,24 +56,24 @@ public class CrawlRepositoryMojo
      */
     private File repository;
 
-    public void execute ()
+    public void execute()
         throws MojoExecutionException, MojoFailureException
     {
-        System.err.println ( "repository " + repository );
-        System.err.println ( "catalogFile " + catalogFile );
+        System.err.println( "repository " + repository );
+        System.err.println( "catalogFile " + catalogFile );
 
         if ( repository == null )
         {
             throw new MojoFailureException( "The repository is not defined. Use -Drepository=/path/to/repository" );
         }
 
-        ArchetypeCatalog catalog = crawler.crawl ( repository );
+        ArchetypeCatalog catalog = crawler.crawl( repository );
 
         if ( catalogFile == null )
         {
-            catalogFile = new File ( repository, "archetype-catalog.xml" );
+            catalogFile = new File( repository, "archetype-catalog.xml" );
         }
 
-        crawler.writeCatalog ( catalog, catalogFile );
+        crawler.writeCatalog( catalog, catalogFile );
     }
 }

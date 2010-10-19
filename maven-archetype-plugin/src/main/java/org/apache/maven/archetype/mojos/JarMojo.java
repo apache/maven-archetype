@@ -30,6 +30,8 @@ import java.io.File;
 import java.io.IOException;
 
 /**
+ * Build a JAR from the current Archetype project.
+ *
  * @author           rafale
  * @goal             jar
  * @phase            package
@@ -63,7 +65,7 @@ public class JarMojo
     private File outputDirectory;
 
     /**
-     * The maven project.
+     * The Maven project.
      *
      * @parameter  expression="${project}"
      * @required
@@ -78,7 +80,7 @@ public class JarMojo
      */
     private ArchetypeManager archetype;
 
-    public void execute( )
+    public void execute()
         throws MojoExecutionException, MojoFailureException
     {
         try

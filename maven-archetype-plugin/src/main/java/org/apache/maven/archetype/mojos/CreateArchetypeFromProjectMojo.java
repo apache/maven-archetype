@@ -117,7 +117,7 @@ public class CreateArchetypeFromProjectMojo
     private ArtifactRepository localRepository;
 
     /**
-     * Poms in archetype are created with their initial parent.
+     * POMs in archetype are created with their initial parent.
      * This property is ignored when preserveCData is true.
      *
      * @parameter expression="${archetype.keepParent}"
@@ -125,7 +125,7 @@ public class CreateArchetypeFromProjectMojo
     private boolean keepParent = true;
 
     /**
-     * The Maven Project to create an archetype from.
+     * The Maven project to create an archetype from.
      *
      * @parameter expression="${project}"
      * @required
@@ -142,7 +142,7 @@ public class CreateArchetypeFromProjectMojo
 
     /**
      * The property telling which phase to call on the generated archetype.
-     * Interesting values are: <code>package</code>, <code>integration-test</code>, <code>install</code> and <code>deploy</code>
+     * Interesting values are: <code>package</code>, <code>integration-test</code>, <code>install</code> and <code>deploy</code>.
      *
      * @parameter expression="${archetype.postPhase}" default-value="package"
      */

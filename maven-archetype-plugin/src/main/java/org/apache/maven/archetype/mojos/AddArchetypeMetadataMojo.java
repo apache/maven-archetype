@@ -46,7 +46,7 @@ public class AddArchetypeMetadataMojo
     private String goalPrefix;
 
     /**
-     * The project artifact, which should have the LATEST metadata added to it.
+     * The Maven project, which should have the LATEST metadata added to its artifact.
      *
      * @parameter expression="${project}"
      * @required
