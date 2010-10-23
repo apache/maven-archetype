@@ -147,8 +147,11 @@ public class ArchetypeConfiguration
         result.setProperty( Constants.ARCHETYPE_ARTIFACT_ID,
                             StringUtils.isNotEmpty( getArtifactId() ) ? getArtifactId() : "" );
         result.setProperty( Constants.ARCHETYPE_VERSION, StringUtils.isNotEmpty( getVersion() ) ? getVersion() : "" );
-        result.setProperty( Constants.ARCHETYPE_POST_GENERATION_GOALS,
-                                StringUtils.isNotEmpty( getGoals() ) ? getGoals() : "" );
+
+        if ( StringUtils.isNotEmpty( getGoals() ) )
+        {
+            result.setProperty( Constants.ARCHETYPE_POST_GENERATION_GOALS, getGoals() );
+        }
 
         return result;
     }
