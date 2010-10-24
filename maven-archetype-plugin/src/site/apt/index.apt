@@ -40,9 +40,7 @@ Maven Archetype Plugin
   {{{./usage.html}Instructions on how to use the Archetype Plugin to create a project}}
   can be found on the usage page.
 
-~~ TODO: The links in the following paragraph doesn't work
-  The Archetype Plugin is embedded in IDEs {{{#}Eclipse}}, {{{#}NetBeans}},
-  {{{#}IDEA}}.
+  The Archetype Plugin is embedded in IDEs (Eclipse, NetBeans, IDEA).
 
   {{{./advanced-usage.html}Instructions on how to use the Archetype Plugin to create an archetype from an existing project}}
   can be found on the advanced usage page.
@@ -81,12 +79,12 @@ Maven Archetype Plugin
 
    * {{{./examples/create-with-property-file.html}Create an archetype with a property file}}
 
-   * {{{#}Handcrafting an archetype}} or features available to an archetype
+   * Handcrafting an archetype or features available to an archetype
      when not created by <<<create-from-project>>> - TBD
 
-   * {{{#}Generate a sub module from an archetype}} - TBD
+   * Generate a sub module from an archetype - TBD
 
-   * {{{#}Create an archetype in interactive mode}} - TBD
+   * Create an archetype in interactive mode - TBD
 
   []
 
