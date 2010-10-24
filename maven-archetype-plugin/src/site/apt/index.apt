@@ -79,12 +79,11 @@ Maven Archetype Plugin
 
    * {{{./examples/create-with-property-file.html}Create an archetype with a property file}}
 
-   * Handcrafting an archetype or features available to an archetype
-     when not created by <<<create-from-project>>> - TBD
+~~   * Handcrafting an archetype or features available to an archetype when not created by <<<create-from-project>>> - TBD
 
-   * Generate a sub module from an archetype - TBD
+~~   * Generate a sub module from an archetype - TBD
 
-   * Create an archetype in interactive mode - TBD
+~~   * Create an archetype in interactive mode - TBD
 
   []
 
