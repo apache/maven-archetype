@@ -452,8 +452,7 @@ public class DefaultFilesetArchetypeGenerator
                           archetypeZipFile, moduleOffset, false );
     }
 
-    private void processArchetypeTemplatesWithWarning(
-                                                       org.apache.maven.archetype.metadata.ArchetypeDescriptor archetypeDescriptor,
+    private void processArchetypeTemplatesWithWarning( ArchetypeDescriptor archetypeDescriptor,
                                                        List<String> archetypeResources, ZipFile archetypeZipFile,
                                                        String moduleOffset, Context context, String packageName,
                                                        File outputDirectoryFile )
