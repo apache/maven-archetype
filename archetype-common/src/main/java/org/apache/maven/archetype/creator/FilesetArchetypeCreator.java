@@ -587,9 +587,9 @@ public class FilesetArchetypeCreator
         // rewrite Plugins
         if ( pom.getBuild() != null && pom.getBuild().getPlugins() != null && !pom.getBuild().getPlugins().isEmpty() )
         {
-            for ( Iterator plugins = pom.getBuild().getPlugins().iterator(); plugins.hasNext(); )
+            for ( Iterator<Plugin> plugins = pom.getBuild().getPlugins().iterator(); plugins.hasNext(); )
             {
-                Plugin plugin = (Plugin) plugins.next();
+                Plugin plugin = plugins.next();
 
                 if ( plugin.getArtifactId() != null && plugin.getArtifactId().indexOf( rootArtifactId ) >= 0 )
                 {
@@ -615,9 +615,9 @@ public class FilesetArchetypeCreator
             && pom.getBuild().getPluginManagement().getPlugins() != null
             && !pom.getBuild().getPluginManagement().getPlugins().isEmpty() )
         {
-            for ( Iterator plugins = pom.getBuild().getPluginManagement().getPlugins().iterator(); plugins.hasNext(); )
+            for ( Iterator<Plugin> plugins = pom.getBuild().getPluginManagement().getPlugins().iterator(); plugins.hasNext(); )
             {
-                Plugin plugin = (Plugin) plugins.next();
+                Plugin plugin = plugins.next();
 
                 if ( plugin.getArtifactId() != null && plugin.getArtifactId().indexOf( rootArtifactId ) >= 0 )
                 {
@@ -641,16 +641,16 @@ public class FilesetArchetypeCreator
         // rewrite Profiles
         if ( pom.getProfiles() != null )
         {
-            for ( Iterator profiles = pom.getProfiles().iterator(); profiles.hasNext(); )
+            for ( Iterator<Profile> profiles = pom.getProfiles().iterator(); profiles.hasNext(); )
             {
-                Profile profile = (Profile) profiles.next();
+                Profile profile = profiles.next();
 
                 // rewrite Dependencies
                 if ( profile.getDependencies() != null && !profile.getDependencies().isEmpty() )
                 {
-                    for ( Iterator dependencies = profile.getDependencies().iterator(); dependencies.hasNext(); )
+                    for ( Iterator<Dependency> dependencies = profile.getDependencies().iterator(); dependencies.hasNext(); )
                     {
-                        Dependency dependency = (Dependency) dependencies.next();
+                        Dependency dependency = dependencies.next();
 
                         if ( dependency.getArtifactId() != null
                             && dependency.getArtifactId().indexOf( rootArtifactId ) >= 0 )
@@ -677,10 +677,10 @@ public class FilesetArchetypeCreator
                     && profile.getDependencyManagement().getDependencies() != null
                     && !profile.getDependencyManagement().getDependencies().isEmpty() )
                 {
-                    for ( Iterator dependencies = profile.getDependencyManagement().getDependencies().iterator();
+                    for ( Iterator<Dependency> dependencies = profile.getDependencyManagement().getDependencies().iterator();
                         dependencies.hasNext(); )
                     {
-                        Dependency dependency = (Dependency) dependencies.next();
+                        Dependency dependency = dependencies.next();
 
                         if ( dependency.getArtifactId() != null
                             && dependency.getArtifactId().indexOf( rootArtifactId ) >= 0 )
@@ -706,9 +706,9 @@ public class FilesetArchetypeCreator
                 if ( profile.getBuild() != null && profile.getBuild().getPlugins() != null
                     && !profile.getBuild().getPlugins().isEmpty() )
                 {
-                    for ( Iterator plugins = profile.getBuild().getPlugins().iterator(); plugins.hasNext(); )
+                    for ( Iterator<Plugin> plugins = profile.getBuild().getPlugins().iterator(); plugins.hasNext(); )
                     {
-                        Plugin plugin = (Plugin) plugins.next();
+                        Plugin plugin = plugins.next();
 
                         if ( plugin.getArtifactId() != null && plugin.getArtifactId().indexOf( rootArtifactId ) >= 0 )
                         {
@@ -734,10 +734,10 @@ public class FilesetArchetypeCreator
                     && profile.getBuild().getPluginManagement().getPlugins() != null
                     && !profile.getBuild().getPluginManagement().getPlugins().isEmpty() )
                 {
-                    for ( Iterator plugins = profile.getBuild().getPluginManagement().getPlugins().iterator();
+                    for ( Iterator<Plugin> plugins = profile.getBuild().getPluginManagement().getPlugins().iterator();
                         plugins.hasNext(); )
                     {
-                        Plugin plugin = (Plugin) plugins.next();
+                        Plugin plugin = plugins.next();
 
                         if ( plugin.getArtifactId() != null && plugin.getArtifactId().indexOf( rootArtifactId ) >= 0 )
                         {
@@ -984,7 +984,7 @@ public class FilesetArchetypeCreator
 
     private ModuleDescriptor createModule( Properties reverseProperties, String rootArtifactId, String moduleId,
                                            String packageName, File basedir, File archetypeFilesDirectory,
-                                           List languages, List filtereds, String defaultEncoding,
+                                           List<String> languages, List<String> filtereds, String defaultEncoding,
                                            boolean preserveCData, boolean keepParent )
         throws IOException, XmlPullParserException
     {
@@ -1015,9 +1015,9 @@ public class FilesetArchetypeCreator
 
         setArtifactId( reverseProperties, pom.getArtifactId() );
 
-        List fileNames = resolveFileNames( pom, basedir );
+        List<String> fileNames = resolveFileNames( pom, basedir );
 
-        List filesets = resolveFileSets( packageName, fileNames, languages, filtereds, defaultEncoding );
+        List<FileSet> filesets = resolveFileSets( packageName, fileNames, languages, filtereds, defaultEncoding );
         getLogger().debug( "Resolved filesets for module " + archetypeDescriptor.getName() );
 
         archetypeDescriptor.setFileSets( filesets );
@@ -1029,9 +1029,9 @@ public class FilesetArchetypeCreator
         String parentArtifactId = reverseProperties.getProperty( Constants.PARENT_ARTIFACT_ID );
         setParentArtifactId( reverseProperties, pom.getArtifactId() );
 
-        for ( Iterator modules = pom.getModules().iterator(); modules.hasNext(); )
+        for ( Iterator<String> modules = pom.getModules().iterator(); modules.hasNext(); )
         {
-            String subModuleId = (String) modules.next();
+            String subModuleId = modules.next();
 
             String subModuleIdDirectory = subModuleId;
             if ( subModuleId.indexOf( rootArtifactId ) >= 0 )
@@ -1352,9 +1352,9 @@ public class FilesetArchetypeCreator
         getLogger().debug( "Resolving files for " + pom.getId() + " in " + basedir );
 
         StringBuffer buff = new StringBuffer( "pom.xml*,archetype.properties*,target/**," );
-        for ( Iterator modules = pom.getModules().iterator(); modules.hasNext(); )
+        for ( Iterator<String> modules = pom.getModules().iterator(); modules.hasNext(); )
         {
-            buff.append( ',' ).append( (String) modules.next() ).append( "/**" );
+            buff.append( ',' ).append( modules.next() ).append( "/**" );
         }
 
         for ( String defaultExclude : ListScanner.DEFAULTEXCLUDES )
@@ -1657,7 +1657,7 @@ public class FilesetArchetypeCreator
         return Constants.SRC + File.separator + Constants.MAIN + File.separator + Constants.RESOURCES;
     }
 
-    private FileSet getUnpackagedFileSet( final boolean filtered, final String group, final List groupFiles,
+    private FileSet getUnpackagedFileSet( final boolean filtered, final String group, final List<String> groupFiles,
                                           String defaultEncoding )
     {
         Set<String> extensions = getExtensions( groupFiles );
