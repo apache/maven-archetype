@@ -177,6 +177,7 @@ under the License.
               <goal>java</goal>
               <goal>xpp3-reader</goal>
               <goal>xpp3-writer</goal>
+              <goal>xsd</goal>
             </goals>
           </execution>
           <execution>
