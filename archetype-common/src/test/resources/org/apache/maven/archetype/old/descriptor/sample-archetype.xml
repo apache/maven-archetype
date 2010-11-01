@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+
+<archetype xmlns="http://maven.apache.org/plugins/maven-archetype-plugin/archetype/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/plugins/maven-archetype-plugin/archetype/1.0.0 http://maven.apache.org/xsd/archetype-1.0.0.xsd">
+  <id>standard</id>
+  <allowPartial>true</allowPartial>
+
+  <sources>
+    <source>source0</source>
+    <source encoding="utf-8">source1</source>
+  </sources>
+  <resources>
+    <resource>resource0</resource>
+    <resource filtered="false">resource1</resource>
+    <resource encoding="iso-8859-1">resource2</resource>
+    <resource encoding="iso-8859-1" filtered="true">resource3</resource>
+  </resources>
+
+  <testSources>
+    <source>testSource0</source>
+    <source encoding="utf-8">testSource1</source>
+  </testSources>
+  <testResources>
+    <resource>testResource0</resource>
+    <resource filtered="false">testResource1</resource>
+    <resource encoding="iso-8859-1">testResource2</resource>
+    <resource encoding="iso-8859-1" filtered="true">testResource3</resource>
+  </testResources>
+
+  <siteResources>
+    <resource>siteResource0</resource>
+    <resource filtered="false">siteResource1</resource>
+    <resource encoding="utf-16">siteResource2</resource>
+    <resource encoding="utf-16" filtered="true">siteResource3</resource>
+  </siteResources>
+</archetype>

@@ -2,8 +2,8 @@
 
  <!-- START SNIPPET: modello-model -->
 
-<model xmlns="http://modello.codehaus.org/MODELLO/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://modello.codehaus.org/MODELLO/1.0.0 http://modello.codehaus.org/xsd/modello-1.0.0.xsd"
+<model xmlns="http://modello.codehaus.org/MODELLO/1.4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://modello.codehaus.org/MODELLO/1.4.0 http://modello.codehaus.org/xsd/modello-1.4.0.xsd"
   xml.namespace="http://maven.apache.org/plugins/maven-archetype-plugin/archetype/${version}"
   xml.schemaLocation="http://maven.apache.org/xsd/archetype-${version}.xsd">
   <id>archetype</id>
@@ -98,6 +98,12 @@
         can be non-filtered.</description>
       <version>1.0.0</version>
       <fields>
+        <field xml.content="true">
+          <name>file</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <description><![CDATA[The source file.]]></description>
+        </field>
         <field xml.attribute="true">
           <name>encoding</name>
           <version>1.0.0</version>
@@ -112,6 +118,12 @@
       <description>Describes a resource file.</description>
       <version>1.0.0</version>
       <fields>
+        <field xml.content="true">
+          <name>file</name>
+          <version>1.0.0</version>
+          <type>String</type>
+          <description><![CDATA[The resource file.]]></description>
+        </field>
         <field xml.attribute="true">
           <name>encoding</name>
           <version>1.0.0</version>
