@@ -41,6 +41,18 @@ under the License.
 
   <dependencies>
     <dependency>
+      <groupId>org.apache.maven.archetype</groupId>
+      <artifactId>archetype-catalog</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.archetype</groupId>
+      <artifactId>archetype-descriptor</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.archetype</groupId>
+      <artifactId>archetype-registry</artifactId>
+    </dependency>
+    <dependency>
       <groupId>net.sourceforge.jchardet</groupId>
       <artifactId>jchardet</artifactId>
     </dependency>
@@ -164,9 +176,6 @@ under the License.
           <version>1.0.0</version>
           <useJava5>true</useJava5>
           <models>
-            <model>src/main/mdo/archetype-registry.mdo</model>
-            <model>src/main/mdo/archetype-descriptor.mdo</model>
-            <model>src/main/mdo/archetype-catalog.mdo</model>
             <model>src/main/mdo/archetype.mdo</model>
           </models>
         </configuration>
