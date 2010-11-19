@@ -47,6 +47,18 @@ under the License.
   <dependencies>
     <dependency>
       <groupId>org.apache.maven.archetype</groupId>
+      <artifactId>archetype-catalog</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.archetype</groupId>
+      <artifactId>archetype-descriptor</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.archetype</groupId>
+      <artifactId>archetype-registry</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.archetype</groupId>
       <artifactId>archetype-common</artifactId>
     </dependency>
     <dependency>
