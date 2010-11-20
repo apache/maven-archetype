@@ -25,7 +25,6 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -44,8 +43,6 @@ public class RepositoryServlet
 {
     private ServletConfig config;
 
-    private ServletContext context;
-
     /*
      * (non-Javadoc)
      * @see javax.servlet.Servlet#init(javax.servlet.ServletConfig)
@@ -54,7 +51,6 @@ public class RepositoryServlet
         throws ServletException
     {
         this.config = config;
-        this.context = config.getServletContext();
     }
 
     /*
@@ -106,18 +102,10 @@ public class RepositoryServlet
 
                 InputStream is = new FileInputStream( requestedFile );
 
-                if ( is != null )
-                {
-                    IO.copy( is, response.getOutputStream() );
-                    response.setStatus( HttpServletResponse.SC_OK );
-                    log( "File sent" );
-                    System.err.println( "File sent" );
-                }
-                else
-                {
-                    log( "Can not send file no content" );
-                    System.err.println( "Can not send file no content" );
-                }
+                IO.copy( is, response.getOutputStream() );
+                response.setStatus( HttpServletResponse.SC_OK );
+                log( "File sent" );
+                System.err.println( "File sent" );
             }
             catch ( FileNotFoundException fileNotFoundException )
             {
