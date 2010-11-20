@@ -46,27 +46,32 @@ public class RepositoryServlet
 
     private ServletContext context;
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see javax.servlet.Servlet#init(javax.servlet.ServletConfig)
      */
-    public void init( ServletConfig config ) throws ServletException
+    public void init( ServletConfig config )
+        throws ServletException
     {
         this.config = config;
-        this.context = config.getServletContext(  );
+        this.context = config.getServletContext();
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see javax.servlet.Servlet#getServletConfig()
      */
-    public ServletConfig getServletConfig( )
+    public ServletConfig getServletConfig()
     {
         return config;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see javax.servlet.Servlet#service(javax.servlet.ServletRequest, javax.servlet.ServletResponse)
      */
-    public void service( ServletRequest req, ServletResponse res ) throws ServletException
+    public void service( ServletRequest req, ServletResponse res )
+        throws ServletException
     {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
@@ -74,23 +79,22 @@ public class RepositoryServlet
         response.setHeader( "Date", null );
         response.setHeader( "Server", null );
 
-
-        log( "Requested file = " + request.getRequestURI(  ) );
-        System.err.println( "Requested file = " + request.getRequestURI(  ) );
+        log( "Requested file = " + request.getRequestURI() );
+        System.err.println( "Requested file = " + request.getRequestURI() );
         String filePath =
-            System.getProperty( "org.apache.maven.archetype.reporitory.directory" ).trim(  ) + "/" +
-            request.getRequestURI(  );
-        filePath = StringUtil.replace(filePath, "\\", File.separator);
-        filePath = StringUtil.replace(filePath, File.separator, "/");
-        filePath=filePath.replaceAll("/repo/", "/");
-        filePath=filePath.replaceAll("//", "/");
-        filePath=filePath.replaceAll("//", "/");
-        filePath=filePath.replaceAll("//", "/");
-        filePath = StringUtil.replace(filePath, "/", File.separator);
+            System.getProperty( "org.apache.maven.archetype.reporitory.directory" ).trim() + "/"
+                + request.getRequestURI();
+        filePath = StringUtil.replace( filePath, "\\", File.separator );
+        filePath = StringUtil.replace( filePath, File.separator, "/" );
+        filePath = filePath.replaceAll( "/repo/", "/" );
+        filePath = filePath.replaceAll( "//", "/" );
+        filePath = filePath.replaceAll( "//", "/" );
+        filePath = filePath.replaceAll( "//", "/" );
+        filePath = StringUtil.replace( filePath, "/", File.separator );
         log( "Complete file path = " + filePath );
         System.err.println( "Complete file path = " + filePath );
 
-        String method = request.getMethod(  );
+        String method = request.getMethod();
 
         if ( "GET".equalsIgnoreCase( method ) )
         {
@@ -104,7 +108,7 @@ public class RepositoryServlet
 
                 if ( is != null )
                 {
-                    IO.copy( is, response.getOutputStream(  ) );
+                    IO.copy( is, response.getOutputStream() );
                     response.setStatus( HttpServletResponse.SC_OK );
                     log( "File sent" );
                     System.err.println( "File sent" );
@@ -119,15 +123,15 @@ public class RepositoryServlet
             {
                 response.setStatus( HttpServletResponse.SC_NOT_FOUND );
                 log( "Requested file not found ", fileNotFoundException );
-                System.err.println( "Requested file not found "+ fileNotFoundException );
-                fileNotFoundException.printStackTrace(System.err);
+                System.err.println( "Requested file not found " + fileNotFoundException );
+                fileNotFoundException.printStackTrace( System.err );
             }
             catch ( IOException iOException )
             {
                 response.setStatus( HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
                 log( "Can not send file", iOException );
-                System.err.println( "Can not send file"+ iOException );
-                iOException.printStackTrace(System.err);
+                System.err.println( "Can not send file" + iOException );
+                iOException.printStackTrace( System.err );
             }
         }
         else if ( "PUT".equalsIgnoreCase( method ) )
@@ -135,23 +139,23 @@ public class RepositoryServlet
             log( "Putting file" );
             System.err.println( "Putting file" );
             File uploadedFile = new File( filePath );
-            if ( uploadedFile.exists(  ) )
+            if ( uploadedFile.exists() )
             {
-                uploadedFile.delete(  );
+                uploadedFile.delete();
                 log( "Removed old file" );
                 System.err.println( "Removed old file" );
             }
-            else if ( !uploadedFile.getParentFile(  ).exists(  ) )
+            else if ( !uploadedFile.getParentFile().exists() )
             {
-                uploadedFile.getParentFile(  ).mkdirs(  );
-                log( "Created directory " + uploadedFile.getParent(  ) );
-                System.err.println( "Created directory " + uploadedFile.getParent(  ) );
+                uploadedFile.getParentFile().mkdirs();
+                log( "Created directory " + uploadedFile.getParent() );
+                System.err.println( "Created directory " + uploadedFile.getParent() );
             }
 
             try
             {
                 FileWriter fw = new FileWriter( uploadedFile );
-                IO.copy( request.getReader(  ), fw );
+                IO.copy( request.getReader(), fw );
                 response.setStatus( HttpServletResponse.SC_OK );
                 log( "File copied" );
                 System.err.println( "File copied" );
@@ -161,8 +165,8 @@ public class RepositoryServlet
 
                 response.setStatus( HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
                 log( "Can not send file", iOException );
-                System.err.println( "Can not send file"+ iOException );
-                iOException.printStackTrace(System.err);
+                System.err.println( "Can not send file" + iOException );
+                iOException.printStackTrace( System.err );
             }
         }
         else
@@ -170,81 +174,79 @@ public class RepositoryServlet
             response.setStatus( HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
             try
             {
-                log( "Method " + request.getMethod(  ) );
-                log( "ContextPath " + request.getContextPath(  ) );
-                log( "QueryString" + request.getQueryString(  ) );
-                log( "PathInfo " + request.getPathInfo(  ) );
-                log( "ServletPath " + request.getServletPath(  ) );
-                log( "AttributeNames " + request.getAttributeNames(  ).toString(  ) );
-                log( "HeaderNames " + request.getHeaderNames(  ).toString(  ) );
-                log( "RequestURL " + request.getRequestURL(  ).toString(  ) );
-                log( "ParameterNames " + request.getParameterNames(  ).toString(  ) );
-                StringWriter w = new StringWriter(  );
-                IO.copy( request.getReader(  ), w );
-                log( "Content " + w.toString(  ) );
+                log( "Method " + request.getMethod() );
+                log( "ContextPath " + request.getContextPath() );
+                log( "QueryString" + request.getQueryString() );
+                log( "PathInfo " + request.getPathInfo() );
+                log( "ServletPath " + request.getServletPath() );
+                log( "AttributeNames " + request.getAttributeNames().toString() );
+                log( "HeaderNames " + request.getHeaderNames().toString() );
+                log( "RequestURL " + request.getRequestURL().toString() );
+                log( "ParameterNames " + request.getParameterNames().toString() );
+                StringWriter w = new StringWriter();
+                IO.copy( request.getReader(), w );
+                log( "Content " + w.toString() );
 
-
-//                System.err.println( "Method " + request.getMethod(  ) );
-//                System.err.println( "ContextPath " + request.getContextPath(  ) );
-//                System.err.println( "QueryString" + request.getQueryString(  ) );
-//                System.err.println( "PathInfo " + request.getPathInfo(  ) );
-//                System.err.println( "ServletPath " + request.getServletPath(  ) );
-//                System.err.println( "AttributeNames " + request.getAttributeNames(  ).toString(  ) );
-//                System.err.println( "HeaderNames " + request.getHeaderNames(  ).toString(  ) );
-//                System.err.println( "RequestURL " + request.getRequestURL(  ).toString(  ) );
-//                System.err.println( "ParameterNames " + request.getParameterNames(  ).toString(  ) );
-//                System.err.println( "Content " + w.toString(  ) );
+                // System.err.println( "Method " + request.getMethod( ) );
+                // System.err.println( "ContextPath " + request.getContextPath( ) );
+                // System.err.println( "QueryString" + request.getQueryString( ) );
+                // System.err.println( "PathInfo " + request.getPathInfo( ) );
+                // System.err.println( "ServletPath " + request.getServletPath( ) );
+                // System.err.println( "AttributeNames " + request.getAttributeNames( ).toString( ) );
+                // System.err.println( "HeaderNames " + request.getHeaderNames( ).toString( ) );
+                // System.err.println( "RequestURL " + request.getRequestURL( ).toString( ) );
+                // System.err.println( "ParameterNames " + request.getParameterNames( ).toString( ) );
+                // System.err.println( "Content " + w.toString( ) );
             }
             catch ( IOException iOException )
             {
                 log( "Error in unnknown method", iOException );
-                System.err.println( "Error in unnknown method"+ iOException );
-                iOException.printStackTrace(System.err);
+                System.err.println( "Error in unnknown method" + iOException );
+                iOException.printStackTrace( System.err );
             }
         }
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see javax.servlet.Servlet#getServletInfo()
      */
-    public String getServletInfo( )
+    public String getServletInfo()
     {
         return "Repository Servlet";
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see javax.servlet.Servlet#destroy()
      */
-    public void destroy( )
+    public void destroy()
     {
     }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+     * 
      * @param request servlet request
      * @param response servlet response
      */
-    protected void processRequest( HttpServletRequest request,
-        HttpServletResponse response ) throws ServletException, IOException
+    protected void processRequest( HttpServletRequest request, HttpServletResponse response )
+        throws ServletException, IOException
     {
         response.setContentType( "text/html;charset=UTF-8" );
-        PrintWriter out = response.getWriter(  );
+        PrintWriter out = response.getWriter();
         try
         {
-            /* TODO output your page here
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet RepositoryServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet RepositoryServlet at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            /*
+             * TODO output your page here out.println("<html>"); out.println("<head>");
+             * out.println("<title>Servlet RepositoryServlet</title>"); out.println("</head>"); out.println("<body>");
+             * out.println("<h1>Servlet RepositoryServlet at " + request.getContextPath () + "</h1>");
+             * out.println("</body>"); out.println("</html>");
              */
         }
         finally
         {
-            out.close(  );
+            out.close();
         }
     }
 
@@ -252,6 +254,5 @@ public class RepositoryServlet
     {
         return "Repository Servlet";
     }
-
 
 }
