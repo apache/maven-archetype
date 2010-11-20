@@ -76,7 +76,6 @@ public class RepositoryServlet
         response.setHeader( "Server", null );
 
         log( "Requested file = " + request.getRequestURI() );
-        System.err.println( "Requested file = " + request.getRequestURI() );
         String filePath =
             System.getProperty( "org.apache.maven.archetype.reporitory.directory" ).trim() + "/"
                 + request.getRequestURI();
@@ -88,14 +87,12 @@ public class RepositoryServlet
         filePath = filePath.replaceAll( "//", "/" );
         filePath = StringUtil.replace( filePath, "/", File.separator );
         log( "Complete file path = " + filePath );
-        System.err.println( "Complete file path = " + filePath );
 
         String method = request.getMethod();
 
         if ( "GET".equalsIgnoreCase( method ) )
         {
             log( "Getting file" );
-            System.err.println( "Getting file" );
             try
             {
                 File requestedFile = new File( filePath );
@@ -105,39 +102,31 @@ public class RepositoryServlet
                 IO.copy( is, response.getOutputStream() );
                 response.setStatus( HttpServletResponse.SC_OK );
                 log( "File sent" );
-                System.err.println( "File sent" );
             }
             catch ( FileNotFoundException fileNotFoundException )
             {
                 response.setStatus( HttpServletResponse.SC_NOT_FOUND );
-                log( "Requested file not found ", fileNotFoundException );
-                System.err.println( "Requested file not found " + fileNotFoundException );
-                fileNotFoundException.printStackTrace( System.err );
+                log( "Requested file not found " );
             }
             catch ( IOException iOException )
             {
                 response.setStatus( HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
                 log( "Can not send file", iOException );
-                System.err.println( "Can not send file" + iOException );
-                iOException.printStackTrace( System.err );
             }
         }
         else if ( "PUT".equalsIgnoreCase( method ) )
         {
             log( "Putting file" );
-            System.err.println( "Putting file" );
             File uploadedFile = new File( filePath );
             if ( uploadedFile.exists() )
             {
                 uploadedFile.delete();
                 log( "Removed old file" );
-                System.err.println( "Removed old file" );
             }
             else if ( !uploadedFile.getParentFile().exists() )
             {
                 uploadedFile.getParentFile().mkdirs();
                 log( "Created directory " + uploadedFile.getParent() );
-                System.err.println( "Created directory " + uploadedFile.getParent() );
             }
 
             try
@@ -146,15 +135,12 @@ public class RepositoryServlet
                 IO.copy( request.getReader(), fw );
                 response.setStatus( HttpServletResponse.SC_OK );
                 log( "File copied" );
-                System.err.println( "File copied" );
             }
             catch ( IOException iOException )
             {
 
                 response.setStatus( HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
                 log( "Can not send file", iOException );
-                System.err.println( "Can not send file" + iOException );
-                iOException.printStackTrace( System.err );
             }
         }
         else
@@ -189,8 +175,6 @@ public class RepositoryServlet
             catch ( IOException iOException )
             {
                 log( "Error in unnknown method", iOException );
-                System.err.println( "Error in unnknown method" + iOException );
-                iOException.printStackTrace( System.err );
             }
         }
     }
