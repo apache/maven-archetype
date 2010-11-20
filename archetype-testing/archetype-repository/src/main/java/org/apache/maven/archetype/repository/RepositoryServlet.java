@@ -19,7 +19,6 @@ package org.apache.maven.archetype.repository;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import javax.servlet.ServletException;
@@ -72,36 +71,6 @@ public class RepositoryServlet
         {
             response.setStatus( HttpServletResponse.SC_NOT_FOUND );
             log( "Requested file not found " );
-        }
-        catch ( IOException iOException )
-        {
-            response.setStatus( HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
-            log( "Cannot send file", iOException );
-        }
-    }
-
-    public void doPut( HttpServletRequest request, HttpServletResponse response )
-        throws ServletException
-    {
-        log( "Putting file" );
-        File uploadedFile = getFile( request );
-        if ( uploadedFile.exists() )
-        {
-            uploadedFile.delete();
-            log( "Removed old file" );
-        }
-        else if ( !uploadedFile.getParentFile().exists() )
-        {
-            uploadedFile.getParentFile().mkdirs();
-            log( "Created directory " + uploadedFile.getParent() );
-        }
-
-        try
-        {
-            FileWriter fw = new FileWriter( uploadedFile );
-            IO.copy( request.getReader(), fw );
-            response.setStatus( HttpServletResponse.SC_OK );
-            log( "File copied" );
         }
         catch ( IOException iOException )
         {
