@@ -22,15 +22,14 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.io.StringWriter;
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.mortbay.util.IO;
 import org.mortbay.util.StringUtil;
 
@@ -41,27 +40,6 @@ import org.mortbay.util.StringUtil;
 public class RepositoryServlet
     extends HttpServlet
 {
-    private ServletConfig config;
-
-    /*
-     * (non-Javadoc)
-     * @see javax.servlet.Servlet#init(javax.servlet.ServletConfig)
-     */
-    public void init( ServletConfig config )
-        throws ServletException
-    {
-        this.config = config;
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see javax.servlet.Servlet#getServletConfig()
-     */
-    public ServletConfig getServletConfig()
-    {
-        return config;
-    }
-
     /*
      * (non-Javadoc)
      * @see javax.servlet.Servlet#service(javax.servlet.ServletRequest, javax.servlet.ServletResponse)
@@ -71,9 +49,6 @@ public class RepositoryServlet
     {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
-
-        response.setHeader( "Date", null );
-        response.setHeader( "Server", null );
 
         log( "Requested file = " + request.getRequestURI() );
         String filePath =
@@ -111,7 +86,7 @@ public class RepositoryServlet
             catch ( IOException iOException )
             {
                 response.setStatus( HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
-                log( "Can not send file", iOException );
+                log( "Cannot send file", iOException );
             }
         }
         else if ( "PUT".equalsIgnoreCase( method ) )
@@ -140,7 +115,7 @@ public class RepositoryServlet
             {
 
                 response.setStatus( HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
-                log( "Can not send file", iOException );
+                log( "Cannot send file", iOException );
             }
         }
         else
@@ -178,53 +153,4 @@ public class RepositoryServlet
             }
         }
     }
-
-    /*
-     * (non-Javadoc)
-     * @see javax.servlet.Servlet#getServletInfo()
-     */
-    public String getServletInfo()
-    {
-        return "Repository Servlet";
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see javax.servlet.Servlet#destroy()
-     */
-    public void destroy()
-    {
-    }
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
-     * 
-     * @param request servlet request
-     * @param response servlet response
-     */
-    protected void processRequest( HttpServletRequest request, HttpServletResponse response )
-        throws ServletException, IOException
-    {
-        response.setContentType( "text/html;charset=UTF-8" );
-        PrintWriter out = response.getWriter();
-        try
-        {
-            /*
-             * TODO output your page here out.println("<html>"); out.println("<head>");
-             * out.println("<title>Servlet RepositoryServlet</title>"); out.println("</head>"); out.println("<body>");
-             * out.println("<h1>Servlet RepositoryServlet at " + request.getContextPath () + "</h1>");
-             * out.println("</body>"); out.println("</html>");
-             */
-        }
-        finally
-        {
-            out.close();
-        }
-    }
-
-    public String getServletName()
-    {
-        return "Repository Servlet";
-    }
-
 }
