@@ -46,92 +46,83 @@ public class RepositoryServlet
 
     private ServletContext context;
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see javax.servlet.Servlet#init(javax.servlet.ServletConfig)
      */
-    public void init( ServletConfig config ) throws ServletException
+    public void init( ServletConfig config )
+        throws ServletException
     {
         this.config = config;
-        this.context = config.getServletContext(  );
+        this.context = config.getServletContext();
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see javax.servlet.Servlet#getServletConfig()
      */
-    public ServletConfig getServletConfig( )
+    public ServletConfig getServletConfig()
     {
         return config;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see javax.servlet.Servlet#service(javax.servlet.ServletRequest, javax.servlet.ServletResponse)
      */
-    public void service( ServletRequest req, ServletResponse res ) throws ServletException
+    public void service( ServletRequest req, ServletResponse res )
+        throws ServletException
     {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
 
+        // log( "A = " + request.getAuthType() );
+        // log( "A = " + request.getCharacterEncoding() );
+        // log( "A = " + request.getContentType() );
+        // log( "B = " + request.getContextPath() );
+        // log( "B = " + request.getLocalAddr() );
+        // log( "B = " + request.getLocalName() );
+        // log( "C = " + request.getMethod() );
+        // log( "C = " + request.getPathInfo() );
+        // log( "C = " + request.getPathTranslated() );
+        // log( "D = " + request.getProtocol() );
+        // log( "D = " + request.getQueryString() );
+        // log( "D = " + request.getRemoteAddr() );
+        // log( "E = " + request.getRemoteHost() );
+        // log( "E = " + request.getRemoteUser() );
+        // log( "E = " + request.getRequestURI() );
+        // log( "F = " + request.getRequestedSessionId() );
+        // log( "F = " + request.getScheme() );
+        // log( "F = " + request.getServerName() );
+        // log( "G = " + request.getServletPath() );
+        // log( "G = " + request.getAttributeNames() );
+        // log( "G = " + request.getCookies() );
+        // log( "H = " + request.getHeaderNames() );
 
-
-//        log( "A = " + request.getAuthType() );
-//        log( "A = " + request.getCharacterEncoding() );
-//        log( "A = " + request.getContentType() );
-//        log( "B = " + request.getContextPath() );
-//        log( "B = " + request.getLocalAddr() );
-//        log( "B = " + request.getLocalName() );
-//        log( "C = " + request.getMethod() );
-//        log( "C = " + request.getPathInfo() );
-//        log( "C = " + request.getPathTranslated() );
-//        log( "D = " + request.getProtocol() );
-//        log( "D = " + request.getQueryString() );
-//        log( "D = " + request.getRemoteAddr() );
-//        log( "E = " + request.getRemoteHost() );
-//        log( "E = " + request.getRemoteUser() );
-//        log( "E = " + request.getRequestURI() );
-//        log( "F = " + request.getRequestedSessionId() );
-//        log( "F = " + request.getScheme() );
-//        log( "F = " + request.getServerName() );
-//        log( "G = " + request.getServletPath() );
-//        log( "G = " + request.getAttributeNames() );
-//        log( "G = " + request.getCookies() );
-//        log( "H = " + request.getHeaderNames() );
-
-//        log( "H = " + request.get );
-//        log( "H = " + request.get );
-//        log( "I = " + request.get );
-//        log( "I = " + request.get );
-//        log( "I = " + request.get );
-//        log( "J = " + request.get );
-//        log( "J = " + request.get );
-//        log( "J = " + request.get );
-//        log( "K = " + request.get );
-//        log( "K = " + request.get );
-//        log( "K = " + request.get );
-
-
-
-
-
-
-
-
-
-
-
+        // log( "H = " + request.get );
+        // log( "H = " + request.get );
+        // log( "I = " + request.get );
+        // log( "I = " + request.get );
+        // log( "I = " + request.get );
+        // log( "J = " + request.get );
+        // log( "J = " + request.get );
+        // log( "J = " + request.get );
+        // log( "K = " + request.get );
+        // log( "K = " + request.get );
+        // log( "K = " + request.get );
 
         response.setHeader( "Date", null );
         response.setHeader( "Server", null );
 
-
-        log( "Proxy Requested file = " + request.getRequestURI(  ) );
+        log( "Proxy Requested file = " + request.getRequestURI() );
         String filePath =
-            System.getProperty( "org.apache.maven.archetype.reporitory.directory" ).trim(  ) + "/" +
-            request.getRequestURI(  );
-        filePath = StringUtil.replace(filePath, "\\", "/");
-        filePath = StringUtil.replace(filePath, "/", File.separator);
+            System.getProperty( "org.apache.maven.archetype.reporitory.directory" ).trim() + "/"
+                + request.getRequestURI();
+        filePath = StringUtil.replace( filePath, "\\", "/" );
+        filePath = StringUtil.replace( filePath, "/", File.separator );
         log( "Complete file path = " + filePath );
 
-        String method = request.getMethod(  );
+        String method = request.getMethod();
 
         if ( "GET".equalsIgnoreCase( method ) )
         {
@@ -144,7 +135,7 @@ public class RepositoryServlet
 
                 if ( is != null )
                 {
-                    IO.copy( is, response.getOutputStream(  ) );
+                    IO.copy( is, response.getOutputStream() );
                     response.setStatus( HttpServletResponse.SC_OK );
                     log( "File sent" );
                 }
@@ -168,21 +159,21 @@ public class RepositoryServlet
         {
             log( "Putting file" );
             File uploadedFile = new File( filePath );
-            if ( uploadedFile.exists(  ) )
+            if ( uploadedFile.exists() )
             {
-                uploadedFile.delete(  );
+                uploadedFile.delete();
                 log( "Removed old file" );
             }
-            else if ( !uploadedFile.getParentFile(  ).exists(  ) )
+            else if ( !uploadedFile.getParentFile().exists() )
             {
-                uploadedFile.getParentFile(  ).mkdirs(  );
-                log( "Created directory " + uploadedFile.getParent(  ) );
+                uploadedFile.getParentFile().mkdirs();
+                log( "Created directory " + uploadedFile.getParent() );
             }
 
             try
             {
                 FileWriter fw = new FileWriter( uploadedFile );
-                IO.copy( request.getReader(  ), fw );
+                IO.copy( request.getReader(), fw );
                 response.setStatus( HttpServletResponse.SC_OK );
                 log( "File copied" );
             }
@@ -199,18 +190,18 @@ public class RepositoryServlet
             response.setStatus( HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
             try
             {
-                log( "Method " + request.getMethod(  ) );
-                log( "ContextPath " + request.getContextPath(  ) );
-                log( "QueryString" + request.getQueryString(  ) );
-                log( "PathInfo " + request.getPathInfo(  ) );
-                log( "ServletPath " + request.getServletPath(  ) );
-                log( "AttributeNames " + request.getAttributeNames(  ).toString(  ) );
-                log( "HeaderNames " + request.getHeaderNames(  ).toString(  ) );
-                log( "RequestURL " + request.getRequestURL(  ).toString(  ) );
-                log( "ParameterNames " + request.getParameterNames(  ).toString(  ) );
-                StringWriter w = new StringWriter(  );
-                IO.copy( request.getReader(  ), w );
-                log( "Content " + w.toString(  ) );
+                log( "Method " + request.getMethod() );
+                log( "ContextPath " + request.getContextPath() );
+                log( "QueryString" + request.getQueryString() );
+                log( "PathInfo " + request.getPathInfo() );
+                log( "ServletPath " + request.getServletPath() );
+                log( "AttributeNames " + request.getAttributeNames().toString() );
+                log( "HeaderNames " + request.getHeaderNames().toString() );
+                log( "RequestURL " + request.getRequestURL().toString() );
+                log( "ParameterNames " + request.getParameterNames().toString() );
+                StringWriter w = new StringWriter();
+                IO.copy( request.getReader(), w );
+                log( "Content " + w.toString() );
             }
             catch ( IOException iOException )
             {
@@ -219,47 +210,46 @@ public class RepositoryServlet
         }
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see javax.servlet.Servlet#getServletInfo()
      */
-    public String getServletInfo( )
+    public String getServletInfo()
     {
         return "Repository Servlet";
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see javax.servlet.Servlet#destroy()
      */
-    public void destroy( )
+    public void destroy()
     {
     }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+     * 
      * @param request servlet request
      * @param response servlet response
      */
-    protected void processRequest( HttpServletRequest request,
-        HttpServletResponse response ) throws ServletException, IOException
+    protected void processRequest( HttpServletRequest request, HttpServletResponse response )
+        throws ServletException, IOException
     {
         response.setContentType( "text/html;charset=UTF-8" );
-        PrintWriter out = response.getWriter(  );
+        PrintWriter out = response.getWriter();
         try
         {
-            /* TODO output your page here
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet RepositoryServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet RepositoryServlet at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            /*
+             * TODO output your page here out.println("<html>"); out.println("<head>");
+             * out.println("<title>Servlet RepositoryServlet</title>"); out.println("</head>"); out.println("<body>");
+             * out.println("<h1>Servlet RepositoryServlet at " + request.getContextPath () + "</h1>");
+             * out.println("</body>"); out.println("</html>");
              */
         }
         finally
         {
-            out.close(  );
+            out.close();
         }
     }
 
@@ -267,6 +257,5 @@ public class RepositoryServlet
     {
         return "Repository Servlet";
     }
-
 
 }
