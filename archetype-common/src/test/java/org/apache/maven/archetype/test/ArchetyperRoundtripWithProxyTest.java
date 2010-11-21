@@ -209,7 +209,7 @@ public class ArchetyperRoundtripWithProxyTest
             new Jetty6xEmbeddedStandaloneLocalConfiguration( "target/proxy-webapp" );
         configuration.setProperty( ServletPropertySet.PORT, "18882" );
 
-        System.setProperty( "org.apache.maven.archetype.reporitory.directory",
+        System.setProperty( "org.apache.maven.archetype.repository.directory",
             getTestPath( "target/test-classes/repositories/central" ) );
         jettyContainer = new Jetty6xEmbeddedLocalContainer( configuration );
         jettyContainer.setTimeout( 180000L );
@@ -232,7 +232,7 @@ public class ArchetyperRoundtripWithProxyTest
             new Jetty6xEmbeddedStandaloneLocalConfiguration( "target/repository-webapp" );
         configuration2.setProperty( ServletPropertySet.PORT, "18881" );
 
-        System.setProperty( "org.apache.maven.archetype.reporitory.directory",
+        System.setProperty( "org.apache.maven.archetype.repository.directory",
             getTestPath( "target/test-classes/repositories/central" ) );
         jettyContainer2 = new Jetty6xEmbeddedLocalContainer( configuration2 );
         jettyContainer2.setTimeout( 180000L );

@@ -222,7 +222,7 @@ public class ArchetyperRoundtripTest
             new Jetty6xEmbeddedStandaloneLocalConfiguration( "target/repository-webapp" );
         configuration.setProperty( ServletPropertySet.PORT, "18881" );
 
-        System.setProperty( "org.apache.maven.archetype.reporitory.directory",
+        System.setProperty( "org.apache.maven.archetype.repository.directory",
             getTestPath( "target/test-classes/repositories/central" ) );
         container = new Jetty6xEmbeddedLocalContainer( configuration );
         container.setTimeout( 180000L );
