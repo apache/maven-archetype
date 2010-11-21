@@ -107,7 +107,7 @@ public class ArchetypeCatalogsTest
             new Jetty6xEmbeddedStandaloneLocalConfiguration( "target/repository-webapp" );
         configuration.setProperty( ServletPropertySet.PORT, "18881" );
 
-        System.setProperty( "org.apache.maven.archetype.reporitory.directory",
+        System.setProperty( "org.apache.maven.archetype.repository.directory",
             getTestPath( "target/test-classes/repositories/test-catalog" ) );
         cargo = new Jetty6xEmbeddedLocalContainer( configuration );
         cargo.setTimeout( 180000L );

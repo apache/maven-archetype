@@ -82,7 +82,7 @@ under the License.
           </webAppConfig>
           <systemProperties>
             <systemProperty>
-              <name>org.apache.maven.archetype.reporitory.directory</name>
+              <name>org.apache.maven.archetype.repository.directory</name>
               <value>${project.basedir}/target/repository</value>
             </systemProperty>
           </systemProperties>

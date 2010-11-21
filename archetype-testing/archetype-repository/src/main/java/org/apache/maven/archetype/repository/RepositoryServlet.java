@@ -41,7 +41,7 @@ public class RepositoryServlet
         log( "Requested file = " + request.getRequestURI() );
 
         String filePath =
-            System.getProperty( "org.apache.maven.archetype.reporitory.directory" ).trim() + "/"
+            System.getProperty( "org.apache.maven.archetype.repository.directory" ).trim() + "/"
                 + request.getRequestURI();
         filePath = StringUtil.replace( filePath, "\\", File.separator );
         filePath = StringUtil.replace( filePath, File.separator, "/" );
