@@ -340,7 +340,12 @@ public class FilesetArchetypeCreator
         model.setVersion( configurationProperties.getProperty( Constants.ARCHETYPE_VERSION, project.getVersion() ) );
         model.setPackaging( "maven-archetype" );
         model.setName( configurationProperties.getProperty( Constants.ARCHETYPE_ARTIFACT_ID, project.getArtifactId() ) );
-
+        model.setUrl( configurationProperties.getProperty( Constants.ARCHETYPE_URL, project.getUrl() ) );
+        model.setDescription( configurationProperties.getProperty( Constants.ARCHETYPE_DESCRIPTION,
+                                                                   project.getDescription() ) );
+        model.setLicenses( project.getLicenses() );
+        model.setDevelopers( project.getDevelopers() );
+        model.setScm( project.getScm() );
         Build build = new Build();
         model.setBuild( build );
 

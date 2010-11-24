@@ -36,6 +36,10 @@ public class ArchetypeDefinition
 
     private String goals;
 
+    private String url;
+
+    private String description;
+
     public ArchetypeDefinition()
     {
     }
@@ -77,6 +81,16 @@ public class ArchetypeDefinition
         return this.version;
     }
 
+    public String getUrl()
+    {
+        return this.url;
+    }
+
+    public String getDescription()
+    {
+        return this.description;
+    }
+
     public void setArtifactId( String artifactId )
     {
         this.artifactId = artifactId;
@@ -105,6 +119,16 @@ public class ArchetypeDefinition
     public void setVersion( String version )
     {
         this.version = version;
+    }
+
+    public void setUrl( String url )
+    {
+        this.url = url;
+    }
+
+    public void setDescription( String description )
+    {
+        this.description = description;
     }
 
     public void reset()
