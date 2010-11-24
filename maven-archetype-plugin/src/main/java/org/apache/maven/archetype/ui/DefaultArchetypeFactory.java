@@ -190,8 +190,8 @@ public class DefaultArchetypeFactory
                 configuration.addRequiredProperty( requiredProperty );
 
                 configuration.setProperty( requiredProperty, properties.getProperty( requiredProperty ) );
-                getLogger().debug( "Setting property " + requiredProperty + "="
-                                       + configuration.getProperty( requiredProperty ) );
+                getLogger().debug( "Setting property " + requiredProperty + "=" +
+                                       configuration.getProperty( requiredProperty ) );
             }
         }
 
@@ -209,6 +209,10 @@ public class DefaultArchetypeFactory
 
         setProperty( configuration, properties, Constants.ARCHETYPE_VERSION );
 
+        setProperty( configuration, properties, Constants.ARCHETYPE_URL );
+
+        setProperty( configuration, properties, Constants.ARCHETYPE_DESCRIPTION );
+
         return configuration;
     }
 
@@ -224,6 +228,10 @@ public class DefaultArchetypeFactory
 
         definition.setRepository( properties.getProperty( Constants.ARCHETYPE_REPOSITORY ) );
 
+        definition.setUrl( properties.getProperty( Constants.ARCHETYPE_URL ) );
+
+        definition.setDescription( properties.getProperty( Constants.ARCHETYPE_DESCRIPTION ) );
+
         return definition;
     }
 
@@ -236,6 +244,10 @@ public class DefaultArchetypeFactory
         configuration.setArtifactId( properties.getProperty( Constants.ARCHETYPE_ARTIFACT_ID ) );
 
         configuration.setVersion( properties.getProperty( Constants.ARCHETYPE_VERSION ) );
+
+        configuration.setUrl( properties.getProperty( Constants.ARCHETYPE_URL ) );
+
+        configuration.setDescription( properties.getProperty( Constants.ARCHETYPE_DESCRIPTION ) );
 
         return configuration;
     }

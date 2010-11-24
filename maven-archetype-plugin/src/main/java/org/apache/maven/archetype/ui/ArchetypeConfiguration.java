@@ -38,6 +38,30 @@ public class ArchetypeConfiguration
 
     private String goals;
 
+    public String getDescription()
+    {
+        return description;
+    }
+
+    public void setDescription( String description )
+    {
+        this.description = description;
+    }
+
+    public String getUrl()
+    {
+        return url;
+    }
+
+    public void setUrl( String url )
+    {
+        this.url = url;
+    }
+
+    private String url;
+
+    private String description;
+
     private List<String> requiredProperties;
 
     public void addRequiredProperty( String string )
