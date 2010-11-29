@@ -40,11 +40,13 @@
           <version>1.4</version>
           <configuration>
             <version>1.0.0</version>
-            <useJava5>true</useJava5>
           </configuration>
           <executions>
             <execution>
               <id>default</id>
+              <configuration>
+                <useJava5>true</useJava5>
+              </configuration>
               <goals>
                 <goal>java</goal>
                 <goal>xpp3-reader</goal>
@@ -55,9 +57,6 @@
             <execution>
               <id>site-docs</id>
               <phase>pre-site</phase>
-              <configuration>
-                <xdocFileName>index.xml</xdocFileName>
-              </configuration>
               <goals>
                 <goal>xdoc</goal>
               </goals>
