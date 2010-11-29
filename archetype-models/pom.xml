@@ -41,12 +41,6 @@
           <configuration>
             <version>1.0.0</version>
             <useJava5>true</useJava5>
-            <models>
-              <model>src/main/mdo/archetype-registry.mdo</model>
-              <model>src/main/mdo/archetype-descriptor.mdo</model>
-              <model>src/main/mdo/archetype-catalog.mdo</model>
-              <model>src/main/mdo/archetype.mdo</model>
-            </models>
           </configuration>
           <executions>
             <execution>
@@ -61,6 +55,9 @@
             <execution>
               <id>site-docs</id>
               <phase>pre-site</phase>
+              <configuration>
+                <xdocFileName>index.xml</xdocFileName>
+              </configuration>
               <goals>
                 <goal>xdoc</goal>
               </goals>
