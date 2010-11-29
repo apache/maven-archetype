@@ -27,9 +27,9 @@ under the License.
       <item name="Internal Catalog" href="./internal.html"/>
     </menu>
     <menu name="Reference">
-      <item name="Archetype Descriptor" href="./archetype-descriptor.html"/>
-      <item name="Archetype Catalog" href="./archetype-catalog.html"/>
-      <item name="Archetype Registry" href="./archetype-registry.html"/>
+      <item name="Archetype Descriptor" href="../archetype-models/archetype-descriptor/archetype-descriptor.html"/>
+      <item name="Archetype Catalog" href="../archetype-models/archetype-catalog/archetype-catalog.html"/>
+      <item name="Archetype Registry" href="../archetype-models/archetype-registry/archetype-registry.html"/>
       <item name="Archetype 1.0.x Descriptor" href="./archetype.html"/>
     </menu>
     <menu ref="parent" inherit="top" />
