@@ -29,11 +29,19 @@ import org.apache.maven.archetype.exception.UnknownArchetype;
 import java.io.File;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 
-/** @author rafale */
+/**
+ * Generate a Maven project from an archetype.
+ *
+ * @author rafale
+ * @version $Id: OldArchetype.java 953452 2010-06-10 20:56:32Z hboutemy $
+ */
 public interface FilesetArchetypeGenerator
 {
     String ROLE = FilesetArchetypeGenerator.class.getName();
 
+    /**
+     * Generate a project from an archetype file.
+     */
     void generateArchetype( ArchetypeGenerationRequest request, File archetypeFile )
         throws UnknownArchetype, ArchetypeNotConfigured, ProjectDirectoryExists, PomFileExists, OutputFileExists,
         ArchetypeGenerationFailure;
