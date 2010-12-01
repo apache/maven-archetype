@@ -38,7 +38,9 @@ Maven Archetype
 *----------------------------------------------------------+----------------+
 || Module                                                  || Description   ||
 *----------------------------------------------------------+----------------+
-| {{{./archetype-common/}archetype-common}}                | core classes and descriptors reference documentation,
+| {{{./archetype-models/}archetype-models}}                | descriptors classes and reference documentation,
+*----------------------------------------------------------+----------------+
+| {{{./archetype-common/}archetype-common}}                | core classes,
 *----------------------------------------------------------+----------------+
 | {{{./maven-archetype-plugin/}maven-archetype-plugin}}    | Archetype Plugin to use archetypes with Maven,
 *----------------------------------------------------------+----------------+
