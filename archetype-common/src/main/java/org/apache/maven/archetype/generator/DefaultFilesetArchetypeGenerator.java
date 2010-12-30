@@ -103,30 +103,27 @@ public class DefaultFilesetArchetypeGenerator
 
             if ( !isArchetypeConfigured( archetypeDescriptor, request ) )
             {
-                if ( request.isInteractiveMode () )
+                if ( request.isInteractiveMode() )
                 {
-                    throw new ArchetypeNotConfigured ( "No archetype was chosen.", null );
+                    throw new ArchetypeNotConfigured( "No archetype was chosen.", null );
                 }
-                else
-                {
-                    StringBuffer exceptionMessage = new StringBuffer();
-                    exceptionMessage.append( "Archetype " + request.getArchetypeGroupId() + ":"
-                        + request.getArchetypeArtifactId() + ":" + request.getArchetypeVersion()
-                        + " is not configured" );
 
-                    List<String> missingProperties = new ArrayList<String>( 0 );
-                    for ( RequiredProperty requiredProperty : archetypeDescriptor.getRequiredProperties() )
+                StringBuffer exceptionMessage =
+                    new StringBuffer( "Archetype " + request.getArchetypeGroupId() + ":"
+                        + request.getArchetypeArtifactId() + ":" + request.getArchetypeVersion() + " is not configured" );
+
+                List<String> missingProperties = new ArrayList<String>( 0 );
+                for ( RequiredProperty requiredProperty : archetypeDescriptor.getRequiredProperties() )
+                {
+                    if ( StringUtils.isEmpty( request.getProperties().getProperty( requiredProperty.getKey() ) ) )
                     {
-                        if ( StringUtils.isEmpty( request.getProperties().getProperty( requiredProperty.getKey() ) ) )
-                        {
-                            exceptionMessage.append( "\n\tProperty " + requiredProperty.getKey() + " is missing." );
+                        exceptionMessage.append( "\n\tProperty " + requiredProperty.getKey() + " is missing." );
 
-                            missingProperties.add( requiredProperty.getKey() );
-                        }
+                        missingProperties.add( requiredProperty.getKey() );
                     }
-
-                    throw new ArchetypeNotConfigured( exceptionMessage.toString(), missingProperties );
                 }
+
+                throw new ArchetypeNotConfigured( exceptionMessage.toString(), missingProperties );
             }
 
             Context context = prepareVelocityContext( request );
