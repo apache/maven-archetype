@@ -560,20 +560,13 @@ public class DefaultOldArchetype
         {
             getLogger().debug(
                 "********************* Debug info for resources created from generated Model ***********************" );
-        }
-
-        if ( getLogger().isDebugEnabled() )
-        {
             getLogger().debug( "Was build element found in generated POM?: " + foundBuildElement );
         }
 
         // create source directory if specified in POM
         if ( foundBuildElement && null != build.getSourceDirectory() )
         {
-            if ( getLogger().isDebugEnabled() )
-            {
-                getLogger().debug( "Overriding default source directory " );
-            }
+            getLogger().debug( "Overriding default source directory " );
 
             overrideSrcDir = true;
 
@@ -587,10 +580,7 @@ public class DefaultOldArchetype
         // create script source directory if specified in POM
         if ( foundBuildElement && null != build.getScriptSourceDirectory() )
         {
-            if ( getLogger().isDebugEnabled() )
-            {
-                getLogger().debug( "Overriding default script source directory " );
-            }
+            getLogger().debug( "Overriding default script source directory " );
 
             String scriptSourceDirectory = build.getScriptSourceDirectory();
 
@@ -602,10 +592,7 @@ public class DefaultOldArchetype
         // create resource director(y/ies) if specified in POM
         if ( foundBuildElement && build.getResources().size() > 0 )
         {
-            if ( getLogger().isDebugEnabled() )
-            {
-                getLogger().info( "Overriding default resource directory " );
-            }
+            getLogger().debug( "Overriding default resource directory " );
 
             overrideResourceDir = true;
 
@@ -625,10 +612,7 @@ public class DefaultOldArchetype
         // create test source directory if specified in POM
         if ( foundBuildElement && null != build.getTestSourceDirectory() )
         {
-            if ( getLogger().isDebugEnabled() )
-            {
-                getLogger().debug( "Overriding default test directory " );
-            }
+            getLogger().debug( "Overriding default test directory " );
 
             overrideTestSrcDir = true;
 
@@ -642,10 +626,7 @@ public class DefaultOldArchetype
         // create test resource directory if specified in POM
         if ( foundBuildElement && build.getTestResources().size() > 0 )
         {
-            if ( getLogger().isDebugEnabled() )
-            {
-                getLogger().debug( "Overriding default test resource directory " );
-            }
+            getLogger().debug( "Overriding default test resource directory " );
 
             overrideTestResourceDir = true;
 
@@ -663,7 +644,7 @@ public class DefaultOldArchetype
             }
         }
 
-        getLogger().info(
+        getLogger().debug(
             "********************* End of debug info from resources from generated POM ***********************" );
 
         // ----------------------------------------------------------------------
