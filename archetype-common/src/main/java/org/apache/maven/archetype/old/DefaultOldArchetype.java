@@ -139,27 +139,20 @@ public class DefaultOldArchetype
         // ---------------------------------------------------------------------
         if ( getLogger().isInfoEnabled() )
         {
-            if ( !parameters.isEmpty() )
+            getLogger().info( "----------------------------------------------------------------------------" );
+
+            getLogger().info( "Using following parameters for creating project from Old (1.x) Archetype: "
+                                  + request.getArchetypeArtifactId() + ":" + request.getArchetypeVersion() );
+
+            getLogger().info( "----------------------------------------------------------------------------" );
+
+            for ( Map.Entry<String, String> entry : parameters.entrySet() )
             {
-                getLogger().info( "----------------------------------------------------------------------------" );
+                String parameterName = entry.getKey();
 
-                getLogger().info( "Using following parameters for creating project from Old (1.x) Archetype: "
-                                      + request.getArchetypeArtifactId() + ":" + request.getArchetypeVersion() );
+                String parameterValue = entry.getValue();
 
-                getLogger().info( "----------------------------------------------------------------------------" );
-
-                for ( Map.Entry<String, String> entry : parameters.entrySet() )
-                {
-                    String parameterName = entry.getKey();
-
-                    String parameterValue = entry.getValue();
-
-                    getLogger().info( "Parameter: " + parameterName + ", Value: " + parameterValue );
-                }
-            }
-            else
-            {
-                getLogger().info( "No Parameters found for creating project from Old (1.x) Archetype" );
+                getLogger().info( "Parameter: " + parameterName + ", Value: " + parameterValue );
             }
         }
 
@@ -188,12 +181,11 @@ public class DefaultOldArchetype
             if ( is == null )
             {
                 is = getStream( ARCHETYPE_OLD_DESCRIPTOR, archetypeJarLoader );
+            }
 
-                if ( is == null )
-                {
-                    throw new ArchetypeDescriptorException(
-                        "The " + ARCHETYPE_DESCRIPTOR + " descriptor cannot be found." );
-                }
+            if ( is == null )
+            {
+                throw new ArchetypeDescriptorException( "The " + ARCHETYPE_DESCRIPTOR + " descriptor cannot be found." );
             }
 
             descriptor = builder.build( new InputStreamReader( is ) );
