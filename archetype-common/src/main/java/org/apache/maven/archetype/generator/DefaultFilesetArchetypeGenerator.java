@@ -508,8 +508,6 @@ public class DefaultFilesetArchetypeGenerator
         {
             ModuleDescriptor project = subprojects.next();
 
-            artifactId = project.getId();
-
             File moduleOutputDirectoryFile =
                 new File( outputDirectoryFile,
                           StringUtils.replace( project.getDir(), "__rootArtifactId__", rootArtifactId ) );
