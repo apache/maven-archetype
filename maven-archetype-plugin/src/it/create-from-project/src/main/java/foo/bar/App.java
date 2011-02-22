@@ -1,4 +1,4 @@
-package foo;
+package foo.bar;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -21,7 +21,7 @@ package foo;
 
 /**
  * Hello world!
- *
+ * package foo.bar from foo/bar directory
  */
 public class App 
 {
