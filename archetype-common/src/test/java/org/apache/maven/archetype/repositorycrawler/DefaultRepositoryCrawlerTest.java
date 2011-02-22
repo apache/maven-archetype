@@ -28,26 +28,22 @@ import java.io.File;
  * @author  rafale
  */
 public class DefaultRepositoryCrawlerTest
-extends AbstractMojoTestCase
+    extends AbstractMojoTestCase
 {
     /**
      * Test of crawl method, of class DefaultRepositoryCrawler.
      */
-    public void testCrawl ()
-    throws Exception
+    public void testCrawl()
+        throws Exception
     {
-        System.out.println ( "crawl" );
+        System.out.println( "crawl" );
 
-        File repository = getTestFile ( "target/test-classes/repositories/central" );
-        RepositoryCrawler instance =
-            (RepositoryCrawler) lookup ( RepositoryCrawler.class.getName () );
+        File repository = getTestFile( "target/test-classes/repositories/central" );
+        RepositoryCrawler instance = (RepositoryCrawler) lookup( RepositoryCrawler.class.getName() );
 
-        ArchetypeCatalog result = instance.crawl ( repository );
-        System.err.println ( "result = " + result );
-        assertTrue (
-            ( 5 <= result.getArchetypes ().size () )
-            && ( result.getArchetypes ().size () <= 8 )
-        );
+        ArchetypeCatalog result = instance.crawl( repository );
+        System.err.println( "result = " + result );
+        assertTrue( ( 5 <= result.getArchetypes().size() ) && ( result.getArchetypes().size() <= 8 ) );
         
         // TODO: should write to another directory 
 //        instance.writeCatalog(result, new File(repository, "archetype-catalog.xml"));
@@ -71,15 +67,15 @@ extends AbstractMojoTestCase
 ////        fail ( "The test case is a prototype." );
 //    }
 
-    protected void tearDown ()
-    throws Exception
+    protected void tearDown()
+        throws Exception
     {
-        super.tearDown ();
+        super.tearDown();
     }
 
-    protected void setUp ()
-    throws Exception
+    protected void setUp()
+        throws Exception
     {
-        super.setUp ();
+        super.setUp();
     }
 }

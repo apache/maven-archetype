@@ -20,11 +20,13 @@ package org.apache.maven.archetype.old.descriptor;
  */
 
 import java.io.File;
+import java.io.InputStream;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.util.IOUtil;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -49,7 +51,15 @@ public class ArchetypeXsdTest
                                "http://www.w3.org/2001/XMLSchema" );
         saxParser.setProperty( "http://java.sun.com/xml/jaxp/properties/schemaSource", archetypeXsd );
 
-        saxParser.parse( new InputSource( getClass().getResourceAsStream( "sample-archetype.xml" ) ), new Handler() );
+        InputStream in = getClass().getResourceAsStream( "sample-archetype.xml" );
+        try
+        {
+            saxParser.parse( new InputSource( in ), new Handler() );
+        }
+        finally
+        {
+            IOUtil.close( in );
+        }
     }
 
     private static class Handler

@@ -29,14 +29,11 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.project.MavenProjectBuildingResult;
 import org.codehaus.plexus.util.FileUtils;
-import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.PropertyUtils;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -332,7 +329,7 @@ public class DefaultArchetypeCreatorTest
     private boolean assertContent( File template, String content )
         throws FileNotFoundException, IOException
     {
-        String templateContent = IOUtil.toString( new FileReader( template ) );
+        String templateContent = FileUtils.fileRead( template, "UTF-8" );
         return StringUtils.countMatches( templateContent, content ) > 0;
     }
 
