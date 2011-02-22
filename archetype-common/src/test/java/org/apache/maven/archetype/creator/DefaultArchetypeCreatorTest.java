@@ -352,7 +352,7 @@ public class DefaultArchetypeCreatorTest
     {
         assertTrue( !out.exists() || out.delete() );
         assertFalse( out.exists() );
-        IOUtil.copy( new FileReader( in ), new FileWriter( out ) );
+        FileUtils.copyFile( in, out );
         assertTrue( out.exists() );
         assertTrue( in.exists() );
     }
