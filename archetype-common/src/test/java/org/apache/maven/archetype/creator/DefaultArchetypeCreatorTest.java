@@ -48,14 +48,12 @@ public class DefaultArchetypeCreatorTest
 
     private DefaultArtifactRepository localRepository;
 
-    public void testCreateFilesetArchetype()
+    protected void createFilesetArchetype( String project )
         throws Exception
     {
-        System.out.println( "testCreateFilesetArchetype" );
-
+        System.out.println( ">>>>>> testCreateFilesetArchetype( \"" + project + "\" )" );
+        
         MavenProjectBuilder builder = (MavenProjectBuilder) lookup( MavenProjectBuilder.ROLE );
-
-        String project = "create-3";
 
         File projectFile = getProjectFile( project );
 
@@ -118,6 +116,7 @@ public class DefaultArchetypeCreatorTest
         filtereds.add( "properties" );
         filtereds.add( ".classpath" );
         filtereds.add( ".project" );
+        filtereds.add( "MF" );
 
         ArchetypeCreationRequest request = new ArchetypeCreationRequest()
             .setProject( mavenProject )
@@ -140,9 +139,17 @@ public class DefaultArchetypeCreatorTest
             throw result.getCause();
         }
 
-        File template;
+        System.out.println( "<<<<<< testCreateFilesetArchetype( \"" + project + "\" )" );
+    }
 
-        template = getTemplateFile( project, "pom.xml" );
+    public void testCreateFilesetArchetype3()
+        throws Exception
+    {
+        String project = "create-3";
+
+        createFilesetArchetype( project );
+
+        File template = getTemplateFile( project, "pom.xml" );
         assertExists( template );
         assertContent( template, "${groupId}" );
         assertContent( template, "${artifactId}" );
@@ -153,7 +160,8 @@ public class DefaultArchetypeCreatorTest
 
         template = getTemplateFile( project, "src/site/site.xml" );
         assertExists( template );
-        assertContent( template, "<!-- ${someProperty} -->" );
+        assertContent( template, "<!-- ${packageInPathFormat}/test" );
+        assertContent( template, "${someProperty} -->" );
 
         template = getTemplateFile( project, "src/site/resources/site.png" );
         assertExists( template );
@@ -161,11 +169,12 @@ public class DefaultArchetypeCreatorTest
 
         template = getTemplateFile( project, ".classpath" );
         assertExists( template );
-        assertNotContent( template, "${someProperty}" );
+        assertContent( template, "${someProperty}" );
 
         template = getTemplateFile( project, "profiles.xml" );
         assertExists( template );
-        assertContent( template, "<!-- ${someProperty} -->" );
+        assertContent( template, "<!-- ${packageInPathFormat}/test" );
+        assertContent( template, "${someProperty} -->" );
 
         template = getTemplateFile( project, "libs/pom.xml" );
         assertExists( template );
@@ -174,7 +183,7 @@ public class DefaultArchetypeCreatorTest
         assertContent( template, "${version}" );
         assertContent( template, "Maven archetype Test create-3-libraries" );
         assertContent( template, "<packaging>pom</packaging>" );
-        assertNotContent( template, "<parent>" );
+        assertContent( template, "<parent>" );
 
         template = getTemplateFile( project, "libs/prj-a/pom.xml" );
         assertExists( template );
@@ -183,11 +192,12 @@ public class DefaultArchetypeCreatorTest
         assertContent( template, "${version}" );
         assertContent( template, "Maven archetype Test create-3-libraries-project-a" );
         assertNotContent( template, "<packaging>pom</packaging>" );
-        assertNotContent( template, "<parent>" );
+        assertContent( template, "<parent>" );
 
         template = getTemplateFile( project, "libs/prj-a/src/main/mdo/descriptor.xml" );
         assertExists( template );
-        assertContent( template, "<!-- ${someProperty} -->" );
+        assertContent( template, "<!-- ${packageInPathFormat}/test" );
+        assertContent( template, "${someProperty} -->" );
 
         template = getTemplateFile( project, "libs/prj-b/pom.xml" );
         assertExists( template );
@@ -196,7 +206,7 @@ public class DefaultArchetypeCreatorTest
         assertContent( template, "${version}" );
         assertContent( template, "Maven archetype Test create-3-libraries-project-b" );
         assertNotContent( template, "<packaging>pom</packaging>" );
-        assertNotContent( template, "<parent>" );
+        assertContent( template, "<parent>" );
 
         template = getTemplateFile( project, "libs/prj-b/src/main/java/test/com/Component.java" );
         assertExists( template );
@@ -206,10 +216,10 @@ public class DefaultArchetypeCreatorTest
 
         template = getTemplateFile( project, "libs/prj-b/src/main/java/test/com/package.html" );
         assertExists( template );
-        assertContent( template, "<!-- ${someProperty} -->" );
+        assertContent( template, "<!-- ${packageInPathFormat}/test" );
+        assertContent( template, "${someProperty} -->" );
 
-        template =
-            getTemplateFile( project, "libs/prj-b/src/test/java/test/common/ComponentTest.java" );
+        template = getTemplateFile( project, "libs/prj-b/src/test/java/test/common/ComponentTest.java" );
         assertExists( template );
         assertContent( template, "${someProperty}" );
         assertContent( template, "${package}" );
@@ -222,29 +232,21 @@ public class DefaultArchetypeCreatorTest
         assertContent( template, "${version}" );
         assertContent( template, "Maven archetype Test create-3-application" );
         assertNotContent( template, "<packaging>pom</packaging>" );
-        assertNotContent( template, "<parent>" );
+        assertContent( template, "<parent>" );
 
         template = getTemplateFile( project, "application/src/main/java/Main.java" );
         assertExists( template );
         assertContent( template, "${someProperty}" );
-        assertContent( template, "${package}" );
-        assertContent( template, "${packageInPathFormat}" );
+        assertNotContent( template, "${package}" );
+        assertContent( template, "${packageInPathFormat}/test" );
 
-        template =
-            getTemplateFile(
-                project,
-                "application/src/main/java/test/application/Application.java"
-            );
+        template = getTemplateFile( project, "application/src/main/java/test/application/Application.java" );
         assertExists( template );
         assertContent( template, "${someProperty}" );
         assertContent( template, "${package}" );
         assertContent( template, "${packageInPathFormat}" );
 
-        template =
-            getTemplateFile(
-                project,
-                "application/src/main/java/test/application/audios/Application.ogg"
-            );
+        template = getTemplateFile( project, "application/src/main/java/test/application/audios/Application.ogg" );
         assertExists( template );
         assertNotContent( template, "${someProperty}" );
 
@@ -255,20 +257,20 @@ public class DefaultArchetypeCreatorTest
         template = getTemplateFile( project, "application/src/main/resources/log4j.properties" );
         assertExists( template );
         assertContent( template, "${someProperty}" );
-        assertContent( template, "${package}" );
-        assertContent( template, "${packageInPathFormat}" );
+        assertNotContent( template, "${package}" );
+        assertContent( template, "${packageInPathFormat}/test" );
 
         template = getTemplateFile( project, "application/src/main/resources/META-INF/MANIFEST.MF" );
         assertExists( template );
         assertContent( template, "${someProperty}" );
-        assertContent( template, "${package}" );
-        assertContent( template, "${packageInPathFormat}" );
+        assertNotContent( template, "${package}" );
+        assertContent( template, "${packageInPathFormat}/test" );
 
         template = getTemplateFile( project, "application/src/main/resources/test/application/some/Gro.groovy" );
         assertExists( template );
         assertContent( template, "${someProperty}" );
-        assertContent( template, "${package}" );
-        assertContent( template, "${packageInPathFormat}" );
+        assertNotContent( template, "${package}" );
+        assertContent( template, "${packageInPathFormat}/test" );
 
         template = getTemplateFile( project, "application/src/main/resources/splash.png" );
         assertExists( template );
@@ -277,37 +279,32 @@ public class DefaultArchetypeCreatorTest
         template = getTemplateFile( project, "application/src/test/java/TestAll.java" );
         assertExists( template );
         assertContent( template, "${someProperty}" );
-        assertContent( template, "${package}" );
-        assertContent( template, "${packageInPathFormat}" );
+        assertNotContent( template, "${package}" );
+        assertContent( template, "${packageInPathFormat}/test" );
 
-        template =
-            getTemplateFile(
-                project,
-                "application/src/test/java/test/application/ApplicationTest.java"
-            );
+        template = getTemplateFile( project, "application/src/test/java/test/application/ApplicationTest.java" );
         assertExists( template );
         assertContent( template, "${someProperty}" );
-        assertContent( template, "${package}" );
-        assertContent( template, "${packageInPathFormat}" );
+        assertContent( template, "package ${package}.test.application;" );
+        assertContent( template, "${packageInPathFormat}/test/application" );
 
         template = getTemplateFile( project, "application/src/it-test/java/test/ItTest1.java" );
         assertExists( template );
         assertContent( template, "${someProperty}" );
-        assertContent( template, "${package}" );
-        assertContent( template, "${packageInPathFormat}" );
+        assertContent( template, "package ${package}.test;" );
+        assertContent( template, "${packageInPathFormat}/test" );
 
         template = getTemplateFile( project, "application/src/it-test/java/ItTestAll.java" );
         assertExists( template );
         assertContent( template, "${someProperty}" );
-        assertContent( template, "${package}" );
-        assertContent( template, "${packageInPathFormat}" );
+        assertNotContent( template, "${package}" );
+        assertContent( template, "${packageInPathFormat}/test" );
 
-        template =
-            getTemplateFile( project, "application/src/it-test/resources/ItTest1Result.txt" );
+        template = getTemplateFile( project, "application/src/it-test/resources/ItTest1Result.txt" );
         assertExists( template );
         assertContent( template, "${someProperty}" );
-        assertContent( template, "${package}" );
-        assertContent( template, "${packageInPathFormat}" );
+        assertNotContent( template, "${package}" );
+        assertContent( template, "${packageInPathFormat}/test" );
     }
 
     protected void tearDown()
@@ -326,22 +323,25 @@ public class DefaultArchetypeCreatorTest
            new DefaultRepositoryLayout() );
     }
 
-    private boolean assertContent( File template, String content )
+    private void assertContent( File template, String content )
         throws FileNotFoundException, IOException
     {
         String templateContent = FileUtils.fileRead( template, "UTF-8" );
-        return StringUtils.countMatches( templateContent, content ) > 0;
+        assertTrue( "File " + template + " does not contain " + content,
+                    StringUtils.countMatches( templateContent, content ) > 0 );
     }
 
     private void assertExists( File file )
     {
-        assertTrue( "File doesn't exist:" + file.getAbsolutePath(), file.exists() );
+        assertTrue( "File doesn't exist: " + file.getAbsolutePath(), file.exists() );
     }
 
-    private boolean assertNotContent( File template, String content )
+    private void assertNotContent( File template, String content )
         throws FileNotFoundException, IOException
     {
-        return !assertContent( template, content );
+        String templateContent = FileUtils.fileRead( template, "UTF-8" );
+        assertFalse( "File " + template + " contains " + content,
+                     StringUtils.countMatches( templateContent, content ) > 0 );
     }
 
     private void copy( File in, File out )
