@@ -142,6 +142,28 @@ public class DefaultArchetypeCreatorTest
         System.out.println( "<<<<<< testCreateFilesetArchetype( \"" + project + "\" )" );
     }
 
+    public void testCreateFilesetArchetype1()
+        throws Exception
+    {
+        String project = "create-1";
+
+        createFilesetArchetype( project );
+
+        File template = getTemplateFile( project, "src/main/java/subfolder1/App.java" );
+        assertExists( template );
+        assertContent( template, "// ${someProperty}" );
+        assertContent( template, "package ${package}.subfolder1;" );
+        assertNotContent( template, "${packageInPathFormat}" );
+    }
+
+    public void testCreateFilesetArchetype2()
+        throws Exception
+    {
+        String project = "create-2";
+
+        createFilesetArchetype( project );
+    }
+
     public void testCreateFilesetArchetype3()
         throws Exception
     {
