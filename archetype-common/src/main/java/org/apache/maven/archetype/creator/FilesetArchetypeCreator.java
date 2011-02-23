@@ -153,11 +153,11 @@ public class FilesetArchetypeCreator
             addRequiredProperties( archetypeDescriptor, properties );
 
             // TODO ensure reverseProperties contains NO dotted properties
-            Properties reverseProperties = getRequiredProperties( archetypeDescriptor, properties );
+            Properties reverseProperties = getReversedProperties( archetypeDescriptor, properties );
             // reverseProperties.remove( Constants.GROUP_ID );
 
             // TODO ensure pomReversedProperties contains NO dotted properties
-            Properties pomReversedProperties = getRequiredProperties( archetypeDescriptor, properties );
+            Properties pomReversedProperties = getReversedProperties( archetypeDescriptor, properties );
             // pomReversedProperties.remove( Constants.PACKAGE );
 
             String packageName = configurationProperties.getProperty( Constants.PACKAGE );
@@ -1337,7 +1337,7 @@ public class FilesetArchetypeCreator
         return unpackagedSources;
     }
 
-    private Properties getRequiredProperties( ArchetypeDescriptor archetypeDescriptor, Properties properties )
+    private Properties getReversedProperties( ArchetypeDescriptor archetypeDescriptor, Properties properties )
     {
         Properties reversedProperties = new Properties();
 
@@ -1345,8 +1345,16 @@ public class FilesetArchetypeCreator
         reversedProperties.remove( Constants.ARCHETYPE_GROUP_ID );
         reversedProperties.remove( Constants.ARCHETYPE_ARTIFACT_ID );
         reversedProperties.remove( Constants.ARCHETYPE_VERSION );
-        reversedProperties.setProperty( Constants.PACKAGE_IN_PATH_FORMAT,
-                                        getPackageInPathFormat( properties.getProperty( Constants.PACKAGE ) ) );
+
+        String packageName = properties.getProperty( Constants.PACKAGE );
+        String packageInPathFormat = getPackageInPathFormat( packageName );
+        if ( !packageInPathFormat.equals( packageName ) )
+        {
+            reversedProperties.setProperty( Constants.PACKAGE_IN_PATH_FORMAT, packageInPathFormat );
+        }
+
+        // TODO check that reversed properties are all different and no one is a substring of another?
+        // to avoid wrong variable replacements
 
         return reversedProperties;
     }
