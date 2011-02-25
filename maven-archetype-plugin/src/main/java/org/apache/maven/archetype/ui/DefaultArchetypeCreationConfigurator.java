@@ -304,7 +304,7 @@ public class DefaultArchetypeCreationConfigurator
 
         getLogger().debug( "Adding " + properties.size() + " properties" );
 
-        Iterator propertiesIterator = properties.keySet().iterator();
+        Iterator<?> propertiesIterator = properties.keySet().iterator();
         while ( propertiesIterator.hasNext() )
         {
             String propertyKey = (String) propertiesIterator.next();
@@ -349,7 +349,7 @@ public class DefaultArchetypeCreationConfigurator
     {
         List<String> toRemove = new ArrayList<String>( 0 );
 
-        for ( Iterator keys = properties.keySet().iterator(); keys.hasNext(); )
+        for ( Iterator<?> keys = properties.keySet().iterator(); keys.hasNext(); )
         {
             String key = (String) keys.next();
             if ( key.indexOf( "." ) >= 0 )

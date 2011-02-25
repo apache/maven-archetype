@@ -180,7 +180,7 @@ public class DefaultArchetypeFactory
 
         ArchetypeConfiguration configuration = createArchetypeConfiguration( properties );
 
-        for ( Iterator requiredProperties = properties.keySet().iterator(); requiredProperties.hasNext(); )
+        for ( Iterator<?> requiredProperties = properties.keySet().iterator(); requiredProperties.hasNext(); )
         {
             String requiredProperty = (String) requiredProperties.next();
 

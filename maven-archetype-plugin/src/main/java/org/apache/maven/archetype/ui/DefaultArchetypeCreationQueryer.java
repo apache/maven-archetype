@@ -93,7 +93,7 @@ public class DefaultArchetypeCreationQueryer
                 + archetypeConfiguration.getArtifactId() + "\n" + Constants.ARCHETYPE_VERSION + "="
                 + archetypeConfiguration.getVersion() + "\n" );
 
-        for ( Iterator propertiesIter = archetypeConfiguration.getProperties().keySet().iterator();
+        for ( Iterator<?> propertiesIter = archetypeConfiguration.getProperties().keySet().iterator();
             propertiesIter.hasNext(); )
         {
             String property = (String) propertiesIter.next();
