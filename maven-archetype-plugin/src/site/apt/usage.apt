@@ -130,7 +130,6 @@ package: com.company.project
 [INFO] Parameter: artifactId, Value: project
 [INFO] Parameter: basedir, Value: /home/local/rafale/projects/tmp
 [INFO] Parameter: version, Value: 1.0
-[INFO] ********************* End of debug info from resources from generated POM ***********************
 [INFO] OldArchetype created in dir: /home/local/rafale/projects/tmp/project
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESSFUL

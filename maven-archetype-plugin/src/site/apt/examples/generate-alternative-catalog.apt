@@ -92,7 +92,6 @@ package: com.company.example
 [INFO] Parameter: basedir, Value: /private/tmp/archetype
 [INFO] Parameter: version, Value: 1.0-SNAPSHOT
 [WARNING] org.apache.velocity.runtime.exception.ReferenceException: reference : template = archetype-resources/pom.xml [line 20,column 6] : $Id is not a valid reference.
-[INFO] ********************* End of debug info from resources from generated POM ***********************
 [WARNING] org.apache.velocity.runtime.exception.ReferenceException: reference : template = archetype-resources/src/main/resources/META-INF/cocoon/spring/block-servlet-service.xml [line 20,column 6] : $Id is not a valid reference.
 [WARNING] org.apache.velocity.runtime.exception.ReferenceException: reference : template = archetype-resources/src/main/resources/META-INF/cocoon/spring/block-application-context.xml [line 18,column 6] : $Id is not a valid reference.
 [INFO] OldArchetype created in dir: /private/tmp/archetype/example
