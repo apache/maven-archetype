@@ -75,7 +75,7 @@ What is done during the creation of an archetype?
 
     In each module's directory and excluding submodules trees, the Archetype
     Plugin sorts the files by languages, fileteredExtensions and sensible
-    default base pathes (src/main/<languages>, src/main/<siblings>,
+    default base paths (src/main/<languages>, src/main/<siblings>,
     src/test/<languages>, src/test/<siblings>, ...).
 
     This defines a tri-dimensional matrix. Each sorted group (matrix' cases)

@@ -1,5 +1,5 @@
  ------
- Create an archetype from a multi module project
+ Create an archetype from a multi-module project
  ------
  Raphaël Piéroni
  ------
@@ -26,15 +26,15 @@
 ~~ NOTE: For help with the syntax of this file, see:
 ~~ http://maven.apache.org/doxia/references/apt-format.html
 
-Create an archetype from a multi module project
+Create an archetype from a multi-module project
 
-   Creating an archetype for a multi module project is as simple as 
-   {{{../advanced-usage.html}creating one for a mono module project}}.
+   Creating an archetype for a multi-module project is as simple as 
+   {{{../advanced-usage.html}creating one for a mono-module project}}.
 
    Just move to the root directory of a multi-module project and call
    <<<mvn archetype:create-from-project>>>. In the archetype used as example,
    some files need to be non filtered. This achieved by giving the archetype
-   plugin some value in the archetype.filtered property.
+   plugin some value in the <<<archetype.filteredExtensions>>> property.
 
 +--
 $ mvn archetype:create-from-project -Darchetype.filteredExtensions=java
@@ -48,7 +48,7 @@ $ mvn archetype:create-from-project -Darchetype.filteredExtensions=java
 [INFO]   archetype :: remoting
 [INFO]   archetype :: web services
 [INFO]   archetype :: web application
-[INFO]   archetype :: entreprise application
+[INFO]   archetype :: enterprise application
 [INFO] Searching repository for plugin with prefix: 'archetype'.
 [INFO] ------------------------------------------------------------------------
 [INFO] Building archetype
@@ -90,7 +90,7 @@ $ mvn archetype:create-from-project -Darchetype.filteredExtensions=java
 [INFO] Unpack native libraries required to run hosted browser
 [INFO] [gwt:generateAsync {execution: default}]
 [INFO] ------------------------------------------------------------------------
-[INFO] Building archetype :: entreprise application
+[INFO] Building archetype :: enterprise application
 [INFO] ------------------------------------------------------------------------
 [INFO] No goals needed for project - skipping
 [INFO] Setting property: classpath.resource.loader.class => 'org.codehaus.plexus.velocity.ContextClassLoaderResourceLoader'.

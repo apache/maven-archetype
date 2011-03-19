@@ -156,7 +156,7 @@ How metadata on an archetype is stored?
     This filset is also packaged and filtered.
 
 
-* Defining multi module in the archetype metadata
+* Defining multi-module in the archetype metadata
 
     Inner modules of an archetype are used to create a multi-module Maven
     project from a single archetype.
@@ -182,7 +182,7 @@ How metadata on an archetype is stored?
     named <<<SubProject>>>. This module is located in the <<<sub-project>>>
     directory of the archetype. It also has the artifactId <<<subproject>>>.
 
-    The attributes name, id and dir of the module are used to determine the
+    The attributes name, <<<id>>> and <<<dir>>>, of the module are used to determine the
     directory where to generate that module's files, they also are used to
     determine the artifactId of the Maven project corresponding to this
     module.

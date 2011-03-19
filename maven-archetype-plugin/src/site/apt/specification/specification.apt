@@ -38,7 +38,7 @@ Specification
 
     * {{{./generate.html}What is done during the creation of a project?}}
 
-    * {{{./archetype-catalog.html}How does the Archetype Plugin know about archetype?}}
+    * {{{./archetype-catalog.html}How does the Archetype Plugin know about archetypes?}}
 
     * {{{./create-from-project.html}What is done during the creation of an archetype?}}
 ~~

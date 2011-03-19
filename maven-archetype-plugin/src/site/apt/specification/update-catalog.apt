@@ -38,7 +38,7 @@ Creation/Deployment behaviour
 
  archetype created using archetpe:create-from-project -Darchetype.phase=install 
 
- the newly created archetype is copied in teh local repository 
+ the newly created archetype is copied in the local repository 
 
  and the archetype-catalog.xml file located at the root of the repository is updated with the archetype information 
 
@@ -58,11 +58,11 @@ Creation/Deployment behaviour
  returns an incomplete creation request
             determine archetype's groupId, artifactId, version 
 
- -> defaults to resolve, overriden by property file, overriden by -D 
+ -> defaults to resolve, overridden by property file, overridden by -D 
 
  resolve package using (-Dlanguages languages can be found in property file instead) 
 
- -> defaults to resolve, overriden by property file, overriden by -D 
+ -> defaults to resolve, overridden by property file, overridden by -D 
 
  determine additional properties 
 
@@ -76,7 +76,7 @@ Creation/Deployment behaviour
 
  determine pom rewriting using: 
 
- -> keepParent, addtional properties 
+ -> keepParent, additional properties 
 
  create archetype files using: 
 
@@ -86,7 +86,7 @@ Creation/Deployment behaviour
 
  create archetype's pom using 
 
- -> archetype's id, copying devs, licnese, ... AND deploymentManagement
+ -> archetype's id, copying devs, license, ... AND deploymentManagement
     6. archetype developer deployment the archetype 
 
  
@@ -103,7 +103,7 @@ Creation/Deployment behaviour
 
  
 
- the deployment url and credentials could be overrided to use staging repositories, but how? 
+ the deployment url and credentials could be overridden to use staging repositories, but how? 
 
  
 
@@ -111,7 +111,7 @@ Creation/Deployment behaviour
 
  
 
- synchronisation between repositories of catalog files is easy as they don't define any repository URL
+ synchronization between repositories of catalog files is easy as they don't define any repository URL
         deployment credentials:
             initialPom.deploymentManagement 
 
@@ -125,7 +125,7 @@ Creation/Deployment behaviour
 
  initialPom.version or archetype.version in property file or in -D
         deployment metadata:
-            deploy vesions metadata as any artifact 
+            deploy versions metadata as any artifact 
 
  use deploymentManagement to update remote catalog
 +---

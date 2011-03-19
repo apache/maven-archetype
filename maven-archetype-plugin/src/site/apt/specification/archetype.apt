@@ -32,12 +32,12 @@ What is an archetype?
 * A Maven project 'en devenir'
 
     I.e. an abstract representation of a kind of project
-    that can be instantiated into a concrete customised
+    that can be instantiated into a concrete customized
     Maven project.
 
     An archetype knows which files will be part of the
     instantiated project and which properties to fill
-    to properly customise the project.
+    to properly customize the project.
 
     Each archetype defines a set of common properties:
 
