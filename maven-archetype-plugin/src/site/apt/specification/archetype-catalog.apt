@@ -67,7 +67,7 @@ How does the Archetype Plugin know about archetypes?
     [[3]] The version of the archetype. <<<RELEASE>>> is a valid version. <<REQUIRED>>
 
     [[4]] The repository where to find the archetype. <<OPTIONAL>>. When
-          ommitted, the archetype is searched for in the repository where the catalog
+          omitted, the archetype is searched for in the repository where the catalog
           comes from.
 
     [[5]] The description of the archetype. <<OPTIONAL>>

@@ -197,7 +197,7 @@ package: my.new.group
     to override the value, one just have to answer <<<N>>> to the first
     confirmation, then the whole bunch of properties is proposed.
 
-    The tree of the generated project show that the only language recognised as
+    The tree of the generated project show that the only language recognized as
     such is groovy. The property <<<archetype.languages>>> gives the list of the
     languages. The languages are the directories in <<<src/main>>> and
     <<<src/test>>> that have the capacity to contain a "packaged" directory
