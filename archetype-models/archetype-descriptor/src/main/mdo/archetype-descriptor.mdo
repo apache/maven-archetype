@@ -103,6 +103,15 @@
           <description>File sets definition.</description>
         </field>
         <field xdoc.separator="blank">
+          <name>scripts</name>
+          <association>
+            <type>Script</type>
+            <multiplicity>*</multiplicity>
+          </association>
+          <required>false</required>
+          <description>Script definitions.</description>
+        </field>
+        <field xdoc.separator="blank">
           <name>modules</name>
           <association>
             <type>ModuleDescriptor</type>
@@ -197,11 +206,42 @@
           <required>true</required>
           <description>Key value of the property.</description>
         </field>
+        <field xml.attribute="true">
+          <name>assignedByScript</name>
+          <type>boolean</type>
+          <required>false</required>
+          <description>Is this property assigned by scripting.</description>
+        </field>
         <field>
           <name>defaultValue</name>
           <type>String</type>
           <required>false</required>
           <description>Default value of the property.</description>
+        </field>
+      </fields>
+    </class>
+
+    <class>
+      <name>Script</name>
+      <description>Script that should be called to process properties.</description>
+      <fields>
+        <field xml.attribute="true">
+          <name>name</name>
+          <type>String</type>
+          <required>true</required>
+          <description>Name of the script (allowed characters A-Z, a-z, 0-9).</description>
+        </field>
+        <field xml.attribute="true">
+          <name>file</name>
+          <type>String</type>
+          <required>true</required>
+          <description>File containing the script.</description>
+        </field>
+        <field xml.attribute="true">
+          <name>language</name>
+          <type>String</type>
+          <required>true</required>
+          <description>Scripting language.</description>
         </field>
       </fields>
     </class>

@@ -403,6 +403,26 @@ public class DefaultArchetypeArtifactManager
 
         return getOldArchetypeDescriptor( archetypeFile );
     }
+    
+    public Reader getScriptFileReader( File archetypeFile, String scriptFile )
+        throws UnknownArchetype
+    {
+        ZipFile zipFile = null;
+        try
+        {
+            zipFile = getArchetypeZipFile( archetypeFile );
+
+            return getDescriptorReader( zipFile, scriptFile );
+        }
+        catch ( IOException e )
+        {
+            throw new UnknownArchetype( e );
+        }
+        finally
+        {
+            closeZipFile( zipFile );
+        }
+    }
 
     private File getArchetype( String archetypeGroupId, String archetypeArtifactId, String archetypeVersion )
     {
@@ -560,6 +580,11 @@ public class DefaultArchetypeArtifactManager
 
     private ZipEntry searchEntry( ZipFile zipFile, String searchString )
     {
+        if( searchString == null )
+        {
+            return null;
+        }
+    
         getLogger().debug( "Searching for " + searchString + " inside " + zipFile.getName() );
 
         Enumeration<? extends ZipEntry> enu = zipFile.entries();

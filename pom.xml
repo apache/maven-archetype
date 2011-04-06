@@ -47,6 +47,7 @@ under the License.
     <module>archetype-testing</module>
     <module>archetype-models</module>
     <module>archetype-common</module>
+    <module>archetype-scripting</module>
     <module>maven-archetype-plugin</module>
     <module>archetype-packaging</module>
   </modules>
@@ -93,6 +94,11 @@ under the License.
       <dependency>
         <groupId>org.apache.maven.archetype</groupId>
         <artifactId>archetype-common</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.maven.archetype</groupId>
+        <artifactId>archetype-scripting</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

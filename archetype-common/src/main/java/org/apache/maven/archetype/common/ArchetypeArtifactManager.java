@@ -28,6 +28,7 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Reader;
 
 import java.util.List;
 import java.util.zip.ZipFile;
@@ -109,5 +110,10 @@ public interface ArchetypeArtifactManager
     org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor getOldArchetypeDescriptor(
             String groupId, String artifactId, String version, ArtifactRepository archetypeRepository,
             ArtifactRepository localRepository, List<ArtifactRepository> repositories )
+        throws UnknownArchetype;
+
+    /**
+     */
+    Reader getScriptFileReader( File archetypeFile, String scriptFile )
         throws UnknownArchetype;
 }

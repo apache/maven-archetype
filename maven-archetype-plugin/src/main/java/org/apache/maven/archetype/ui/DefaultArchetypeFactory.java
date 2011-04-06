@@ -21,12 +21,15 @@ package org.apache.maven.archetype.ui;
 
 import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.metadata.RequiredProperty;
+import org.apache.maven.archetype.metadata.Script;
 import org.apache.maven.project.MavenProject;
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 /**
  * @plexus.component
@@ -35,6 +38,9 @@ public class DefaultArchetypeFactory
     extends AbstractLogEnabled
     implements ArchetypeFactory
 {
+    private static final Pattern SCRIPT_NAME_PATTERN = Pattern.compile( "[A-Za-z0-9]+" );
+    private static final String[] ALLOWED_SCRIPTING_LANGUAGES = { "groovy" };
+
     private void addOldRequiredProperty( ArchetypeConfiguration configuration, Properties properties, String key,
                                          String defaultValue, boolean initPropertyWithDefault )
     {
@@ -105,7 +111,7 @@ public class DefaultArchetypeFactory
             String key = requiredProperty.getKey();
             getLogger().debug( "Adding requiredProperty " + key );
 
-            configuration.addRequiredProperty( key );
+            configuration.addRequiredProperty( key, requiredProperty.isAssignedByScript() );
 
             String defaultValue = requiredProperty.getDefaultValue();
 
@@ -123,7 +129,27 @@ public class DefaultArchetypeFactory
                 getLogger().debug( "Setting defaultProperty " + key + "=" + value );
             }
         }
-
+        
+        for ( Script script : archetypeDescriptor.getScripts() )
+        {
+            int i = 0;
+            if( !SCRIPT_NAME_PATTERN.matcher( script.getName() ).matches() )
+            {
+                String originalName = script.getName();
+                String newName = originalName.trim().length() == 0 ? ( "script" + ++i ) : originalName.replaceAll( "[^A-Za-z0-9]", "_" );
+                getLogger().warn( "Script name '" + originalName + "' is not valid. Replaced with '" + newName + "'." );
+                script.setName( newName );
+            }
+            if( Arrays.binarySearch( ALLOWED_SCRIPTING_LANGUAGES, script.getLanguage() ) < 0 )
+            {
+                getLogger().warn("Unknown scripting language " + script.getLanguage() + " (ignoring script file " + script.getFile() + ")");
+            }
+            else
+            {
+                configuration.addScript( script );
+            }
+        }
+        
         addRequiredProperty( configuration, properties, Constants.GROUP_ID, null, false );
 
         addRequiredProperty( configuration, properties, Constants.ARTIFACT_ID, null, false );

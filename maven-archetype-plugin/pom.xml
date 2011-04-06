@@ -62,6 +62,10 @@ under the License.
       <artifactId>archetype-common</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.apache.maven.archetype</groupId>
+      <artifactId>archetype-scripting</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-utils</artifactId>
     </dependency>

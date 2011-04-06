@@ -32,6 +32,7 @@ import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.easymock.MockControl;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -47,6 +48,8 @@ public class DefaultArchetypeGenerationConfiguratorTest
         throws Exception
     {
         super.setUp();
+        
+        File archetypeFile = new File("archetype-descriptor.xml");
 
         configurator = (DefaultArchetypeGenerationConfigurator) lookup( ArchetypeGenerationConfigurator.ROLE );
 
@@ -56,12 +59,13 @@ public class DefaultArchetypeGenerationConfiguratorTest
         ArchetypeArtifactManager manager = (ArchetypeArtifactManager) control.getMock();
         manager.exists( "archetypeGroupId", "archetypeArtifactId", "archetypeVersion", null, null, null );
         control.setReturnValue( true );
-        manager.isFileSetArchetype( "archetypeGroupId", "archetypeArtifactId", "archetypeVersion", null, null, null );
+        manager.getArchetypeFile( "archetypeGroupId", "archetypeArtifactId", "archetypeVersion", null, null, null);
+        control.setReturnValue( archetypeFile );
+        manager.isFileSetArchetype( archetypeFile );
         control.setReturnValue( false );
-        manager.isOldArchetype( "archetypeGroupId", "archetypeArtifactId", "archetypeVersion", null, null, null );
+        manager.isOldArchetype( archetypeFile );
         control.setReturnValue( true );
-        manager.getOldArchetypeDescriptor( "archetypeGroupId", "archetypeArtifactId", "archetypeVersion", null,
-                                               null, null );
+        manager.getOldArchetypeDescriptor( archetypeFile );
         control.setReturnValue( new ArchetypeDescriptor() );
         control.replay();
         configurator.setArchetypeArtifactManager( manager );

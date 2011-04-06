@@ -19,9 +19,13 @@ package org.apache.maven.archetype.ui;
  * under the License.
  */
 
+import org.apache.maven.archetype.metadata.Script;
+ 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
+import java.util.HashSet;
 
 import org.apache.maven.archetype.common.Constants;
 import org.codehaus.plexus.util.StringUtils;
@@ -63,10 +67,48 @@ public class ArchetypeConfiguration
     private String description;
 
     private List<String> requiredProperties;
+    
+    private Set<String> assignByScriptProperties;
+    
+    private List<Script> scripts;
+    
+    public ArchetypeConfiguration()
+    {
+        assignByScriptProperties = new HashSet<String>();
+        scripts = new ArrayList<Script>();
+    }
 
     public void addRequiredProperty( String string )
     {
-        getRequiredProperties().add( string );
+        addRequiredProperty( string, false );
+    }
+
+    public void addRequiredProperty( String string, boolean assignByScript )
+    {
+        List<String> requiredProperties = getRequiredProperties();
+        if( !requiredProperties.contains( string ) ) 
+        {
+            requiredProperties.add( string );
+            if( assignByScript )
+            {
+                assignByScriptProperties.add( string );
+            }
+        }        
+    }
+    
+    public void addScript( Script script )
+    {
+        scripts.add( script ); 
+    }
+    
+    public boolean isAssignedByScript(String property)
+    {
+        return assignByScriptProperties.contains( property );
+    }
+    
+    public List<Script> getScripts()
+    {
+        return scripts;
     }
 
     public String getArtifactId()
@@ -159,6 +201,11 @@ public class ArchetypeConfiguration
     public Properties getProperties()
     {
         return properties;
+    }
+    
+    public void updateProperties( Properties properties )
+    {
+        this.properties.putAll(properties);
     }
 
     public Properties toProperties()

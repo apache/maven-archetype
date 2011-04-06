@@ -28,12 +28,18 @@ import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
 import org.apache.maven.archetype.exception.ArchetypeNotDefined;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.archetype.old.OldArchetype;
+import org.apache.maven.archetype.metadata.Script;
 import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.archetype.scripting.ArchetypePropertiesScripter;
+import org.apache.maven.archetype.scripting.ArchetypePropertyScripterRequest;
+import org.apache.maven.archetype.scripting.ArchetypePropertyScripterResult;
 
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
 
+import java.io.File;
+import java.io.Reader;
 import java.io.IOException;
 
 import java.util.ArrayList;
@@ -74,6 +80,11 @@ public class DefaultArchetypeGenerationConfigurator
      * @plexus.requirement
      */
     private ArchetypeRegistryManager archetypeRegistryManager;
+
+    /**
+     * @plexus.requirement
+     */
+    private ArchetypePropertiesScripter archetypePropertiesScripter;
 
     public void setArchetypeArtifactManager( ArchetypeArtifactManager archetypeArtifactManager )
     {
@@ -128,24 +139,22 @@ public class DefaultArchetypeGenerationConfigurator
         request.setArchetypeVersion( ad.getVersion() );
 
         ArchetypeConfiguration archetypeConfiguration;
-
-        if ( archetypeArtifactManager.isFileSetArchetype( ad.getGroupId(), ad.getArtifactId(), ad.getVersion(),
-                                                          archetypeRepository, localRepository, repositories ) )
-        {
-            org.apache.maven.archetype.metadata.ArchetypeDescriptor archetypeDescriptor =
-                archetypeArtifactManager.getFileSetArchetypeDescriptor( ad.getGroupId(), ad.getArtifactId(),
+        
+        File archetypeFile = archetypeArtifactManager.getArchetypeFile( ad.getGroupId(), ad.getArtifactId(),
                                                                         ad.getVersion(), archetypeRepository,
                                                                         localRepository, repositories );
 
+        if ( archetypeArtifactManager.isFileSetArchetype( archetypeFile ) )
+        {
+            org.apache.maven.archetype.metadata.ArchetypeDescriptor archetypeDescriptor =
+                archetypeArtifactManager.getFileSetArchetypeDescriptor( archetypeFile );
+
             archetypeConfiguration = archetypeFactory.createArchetypeConfiguration( archetypeDescriptor, properties );
         }
-        else if ( archetypeArtifactManager.isOldArchetype( ad.getGroupId(), ad.getArtifactId(), ad.getVersion(),
-                                                           archetypeRepository, localRepository, repositories ) )
+        else if ( archetypeArtifactManager.isOldArchetype( archetypeFile ) )
         {
             org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor archetypeDescriptor =
-                archetypeArtifactManager.getOldArchetypeDescriptor( ad.getGroupId(), ad.getArtifactId(),
-                                                                    ad.getVersion(), archetypeRepository,
-                                                                    localRepository, repositories );
+                archetypeArtifactManager.getOldArchetypeDescriptor( archetypeFile );
 
             archetypeConfiguration = archetypeFactory.createArchetypeConfiguration( archetypeDescriptor, properties );
         }
@@ -169,7 +178,11 @@ public class DefaultArchetypeGenerationConfigurator
                 {
                     for ( String requiredProperty : propertiesRequired )
                     {
-                        if ( !archetypeConfiguration.isConfigured( requiredProperty ) )
+                        if ( archetypeConfiguration.isAssignedByScript( requiredProperty ) )
+                        {
+                            getLogger().debug(requiredProperty + " will be assigned by script");
+                        }
+                        else if( !archetypeConfiguration.isConfigured( requiredProperty ) )
                         {
                             if ( "package".equals( requiredProperty ) )
                             {
@@ -217,21 +230,25 @@ public class DefaultArchetypeGenerationConfigurator
                     }
                 }
 
-                if ( !archetypeConfiguration.isConfigured() )
+                if ( !executeScripts( archetypeFile, archetypeConfiguration, executionProperties ) ||
+                    !archetypeConfiguration.isConfigured() )
                 {
                     getLogger().warn( "Archetype is not fully configured" );
                 }
-                else if ( !archetypeGenerationQueryer.confirmConfiguration( archetypeConfiguration ) )
+                else 
                 {
-                    getLogger().debug( "Archetype generation configuration not confirmed" );
-                    archetypeConfiguration.reset();
-                    restoreCommandLineProperties( archetypeConfiguration, executionProperties );
-                }
-                else
-                {
-                    getLogger().debug( "Archetype generation configuration confirmed" );
+                    if ( !archetypeGenerationQueryer.confirmConfiguration( archetypeConfiguration ) )
+                    {
+                        getLogger().debug( "Archetype generation configuration not confirmed" );
+                        archetypeConfiguration.reset();
+                        restoreCommandLineProperties( archetypeConfiguration, executionProperties );
+                    }
+                    else
+                    {
+                        getLogger().debug( "Archetype generation configuration confirmed" );
 
-                    confirmed = true;
+                        confirmed = true;
+                    }
                 }
             }
         }
@@ -250,7 +267,8 @@ public class DefaultArchetypeGenerationConfigurator
                 }
 
                 // in batch mode, we assume the defaults, and if still not configured fail
-                if ( !archetypeConfiguration.isConfigured() )
+                if ( !executeScripts( archetypeFile, archetypeConfiguration, executionProperties ) 
+                    || !archetypeConfiguration.isConfigured() )
                 {
                     StringBuffer exceptionMessage = new StringBuffer();
                     exceptionMessage.append( "Archetype " );
@@ -292,6 +310,59 @@ public class DefaultArchetypeGenerationConfigurator
         properties = archetypeConfiguration.getProperties();
 
         request.setProperties( properties );
+    }
+    
+    private boolean executeScripts( File archetypeFile, ArchetypeConfiguration archetypeConfiguration, Properties executionProperties )
+        throws ArchetypeGenerationConfigurationFailure, UnknownArchetype
+    {
+        for( Script script : archetypeConfiguration.getScripts() )
+        {
+            Reader reader = archetypeArtifactManager.getScriptFileReader( archetypeFile, script.getFile() );
+            if( reader == null )
+            {
+                throw new ArchetypeGenerationConfigurationFailure( "Cannot find script '" + script.getName() + "'");
+            }
+            
+            getLogger().debug( "Executing script '" + script.getName() + "'" );
+            
+            ArchetypePropertyScripterRequest scriptingRequest = 
+                new ArchetypePropertyScripterRequest().setProperties( archetypeConfiguration.getProperties() ) 
+                    .setScriptFileReader( reader )
+                    .setScriptFileName( script.getName() );
+                    
+            // TODO: handle different scripting languages
+            ArchetypePropertyScripterResult scriptingResult = archetypePropertiesScripter.executeScript( scriptingRequest );
+            if( scriptingResult.hasErrors() )
+            {
+                getLogger().warn( "Properties not valid!" );
+                for( String error : scriptingResult.getErrors() )
+                {
+                    getLogger().warn( error );
+                }
+                archetypeConfiguration.reset();
+                restoreCommandLineProperties( archetypeConfiguration, executionProperties );
+                return false;
+            }
+            else
+            {
+                archetypeConfiguration.updateProperties( scriptingResult.getProperties() );
+            }
+        }
+        
+        if( !archetypeConfiguration.isConfigured() )
+        {
+            for ( String requiredProperty : archetypeConfiguration.getRequiredProperties() )
+            {
+                if ( archetypeConfiguration.isAssignedByScript( requiredProperty ) 
+                    && !archetypeConfiguration.isConfigured( requiredProperty ) )
+                {
+                    throw new ArchetypeGenerationConfigurationFailure( "Scriptinng not correctly initialized property '" 
+                        + requiredProperty + "'" );
+                }
+            }
+        }
+        
+        return true;
     }
 
     private String getTransitiveDefaultValue( String defaultValue, ArchetypeConfiguration archetypeConfiguration )
