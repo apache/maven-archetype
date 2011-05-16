@@ -60,6 +60,10 @@ under the License.
     <system>jira</system>
     <url>http://jira.codehaus.org/browse/ARCHETYPE</url>
   </issueManagement>
+  <ciManagement>
+    <system>Jenkins</system>
+    <url>https://builds.apache.org/hudson/job/maven-archetype/</url>
+  </ciManagement>
 
   <distributionManagement>
     <site>
