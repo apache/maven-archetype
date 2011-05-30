@@ -75,6 +75,7 @@ under the License.
   <properties>
     <mavenVersion>2.0.8</mavenVersion><!-- with 2.0.9 proxy test fails-->
     <netbeans.hint.useExternalMaven>true</netbeans.hint.useExternalMaven>
+    <mavenPluginPluginVersion>2.7</mavenPluginPluginVersion>
   </properties>
 
   <dependencyManagement>
@@ -245,7 +246,7 @@ under the License.
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-plugin-plugin</artifactId>
-          <version>2.4.3</version>
+          <version>${mavenPluginPluginVersion}</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
