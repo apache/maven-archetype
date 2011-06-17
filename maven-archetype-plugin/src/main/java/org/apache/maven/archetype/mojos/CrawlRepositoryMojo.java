@@ -27,9 +27,6 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
 import java.io.File;
-import java.io.FileFilter;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Crawl a Maven repository (filesystem, not HTTP) and creates a catalog file.
@@ -71,47 +68,17 @@ public class CrawlRepositoryMojo extends AbstractMojo
             throw new MojoFailureException("The repository is not defined. Use -Drepository=/path/to/repository");
         }
 
-        final ArchetypeCatalog catalog;
-
-        // process archiva style repositories in a batch
-        if (repository.getAbsolutePath().matches(".*/archiva/data/repositories/$"))
+        final ArchetypeCatalog catalog = crawler.crawl(repository);
+        if (remoteRepository != null)
         {
-            catalog = new ArchetypeCatalog();
-            final List<File> repositories = Arrays.asList(repository.listFiles(new FileFilter()
+            for (final Archetype a : catalog.getArchetypes())
             {
-                public boolean accept(final File pathname)
-                {
-                    return pathname.isDirectory();
-                }
-            }));
-            // add all the repositories to a single ArchetypeCatalog to merge all the repositories
-            // into one archetype-catalog.xml file
-            for (final File dir : repositories)
-            {
-                final ArchetypeCatalog ac = crawler.crawl(dir);
-                if (remoteRepository != null)
-                {
-                    for (final Archetype a : ac.getArchetypes())
-                    {
-                        a.setRepository(remoteRepository + dir.getName());
-                    }
-                }
-                catalog.getArchetypes().addAll(ac.getArchetypes());
-            }
-        }
-        else // process a single repository
-        {
-            catalog = crawler.crawl(repository);
-            if (remoteRepository != null)
-            {
-                for (final Archetype a : catalog.getArchetypes())
-                {
-                    a.setRepository(remoteRepository);
-                }
+                a.setRepository(remoteRepository);
             }
         }
 
         if (catalogFile == null)
+
         {
             catalogFile = new File(repository, "archetype-catalog.xml");
         }
