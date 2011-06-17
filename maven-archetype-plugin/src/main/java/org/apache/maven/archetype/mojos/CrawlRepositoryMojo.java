@@ -73,7 +73,7 @@ public class CrawlRepositoryMojo extends AbstractMojo
 
         final ArchetypeCatalog catalog;
 
-        // process archiva repositories in a batch
+        // process archiva style repositories in a batch
         if (repository.getAbsolutePath().matches(".*/archiva/data/repositories/$"))
         {
             catalog = new ArchetypeCatalog();
