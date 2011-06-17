@@ -53,6 +53,12 @@ public class CrawlArchivaRepositoryMojo extends AbstractMojo
     /** @parameter expression="${archivaHost}" */
     private String remoteRepository;
 
+    /**
+     * filter by groupId regular expression
+     * @parameter expression="${groupId}"
+     */
+    private String filter;
+
     public void execute() throws MojoExecutionException, MojoFailureException
     {
         if (archivaHome == null)
@@ -60,7 +66,6 @@ public class CrawlArchivaRepositoryMojo extends AbstractMojo
             throw new MojoFailureException("The repository is not defined. Use -archiva=/path/to/archiva");
         }
 
-        final ArchetypeCatalog catalog = new ArchetypeCatalog();
         final File repositories = new File(archivaHome, "data/repositories/");
 
         // process archiva style repositories in a batch, create a list of repositories to process
@@ -72,11 +77,19 @@ public class CrawlArchivaRepositoryMojo extends AbstractMojo
             }
         }));
 
+        final ArchetypeCatalog catalog = new ArchetypeCatalog();
         // add all the repositories to a single ArchetypeCatalog to merge all the repositories
         // into one archetype-catalog.xml file
         for (final File dir : repos)
         {
             final ArchetypeCatalog ac = crawler.crawl(dir);
+            if (filter != null)
+            {
+                for (final Archetype a : ac.getArchetypes())
+                {
+                    if (!a.getGroupId().matches(filter)) { ac.removeArchetype(a); }
+                }
+            }
             // write a repository specific file to the individual repositories
             crawler.writeCatalog(ac, new File(dir, "archetype-catalog.xml"));
             // set the remote repository url if supplied
