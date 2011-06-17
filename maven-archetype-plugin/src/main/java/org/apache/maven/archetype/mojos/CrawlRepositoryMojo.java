@@ -56,6 +56,9 @@ public class CrawlRepositoryMojo  extends AbstractMojo
      */
     private File repository;
 
+    /**
+     * @parameter expression="${remoteRepository}"
+     */
     private String remoteRepository;
 
     public void execute() throws MojoExecutionException, MojoFailureException
