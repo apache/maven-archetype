@@ -78,7 +78,7 @@ public class CrawlArchivaRepositoryMojo extends AbstractMojo
         {
             final ArchetypeCatalog ac = crawler.crawl(dir);
             // write a repository specific file to the individual repositories
-            crawler.writeCatalog(ac, dir);
+            crawler.writeCatalog(ac, new File(dir, "archetype-catalog.xml"));
             // set the remote repository url if supplied
             if (remoteRepository != null)
             {
@@ -91,6 +91,6 @@ public class CrawlArchivaRepositoryMojo extends AbstractMojo
         }
 
         // write out a merged archetype-catalog.xml from all the repositories processed
-        crawler.writeCatalog(catalog, new File(archivaHome, "/apps/archiva/archetype-catalog.xml"));
+        crawler.writeCatalog(catalog, new File(archivaHome, "apps/archiva/archetype-catalog.xml"));
     }
 }
