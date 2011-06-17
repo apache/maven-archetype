@@ -51,12 +51,13 @@
       <name>ArchetypeCatalog</name>
       <fields>
         <field>
+          <type>Set</type>
           <name>archetypes</name>
           <association>
             <type>Archetype</type>
             <multiplicity>*</multiplicity>
           </association>
-          <description>List of Acthetypes available in this catalog.</description>
+          <description>List of Archetypes available in this catalog.</description>
         </field>
       </fields>
       <codeSegments>

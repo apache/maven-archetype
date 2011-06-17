@@ -19,6 +19,7 @@ package org.apache.maven.archetype.mojos;
  * under the License.
  */
 
+import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.repositorycrawler.RepositoryCrawler;
 import org.apache.maven.plugin.AbstractMojo;
@@ -34,8 +35,7 @@ import java.io.File;
  * @requiresProject  false
  * @goal             crawl
  */
-public class CrawlRepositoryMojo
-    extends AbstractMojo
+public class CrawlRepositoryMojo  extends AbstractMojo
 {
     /**
      * The archetype's catalog to update.
@@ -56,18 +56,28 @@ public class CrawlRepositoryMojo
      */
     private File repository;
 
-    public void execute()
-        throws MojoExecutionException, MojoFailureException
+    private String remoteRepository;
+
+    public void execute() throws MojoExecutionException, MojoFailureException
     {
         System.err.println( "repository " + repository );
         System.err.println( "catalogFile " + catalogFile );
+        System.err.println( "remoteRepository " + remoteRepository);
 
         if ( repository == null )
         {
             throw new MojoFailureException( "The repository is not defined. Use -Drepository=/path/to/repository" );
         }
 
-        ArchetypeCatalog catalog = crawler.crawl( repository );
+        final ArchetypeCatalog catalog = crawler.crawl( repository );
+
+        if (remoteRepository != null)
+        {
+            for (final Archetype a : catalog.getArchetypes())
+            {
+                a.setRepository(remoteRepository);
+            }
+        }
 
         if ( catalogFile == null )
         {
