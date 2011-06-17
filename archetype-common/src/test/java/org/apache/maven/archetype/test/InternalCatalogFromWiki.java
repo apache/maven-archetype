@@ -39,9 +39,7 @@ import org.codehaus.plexus.util.WriterFactory;
 
 import java.io.File;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Generate catalog content from Wiki to replace internal catalog.
@@ -137,7 +135,7 @@ public class InternalCatalogFromWiki
 
         System.out.println( "Testing archetypes to " + outputDirectory.getPath() );
 
-        List<Archetype> validArchetypes = new ArrayList<Archetype>();
+        Set<Archetype> validArchetypes = new HashSet<Archetype>();
 
         int count = 1;
 

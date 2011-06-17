@@ -28,7 +28,9 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /** @author Jason van Zyl */
 public class CatalogArchetypeDataSinkTest
@@ -49,7 +51,7 @@ public class CatalogArchetypeDataSinkTest
 
         a0.setRepository( "http://magicbunny.com/maven2" );
 
-        List<Archetype> archetypes = new ArrayList<Archetype>();
+        Set<Archetype> archetypes = new HashSet<Archetype>();
 
         archetypes.add( a0 );
 
@@ -65,7 +67,7 @@ public class CatalogArchetypeDataSinkTest
 
         ArchetypeCatalog catalog = catalogReader.read( reader );
 
-        Archetype a1 = (Archetype) catalog.getArchetypes().get( 0 );
+        Archetype a1 = (Archetype) catalog.getArchetypes().toArray()[0];
 
         assertEquals( "groupId", a1.getGroupId()  );
 

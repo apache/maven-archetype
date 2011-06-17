@@ -27,11 +27,7 @@ import org.easymock.AbstractMatcher;
 import org.easymock.ArgumentsMatcher;
 import org.easymock.MockControl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DefaultArchetypeSelectionQueryerTest
     extends PlexusTestCase
@@ -49,7 +45,7 @@ public class DefaultArchetypeSelectionQueryerTest
     public void testDefaultArchetypeInMapOtherSelection()
         throws PrompterException
     {
-        Map<String, List<Archetype>> map = createDefaultArchetypeCatalog();
+        Map<String, Set<Archetype>> map = createDefaultArchetypeCatalog();
 
         MockControl control = MockControl.createControl( Prompter.class );
         Prompter prompter = (Prompter) control.getMock();
@@ -76,7 +72,7 @@ public class DefaultArchetypeSelectionQueryerTest
     public void testDefaultArchetypeInMapDefaultSelection()
         throws PrompterException
     {
-        Map<String, List<Archetype>> map = createDefaultArchetypeCatalog();
+        Map<String, Set<Archetype>> map = createDefaultArchetypeCatalog();
 
         MockControl control = MockControl.createControl( Prompter.class );
         Prompter prompter = (Prompter) control.getMock();
@@ -103,7 +99,7 @@ public class DefaultArchetypeSelectionQueryerTest
     public void testDefaultArchetypeNotInMap()
         throws PrompterException
     {
-        Map<String, List<Archetype>> map = createDefaultArchetypeCatalog();
+        Map<String, Set<Archetype>> map = createDefaultArchetypeCatalog();
 
         MockControl control = MockControl.createControl( Prompter.class );
         Prompter prompter = (Prompter) control.getMock();
@@ -130,7 +126,7 @@ public class DefaultArchetypeSelectionQueryerTest
     public void testNoDefaultArchetype()
         throws PrompterException
     {
-        Map<String, List<Archetype>> map = createDefaultArchetypeCatalog();
+        Map<String, Set<Archetype>> map = createDefaultArchetypeCatalog();
 
         MockControl control = MockControl.createControl( Prompter.class );
         Prompter prompter = (Prompter) control.getMock();
@@ -150,9 +146,9 @@ public class DefaultArchetypeSelectionQueryerTest
         assertEquals( "set-version", archetype.getVersion() );
     }
 
-    private static Map<String, List<Archetype>> createDefaultArchetypeCatalog()
+    private static Map<String, Set<Archetype>> createDefaultArchetypeCatalog()
     {
-        List<Archetype> list = new ArrayList<Archetype>();
+        Set<Archetype> list = new HashSet<Archetype>();
         list.add( createArchetype( "set-groupId", "set-artifactId", "set-version" ) );
         list.add( createArchetype( "default-groupId", "default-artifactId", "default-version" ) );
         return Collections.singletonMap( "internal", list );

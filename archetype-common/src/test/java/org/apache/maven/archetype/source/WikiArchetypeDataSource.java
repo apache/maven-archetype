@@ -30,9 +30,7 @@ import java.io.InputStream;
 
 import java.net.URL;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -69,7 +67,7 @@ public class WikiArchetypeDataSource
         return ac;
     }
 
-    public List<Archetype> getArchetypes( Properties properties )
+    public Set<Archetype> getArchetypes( Properties properties )
         throws ArchetypeDataSourceException
     {
         String url = properties.getProperty( "url" );
@@ -79,7 +77,7 @@ public class WikiArchetypeDataSource
             url = DEFAULT_ARCHETYPE_INVENTORY_PAGE;
         }
 
-        List<Archetype> archetypes = new ArrayList<Archetype>();
+        Set<Archetype> archetypes = new HashSet<Archetype>();
 
         String pageSource = "";
         InputStream in = null;

@@ -20,7 +20,7 @@ package org.apache.maven.archetype.source;
  */
 
 import java.io.Writer;
-import java.util.List;
+import java.util.Set;
 import java.util.Properties;
 
 import org.apache.maven.archetype.catalog.Archetype;
@@ -28,7 +28,7 @@ import org.apache.maven.archetype.catalog.Archetype;
 /** @author Jason van Zyl */
 public interface ArchetypeDataSink
 {
-    void putArchetypes( List<Archetype> archetypes, Writer writer )
+    void putArchetypes( Set<Archetype> archetypes, Writer writer )
         throws ArchetypeDataSinkException;
 
     void putArchetypes( ArchetypeDataSource source, Properties properties, Writer writer )

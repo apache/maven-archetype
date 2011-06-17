@@ -24,6 +24,7 @@ import org.codehaus.plexus.components.interactivity.PrompterException;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @todo this interface is bound to its implementation through the prompter exception
@@ -32,7 +33,7 @@ public interface ArchetypeSelectionQueryer
 {
     String ROLE = ArchetypeSelectionQueryer.class.getName();
 
-    public Archetype selectArchetype( Map<String, List<Archetype>> map )
+    public Archetype selectArchetype( Map<String, Set<Archetype>> map )
         throws PrompterException;
 
     boolean confirmSelection( ArchetypeDefinition archetypeDefinition )
@@ -47,6 +48,6 @@ public interface ArchetypeSelectionQueryer
      * @throws org.codehaus.plexus.components.interactivity.PrompterException if there is a problem in making a
      *             selection
      */
-    Archetype selectArchetype( Map<String, List<Archetype>> archetypes, ArchetypeDefinition defaultDefinition )
+    Archetype selectArchetype( Map<String, Set<Archetype>> archetypes, ArchetypeDefinition defaultDefinition )
         throws PrompterException;
 }

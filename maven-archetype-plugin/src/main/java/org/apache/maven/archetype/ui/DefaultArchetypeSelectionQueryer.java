@@ -56,13 +56,13 @@ public class DefaultArchetypeSelectionQueryer
         return "Y".equalsIgnoreCase( answer );
     }
 
-    public Archetype selectArchetype( Map<String, List<Archetype>> catalogs )
+    public Archetype selectArchetype( Map<String, Set<Archetype>> catalogs )
         throws PrompterException
     {
         return selectArchetype( catalogs, null );
     }
 
-    public Archetype selectArchetype( Map<String, List<Archetype>> catalogs, ArchetypeDefinition defaultDefinition )
+    public Archetype selectArchetype( Map<String, Set<Archetype>> catalogs, ArchetypeDefinition defaultDefinition )
         throws PrompterException
     {
         StringBuilder query = new StringBuilder( "Choose archetype:\n" );
@@ -74,7 +74,7 @@ public class DefaultArchetypeSelectionQueryer
         int counter = 1;
         int defaultSelection = 0;
 
-        for ( Map.Entry<String, List<Archetype>> entry : catalogs.entrySet() )
+        for ( Map.Entry<String, Set<Archetype>> entry : catalogs.entrySet() )
         {
             String catalog = entry.getKey();
 
@@ -131,12 +131,12 @@ public class DefaultArchetypeSelectionQueryer
         return selectVersion( catalogs, selection.getGroupId(), selection.getArtifactId() );
     }
 
-    private Archetype selectVersion( Map<String, List<Archetype>> catalogs, String groupId, String artifactId )
+    private Archetype selectVersion( Map<String, Set<Archetype>> catalogs, String groupId, String artifactId )
         throws PrompterException
     {
         SortedMap<ArtifactVersion, Archetype> archetypeVersionsMap = new TreeMap<ArtifactVersion, Archetype>();
 
-        for ( Map.Entry<String, List<Archetype>> entry : catalogs.entrySet() )
+        for ( Map.Entry<String, Set<Archetype>> entry : catalogs.entrySet() )
         {
             for ( Archetype archetype : entry.getValue() )
             {

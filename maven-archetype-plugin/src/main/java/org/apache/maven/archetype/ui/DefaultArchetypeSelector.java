@@ -31,10 +31,7 @@ import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /** @plexus.component */
 public class DefaultArchetypeSelector
@@ -65,7 +62,7 @@ public class DefaultArchetypeSelector
             return;
         }
 
-        Map<String, List<Archetype>> archetypes = getArchetypesByCatalog( catalogs );
+        Map<String, Set<Archetype>> archetypes = getArchetypesByCatalog( catalogs );
 
         if ( definition.isDefined() && StringUtils.isEmpty( request.getArchetypeRepository() ) )
         {
@@ -159,14 +156,14 @@ public class DefaultArchetypeSelector
         definition.updateRequest( request );
     }
 
-    private Map<String, List<Archetype>> getArchetypesByCatalog( String catalogs )
+    private Map<String, Set<Archetype>> getArchetypesByCatalog( String catalogs )
     {
         if ( catalogs == null )
         {
             throw new NullPointerException( "catalogs cannot be null" );
         }
 
-        Map<String, List<Archetype>> archetypes = new LinkedHashMap<String, List<Archetype>>();
+        Map<String, Set<Archetype>> archetypes = new LinkedHashMap<String, Set<Archetype>>();
 
         for ( String catalog : StringUtils.split( catalogs, "," ) )
         {
@@ -180,7 +177,7 @@ public class DefaultArchetypeSelector
             }
             else if ( "remote".equalsIgnoreCase( catalog ) )
             {
-                List<Archetype> archetypesFromRemote = archetypeManager.getRemoteCatalog().getArchetypes();
+                Set<Archetype> archetypesFromRemote = archetypeManager.getRemoteCatalog().getArchetypes();
                 if ( archetypesFromRemote.size() > 0 )
                 {
                     archetypes.put( "remote", archetypesFromRemote );
@@ -242,11 +239,11 @@ public class DefaultArchetypeSelector
         this.archetypeSelectionQueryer = archetypeSelectionQueryer;
     }
 
-    private String getCatalogKey( Map<String, List<Archetype>> archetypes, Archetype selectedArchetype )
+    private String getCatalogKey( Map<String, Set<Archetype>> archetypes, Archetype selectedArchetype )
     {
-        for ( Map.Entry<String, List<Archetype>> entry : archetypes.entrySet() )
+        for ( Map.Entry<String, Set<Archetype>> entry : archetypes.entrySet() )
         {
-            List<Archetype> catalog = entry.getValue();
+            Set<Archetype> catalog = entry.getValue();
 
             if ( catalog.contains( selectedArchetype ) )
             {
@@ -256,22 +253,20 @@ public class DefaultArchetypeSelector
         return "";
     }
 
-    private Map.Entry<String, Archetype> findArchetype( Map<String, List<Archetype>> archetypes, String groupId,
+    private Map.Entry<String, Archetype> findArchetype( Map<String, Set<Archetype>> archetypes, String groupId,
                                                         String artifactId )
     {
         Archetype example = new Archetype();
         example.setGroupId( groupId );
         example.setArtifactId( artifactId );
 
-        for ( Map.Entry<String, List<Archetype>> entry : archetypes.entrySet() )
+        for ( Map.Entry<String, Set<Archetype>> entry : archetypes.entrySet() )
         {
-            List<Archetype> catalog = entry.getValue();
+            Set<Archetype> catalog = entry.getValue();
 
             if ( catalog.contains( example ) )
             {
-                Archetype archetype = catalog.get( catalog.indexOf( example ) );
-
-                return newMapEntry( entry.getKey(), archetype );
+                return newMapEntry( entry.getKey(), example );
             }
         }
 

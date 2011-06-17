@@ -53,10 +53,10 @@ public class ArchetypeCatalogsTest
         ArchetypeCatalog result = archetype.getRemoteCatalog( "http://localhost:18881/repo/" );
 
         assertEquals( 1, result.getArchetypes().size() );
-        assertEquals( "groupId", ( (Archetype) result.getArchetypes().get( 0 ) ).getGroupId() );
-        assertEquals( "artifactId", ( (Archetype) result.getArchetypes().get( 0 ) ).getArtifactId() );
-        assertEquals( "1", ( (Archetype) result.getArchetypes().get( 0 ) ).getVersion() );
-        assertEquals( "http://localhost:18881/repo/", ( (Archetype) result.getArchetypes().get( 0 ) ).getRepository() );
+        assertEquals( "groupId", ( (Archetype) result.getArchetypes().toArray()[0] ).getGroupId() );
+        assertEquals( "artifactId", ( (Archetype) result.getArchetypes().toArray()[0] ).getArtifactId() );
+        assertEquals( "1", ( (Archetype) result.getArchetypes().toArray()[0] ).getVersion() );
+        assertEquals( "http://localhost:18881/repo/", ( (Archetype) result.getArchetypes().toArray()[0] ).getRepository() );
     }
 
     public void testLocalCatalog()
@@ -69,10 +69,10 @@ public class ArchetypeCatalogsTest
             getAbsolutePath() );
 
         assertEquals( 1, result.getArchetypes().size() );
-        assertEquals( "groupId", ( (Archetype) result.getArchetypes().get( 0 ) ).getGroupId() );
-        assertEquals( "artifactId", ( (Archetype) result.getArchetypes().get( 0 ) ).getArtifactId() );
-        assertEquals( "1", ( (Archetype) result.getArchetypes().get( 0 ) ).getVersion() );
-        assertEquals( "http://localhost:18881/repo/", ( (Archetype) result.getArchetypes().get( 0 ) ).getRepository() );
+        assertEquals( "groupId", ( (Archetype) result.getArchetypes().toArray()[0] ).getGroupId() );
+        assertEquals( "artifactId", ( (Archetype) result.getArchetypes().toArray()[0] ).getArtifactId() );
+        assertEquals( "1", ( (Archetype) result.getArchetypes().toArray()[0] ).getVersion() );
+        assertEquals( "http://localhost:18881/repo/", ( (Archetype) result.getArchetypes().toArray()[0] ).getRepository() );
     }
 
     private Jetty6xEmbeddedLocalContainer cargo;

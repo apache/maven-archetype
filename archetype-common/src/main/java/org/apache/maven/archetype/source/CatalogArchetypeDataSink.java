@@ -28,6 +28,7 @@ import org.codehaus.plexus.util.IOUtil;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
+import java.util.Set;
 import java.util.Properties;
 
 /** @author Jason van Zyl */
@@ -37,7 +38,7 @@ public class CatalogArchetypeDataSink
 {
     private ArchetypeCatalogXpp3Writer catalogWriter = new ArchetypeCatalogXpp3Writer();
 
-    public void putArchetypes( List<Archetype> archetypes, Writer writer )
+    public void putArchetypes( Set<Archetype> archetypes, Writer writer )
         throws ArchetypeDataSinkException
     {
         ArchetypeCatalog catalog = new ArchetypeCatalog();
@@ -64,7 +65,7 @@ public class CatalogArchetypeDataSink
     public void putArchetypes( ArchetypeDataSource source, Properties properties, Writer writer )
         throws ArchetypeDataSourceException, ArchetypeDataSinkException
     {
-        List<Archetype> archetypes = source.getArchetypeCatalog( properties ).getArchetypes();
+        Set<Archetype> archetypes = source.getArchetypeCatalog( properties ).getArchetypes();
 
         putArchetypes( archetypes, writer );
     }

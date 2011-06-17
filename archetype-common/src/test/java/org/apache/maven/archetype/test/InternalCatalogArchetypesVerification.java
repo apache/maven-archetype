@@ -22,7 +22,10 @@ package org.apache.maven.archetype.test;
 import java.io.File;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
@@ -57,8 +60,8 @@ public class InternalCatalogArchetypesVerification
 
         ArchetypeCatalog result = archetype.getInternalCatalog();
 
-        List<Archetype> archetypesUsed = new ArrayList<Archetype>();
-        List<Archetype> archetypesRemoved = new ArrayList<Archetype>();
+        Set<Archetype> archetypesUsed = new HashSet<Archetype>();
+        Set<Archetype> archetypesRemoved = new HashSet<Archetype>();
         int count = 1;
         for ( Archetype a : result.getArchetypes() )
         {

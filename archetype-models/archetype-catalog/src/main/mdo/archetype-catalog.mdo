@@ -44,6 +44,10 @@
       <key>package</key>
       <value>org.apache.maven.archetype.catalog</value>
     </default>
+    <default>
+        <key>java.util.Set</key>
+        <value>new java.util.TreeSet&lt;?&gt;()</value>
+    </default>
   </defaults>
 
   <classes>
@@ -73,6 +77,9 @@
     </class>
 
     <class>
+      <interfaces>
+          <interface>Comparable</interface>
+      </interfaces>
       <name>Archetype</name>
       <description>Informations to point to an Archetype referenced in the catalog.</description>
       <fields>
@@ -130,6 +137,25 @@
       <codeSegments>
         <codeSegment>
           <code><![CDATA[
+    public int compareTo(final Object o)
+    {
+        final Archetype a = (Archetype) o;
+        if (this.getGroupId().equalsIgnoreCase(a.getGroupId()))
+        {
+            if (this.getArtifactId().equalsIgnoreCase(a.getArtifactId()))
+            {
+                return this.getVersion().compareTo(a.getVersion());
+            }
+            else
+            {
+                return this.getArtifactId().compareTo(a.getArtifactId());
+            }
+        }
+        else
+        {
+            return this.getGroupId().compareTo(a.getGroupId());
+        }
+    }
     public String toString()
     {
         return "[" + groupId + ":" + artifactId + ":" + version + ( repository != null ? " -> " + repository : "" ) + "]";
