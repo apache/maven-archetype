@@ -90,6 +90,7 @@ public class CrawlArchivaRepositoryMojo extends AbstractMojo
             catalog.getArchetypes().addAll(ac.getArchetypes());
         }
 
+        // write out a merged archetype-catalog.xml from all the repositories processed
         crawler.writeCatalog(catalog, new File(archivaHome, "/apps/archiva/archetype-catalog.xml"));
     }
 }
