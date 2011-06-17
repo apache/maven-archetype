@@ -55,6 +55,7 @@ public class CrawlArchivaRepositoryMojo extends AbstractMojo
 
     /**
      * filter by groupId regular expression
+     *
      * @parameter expression="${groupId}"
      */
     private String filter;
@@ -83,13 +84,6 @@ public class CrawlArchivaRepositoryMojo extends AbstractMojo
         for (final File dir : repos)
         {
             final ArchetypeCatalog ac = crawler.crawl(dir);
-            if (filter != null)
-            {
-                for (final Archetype a : ac.getArchetypes())
-                {
-                    if (!a.getGroupId().matches(filter)) { ac.removeArchetype(a); }
-                }
-            }
             // write a repository specific file to the individual repositories
             crawler.writeCatalog(ac, new File(dir, "archetype-catalog.xml"));
             // set the remote repository url if supplied
@@ -100,7 +94,19 @@ public class CrawlArchivaRepositoryMojo extends AbstractMojo
                     a.setRepository(remoteRepository + "repository/" + dir.getName());
                 }
             }
-            catalog.getArchetypes().addAll(ac.getArchetypes());
+
+            // limit what gets put in the master catalog
+            if (filter == null)
+            {
+                catalog.getArchetypes().addAll(ac.getArchetypes());
+            }
+            else
+            {
+                for (final Archetype a : ac.getArchetypes())
+                {
+                    if (a.getGroupId().matches(filter)) { catalog.addArchetype(a); }
+                }
+            }
         }
 
         // write out a merged archetype-catalog.xml from all the repositories processed
