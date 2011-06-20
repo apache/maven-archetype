@@ -37,16 +37,12 @@
         <plugin>
           <groupId>org.codehaus.modello</groupId>
           <artifactId>modello-maven-plugin</artifactId>
-          <version>1.4</version>
           <configuration>
             <version>1.0.0</version>
           </configuration>
           <executions>
             <execution>
               <id>default</id>
-              <configuration>
-                <useJava5>true</useJava5>
-              </configuration>
               <goals>
                 <goal>java</goal>
                 <goal>xpp3-reader</goal>
