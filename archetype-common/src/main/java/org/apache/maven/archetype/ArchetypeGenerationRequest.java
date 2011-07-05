@@ -75,8 +75,14 @@ public class ArchetypeGenerationRequest
 
     private Properties properties = new Properties();
 
+    /**
+     *  @since 2.1
+     */
+    private String filter;
+
     public ArchetypeGenerationRequest()
     {
+        // no op
     }
 
     public ArchetypeGenerationRequest( Archetype archetype )
@@ -326,6 +332,18 @@ public class ArchetypeGenerationRequest
     public ArchetypeGenerationRequest setRemoteArtifactRepositories( List<ArtifactRepository>  remoteArtifactRepositories )
     {
         this.remoteArtifactRepositories = remoteArtifactRepositories;
+
+        return this;
+    }
+
+    public String getFilter()
+    {
+        return filter;
+    }
+
+    public ArchetypeGenerationRequest setFilter( String filter )
+    {
+        this.filter = filter;
 
         return this;
     }

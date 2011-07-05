@@ -19,6 +19,7 @@ package org.apache.maven.archetype.ui;
  * under the License.
  */
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.catalog.Archetype;
@@ -31,12 +32,16 @@ import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/** @plexus.component */
+/**
+ * @plexus.component
+ */
 public class DefaultArchetypeSelector
     extends AbstractLogEnabled
     implements ArchetypeSelector
@@ -47,10 +52,14 @@ public class DefaultArchetypeSelector
 
     static final String DEFAULT_ARCHETYPE_ARTIFACTID = "maven-archetype-quickstart";
 
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private ArchetypeSelectionQueryer archetypeSelectionQueryer;
 
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private ArchetypeManager archetypeManager;
 
     public void selectArchetype( ArchetypeGenerationRequest request, Boolean interactiveMode, String catalogs )
@@ -67,6 +76,12 @@ public class DefaultArchetypeSelector
 
         Map<String, List<Archetype>> archetypes = getArchetypesByCatalog( catalogs );
 
+        if ( org.apache.commons.lang.StringUtils.isNotBlank( request.getFilter() ) )
+        {
+            // applying some filtering depending on filter parameter
+            archetypes = getFilteredArchetypesByCatalog( archetypes, request );
+        }
+
         if ( definition.isDefined() && StringUtils.isEmpty( request.getArchetypeRepository() ) )
         {
             Map.Entry<String, Archetype> found =
@@ -79,13 +94,15 @@ public class DefaultArchetypeSelector
 
                 updateRepository( definition, archetype, catalogKey );
 
-                getLogger().info( "Archetype repository missing. Using the one from " + archetype
-                                      + " found in catalog " + catalogKey );
+                getLogger().info( "Archetype repository missing. Using the one from " + archetype + " found in catalog "
+                                      + catalogKey );
             }
             else
             {
-                getLogger().warn( "Archetype not found in any catalog. Falling back to central repository (http://repo1.maven.org/maven2)." );
-                getLogger().warn( "Use -DarchetypeRepository=<your repository> if archetype's repository is elsewhere." );
+                getLogger().warn(
+                    "Archetype not found in any catalog. Falling back to central repository (http://repo1.maven.org/maven2)." );
+                getLogger().warn(
+                    "Use -DarchetypeRepository=<your repository> if archetype's repository is elsewhere." );
 
                 definition.setRepository( "http://repo1.maven.org/maven2" );
             }
@@ -132,9 +149,9 @@ public class DefaultArchetypeSelector
             // if artifact ID is set to its default, we still prompt to confirm
             if ( definition.getArtifactId() == null )
             {
-                getLogger().info( "No archetype defined. Using " + DEFAULT_ARCHETYPE_ARTIFACTID + " ("
-                    + definition.getGroupId() + ":" + DEFAULT_ARCHETYPE_ARTIFACTID + ":" + definition.getVersion()
-                    + ")" );
+                getLogger().info(
+                    "No archetype defined. Using " + DEFAULT_ARCHETYPE_ARTIFACTID + " (" + definition.getGroupId() + ":"
+                        + DEFAULT_ARCHETYPE_ARTIFACTID + ":" + definition.getVersion() + ")" );
                 definition.setArtifactId( DEFAULT_ARCHETYPE_ARTIFACTID );
             }
 
@@ -158,6 +175,43 @@ public class DefaultArchetypeSelector
         // finally update the request with gathered information
         definition.updateRequest( request );
     }
+
+    /**
+     * apply some filtering on archetypes.
+     * currently only on artifactId contains filter
+     *
+     * @param archetypesPerCatalog
+     * @return
+     */
+    private Map<String, List<Archetype>> getFilteredArchetypesByCatalog(
+        Map<String, List<Archetype>> archetypesPerCatalog, ArchetypeGenerationRequest request )
+    {
+        if ( archetypesPerCatalog == null || archetypesPerCatalog.isEmpty() )
+        {
+            return Collections.emptyMap();
+        }
+        Map<String, List<Archetype>> filtered =
+            new LinkedHashMap<String, List<Archetype>>( archetypesPerCatalog.size() );
+
+        for ( Map.Entry<String, List<Archetype>> entry : archetypesPerCatalog.entrySet() )
+        {
+            List<Archetype> archetypes = new ArrayList<Archetype>();
+            for (Archetype archetype : entry.getValue())
+            {
+                if ( org.apache.commons.lang.StringUtils.contains( archetype.getArtifactId(), request.getFilter() ))
+                {
+                    archetypes.add( archetype );
+                }
+            }
+            if (!archetypes.isEmpty())
+            {
+                filtered.put( entry.getKey(), archetypes );
+            }
+        }
+
+        return filtered;
+    }
+
 
     private Map<String, List<Archetype>> getArchetypesByCatalog( String catalogs )
     {
@@ -277,7 +331,7 @@ public class DefaultArchetypeSelector
 
         return null;
     }
-    
+
     private static <K, V> Map.Entry<K, V> newMapEntry( K key, V value )
     {
         Map<K, V> map = new HashMap<K, V>( 1 );
