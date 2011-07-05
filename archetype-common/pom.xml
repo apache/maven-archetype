@@ -171,10 +171,8 @@ under the License.
       <plugin>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-maven-plugin</artifactId>
-        <version>1.4</version>
         <configuration>
           <version>1.0.0</version>
-          <useJava5>true</useJava5>
           <models>
             <model>src/main/mdo/archetype.mdo</model>
           </models>
@@ -397,16 +395,6 @@ under the License.
       </plugin>
     </plugins>
   </build>
-
-  <reporting>
-    <plugins>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>cobertura-maven-plugin</artifactId>
-        <version>2.2</version>
-      </plugin>
-    </plugins>
-  </reporting>
 
   <profiles>
     <profile>
