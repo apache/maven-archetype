@@ -158,6 +158,14 @@ public class CreateProjectFromArchetypeMojo
      */
     private String goals;
 
+
+    /**
+     *  Applying some filter on possible archetype currently artifactId name
+     *  @parameter expression="${filter}"
+     *  @since 2.1
+     */
+    private String filter;
+
     public void execute()
         throws MojoExecutionException, MojoFailureException
     {
@@ -170,7 +178,8 @@ public class CreateProjectFromArchetypeMojo
             .setOutputDirectory( basedir.getAbsolutePath() )
             .setLocalRepository( localRepository )
             .setArchetypeRepository( archetypeRepository )
-            .setRemoteArtifactRepositories( remoteArtifactRepositories );
+            .setRemoteArtifactRepositories( remoteArtifactRepositories )
+            .setFilter( filter );
 
         try
         {
