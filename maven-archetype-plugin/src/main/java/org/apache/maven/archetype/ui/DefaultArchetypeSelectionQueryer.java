@@ -95,7 +95,7 @@ public class DefaultArchetypeSelectionQueryer
 
                 String answer = String.valueOf( counter );
 
-                query.append( answer + ": " + catalog + " -> " + archetype.getArtifactId() + " ("
+                query.append( answer + ": " + catalog + " -> " + archetype.getGroupId() + ":" + archetype.getArtifactId() + " ("
                     + description + ")\n" );
 
                 answers.add( answer );
