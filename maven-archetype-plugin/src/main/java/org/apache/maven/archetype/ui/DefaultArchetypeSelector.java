@@ -19,7 +19,6 @@ package org.apache.maven.archetype.ui;
  * under the License.
  */
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.catalog.Archetype;
@@ -196,14 +195,14 @@ public class DefaultArchetypeSelector
         for ( Map.Entry<String, List<Archetype>> entry : archetypesPerCatalog.entrySet() )
         {
             List<Archetype> archetypes = new ArrayList<Archetype>();
-            for (Archetype archetype : entry.getValue())
+            for ( Archetype archetype : entry.getValue() )
             {
-                if ( org.apache.commons.lang.StringUtils.contains( archetype.getArtifactId(), request.getFilter() ))
+                if ( org.apache.commons.lang.StringUtils.contains( archetype.getArtifactId(), request.getFilter() ) )
                 {
                     archetypes.add( archetype );
                 }
             }
-            if (!archetypes.isEmpty())
+            if ( !archetypes.isEmpty() )
             {
                 filtered.put( entry.getKey(), archetypes );
             }
