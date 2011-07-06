@@ -523,7 +523,7 @@ public class Format
                 {
                     try
                     {
-                        Boolean val = (Boolean) canEncode.invoke( encoder, new Object[] { new Character( ch ) } );
+                        Boolean val = (Boolean) canEncode.invoke( encoder, new Object[] { Character.valueOf( ch ) } );
                         return !val.booleanValue();
                     }
                     catch ( Exception ignored )
