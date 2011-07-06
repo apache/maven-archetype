@@ -140,7 +140,6 @@ under the License.
     <dependency>
       <groupId>org.apache.maven.wagon</groupId>
       <artifactId>wagon-http</artifactId>
-      <version>1.0-beta-2</version><!-- with 1.0-beta-4 some tests fail -->
       <scope>test</scope>
     </dependency>
 
