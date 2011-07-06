@@ -33,35 +33,26 @@ import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
-import org.codehaus.cargo.container.deployable.DeployableType;
-import org.codehaus.cargo.container.deployable.WAR;
-import org.codehaus.cargo.container.deployer.Deployer;
-import org.codehaus.cargo.container.deployer.URLDeployableMonitor;
-import org.codehaus.cargo.container.jetty.Jetty6xEmbeddedLocalContainer;
-import org.codehaus.cargo.container.jetty.Jetty6xEmbeddedLocalDeployer;
-import org.codehaus.cargo.container.jetty.Jetty6xEmbeddedStandaloneLocalConfiguration;
-import org.codehaus.cargo.container.property.ServletPropertySet;
-import org.codehaus.cargo.generic.deployable.DefaultDeployableFactory;
-import org.codehaus.cargo.generic.deployable.DeployableFactory;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
+import org.mortbay.jetty.Server;
+import org.mortbay.jetty.webapp.WebAppContext;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.OutputStream;
 import java.io.Writer;
-import java.net.URL;
 import java.util.Iterator;
 import java.util.Properties;
 
-/** @author Jason van Zyl */
+/**
+ * @author Jason van Zyl
+ */
 public class RoundtripMultiModuleTest
     extends PlexusTestCase
 {
-    private Jetty6xEmbeddedLocalContainer jettyContainer;
-
     public void testArchetyper()
         throws Exception
     {
@@ -73,14 +64,22 @@ public class RoundtripMultiModuleTest
         MavenProjectBuilder projectBuilder = (MavenProjectBuilder) lookup( MavenProjectBuilder.ROLE );
 
         ArtifactRepository localRepository = registryManager.createRepository( new File( getBasedir(),
-            "target" + File.separator + "test-classes" + File.separator + "repositories" + File.separator + "local" )
-            .toURI().toURL().toExternalForm(),
-            "local-repo" );
+                                                                                         "target" + File.separator
+                                                                                             + "test-classes"
+                                                                                             + File.separator
+                                                                                             + "repositories"
+                                                                                             + File.separator
+                                                                                             + "local" ).toURI().toURL().toExternalForm(),
+                                                                               "local-repo" );
 
         ArtifactRepository centralRepository = registryManager.createRepository( new File( getBasedir(),
-            "target" + File.separator + "test-classes" + File.separator + "repositories" + File.separator + "central" )
-            .toURI().toURL().toExternalForm(),
-            "central-repo" );
+                                                                                           "target" + File.separator
+                                                                                               + "test-classes"
+                                                                                               + File.separator
+                                                                                               + "repositories"
+                                                                                               + File.separator
+                                                                                               + "central" ).toURI().toURL().toExternalForm(),
+                                                                                 "central-repo" );
 
         // (1) create a project from scratch
         // (2) create an archetype from the project
@@ -95,7 +94,8 @@ public class RoundtripMultiModuleTest
 //        File sourceProject = new File( getBasedir(  ), "target/test-classes/projects/roundtrip-1-project" );
 
         File workingProject = new File( getBasedir(),
-            "target" + File.separator + "test-classes" + File.separator + "projects" + File.separator + "roundtrip-multi" );
+                                        "target" + File.separator + "test-classes" + File.separator + "projects"
+                                            + File.separator + "roundtrip-multi" );
         FileUtils.forceDelete( new File( workingProject, "target" ) );
 
         // (2) create an archetype from the project
@@ -103,12 +103,10 @@ public class RoundtripMultiModuleTest
 
         MavenProject project = projectBuilder.build( pom, localRepository, null );
 
-        ArchetypeCreationRequest acr = new ArchetypeCreationRequest()
-            .setProject( project )
-            .setLocalRepository( localRepository )
-            .setFiltereds(Constants.DEFAULT_FILTERED_EXTENSIONS)
-            .setLanguages(Constants.DEFAULT_LANGUAGES)
-            .setPostPhase( "package" );
+        ArchetypeCreationRequest acr =
+            new ArchetypeCreationRequest().setProject( project ).setLocalRepository( localRepository ).setFiltereds(
+                Constants.DEFAULT_FILTERED_EXTENSIONS ).setLanguages( Constants.DEFAULT_LANGUAGES ).setPostPhase(
+                "package" );
 
         ArchetypeCreationResult creationResult = archetype.createArchetypeFromProject( acr );
 
@@ -137,30 +135,25 @@ public class RoundtripMultiModuleTest
         p.store( os, "Generated catalog properties" );
 
         // (5) install the archetype we just created
-        File generatedArchetypeDirectory =
-            new File( project.getBasedir(), "target" + File.separator + "generated-sources" + File.separator
-                + "archetype" );
+        File generatedArchetypeDirectory = new File( project.getBasedir(),
+                                                     "target" + File.separator + "generated-sources" + File.separator
+                                                         + "archetype" );
         File generatedArchetypePom = new File( generatedArchetypeDirectory, "pom.xml" );
         MavenProject generatedArchetypeProject = projectBuilder.build( generatedArchetypePom, localRepository, null );
 
         File archetypeDirectory =
             new File( generatedArchetypeDirectory, "src" + File.separator + "main" + File.separator + "resources" );
 
-        File archetypeArchive = archetype.archiveArchetype( archetypeDirectory,
-            new File( generatedArchetypeProject.getBuild().getDirectory() ),
-            generatedArchetypeProject.getBuild().getFinalName() );
+        File archetypeArchive = archetype.archiveArchetype( archetypeDirectory, new File(
+            generatedArchetypeProject.getBuild().getDirectory() ),
+                                                            generatedArchetypeProject.getBuild().getFinalName() );
 
-        String baseName = StringUtils.replace( generatedArchetypeProject.getGroupId(), ".", File.separator )
-                        + File.separator
-                        + generatedArchetypeProject.getArtifactId()
-                        + File.separator
-                        + generatedArchetypeProject.getVersion()
-                        + File.separator
-                        + generatedArchetypeProject.getBuild().getFinalName();
-        File archetypeInRepository =
-            new File( centralRepository.getBasedir(), baseName + ".jar" );
-        File archetypePomInRepository =
-            new File( centralRepository.getBasedir(), baseName + ".pom" );
+        String baseName =
+            StringUtils.replace( generatedArchetypeProject.getGroupId(), ".", File.separator ) + File.separator
+                + generatedArchetypeProject.getArtifactId() + File.separator + generatedArchetypeProject.getVersion()
+                + File.separator + generatedArchetypeProject.getBuild().getFinalName();
+        File archetypeInRepository = new File( centralRepository.getBasedir(), baseName + ".jar" );
+        File archetypePomInRepository = new File( centralRepository.getBasedir(), baseName + ".pom" );
         archetypeInRepository.getParentFile().mkdirs();
         FileUtils.copyFile( archetypeArchive, archetypeInRepository );
         FileUtils.copyFile( generatedArchetypePom, archetypePomInRepository );
@@ -171,7 +164,7 @@ public class RoundtripMultiModuleTest
         generatedArchetype.setGroupId( generatedArchetypeProject.getGroupId() );
         generatedArchetype.setArtifactId( generatedArchetypeProject.getArtifactId() );
         generatedArchetype.setVersion( generatedArchetypeProject.getVersion() );
-        generatedArchetype.setRepository( "http://localhost:18881/repo" );
+        generatedArchetype.setRepository( "http://localhost:" + port + "/repo" );
         catalog.addArchetype( generatedArchetype );
 
         ArchetypeCatalogXpp3Writer catalogWriter = new ArchetypeCatalogXpp3Writer();
@@ -180,23 +173,18 @@ public class RoundtripMultiModuleTest
         IOUtils.closeQuietly( writer );
 
         // (6) create a project form the archetype we just created
-        String outputDirectory =
-            new File( getBasedir(), "target" + File.separator + "test-classes" + File.separator + "projects"
-                + File.separator + "roundtrip-multi-recreated" ).getAbsolutePath();
-        FileUtils.forceDelete(outputDirectory);
+        String outputDirectory = new File( getBasedir(),
+                                           "target" + File.separator + "test-classes" + File.separator + "projects"
+                                               + File.separator + "roundtrip-multi-recreated" ).getAbsolutePath();
+        FileUtils.forceDelete( outputDirectory );
 
-        ArchetypeGenerationRequest agr =
-            new ArchetypeGenerationRequest()
-            .setArchetypeGroupId( generatedArchetypeProject.getGroupId() )
-            .setArchetypeArtifactId( generatedArchetypeProject.getArtifactId() )
-            .setArchetypeVersion( generatedArchetypeProject.getVersion() )
-            .setGroupId( "com.mycompany" )
-            .setArtifactId( "myapp" )
-            .setVersion( "1.0-SNAPSHOT" )
-            .setPackage( "com.mycompany.myapp" )
-            .setOutputDirectory( outputDirectory )
-            .setLocalRepository( localRepository )
-            .setArchetypeRepository( "http://localhost:18881/repo/" );
+        ArchetypeGenerationRequest agr = new ArchetypeGenerationRequest().setArchetypeGroupId(
+            generatedArchetypeProject.getGroupId() ).setArchetypeArtifactId(
+            generatedArchetypeProject.getArtifactId() ).setArchetypeVersion(
+            generatedArchetypeProject.getVersion() ).setGroupId( "com.mycompany" ).setArtifactId( "myapp" ).setVersion(
+            "1.0-SNAPSHOT" ).setPackage( "com.mycompany.myapp" ).setOutputDirectory(
+            outputDirectory ).setLocalRepository( localRepository ).setArchetypeRepository(
+            "http://localhost:" + port + "/repo/" );
         ArchetypeGenerationResult generationResult = archetype.generateProjectFromArchetype( agr );
 
         if ( generationResult.getCause() != null )
@@ -211,44 +199,44 @@ public class RoundtripMultiModuleTest
         assertTrue( new File( myapp + "myapp-model", ".classpath" ).exists() );
         assertTrue( new File( myapp + File.separator + "myapp-stores" + File.separator + "myapp-store-memory",
                               ".classpath" ).exists() );
-        assertTrue( new File( myapp + "myapp-stores" + File.separator + "myapp-store-xstream", ".classpath" ).exists() );
+        assertTrue(
+            new File( myapp + "myapp-stores" + File.separator + "myapp-store-xstream", ".classpath" ).exists() );
 
         assertTrue( new File( myapp + "myapp-api", ".checkstyle" ).exists() );
         assertTrue( new File( myapp + "myapp-cli", ".checkstyle" ).exists() );
         assertTrue( new File( myapp + "myapp-core", ".checkstyle" ).exists() );
         assertTrue( new File( myapp + "myapp-model", ".checkstyle" ).exists() );
-        assertTrue( new File( myapp + "myapp-stores" + File.separator + "myapp-store-memory", ".checkstyle" ).exists() );
-        assertTrue( new File( myapp + "myapp-stores" + File.separator + "myapp-store-xstream", ".checkstyle" ).exists() );
+        assertTrue(
+            new File( myapp + "myapp-stores" + File.separator + "myapp-store-memory", ".checkstyle" ).exists() );
+        assertTrue(
+            new File( myapp + "myapp-stores" + File.separator + "myapp-store-xstream", ".checkstyle" ).exists() );
 
     }
+
+    private Server server;
+
+    int port;
 
     public void setUp()
         throws Exception
     {
         super.setUp();
-        //        Start Cargo
-
-        Jetty6xEmbeddedStandaloneLocalConfiguration configuration =
-            new Jetty6xEmbeddedStandaloneLocalConfiguration( "target/repository-webapp" );
-        configuration.setProperty( ServletPropertySet.PORT, "18881" );
+        // Start Jetty
 
         System.setProperty( "org.apache.maven.archetype.repository.directory",
-            getTestPath( "target/test-classes/repositories/central" ) );
-        jettyContainer = new Jetty6xEmbeddedLocalContainer( configuration );
-        jettyContainer.setTimeout( 180000L );
-        jettyContainer.start();
+                            getTestPath( "target/test-classes/repositories/central" ) );
 
-        DeployableFactory factory = new DefaultDeployableFactory();
-        WAR war = (WAR) factory.createDeployable( jettyContainer.getId(),
-            "target/wars/archetype-repository.war",
-            DeployableType.WAR );
+        server = new Server( 0 );
 
-        war.setContext( "/repo" );
+        WebAppContext webapp = new WebAppContext();
+        webapp.setContextPath( "/repo" );
+        webapp.setWar( "target/wars/archetype-repository.war" );
+        server.setHandler( webapp );
 
-        Deployer deployer = new Jetty6xEmbeddedLocalDeployer( jettyContainer );
-        deployer.deploy( war,
-            new URLDeployableMonitor( new URL( "http://localhost:18881/repo/dummy" ) ) );
-        deployer.start( war );
+        server.start();
+
+        port = server.getConnectors()[0].getLocalPort();
+
 
     }
 
@@ -256,9 +244,9 @@ public class RoundtripMultiModuleTest
         throws Exception
     {
         super.tearDown();
-        //        Stop Cargo
+        // Stop Jetty
 
-        jettyContainer.stop();
+        server.stop();
     }
 
     private void assertArchetypeCreated( File workingProject )
@@ -296,11 +284,11 @@ public class RoundtripMultiModuleTest
         assertExistDirectory( stores );
         assertExistFile( FileUtils.resolveFile( stores, "pom.xml" ) );
         assertExistDirectory( FileUtils.resolveFile( stores, "__rootArtifactId__-store-memory" ) );
-        assertExistFile( FileUtils.resolveFile( FileUtils.resolveFile( stores, "__rootArtifactId__-store-memory" ),
-                                                "pom.xml" ) );
+        assertExistFile(
+            FileUtils.resolveFile( FileUtils.resolveFile( stores, "__rootArtifactId__-store-memory" ), "pom.xml" ) );
         assertExistDirectory( FileUtils.resolveFile( stores, "__rootArtifactId__-store-xstream" ) );
-        assertExistFile( FileUtils.resolveFile( FileUtils.resolveFile( stores, "__rootArtifactId__-store-xstream" ),
-                                                "pom.xml" ) );
+        assertExistFile(
+            FileUtils.resolveFile( FileUtils.resolveFile( stores, "__rootArtifactId__-store-xstream" ), "pom.xml" ) );
         assertExistFile( FileUtils.resolveFile( archetypeResourcesDirectory, "pom.xml" ) );
 
         assertExistDirectory( archetypeMetadataDirectory );
