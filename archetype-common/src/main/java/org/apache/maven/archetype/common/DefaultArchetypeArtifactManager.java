@@ -485,7 +485,10 @@ public class DefaultArchetypeArtifactManager
         }
         finally
         {
-            reader.close();
+            if (reader != null)
+            {
+                reader.close();
+            }
         }
     }
 
