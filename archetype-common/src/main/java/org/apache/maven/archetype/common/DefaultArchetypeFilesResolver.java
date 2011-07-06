@@ -84,13 +84,14 @@ public class DefaultArchetypeFilesResolver
 
         scanner.setBasedir( "" );
 
-        String includes = "";
+        StringBuilder includes = new StringBuilder(  );
         for ( int i = 0; i < level; i++ )
         {
-            includes += "*/";
+            includes.append( "*/" );
         }
 
-        scanner.setIncludes( includes + "**" );
+        includes.append( "**" );
+        scanner.setIncludes( includes.toString() );
         scanner.setExcludes( languages );
 
         List<String> result = scanner.scan( files );
