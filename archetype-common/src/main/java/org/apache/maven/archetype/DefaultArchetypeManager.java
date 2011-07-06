@@ -46,14 +46,20 @@ public class DefaultArchetypeManager
     extends AbstractLogEnabled
     implements ArchetypeManager
 {
-    /** @plexus.requirement role-hint="fileset" */
+    /**
+     * @plexus.requirement role-hint="fileset"
+     */
     private ArchetypeCreator creator;
 
-    /** @plexus.requirement */
+    /**
+     * @plexus.requirement
+     */
     private ArchetypeGenerator generator;
 
-    /** @plexus.requirement role="org.apache.maven.archetype.source.ArchetypeDataSource" */
-    private Map<String,ArchetypeDataSource> archetypeSources;
+    /**
+     * @plexus.requirement role="org.apache.maven.archetype.source.ArchetypeDataSource"
+     */
+    private Map<String, ArchetypeDataSource> archetypeSources;
 
     public ArchetypeCreationResult createArchetypeFromProject( ArchetypeCreationRequest request )
     {
@@ -91,13 +97,23 @@ public class DefaultArchetypeManager
             archive.getParentFile().mkdirs();
         }
 
-        ZipOutputStream zos = new ZipOutputStream( new FileOutputStream( archive ) );
+        ZipOutputStream zos = null;
+        try
+        {
+            zos = new ZipOutputStream( new FileOutputStream( archive ) );
 
-        zos.setLevel( 9 );
+            zos.setLevel( 9 );
 
-        zipper( zos, sourceDirectory.getAbsolutePath().length(), sourceDirectory );
+            zipper( zos, sourceDirectory.getAbsolutePath().length(), sourceDirectory );
+        }
+        finally
+        {
+            if ( zos != null )
+            {
+                zos.close();
+            }
+        }
 
-        zos.close();
     }
 
     private void zipper( ZipOutputStream zos, int offset, File currentSourceDirectory )
@@ -124,11 +140,20 @@ public class DefaultArchetypeManager
 
                 zos.putNextEntry( e );
 
-                FileInputStream is = new FileInputStream( files[i] );
+                FileInputStream is = null;
+                try
+                {
+                    is = new FileInputStream( files[i] );
 
-                IOUtil.copy( is, zos );
-
-                is.close();
+                    IOUtil.copy( is, zos );
+                }
+                finally
+                {
+                    if ( is != null )
+                    {
+                        is.close();
+                    }
+                }
 
                 zos.flush();
 
