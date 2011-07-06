@@ -1395,11 +1395,11 @@ public class FilesetArchetypeCreator
 
         List<String> files = new ArrayList<String>( fileNames );
 
-        String languageIncludes = "";
+        StringBuilder languageIncludes = new StringBuilder(  );
 
         for ( String language : languages )
         {
-            languageIncludes += ( ( languageIncludes.length() == 0 ) ? "" : "," ) + language + "/**";
+            languageIncludes .append( ( ( languageIncludes.length() == 0 ) ? "" : "," ) + language + "/**" );
         }
 
         getLogger().debug( "Using languages includes " + languageIncludes );
@@ -1415,7 +1415,7 @@ public class FilesetArchetypeCreator
         getLogger().debug( "Using filtered includes " + filteredIncludes );
 
         /* sourcesMainFiles */
-        List<String> sourcesMainFiles = archetypeFilesResolver.findSourcesMainFiles( files, languageIncludes );
+        List<String> sourcesMainFiles = archetypeFilesResolver.findSourcesMainFiles( files, languageIncludes.toString() );
         if ( !sourcesMainFiles.isEmpty() )
         {
             files.removeAll( sourcesMainFiles );
@@ -1436,7 +1436,7 @@ public class FilesetArchetypeCreator
         }
 
         /* resourcesMainFiles */
-        List<String> resourcesMainFiles = archetypeFilesResolver.findResourcesMainFiles( files, languageIncludes );
+        List<String> resourcesMainFiles = archetypeFilesResolver.findResourcesMainFiles( files, languageIncludes.toString() );
         if ( !resourcesMainFiles.isEmpty() )
         {
             files.removeAll( resourcesMainFiles );
@@ -1456,7 +1456,7 @@ public class FilesetArchetypeCreator
         }
 
         /* sourcesTestFiles */
-        List<String> sourcesTestFiles = archetypeFilesResolver.findSourcesTestFiles( files, languageIncludes );
+        List<String> sourcesTestFiles = archetypeFilesResolver.findSourcesTestFiles( files, languageIncludes.toString() );
         if ( !sourcesTestFiles.isEmpty() )
         {
             files.removeAll( sourcesTestFiles );
@@ -1476,7 +1476,7 @@ public class FilesetArchetypeCreator
         }
 
         /* ressourcesTestFiles */
-        List<String> resourcesTestFiles = archetypeFilesResolver.findResourcesTestFiles( files, languageIncludes );
+        List<String> resourcesTestFiles = archetypeFilesResolver.findResourcesTestFiles( files, languageIncludes.toString() );
         if ( !resourcesTestFiles.isEmpty() )
         {
             files.removeAll( resourcesTestFiles );
@@ -1496,7 +1496,7 @@ public class FilesetArchetypeCreator
         }
 
         /* siteFiles */
-        List<String> siteFiles = archetypeFilesResolver.findSiteFiles( files, languageIncludes );
+        List<String> siteFiles = archetypeFilesResolver.findSiteFiles( files, languageIncludes.toString() );
         if ( !siteFiles.isEmpty() )
         {
             files.removeAll( siteFiles );
@@ -1516,7 +1516,7 @@ public class FilesetArchetypeCreator
         }
 
         /* thirdLevelSourcesfiles */
-        List<String> thirdLevelSourcesfiles = archetypeFilesResolver.findOtherSources( 3, files, languageIncludes );
+        List<String> thirdLevelSourcesfiles = archetypeFilesResolver.findOtherSources( 3, files, languageIncludes.toString() );
         if ( !thirdLevelSourcesfiles.isEmpty() )
         {
             files.removeAll( thirdLevelSourcesfiles );
@@ -1536,7 +1536,7 @@ public class FilesetArchetypeCreator
 
             /* thirdLevelResourcesfiles */
             List<String> thirdLevelResourcesfiles =
-                archetypeFilesResolver.findOtherResources( 3, files, thirdLevelSourcesfiles, languageIncludes );
+                archetypeFilesResolver.findOtherResources( 3, files, thirdLevelSourcesfiles, languageIncludes.toString() );
             if ( !thirdLevelResourcesfiles.isEmpty() )
             {
                 files.removeAll( thirdLevelResourcesfiles );
@@ -1557,7 +1557,7 @@ public class FilesetArchetypeCreator
         } // end if
 
         /* secondLevelSourcesfiles */
-        List<String> secondLevelSourcesfiles = archetypeFilesResolver.findOtherSources( 2, files, languageIncludes );
+        List<String> secondLevelSourcesfiles = archetypeFilesResolver.findOtherSources( 2, files, languageIncludes.toString() );
         if ( !secondLevelSourcesfiles.isEmpty() )
         {
             files.removeAll( secondLevelSourcesfiles );
@@ -1577,7 +1577,7 @@ public class FilesetArchetypeCreator
         }
 
         /* secondLevelResourcesfiles */
-        List<String> secondLevelResourcesfiles = archetypeFilesResolver.findOtherResources( 2, files, languageIncludes );
+        List<String> secondLevelResourcesfiles = archetypeFilesResolver.findOtherResources( 2, files, languageIncludes.toString() );
         if ( !secondLevelResourcesfiles.isEmpty() )
         {
             files.removeAll( secondLevelResourcesfiles );
@@ -1597,7 +1597,7 @@ public class FilesetArchetypeCreator
         }
 
         /* rootResourcesfiles */
-        List<String> rootResourcesfiles = archetypeFilesResolver.findOtherResources( 0, files, languageIncludes );
+        List<String> rootResourcesfiles = archetypeFilesResolver.findOtherResources( 0, files, languageIncludes.toString() );
         if ( !rootResourcesfiles.isEmpty() )
         {
             files.removeAll( rootResourcesfiles );
