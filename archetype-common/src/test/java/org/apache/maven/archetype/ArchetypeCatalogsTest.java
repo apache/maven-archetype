@@ -36,6 +36,8 @@ import org.codehaus.cargo.container.property.ServletPropertySet;
 import org.codehaus.cargo.generic.deployable.DefaultDeployableFactory;
 import org.codehaus.cargo.generic.deployable.DeployableFactory;
 import org.codehaus.plexus.PlexusTestCase;
+import org.mortbay.jetty.Server;
+import org.mortbay.jetty.webapp.WebAppContext;
 
 /**
  *
@@ -50,13 +52,13 @@ public class ArchetypeCatalogsTest
 
         ArchetypeManager archetype = (ArchetypeManager) lookup( ArchetypeManager.class.getName() );
 
-        ArchetypeCatalog result = archetype.getRemoteCatalog( "http://localhost:18881/repo/" );
+        ArchetypeCatalog result = archetype.getRemoteCatalog( "http://localhost:"+ port + "/repo/" );
 
         assertEquals( 1, result.getArchetypes().size() );
         assertEquals( "groupId", ( (Archetype) result.getArchetypes().get( 0 ) ).getGroupId() );
         assertEquals( "artifactId", ( (Archetype) result.getArchetypes().get( 0 ) ).getArtifactId() );
         assertEquals( "1", ( (Archetype) result.getArchetypes().get( 0 ) ).getVersion() );
-        assertEquals( "http://localhost:18881/repo/", ( (Archetype) result.getArchetypes().get( 0 ) ).getRepository() );
+        assertEquals( "http://localhost:"+ port + "/repo/", ( (Archetype) result.getArchetypes().get( 0 ) ).getRepository() );
     }
 
     public void testLocalCatalog()
@@ -72,16 +74,36 @@ public class ArchetypeCatalogsTest
         assertEquals( "groupId", ( (Archetype) result.getArchetypes().get( 0 ) ).getGroupId() );
         assertEquals( "artifactId", ( (Archetype) result.getArchetypes().get( 0 ) ).getArtifactId() );
         assertEquals( "1", ( (Archetype) result.getArchetypes().get( 0 ) ).getVersion() );
-        assertEquals( "http://localhost:18881/repo/", ( (Archetype) result.getArchetypes().get( 0 ) ).getRepository() );
+        assertEquals( "http://localhost:"+ port + "/repo/", ( (Archetype) result.getArchetypes().get( 0 ) ).getRepository() );
     }
 
-    private Jetty6xEmbeddedLocalContainer cargo;
+    //private Jetty6xEmbeddedLocalContainer cargo;
+
+    private Server server;
+
+    int port;
 
     protected void setUp()
         throws Exception
     {
         super.setUp();
         //        Start Cargo
+
+        System.setProperty( "org.apache.maven.archetype.repository.directory",
+            getTestPath( "target/test-classes/repositories/test-catalog" ) );
+
+        server = new Server( 0 );
+
+
+        WebAppContext webapp = new WebAppContext();
+        webapp.setContextPath("/repo");
+        webapp.setWar("target/wars/archetype-repository.war");
+        server.setHandler(webapp);
+
+        server.start();
+
+        port = server.getConnectors()[0].getLocalPort();
+
 
         File catalogDirectory = getTestFile( "target/test-classes/repositories/test-catalog" );
         catalogDirectory.mkdirs();
@@ -93,7 +115,7 @@ public class ArchetypeCatalogsTest
         generatedArchetype.setGroupId( "groupId" );
         generatedArchetype.setArtifactId( "artifactId" );
         generatedArchetype.setVersion( "1" );
-        generatedArchetype.setRepository( "http://localhost:18881/repo/" );
+        generatedArchetype.setRepository( "http://localhost:"+ port + "/repo/" );
         catalog.addArchetype( generatedArchetype );
 
         File catalogFile = new File( catalogDirectory, "archetype-catalog.xml" );
@@ -103,18 +125,16 @@ public class ArchetypeCatalogsTest
         IOUtils.closeQuietly( writer );
 
 
-        Jetty6xEmbeddedStandaloneLocalConfiguration configuration =
-            new Jetty6xEmbeddedStandaloneLocalConfiguration( "target/repository-webapp" );
-        configuration.setProperty( ServletPropertySet.PORT, "18881" );
 
-        System.setProperty( "org.apache.maven.archetype.repository.directory",
-            getTestPath( "target/test-classes/repositories/test-catalog" ) );
-        cargo = new Jetty6xEmbeddedLocalContainer( configuration );
-        cargo.setTimeout( 180000L );
-        cargo.start();
+
+
+
+        /*
+
+
 
         DeployableFactory factory = new DefaultDeployableFactory();
-        WAR war = (WAR) factory.createDeployable( cargo.getId(),
+        WAR war = (WAR) factory.createDeployable( Jetty6xEmbeddedLocalContainer.ID,
             "target/wars/archetype-repository.war",
             DeployableType.WAR );
 
@@ -122,8 +142,10 @@ public class ArchetypeCatalogsTest
 
         Deployer deployer = new Jetty6xEmbeddedLocalDeployer( cargo );
         deployer.deploy( war,
-            new URLDeployableMonitor( new URL( "http://localhost:18881/repo/dummy" ) ) );
+            new URLDeployableMonitor( new URL( "http://localhost:" + port + "/repo/dummy" ) ) );
         deployer.start( war );
+
+        */
     }
 
     protected void tearDown()
@@ -131,7 +153,7 @@ public class ArchetypeCatalogsTest
     {
         super.tearDown();
         //        Stop Cargo
-
-        cargo.stop();
+        server.stop();
+        //cargo.stop();
     }
 }
