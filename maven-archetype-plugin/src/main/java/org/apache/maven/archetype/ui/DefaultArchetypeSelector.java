@@ -75,7 +75,7 @@ public class DefaultArchetypeSelector
 
         Map<String, List<Archetype>> archetypes = getArchetypesByCatalog( catalogs );
 
-        if ( org.apache.commons.lang.StringUtils.isNotBlank( request.getFilter() ) )
+        if ( StringUtils.isNotBlank( request.getFilter() ) )
         {
             // applying some filtering depending on filter parameter
             archetypes = getFilteredArchetypesByCatalog( archetypes, request );
