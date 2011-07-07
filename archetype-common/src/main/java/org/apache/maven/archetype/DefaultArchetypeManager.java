@@ -108,10 +108,7 @@ public class DefaultArchetypeManager
         }
         finally
         {
-            if ( zos != null )
-            {
-                zos.close();
-            }
+            IOUtil.close( zos );
         }
 
     }
@@ -149,10 +146,7 @@ public class DefaultArchetypeManager
                 }
                 finally
                 {
-                    if ( is != null )
-                    {
-                        is.close();
-                    }
+                    IOUtil.close( is );
                 }
 
                 zos.flush();
