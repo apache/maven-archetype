@@ -485,10 +485,7 @@ public class DefaultArchetypeArtifactManager
         }
         finally
         {
-            if (reader != null)
-            {
-                reader.close();
-            }
+            IOUtil.close( reader );
         }
     }
 
