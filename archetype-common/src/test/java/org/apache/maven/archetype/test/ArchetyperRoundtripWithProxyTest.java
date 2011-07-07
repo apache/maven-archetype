@@ -163,7 +163,7 @@ public class ArchetyperRoundtripWithProxyTest
         generatedArchetype.setGroupId( generatedArchetypeProject.getGroupId() );
         generatedArchetype.setArtifactId( generatedArchetypeProject.getArtifactId() );
         generatedArchetype.setVersion( generatedArchetypeProject.getVersion() );
-        generatedArchetype.setRepository( "http://127.0.0.2:" + port + "/" );
+        generatedArchetype.setRepository( "http://localhost:" + port + "/repo" );
         catalog.addArchetype( generatedArchetype );
 
         ArchetypeCatalogXpp3Writer catalogWriter = new ArchetypeCatalogXpp3Writer();
@@ -186,7 +186,7 @@ public class ArchetyperRoundtripWithProxyTest
                 setArchetypeVersion( generatedArchetypeProject.getVersion() ).
                 setGroupId( "com.mycompany" ).setArtifactId( "myapp" ).setVersion( "1.0-SNAPSHOT" ).
                 setPackage( "com.mycompany.myapp" ).setOutputDirectory( outputDirectory ).
-                setLocalRepository( localRepository ).setArchetypeRepository( "http://127.0.0.2:" + port + "/" );
+                setLocalRepository( localRepository ).setArchetypeRepository( "http://localhost:" + port + "/repo" );
         ArchetypeGenerationResult generationResult = archetype.generateProjectFromArchetype( agr );
 
         if ( generationResult.getCause() != null )
