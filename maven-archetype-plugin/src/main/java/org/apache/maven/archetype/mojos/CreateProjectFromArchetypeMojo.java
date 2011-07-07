@@ -160,7 +160,12 @@ public class CreateProjectFromArchetypeMojo
 
 
     /**
-     *  Applying some filter on possible archetype currently artifactId name
+     *  Applying some filter on possible archetypes format is groupId:artifactId .
+     *  <ul>
+     *    <li>org.apache: -> display all archetypes which contains org.apache in groupId</li>
+     *    <li>:jee or jee -> display all archetypes which contains jee in artifactId</li>
+     *    <li>org.apache:jee -> display all archetypes which contains org.apache in groupId AND jee in artifactId</li>
+     *  </ul>
      *  @parameter expression="${filter}"
      *  @since 2.1
      */
