@@ -19,6 +19,7 @@ package org.apache.maven.archetype.ui;
  * under the License.
  */
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.catalog.Archetype;
@@ -28,7 +29,6 @@ import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.archetype.exception.UnknownGroup;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.util.StringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -197,9 +197,29 @@ public class DefaultArchetypeSelector
             List<Archetype> archetypes = new ArrayList<Archetype>();
             for ( Archetype archetype : entry.getValue() )
             {
-                if ( org.apache.commons.lang.StringUtils.contains( archetype.getArtifactId(), request.getFilter() ) )
+                String groupId = extractGroupIdFromFilter( request.getFilter() );
+                String artifactId = extractArtifactIdFromFilter( request.getFilter() );
+                if ( groupId == null )
                 {
-                    archetypes.add( archetype );
+                    if ( StringUtils.contains( archetype.getArtifactId(), artifactId ) )
+                    {
+                        archetypes.add( archetype );
+                    }
+                }
+                else if ( artifactId == null )
+                {
+                    if ( StringUtils.contains( archetype.getGroupId(), groupId ) )
+                    {
+                        archetypes.add( archetype );
+                    }
+                }
+                else
+                {
+                    if ( StringUtils.contains( archetype.getGroupId(), groupId ) && StringUtils.contains(
+                        archetype.getArtifactId(), artifactId ) )
+                    {
+                        archetypes.add( archetype );
+                    }
                 }
             }
             if ( !archetypes.isEmpty() )
@@ -209,6 +229,17 @@ public class DefaultArchetypeSelector
         }
 
         return filtered;
+    }
+
+    private String extractGroupIdFromFilter( String filter )
+    {
+        return StringUtils.contains( filter, ':' ) ? StringUtils.substringBefore( filter, ":" ) : null;
+    }
+
+    private String extractArtifactIdFromFilter( String filter )
+    {
+        // if no : the full text is considered as artifactId content
+        return StringUtils.contains( filter, ':' ) ? StringUtils.substringAfter( filter, ":" ) : filter;
     }
 
 
