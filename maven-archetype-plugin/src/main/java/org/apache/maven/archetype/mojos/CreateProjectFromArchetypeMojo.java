@@ -19,6 +19,7 @@ package org.apache.maven.archetype.mojos;
  * under the License.
  */
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
@@ -35,7 +36,6 @@ import org.apache.maven.shared.invoker.DefaultInvocationRequest;
 import org.apache.maven.shared.invoker.InvocationRequest;
 import org.apache.maven.shared.invoker.Invoker;
 import org.apache.maven.shared.invoker.MavenInvocationException;
-import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
 import java.util.Arrays;
@@ -199,7 +199,7 @@ public class CreateProjectFromArchetypeMojo
 
             selector.selectArchetype( request, interactiveMode, archetypeCatalog );
 
-            if ( org.apache.commons.lang.StringUtils.isBlank( request.getArchetypeArtifactId()) )
+            if ( StringUtils.isBlank( request.getArchetypeArtifactId() ) )
             {
                 // no archetype found : stopping
                 return;
