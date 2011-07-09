@@ -199,6 +199,12 @@ public class CreateProjectFromArchetypeMojo
 
             selector.selectArchetype( request, interactiveMode, archetypeCatalog );
 
+            if ( org.apache.commons.lang.StringUtils.isBlank( request.getArchetypeArtifactId()) )
+            {
+                // no archetype found : stopping
+                return;
+            }
+
             configurator.configureArchetype( request, interactiveMode, executionProperties );
 
             ArchetypeGenerationResult generationResult = archetype.generateProjectFromArchetype( request );

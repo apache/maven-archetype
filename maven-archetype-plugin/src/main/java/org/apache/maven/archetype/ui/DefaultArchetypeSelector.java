@@ -31,8 +31,6 @@ import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -79,6 +77,11 @@ public class DefaultArchetypeSelector
         {
             // applying some filtering depending on filter parameter
             archetypes = ArchetypeSelectorUtils.getFilteredArchetypesByCatalog( archetypes, request.getFilter() );
+            if ( archetypes.isEmpty() )
+            {
+                getLogger().info( "your filter doesn't find any archetype, so try again with an other value" );
+                return;
+            }
         }
 
         if ( definition.isDefined() && StringUtils.isEmpty( request.getArchetypeRepository() ) )
