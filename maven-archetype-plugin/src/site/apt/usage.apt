@@ -2,8 +2,9 @@
  Usage
  ------
  Raphaël Piéroni
+ Olivier Lamy
  ------
- 25 January 2008
+ 2011-07-09
  ------
 
 ~~ Licensed to the Apache Software Foundation (ASF) under one
@@ -107,7 +108,7 @@ Choose archetype:
 34: internal -> maven-archetype-har (Hibernate Archive)
 35: internal -> maven-archetype-sar (JBoss Service Archive)
 36: internal -> wicket-archetype-quickstart (A simple Apache Wicket project)
-Choose a number:  (1/2/3/4/5/6/7/8/9/10/11/12/13/14/15/16/17/18/19/20/21/22/23/24/25/26/27/28/29/30/31/32/33/34/35/36): 15
+Choose a number or apply filter (format : [groupId:]artifactId case sensitive contains ):  (1/2/3/4/5/6/7/8/9/10/11/12/13/14/15/16/17/18/19/20/21/22/23/24/25/26/27/28/29/30/31/32/33/34/35/36): 15
 [INFO] artifact org.apache.maven.archetypes:maven-archetype-quickstart: checking for updates from maven-archetype-quickstart-repo
 Downloading: http://repo1.maven.org/maven2/org/apache/maven/archetypes/maven-archetype-quickstart/1.0/maven-archetype-quickstart-1.0.jar
 4K downloaded
@@ -161,6 +162,32 @@ project
                         `-- AppTest.java
 
 11 directories, 3 files
++---
+
+Filtering to reduce archetype list
+
+  As of 2.1, you can reduce the list of displayed archetypes.
+  The filter use the following format [groupId:]artifactId.
+  If you use single word without : only artifactId will be check.
+  The filtering applyed is a case sensitive contains on the artifactId (and groupId if set)
+
+  Two options
+
+  With a mojo parameter
+
++---
+$ mvn archetype:generate -Dorg.apache:struts
+The diplayed list will contains only archetype with a groupId containing org.apache AND an artifactId containing struts
++---
+
+  Tru the prompter. Note if your filter doesn't find any archetype the previous list will be displayed again.
+
++---
+$ mvn archetype:generate
+.......
+The full list is displayed and in the prompt response you will be able to answer a filter
+Choose a number or apply filter (format : [groupId:]artifactId case sensitive contains ): org.apache:struts
+
 +---
 
 Backward compatibility

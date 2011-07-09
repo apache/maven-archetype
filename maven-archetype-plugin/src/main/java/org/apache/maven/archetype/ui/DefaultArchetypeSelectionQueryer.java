@@ -120,7 +120,7 @@ public class DefaultArchetypeSelectionQueryer
 
         }
 
-        query.append( "Choose a number or apply filter (format part of groupId:part if artifactId ) : " );
+        query.append( "Choose a number or apply filter (format : [groupId:]artifactId case sensitive contains ) : " );
 
         String answer;
         if ( defaultSelection == 0 )
