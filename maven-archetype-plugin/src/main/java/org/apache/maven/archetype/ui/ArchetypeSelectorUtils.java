@@ -70,33 +70,19 @@ public class ArchetypeSelectorUtils
         for ( Map.Entry<String, List<Archetype>> entry : archetypesPerCatalog.entrySet() )
         {
             List<Archetype> archetypes = new ArrayList<Archetype>();
+
             for ( Archetype archetype : entry.getValue() )
             {
                 String groupId = ArchetypeSelectorUtils.extractGroupIdFromFilter( filter );
                 String artifactId = ArchetypeSelectorUtils.extractArtifactIdFromFilter( filter );
-                if ( groupId == null )
+
+                if ( ( ( groupId == null ) || StringUtils.contains( archetype.getGroupId(), groupId ) )
+                    && StringUtils.contains( archetype.getArtifactId(), artifactId ) )
                 {
-                    if ( StringUtils.contains( archetype.getArtifactId(), artifactId ) )
-                    {
-                        archetypes.add( archetype );
-                    }
-                }
-                else if ( artifactId == null )
-                {
-                    if ( StringUtils.contains( archetype.getGroupId(), groupId ) )
-                    {
-                        archetypes.add( archetype );
-                    }
-                }
-                else
-                {
-                    if ( StringUtils.contains( archetype.getGroupId(), groupId ) && StringUtils.contains(
-                        archetype.getArtifactId(), artifactId ) )
-                    {
-                        archetypes.add( archetype );
-                    }
+                    archetypes.add( archetype );
                 }
             }
+
             if ( !archetypes.isEmpty() )
             {
                 filtered.put( entry.getKey(), archetypes );
