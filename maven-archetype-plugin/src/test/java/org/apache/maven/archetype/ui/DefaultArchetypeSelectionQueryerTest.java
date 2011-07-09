@@ -150,6 +150,31 @@ public class DefaultArchetypeSelectionQueryerTest
         assertEquals( "set-version", archetype.getVersion() );
     }
 
+    public void testArchetypeFiltering()
+        throws PrompterException
+    {
+        Map<String, List<Archetype>> map = createDefaultArchetypeCatalog();
+
+        MockControl control = MockControl.createControl( Prompter.class );
+        Prompter prompter = (Prompter) control.getMock();
+        prompter.prompt( "" );
+        control.setMatcher( createArgumentMatcher() );
+        control.setReturnValue( "set-artifactId" );
+        prompter.prompt( "" );
+        control.setReturnValue( "1" );
+        queryer.setPrompter( prompter );
+
+        control.replay();
+
+        Archetype archetype = queryer.selectArchetype( map );
+
+        control.verify();
+
+        assertEquals( "set-groupId", archetype.getGroupId() );
+        assertEquals( "set-artifactId", archetype.getArtifactId() );
+        assertEquals( "set-version", archetype.getVersion() );
+    }
+
     private static Map<String, List<Archetype>> createDefaultArchetypeCatalog()
     {
         List<Archetype> list = new ArrayList<Archetype>();
