@@ -19,6 +19,7 @@ package org.apache.maven.archetype.ui;
  * under the License.
  */
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
@@ -36,12 +37,16 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-/** @plexus.component */
+/**
+ * @plexus.component
+ */
 public class DefaultArchetypeSelectionQueryer
     extends AbstractLogEnabled
     implements ArchetypeSelectionQueryer
 {
-    /** @plexus.requirement role-hint="archetype" */
+    /**
+     * @plexus.requirement role-hint="archetype"
+     */
     private Prompter prompter;
 
     public boolean confirmSelection( ArchetypeDefinition archetypeDefinition )
@@ -51,7 +56,7 @@ public class DefaultArchetypeSelectionQueryer
             "Confirm archetype selection: \n" + archetypeDefinition.getGroupId() + "/" + archetypeDefinition.getName()
                 + "\n";
 
-        String answer = prompter.prompt( query, Arrays.asList( new String[] { "Y", "N" } ), "Y" );
+        String answer = prompter.prompt( query, Arrays.asList( new String[]{ "Y", "N" } ), "Y" );
 
         return "Y".equalsIgnoreCase( answer );
     }
@@ -95,8 +100,9 @@ public class DefaultArchetypeSelectionQueryer
 
                 String answer = String.valueOf( counter );
 
-                query.append( answer + ": " + catalog + " -> " + archetype.getGroupId() + ":" + archetype.getArtifactId() + " ("
-                    + description + ")\n" );
+                query.append(
+                    answer + ": " + catalog + " -> " + archetype.getGroupId() + ":" + archetype.getArtifactId() + " ("
+                        + description + ")\n" );
 
                 answers.add( answer );
 
@@ -114,16 +120,30 @@ public class DefaultArchetypeSelectionQueryer
 
         }
 
-        query.append( "Choose a number: " );
+        query.append( "Choose a number or apply filter (format part of groupId:part if artifactId ) : " );
 
         String answer;
         if ( defaultSelection == 0 )
         {
-            answer = prompter.prompt( query.toString(), answers );
+            answer = prompter.prompt( query.toString() );
         }
         else
         {
-            answer = prompter.prompt( query.toString(), answers, Integer.toString( defaultSelection ) );
+            answer = prompter.prompt( query.toString(), Integer.toString( defaultSelection ) );
+        }
+
+        if ( !NumberUtils.isNumber( answer ) )
+        {
+            // not a number so apply filter and ask again
+
+            Map<String, List<Archetype>> filteredCatalogs =
+                ArchetypeSelectorUtils.getFilteredArchetypesByCatalog( catalogs, answer );
+            return selectArchetype( filteredCatalogs, defaultDefinition );
+        }
+
+        if ( !answer.contains( answer ) )
+        {
+            return selectArchetype( catalogs, defaultDefinition );
         }
 
         Archetype selection = archetypeAnswerMap.get( answer );

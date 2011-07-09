@@ -78,7 +78,7 @@ public class DefaultArchetypeSelector
         if ( StringUtils.isNotBlank( request.getFilter() ) )
         {
             // applying some filtering depending on filter parameter
-            archetypes = getFilteredArchetypesByCatalog( archetypes, request );
+            archetypes = ArchetypeSelectorUtils.getFilteredArchetypesByCatalog( archetypes, request.getFilter() );
         }
 
         if ( definition.isDefined() && StringUtils.isEmpty( request.getArchetypeRepository() ) )
@@ -173,73 +173,6 @@ public class DefaultArchetypeSelector
 
         // finally update the request with gathered information
         definition.updateRequest( request );
-    }
-
-    /**
-     * apply some filtering on archetypes.
-     * currently only on artifactId contains filter
-     *
-     * @param archetypesPerCatalog
-     * @return
-     */
-    private Map<String, List<Archetype>> getFilteredArchetypesByCatalog(
-        Map<String, List<Archetype>> archetypesPerCatalog, ArchetypeGenerationRequest request )
-    {
-        if ( archetypesPerCatalog == null || archetypesPerCatalog.isEmpty() )
-        {
-            return Collections.emptyMap();
-        }
-        Map<String, List<Archetype>> filtered =
-            new LinkedHashMap<String, List<Archetype>>( archetypesPerCatalog.size() );
-
-        for ( Map.Entry<String, List<Archetype>> entry : archetypesPerCatalog.entrySet() )
-        {
-            List<Archetype> archetypes = new ArrayList<Archetype>();
-            for ( Archetype archetype : entry.getValue() )
-            {
-                String groupId = extractGroupIdFromFilter( request.getFilter() );
-                String artifactId = extractArtifactIdFromFilter( request.getFilter() );
-                if ( groupId == null )
-                {
-                    if ( StringUtils.contains( archetype.getArtifactId(), artifactId ) )
-                    {
-                        archetypes.add( archetype );
-                    }
-                }
-                else if ( artifactId == null )
-                {
-                    if ( StringUtils.contains( archetype.getGroupId(), groupId ) )
-                    {
-                        archetypes.add( archetype );
-                    }
-                }
-                else
-                {
-                    if ( StringUtils.contains( archetype.getGroupId(), groupId ) && StringUtils.contains(
-                        archetype.getArtifactId(), artifactId ) )
-                    {
-                        archetypes.add( archetype );
-                    }
-                }
-            }
-            if ( !archetypes.isEmpty() )
-            {
-                filtered.put( entry.getKey(), archetypes );
-            }
-        }
-
-        return filtered;
-    }
-
-    private String extractGroupIdFromFilter( String filter )
-    {
-        return StringUtils.contains( filter, ':' ) ? StringUtils.substringBefore( filter, ":" ) : null;
-    }
-
-    private String extractArtifactIdFromFilter( String filter )
-    {
-        // if no : the full text is considered as artifactId content
-        return StringUtils.contains( filter, ':' ) ? StringUtils.substringAfter( filter, ":" ) : filter;
     }
 
 
