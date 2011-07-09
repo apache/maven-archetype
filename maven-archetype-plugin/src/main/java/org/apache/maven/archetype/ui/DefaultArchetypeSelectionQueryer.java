@@ -138,6 +138,12 @@ public class DefaultArchetypeSelectionQueryer
 
             Map<String, List<Archetype>> filteredCatalogs =
                 ArchetypeSelectorUtils.getFilteredArchetypesByCatalog( catalogs, answer );
+            if ( filteredCatalogs.isEmpty() )
+            {
+                prompter.prompt(
+                    "Your filter doesn't find any corresponding archetype (hint enter to return to your previous list)" );
+                return selectArchetype( catalogs, defaultDefinition );
+            }
             return selectArchetype( filteredCatalogs, defaultDefinition );
         }
 
