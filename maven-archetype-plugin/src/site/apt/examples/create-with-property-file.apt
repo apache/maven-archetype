@@ -160,7 +160,7 @@ $ mvn archetype:generate -DarchetypeCatalog=local
 [INFO] No archetype defined. Using maven-archetype-quickstart (org.apache.maven.archetypes:maven-archetype-quickstart:1.0)
 Choose archetype:
 1: local -> archetype-with-properties (archetype-with-properties)
-Choose a number or apply filter (format : [groupId:]artifactId case sensitive contains ):  (1): 1
+Choose a number or apply filter (format : [groupId:]artifactId case sensitive contains ): 1
 Define value for groupId: : foo
 Define value for artifactId: : bar
 Define value for version:  1.0-SNAPSHOT: :
