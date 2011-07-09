@@ -26,7 +26,6 @@ under the License.
     <groupId>org.apache.maven</groupId>
     <artifactId>maven-parent</artifactId>
     <version>21-SNAPSHOT</version>
-    <relativePath>../pom/maven/pom.xml</relativePath>
   </parent>
 
   <groupId>org.apache.maven.archetype</groupId>
@@ -290,20 +289,18 @@ under the License.
         </plugins>
       </reporting>
     </profile>
-    <profile>
-      <id>apache.shapshots</id>
-      <repositories>
-        <repository>
-          <id>apache.snapshots</id>
-          <url>https://repository.apache.org/content/groups/snapshots-group/</url>
-          <releases>
-            <enabled>false</enabled>
-          </releases>
-          <snapshots>
-            <enabled>true</enabled>
-          </snapshots>
-        </repository>
-      </repositories>
-    </profile>
-  </profiles>
+
+  <!-- remove when parent released -->
+  <repositories>
+    <repository>
+      <id>apache.snapshots</id>
+      <url>https://repository.apache.org/content/groups/snapshots-group/</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
 </project>
