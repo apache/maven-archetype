@@ -34,6 +34,11 @@ import java.util.Map;
  */
 public class ArchetypeSelectorUtils
 {
+    private ArchetypeSelectorUtils()
+    {
+        // no constructor for utility class
+    }
+
     private static String extractGroupIdFromFilter( String filter )
     {
         return StringUtils.contains( filter, ':' ) ? StringUtils.substringBefore( filter, ":" ) : null;
