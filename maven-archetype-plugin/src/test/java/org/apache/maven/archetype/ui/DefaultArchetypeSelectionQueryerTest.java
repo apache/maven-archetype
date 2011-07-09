@@ -53,7 +53,7 @@ public class DefaultArchetypeSelectionQueryerTest
 
         MockControl control = MockControl.createControl( Prompter.class );
         Prompter prompter = (Prompter) control.getMock();
-        prompter.prompt( "", Arrays.asList( new String[]{"1", "2"} ), "2" );
+        prompter.prompt( "", "2" );
         control.setMatcher( createArgumentMatcher() );
         control.setReturnValue( "1" );
         queryer.setPrompter( prompter );
@@ -80,7 +80,7 @@ public class DefaultArchetypeSelectionQueryerTest
 
         MockControl control = MockControl.createControl( Prompter.class );
         Prompter prompter = (Prompter) control.getMock();
-        prompter.prompt( "", Arrays.asList( new String[]{"1", "2"} ), "2" );
+        prompter.prompt( "", "2" );
         control.setMatcher( createArgumentMatcher() );
         control.setReturnValue( "2" );
         queryer.setPrompter( prompter );
@@ -107,7 +107,7 @@ public class DefaultArchetypeSelectionQueryerTest
 
         MockControl control = MockControl.createControl( Prompter.class );
         Prompter prompter = (Prompter) control.getMock();
-        prompter.prompt( "", Arrays.asList( new String[]{"1", "2"} ) );
+        prompter.prompt( "" );
         control.setMatcher( createArgumentMatcher() );
         control.setReturnValue( "1" );
         queryer.setPrompter( prompter );
@@ -134,7 +134,7 @@ public class DefaultArchetypeSelectionQueryerTest
 
         MockControl control = MockControl.createControl( Prompter.class );
         Prompter prompter = (Prompter) control.getMock();
-        prompter.prompt( "", Arrays.asList( new String[]{"1", "2"} ) );
+        prompter.prompt( "" );
         control.setMatcher( createArgumentMatcher() );
         control.setReturnValue( "1" );
         queryer.setPrompter( prompter );

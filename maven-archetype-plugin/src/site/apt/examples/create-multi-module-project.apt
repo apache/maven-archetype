@@ -168,7 +168,7 @@ $ mvn archetype:generate -DarchetypeCatalog=local
 Choose archetype:
 1: local -> archetype (archetype)
 2: local -> archetype-archetype (archetype-archetype)
-Choose a number or apply filter (format : [groupId:]artifactId case sensitive contains ):  (1/2): 2
+Choose a number or apply filter (format : [groupId:]artifactId case sensitive contains ): 2
 Define value for groupId: : com.company
 Define value for artifactId: : project
 Define value for version:  1.0-SNAPSHOT: :
