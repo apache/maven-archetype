@@ -69,7 +69,7 @@ Choose archetype:
 1: http://cocoon.apache.org -> cocoon-22-archetype-block-plain (Creates an empty Cocoon block; useful if you want to add another block to a Cocoon application)
 2: http://cocoon.apache.org -> cocoon-22-archetype-block (Creates a Cocoon block containing some small samples)
 3: http://cocoon.apache.org -> cocoon-22-archetype-webapp (Creates a web application configured to host Cocoon blocks. Just add the block dependencies)
-Choose a number or apply filter (format : [groupId:]artifactId case sensitive contains ): 1
+Choose a number or apply filter (format: [groupId:]artifactId, case sensitive contains): 1
 Downloading: http://localhost:8081/nexus/content/groups/mac/org/apache/cocoon/cocoon-22-archetype-block-plain/1.0.0/cocoon-22-archetype-block-plain-1.0.0.jar
 13K downloaded
 Define value for groupId: : com.company

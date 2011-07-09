@@ -120,7 +120,7 @@ public class DefaultArchetypeSelectionQueryer
 
         }
 
-        query.append( "Choose a number or apply filter (format : [groupId:]artifactId case sensitive contains ) : " );
+        query.append( "Choose a number or apply filter (format: [groupId:]artifactId, case sensitive contains): " );
 
         String answer;
         if ( defaultSelection == 0 )
@@ -141,7 +141,7 @@ public class DefaultArchetypeSelectionQueryer
             if ( filteredCatalogs.isEmpty() )
             {
                 prompter.prompt(
-                    "Your filter doesn't find any corresponding archetype (hint enter to return to your previous list)" );
+                    "Your filter doesn't match any archetype (hint: enter to return to your previous list)" );
                 return selectArchetype( catalogs, defaultDefinition );
             }
             return selectArchetype( filteredCatalogs, defaultDefinition );
