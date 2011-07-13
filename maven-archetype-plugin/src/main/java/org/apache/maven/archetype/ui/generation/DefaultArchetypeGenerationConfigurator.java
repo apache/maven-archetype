@@ -1,4 +1,4 @@
-package org.apache.maven.archetype.ui;
+package org.apache.maven.archetype.ui.generation;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -28,6 +28,9 @@ import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
 import org.apache.maven.archetype.exception.ArchetypeNotDefined;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.archetype.old.OldArchetype;
+import org.apache.maven.archetype.ui.ArchetypeConfiguration;
+import org.apache.maven.archetype.ui.ArchetypeDefinition;
+import org.apache.maven.archetype.ui.ArchetypeFactory;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 
 import org.codehaus.plexus.components.interactivity.PrompterException;

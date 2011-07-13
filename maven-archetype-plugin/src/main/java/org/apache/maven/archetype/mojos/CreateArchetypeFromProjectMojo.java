@@ -24,7 +24,7 @@ import org.apache.maven.archetype.ArchetypeCreationResult;
 import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 import org.apache.maven.archetype.common.Constants;
-import org.apache.maven.archetype.ui.ArchetypeCreationConfigurator;
+import org.apache.maven.archetype.ui.creation.ArchetypeCreationConfigurator;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
