@@ -1,4 +1,4 @@
-package org.apache.maven.archetype.ui;
+package org.apache.maven.archetype.ui.creation;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,6 +19,7 @@ package org.apache.maven.archetype.ui;
  * under the License.
  */
 
+import org.apache.maven.archetype.ui.ArchetypeConfiguration;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 
 public interface ArchetypeCreationQueryer

@@ -1,4 +1,4 @@
-package org.apache.maven.archetype.ui;
+package org.apache.maven.archetype.ui.generation;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -20,6 +20,7 @@ package org.apache.maven.archetype.ui;
  */
 
 import org.apache.maven.archetype.catalog.Archetype;
+import org.apache.maven.archetype.ui.ArchetypeDefinition;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 
 import java.util.List;

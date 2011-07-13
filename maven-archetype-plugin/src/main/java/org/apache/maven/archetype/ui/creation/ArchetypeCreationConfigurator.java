@@ -1,4 +1,4 @@
-package org.apache.maven.archetype.ui;
+package org.apache.maven.archetype.ui.creation;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,22 +19,24 @@ package org.apache.maven.archetype.ui;
  * under the License.
  */
 
-import org.apache.maven.archetype.ArchetypeGenerationRequest;
-import org.apache.maven.archetype.exception.ArchetypeGenerationConfigurationFailure;
 import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
 import org.apache.maven.archetype.exception.ArchetypeNotDefined;
-import org.apache.maven.archetype.exception.UnknownArchetype;
+import org.apache.maven.archetype.exception.TemplateCreationException;
+import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
 
-public interface ArchetypeGenerationConfigurator
+public interface ArchetypeCreationConfigurator
 {
-    String ROLE = ArchetypeGenerationConfigurator.class.getName();
+    String ROLE = ArchetypeCreationConfigurator.class.getName();
 
-    void configureArchetype( ArchetypeGenerationRequest request, Boolean interactiveMode,
-                             Properties commandLineProperties )
-        throws ArchetypeNotDefined, UnknownArchetype, ArchetypeNotConfigured, IOException, PrompterException,
-        ArchetypeGenerationConfigurationFailure;
+    Properties configureArchetypeCreation( MavenProject project, Boolean interactiveMode,
+                                           Properties commandLineProperties, File propertyFile, List<String> languages )
+        throws FileNotFoundException, IOException, ArchetypeNotDefined, ArchetypeNotConfigured, PrompterException,
+        TemplateCreationException;
 }
