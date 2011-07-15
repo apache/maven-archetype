@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * User interaction component for archetype selection.
+ * 
  * @todo this interface is bound to its implementation through the prompter exception
  */
 public interface ArchetypeSelectionQueryer

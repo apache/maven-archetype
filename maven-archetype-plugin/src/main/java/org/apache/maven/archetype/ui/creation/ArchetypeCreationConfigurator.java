@@ -31,6 +31,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 
+/**
+ * Configurator component to organize steps for archetype creation from a project.
+ */
 public interface ArchetypeCreationConfigurator
 {
     String ROLE = ArchetypeCreationConfigurator.class.getName();

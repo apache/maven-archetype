@@ -35,6 +35,25 @@ public class DefaultArchetypeFactory
     extends AbstractLogEnabled
     implements ArchetypeFactory
 {
+    public ArchetypeDefinition createArchetypeDefinition( Properties properties )
+    {
+        ArchetypeDefinition definition = new ArchetypeDefinition();
+
+        definition.setGroupId( properties.getProperty( Constants.ARCHETYPE_GROUP_ID ) );
+
+        definition.setArtifactId( properties.getProperty( Constants.ARCHETYPE_ARTIFACT_ID ) );
+
+        definition.setVersion( properties.getProperty( Constants.ARCHETYPE_VERSION ) );
+
+        definition.setRepository( properties.getProperty( Constants.ARCHETYPE_REPOSITORY ) );
+
+        definition.setUrl( properties.getProperty( Constants.ARCHETYPE_URL ) );
+
+        definition.setDescription( properties.getProperty( Constants.ARCHETYPE_DESCRIPTION ) );
+
+        return definition;
+    }
+
     private void addOldRequiredProperty( ArchetypeConfiguration configuration, Properties properties, String key,
                                          String defaultValue, boolean initPropertyWithDefault )
     {
@@ -214,25 +233,6 @@ public class DefaultArchetypeFactory
         setProperty( configuration, properties, Constants.ARCHETYPE_DESCRIPTION );
 
         return configuration;
-    }
-
-    public ArchetypeDefinition createArchetypeDefinition( Properties properties )
-    {
-        ArchetypeDefinition definition = new ArchetypeDefinition();
-
-        definition.setGroupId( properties.getProperty( Constants.ARCHETYPE_GROUP_ID ) );
-
-        definition.setArtifactId( properties.getProperty( Constants.ARCHETYPE_ARTIFACT_ID ) );
-
-        definition.setVersion( properties.getProperty( Constants.ARCHETYPE_VERSION ) );
-
-        definition.setRepository( properties.getProperty( Constants.ARCHETYPE_REPOSITORY ) );
-
-        definition.setUrl( properties.getProperty( Constants.ARCHETYPE_URL ) );
-
-        definition.setDescription( properties.getProperty( Constants.ARCHETYPE_DESCRIPTION ) );
-
-        return definition;
     }
 
     private ArchetypeConfiguration createArchetypeConfiguration( Properties properties )

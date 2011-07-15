@@ -22,6 +22,11 @@ package org.apache.maven.archetype.ui.creation;
 import org.apache.maven.archetype.ui.ArchetypeConfiguration;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 
+/**
+ * User interaction component to query informations necessary for an archetype creation from a project.
+ * 
+ * @todo this interface is bound to its implementation through the prompter exception
+ */
 public interface ArchetypeCreationQueryer
 {
     String ROLE = ArchetypeCreationQueryer.class.getName();
