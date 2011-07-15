@@ -22,6 +22,11 @@ package org.apache.maven.archetype.ui.generation;
 import org.apache.maven.archetype.ui.ArchetypeConfiguration;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 
+/**
+ * User interaction component to query informations necessary for a project generation from an archetype.
+ * 
+ * @todo this interface is bound to its implementation through the prompter exception
+ */
 public interface ArchetypeGenerationQueryer
 {
     boolean confirmConfiguration( ArchetypeConfiguration archetypeConfiguration )

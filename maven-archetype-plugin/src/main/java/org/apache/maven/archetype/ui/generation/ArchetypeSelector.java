@@ -28,6 +28,9 @@ import org.codehaus.plexus.components.interactivity.PrompterException;
 
 import java.io.IOException;
 
+/**
+ * Selection component to organize steps to choose an archetype.
+ */
 //TODO: We should need any remote repositories here, we should simply be doing selection, any remote catalogs
 //      should be validating correctness, and if it so happens we get a crap entry then the generation mechanism
 //      should take care of reporting the error. The selector should not be downloading anything.

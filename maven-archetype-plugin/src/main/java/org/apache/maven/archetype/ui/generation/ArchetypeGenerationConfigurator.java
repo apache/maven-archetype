@@ -29,6 +29,9 @@ import org.codehaus.plexus.components.interactivity.PrompterException;
 import java.io.IOException;
 import java.util.Properties;
 
+/**
+ * Configurator component to organize steps for project generation from an archetype.
+ */
 public interface ArchetypeGenerationConfigurator
 {
     String ROLE = ArchetypeGenerationConfigurator.class.getName();
