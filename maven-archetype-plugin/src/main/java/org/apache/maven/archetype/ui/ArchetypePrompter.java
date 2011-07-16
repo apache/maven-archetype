@@ -49,53 +49,24 @@ public class ArchetypePrompter
     public String prompt( String message )
         throws PrompterException
     {
-        try
-        {
-            writePrompt( message );
-        }
+        writePrompt( message );
 
-        catch ( IOException e )
-        {
-            throw new PrompterException( "Failed to present prompt", e );
-        }
-
-        try
-        {
-            return inputHandler.readLine();
-        }
-        catch ( IOException e )
-        {
-            throw new PrompterException( "Failed to read user response", e );
-        }
+        return readLine();
     }
 
     public String prompt( String message, String defaultReply )
         throws PrompterException
     {
-        try
+        writePrompt( formatMessage( message, null, defaultReply ) );
+
+        String line = readLine();
+
+        if ( StringUtils.isEmpty( line ) )
         {
-            writePrompt( formatMessage( message, null, defaultReply ) );
-        }
-        catch ( IOException e )
-        {
-            throw new PrompterException( "Failed to present prompt", e );
+            line = defaultReply;
         }
 
-        try
-        {
-            String line = inputHandler.readLine();
-
-            if ( StringUtils.isEmpty( line ) )
-            {
-                line = defaultReply;
-            }
-
-            return line;
-        }
-        catch ( IOException e )
-        {
-            throw new PrompterException( "Failed to read user response", e );
-        }
+        return line;
     }
 
     public String prompt( String message, List possibleValues, String defaultReply )
@@ -107,23 +78,9 @@ public class ArchetypePrompter
 
         do
         {
-            try
-            {
-                writePrompt( formattedMessage );
-            }
-            catch ( IOException e )
-            {
-                throw new PrompterException( "Failed to present prompt", e );
-            }
+            writePrompt( formattedMessage );
 
-            try
-            {
-                line = inputHandler.readLine();
-            }
-            catch ( IOException e )
-            {
-                throw new PrompterException( "Failed to read user response", e );
-            }
+            line = readLine();
 
             if ( StringUtils.isEmpty( line ) )
             {
@@ -156,14 +113,7 @@ public class ArchetypePrompter
     public String promptForPassword( String message )
         throws PrompterException
     {
-        try
-        {
-            writePrompt( message );
-        }
-        catch ( IOException e )
-        {
-            throw new PrompterException( "Failed to present prompt", e );
-        }
+        writePrompt( message );
 
         try
         {
@@ -195,9 +145,22 @@ public class ArchetypePrompter
     }
 
     private void writePrompt( String message )
-        throws IOException
+        throws PrompterException
     {
-        outputHandler.write( message + ": " );
+        showMessage( message + ": " );
+    }
+
+    private String readLine()
+        throws PrompterException
+    {
+        try
+        {
+            return inputHandler.readLine();
+        }
+        catch ( IOException e )
+        {
+            throw new PrompterException( "Failed to read user response", e );
+        }
     }
 
     public void showMessage( String message )
@@ -205,13 +168,12 @@ public class ArchetypePrompter
     {
         try
         {
-            writePrompt( message );
+            outputHandler.write( message + ": " );
         }
         catch ( IOException e )
         {
-            throw new PrompterException( "Failed to present prompt", e );
+            throw new PrompterException( "Failed to show message", e );
         }
-
     }
 
 }
