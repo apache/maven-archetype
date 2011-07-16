@@ -69,6 +69,7 @@ public class ArchetypePrompter
         return line;
     }
 
+    @SuppressWarnings( { "rawtypes", "unchecked" })
     public String prompt( String message, List possibleValues, String defaultReply )
         throws PrompterException
     {
@@ -104,6 +105,7 @@ public class ArchetypePrompter
         return line;
     }
 
+    @SuppressWarnings( "rawtypes" )
     public String prompt( String message, List possibleValues )
         throws PrompterException
     {

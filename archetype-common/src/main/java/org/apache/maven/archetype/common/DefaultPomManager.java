@@ -108,7 +108,8 @@ public class DefaultPomManager
                 project.addText( "\n" );
             }
             // TODO: change to while loop
-            for ( Iterator<Element> i = modules.elementIterator( "module" ); i.hasNext() && !found; )
+            for ( @SuppressWarnings( "unchecked" )
+            Iterator<Element> i = modules.elementIterator( "module" ); i.hasNext() && !found; )
             {
                 Element module = i.next();
                 if ( module.getText().equals( artifactId ) )
@@ -119,7 +120,8 @@ public class DefaultPomManager
             if ( !found )
             {
                 Node lastTextNode = null;
-                for ( Iterator<Node> i = modules.nodeIterator(); i.hasNext(); )
+                for ( @SuppressWarnings( "unchecked" )
+                Iterator<Node> i = modules.nodeIterator(); i.hasNext(); )
                 {
                     Node node = i.next();
                     if ( node.getNodeType() == Node.ELEMENT_NODE )
@@ -376,9 +378,11 @@ public class DefaultPomManager
 
     private void mergeProfiles( Model model, Model generatedModel )
     {
+        @SuppressWarnings( "unchecked" )
         List<Profile> generatedProfiles = generatedModel.getProfiles();
         if ( generatedProfiles != null && generatedProfiles.size() > 0 )
         {
+            @SuppressWarnings( "unchecked" )
             List<Profile> modelProfiles = model.getProfiles();
             Map<String,Profile> modelProfileIdMap = new HashMap<String,Profile>();
             if ( modelProfiles == null )
@@ -429,7 +433,9 @@ public class DefaultPomManager
     {
         // ModelBase can be a Model or a Profile...
 
+        @SuppressWarnings( "unchecked" )
         Map<String, Dependency> dependenciesByIds = createDependencyMap( model.getDependencies() );
+        @SuppressWarnings( "unchecked" )
         Map<String, Dependency> generatedDependenciesByIds = createDependencyMap( generatedModel.getDependencies() );
 
         for ( String generatedDependencyId : generatedDependenciesByIds.keySet() )
@@ -459,7 +465,9 @@ public class DefaultPomManager
                 model.setReporting( new Reporting() );
             }
 
+            @SuppressWarnings( "unchecked" )
             Map<String, ReportPlugin> reportPluginsByIds = model.getReporting().getReportPluginsAsMap();
+            @SuppressWarnings( "unchecked" )
             Map<String, ReportPlugin> generatedReportPluginsByIds =
                 generatedModel.getReporting().getReportPluginsAsMap();
 
@@ -479,7 +487,9 @@ public class DefaultPomManager
 
     private void mergeBuildPlugins( BuildBase modelBuild, BuildBase generatedModelBuild )
     {
+        @SuppressWarnings( "unchecked" )
         Map<String, Plugin> pluginsByIds = modelBuild.getPluginsAsMap();
+        @SuppressWarnings( "unchecked" )
         List<Plugin> generatedPlugins = generatedModelBuild.getPlugins();
 
         for ( Plugin generatedPlugin : generatedPlugins )

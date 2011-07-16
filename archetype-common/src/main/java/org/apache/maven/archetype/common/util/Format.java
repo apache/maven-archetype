@@ -489,12 +489,12 @@ public class Format
                 //encoder = Charset.forName(encoding).newEncoder();
                 try
                 {
-                    Class charsetClass = Class.forName( "java.nio.charset.Charset" );
-                    Class encoderClass = Class.forName( "java.nio.charset.CharsetEncoder" );
+                    Class<?> charsetClass = Class.forName( "java.nio.charset.Charset" );
+                    Class<?> encoderClass = Class.forName( "java.nio.charset.CharsetEncoder" );
                     Method forName = charsetClass.getMethod( "forName", new Class[] { String.class } );
                     Object charsetObj = forName.invoke( null, new Object[] { encoding } );
-                    Method newEncoder = charsetClass.getMethod( "newEncoder", null );
-                    encoder = newEncoder.invoke( charsetObj, null );
+                    Method newEncoder = charsetClass.getMethod( "newEncoder" );
+                    encoder = newEncoder.invoke( charsetObj );
                     canEncode = encoderClass.getMethod( "canEncode", new Class[] { char.class } );
                 }
                 catch ( Exception ignored )

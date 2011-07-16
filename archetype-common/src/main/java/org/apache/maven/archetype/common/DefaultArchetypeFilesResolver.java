@@ -309,6 +309,7 @@ public class DefaultArchetypeFilesResolver
             excludes += "," + defaultExclude + "/**";
         }
 
+        @SuppressWarnings( "unchecked" )
         List<File> absoluteFiles = FileUtils.getFiles( basedir, StringUtils.join( languagesPathesArray, "," ), excludes );
 
         getLogger().debug( "Found " + absoluteFiles.size() + " potential archetype files" );
