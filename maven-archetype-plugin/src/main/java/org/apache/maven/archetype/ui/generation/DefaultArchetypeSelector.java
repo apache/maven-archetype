@@ -80,7 +80,7 @@ public class DefaultArchetypeSelector
             archetypes = ArchetypeSelectorUtils.getFilteredArchetypesByCatalog( archetypes, request.getFilter() );
             if ( archetypes.isEmpty() )
             {
-                getLogger().info( "your filter doesn't find any archetype, so try again with an other value" );
+                getLogger().info( "Your filter doesn't match any archetype, so try again with another value." );
                 return;
             }
         }

@@ -71,89 +71,87 @@ public class DefaultArchetypeSelectionQueryer
     public Archetype selectArchetype( Map<String, List<Archetype>> catalogs, ArchetypeDefinition defaultDefinition )
         throws PrompterException
     {
-        StringBuilder query = new StringBuilder( "Choose archetype:\n" );
+        Archetype selection = null;
+        Map<String, List<Archetype>> filteredCatalogs = catalogs;
 
-        Set<String> archetypeKeys = new HashSet<String>();
-        List<String> answers = new ArrayList<String>();
-        Map<String, Archetype> archetypeAnswerMap = new HashMap<String, Archetype>();
-
-        int counter = 1;
-        int defaultSelection = 0;
-
-        for ( Map.Entry<String, List<Archetype>> entry : catalogs.entrySet() )
+        do
         {
-            String catalog = entry.getKey();
+            StringBuilder query = new StringBuilder( "Choose archetype:\n" );
 
-            for ( Archetype archetype : entry.getValue() )
+            Set<String> archetypeKeys = new HashSet<String>();
+            List<String> answers = new ArrayList<String>();
+            Map<String, Archetype> archetypeAnswerMap = new HashMap<String, Archetype>();
+
+            int counter = 0;
+            int defaultSelection = 0;
+
+            for ( Map.Entry<String, List<Archetype>> entry : filteredCatalogs.entrySet() )
             {
-                String archetypeKey = archetype.getGroupId() + ":" + archetype.getArtifactId();
+                String catalog = entry.getKey();
 
-                if ( !archetypeKeys.add( archetypeKey ) )
+                for ( Archetype archetype : entry.getValue() )
                 {
-                    continue;
+                    String archetypeKey = archetype.getGroupId() + ":" + archetype.getArtifactId();
+
+                    if ( !archetypeKeys.add( archetypeKey ) )
+                    {
+                        continue;
+                    }
+
+                    counter++;
+
+                    String description = archetype.getDescription();
+                    if ( description == null )
+                    {
+                        description = "-";
+                    }
+
+                    String answer = String.valueOf( counter );
+
+                    query.append( answer + ": " + catalog + " -> " + archetype.getGroupId() + ":"
+                        + archetype.getArtifactId() + " (" + description + ")\n" );
+
+                    answers.add( answer );
+
+                    archetypeAnswerMap.put( answer, archetype );
+
+                    // the version is not tested. This is intentional.
+                    if ( defaultDefinition != null && archetype.getGroupId().equals( defaultDefinition.getGroupId() )
+                        && archetype.getArtifactId().equals( defaultDefinition.getArtifactId() ) )
+                    {
+                        defaultSelection = counter;
+                    }
                 }
-
-                String description = archetype.getDescription();
-                if ( description == null )
-                {
-                    description = "-";
-                }
-
-                String answer = String.valueOf( counter );
-
-                query.append(
-                    answer + ": " + catalog + " -> " + archetype.getGroupId() + ":" + archetype.getArtifactId() + " ("
-                        + description + ")\n" );
-
-                answers.add( answer );
-
-                archetypeAnswerMap.put( answer, archetype );
-
-                // the version is not tested. This is intentional.
-                if ( defaultDefinition != null && archetype.getGroupId().equals( defaultDefinition.getGroupId() )
-                    && archetype.getArtifactId().equals( defaultDefinition.getArtifactId() ) )
-                {
-                    defaultSelection = counter;
-                }
-
-                counter++;
             }
 
-        }
-
-        query.append( "Choose a number or apply filter (format: [groupId:]artifactId, case sensitive contains): " );
-
-        String answer;
-        if ( defaultSelection == 0 )
-        {
-            answer = prompter.prompt( query.toString() );
-        }
-        else
-        {
-            answer = prompter.prompt( query.toString(), Integer.toString( defaultSelection ) );
-        }
-
-        if ( !NumberUtils.isNumber( answer ) )
-        {
-            // not a number so apply filter and ask again
-
-            Map<String, List<Archetype>> filteredCatalogs =
-                ArchetypeSelectorUtils.getFilteredArchetypesByCatalog( catalogs, answer );
-            if ( filteredCatalogs.isEmpty() )
+            if ( counter == 0 )
             {
-                prompter.prompt(
-                    "Your filter doesn't match any archetype (hint: enter to return to your previous list)" );
-                return selectArchetype( catalogs, defaultDefinition );
+                query.append( "   Your filter doesn't match any archetype (hint: enter to return to initial list)\n" );
             }
-            return selectArchetype( filteredCatalogs, defaultDefinition );
-        }
 
-        if ( !answer.contains( answer ) )
-        {
-            return selectArchetype( catalogs, defaultDefinition );
-        }
+            query.append( "Choose a number or apply filter (format: [groupId:]artifactId, case sensitive contains): " );
 
-        Archetype selection = archetypeAnswerMap.get( answer );
+            String answer;
+            if ( defaultSelection == 0 )
+            {
+                answer = prompter.prompt( query.toString() );
+            }
+            else
+            {
+                answer = prompter.prompt( query.toString(), Integer.toString( defaultSelection ) );
+            }
+
+            if ( NumberUtils.isNumber( answer ) )
+            {
+                selection = archetypeAnswerMap.get( answer );
+            }
+            else
+            {
+                // not a number so apply filter and ask again
+                filteredCatalogs = ArchetypeSelectorUtils.getFilteredArchetypesByCatalog( catalogs, answer );
+            }
+        }
+        while ( selection == null );
 
         return selectVersion( catalogs, selection.getGroupId(), selection.getArtifactId() );
     }
