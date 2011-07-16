@@ -168,7 +168,7 @@ public class ArchetypePrompter
     {
         try
         {
-            outputHandler.write( message + ": " );
+            outputHandler.write( message );
         }
         catch ( IOException e )
         {
