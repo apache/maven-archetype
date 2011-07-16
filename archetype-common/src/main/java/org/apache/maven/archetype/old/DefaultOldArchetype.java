@@ -432,7 +432,7 @@ public class DefaultOldArchetype
             project.addText( "\n" );
         }
         boolean found = false;
-        for ( Iterator i = modules.elementIterator( "module" ); i.hasNext() && !found; )
+        for ( Iterator<?> i = modules.elementIterator( "module" ); i.hasNext() && !found; )
         {
             Element module = (Element) i.next();
             if ( module.getText().equals( artifactId ) )
@@ -443,7 +443,7 @@ public class DefaultOldArchetype
         if ( !found )
         {
             Node lastTextNode = null;
-            for ( Iterator i = modules.nodeIterator(); i.hasNext(); )
+            for ( Iterator<?> i = modules.nodeIterator(); i.hasNext(); )
             {
                 Node node = (Node) i.next();
                 if ( node.getNodeType() == Node.ELEMENT_NODE )
@@ -596,7 +596,7 @@ public class DefaultOldArchetype
 
             overrideResourceDir = true;
 
-            Iterator resourceItr = build.getResources().iterator();
+            Iterator<?> resourceItr = build.getResources().iterator();
 
             while ( resourceItr.hasNext() )
             {
@@ -630,7 +630,7 @@ public class DefaultOldArchetype
 
             overrideTestResourceDir = true;
 
-            Iterator testResourceItr = build.getTestResources().iterator();
+            Iterator<?> testResourceItr = build.getTestResources().iterator();
 
             while ( testResourceItr.hasNext() )
             {

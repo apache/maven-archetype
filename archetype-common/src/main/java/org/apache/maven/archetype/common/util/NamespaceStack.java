@@ -69,6 +69,7 @@ import java.util.Stack;
 class NamespaceStack
 {
 
+    @SuppressWarnings( "unused" )
     private static final String CVS_ID =
         "@(#) $RCSfile: NamespaceStack.java,v $ $Revision: 1.13 $ $Date: 2004/02/06 09:28:32 $ $Name: jdom_1_0 $";
 

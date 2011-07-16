@@ -96,6 +96,7 @@ public class IntegrationTestMojo
 
         try
         {
+            @SuppressWarnings( "unchecked" )
             List<File> projectsGoalFiles = FileUtils.getFiles( projectsDirectory, "*/goal.txt", "" );
 
             File archetypeFile = project.getArtifact().getFile();
@@ -131,7 +132,9 @@ public class IntegrationTestMojo
     private void assertTest( File reference, File basedir )
         throws IntegrationTestFailure, IOException
     {
+        @SuppressWarnings( "unchecked" )
         List<String> referenceFiles = FileUtils.getFileNames( reference, "**", null, false );
+        @SuppressWarnings( "unchecked" )
         List<String> projectFiles = FileUtils.getFileNames( basedir, "**", null, false );
 
         boolean fileNamesEquals = CollectionUtils.isEqualCollection( referenceFiles, projectFiles );

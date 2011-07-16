@@ -129,6 +129,7 @@ public class XMLOutputter
     implements Cloneable
 {
 
+    @SuppressWarnings( "unused" )
     private static final String CVS_ID =
         "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.112 $ $Date: 2004/09/01 06:08:18 $ $Name: jdom_1_0 $";
 
@@ -280,7 +281,7 @@ public class XMLOutputter
      * @param list <code>List</code> of nodes.
      * @param out  <code>OutputStream</code> to use.
      */
-    public void output( List list, OutputStream out )
+    public void output( List<?> list, OutputStream out )
         throws IOException
     {
         Writer writer = makeWriter( out );
@@ -404,7 +405,7 @@ public class XMLOutputter
         // Print out root element, as well as any root level
         // comments and processing instructions,
         // starting with no indentation
-        List content = doc.getContent();
+        List<?> content = doc.getContent();
         int size = content.size();
         for ( int i = 0; i < size; i++ )
         {
@@ -489,7 +490,7 @@ public class XMLOutputter
     public void outputElementContent( Element element, Writer out )
         throws IOException
     {
-        List content = element.getContent();
+        List<?> content = element.getContent();
         printContentRange( out, content, 0, content.size(),
             0, createNamespaceStack() );
         out.flush();
@@ -504,7 +505,7 @@ public class XMLOutputter
      * @param list <code>List</code> of nodes.
      * @param out  <code>Writer</code> to use.
      */
-    public void output( List list, Writer out )
+    public void output( List<?> list, Writer out )
         throws IOException
     {
         printContentRange( out, list, 0, list.size(), 0, createNamespaceStack() );
@@ -652,7 +653,7 @@ public class XMLOutputter
      *
      * @param list <code>List</code> to format.
      */
-    public String outputString( List list )
+    public String outputString( List<?> list )
     {
         StringWriter out = new StringWriter();
         try
@@ -986,8 +987,8 @@ public class XMLOutputter
         throws IOException
     {
 
-        List attributes = element.getAttributes();
-        List content = element.getContent();
+        List<?> attributes = element.getAttributes();
+        List<?> content = element.getContent();
 
         // Check for xml:space and adjust format settings
         String space = null;
@@ -1098,7 +1099,7 @@ public class XMLOutputter
      * @param level      <code>int</code> level of indentation.
      * @param namespaces <code>List</code> stack of Namespaces in scope.
      */
-    private void printContentRange( Writer out, List content, int start, int end, int level, NamespaceStack namespaces )
+    private void printContentRange( Writer out, List<?> content, int start, int end, int level, NamespaceStack namespaces )
         throws IOException
     {
         boolean firstNode; // Flag for 1st node in content
@@ -1176,7 +1177,7 @@ public class XMLOutputter
      * @param end     index of last content node (exclusive).
      * @param out     <code>Writer</code> to use.
      */
-    private void printTextRange( Writer out, List content, int start, int end )
+    private void printTextRange( Writer out, List<?> content, int start, int end )
         throws IOException
     {
         String previous; // Previous text printed
@@ -1294,7 +1295,7 @@ public class XMLOutputter
      * @param attributes <code>List</code> of Attribute objcts
      * @param out        <code>Writer</code> to use
      */
-    protected void printAttributes( Writer out, List attributes, Element parent, NamespaceStack namespaces )
+    protected void printAttributes( Writer out, List<?> attributes, Element parent, NamespaceStack namespaces )
         throws IOException
     {
 
@@ -1343,7 +1344,7 @@ public class XMLOutputter
     private void printAdditionalNamespaces( Writer out, Element element, NamespaceStack namespaces )
         throws IOException
     {
-        List list = element.getAdditionalNamespaces();
+        List<?> list = element.getAdditionalNamespaces();
         if ( list != null )
         {
             for ( int i = 0; i < list.size(); i++ )
@@ -1397,7 +1398,7 @@ public class XMLOutputter
     // index = content.size() is returned if content contains
     // all whitespace.
     // @param start index to begin search (inclusive)
-    private int skipLeadingWhite( List content, int start )
+    private int skipLeadingWhite( List<?> content, int start )
     {
         if ( start < 0 )
         {
@@ -1426,7 +1427,7 @@ public class XMLOutputter
     // Text node,  index < 0 is returned
     // if content contains all whitespace.
     // @param start index to begin search (exclusive)
-    private int skipTrailingWhite( List content, int start )
+    private int skipTrailingWhite( List<?> content, int start )
     {
         int size = content.size();
         if ( start > size )
@@ -1455,7 +1456,7 @@ public class XMLOutputter
     // index = content.size() is returned if there is no more non-CDATA,
     // non-Text, or non-EntiryRef nodes
     // @param start index to begin search (inclusive)
-    private static int nextNonText( List content, int start )
+    private static int nextNonText( List<?> content, int start )
     {
         if ( start < 0 )
         {

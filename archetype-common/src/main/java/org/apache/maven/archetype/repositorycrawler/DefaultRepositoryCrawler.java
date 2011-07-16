@@ -62,11 +62,12 @@ public class DefaultRepositoryCrawler
         }
 
         ArchetypeCatalog catalog = new ArchetypeCatalog();
-        Iterator jars = FileUtils.listFiles( repository, new String[] { "jar" }, true ).iterator();
+        @SuppressWarnings( "unchecked" )
+        Iterator<File> jars = FileUtils.listFiles( repository, new String[] { "jar" }, true ).iterator();
 
         while ( jars.hasNext() )
         {
-            File jar = (File) jars.next();
+            File jar = jars.next();
             getLogger().info( "Scanning " + jar );
             if ( archetypeArtifactManager.isFileSetArchetype( jar ) || archetypeArtifactManager.isOldArchetype( jar ) )
             {

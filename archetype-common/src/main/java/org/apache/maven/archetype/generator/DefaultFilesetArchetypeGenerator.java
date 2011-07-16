@@ -428,7 +428,7 @@ public class DefaultFilesetArchetypeGenerator
         context.put( Constants.PACKAGE, request.getPackage() );
         context.put( Constants.PACKAGE_IN_PATH_FORMAT, getPackageInPathFormat( request.getPackage() ) );
 
-        for ( Iterator iterator = request.getProperties().keySet().iterator(); iterator.hasNext(); )
+        for ( Iterator<?> iterator = request.getProperties().keySet().iterator(); iterator.hasNext(); )
         {
             String key = (String) iterator.next();
 
@@ -604,6 +604,7 @@ public class DefaultFilesetArchetypeGenerator
         pomManager.addParent( pom, basedirPom );
     }
 
+    @SuppressWarnings( "deprecation" )
     private void processTemplate( File outFile, Context context, String templateFileName, String encoding,
                                   boolean failIfExists )
         throws OutputFileExists, ArchetypeGenerationFailure

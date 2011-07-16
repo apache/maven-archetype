@@ -34,6 +34,7 @@ import org.easymock.MockControl;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 public class DefaultArchetypeSelectorTest
@@ -110,7 +111,7 @@ public class DefaultArchetypeSelectorTest
         MockControl control = MockControl.createControl( ArchetypeSelectionQueryer.class );
 
         ArchetypeSelectionQueryer queryer = (ArchetypeSelectionQueryer) control.getMock();
-        queryer.selectArchetype( Collections.EMPTY_MAP, new ArchetypeDefinition() );
+        queryer.selectArchetype( Collections.<String, List<Archetype>> emptyMap(), new ArchetypeDefinition() );
         control.setMatcher( MockControl.ALWAYS_MATCHER );
         Archetype archetype = new Archetype();
         archetype.setArtifactId( "set-artifactId" );
@@ -164,7 +165,7 @@ public class DefaultArchetypeSelectorTest
         MockControl control = MockControl.createControl( ArchetypeSelectionQueryer.class );
 
         ArchetypeSelectionQueryer queryer = (ArchetypeSelectionQueryer) control.getMock();
-        queryer.selectArchetype( Collections.EMPTY_MAP, createDefaultArchetypeDefinition() );
+        queryer.selectArchetype( Collections.<String, List<Archetype>> emptyMap(), createDefaultArchetypeDefinition() );
         control.setMatcher( createArgumentMatcher() );
         Archetype archetype = new Archetype();
         archetype.setArtifactId( "set-artifactId" );
