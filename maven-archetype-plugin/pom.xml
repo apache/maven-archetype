@@ -61,6 +61,12 @@ under the License.
       <groupId>org.apache.maven.archetype</groupId>
       <artifactId>archetype-common</artifactId>
     </dependency>
+    <!-- Required for the integration tests, dependency is only to define build order -->
+    <dependency>
+      <groupId>org.apache.maven.archetype</groupId>
+      <artifactId>archetype-packaging</artifactId>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-utils</artifactId>
