@@ -128,11 +128,17 @@ public class DefaultArchetypeFactory
 
             String defaultValue = requiredProperty.getDefaultValue();
 
-            if ( properties.getProperty( key, defaultValue ) != null && !containsInnerProperty( defaultValue ) )
+            if ( properties.getProperty( key ) != null )
             {
-                String value = properties.getProperty( key, defaultValue );
+                String value = properties.getProperty( key );
                 configuration.setProperty( key, value );
                 getLogger().debug( "Setting property " + key + "=" + value );
+            }
+            else if ( properties.getProperty( key, defaultValue ) != null && !containsInnerProperty( defaultValue ) )
+            {
+                 String value = properties.getProperty( key, defaultValue );
+                 configuration.setProperty( key, value );
+                 getLogger().debug( "Setting property " + key + "=" + value );
             }
 
             if ( requiredProperty.getDefaultValue() != null )
