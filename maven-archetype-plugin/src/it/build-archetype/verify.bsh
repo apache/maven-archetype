@@ -20,10 +20,26 @@
 
 import java.io.*;
 
-File target = new File( basedir, "target/test-classes/projects/basic/project/basic/src/main/java/build/archetype/App.java" );
-if ( !target.isFile() )
+File main = new File( basedir, "target/test-classes/projects/basic/project/basic/src/main" );
+
+// check <fileset packaged="true">
+File app = new File( main, "java/build/archetype/App.java" );
+if ( !app.isFile() )
 {
-    throw new Exception( target + " file is missing or not a file." );
+    throw new Exception( app + " file is missing or not a file." );
+}
+
+// check __propertyName__ path replacement
+File artifactId = new File( main, "resources/test-basic.properties" );
+if ( !artifactId.isFile() )
+{
+    throw new Exception( artifactId + " file is missing or not a file." );
+}
+
+File packageInPathFormat = new File( main, "resources/build/archetype/build.archetype.properties" );
+if ( !packageInPathFormat.isFile() )
+{
+    throw new Exception( packageInPathFormat + " file is missing or not a file." );
 }
 
 return true;
