@@ -30,5 +30,11 @@ under the License.
         <include>**/*.java</include>
       </includes>
     </fileSet>
+    <fileSet filtered="true" packaged="false" encoding="UTF-8">
+      <directory>src/main/resources</directory>
+      <includes>
+        <include>**/*.properties</include>
+      </includes>
+    </fileSet>
   </fileSets>
 </archetype-descriptor>

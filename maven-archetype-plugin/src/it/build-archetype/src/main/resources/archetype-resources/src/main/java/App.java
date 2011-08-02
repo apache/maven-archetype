@@ -28,5 +28,9 @@ public class App
     public static void main( String[] args )
     {
         System.out.println( "Hello World!" );
+        System.out.println( "groupId = ${groupId}" );
+        System.out.println( "artifactId = ${artifactId}" );
+        System.out.println( "package = ${package}" );
+        System.out.println( "packageInPathFormat = ${packageInPathFormat}" );
     }
 }

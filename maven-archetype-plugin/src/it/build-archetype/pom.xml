@@ -29,6 +29,7 @@ under the License.
   <packaging>maven-archetype</packaging>
 
   <name>build-archetype</name>
+  <description>packages an archetype then runs IT (archetype:integration-test)</description>
 
   <build>
     <extensions>
