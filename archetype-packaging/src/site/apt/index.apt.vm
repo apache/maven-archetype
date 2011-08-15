@@ -3,7 +3,7 @@ Maven Archetype Packaging
  ------
 Hervé Boutemy
  ------
-2011-01-29
+2011-08-16
  ------
 
 ~~ Licensed to the Apache Software Foundation (ASF) under one
@@ -28,11 +28,21 @@ Hervé Boutemy
 
 Maven Archetype Packaging
 
-   This is '<<<maven-archetype>>>' packaging configuration for archetypes, providing
-   {{{../maven-archetype-plugin}maven-archetype-plugin}} bindings to default lifecycle.
+   This is '<<<maven-archetype>>>' packaging configuration for archetypes. It provides
+   {{{../maven-archetype-plugin}maven-archetype-plugin}} bindings to default lifecycle:
 
+   * {{{../maven-archetype-plugin/jar-mojo.html}archetype:jar}} to <<<package>>> phase,
+
+   * {{{../maven-archetype-plugin/integration-test-mojo.html}archetype:integration-test}} to <<<integration-test>>> phase,
+
+   * {{{../maven-archetype-plugin/update-local-catalog-mojo.html}archetype:update-local-catalog}} to <<<install>>> phase.
+
+   []
 
 Usage
+
+   To be available from an archetype project, the packaging is added as an extension. To ensure a reproducible build,
+   the archetype plugin version is locked down in pluginManagement section:
 
 ---
 <project>
