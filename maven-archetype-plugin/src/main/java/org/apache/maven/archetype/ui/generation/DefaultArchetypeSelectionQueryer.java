@@ -212,9 +212,17 @@ public class DefaultArchetypeSelectionQueryer
 
         query.append( "Choose a number: " );
 
-        String answer = prompter.prompt( query.toString(), answers, mapKey );
+        Archetype archetype = null;
 
-        return answerMap.get( answer );
+        do
+        {
+            String answer = prompter.prompt( query.toString(), answers, mapKey );
+
+            archetype = answerMap.get( answer );
+        }
+        while ( archetype == null );
+
+        return archetype;
     }
 
     public void setPrompter( Prompter prompter )
