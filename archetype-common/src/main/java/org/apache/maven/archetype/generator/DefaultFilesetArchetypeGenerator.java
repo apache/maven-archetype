@@ -208,6 +208,14 @@ public class DefaultFilesetArchetypeGenerator
                                           basedirPom, outputDirectoryFile, packageName, archetypeDescriptor, context );
                 }
             }
+
+            // ----------------------------------------------------------------------
+            // Log message on OldArchetype creation
+            // ----------------------------------------------------------------------
+            if ( getLogger().isInfoEnabled() )
+            {
+                getLogger().info( "project created from Archetype in dir: " + outputDirectoryFile.getAbsolutePath() );
+            }
         }
         catch ( FileNotFoundException ex )
         {
@@ -426,7 +434,23 @@ public class DefaultFilesetArchetypeGenerator
         context.put( Constants.ARTIFACT_ID, request.getArtifactId() );
         context.put( Constants.VERSION, request.getVersion() );
         context.put( Constants.PACKAGE, request.getPackage() );
-        context.put( Constants.PACKAGE_IN_PATH_FORMAT, getPackageInPathFormat( request.getPackage() ) );
+        final String packageInPathFormat = getPackageInPathFormat( request.getPackage() );
+        context.put( Constants.PACKAGE_IN_PATH_FORMAT, packageInPathFormat );
+
+        if ( getLogger().isInfoEnabled() )
+        {
+            getLogger().info( "----------------------------------------------------------------------------" );
+
+            getLogger().info( "Using following parameters for creating project from Archetype: "
+                                  + request.getArchetypeArtifactId() + ":" + request.getArchetypeVersion() );
+
+            getLogger().info( "----------------------------------------------------------------------------" );
+            getLogger().info( "Parameter: " + Constants.GROUP_ID + ", Value: " + request.getGroupId() );
+            getLogger().info( "Parameter: " + Constants.ARTIFACT_ID + ", Value: " + request.getArtifactId() );
+            getLogger().info( "Parameter: " + Constants.VERSION + ", Value: " + request.getVersion() );
+            getLogger().info( "Parameter: " + Constants.PACKAGE + ", Value: " + request.getPackage() );
+            getLogger().info( "Parameter: " + Constants.PACKAGE_IN_PATH_FORMAT + ", Value: " + packageInPathFormat );
+        }
 
         for ( Iterator<?> iterator = request.getProperties().keySet().iterator(); iterator.hasNext(); )
         {
@@ -435,6 +459,11 @@ public class DefaultFilesetArchetypeGenerator
             Object value = request.getProperties().getProperty( key );
 
             context.put( key, value );
+
+            if ( getLogger().isInfoEnabled() )
+            {
+                getLogger().info( "Parameter: " + key + ", Value: " + value );
+            }
         }
         return context;
     }
