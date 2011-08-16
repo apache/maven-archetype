@@ -53,7 +53,7 @@ public class CreateArchetypeFromProjectMojo
     extends AbstractMojo
 {
     /** @component */
-    ArchetypeCreationConfigurator configurator;
+    private ArchetypeCreationConfigurator configurator;
 
     /**
      * Enable the interactive mode to define the archetype from the project.
@@ -63,10 +63,7 @@ public class CreateArchetypeFromProjectMojo
     private boolean interactive;
 
     /** @component */
-    ArchetypeRegistryManager archetypeRegistryManager;
-
-    /** @component */
-    ArchetypeManager archetype;
+    private ArchetypeManager manager;
 
     /**
      * File extensions which are checked for project's text files (vs binary files).
@@ -203,7 +200,7 @@ public class CreateArchetypeFromProjectMojo
                 .setPostPhase( archetypePostPhase )
                 .setOutputDirectory( outputDirectory );
 
-            ArchetypeCreationResult result = archetype.createArchetypeFromProject( request );
+            ArchetypeCreationResult result = manager.createArchetypeFromProject( request );
 
             if ( result.getCause() != null )
             {

@@ -78,14 +78,14 @@ public class JarMojo
      *
      * @component
      */
-    private ArchetypeManager archetype;
+    private ArchetypeManager manager;
 
     public void execute()
         throws MojoExecutionException, MojoFailureException
     {
         try
         {
-            File jarFile = archetype.archiveArchetype( archetypeDirectory, outputDirectory, finalName );
+            File jarFile = manager.archiveArchetype( archetypeDirectory, outputDirectory, finalName );
 
             project.getArtifact().setFile( jarFile );
         }

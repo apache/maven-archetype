@@ -40,7 +40,7 @@ public class UpdateLocalCatalogMojo
     implements ContextEnabled
 {
     /** @component */
-    private ArchetypeManager archetyper;
+    private ArchetypeManager manager;
 
     /**
      * The project artifact, which should have the LATEST metadata added to it.
@@ -68,6 +68,6 @@ public class UpdateLocalCatalogMojo
             archetype.setDescription( project.getName() );
         }
 
-        archetyper.updateLocalCatalog( archetype );
+        manager.updateLocalCatalog( archetype );
     }
 }
