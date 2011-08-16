@@ -54,7 +54,7 @@ public class CreateProjectFromArchetypeMojo
     implements ContextEnabled
 {
     /** @component */
-    private ArchetypeManager archetype;
+    private ArchetypeManager manager;
 
     /** @component */
     private ArchetypeSelector selector;
@@ -124,7 +124,7 @@ public class CreateProjectFromArchetypeMojo
     /**
      * List of remote repositories used by the resolver.
      *
-     * @parameter  expression="${project.remoteArtifactRepositories}"
+     * @parameter expression="${project.remoteArtifactRepositories}"
      * @readonly
      * @required
      */
@@ -154,13 +154,12 @@ public class CreateProjectFromArchetypeMojo
      */
     private String goals;
 
-
     /**
      *  Applying some filter on possible archetypes format is groupId:artifactId .
      *  <ul>
-     *    <li>org.apache: -> display all archetypes which contains org.apache in groupId</li>
-     *    <li>:jee or jee -> display all archetypes which contains jee in artifactId</li>
-     *    <li>org.apache:jee -> display all archetypes which contains org.apache in groupId AND jee in artifactId</li>
+     *    <li>org.apache: -> display all archetypes which contain org.apache in groupId</li>
+     *    <li>:jee or jee -> display all archetypes which contain jee in artifactId</li>
+     *    <li>org.apache:jee -> display all archetypes which contain org.apache in groupId AND jee in artifactId</li>
      *  </ul>
      *  @parameter expression="${filter}"
      *  @since 2.1
@@ -197,13 +196,13 @@ public class CreateProjectFromArchetypeMojo
 
             if ( StringUtils.isBlank( request.getArchetypeArtifactId() ) )
             {
-                // no archetype found : stopping
+                // no archetype found: stopping
                 return;
             }
 
             configurator.configureArchetype( request, interactiveMode, executionProperties );
 
-            ArchetypeGenerationResult generationResult = archetype.generateProjectFromArchetype( request );
+            ArchetypeGenerationResult generationResult = manager.generateProjectFromArchetype( request );
 
             if ( generationResult.getCause() != null )
             {
