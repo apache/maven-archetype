@@ -23,7 +23,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
-import org.apache.maven.archetype.generator.ArchetypeGenerator;
 import org.apache.maven.archetype.ui.generation.ArchetypeGenerationConfigurator;
 import org.apache.maven.archetype.ui.generation.ArchetypeSelector;
 import org.apache.maven.artifact.repository.ArtifactRepository;
@@ -61,10 +60,7 @@ public class CreateProjectFromArchetypeMojo
     private ArchetypeSelector selector;
 
     /** @component */
-    ArchetypeGenerationConfigurator configurator;
-
-    /** @component */
-    ArchetypeGenerator generator;
+    private ArchetypeGenerationConfigurator configurator;
 
     /** @component */
     private Invoker invoker;
