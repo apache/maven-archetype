@@ -22,7 +22,6 @@ package org.apache.maven.archetype.mojos;
 import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.ContextEnabled;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.StringUtils;
@@ -37,13 +36,12 @@ import org.codehaus.plexus.util.StringUtils;
  */
 public class UpdateLocalCatalogMojo
     extends AbstractMojo
-    implements ContextEnabled
 {
     /** @component */
     private ArchetypeManager manager;
 
     /**
-     * The project artifact, which should have the LATEST metadata added to it.
+     * The archetype project to add/update to the local catalog.
      *
      * @parameter expression="${project}"
      * @required
