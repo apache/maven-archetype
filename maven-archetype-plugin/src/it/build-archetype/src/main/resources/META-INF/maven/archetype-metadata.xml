@@ -23,6 +23,13 @@ under the License.
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0 http://maven.apache.org/xsd/archetype-descriptor-1.0.0.xsd"
     name="build-archetype-IT">
+  <requiredProperties>
+    <requiredProperty key="requiredPropertyWithoutDefaultValue"/>
+    <requiredProperty key="requiredPropertyWithDefaultValue">
+      <defaultValue>this property has a default value defined in the archetype descriptor</defaultValue>
+    </requiredProperty>
+  </requiredProperties>
+
   <fileSets>
     <fileSet filtered="true" packaged="true" encoding="UTF-8">
       <directory>src/main/java</directory>
