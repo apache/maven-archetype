@@ -27,8 +27,7 @@
                 <phases>
                     <process-resources>org.apache.maven.plugins:maven-resources-plugin:resources</process-resources>
                     <process-test-resources>org.apache.maven.plugins:maven-resources-plugin:testResources</process-test-resources>
-                    <package>org.apache.maven.plugins:maven-archetype-plugin:jar,
-                             org.apache.maven.plugins:maven-archetype-plugin:add-archetype-metadata</package><!--, AND METADATA LIKE MAVEN PLUGIN-->
+                    <package>org.apache.maven.plugins:maven-archetype-plugin:jar</package>
                     <integration-test>org.apache.maven.plugins:maven-archetype-plugin:integration-test</integration-test>
                     <install>org.apache.maven.plugins:maven-install-plugin:install,
                              org.apache.maven.plugins:maven-archetype-plugin:update-local-catalog</install><!-- Update the local catalog -->
