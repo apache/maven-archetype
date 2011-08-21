@@ -41,6 +41,7 @@ under the License.
       <directory>src/main/resources</directory>
       <includes>
         <include>**/*.properties</include>
+        <include>**/__*/</include>
       </includes>
     </fileSet>
     <fileSet filtered="false" packaged="false" encoding="UTF-8">

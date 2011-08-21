@@ -671,6 +671,15 @@ public class DefaultFilesetArchetypeGenerator
             return false;
         }
 
+        if ( templateFileName.endsWith( "/" ) )
+        {
+            getLogger().debug( "Creating directory " + outFile );
+
+            outFile.mkdirs();
+
+            return true;
+        }
+
         if ( !outFile.getParentFile().exists() )
         {
             outFile.getParentFile().mkdirs();
