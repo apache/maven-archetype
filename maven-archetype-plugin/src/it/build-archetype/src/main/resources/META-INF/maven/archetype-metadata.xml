@@ -43,5 +43,11 @@ under the License.
         <include>**/*.properties</include>
       </includes>
     </fileSet>
+    <fileSet filtered="false" packaged="false" encoding="UTF-8">
+      <directory>src/main/resources</directory>
+      <includes>
+        <include>**</include>
+      </includes>
+    </fileSet>
   </fileSets>
 </archetype-descriptor>

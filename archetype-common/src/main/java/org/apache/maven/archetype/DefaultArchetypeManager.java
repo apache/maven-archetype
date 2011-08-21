@@ -118,6 +118,19 @@ public class DefaultArchetypeManager
     {
         File[] files = currentSourceDirectory.listFiles();
 
+        if ( files.length == 0 )
+        {
+            // add an empty directory
+            String dirName = currentSourceDirectory.getAbsolutePath().substring( offset + 1 );
+
+            if ( File.separatorChar != '/' )
+            {
+                dirName = dirName.replace( '\\', '/' );
+            }
+
+            zos.putNextEntry( new ZipEntry( dirName + '/' ) );
+        }
+
         for ( int i = 0; i < files.length; i++ )
         {
             if ( files[i].isDirectory() )
