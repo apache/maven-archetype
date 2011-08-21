@@ -20,7 +20,9 @@
 
 import java.io.*;
 
-File main = new File( basedir, "target/test-classes/projects/basic/project/basic/src/main" );
+basedir = new File( basedir, "target/test-classes/projects/basic/project/basic" );
+
+File main = new File( basedir, "src/main" );
 
 // check <fileset packaged="true">
 File app = new File( main, "java/build/archetype/App.java" );
@@ -52,6 +54,13 @@ File filteredEmpty = new File( main, "resources/basic-empty-directory" );
 if ( !filteredEmpty.isDirectory() )
 {
     throw new Exception( filteredEmpty + " directory is missing or not a directory." );
+}
+
+// ARCHETYPE-334 check generated project has been compiled
+File appClass = new File( basedir, "target/classes/build/archetype/App.class" );
+if ( !appClass.isFile() )
+{
+    throw new Exception( appClass + " not here: generated project not compiled?" );
 }
 
 return true;

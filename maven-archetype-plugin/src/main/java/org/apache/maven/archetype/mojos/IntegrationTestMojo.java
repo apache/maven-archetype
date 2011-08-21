@@ -28,6 +28,11 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.shared.invoker.DefaultInvocationRequest;
+import org.apache.maven.shared.invoker.InvocationRequest;
+import org.apache.maven.shared.invoker.InvocationResult;
+import org.apache.maven.shared.invoker.Invoker;
+import org.apache.maven.shared.invoker.MavenInvocationException;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
@@ -38,6 +43,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
@@ -46,9 +52,8 @@ import java.util.Properties;
  * defined properties and optional comparison with reference copy. An IT consists of a directory in
  * <code>src/test/resources/projects</code> containing:
  * <ul>
- * <li><code>goal.txt</code> (content actually not used, but future version should interpret it as a goal to run against
- * the generated project: see <a href="http://jira.codehaus.org/browse/ARCHETYPE-334/">ARCHETYPE-334</a>),</li>
- * <li><code>archetype.properties</code> with properties for project generation,</li>
+ * <li><code>goal.txt</code> file, containing goals to run against the generated project (can be empty),</li>
+ * <li><code>archetype.properties</code> file containing properties for project generation,</li>
  * <li>optional <code>reference/</code> directory containing a reference copy of the expected project created from the IT.</li>
  * </ul>
  *
@@ -60,7 +65,10 @@ public class IntegrationTestMojo
     extends AbstractMojo
 {
     /** @component */
-    ArchetypeGenerator archetypeGenerator;
+    private ArchetypeGenerator archetypeGenerator;
+
+    /** @component */
+    private Invoker invoker;
 
     /**
      * The archetype project to execute the integration tests on.
@@ -280,6 +288,10 @@ public class IntegrationTestMojo
 
                 assertDirectoryEquals( reference, new File( basedir, request.getArtifactId() ) );
             }
+
+            String goals = FileUtils.fileRead( goalFile );
+
+            invokePostArchetypeGenerationGoals( goals, new File( basedir, request.getArtifactId() ) );
         }
         catch ( IOException ioe )
         {
@@ -293,6 +305,40 @@ public class IntegrationTestMojo
         File propertiesFile = new File( goalFile.getParentFile(), "archetype.properties" );
 
         return loadProperties( propertiesFile );
+    }
+
+    private void invokePostArchetypeGenerationGoals( String goals, File basedir )
+        throws IntegrationTestFailure
+    {
+        if ( StringUtils.isBlank( goals ) )
+        {
+            getLog().info( "No post-archetype-generation goals to invoke." );
+
+            return;
+        }
+
+        getLog().info( "Invoking post-archetype-generation goals: " + goals );
+
+        InvocationRequest request = new DefaultInvocationRequest()
+            .setBaseDirectory( basedir )
+            .setGoals( Arrays.asList( StringUtils.split( goals, "," ) ) );
+
+        try
+        {
+            InvocationResult result = invoker.execute( request );
+
+            getLog().info( "Post-archetype-generation invoker exit code: " + result.getExitCode() );
+
+            if ( result.getExitCode() != 0 )
+            {
+                throw new IntegrationTestFailure( "Execution failure: exit code = " + result.getExitCode(),
+                                                  result.getExecutionException() );
+            }
+        }
+        catch ( MavenInvocationException e )
+        {
+            throw new IntegrationTestFailure( "Cannot run additions goals.", e );
+        }
     }
 
     class IntegrationTestFailure
