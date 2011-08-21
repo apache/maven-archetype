@@ -2,8 +2,9 @@
  Introduction
  ------
  Raphaël Piéroni
+ Hervé Boutemy
  ------
- 25 January 2008
+ 2011-08-21
  ------
 
 ~~ Licensed to the Apache Software Foundation (ASF) under one
@@ -48,7 +49,7 @@ Maven Archetype Plugin
 
 * Goals Overview
 
-  The archetype plugin has four goals:
+  The archetype plugin has seven goals:
 
   * <{{{./create-mojo.html}archetype:create}} (deprecated)> creates a Maven project from an
     archetype. It use the behaviour of the {{{/plugins/maven-archetype-plugin-1.0-alpha-7/}Archetype Plugin version 1.0-alpha-7}}.
@@ -62,6 +63,16 @@ Maven Archetype Plugin
 
   * {{{./crawl-mojo.html}archetype:crawl}} search a repository
     for archetypes and updates a catalog.
+
+  * {{{./jar-mojo.html}archetype:jar}} is bound to the <<<package>>> phase (see the
+    {{{../archetype-packaging/}'maven-archetype' packaging}}) and is used to build the archetype jar artifact.
+
+  * {{{./integration-test-mojo.html}archetype:integration-test}} is bound to the <<<integration-test>>> phase (see the
+    {{{../archetype-packaging/}'maven-archetype' packaging}}) and is used to execute archetype integration tests
+    by generating sample projects from the just built archetype.
+
+  * {{{./update-local-catalog-mojo.html}archetype:update-local-catalog}} is bound to the <<<install>>> phase(see the
+    {{{../archetype-packaging/}'maven-archetype' packaging}}) and is used to update the local catalog.
 
   []
 
