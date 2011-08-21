@@ -1,0 +1,19 @@
+ -----
+ Maven Archetype Registry Descriptor Model
+ -----
+ Hervé Boutemy
+ -----
+ 2011-08-21
+ -----
+
+Maven Archetype Registry Descriptor Model
+
+ This is strictly the model for Maven Archetype Registry Descriptor.
+
+ The following are generated from this model:
+
+   * {{{./apidocs/index.html}Java sources}} with Reader and Writers for the Xpp3 XML parser
+
+   * A {{{./archetype-registry.html}Descriptor Reference}}
+
+   * An XSD referenced in the {{{./archetype-registry.html}Descriptor Reference}}.
