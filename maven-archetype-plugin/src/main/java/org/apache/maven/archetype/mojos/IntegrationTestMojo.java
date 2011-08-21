@@ -91,6 +91,8 @@ public class IntegrationTestMojo
 
         if ( !projectsDirectory.exists() )
         {
+            getLog().warn( "No Archetype IT projects: root 'projects' directory not found." );
+
             return;
         }
 
@@ -98,6 +100,13 @@ public class IntegrationTestMojo
         {
             @SuppressWarnings( "unchecked" )
             List<File> projectsGoalFiles = FileUtils.getFiles( projectsDirectory, "*/goal.txt", "" );
+
+            if ( projectsGoalFiles.size() == 0 )
+            {
+                getLog().warn( "No Archetype IT projects: no directory with goal.txt found." );
+
+                return;
+            }
 
             File archetypeFile = project.getArtifact().getFile();
 
@@ -129,54 +138,69 @@ public class IntegrationTestMojo
         }
     }
 
-    private void assertTest( File reference, File basedir )
+    /**
+     * Checks that actual directory content is the same as reference.
+     *
+     * @param reference the reference directory
+     * @param actual the actual directory to compare with the reference
+     * @throws IntegrationTestFailure if content differs
+     */
+    private void assertDirectoryEquals( File reference, File actual )
         throws IntegrationTestFailure, IOException
     {
         @SuppressWarnings( "unchecked" )
         List<String> referenceFiles = FileUtils.getFileNames( reference, "**", null, false );
+        getLog().debug( "reference content: " + referenceFiles );
         @SuppressWarnings( "unchecked" )
-        List<String> projectFiles = FileUtils.getFileNames( basedir, "**", null, false );
+        List<String> actualFiles = FileUtils.getFileNames( actual, "**", null, false );
+        getLog().debug( "actual content: " + referenceFiles );
 
-        boolean fileNamesEquals = CollectionUtils.isEqualCollection( referenceFiles, projectFiles );
+        boolean fileNamesEquals = CollectionUtils.isEqualCollection( referenceFiles, actualFiles );
 
         if ( !fileNamesEquals )
         {
+            getLog().debug( "Actual list of files is not the same as reference:" );
+            int missing = 0;
             for ( String ref : referenceFiles )
             {
-                if ( projectFiles.contains( ref ) )
+                if ( actualFiles.contains( ref ) )
                 {
-                    projectFiles.remove( ref );
+                    actualFiles.remove( ref );
                     getLog().debug( "Contained " + ref );
                 }
                 else
                 {
+                    missing++;
                     getLog().error( "Not contained " + ref );
                 }
             }
-            getLog().error( "Remains " + projectFiles );
+            getLog().error( "Remains " + actualFiles );
 
-            throw new IntegrationTestFailure( "Reference and generated project differs" );
+            throw new IntegrationTestFailure( "Reference and generated project differs (missing: " + missing
+                + ", unexpected: " + actualFiles.size() + ")" );
         }
 
         boolean contentEquals = true;
 
         for ( String file : referenceFiles )
         {
-            if ( file.endsWith( "pom.xml" ) )
+            File referenceFile = new File( reference, file );
+            File actualFile = new File( actual, file );
+
+            if ( referenceFile.isDirectory() && actualFile.isFile() )
             {
-                if ( !modelEquals( new File( reference, file ), new File( basedir, file ) ) )
-                {
-                    getLog().warn( "Contents of file " + file + " are not equal" );
-                    contentEquals = false;
-                }
+                getLog().warn( "File " + file + " is a directory in the reference but a file in actual" );
+                contentEquals = false;
             }
-            else
+            else if ( referenceFile.isFile() && actualFile.isDirectory() )
             {
-                if ( !FileUtils.contentEquals( new File( reference, file ), new File( basedir, file ) ) )
-                {
-                    getLog().warn( "Contents of file " + file + " are not equal" );
-                    contentEquals = false;
-                }
+                getLog().warn( "File " + file + " is a file in the reference but a directory in actual" );
+                contentEquals = false;
+            }
+            else if ( !FileUtils.contentEquals( referenceFile, actualFile ) )
+            {
+                getLog().warn( "Contents of file " + file + " are not equal" );
+                contentEquals = false;
             }
         }
         if ( !contentEquals )
@@ -205,15 +229,11 @@ public class IntegrationTestMojo
         return properties;
     }
 
-    private boolean modelEquals( File referencePom, File generatedPom )
-        throws IOException
-    {
-        return FileUtils.contentEquals( referencePom, generatedPom );
-    }
-
     private void processIntegrationTest( File goalFile, File archetypeFile )
         throws IntegrationTestFailure
     {
+        getLog().info( "Processing Archetype IT project: " + goalFile.getParentFile().getName() );
+
         try
         {
             Properties properties = getProperties( goalFile );
@@ -249,7 +269,9 @@ public class IntegrationTestMojo
             if ( reference.exists() )
             {
                 // compare generated project with reference
-                assertTest( reference, new File( basedir, request.getArtifactId() ) );
+                getLog().info( "Comparing generated project with reference content: " + reference );
+
+                assertDirectoryEquals( reference, new File( basedir, request.getArtifactId() ) );
             }
         }
         catch ( IOException ioe )
