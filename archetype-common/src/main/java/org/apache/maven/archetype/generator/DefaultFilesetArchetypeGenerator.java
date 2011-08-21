@@ -348,57 +348,54 @@ public class DefaultFilesetArchetypeGenerator
      * @param filePath the file name and path to be interpolated
      * @param context contains the available properties
      */
-    private String replaceFilenameTokens( String filePath, Context context )
+    private String replaceFilenameTokens( final String filePath, final Context context )
     {
         String interpolatedResult = filePath;
-        String propertyToken = null;
-        String contextPropertyValue = null;
 
         int start = 0;
-        int end = 0;
-        int skipUndefinedPropertyIndex = 0;
 
-        int maxAttempts = StringUtils.countMatches( interpolatedResult, DELIMITER ) / 2;
-
-        for ( int x = 0; x < maxAttempts && start != -1; x++ )
+        while ( true )
         {
-            start = interpolatedResult.indexOf( DELIMITER, skipUndefinedPropertyIndex );
+            start = interpolatedResult.indexOf( DELIMITER, start );
 
-            if ( start != -1 )
+            if ( start == -1 )
             {
-                end = interpolatedResult.indexOf( DELIMITER, start + DELIMITER.length() );
-
-                if ( end != -1 )
-                {
-                    propertyToken = interpolatedResult.substring( start + DELIMITER.length(), end );
-                }
-
-                contextPropertyValue = (String) context.get( propertyToken );
-
-                if ( contextPropertyValue != null && contextPropertyValue.trim().length() > 0 )
-                {
-                    if ( getLogger().isDebugEnabled() )
-                    {
-                        getLogger().debug(
-                                           "Replacing '" + DELIMITER + propertyToken + DELIMITER + "' in file path '"
-                                               + interpolatedResult + "' with value '" + contextPropertyValue + "'." );
-                    }
-
-                    interpolatedResult =
-                        StringUtils.replace( interpolatedResult, DELIMITER + propertyToken + DELIMITER,
-                                             contextPropertyValue );
-
-                }
-                else
-                {
-                    // Need to skip the undefined property
-                    skipUndefinedPropertyIndex = end + DELIMITER.length() + 1;
-
-                    getLogger().warn(
-                                      "Property '" + propertyToken + "' was not specified, so the token in '"
-                                          + interpolatedResult + "' is not being replaced." );
-                }
+                break;
             }
+
+            int end = interpolatedResult.indexOf( DELIMITER, start + DELIMITER.length() );
+
+            if ( end == -1 )
+            {
+                break;
+            }
+
+            String propertyToken = interpolatedResult.substring( start + DELIMITER.length(), end );
+
+            String contextPropertyValue = (String) context.get( propertyToken );
+
+            if ( contextPropertyValue != null && contextPropertyValue.trim().length() > 0 )
+            {
+                String search = DELIMITER + propertyToken + DELIMITER;
+
+                if ( getLogger().isDebugEnabled() )
+                {
+                    getLogger().debug( "Replacing '" + search + "' in file path '" + interpolatedResult
+                                           + "' with value '" + contextPropertyValue + "'." );
+                }
+
+                interpolatedResult = StringUtils.replace( interpolatedResult, search, contextPropertyValue );
+
+                end = end + contextPropertyValue.length() - search.length();
+            }
+            else
+            {
+                // Need to skip the undefined property
+                getLogger().warn( "Property '" + propertyToken + "' was not specified, so the token in '"
+                                      + interpolatedResult + "' is not being replaced." );
+            }
+
+            start = end + DELIMITER.length() + 1;
         }
 
         if ( getLogger().isDebugEnabled() )
