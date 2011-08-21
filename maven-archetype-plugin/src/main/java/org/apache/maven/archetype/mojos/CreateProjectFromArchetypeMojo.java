@@ -237,6 +237,8 @@ public class CreateProjectFromArchetypeMojo
     private void invokePostArchetypeGenerationGoals( String goals, String artifactId )
         throws MojoExecutionException, MojoFailureException
     {
+        getLog().info( "Invoking post-archetype-generation goals: " + goals );
+
         File projectBasedir = new File( basedir, artifactId );
 
         if ( projectBasedir.exists() )
@@ -253,6 +255,10 @@ public class CreateProjectFromArchetypeMojo
             {
                 throw new MojoExecutionException( "Cannot run additions goals." );
             }
+        }
+        else
+        {
+            getLog().info( "Post-archetype-generation goals aborted: unavailable basedir " + projectBasedir );
         }
     }
 }
