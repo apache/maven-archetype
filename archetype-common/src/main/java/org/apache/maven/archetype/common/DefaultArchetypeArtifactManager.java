@@ -348,9 +348,9 @@ public class DefaultArchetypeArtifactManager
             {
                 ZipEntry entry = (ZipEntry) enumeration.nextElement();
 
-                if ( !entry.isDirectory() && entry.getName().startsWith( Constants.ARCHETYPE_RESOURCES ) )
+                if ( entry.getName().startsWith( Constants.ARCHETYPE_RESOURCES ) )
                 {
-                    // not supposed to be file.seperator
+                    // not supposed to be file.separator
                     String resource = entry.getName().substring( Constants.ARCHETYPE_RESOURCES.length() + 1 );
                     getLogger().debug( "  - found resource (" + Constants.ARCHETYPE_RESOURCES + "/)" + resource );
                     // TODO:FIXME

@@ -46,6 +46,12 @@ under the License.
           <artifactId>maven-archetype-plugin</artifactId>
           <version>@project.version@</version>
         </plugin>
+        <plugin>
+          <artifactId>maven-resources-plugin</artifactId>
+          <configuration>
+            <includeEmptyDirs>true</includeEmptyDirs>
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
   </build>

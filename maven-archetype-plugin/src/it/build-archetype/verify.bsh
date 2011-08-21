@@ -42,4 +42,11 @@ if ( !packageInPathFormat.isFile() )
     throw new Exception( packageInPathFormat + " file is missing or not a file." );
 }
 
+// ARCHETYPE-289 check empty directory creation
+File artifactId = new File( main, "resources/empty-directory" );
+if ( !artifactId.isDirectory() )
+{
+    throw new Exception( artifactId + " directory is missing or not a directory." );
+}
+
 return true;

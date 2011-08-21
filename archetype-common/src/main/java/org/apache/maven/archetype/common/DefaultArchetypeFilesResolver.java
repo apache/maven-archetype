@@ -60,6 +60,7 @@ public class DefaultArchetypeFilesResolver
 
         List<String> result = scanner.scan( files );
         getLogger().debug( "Scanned " + result.size() + " filtered files in " + files.size() + " files" );
+        System.out.println( "Scanned " + result.size() + " filtered files in " + files.size() + " files: " + StringUtils.join( result.iterator(), ", " ) );
 
         return result;
     }
