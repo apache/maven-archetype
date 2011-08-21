@@ -253,7 +253,7 @@ public class CreateProjectFromArchetypeMojo
             }
             catch ( MavenInvocationException e )
             {
-                throw new MojoExecutionException( "Cannot run additions goals." );
+                throw new MojoExecutionException( "Cannot run additions goals.", e );
             }
         }
         else
