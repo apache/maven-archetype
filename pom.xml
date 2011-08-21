@@ -75,7 +75,7 @@ under the License.
     <mavenVersion>2.0.8</mavenVersion><!-- with 2.0.9 proxy test fails-->
     <netbeans.hint.useExternalMaven>true</netbeans.hint.useExternalMaven>
     <mavenPluginPluginVersion>2.8</mavenPluginPluginVersion>
-    <wagonVersion>1.0-beta-7</wagonVersion><!-- with 1.0-beta-3 1.0-beta-4 all tests fail -->
+    <wagonVersion>1.0</wagonVersion>
   </properties>
 
   <dependencyManagement>
