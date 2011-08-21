@@ -93,7 +93,7 @@
     <class>
       <name>AbstractArchetypeDescriptor</name>
       <fields>
-        <field>
+        <field xdoc.separator="blank">
           <name>fileSets</name>
           <association>
             <type>FileSet</type>
