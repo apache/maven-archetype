@@ -149,10 +149,11 @@ public class IntegrationTestMojo
         throws IntegrationTestFailure, IOException
     {
         @SuppressWarnings( "unchecked" )
-        List<String> referenceFiles = FileUtils.getFileNames( reference, "**", null, false );
+        List<String> referenceFiles = FileUtils.getFileAndDirectoryNames( reference, "**", null, false, true, true, true );
         getLog().debug( "reference content: " + referenceFiles );
+
         @SuppressWarnings( "unchecked" )
-        List<String> actualFiles = FileUtils.getFileNames( actual, "**", null, false );
+        List<String> actualFiles = FileUtils.getFileAndDirectoryNames( actual, "**", null, false, true, true, true );
         getLog().debug( "actual content: " + referenceFiles );
 
         boolean fileNamesEquals = CollectionUtils.isEqualCollection( referenceFiles, actualFiles );
@@ -187,15 +188,21 @@ public class IntegrationTestMojo
             File referenceFile = new File( reference, file );
             File actualFile = new File( actual, file );
 
-            if ( referenceFile.isDirectory() && actualFile.isFile() )
+            if ( referenceFile.isDirectory() )
             {
-                getLog().warn( "File " + file + " is a directory in the reference but a file in actual" );
-                contentEquals = false;
+                if ( actualFile.isFile() )
+                {
+                    getLog().warn( "File " + file + " is a directory in the reference but a file in actual" );
+                    contentEquals = false;
+                }
             }
-            else if ( referenceFile.isFile() && actualFile.isDirectory() )
+            else if ( actualFile.isDirectory() )
             {
-                getLog().warn( "File " + file + " is a file in the reference but a directory in actual" );
-                contentEquals = false;
+                if ( referenceFile.isFile() )
+                {
+                    getLog().warn( "File " + file + " is a file in the reference but a directory in actual" );
+                    contentEquals = false;
+                }
             }
             else if ( !FileUtils.contentEquals( referenceFile, actualFile ) )
             {
