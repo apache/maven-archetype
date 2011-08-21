@@ -1,0 +1,21 @@
+ -----
+ Maven Archetype Catalog Model
+ -----
+ Hervé Boutemy
+ -----
+ 2011-08-21
+ -----
+
+Maven Archetype Catalog Model
+
+ This is strictly the model for Maven Archetype Catalog used to contain information about Archetypes so that users
+    can be presented with a list of archetypes from any number of catalogs to generate new
+    projects.
+
+ The following are generated from this model:
+
+   * {{{./apidocs/index.html}Java sources}} with Reader and Writers for the Xpp3 XML parser
+
+   * A {{{./archetype-catalog.html}Descriptor Reference}}
+
+   * An XSD referenced in the {{{./archetype-catalog.html}Descriptor Reference}}.
