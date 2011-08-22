@@ -10,8 +10,8 @@
         <p><code>maven-archetype</code> packaging is available since 2.0-alpha-1: it should be used instead of <code>jar</code>, which was used
         for Archetype 1.x.</p>
         <p>Using <code>maven-archetype</code> packaging helps identifying archetypes in repositories and adds archetype related bindings to
-        build lifecycle, like <a href="./integration-test-mojo.html"><code>integration-tests</code></a> and
-        <a href="./update-local-catalog-mojo.html"><code>update-local-catalog</code></a>.</p>
+        build lifecycle: see <a href="../archetype-packaging/"><code>maven-archetype</code> packaging documentation</a>
+        for more information.</p>
       </answer>
     </faq>
 
