@@ -116,14 +116,20 @@
 
     <class>
       <name>FileSet</name>
-      <description>A fileset defines the way the project's files located in the jar file are used by the Archetype Plugin to generate a project.</description>
+      <description><![CDATA[
+        A fileset defines the way the project's files located in the jar file are used by the Archetype Plugin to generate a project.
+        If file name or directory contains <code>__<i>property</i>__</code>, it is replaced with property value.
+        ]]></description>
       <fields>
         <field xml.attribute="true">
           <name>filtered</name>
           <type>boolean</type>
           <required>false</required>
-          <description>Filesets can be filtered, which means the selected files will be used as Velocity templates.
-          They can be non-filtered, which means the selected files will be copied without modification.</description>
+          <description><![CDATA[
+            Filesets can be filtered, which means the selected files will be used as
+            <a href="http://velocity.apache.org/engine/releases/velocity-1.5/user-guide.html">Velocity templates</a>.
+            They can be non-filtered, which means the selected files will be copied without modification.
+          ]]></description>
         </field>
         <field xml.attribute="true">
           <name>packaged</name>
