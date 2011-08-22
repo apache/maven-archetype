@@ -33,6 +33,11 @@
       <item name="Specification" href="/specification/specification.html"/>
     </menu>
 
+    <menu name="Reference">
+      <item name="Archetype Descriptor" href="../archetype-models/archetype-descriptor/archetype-descriptor.html"/>
+      <item name="Packaging" href="../archetype-packaging/"/>
+    </menu>
+
     <!--menu name="Examples">
       <item name="Specifying the Remote Repositories" href="/examples/remote-repositories.html"/>
       <item name="Creating a Simple Java Application" href="/examples/simple.html"/>
