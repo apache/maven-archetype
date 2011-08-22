@@ -3,7 +3,7 @@
  ------
  Raphaël Piéroni
  ------
- 10 February 2008
+ 2011-08-22
  ------
 
 ~~ Licensed to the Apache Software Foundation (ASF) under one
@@ -40,10 +40,10 @@ What is done during the creation of an archetype?
 * Archetype creation
 
     Using the project's directory as sources, <<<filteredExtensions>>> and <<<languages>>>
-    properties, the module tree; the Archetype Plugin searches for revelant
+    properties, the module tree; the Archetype Plugin searches for relevant
     filesets indexed by module.
 
-    Using the revelant filesets, the module tree, the resolved properties; the
+    Using the relevant filesets, the module tree, the resolved properties; the
     Archetype Plugin creates the archetype's resources.
 
     Then it creates the archetype's descriptor.

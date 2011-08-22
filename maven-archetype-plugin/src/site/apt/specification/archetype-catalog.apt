@@ -3,7 +3,7 @@
  ------
  Raphaël Piéroni
  ------
- 10 February 2008
+ 2011-08-22
  ------
 
 ~~ Licensed to the Apache Software Foundation (ASF) under one
@@ -31,7 +31,7 @@ How does the Archetype Plugin know about archetypes?
 
     Knowledge about archetypes are stored in catalogs.
 
-    The catalogs are xml files: see the {{{/archetype/archetype-common/archetype-catalog.html}reference documentation}}.
+    The catalogs are xml files: see the {{{../../archetype-models/archetype-catalog/archetype-catalog.html}reference documentation}}.
 
     The Archetype Plugin comes bundled with an internal catalog.
     This one is used by default.
