@@ -50,5 +50,11 @@ under the License.
         <include>**</include>
       </includes>
     </fileSet>
+    <fileSet filtered="false" packaged="true" encoding="UTF-8">
+      <directory>src/site</directory>
+      <includes>
+        <include>**</include>
+      </includes>
+    </fileSet>
   </fileSets>
 </archetype-descriptor>

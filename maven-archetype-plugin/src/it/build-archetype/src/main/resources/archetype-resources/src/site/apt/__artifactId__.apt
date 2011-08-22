@@ -1,0 +1,4 @@
+test:
+- non-filtered: ${artifactId} stays intact (not replaced by Velocity)
+- packaged: package directory will be added
+- __artifactId__ is replaced (even if non-filtered)
