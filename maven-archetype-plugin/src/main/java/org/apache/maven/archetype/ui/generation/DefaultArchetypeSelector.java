@@ -217,7 +217,7 @@ public class DefaultArchetypeSelector
                 String path = catalog.substring( 7 );
                 archetypes.put( catalog, archetypeManager.getLocalCatalog( path ).getArchetypes() );
             }
-            else if ( catalog.startsWith( "http://" ) )
+            else if ( catalog.startsWith( "http://" ) || catalog.startsWith( "https://" ) )
             {
                 archetypes.put( catalog, archetypeManager.getRemoteCatalog( catalog ).getArchetypes() );
             }
