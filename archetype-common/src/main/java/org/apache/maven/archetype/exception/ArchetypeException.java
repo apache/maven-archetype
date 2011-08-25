@@ -19,24 +19,24 @@ package org.apache.maven.archetype.exception;
  * under the License.
  */
 
-public class UnknownArchetype
-    extends ArchetypeException
+public class ArchetypeException
+    extends Exception
 {
-    public UnknownArchetype()
+    public ArchetypeException()
     {
     }
 
-    public UnknownArchetype( String msg )
+    public ArchetypeException( String msg )
     {
         super( msg );
     }
 
-    public UnknownArchetype( Throwable cause )
+    public ArchetypeException( Throwable cause )
     {
         super( cause );
     }
 
-    public UnknownArchetype( String msg, Throwable cause )
+    public ArchetypeException( String msg, Throwable cause )
     {
         super( msg, cause );
     }
