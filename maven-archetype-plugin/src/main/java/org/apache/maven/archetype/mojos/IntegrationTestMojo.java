@@ -23,7 +23,9 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
 import org.apache.maven.archetype.common.Constants;
+import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
 import org.apache.maven.archetype.generator.ArchetypeGenerator;
+import org.apache.maven.archetype.metadata.RequiredProperty;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -43,6 +45,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -127,10 +130,8 @@ public class IntegrationTestMojo
                 }
                 catch ( IntegrationTestFailure ex )
                 {
-                    errorWriter.write( "Test " + goalFile.getParentFile().getName() + " failed\n" );
-                    errorWriter.write( ex.getStackTrace() + "\n" );
-                    errorWriter.write( ex.getMessage() + "\n" );
-                    errorWriter.write( "\n" );
+                    errorWriter.write( "\nArchetype IT '" + goalFile.getParentFile().getName() + "' failed: " );
+                    errorWriter.write( ex.getMessage() );
                 }
             }
 
@@ -276,7 +277,15 @@ public class IntegrationTestMojo
 
             if ( result.getCause() != null )
             {
-                throw new IntegrationTestFailure( result.getCause() );
+                if ( result.getCause() instanceof ArchetypeNotConfigured )
+                {
+                    ArchetypeNotConfigured anc = (ArchetypeNotConfigured) result.getCause();
+
+                    throw new IntegrationTestFailure( "Missing required properties in archetype.properties: "
+                        + StringUtils.join( anc.getMissingProperties().iterator(), ", " ), anc );
+                }
+
+                throw new IntegrationTestFailure( result.getCause().getMessage(), result.getCause() );
             }
 
             File reference = new File( goalFile.getParentFile(), "reference" );
