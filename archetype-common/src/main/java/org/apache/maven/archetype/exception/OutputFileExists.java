@@ -36,8 +36,7 @@ public class OutputFileExists
         super( cause );
     }
 
-    public OutputFileExists( String msg,
-                             Throwable cause )
+    public OutputFileExists( String msg, Throwable cause )
     {
         super( msg, cause );
     }

@@ -36,8 +36,7 @@ public class ArchetypeSelectionFailure
         super( cause );
     }
 
-    public ArchetypeSelectionFailure( String msg,
-                                      Throwable cause )
+    public ArchetypeSelectionFailure( String msg, Throwable cause )
     {
         super( msg, cause );
     }

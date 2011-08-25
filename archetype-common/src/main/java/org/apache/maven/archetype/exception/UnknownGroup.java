@@ -36,8 +36,7 @@ public class UnknownGroup
         super( cause );
     }
 
-    public UnknownGroup( String msg,
-                         Throwable cause )
+    public UnknownGroup( String msg, Throwable cause )
     {
         super( msg, cause );
     }

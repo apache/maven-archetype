@@ -36,8 +36,7 @@ public class ArchetypeGenerationConfigurationFailure
         super( cause );
     }
 
-    public ArchetypeGenerationConfigurationFailure( String msg,
-                                                    Throwable cause )
+    public ArchetypeGenerationConfigurationFailure( String msg, Throwable cause )
     {
         super( msg, cause );
     }

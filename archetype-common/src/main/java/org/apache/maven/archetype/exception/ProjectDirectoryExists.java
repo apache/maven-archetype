@@ -36,8 +36,7 @@ public class ProjectDirectoryExists
         super( cause );
     }
 
-    public ProjectDirectoryExists( String msg,
-                                   Throwable cause )
+    public ProjectDirectoryExists( String msg, Throwable cause )
     {
         super( msg, cause );
     }
