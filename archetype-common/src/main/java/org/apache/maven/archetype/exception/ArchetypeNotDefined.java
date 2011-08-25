@@ -36,8 +36,7 @@ public class ArchetypeNotDefined
         super( cause );
     }
 
-    public ArchetypeNotDefined( String msg,
-                                Throwable cause )
+    public ArchetypeNotDefined( String msg, Throwable cause )
     {
         super( msg, cause );
     }

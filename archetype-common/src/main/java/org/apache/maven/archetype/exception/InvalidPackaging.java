@@ -36,8 +36,7 @@ public class InvalidPackaging
         super( cause );
     }
 
-    public InvalidPackaging( String msg,
-                             Throwable cause )
+    public InvalidPackaging( String msg, Throwable cause )
     {
         super( msg, cause );
     }

@@ -36,8 +36,7 @@ public class PomFileExists
         super( cause );
     }
 
-    public PomFileExists( String msg,
-                          Throwable cause )
+    public PomFileExists( String msg, Throwable cause )
     {
         super( msg, cause );
     }

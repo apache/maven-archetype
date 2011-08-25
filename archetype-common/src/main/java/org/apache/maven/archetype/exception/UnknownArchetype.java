@@ -36,8 +36,7 @@ public class UnknownArchetype
         super( cause );
     }
 
-    public UnknownArchetype( String msg,
-                             Throwable cause )
+    public UnknownArchetype( String msg, Throwable cause )
     {
         super( msg, cause );
     }

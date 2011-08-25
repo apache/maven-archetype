@@ -36,8 +36,7 @@ public class TemplateCreationException
         super( cause );
     }
 
-    public TemplateCreationException( String msg,
-                                      Throwable cause )
+    public TemplateCreationException( String msg, Throwable cause )
     {
         super( msg, cause );
     }

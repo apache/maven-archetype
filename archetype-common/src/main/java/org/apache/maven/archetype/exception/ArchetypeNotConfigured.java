@@ -24,32 +24,31 @@ import java.util.List;
 public class ArchetypeNotConfigured
     extends Exception
 {
-    private List missingProperties;
+    private List<String> missingProperties;
 
-    public List getMissingProperties()
+    public List<String> getMissingProperties()
     {
         return missingProperties;
     }
 
-    public ArchetypeNotConfigured( List missingProperties )
+    public ArchetypeNotConfigured( List<String> missingProperties )
     {
         this.missingProperties = missingProperties;
     }
 
-    public ArchetypeNotConfigured( String msg, List missingProperties )
+    public ArchetypeNotConfigured( String msg, List<String> missingProperties )
     {
         super( msg );
         this.missingProperties = missingProperties;
     }
 
-    public ArchetypeNotConfigured( Throwable cause, List missingProperties )
+    public ArchetypeNotConfigured( Throwable cause, List<String> missingProperties )
     {
         super( cause );
         this.missingProperties = missingProperties;
     }
 
-    public ArchetypeNotConfigured( String msg,
-                                   Throwable cause, List missingProperties )
+    public ArchetypeNotConfigured( String msg, Throwable cause, List<String> missingProperties )
     {
         super( msg, cause );
         this.missingProperties = missingProperties;
