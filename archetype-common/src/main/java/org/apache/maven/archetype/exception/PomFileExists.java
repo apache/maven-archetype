@@ -20,7 +20,7 @@ package org.apache.maven.archetype.exception;
  */
 
 public class PomFileExists
-    extends Exception
+    extends ArchetypeException
 {
     public PomFileExists()
     {

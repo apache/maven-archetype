@@ -20,7 +20,7 @@ package org.apache.maven.archetype.exception;
  */
 
 public class UnknownGroup
-    extends Exception
+    extends ArchetypeException
 {
     public UnknownGroup()
     {

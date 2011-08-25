@@ -22,7 +22,7 @@ package org.apache.maven.archetype.exception;
 import java.util.List;
 
 public class ArchetypeNotConfigured
-    extends Exception
+    extends ArchetypeException
 {
     private List<String> missingProperties;
 

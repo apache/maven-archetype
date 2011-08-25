@@ -20,7 +20,7 @@ package org.apache.maven.archetype.exception;
  */
 
 public class ArchetypeGenerationConfigurationFailure
-    extends Exception
+    extends ArchetypeException
 {
     public ArchetypeGenerationConfigurationFailure()
     {

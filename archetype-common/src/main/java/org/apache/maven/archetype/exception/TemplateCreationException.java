@@ -20,7 +20,7 @@ package org.apache.maven.archetype.exception;
  */
 
 public class TemplateCreationException
-    extends Exception
+    extends ArchetypeException
 {
     public TemplateCreationException()
     {
