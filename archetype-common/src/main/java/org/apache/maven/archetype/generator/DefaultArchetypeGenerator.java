@@ -141,22 +141,18 @@ public class DefaultArchetypeGenerator
         }
         catch ( IOException ex )
         {
-            getLogger().error( ex.getMessage(), ex );
             result.setCause( ex );
         }
         catch ( ArchetypeException ex )
         {
-            getLogger().error( ex.getMessage(), ex );
             result.setCause( ex );
         }
         catch ( XmlPullParserException ex )
         {
-            getLogger().error( ex.getMessage(), ex );
             result.setCause( ex );
         }
         catch ( DocumentException ex )
         {
-            getLogger().error( ex.getMessage(), ex );
             result.setCause( ex );
         }
     }
@@ -171,22 +167,18 @@ public class DefaultArchetypeGenerator
         }
         catch ( IOException ex )
         {
-            getLogger().error( ex.getMessage(), ex );
             result.setCause( ex );
         }
         catch ( ArchetypeException ex )
         {
-            getLogger().error( ex.getMessage(), ex );
             result.setCause( ex );
         }
         catch ( XmlPullParserException ex )
         {
-            getLogger().error( ex.getMessage(), ex );
             result.setCause( ex );
         }
         catch ( DocumentException ex )
         {
-            getLogger().error( ex.getMessage(), ex );
             result.setCause( ex );
         }
     }
