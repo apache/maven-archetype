@@ -48,9 +48,9 @@ public interface Constants
 
     String ARCHETYPE_LANGUAGES = "archetype.languages";
 
-	String ARCHETYPE_URL = "archetype.url";
+    String ARCHETYPE_URL = "archetype.url";
 
-	String ARCHETYPE_DESCRIPTION = "archetype.description";
+    String ARCHETYPE_DESCRIPTION = "archetype.description";
 
     List<String> DEFAULT_FILTERED_EXTENSIONS =
         Arrays.asList(

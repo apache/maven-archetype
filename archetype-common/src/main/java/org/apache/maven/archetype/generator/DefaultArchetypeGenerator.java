@@ -133,7 +133,8 @@ public class DefaultArchetypeGenerator
         oldArchetype.createArchetype( request, archetypeFile );
     }
 
-    public void generateArchetype( ArchetypeGenerationRequest request, File archetypeFile, ArchetypeGenerationResult result )
+    public void generateArchetype( ArchetypeGenerationRequest request, File archetypeFile,
+                                   ArchetypeGenerationResult result )
     {
         try
         {

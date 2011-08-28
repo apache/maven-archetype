@@ -384,7 +384,7 @@ public class DefaultPomManager
         {
             @SuppressWarnings( "unchecked" )
             List<Profile> modelProfiles = model.getProfiles();
-            Map<String,Profile> modelProfileIdMap = new HashMap<String,Profile>();
+            Map<String, Profile> modelProfileIdMap = new HashMap<String, Profile>();
             if ( modelProfiles == null )
             {
                 modelProfiles = new ArrayList<Profile>();

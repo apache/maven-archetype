@@ -49,7 +49,8 @@ public interface OldArchetype
      * Download an archetype then create a project from it.
      */
     void createArchetype( ArchetypeGenerationRequest request, ArtifactRepository archetypeRepository )
-        throws UnknownArchetype, ArchetypeNotFoundException, ArchetypeDescriptorException, ArchetypeTemplateProcessingException;
+        throws UnknownArchetype, ArchetypeNotFoundException, ArchetypeDescriptorException,
+        ArchetypeTemplateProcessingException;
 
     /**
      * Create a project from an archetype file.
