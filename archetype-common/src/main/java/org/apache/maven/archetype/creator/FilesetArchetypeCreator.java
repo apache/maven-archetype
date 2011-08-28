@@ -88,7 +88,7 @@ public class FilesetArchetypeCreator
     extends AbstractLogEnabled
     implements ArchetypeCreator
 {
-    private final static String DEFAULT_OUTPUT_DIRECTORY = "target" + File.separator + "generated-sources"
+    private static final String DEFAULT_OUTPUT_DIRECTORY = "target" + File.separator + "generated-sources"
         + File.separator + "archetype";
 
     /** @plexus.requirement */
@@ -181,7 +181,8 @@ public class FilesetArchetypeCreator
 
             archetypeDescriptor.setFileSets( filesets );
 
-            createArchetypeFiles( reverseProperties, filesets, packageName, basedir, archetypeFilesDirectory, defaultEncoding );
+            createArchetypeFiles( reverseProperties, filesets, packageName, basedir, archetypeFilesDirectory,
+                                  defaultEncoding );
             getLogger().debug( "Created files for " + archetypeDescriptor.getName() );
 
             setParentArtifactId( reverseProperties, configurationProperties.getProperty( Constants.ARTIFACT_ID ) );
@@ -339,7 +340,8 @@ public class FilesetArchetypeCreator
         model.setModelVersion( "4.0.0" );
         // these values should be retrieved from the request with sensible defaults
         model.setGroupId( configurationProperties.getProperty( Constants.ARCHETYPE_GROUP_ID, project.getGroupId() ) );
-        model.setArtifactId( configurationProperties.getProperty( Constants.ARCHETYPE_ARTIFACT_ID, project.getArtifactId() ) );
+        model.setArtifactId( configurationProperties.getProperty( Constants.ARCHETYPE_ARTIFACT_ID,
+                                                                  project.getArtifactId() ) );
         model.setVersion( configurationProperties.getProperty( Constants.ARCHETYPE_VERSION, project.getVersion() ) );
         model.setPackaging( "maven-archetype" );
         model.setName( configurationProperties.getProperty( Constants.ARCHETYPE_ARTIFACT_ID, project.getArtifactId() ) );
@@ -366,7 +368,8 @@ public class FilesetArchetypeCreator
 
             try
             {
-                MavenProject p = projectBuilder.buildFromRepository( pa, project.getRemoteArtifactRepositories(), localRepository );
+                MavenProject p =
+                    projectBuilder.buildFromRepository( pa, project.getRemoteArtifactRepositories(), localRepository );
 
                 if ( p.getDistributionManagement() != null )
                 {
@@ -685,8 +688,8 @@ public class FilesetArchetypeCreator
                     && profile.getDependencyManagement().getDependencies() != null
                     && !profile.getDependencyManagement().getDependencies().isEmpty() )
                 {
-                    for ( Iterator<Dependency> dependencies = profile.getDependencyManagement().getDependencies().iterator();
-                        dependencies.hasNext(); )
+                    for ( Iterator<Dependency> dependencies =
+                        profile.getDependencyManagement().getDependencies().iterator(); dependencies.hasNext(); )
                     {
                         Dependency dependency = dependencies.next();
 
@@ -1439,7 +1442,8 @@ public class FilesetArchetypeCreator
         }
 
         /* resourcesMainFiles */
-        List<String> resourcesMainFiles = archetypeFilesResolver.findResourcesMainFiles( files, languageIncludes.toString() );
+        List<String> resourcesMainFiles =
+            archetypeFilesResolver.findResourcesMainFiles( files, languageIncludes.toString() );
         if ( !resourcesMainFiles.isEmpty() )
         {
             files.removeAll( resourcesMainFiles );
@@ -1479,7 +1483,8 @@ public class FilesetArchetypeCreator
         }
 
         /* ressourcesTestFiles */
-        List<String> resourcesTestFiles = archetypeFilesResolver.findResourcesTestFiles( files, languageIncludes.toString() );
+        List<String> resourcesTestFiles =
+            archetypeFilesResolver.findResourcesTestFiles( files, languageIncludes.toString() );
         if ( !resourcesTestFiles.isEmpty() )
         {
             files.removeAll( resourcesTestFiles );
@@ -1519,12 +1524,14 @@ public class FilesetArchetypeCreator
         }
 
         /* thirdLevelSourcesfiles */
-        List<String> thirdLevelSourcesfiles = archetypeFilesResolver.findOtherSources( 3, files, languageIncludes.toString() );
+        List<String> thirdLevelSourcesfiles =
+            archetypeFilesResolver.findOtherSources( 3, files, languageIncludes.toString() );
         if ( !thirdLevelSourcesfiles.isEmpty() )
         {
             files.removeAll( thirdLevelSourcesfiles );
 
-            List<String> filteredFiles = archetypeFilesResolver.getFilteredFiles( thirdLevelSourcesfiles, filteredIncludes );
+            List<String> filteredFiles =
+                archetypeFilesResolver.getFilteredFiles( thirdLevelSourcesfiles, filteredIncludes );
             thirdLevelSourcesfiles.removeAll( filteredFiles );
 
             List<String> unfilteredFiles = thirdLevelSourcesfiles;
@@ -1560,12 +1567,14 @@ public class FilesetArchetypeCreator
         } // end if
 
         /* secondLevelSourcesfiles */
-        List<String> secondLevelSourcesfiles = archetypeFilesResolver.findOtherSources( 2, files, languageIncludes.toString() );
+        List<String> secondLevelSourcesfiles =
+            archetypeFilesResolver.findOtherSources( 2, files, languageIncludes.toString() );
         if ( !secondLevelSourcesfiles.isEmpty() )
         {
             files.removeAll( secondLevelSourcesfiles );
 
-            List<String> filteredFiles = archetypeFilesResolver.getFilteredFiles( secondLevelSourcesfiles, filteredIncludes );
+            List<String> filteredFiles =
+                archetypeFilesResolver.getFilteredFiles( secondLevelSourcesfiles, filteredIncludes );
             secondLevelSourcesfiles.removeAll( filteredFiles );
 
             List<String> unfilteredFiles = secondLevelSourcesfiles;
@@ -1580,12 +1589,14 @@ public class FilesetArchetypeCreator
         }
 
         /* secondLevelResourcesfiles */
-        List<String> secondLevelResourcesfiles = archetypeFilesResolver.findOtherResources( 2, files, languageIncludes.toString() );
+        List<String> secondLevelResourcesfiles =
+            archetypeFilesResolver.findOtherResources( 2, files, languageIncludes.toString() );
         if ( !secondLevelResourcesfiles.isEmpty() )
         {
             files.removeAll( secondLevelResourcesfiles );
 
-            List<String> filteredFiles = archetypeFilesResolver.getFilteredFiles( secondLevelResourcesfiles, filteredIncludes );
+            List<String> filteredFiles =
+                archetypeFilesResolver.getFilteredFiles( secondLevelResourcesfiles, filteredIncludes );
             secondLevelResourcesfiles.removeAll( filteredFiles );
 
             List<String> unfilteredFiles = secondLevelResourcesfiles;
@@ -1600,7 +1611,8 @@ public class FilesetArchetypeCreator
         }
 
         /* rootResourcesfiles */
-        List<String> rootResourcesfiles = archetypeFilesResolver.findOtherResources( 0, files, languageIncludes.toString() );
+        List<String> rootResourcesfiles =
+            archetypeFilesResolver.findOtherResources( 0, files, languageIncludes.toString() );
         if ( !rootResourcesfiles.isEmpty() )
         {
             files.removeAll( rootResourcesfiles );
@@ -1711,14 +1723,15 @@ public class FilesetArchetypeCreator
         return createFileSet( excludes, false, filtered, group, includes, defaultEncoding );
     }
 
-    private static final String MAVEN_PROPERTIES = "META-INF/maven/org.apache.maven.archetype/archetype-common/pom.properties";
+    private static final String MAVEN_PROPERTIES =
+        "META-INF/maven/org.apache.maven.archetype/archetype-common/pom.properties";
 
     public String getArchetypeVersion()
     {
         InputStream is = null;
 
-        // This should actually come from the pom.properties at testing but it's not generated and put into the JAR, it happens
-        // as part of the JAR plugin which is crap as it makes testing inconsistent.
+        // This should actually come from the pom.properties at testing but it's not generated and put into the JAR, it
+        // happens as part of the JAR plugin which is crap as it makes testing inconsistent.
         String version = "version";
 
         try

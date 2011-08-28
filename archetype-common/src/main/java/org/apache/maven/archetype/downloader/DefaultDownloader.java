@@ -51,8 +51,10 @@ public class DefaultDownloader
                           ArtifactRepository localRepository, List<ArtifactRepository> remoteRepositories )
         throws DownloadException, DownloadNotFoundException
    {
-        Artifact artifact = artifactFactory.createArtifact( groupId, artifactId, version, Artifact.SCOPE_RUNTIME, "jar" );
-        Artifact artifactPom = artifactFactory.createArtifact( groupId, artifactId, version, Artifact.SCOPE_RUNTIME, "pom" );
+        Artifact artifact =
+            artifactFactory.createArtifact( groupId, artifactId, version, Artifact.SCOPE_RUNTIME, "jar" );
+        Artifact artifactPom =
+            artifactFactory.createArtifact( groupId, artifactId, version, Artifact.SCOPE_RUNTIME, "pom" );
 
         List<ArtifactRepository> repositories = new ArrayList<ArtifactRepository>( remoteRepositories );
         if ( repositories.isEmpty() && archetypeRepository != null )
@@ -96,8 +98,9 @@ public class DefaultDownloader
     public File downloadOld( String groupId, String artifactId, String version, ArtifactRepository archetypeRepository,
                              ArtifactRepository localRepository, List<ArtifactRepository> remoteRepositories )
         throws DownloadException, DownloadNotFoundException
-   {
-        Artifact artifact = artifactFactory.createArtifact( groupId, artifactId, version, Artifact.SCOPE_RUNTIME, "jar" );
+    {
+        Artifact artifact =
+            artifactFactory.createArtifact( groupId, artifactId, version, Artifact.SCOPE_RUNTIME, "jar" );
         try
         {
             artifactResolver.resolve( artifact, remoteRepositories, localRepository );

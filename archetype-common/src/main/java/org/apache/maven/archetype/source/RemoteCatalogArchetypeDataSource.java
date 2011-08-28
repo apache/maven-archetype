@@ -58,7 +58,8 @@ public class RemoteCatalogArchetypeDataSource
 
         if ( repository == null )
         {
-            throw new ArchetypeDataSourceException( "To use the remote catalog you must specify the 'repository' property with an URL." );
+            throw new ArchetypeDataSourceException( "To use the remote catalog you must specify the 'repository'"
+                + " property with an URL." );
         }
 
         if ( repository.endsWith( "/" ) )

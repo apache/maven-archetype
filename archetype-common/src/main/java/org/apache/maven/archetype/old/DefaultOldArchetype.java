@@ -104,7 +104,8 @@ public class DefaultOldArchetype
     // version = latest
 
     public void createArchetype( ArchetypeGenerationRequest request, ArtifactRepository archetypeRepository )
-        throws UnknownArchetype, ArchetypeNotFoundException, ArchetypeDescriptorException, ArchetypeTemplateProcessingException
+        throws UnknownArchetype, ArchetypeNotFoundException, ArchetypeDescriptorException,
+        ArchetypeTemplateProcessingException
     {
         // ----------------------------------------------------------------------
         // Download the archetype
