@@ -79,7 +79,8 @@ import java.util.Properties;
 import java.util.Set;
 
 /**
- * Create a 2.0.x Archetype from a project.
+ * Create a 2.x Archetype project from a project. Since 2.0-alpha-5, an integration-test named "basic" is created along
+ * the archetype itself to provide immediate test when building the archetype.
  *
  *  @plexus.component role-hint="fileset"
  */
@@ -256,6 +257,8 @@ public class FilesetArchetypeCreator
      * @param archetypeDescriptor
      * @param generatedSourcesDirectory
      * @throws IOException
+     *
+     * @since 2.0-alpha-5
      */
     private void createArchetypeBasicIt( ArchetypeDescriptor archetypeDescriptor, File generatedSourcesDirectory )
         throws IOException
@@ -447,7 +450,7 @@ public class FilesetArchetypeCreator
         requiredProperties.remove( Constants.VERSION );
         requiredProperties.remove( Constants.PACKAGE );
 
-        for ( Iterator propertiesIterator = requiredProperties.keySet().iterator(); propertiesIterator.hasNext(); )
+        for ( Iterator<?> propertiesIterator = requiredProperties.keySet().iterator(); propertiesIterator.hasNext(); )
         {
             String propertyKey = (String) propertiesIterator.next();
 
@@ -565,10 +568,10 @@ public class FilesetArchetypeCreator
         if ( pom.getDependencyManagement() != null && pom.getDependencyManagement().getDependencies() != null
             && !pom.getDependencyManagement().getDependencies().isEmpty() )
         {
-            for ( Iterator dependencies = pom.getDependencyManagement().getDependencies().iterator();
+            for ( Iterator<Dependency> dependencies = pom.getDependencyManagement().getDependencies().iterator();
                 dependencies.hasNext(); )
             {
-                Dependency dependency = (Dependency) dependencies.next();
+                Dependency dependency = dependencies.next();
 
                 if ( dependency.getArtifactId() != null && dependency.getArtifactId().indexOf( rootArtifactId ) >= 0 )
                 {
@@ -905,7 +908,7 @@ public class FilesetArchetypeCreator
             in = ReaderFactory.newXmlReader( initialPomFile );
             String initialcontent = IOUtil.toString( in );
 
-            Iterator properties = pomReversedProperties.keySet().iterator();
+            Iterator<?> properties = pomReversedProperties.keySet().iterator();
             while ( properties.hasNext() )
             {
                 String property = (String) properties.next();
@@ -1151,7 +1154,7 @@ public class FilesetArchetypeCreator
             in = ReaderFactory.newXmlReader( initialPomFile );
             String initialcontent = IOUtil.toString( in );
 
-            for ( Iterator properties = pomReversedProperties.keySet().iterator(); properties.hasNext(); )
+            for ( Iterator<?> properties = pomReversedProperties.keySet().iterator(); properties.hasNext(); )
             {
                 String property = (String) properties.next();
 
@@ -1298,7 +1301,7 @@ public class FilesetArchetypeCreator
 
             String initialcontent = IOUtil.toString( new FileInputStream( inputFile ), fileEncoding );
 
-            for ( Iterator properties = reverseProperties.keySet().iterator(); properties.hasNext(); )
+            for ( Iterator<?> properties = reverseProperties.keySet().iterator(); properties.hasNext(); )
             {
                 String property = (String) properties.next();
 
@@ -1654,7 +1657,7 @@ public class FilesetArchetypeCreator
         String result =
             StringUtils.replace( StringUtils.replace( content, "$", "${symbol_dollar}" ), "\\", "${symbol_escape}" );
 
-        for ( Iterator propertyIterator = properties.keySet().iterator(); propertyIterator.hasNext(); )
+        for ( Iterator<?> propertyIterator = properties.keySet().iterator(); propertyIterator.hasNext(); )
         {
             String propertyKey = (String) propertyIterator.next();
 
