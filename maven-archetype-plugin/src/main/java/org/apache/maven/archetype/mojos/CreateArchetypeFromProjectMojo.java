@@ -40,7 +40,7 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- * Creates an archetype from the current project.
+ * Creates an archetype project from the current project, with a <code>basic</code> integration-test.
  *
  * @author rafale
  * @requiresProject true
