@@ -35,6 +35,7 @@ Maven Archetype Plugin
 
  It also allows the user to create an archetype from an existing project.
 
+[images/archetype-overview.png] Maven Archetype Plugin Overview
 
 * Usage
 
