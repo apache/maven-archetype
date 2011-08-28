@@ -25,7 +25,6 @@ import org.apache.maven.archetype.ArchetypeGenerationResult;
 import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
 import org.apache.maven.archetype.generator.ArchetypeGenerator;
-import org.apache.maven.archetype.metadata.RequiredProperty;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -45,19 +44,20 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
 /**
- * Execute the archetype integration tests, consisting of a creation of a project from the current archetype with
- * defined properties and optional comparison with reference copy. An IT consists of a directory in
- * <code>src/test/resources/projects</code> containing:
+ * <p>Execute the archetype integration tests, consisting in generating projects from the current archetype and
+ * optionally comparing generated projects with reference copy.</p>
+ * 
+ * <p>Each IT consists of a sub-directory in <code>src/test/resources/projects</code> containing:</p>
  * <ul>
- * <li><code>goal.txt</code> file, containing goals to run against the generated project (can be empty),</li>
- * <li><code>archetype.properties</code> file containing properties for project generation,</li>
- * <li>optional <code>reference/</code> directory containing a reference copy of the expected project created from the IT.</li>
+ * <li>a <code>goal.txt</code> file, containing a list of goals to run against the generated project (can be empty,
+ * content ignored before maven-archetype-plugin 2.1),</li>
+ * <li>an <code>archetype.properties</code> file, containing properties for project generation,</li>
+ * <li>an optional <code>reference/</code> directory containing a reference copy of the expected project created from the IT.</li>
  * </ul>
  *
  * @author rafale
