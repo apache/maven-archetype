@@ -30,6 +30,7 @@ under the License.
       <!--item name="FAQ" href="faq.html"/-->
     </menu>
     <menu name="Documentation">
+      <item name="Maven Archetype Plugin" href="../maven-archetype-plugin/"/>
       <item name="Internal Catalog" href="./internal.html"/>
     </menu>
     <menu name="Reference">
