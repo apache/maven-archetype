@@ -118,7 +118,7 @@
       <name>FileSet</name>
       <description><![CDATA[
         A fileset defines the way the project's files located in the jar file are used by the Archetype Plugin to generate a project.
-        If file name or directory contains <code>__<i>property</i>__</code>, it is replaced with property value.
+        If file or directory name contains <code>__<i>property</i>__</code> pattern, it is replaced with corresponding property value.
         ]]></description>
       <fields>
         <field xml.attribute="true">
