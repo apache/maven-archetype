@@ -130,22 +130,22 @@ public class DefaultArchetypeFactory
 
             if ( properties.getProperty( key ) != null )
             {
+                // using value defined in properties, which overrides any default
                 String value = properties.getProperty( key );
                 configuration.setProperty( key, value );
                 getLogger().debug( "Setting property " + key + "=" + value );
             }
-            else if ( properties.getProperty( key, defaultValue ) != null && !containsInnerProperty( defaultValue ) )
+            else if ( ( defaultValue != null ) && !containsInnerProperty( defaultValue ) )
             {
-                 String value = properties.getProperty( key, defaultValue );
-                 configuration.setProperty( key, value );
-                 getLogger().debug( "Setting property " + key + "=" + value );
+                // using default value
+                 configuration.setProperty( key, defaultValue );
+                 getLogger().debug( "Setting property " + key + "=" + defaultValue );
             }
 
-            if ( requiredProperty.getDefaultValue() != null )
+            if ( defaultValue != null )
             {
-                String value = requiredProperty.getDefaultValue();
-                configuration.setDefaultProperty( key, value );
-                getLogger().debug( "Setting defaultProperty " + key + "=" + value );
+                configuration.setDefaultProperty( key, defaultValue );
+                getLogger().debug( "Setting defaultProperty " + key + "=" + defaultValue );
             }
         }
 
