@@ -23,12 +23,12 @@ under the License.
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>${groupId}</groupId>
-  <artifactId>${artifactId}</artifactId>
+  <groupId>archetype.it</groupId>
+  <artifactId>basic</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <properties>
-    <foo>${foo}</foo><!-- foo is an archetypes' required property -->
+    <foo>bar</foo><!-- foo is an archetypes' required property -->
   </properties>
 </project>
 
