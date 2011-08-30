@@ -42,7 +42,9 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- * Generates a new project from an archetype.
+ * Generates a new project from an archetype, or updated the actual project if using a partial archetype.
+ * If the project is fully generated, it is generated in a directory corresponding to its artifactId.
+ * If the project is updated with a partial archetype, it is done in the current directory.
  *
  * @author rafale
  * @requiresProject false
@@ -148,18 +150,18 @@ public class CreateProjectFromArchetypeMojo
     private MavenSession session;
 
     /**
-     * Additional goals that can be specified by the user during the creation of the archetype.
+     * Additional goals to immediately run on the project created from the archetype.
      *
      * @parameter expression="${goals}"
      */
     private String goals;
 
     /**
-     *  Applying some filter on possible archetypes format is groupId:artifactId .
+     *  Applying some filter on displayed archetypes list: format is <code>artifactId</code> or <code>groupId:artifactId</code>.
      *  <ul>
-     *    <li>org.apache: -> display all archetypes which contain org.apache in groupId</li>
-     *    <li>:jee or jee -> display all archetypes which contain jee in artifactId</li>
-     *    <li>org.apache:jee -> display all archetypes which contain org.apache in groupId AND jee in artifactId</li>
+     *    <li><code>org.apache:</code> -> displays all archetypes which contain org.apache in groupId</li>
+     *    <li><code>:jee</code> or <code>jee</code> -> displays all archetypes which contain jee in artifactId</li>
+     *    <li><code>org.apache:jee</code> -> displays all archetypes which contain org.apache in groupId AND jee in artifactId</li>
      *  </ul>
      *  @parameter expression="${filter}"
      *  @since 2.1
