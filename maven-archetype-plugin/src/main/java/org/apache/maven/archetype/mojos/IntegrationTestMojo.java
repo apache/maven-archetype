@@ -60,6 +60,9 @@ import java.util.Properties;
  * <li>an optional <code>reference/</code> directory containing a reference copy of the expected project created from the IT.</li>
  * </ul>
  *
+ * Notice that it is expected to be run as part as of a build after the <code>package</code> phase and not directly
+ * as a goal from CLI.
+ *
  * @author rafale
  * @requiresProject true
  * @goal integration-test
@@ -107,6 +110,16 @@ public class IntegrationTestMojo
             return;
         }
 
+        File archetypeFile = project.getArtifact().getFile();
+
+        if ( archetypeFile == null )
+        {
+            throw new MojoFailureException(
+                                            "Unable to get the archetypes' artifact which should have just been built:"
+                                                + " you probably launched 'mvn archetype:integration-test' instead of"
+                                                + " 'mvn integration-test'." );
+        }
+
         try
         {
             @SuppressWarnings( "unchecked" )
@@ -118,8 +131,6 @@ public class IntegrationTestMojo
 
                 return;
             }
-
-            File archetypeFile = project.getArtifact().getFile();
 
             StringWriter errorWriter = new StringWriter();
             for ( File goalFile : projectsGoalFiles )
