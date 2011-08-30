@@ -330,7 +330,8 @@ public class DefaultArchetypeGenerationConfigurator
         }
     }
 
-    public static class RequiredPropertyComparator implements Comparator<String>
+    public static class RequiredPropertyComparator
+        implements Comparator<String>
     {
         private final ArchetypeConfiguration archetypeConfiguration;
 
@@ -342,23 +343,20 @@ public class DefaultArchetypeGenerationConfigurator
         public int compare( String left, String right )
         {
             String leftDefault = archetypeConfiguration.getDefaultValue( left );
-            String rightDefault = archetypeConfiguration.getDefaultValue( right );
-            if ( null == leftDefault || null == rightDefault )
-            {
-                return comparePropertyName( (String) left, (String) right );
-            }
-            else if ( leftDefault.indexOf( "${" + right + "}" ) >= 0 )
+
+            if ( ( leftDefault != null ) && leftDefault.indexOf( "${" + right + "}" ) >= 0 )
             { //left contains right
                 return 1;
             }
-            else if ( rightDefault.indexOf( "${" + left + "}" ) >= 0 )
+
+            String rightDefault = archetypeConfiguration.getDefaultValue( right );
+
+            if ( ( rightDefault != null ) && rightDefault.indexOf( "${" + left + "}" ) >= 0 )
             { //right contains left
                 return -1;
             }
-            else
-            {
-                return comparePropertyName( left, right );
-            }
+
+            return comparePropertyName( left, right );
         }
 
         private int comparePropertyName( String left, String right )
