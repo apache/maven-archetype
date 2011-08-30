@@ -94,12 +94,12 @@ public class CreateProjectFromArchetypeMojo
     private String archetypeRepository;
 
     /**
-     * The archetype's catalogs.
+     * The archetype catalogs to use to build a list and let the user choose from.
      * It is a comma separated list of catalogs.
-     * Catalogs use scheme:
+     * Catalogs use following schemes:
      * <ul>
      * <li>'<code>file://...</code>' with <code>archetype-catalog.xml</code> automatically appended when pointing to a directory</li>
-     * <li>'<code>http://...</code>' with <code>archetype-catalog.xml</code> always appended</li>
+     * <li>'<code>http://...</code>' or '<code>https://...</code>' with <code>archetype-catalog.xml</code> always appended</li>
      * <li>'<code>local</code>' which is the shortcut for '<code>file://~/.m2/archetype-catalog.xml</code>'</li>
      * <li>'<code>remote</code>' which is the shortcut for Maven Central repository, ie '<code>http://repo1.maven.org/maven2</code>'</li>
      * <li>'<code>internal</code>' which is an internal catalog</li>
