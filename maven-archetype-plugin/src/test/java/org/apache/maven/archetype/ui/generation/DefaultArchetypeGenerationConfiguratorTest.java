@@ -121,11 +121,14 @@ public class DefaultArchetypeGenerationConfiguratorTest
         Properties properties = new Properties();
         properties.setProperty( "artifactId", "preset-artifactId" );
 
-        try{
+        try
+        {
             configurator.configureArchetype( request, Boolean.FALSE, properties );
-            fail("An exception must be thrown");
-        }catch (ArchetypeNotConfigured e){
-            
+            fail( "An exception must be thrown" );
+        }
+        catch ( ArchetypeNotConfigured e )
+        {
+
         }
     }
 }
