@@ -3,8 +3,9 @@
  ------
  Raphaël Piéroni
  Olivier Lamy
+ Hervé Boutemy
  ------
- 2011-07-09
+ 2011-08-31
  ------
 
 ~~ Licensed to the Apache Software Foundation (ASF) under one
@@ -136,7 +137,7 @@ package: com.company.project
 [INFO] BUILD SUCCESSFUL
 [INFO] ------------------------------------------------------------------------
 [INFO] Total time: 54 seconds
-[INFO] Finished at: Fri Jan 25 23:01:01 GMT 2008
+[INFO] Finished at: Fri Aug 26 23:01:01 GMT 2011
 [INFO] Final Memory: 10M/25M
 [INFO] ------------------------------------------------------------------------
 +---
@@ -173,22 +174,29 @@ Filtering to reduce archetype list
 
   Two options
 
-  With a mojo parameter:
+  [[1]] With a mojo parameter:
 
 +---
 $ mvn archetype:generate -Dorg.apache:struts
-The diplayed list will contains only archetype with a groupId containing org.apache AND an artifactId containing struts
 +---
 
-  Through the prompter. Note that if your filter doesn't match any archetype, the previous list will be displayed again.
+  The displayed list will contain only archetypes with a groupId containing <<<org.apache>>> AND an artifactId containing <<<struts>>>
+
+  [[2]] Through the prompter:
 
 +---
 $ mvn archetype:generate
-.......
-The full list is displayed and in the prompt response, you will be able to answer a filter
-Choose a number or apply filter (format: [groupId:]artifactId, case sensitive contains): org.apache:struts
++---
+
+  The full list is displayed and in the prompt response, you will be able to answer a filter.
 
 +---
+  Choose a number or apply filter (format: [groupId:]artifactId, case sensitive contains): org.apache:struts
++---
+
+  Notice that if your filter doesn't match any archetype, the previous list will be displayed again.
+
+  []
 
 Backward compatibility
 
