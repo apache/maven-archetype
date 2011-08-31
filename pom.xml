@@ -30,7 +30,7 @@ under the License.
 
   <groupId>org.apache.maven.archetype</groupId>
   <artifactId>maven-archetype</artifactId>
-  <version>2.1-SNAPSHOT</version>
+  <version>2.1</version>
   <packaging>pom</packaging>
 
   <name>Maven Archetype</name>
@@ -123,9 +123,9 @@ under the License.
   </mailingLists>
 
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/archetype/trunk</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/trunk</developerConnection>
-    <url>http://svn.apache.org/viewvc/maven/archetype/trunk</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/archetype/tags/maven-archetype-2.1</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/archetype/tags/maven-archetype-2.1</developerConnection>
+    <url>http://svn.apache.org/viewvc/maven/archetype/tags/maven-archetype-2.1</url>
   </scm>
   <issueManagement>
     <system>jira</system>
