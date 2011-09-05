@@ -177,7 +177,7 @@ Filtering to reduce archetype list
   [[1]] With a mojo parameter:
 
 +---
-$ mvn archetype:generate -Dorg.apache:struts
+$ mvn archetype:generate -Dfilter=org.apache:struts
 +---
 
   The displayed list will contain only archetypes with a groupId containing <<<org.apache>>> AND an artifactId containing <<<struts>>>
