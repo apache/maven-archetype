@@ -186,7 +186,7 @@ public class DefaultArchetypeSelectionQueryer
         }
 
         // let the user choose between available versions
-        StringBuilder query = new StringBuilder( "Choose version: \n" );
+        StringBuilder query = new StringBuilder( "Choose " + groupId + ":" + artifactId + " version: \n" );
 
         List<String> answers = new ArrayList<String>();
         Map<String, Archetype> answerMap = new HashMap<String, Archetype>();
