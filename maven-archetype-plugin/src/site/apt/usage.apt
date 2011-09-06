@@ -53,7 +53,8 @@ Usage
    It then asks for confirmation of the configuration and performs 
    the creation of the project.
 
-   In the following example, we selected the quickstart archetype (numbered 15)
+   In the following example, we selected the quickstart archetype (default value,
+   which is 15 here but may vary depending on repository content)
    and set <<<groupId>>> to <<<com.company>>>, <<<artifactId>>> to <<<project>>>,
    <<<version>>> to <<<1.0>>> and <<<package>>> to <<<com.company.project>>>.
 
