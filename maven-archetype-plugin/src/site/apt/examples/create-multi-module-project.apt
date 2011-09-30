@@ -3,7 +3,7 @@
  ------
  Raphaël Piéroni
  ------
- 10 September 2008
+ 2011-09-30
  ------
 
 ~~ Licensed to the Apache Software Foundation (ASF) under one
@@ -29,12 +29,12 @@
 Create an archetype from a multi-module project
 
    Creating an archetype for a multi-module project is as simple as 
-   {{{../advanced-usage.html}creating one for a mono-module project}}.
+   {{{../advanced-usage.html}creating one for a single-module project}}.
 
    Just move to the root directory of a multi-module project and call
-   <<<mvn archetype:create-from-project>>>. In the archetype used as example,
-   some files need to be non filtered. This achieved by giving the archetype
-   plugin some value in the <<<archetype.filteredExtensions>>> property.
+   <<<mvn archetype:create-from-project>>>. In the archetype used as an example,
+   some files need to be non filtered. This is achieved by giving the archetype
+   plugin some values in the <<<archetype.filteredExtensions>>> property.
 
 +--
 $ mvn archetype:create-from-project -Darchetype.filteredExtensions=java
@@ -238,15 +238,15 @@ package: com.company
 +--
 
     As one can see, Velocity, the internal processor of archetype files,
-    complains not finding some properties. One should not worry about. What is
+    complains about not finding some properties. One should not worry about that. What is
     more interesting, is that the archetype plugin has renamed the original
-    project module to '''__rootArtifactId__'''. And during the generation that
-    named is converted to the provided artifactId.
+    project module to "__rootArtifactId__". And during the generation that
+    name is converted to the provided artifactId.
 
-    The resulting project is shown there after.
+    The resulting directory tree of the project is shown here.
 
 +--
- tree
+$ tree
 .
 |____project
 | |____pom.xml
@@ -411,7 +411,7 @@ package: com.company
 | | | | | |____log4j.xml
 +--
 
-    which can be compared to the original tree of the project from which the
+    This can be compared to the original tree of the project from which the
     archetype is originating.
 
 +--

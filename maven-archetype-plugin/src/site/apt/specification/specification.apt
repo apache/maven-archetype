@@ -3,7 +3,7 @@
  ------
  Raphaël Piéroni
  ------
- 10 February 2008
+ 2011-09-30
  ------
 
 ~~ Licensed to the Apache Software Foundation (ASF) under one
@@ -34,7 +34,7 @@ Specification
 
     * {{{./archetype.html}What is an archetype?}}
 
-    * {{{./archetype-metadata.html}How is metadata on an archetype stored?}}
+    * {{{./archetype-metadata.html}How is metadata about an archetype stored?}}
 
     * {{{./generate.html}What is done during the creation of a project?}}
 

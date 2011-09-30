@@ -3,7 +3,7 @@
  ------
  Raphaël Piéroni
  ------
- 10 February 2008
+ 2011-09-30
  ------
 
 ~~ Licensed to the Apache Software Foundation (ASF) under one
@@ -47,15 +47,15 @@ What is an archetype?
 
     * <<<version>>> which will be the version of the project
 
-    * <<<package>>> which will be the base package of all source files of the project
+    * <<<package>>> which will be the base package for all source files of the project
 
     []
 
 
 
-* A jar file
+* A JAR file
 
-    The minimal content of the jar file is:
+    The minimal content of the JAR file is:
 
 +---
 .
@@ -69,22 +69,20 @@ What is an archetype?
 
     [[1]] The metadata file that defines:
 
-        * the default values of the common properties,
+        * the default values of the common properties
 
-        * a set of additional properties with their default values,
+        * a set of additional properties with their default values
 
-        * a set of archetype resources;
+        * a set of archetype resources
 
         []
 
-    [[2]] The resource files defined by the archetype metadata,
+    [[2]] The resource files defined by the archetype metadata
 
-    [[3]] The POM file of a Maven project.
+    [[3]] The POM file of a Maven project
 
     []
 
 
-* Note
-
-    The common properties should be renamed to <<<${target.groupId}>>>, ...
-    to avoid name clash.
+  <<Note:>> The common properties should be renamed to <<<${target.groupId}>>>, ...
+  to avoid name clash.

@@ -3,7 +3,7 @@
  ------
  Raphaël Piéroni
  ------
- 2011-08-22
+ 2011-09-30
  ------
 
 ~~ Licensed to the Apache Software Foundation (ASF) under one
@@ -48,7 +48,7 @@ What is done during the creation of an archetype?
 
     Then it creates the archetype's descriptor.
 
-    Finishing by creating the pom for the archetype as a project.
+    Finishing by creating the POM for the archetype as a project.
 
 * Archetype installation
 
@@ -68,15 +68,15 @@ What is done during the creation of an archetype?
 * Advanced batch mode
 
     In batch mode, the additional properties can only be defined using a property
-    file. This file can also contain the other properties, both the commons and
+    file. This file can also contain the other properties, both the common and
     <<<filteredExtensions>>> and <<<languages>>>.
 
 * Fileset resolution
 
     In each module's directory and excluding submodules trees, the Archetype
-    Plugin sorts the files by languages, fileteredExtensions and sensible
+    Plugin sorts the files by languages, filteredExtensions and sensible
     default base paths (src/main/<languages>, src/main/<siblings>,
     src/test/<languages>, src/test/<siblings>, ...).
 
-    This defines a tri-dimensional matrix. Each sorted group (matrix' cases)
+    This defines a three-dimensional matrix. Each sorted group (matrix' cases)
     becomes a resolved fileset.
