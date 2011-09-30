@@ -3,7 +3,7 @@
  ------
  Raphaël Piéroni
  ------
- 04 February 2008
+ 2011-09-30
  ------
 
 ~~ Licensed to the Apache Software Foundation (ASF) under one
@@ -29,7 +29,7 @@
 Generate project in batch mode
 
    It is possible to get rid of the interactivity of the archetype plugin
-   by defining the <<<interactive>>> property to <<<false>>> or by using the -B
+   by setting the <<<interactive>>> property to <<<false>>> or by using the -B
    flag.
    A couple of meaningful properties are then required.
    

@@ -3,7 +3,7 @@
  ------
  Raphaël Piéroni
  ------
- 2011-08-22
+ 2011-09-30
  ------
 
 ~~ Licensed to the Apache Software Foundation (ASF) under one
@@ -29,7 +29,7 @@
 
 How does the Archetype Plugin know about archetypes?
 
-    Knowledge about archetypes are stored in catalogs.
+    Knowledge about archetypes is stored in catalogs.
 
     The catalogs are xml files: see the {{{../../archetype-models/archetype-catalog/archetype-catalog.html}reference documentation}}.
 
@@ -41,7 +41,7 @@ How does the Archetype Plugin know about archetypes?
 
 * Catalog file explained
 
-    A catalog is a xml file with such content:
+    A catalog is an xml file with such content:
 
 +---
 <?xml version="1.0" encoding="UTF-8"?>
@@ -88,9 +88,9 @@ How does the Archetype Plugin know about archetypes?
     * <<<1:>>> The index of the archetype in the aggregated list (starting from
       1).
 
-    * <<<internal>>> The name of the catalog where the archetype is originating.
+    * <<<internal>>> The name of the catalog where the archetype originates from.
 
-    * <<<appfuse-basic-jsf>>> The artifactId of the archetype
+    * <<<appfuse-basic-jsf>>> The artifactId of the archetype.
 
     * <<<(AppFuse archetype...)>>> The description of the archetype as found in
       the catalog.
@@ -106,7 +106,7 @@ How does the Archetype Plugin know about archetypes?
 
 * Location of catalog files
 
-    The Archetype Plugin knows by default its internal catalog. It also knows
+    The Archetype Plugin knows by default about its internal catalog. It also knows
     about the <<<local>>> and <<<remote>>> catalogs.
 
     <<<local>>> represents the <<<~/.m2/archetype-catalog.xml>>> catalog file.

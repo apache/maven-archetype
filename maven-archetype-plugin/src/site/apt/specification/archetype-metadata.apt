@@ -3,7 +3,7 @@
  ------
  Raphaël Piéroni
  ------
- 2011-08-22
+ 2011-09-30
  ------
 
 ~~ Licensed to the Apache Software Foundation (ASF) under one
@@ -27,10 +27,10 @@
 ~~ http://maven.apache.org/doxia/references/apt-format.html
 
 
-How is metadata on an archetype stored?
+How is metadata about an archetype stored?
 
     The metadata about an archetype is stored in the <<<archetype-metadata.xml>>> file
-    located in the directory <<<META-INF/maven>>> of its jar file: see the
+    located in the directory <<<META-INF/maven>>> of its JAR file, see the
     {{{../../archetype-models/archetype-descriptor/archetype-descriptor.html}reference documentation}}.
 
     The metadata file stores the additional properties, with corresponding
@@ -70,8 +70,8 @@ How is metadata on an archetype stored?
         (<<<filtered=true>>>)
 
       * the files will be generated in the <<<src/main/java>>> directory of the
-        generated project in the same directory as in the jar file, but with
-        that directory prepended by the package property.
+        generated project in the same directory as in the JAR file, but with
+        that directory prepended by the <<<package>>> property.
 
       []
 
@@ -100,25 +100,25 @@ How is metadata on an archetype stored?
 </archetype-descriptor>
 +---
 
-    Here two additional properties are defined: <<<property-without-default>>>
-    and <<<property-with-default>>>.
+    Here two additional properties are defined: <<<property-with-default>>>
+    and <<<property-without-default>>>.
 
-    Be aware that the property keys can not contain any dots as they are
+    <<Note:>> The property keys can not contain any dots as they are
     Velocity properties.
 
 
 * Defining specific filesets
 
     The filesets contained in the <<<archetype-metadata.xml>>> file defines the way
-    the project's files located in the jar file are used by the Archetype Plugin
+    the project's files located in the JAR file are used by the Archetype Plugin
     to generate a project.
 
     Filesets must define the directory where the files will be searched for
     which is also the directory where the project's files will be generated.
-    The first is the directory inside the archetype jar file, the second is the
+    The first is the directory inside the archetype JAR file, the second is the
     directory in the generated project's tree.
 
-    Filesets also defines the inclusion/exclusion of files "<à la>" ant.
+    Filesets also defines the inclusion/exclusion of files "<à la>" Ant.
     This provide a powerful way to describe a large set of files to be selected
     for the generation process.
 
@@ -153,7 +153,7 @@ How is metadata on an archetype stored?
     <<<src/test/java>>> directory of the archetype resources, except the
     <<<AllTest.java>>> file that is located at the root of this directory.
 
-    This filset is also packaged and filtered.
+    This fileset is also packaged and filtered.
 
 
 * Defining multiple modules in the archetype metadata
@@ -161,7 +161,7 @@ How is metadata on an archetype stored?
     Inner modules of an archetype are used to create a multi-module Maven
     project from a single archetype.
 
-    Modules in the <<<archetype-metadata.xml>>> file are defined like:
+    Modules in the <<<archetype-metadata.xml>>> file are defined like this:
 
 +---
 <archetype-descriptor name="multi-module">
@@ -182,8 +182,8 @@ How is metadata on an archetype stored?
     named <<<SubProject>>>. This module is located in the <<<sub-project>>>
     directory of the archetype. It also has the artifactId <<<subproject>>>.
 
-    The attributes name, <<<id>>> and <<<dir>>>, of the module are used to determine the
-    directory where to generate that module's files, they also are used to
+    The attributes <<<name>>>, <<<id>>> and <<<dir>>> of the module are used to determine the
+    directory where the generated module's files will appear. They also are used to
     determine the artifactId of the Maven project corresponding to this
     module.
 

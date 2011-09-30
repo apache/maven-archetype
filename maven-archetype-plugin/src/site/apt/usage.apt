@@ -5,7 +5,7 @@
  Olivier Lamy
  Hervé Boutemy
  ------
- 2011-08-31
+ 2011-09-30
  ------
 
 ~~ Licensed to the Apache Software Foundation (ASF) under one
@@ -54,7 +54,7 @@ Usage
    the creation of the project.
 
    In the following example, we selected the quickstart archetype (default value,
-   which is 15 here but may vary depending on repository content)
+   which is 15 here but may vary depending on the repository content)
    and set <<<groupId>>> to <<<com.company>>>, <<<artifactId>>> to <<<project>>>,
    <<<version>>> to <<<1.0>>> and <<<package>>> to <<<com.company.project>>>.
 
@@ -160,7 +160,7 @@ project
 
 Filtering to reduce archetype list
 
-  As of 2.1, you can reduce the list of displayed archetypes.
+  As of version 2.1, you can reduce the list of displayed archetypes.
   The filter use the following format: <<<[groupId:]artifactId>>>.
   If you use single word without <<<:>>>, only artifactId will be checked.
   The filtering applied is a case sensitive contains on the artifactId (and groupId if set).
@@ -175,13 +175,13 @@ $ mvn archetype:generate -Dfilter=org.apache:struts
 
   The displayed list will contain only archetypes with a groupId containing <<<org.apache>>> AND an artifactId containing <<<struts>>>
 
-  [[2]] Through the prompter:
+  [[2]] Through the prompt:
 
 +---
 $ mvn archetype:generate
 +---
 
-  The full list is displayed and in the prompt response, you will be able to answer a filter.
+  The full list is displayed and in the prompt response, you will be able to answer with a filter.
 
 +---
   Choose a number or apply filter (format: [groupId:]artifactId, case sensitive contains): org.apache:struts

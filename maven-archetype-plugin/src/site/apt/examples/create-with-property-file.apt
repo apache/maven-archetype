@@ -3,7 +3,7 @@
  ------
  Raphaël Piéroni
  ------
- 16 September 2008
+ 2011-09-30
  ------
 
 ~~ Licensed to the Apache Software Foundation (ASF) under one
@@ -30,7 +30,7 @@ Create an archetype with a property file
 
     Creating an archetype using a property file is possible by defining a text
     file containing the properties that will lead the archetype creation, and by
-    calling the archetype plugin with the command line property
+    calling the Archetype Plugin with the command line property
     <<<archetype.properties>>> giving it the path to the property file.
 
     The directory above the would be archetype project:
@@ -261,11 +261,11 @@ public class App
 +--
 
     The languages and the filtered extensions are used even if that don't make
-    any sense. All the properties defined in the property file can be used in
+    any sense. All the properties defined in the property file can be used
     as command line properties.
 
     When undefined, the <<<archetype.languages>>> and <<<archetype.filteredExtensions>>>
-    properties are given sensible default:
+    properties are given sensible default values:
 
     * <<<archetype.languages>>> have: <<<java, xml, txt, groovy, cs, mdo, aj,
        jsp, gsp, vm, html, xhtml, properties, .classpath, .project>>>. Notice
