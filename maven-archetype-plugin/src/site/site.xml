@@ -20,7 +20,7 @@
  * under the License.
  */
   -->
-<project name="Maven Archetype Plugin"
+<project
   xmlns="http://maven.apache.org/DECORATION/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0 http://maven.apache.org/xsd/decoration-1.0.0.xsd">
   <body>
@@ -38,16 +38,12 @@
       <item name="maven-archetype Packaging" href="../archetype-packaging/"/>
     </menu>
 
-    <!--menu name="Examples">
-      <item name="Specifying the Remote Repositories" href="/examples/remote-repositories.html"/>
-      <item name="Creating a Simple Java Application" href="/examples/simple.html"/>
-	  <item name="Creating a Site" href="/examples/site.html"/>
-      <item name="Creating a Simple j2ee Project" href="/examples/j2ee-simple.html"/>
-	  <item name="Creating a Webapp" href="/examples/webapp.html"/>
-	  <item name="Creating a Portlet" href="/examples/portlet.html"/>
-      <item name="Creating a Mojo" href="/examples/mojo.html"/>
-	  <item name="Creating your own Archetype" href="/examples/archetype.html"/>
-    </menu-->
+    <menu name="Examples">
+      <item name="Create an archetype from a multi-module project" href="/examples/create-multi-module-project.html"/>
+      <item name="Create an archetype with a property file" href="/examples/create-with-property-file.html"/>
+      <item name="Generate project in batch mode" href="/examples/generate-batch.html"/>
+      <item name="Generate project using an alternative catalog" href="/examples/generate-alternative-catalog.html"/>
+    </menu>
 
     <!--menu name="Specification">
       <item name="Introduction to archetype plugin" href="./main.html"/>
