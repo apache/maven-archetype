@@ -19,6 +19,8 @@ package org.apache.maven.archetype.ui;
  * under the License.
  */
 
+import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.components.interactivity.InputHandler;
 import org.codehaus.plexus.components.interactivity.OutputHandler;
 import org.codehaus.plexus.components.interactivity.Prompter;
@@ -30,20 +32,16 @@ import java.util.List;
 
 /**
  * @author raphaelpieroni
- * @plexus.component role-hint="archetype"
  */
+@Component( role = Prompter.class, hint = "archetype" )
 public class ArchetypePrompter
     implements Prompter
 {
 
-    /**
-     * @plexus.requirement
-     */
+    @Requirement
     private OutputHandler outputHandler;
 
-    /**
-     * @plexus.requirement
-     */
+    @Requirement
     private InputHandler inputHandler;
 
     public String prompt( String message )

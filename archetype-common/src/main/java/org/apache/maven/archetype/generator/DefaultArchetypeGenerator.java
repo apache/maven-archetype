@@ -29,6 +29,8 @@ import org.apache.maven.archetype.exception.ArchetypeGenerationFailure;
 import org.apache.maven.archetype.exception.ArchetypeNotDefined;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
@@ -39,21 +41,21 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/** @plexus.component */
+@Component( role = ArchetypeGenerator.class )
 public class DefaultArchetypeGenerator
     extends AbstractLogEnabled
     implements ArchetypeGenerator
 {
-    /** @plexus.requirement */
+    @Requirement
     private ArchetypeRegistryManager archetypeRegistryManager;
 
-    /** @plexus.requirement */
+    @Requirement
     private ArchetypeArtifactManager archetypeArtifactManager;
 
-    /** @plexus.requirement */
+    @Requirement
     private FilesetArchetypeGenerator filesetGenerator;
 
-    /** @plexus.requirement */
+    @Requirement
     private OldArchetype oldArchetype;
 
     private File getArchetypeFile( ArchetypeGenerationRequest request, ArtifactRepository localRepository )

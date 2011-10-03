@@ -24,6 +24,8 @@ import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.ui.ArchetypeDefinition;
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
+import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.components.interactivity.Prompter;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -38,16 +40,12 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-/**
- * @plexus.component
- */
+@Component( role = ArchetypeSelectionQueryer.class )
 public class DefaultArchetypeSelectionQueryer
     extends AbstractLogEnabled
     implements ArchetypeSelectionQueryer
 {
-    /**
-     * @plexus.requirement role-hint="archetype"
-     */
+    @Requirement( hint = "archetype" )
     private Prompter prompter;
 
     public boolean confirmSelection( ArchetypeDefinition archetypeDefinition )

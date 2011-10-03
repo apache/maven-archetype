@@ -49,6 +49,8 @@ import org.apache.maven.shared.invoker.DefaultInvocationRequest;
 import org.apache.maven.shared.invoker.DefaultInvoker;
 import org.apache.maven.shared.invoker.InvocationRequest;
 import org.apache.maven.shared.invoker.Invoker;
+import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.FileUtils;
@@ -81,9 +83,8 @@ import java.util.Set;
 /**
  * Create a 2.x Archetype project from a project. Since 2.0-alpha-5, an integration-test named "basic" is created along
  * the archetype itself to provide immediate test when building the archetype.
- *
- *  @plexus.component role-hint="fileset"
  */
+@Component( role = ArchetypeCreator.class, hint = "fileset" )
 public class FilesetArchetypeCreator
     extends AbstractLogEnabled
     implements ArchetypeCreator
@@ -91,13 +92,13 @@ public class FilesetArchetypeCreator
     private static final String DEFAULT_OUTPUT_DIRECTORY = "target" + File.separator + "generated-sources"
         + File.separator + "archetype";
 
-    /** @plexus.requirement */
+    @Requirement
     private ArchetypeFilesResolver archetypeFilesResolver;
 
-    /** @plexus.requirement */
+    @Requirement
     private PomManager pomManager;
 
-    /** @plexus.requirement */
+    @Requirement
     private MavenProjectBuilder projectBuilder;
 
     public void createArchetype( ArchetypeCreationRequest request, ArchetypeCreationResult result )

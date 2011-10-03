@@ -26,6 +26,8 @@ import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.ArtifactRepositoryFactory;
 import org.apache.maven.artifact.repository.ArtifactRepositoryPolicy;
 import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
+import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.ReaderFactory;
@@ -41,23 +43,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/** @plexus.component */
+@Component( role = ArchetypeRegistryManager.class )
 public class DefaultArchetypeRegistryManager
     extends AbstractLogEnabled
     implements ArchetypeRegistryManager
 {
     /**
      * Used to create ArtifactRepository objects given the urls of the remote repositories.
-     *
-     * @plexus.requirement
      */
+    @Requirement
     private ArtifactRepositoryFactory artifactRepositoryFactory;
 
     /**
      * Determines whether the layout is legacy or not.
-     *
-     * @plexus.requirement roleHint="default"
      */
+    @Requirement
     private ArtifactRepositoryLayout defaultArtifactRepositoryLayout;
 
     public List<String> getFilteredExtensions( String archetypeFilteredExtentions, File archetypeRegistryFile )

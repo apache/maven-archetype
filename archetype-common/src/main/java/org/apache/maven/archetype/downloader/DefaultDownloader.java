@@ -25,6 +25,8 @@ import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
 import org.apache.maven.artifact.resolver.ArtifactResolutionException;
 import org.apache.maven.artifact.resolver.ArtifactResolver;
+import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -32,19 +34,15 @@ import java.util.List;
 
 /**
  * @author Jason van Zyl
- * @plexus.component
  */
+@Component( role = Downloader.class )
 public class DefaultDownloader
     implements Downloader
 {
-    /**
-     * @plexus.requirement
-     */
+    @Requirement
     private ArtifactResolver artifactResolver;
 
-    /**
-     * @plexus.requirement
-     */
+    @Requirement
     private ArtifactFactory artifactFactory;
 
     public File download( String groupId, String artifactId, String version, ArtifactRepository archetypeRepository,

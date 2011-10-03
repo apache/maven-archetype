@@ -22,6 +22,7 @@ package org.apache.maven.archetype.common;
 import org.apache.maven.archetype.common.util.ListScanner;
 import org.apache.maven.archetype.common.util.PathUtils;
 import org.apache.maven.archetype.metadata.FileSet;
+import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
@@ -34,7 +35,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/** @plexus.component */
+@Component( role = ArchetypeFilesResolver.class )
 public class DefaultArchetypeFilesResolver
     extends AbstractLogEnabled
     implements ArchetypeFilesResolver

@@ -36,6 +36,8 @@ import org.apache.maven.archetype.metadata.FileSet;
 import org.apache.maven.archetype.metadata.ModuleDescriptor;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.context.Context;
+import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
@@ -62,21 +64,21 @@ import java.util.zip.ZipFile;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.metadata.RequiredProperty;
 
-/** @plexus.component */
+@Component( role = FilesetArchetypeGenerator.class )
 public class DefaultFilesetArchetypeGenerator
     extends AbstractLogEnabled
     implements FilesetArchetypeGenerator
 {
-    /** @plexus.requirement */
+    @Requirement
     private ArchetypeArtifactManager archetypeArtifactManager;
 
-    /** @plexus.requirement */
+    @Requirement
     private ArchetypeFilesResolver archetypeFilesResolver;
 
-    /** @plexus.requirement */
+    @Requirement
     private PomManager pomManager;
 
-    /** @plexus.requirement */
+    @Requirement
     private VelocityComponent velocity;
 
     /**

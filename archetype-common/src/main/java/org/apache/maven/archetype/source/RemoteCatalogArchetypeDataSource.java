@@ -27,6 +27,8 @@ import org.apache.maven.wagon.WagonException;
 import org.apache.maven.wagon.authentication.AuthenticationInfo;
 import org.apache.maven.wagon.proxy.ProxyInfo;
 import org.apache.maven.wagon.repository.Repository;
+import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.util.ReaderFactory;
 
 import java.io.File;
@@ -34,13 +36,13 @@ import java.io.IOException;
 import java.util.Properties;
 
 /**
- * @plexus.component role-hint="remote-catalog"
  * @author Jason van Zyl
  */
+@Component( role = ArchetypeDataSource.class, hint = "remote-catalog" )
 public class RemoteCatalogArchetypeDataSource
     extends CatalogArchetypeDataSource
 {
-    /** @plexus.requirement */
+    @Requirement
     private WagonManager wagonManager;
 
     public static final String REPOSITORY_PROPERTY = "repository";
