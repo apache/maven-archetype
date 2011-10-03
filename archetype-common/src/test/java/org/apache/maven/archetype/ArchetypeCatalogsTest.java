@@ -38,23 +38,20 @@ public class ArchetypeCatalogsTest
     public void testRemoteCatalog()
         throws Exception
     {
-
         ArchetypeManager archetype = (ArchetypeManager) lookup( ArchetypeManager.class.getName() );
 
         ArchetypeCatalog result = archetype.getRemoteCatalog( "http://localhost:" + port + "/repo/" );
 
         assertEquals( 1, result.getArchetypes().size() );
-        assertEquals( "groupId", ( (Archetype) result.getArchetypes().get( 0 ) ).getGroupId() );
-        assertEquals( "artifactId", ( (Archetype) result.getArchetypes().get( 0 ) ).getArtifactId() );
-        assertEquals( "1", ( (Archetype) result.getArchetypes().get( 0 ) ).getVersion() );
-        assertEquals( "http://localhost:" + port + "/repo/",
-                      ( (Archetype) result.getArchetypes().get( 0 ) ).getRepository() );
+        assertEquals( "groupId", result.getArchetypes().get( 0 ).getGroupId() );
+        assertEquals( "artifactId", result.getArchetypes().get( 0 ).getArtifactId() );
+        assertEquals( "1", result.getArchetypes().get( 0 ).getVersion() );
+        assertEquals( "http://localhost:" + port + "/repo/", result.getArchetypes().get( 0 ).getRepository() );
     }
 
     public void testLocalCatalog()
         throws Exception
     {
-
         ArchetypeManager archetype = (ArchetypeManager) lookup( ArchetypeManager.class.getName() );
 
         ArchetypeCatalog result =
@@ -62,11 +59,10 @@ public class ArchetypeCatalogsTest
                 getAbsolutePath() );
 
         assertEquals( 1, result.getArchetypes().size() );
-        assertEquals( "groupId", ( (Archetype) result.getArchetypes().get( 0 ) ).getGroupId() );
-        assertEquals( "artifactId", ( (Archetype) result.getArchetypes().get( 0 ) ).getArtifactId() );
-        assertEquals( "1", ( (Archetype) result.getArchetypes().get( 0 ) ).getVersion() );
-        assertEquals( "http://localhost:" + port + "/repo/",
-                      ( (Archetype) result.getArchetypes().get( 0 ) ).getRepository() );
+        assertEquals( "groupId", result.getArchetypes().get( 0 ).getGroupId() );
+        assertEquals( "artifactId", result.getArchetypes().get( 0 ).getArtifactId() );
+        assertEquals( "1", result.getArchetypes().get( 0 ).getVersion() );
+        assertEquals( "http://localhost:" + port + "/repo/", result.getArchetypes().get( 0 ).getRepository() );
     }
 
 

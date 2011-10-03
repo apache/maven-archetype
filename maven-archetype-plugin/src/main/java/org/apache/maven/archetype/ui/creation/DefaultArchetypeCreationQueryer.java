@@ -21,18 +21,20 @@ package org.apache.maven.archetype.ui.creation;
 
 import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.ui.ArchetypeConfiguration;
+import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.components.interactivity.Prompter;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 import java.util.Iterator;
 
-/** @plexus.component */
+@Component( role = ArchetypeCreationQueryer.class )
 public class DefaultArchetypeCreationQueryer
     extends AbstractLogEnabled
     implements ArchetypeCreationQueryer
 {
-    /** @plexus.requirement */
+    @Requirement
     private Prompter prompter;
 
     public String getArchetypeArtifactId( String defaultValue )

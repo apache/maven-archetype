@@ -23,6 +23,7 @@ import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Reader;
 import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Writer;
+import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.ReaderFactory;
@@ -40,8 +41,8 @@ import java.util.Properties;
 
 /**
  * @author Jason van Zyl
- * @plexus.component role-hint="catalog"
  */
+@Component( role = ArchetypeDataSource.class, hint = "catalog" )
 public class CatalogArchetypeDataSource
     extends AbstractLogEnabled
     implements ArchetypeDataSource

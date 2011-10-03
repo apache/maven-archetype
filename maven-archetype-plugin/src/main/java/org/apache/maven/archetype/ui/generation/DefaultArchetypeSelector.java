@@ -28,6 +28,8 @@ import org.apache.maven.archetype.exception.ArchetypeSelectionFailure;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.archetype.exception.UnknownGroup;
 import org.apache.maven.archetype.ui.ArchetypeDefinition;
+import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
@@ -37,9 +39,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @plexus.component
- */
+@Component( role = ArchetypeSelector.class )
 public class DefaultArchetypeSelector
     extends AbstractLogEnabled
     implements ArchetypeSelector
@@ -50,14 +50,10 @@ public class DefaultArchetypeSelector
 
     static final String DEFAULT_ARCHETYPE_ARTIFACTID = "maven-archetype-quickstart";
 
-    /**
-     * @plexus.requirement
-     */
+    @Requirement
     private ArchetypeSelectionQueryer archetypeSelectionQueryer;
 
-    /**
-     * @plexus.requirement
-     */
+    @Requirement
     private ArchetypeManager archetypeManager;
 
     public void selectArchetype( ArchetypeGenerationRequest request, Boolean interactiveMode, String catalogs )

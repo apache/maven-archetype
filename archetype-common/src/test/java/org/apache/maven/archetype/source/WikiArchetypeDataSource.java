@@ -23,6 +23,7 @@ import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.source.ArchetypeDataSource;
 import org.apache.maven.archetype.source.ArchetypeDataSourceException;
+import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.util.IOUtil;
 
 import java.io.IOException;
@@ -42,8 +43,8 @@ import java.util.regex.Pattern;
  * is used.
  *
  * @author            Jason van Zyl
- * @plexus.component  role-hint="wiki"
  */
+@Component( role = ArchetypeDataSource.class, hint = "wiki" )
 public class WikiArchetypeDataSource
     implements ArchetypeDataSource
 {

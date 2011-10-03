@@ -29,6 +29,8 @@ import org.apache.maven.archetype.old.descriptor.ArchetypeDescriptorBuilder;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.model.Model;
 
+import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.ReaderFactory;
@@ -52,21 +54,15 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
-/**
- * @plexus.component
- */
+@Component( role = ArchetypeArtifactManager.class )
 public class DefaultArchetypeArtifactManager
     extends AbstractLogEnabled
     implements ArchetypeArtifactManager
 {
-    /**
-     * @plexus.requirement
-     */
+    @Requirement
     private Downloader downloader;
 
-    /**
-     * @plexus.requirement
-     */
+    @Requirement
     private PomManager pomManager;
 
     private Map<String, File> archetypeCache = new TreeMap<String, File>();
