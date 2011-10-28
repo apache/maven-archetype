@@ -61,7 +61,9 @@ public class DefaultArchetypeFilesResolver
 
         List<String> result = scanner.scan( files );
         getLogger().debug( "Scanned " + result.size() + " filtered files in " + files.size() + " files" );
-        System.out.println( "Scanned " + result.size() + " filtered files in " + files.size() + " files: " + StringUtils.join( result.iterator(), ", " ) );
+        System.out.println(
+            "Scanned " + result.size() + " filtered files in " + files.size() + " files: " + StringUtils.join(
+                result.iterator(), ", " ) );
 
         return result;
     }
@@ -69,10 +71,8 @@ public class DefaultArchetypeFilesResolver
     public List<String> filterFiles( String moduleOffset, FileSet fileSet, List<String> archetypeResources )
     {
         ListScanner scanner = new ListScanner();
-        scanner.setBasedir(
-            ( StringUtils.isEmpty( moduleOffset ) ? "" : ( moduleOffset + File.separatorChar ) )
-                + fileSet.getDirectory()
-        );
+        scanner.setBasedir( ( StringUtils.isEmpty( moduleOffset ) ? "" : ( moduleOffset + File.separatorChar ) )
+                                + fileSet.getDirectory() );
         scanner.setIncludes( fileSet.getIncludes() );
         scanner.setExcludes( fileSet.getExcludes() );
         scanner.setCaseSensitive( true );
@@ -86,7 +86,7 @@ public class DefaultArchetypeFilesResolver
 
         scanner.setBasedir( "" );
 
-        StringBuilder includes = new StringBuilder(  );
+        StringBuilder includes = new StringBuilder();
         for ( int i = 0; i < level; i++ )
         {
             includes.append( "*/" );
@@ -98,8 +98,7 @@ public class DefaultArchetypeFilesResolver
 
         List<String> result = scanner.scan( files );
         getLogger().debug(
-                           "Scanned " + result.size() + " other resources in " + files.size() + " files at level "
-                               + level );
+            "Scanned " + result.size() + " other resources in " + files.size() + " files at level " + level );
 
         return result;
     }
@@ -129,8 +128,7 @@ public class DefaultArchetypeFilesResolver
 
         List<String> result = scanner.scan( files );
         getLogger().debug(
-                           "Scanned " + result.size() + " other resources in " + files.size() + " files at level "
-                               + level );
+            "Scanned " + result.size() + " other resources in " + files.size() + " files at level " + level );
 
         return result;
     }
@@ -140,25 +138,24 @@ public class DefaultArchetypeFilesResolver
         ListScanner scanner = new ListScanner();
         scanner.setBasedir( "" );
 
-        String levelDirectory = "";
+        StringBuilder levelDirectory = new StringBuilder();
         for ( int i = 0; i < ( level - 1 ); i++ )
         {
-            levelDirectory += "*/";
+            levelDirectory.append( "*/" );
         }
 
-        String includes = "";
+        StringBuilder includes = new StringBuilder();
         String[] languagesAsArray = StringUtils.split( languages );
         for ( int i = 0; i < languagesAsArray.length; i++ )
         {
-            includes += levelDirectory + languagesAsArray[i];
+            includes.append( levelDirectory ).append( languagesAsArray[i] );
         }
 
-        scanner.setIncludes( includes );
+        scanner.setIncludes( includes.toString() );
 
         List<String> result = scanner.scan( files );
         getLogger().debug(
-                           "Scanned " + result.size() + " other sources in " + files.size() + " files at level "
-                               + level );
+            "Scanned " + result.size() + " other sources in " + files.size() + " files at level " + level );
 
         return result;
     }
@@ -311,8 +308,8 @@ public class DefaultArchetypeFilesResolver
             excludes += "," + defaultExclude + "/**";
         }
 
-        @SuppressWarnings( "unchecked" )
-        List<File> absoluteFiles = FileUtils.getFiles( basedir, StringUtils.join( languagesPathesArray, "," ), excludes );
+        @SuppressWarnings( "unchecked" ) List<File> absoluteFiles =
+            FileUtils.getFiles( basedir, StringUtils.join( languagesPathesArray, "," ), excludes );
 
         getLogger().debug( "Found " + absoluteFiles.size() + " potential archetype files" );
 
@@ -320,7 +317,8 @@ public class DefaultArchetypeFilesResolver
 
         for ( File file : absoluteFiles )
         {
-            String filePath = StringUtils.prechomp( file.getAbsolutePath(), basedir.getAbsolutePath() + File.separator );
+            String filePath =
+                StringUtils.prechomp( file.getAbsolutePath(), basedir.getAbsolutePath() + File.separator );
 
             String minusSrc = StringUtils.prechomp( filePath, "src" + File.separator );
 
