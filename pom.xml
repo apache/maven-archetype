@@ -367,6 +367,41 @@ under the License.
         </rules>
       </configuration>
       </plugin>-->
+      <plugin>
+        <groupId>org.apache.rat</groupId>
+        <artifactId>apache-rat-plugin</artifactId>
+        <version>0.7</version>
+        <configuration>
+          <excludes>
+            <exclude>.gitignore</exclude>
+            <exclude>DEPENDENCIES</exclude>
+            <exclude>README.txt</exclude>
+            <exclude>*.sh</exclude>
+            <exclude>.git/**</exclude>
+            <exclude>.idea/**</exclude>
+            <exclude>**/generated-sources/**</exclude>
+            <exclude>**/.gitattributes</exclude>
+            <exclude>archetype-samples/**</exclude>
+            <exclude>**/*.sha1</exclude>
+            <!-- exclude some classes coming from dom4j -->
+            <exclude>**/Format.java</exclude>
+            <exclude>**/NamespaceStack.java</exclude>
+            <exclude>**/XMLOutputter.java</exclude>
+            <!-- disable test directories -->
+            <exclude>src/test/**</exclude>
+            <exclude>src/it/**</exclude>
+          </excludes>
+        </configuration>
+        <executions>
+          <execution>
+            <id>rat-check</id>
+            <goals>
+              <goal>check</goal>
+            </goals>
+            <phase>verify</phase>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 
