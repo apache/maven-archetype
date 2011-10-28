@@ -31,7 +31,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
-/** @author rafale */
+/**
+ * @author rafale
+ */
 public class FileCharsetDetector
     extends AbstractLogEnabled
 {
@@ -44,72 +46,79 @@ public class FileCharsetDetector
     {
         nsDetector det = new nsDetector( nsPSMDetector.ALL );
 
-        det.Init(
-            new nsICharsetDetectionObserver()
+        det.Init( new nsICharsetDetectionObserver()
+        {
+            public void Notify( String charset )
             {
-                public void Notify( String charset )
+                FileCharsetDetector.this.charset = charset;
+                FileCharsetDetector.this.found = true;
+            }
+        } );
+
+        FileInputStream fileInputStream = new FileInputStream( detectedFile );
+        BufferedInputStream imp = new BufferedInputStream( fileInputStream );
+        try
+        {
+
+            byte[] buf = new byte[1024];
+            int len;
+            boolean done = false;
+            boolean isAscii = true;
+
+            while ( ( len = imp.read( buf, 0, buf.length ) ) != -1 )
+            {
+                // Check if the stream is only ascii.
+                if ( isAscii )
                 {
-                    FileCharsetDetector.this.charset = charset;
-                    FileCharsetDetector.this.found = true;
+                    isAscii = det.isAscii( buf, len );
+                }
+
+                // DoIt if non-ascii and not done yet.
+                if ( !isAscii && !done )
+                {
+                    done = det.DoIt( buf, len, false );
+                    found = done;
                 }
             }
-        );
+            det.DataEnd();
 
-        BufferedInputStream imp = new BufferedInputStream( new FileInputStream( detectedFile ) );
+            if ( !isFound() )
+            {
+                String[] prob = det.getProbableCharsets();
 
-        byte[] buf = new byte[1024];
-        int len;
-        boolean done = false;
-        boolean isAscii = true;
+                if ( prob.length > 0 )
+                {
+                    charset = prob[0];
+                }
+            }
 
-        while ( ( len = imp.read( buf, 0, buf.length ) ) != -1 )
-        {
-            // Check if the stream is only ascii.
             if ( isAscii )
             {
-                isAscii = det.isAscii( buf, len );
-            }
-
-            // DoIt if non-ascii and not done yet.
-            if ( !isAscii && !done )
-            {
-                done = det.DoIt( buf, len, false );
-                found = done;
+                charset = "ASCII";
             }
         }
-        det.DataEnd();
-
-        if ( !isFound() )
+        finally
         {
-            String[] prob = det.getProbableCharsets();
-
-            if ( prob.length > 0 )
-            {
-                charset = prob[0];
-            }
-        }
-
-        if ( isAscii )
-        {
-            charset = "ASCII";
+            imp.close();
+            fileInputStream.close();
         }
     }
+
+
 
     public FileCharsetDetector( InputStream detectedStream )
         throws FileNotFoundException, IOException
     {
         nsDetector det = new nsDetector( nsPSMDetector.ALL );
 
-        det.Init(
-            new nsICharsetDetectionObserver()
+        det.Init( new nsICharsetDetectionObserver()
+        {
+            public void Notify( String charset )
             {
-                public void Notify( String charset )
-                {
-                    FileCharsetDetector.this.charset = charset;
-                    FileCharsetDetector.this.found = true;
-                }
+                FileCharsetDetector.this.charset = charset;
+                FileCharsetDetector.this.found = true;
             }
-        );
+        } );
 
         BufferedInputStream imp = new BufferedInputStream( detectedStream );
 
