@@ -89,8 +89,8 @@ public class FilesetArchetypeCreator
     extends AbstractLogEnabled
     implements ArchetypeCreator
 {
-    private static final String DEFAULT_OUTPUT_DIRECTORY = "target" + File.separator + "generated-sources"
-        + File.separator + "archetype";
+    private static final String DEFAULT_OUTPUT_DIRECTORY =
+        "target" + File.separator + "generated-sources" + File.separator + "archetype";
 
     @Requirement
     private ArchetypeFilesResolver archetypeFilesResolver;
@@ -204,14 +204,13 @@ public class FilesetArchetypeCreator
                 ModuleDescriptor moduleDescriptor =
                     createModule( reverseProperties, rootArtifactId, moduleId, packageName,
                                   FileUtils.resolveFile( basedir, moduleId ),
-                                  new File( archetypeFilesDirectory, moduleIdDirectory ), languages,
-                                  filtereds, defaultEncoding, preserveCData, keepParent );
+                                  new File( archetypeFilesDirectory, moduleIdDirectory ), languages, filtereds,
+                                  defaultEncoding, preserveCData, keepParent );
 
                 archetypeDescriptor.addModule( moduleDescriptor );
 
                 getLogger().debug(
-                                   "Added module " + moduleDescriptor.getName() + " in "
-                                       + archetypeDescriptor.getName() );
+                    "Added module " + moduleDescriptor.getName() + " in " + archetypeDescriptor.getName() );
             }
 
             restoreParentArtifactId( reverseProperties, null );
@@ -259,14 +258,14 @@ public class FilesetArchetypeCreator
      * @param archetypeDescriptor
      * @param generatedSourcesDirectory
      * @throws IOException
-     *
      * @since 2.0-alpha-5
      */
     private void createArchetypeBasicIt( ArchetypeDescriptor archetypeDescriptor, File generatedSourcesDirectory )
         throws IOException
     {
-        String basic = Constants.SRC + File.separator + Constants.TEST + File.separator + Constants.RESOURCES
-            + File.separator + "projects" + File.separator + "basic";
+        String basic =
+            Constants.SRC + File.separator + Constants.TEST + File.separator + Constants.RESOURCES + File.separator
+                + "projects" + File.separator + "basic";
         File basicItDirectory = new File( generatedSourcesDirectory, basic );
         basicItDirectory.mkdirs();
 
@@ -341,14 +340,15 @@ public class FilesetArchetypeCreator
         model.setModelVersion( "4.0.0" );
         // these values should be retrieved from the request with sensible defaults
         model.setGroupId( configurationProperties.getProperty( Constants.ARCHETYPE_GROUP_ID, project.getGroupId() ) );
-        model.setArtifactId( configurationProperties.getProperty( Constants.ARCHETYPE_ARTIFACT_ID,
-                                                                  project.getArtifactId() ) );
+        model.setArtifactId(
+            configurationProperties.getProperty( Constants.ARCHETYPE_ARTIFACT_ID, project.getArtifactId() ) );
         model.setVersion( configurationProperties.getProperty( Constants.ARCHETYPE_VERSION, project.getVersion() ) );
         model.setPackaging( "maven-archetype" );
-        model.setName( configurationProperties.getProperty( Constants.ARCHETYPE_ARTIFACT_ID, project.getArtifactId() ) );
+        model.setName(
+            configurationProperties.getProperty( Constants.ARCHETYPE_ARTIFACT_ID, project.getArtifactId() ) );
         model.setUrl( configurationProperties.getProperty( Constants.ARCHETYPE_URL, project.getUrl() ) );
-        model.setDescription( configurationProperties.getProperty( Constants.ARCHETYPE_DESCRIPTION,
-                                                                   project.getDescription() ) );
+        model.setDescription(
+            configurationProperties.getProperty( Constants.ARCHETYPE_DESCRIPTION, project.getDescription() ) );
         model.setLicenses( project.getLicenses() );
         model.setDevelopers( project.getDevelopers() );
         model.setScm( project.getScm() );
@@ -389,8 +389,9 @@ public class FilesetArchetypeCreator
             }
             catch ( ProjectBuildingException e )
             {
-                throw new TemplateCreationException( "Error reading parent POM of project: " + pa.getGroupId() + ":"
-                    + pa.getArtifactId() + ":" + pa.getVersion() );
+                throw new TemplateCreationException(
+                    "Error reading parent POM of project: " + pa.getGroupId() + ":" + pa.getArtifactId() + ":"
+                        + pa.getVersion() );
             }
         }
 
@@ -465,13 +466,14 @@ public class FilesetArchetypeCreator
             archetypeDescriptor.addRequiredProperty( requiredProperty );
 
             getLogger().debug(
-                               "Adding requiredProperty " + propertyKey + "="
-                                   + requiredProperties.getProperty( propertyKey ) + " to archetype's descriptor" );
+                "Adding requiredProperty " + propertyKey + "=" + requiredProperties.getProperty( propertyKey )
+                    + " to archetype's descriptor" );
         }
     }
 
     private void createModulePoms( Properties pomReversedProperties, String rootArtifactId, String packageName,
-                                   File basedir, File archetypeFilesDirectory, boolean preserveCData, boolean keepParent )
+                                   File basedir, File archetypeFilesDirectory, boolean preserveCData,
+                                   boolean keepParent )
         throws FileNotFoundException, IOException, XmlPullParserException
     {
         Model pom = pomManager.readPom( FileUtils.resolveFile( basedir, Constants.ARCHETYPE_POM ) );
@@ -494,8 +496,8 @@ public class FilesetArchetypeCreator
 
             createModulePoms( pomReversedProperties, rootArtifactId, packageName,
                               FileUtils.resolveFile( basedir, subModuleId ),
-                              FileUtils.resolveFile( archetypeFilesDirectory, subModuleIdDirectory ),
-                              preserveCData, keepParent );
+                              FileUtils.resolveFile( archetypeFilesDirectory, subModuleIdDirectory ), preserveCData,
+                              keepParent );
         }
 
         createModulePom( pom, rootArtifactId, archetypeFilesDirectory, pomReversedProperties,
@@ -524,8 +526,7 @@ public class FilesetArchetypeCreator
 
             createModulePoms( pomReversedProperties, rootArtifactId, moduleId,
                               FileUtils.resolveFile( basedir, moduleId ),
-                              new File( archetypeFilesDirectory, moduleIdDirectory ),
-                              preserveCData, keepParent );
+                              new File( archetypeFilesDirectory, moduleIdDirectory ), preserveCData, keepParent );
         }
 
         restoreParentArtifactId( pomReversedProperties, null );
@@ -553,12 +554,12 @@ public class FilesetArchetypeCreator
                 {
                     if ( dependency.getGroupId() != null )
                     {
-                        dependency.setGroupId( StringUtils.replace( dependency.getGroupId(), groupId,
-                                                                    "${" + Constants.GROUP_ID + "}" ) );
+                        dependency.setGroupId(
+                            StringUtils.replace( dependency.getGroupId(), groupId, "${" + Constants.GROUP_ID + "}" ) );
                     }
 
-                    dependency.setArtifactId( StringUtils.replace( dependency.getArtifactId(), rootArtifactId,
-                                                                   "${rootArtifactId}" ) );
+                    dependency.setArtifactId(
+                        StringUtils.replace( dependency.getArtifactId(), rootArtifactId, "${rootArtifactId}" ) );
 
                     if ( dependency.getVersion() != null )
                     {
@@ -573,7 +574,7 @@ public class FilesetArchetypeCreator
             && !pom.getDependencyManagement().getDependencies().isEmpty() )
         {
             for ( Iterator<Dependency> dependencies = pom.getDependencyManagement().getDependencies().iterator();
-                dependencies.hasNext(); )
+                  dependencies.hasNext(); )
             {
                 Dependency dependency = dependencies.next();
 
@@ -581,12 +582,12 @@ public class FilesetArchetypeCreator
                 {
                     if ( dependency.getGroupId() != null )
                     {
-                        dependency.setGroupId( StringUtils.replace( dependency.getGroupId(), groupId,
-                                                                    "${" + Constants.GROUP_ID + "}" ) );
+                        dependency.setGroupId(
+                            StringUtils.replace( dependency.getGroupId(), groupId, "${" + Constants.GROUP_ID + "}" ) );
                     }
 
-                    dependency.setArtifactId( StringUtils.replace( dependency.getArtifactId(), rootArtifactId,
-                                                                   "${rootArtifactId}" ) );
+                    dependency.setArtifactId(
+                        StringUtils.replace( dependency.getArtifactId(), rootArtifactId, "${rootArtifactId}" ) );
 
                     if ( dependency.getVersion() != null )
                     {
@@ -607,12 +608,12 @@ public class FilesetArchetypeCreator
                 {
                     if ( plugin.getGroupId() != null )
                     {
-                        plugin.setGroupId( StringUtils.replace( plugin.getGroupId(), groupId,
-                                                                "${" + Constants.GROUP_ID + "}" ) );
+                        plugin.setGroupId(
+                            StringUtils.replace( plugin.getGroupId(), groupId, "${" + Constants.GROUP_ID + "}" ) );
                     }
 
-                    plugin.setArtifactId( StringUtils.replace( plugin.getArtifactId(), rootArtifactId,
-                                                               "${rootArtifactId}" ) );
+                    plugin.setArtifactId(
+                        StringUtils.replace( plugin.getArtifactId(), rootArtifactId, "${rootArtifactId}" ) );
 
                     if ( plugin.getVersion() != null )
                     {
@@ -627,7 +628,8 @@ public class FilesetArchetypeCreator
             && pom.getBuild().getPluginManagement().getPlugins() != null
             && !pom.getBuild().getPluginManagement().getPlugins().isEmpty() )
         {
-            for ( Iterator<Plugin> plugins = pom.getBuild().getPluginManagement().getPlugins().iterator(); plugins.hasNext(); )
+            for ( Iterator<Plugin> plugins = pom.getBuild().getPluginManagement().getPlugins().iterator();
+                  plugins.hasNext(); )
             {
                 Plugin plugin = plugins.next();
 
@@ -635,12 +637,12 @@ public class FilesetArchetypeCreator
                 {
                     if ( plugin.getGroupId() != null )
                     {
-                        plugin.setGroupId( StringUtils.replace( plugin.getGroupId(), groupId,
-                                                                "${" + Constants.GROUP_ID + "}" ) );
+                        plugin.setGroupId(
+                            StringUtils.replace( plugin.getGroupId(), groupId, "${" + Constants.GROUP_ID + "}" ) );
                     }
 
-                    plugin.setArtifactId( StringUtils.replace( plugin.getArtifactId(), rootArtifactId,
-                                                               "${rootArtifactId}" ) );
+                    plugin.setArtifactId(
+                        StringUtils.replace( plugin.getArtifactId(), rootArtifactId, "${rootArtifactId}" ) );
 
                     if ( plugin.getVersion() != null )
                     {
@@ -660,7 +662,8 @@ public class FilesetArchetypeCreator
                 // rewrite Dependencies
                 if ( profile.getDependencies() != null && !profile.getDependencies().isEmpty() )
                 {
-                    for ( Iterator<Dependency> dependencies = profile.getDependencies().iterator(); dependencies.hasNext(); )
+                    for ( Iterator<Dependency> dependencies = profile.getDependencies().iterator();
+                          dependencies.hasNext(); )
                     {
                         Dependency dependency = dependencies.next();
 
@@ -690,7 +693,7 @@ public class FilesetArchetypeCreator
                     && !profile.getDependencyManagement().getDependencies().isEmpty() )
                 {
                     for ( Iterator<Dependency> dependencies =
-                        profile.getDependencyManagement().getDependencies().iterator(); dependencies.hasNext(); )
+                              profile.getDependencyManagement().getDependencies().iterator(); dependencies.hasNext(); )
                     {
                         Dependency dependency = dependencies.next();
 
@@ -730,8 +733,8 @@ public class FilesetArchetypeCreator
                                                                         "${" + Constants.GROUP_ID + "}" ) );
                             }
 
-                            plugin.setArtifactId( StringUtils.replace( plugin.getArtifactId(), rootArtifactId,
-                                                                       "${rootArtifactId}" ) );
+                            plugin.setArtifactId(
+                                StringUtils.replace( plugin.getArtifactId(), rootArtifactId, "${rootArtifactId}" ) );
 
                             if ( plugin.getVersion() != null )
                             {
@@ -747,7 +750,7 @@ public class FilesetArchetypeCreator
                     && !profile.getBuild().getPluginManagement().getPlugins().isEmpty() )
                 {
                     for ( Iterator<Plugin> plugins = profile.getBuild().getPluginManagement().getPlugins().iterator();
-                        plugins.hasNext(); )
+                          plugins.hasNext(); )
                     {
                         Plugin plugin = plugins.next();
 
@@ -759,8 +762,8 @@ public class FilesetArchetypeCreator
                                                                         "${" + Constants.GROUP_ID + "}" ) );
                             }
 
-                            plugin.setArtifactId( StringUtils.replace( plugin.getArtifactId(), rootArtifactId,
-                                                                       "${rootArtifactId}" ) );
+                            plugin.setArtifactId(
+                                StringUtils.replace( plugin.getArtifactId(), rootArtifactId, "${rootArtifactId}" ) );
 
                             if ( plugin.getVersion() != null )
                             {
@@ -790,8 +793,8 @@ public class FilesetArchetypeCreator
         return result;
     }
 
-    private void copyFiles( File basedir, File archetypeFilesDirectory, String directory,
-                            List<String> fileSetResources, boolean packaged, String packageName )
+    private void copyFiles( File basedir, File archetypeFilesDirectory, String directory, List<String> fileSetResources,
+                            boolean packaged, String packageName )
         throws IOException
     {
         String packageAsDirectory = StringUtils.replace( packageName, ".", File.separator );
@@ -800,9 +803,9 @@ public class FilesetArchetypeCreator
 
         for ( String inputFileName : fileSetResources )
         {
-            String outputFileName =
-                packaged ? StringUtils.replace( inputFileName, packageAsDirectory + File.separator, "" )
-                                : inputFileName;
+            String outputFileName = packaged
+                ? StringUtils.replace( inputFileName, packageAsDirectory + File.separator, "" )
+                : inputFileName;
             getLogger().debug( "InputFileName:" + inputFileName );
             getLogger().debug( "OutputFileName:" + outputFileName );
 
@@ -826,8 +829,8 @@ public class FilesetArchetypeCreator
         {
             DirectoryScanner scanner = new DirectoryScanner();
             scanner.setBasedir( basedir );
-            scanner.setIncludes( (String[]) concatenateToList( fileSet.getIncludes(),
-                                                               fileSet.getDirectory() ).toArray( new String[fileSet.getIncludes().size()] ) );
+            scanner.setIncludes( (String[]) concatenateToList( fileSet.getIncludes(), fileSet.getDirectory() ).toArray(
+                new String[fileSet.getIncludes().size()] ) );
             scanner.setExcludes( (String[]) fileSet.getExcludes().toArray( new String[fileSet.getExcludes().size()] ) );
             scanner.addDefaultExcludes();
             getLogger().debug( "Using fileset " + fileSet );
@@ -920,8 +923,8 @@ public class FilesetArchetypeCreator
                 if ( initialcontent.indexOf( "${" + property + "}" ) > 0 )
                 {
                     getLogger().warn(
-                                      "Archetype uses ${" + property + "} for internal processing, but file "
-                                          + initialPomFile + " contains this property already" );
+                        "Archetype uses ${" + property + "} for internal processing, but file " + initialPomFile
+                            + " contains this property already" );
                 }
             }
         }
@@ -955,9 +958,10 @@ public class FilesetArchetypeCreator
 
         if ( !files.isEmpty() )
         {
-            getLogger().debug(
-                               "Creating filesets" + ( packaged ? ( " packaged (" + packageName + ")" ) : "" )
-                                   + ( filtered ? " filtered" : "" ) + " at level " + level );
+            getLogger().debug( "Creating filesets" + ( packaged ? ( " packaged (" + packageName + ")" ) : "" ) + (
+                filtered
+                    ? " filtered"
+                    : "" ) + " at level " + level );
             if ( level == 0 )
             {
                 List<String> includes = new ArrayList<String>( files );
@@ -982,8 +986,8 @@ public class FilesetArchetypeCreator
                     }
                     else
                     {
-                        fileSets.addAll( getPackagedFileSets( filtered, group, groups.get( group ), packageName,
-                                                              defaultEncoding ) );
+                        fileSets.addAll(
+                            getPackagedFileSets( filtered, group, groups.get( group ), packageName, defaultEncoding ) );
                     }
                 }
             } // end if
@@ -1114,17 +1118,15 @@ public class FilesetArchetypeCreator
         {
             if ( pom.getParent() != null )
             {
-                pom.getParent().setGroupId(
-                                            StringUtils.replace(
-                                                                 pom.getParent().getGroupId(),
-                                                                 pomReversedProperties.getProperty( Constants.GROUP_ID ),
+                pom.getParent().setGroupId( StringUtils.replace( pom.getParent().getGroupId(),
+                                                                 pomReversedProperties.getProperty(
+                                                                     Constants.GROUP_ID ),
                                                                  "${" + Constants.GROUP_ID + "}" ) );
                 if ( pom.getParent().getArtifactId() != null
                     && pom.getParent().getArtifactId().indexOf( rootArtifactId ) >= 0 )
                 {
                     pom.getParent().setArtifactId(
-                                                   StringUtils.replace( pom.getParent().getArtifactId(),
-                                                                        rootArtifactId, "${rootArtifactId}" ) );
+                        StringUtils.replace( pom.getParent().getArtifactId(), rootArtifactId, "${rootArtifactId}" ) );
                 }
                 if ( pom.getParent().getVersion() != null )
                 {
@@ -1135,9 +1137,9 @@ public class FilesetArchetypeCreator
 
             if ( pom.getGroupId() != null )
             {
-                pom.setGroupId( StringUtils.replace( pom.getGroupId(),
-                                                     pomReversedProperties.getProperty( Constants.GROUP_ID ), "${"
-                                                         + Constants.GROUP_ID + "}" ) );
+                pom.setGroupId(
+                    StringUtils.replace( pom.getGroupId(), pomReversedProperties.getProperty( Constants.GROUP_ID ),
+                                         "${" + Constants.GROUP_ID + "}" ) );
             }
 
             pom.setArtifactId( "${" + Constants.ARTIFACT_ID + "}" );
@@ -1165,8 +1167,8 @@ public class FilesetArchetypeCreator
                 if ( initialcontent.indexOf( "${" + property + "}" ) > 0 )
                 {
                     getLogger().warn(
-                                      "OldArchetype uses ${" + property + "} for internal processing, but file "
-                                          + initialPomFile + " contains this property already" );
+                        "OldArchetype uses ${" + property + "} for internal processing, but file " + initialPomFile
+                            + " contains this property already" );
                 }
             }
         }
@@ -1258,16 +1260,18 @@ public class FilesetArchetypeCreator
 
         if ( !packagedExtensions.isEmpty() )
         {
-            packagedFileSets.add( getPackagedFileSet( filtered, packagedExtensions, group, unpackagedExtensions,
-                                                      unpackagedFiles, defaultEncoding ) );
+            packagedFileSets.add(
+                getPackagedFileSet( filtered, packagedExtensions, group, unpackagedExtensions, unpackagedFiles,
+                                    defaultEncoding ) );
         }
 
         if ( !unpackagedExtensions.isEmpty() )
         {
             getLogger().debug( "Found unpackaged extensions " + unpackagedExtensions );
 
-            packagedFileSets.add( getUnpackagedFileSet( filtered, unpackagedExtensions, unpackagedFiles, group,
-                                                        packagedExtensions, defaultEncoding ) );
+            packagedFileSets.add(
+                getUnpackagedFileSet( filtered, unpackagedExtensions, unpackagedFiles, group, packagedExtensions,
+                                      defaultEncoding ) );
         }
 
         return packagedFileSets;
@@ -1289,9 +1293,9 @@ public class FilesetArchetypeCreator
 
         for ( String inputFileName : fileSetResources )
         {
-            String outputFileName =
-                packaged ? StringUtils.replace( inputFileName, packageAsDirectory + File.separator, "" )
-                                : inputFileName;
+            String outputFileName = packaged
+                ? StringUtils.replace( inputFileName, packageAsDirectory + File.separator, "" )
+                : inputFileName;
 
             getLogger().debug( "InputFileName:" + inputFileName );
             getLogger().debug( "OutputFileName:" + outputFileName );
@@ -1312,8 +1316,8 @@ public class FilesetArchetypeCreator
                 if ( initialcontent.indexOf( "${" + property + "}" ) > 0 )
                 {
                     getLogger().warn(
-                                      "Archetype uses ${" + property + "} for internal processing, but file "
-                                          + inputFile + " contains this property already" );
+                        "Archetype uses ${" + property + "} for internal processing, but file " + inputFile
+                            + " contains this property already" );
                 }
             }
 
@@ -1397,37 +1401,39 @@ public class FilesetArchetypeCreator
     {
         List<FileSet> resolvedFileSets = new ArrayList<FileSet>();
         getLogger().debug(
-                           "Resolving filesets with package=" + packageName + ", languages=" + languages
-                               + " and extentions=" + filtereds );
+            "Resolving filesets with package=" + packageName + ", languages=" + languages + " and extentions="
+                + filtereds );
 
         List<String> files = new ArrayList<String>( fileNames );
 
-        StringBuilder languageIncludes = new StringBuilder(  );
+        StringBuilder languageIncludes = new StringBuilder();
 
         for ( String language : languages )
         {
-            languageIncludes .append( ( ( languageIncludes.length() == 0 ) ? "" : "," ) + language + "/**" );
+            languageIncludes.append( ( ( languageIncludes.length() == 0 ) ? "" : "," ) + language + "/**" );
         }
 
         getLogger().debug( "Using languages includes " + languageIncludes );
 
-        String filteredIncludes = "";
+        StringBuilder filteredIncludes = new StringBuilder();
         for ( String filtered : filtereds )
         {
-            filteredIncludes +=
+            filteredIncludes.append(
                 ( ( filteredIncludes.length() == 0 ) ? "" : "," ) + "**/" + ( filtered.startsWith( "." ) ? "" : "*." )
-                    + filtered;
+                    + filtered );
         }
 
         getLogger().debug( "Using filtered includes " + filteredIncludes );
 
         /* sourcesMainFiles */
-        List<String> sourcesMainFiles = archetypeFilesResolver.findSourcesMainFiles( files, languageIncludes.toString() );
+        List<String> sourcesMainFiles =
+            archetypeFilesResolver.findSourcesMainFiles( files, languageIncludes.toString() );
         if ( !sourcesMainFiles.isEmpty() )
         {
             files.removeAll( sourcesMainFiles );
 
-            List<String> filteredFiles = archetypeFilesResolver.getFilteredFiles( sourcesMainFiles, filteredIncludes );
+            List<String> filteredFiles =
+                archetypeFilesResolver.getFilteredFiles( sourcesMainFiles, filteredIncludes.toString() );
             sourcesMainFiles.removeAll( filteredFiles );
 
             List<String> unfilteredFiles = sourcesMainFiles;
@@ -1438,7 +1444,8 @@ public class FilesetArchetypeCreator
 
             if ( !unfilteredFiles.isEmpty() )
             {
-                resolvedFileSets.addAll( createFileSets( unfilteredFiles, 3, true, packageName, false, defaultEncoding ) );
+                resolvedFileSets.addAll(
+                    createFileSets( unfilteredFiles, 3, true, packageName, false, defaultEncoding ) );
             }
         }
 
@@ -1449,27 +1456,32 @@ public class FilesetArchetypeCreator
         {
             files.removeAll( resourcesMainFiles );
 
-            List<String> filteredFiles = archetypeFilesResolver.getFilteredFiles( resourcesMainFiles, filteredIncludes );
+            List<String> filteredFiles =
+                archetypeFilesResolver.getFilteredFiles( resourcesMainFiles, filteredIncludes.toString() );
             resourcesMainFiles.removeAll( filteredFiles );
 
             List<String> unfilteredFiles = resourcesMainFiles;
             if ( !filteredFiles.isEmpty() )
             {
-                resolvedFileSets.addAll( createFileSets( filteredFiles, 3, false, packageName, true, defaultEncoding ) );
+                resolvedFileSets.addAll(
+                    createFileSets( filteredFiles, 3, false, packageName, true, defaultEncoding ) );
             }
             if ( !unfilteredFiles.isEmpty() )
             {
-                resolvedFileSets.addAll( createFileSets( unfilteredFiles, 3, false, packageName, false, defaultEncoding ) );
+                resolvedFileSets.addAll(
+                    createFileSets( unfilteredFiles, 3, false, packageName, false, defaultEncoding ) );
             }
         }
 
         /* sourcesTestFiles */
-        List<String> sourcesTestFiles = archetypeFilesResolver.findSourcesTestFiles( files, languageIncludes.toString() );
+        List<String> sourcesTestFiles =
+            archetypeFilesResolver.findSourcesTestFiles( files, languageIncludes.toString() );
         if ( !sourcesTestFiles.isEmpty() )
         {
             files.removeAll( sourcesTestFiles );
 
-            List<String> filteredFiles = archetypeFilesResolver.getFilteredFiles( sourcesTestFiles, filteredIncludes );
+            List<String> filteredFiles =
+                archetypeFilesResolver.getFilteredFiles( sourcesTestFiles, filteredIncludes.toString() );
             sourcesTestFiles.removeAll( filteredFiles );
 
             List<String> unfilteredFiles = sourcesTestFiles;
@@ -1479,7 +1491,8 @@ public class FilesetArchetypeCreator
             }
             if ( !unfilteredFiles.isEmpty() )
             {
-                resolvedFileSets.addAll( createFileSets( unfilteredFiles, 3, true, packageName, false, defaultEncoding ) );
+                resolvedFileSets.addAll(
+                    createFileSets( unfilteredFiles, 3, true, packageName, false, defaultEncoding ) );
             }
         }
 
@@ -1490,17 +1503,20 @@ public class FilesetArchetypeCreator
         {
             files.removeAll( resourcesTestFiles );
 
-            List<String> filteredFiles = archetypeFilesResolver.getFilteredFiles( resourcesTestFiles, filteredIncludes );
+            List<String> filteredFiles =
+                archetypeFilesResolver.getFilteredFiles( resourcesTestFiles, filteredIncludes.toString() );
             resourcesTestFiles.removeAll( filteredFiles );
 
             List<String> unfilteredFiles = resourcesTestFiles;
             if ( !filteredFiles.isEmpty() )
             {
-                resolvedFileSets.addAll( createFileSets( filteredFiles, 3, false, packageName, true, defaultEncoding ) );
+                resolvedFileSets.addAll(
+                    createFileSets( filteredFiles, 3, false, packageName, true, defaultEncoding ) );
             }
             if ( !unfilteredFiles.isEmpty() )
             {
-                resolvedFileSets.addAll( createFileSets( unfilteredFiles, 3, false, packageName, false, defaultEncoding ) );
+                resolvedFileSets.addAll(
+                    createFileSets( unfilteredFiles, 3, false, packageName, false, defaultEncoding ) );
             }
         }
 
@@ -1510,17 +1526,20 @@ public class FilesetArchetypeCreator
         {
             files.removeAll( siteFiles );
 
-            List<String> filteredFiles = archetypeFilesResolver.getFilteredFiles( siteFiles, filteredIncludes );
+            List<String> filteredFiles =
+                archetypeFilesResolver.getFilteredFiles( siteFiles, filteredIncludes.toString() );
             siteFiles.removeAll( filteredFiles );
 
             List<String> unfilteredFiles = siteFiles;
             if ( !filteredFiles.isEmpty() )
             {
-                resolvedFileSets.addAll( createFileSets( filteredFiles, 2, false, packageName, true, defaultEncoding ) );
+                resolvedFileSets.addAll(
+                    createFileSets( filteredFiles, 2, false, packageName, true, defaultEncoding ) );
             }
             if ( !unfilteredFiles.isEmpty() )
             {
-                resolvedFileSets.addAll( createFileSets( unfilteredFiles, 2, false, packageName, false, defaultEncoding ) );
+                resolvedFileSets.addAll(
+                    createFileSets( unfilteredFiles, 2, false, packageName, false, defaultEncoding ) );
             }
         }
 
@@ -1532,7 +1551,7 @@ public class FilesetArchetypeCreator
             files.removeAll( thirdLevelSourcesfiles );
 
             List<String> filteredFiles =
-                archetypeFilesResolver.getFilteredFiles( thirdLevelSourcesfiles, filteredIncludes );
+                archetypeFilesResolver.getFilteredFiles( thirdLevelSourcesfiles, filteredIncludes.toString() );
             thirdLevelSourcesfiles.removeAll( filteredFiles );
 
             List<String> unfilteredFiles = thirdLevelSourcesfiles;
@@ -1542,27 +1561,30 @@ public class FilesetArchetypeCreator
             }
             if ( !unfilteredFiles.isEmpty() )
             {
-                resolvedFileSets.addAll( createFileSets( unfilteredFiles, 3, true, packageName, false, defaultEncoding ) );
+                resolvedFileSets.addAll(
+                    createFileSets( unfilteredFiles, 3, true, packageName, false, defaultEncoding ) );
             }
 
             /* thirdLevelResourcesfiles */
             List<String> thirdLevelResourcesfiles =
-                archetypeFilesResolver.findOtherResources( 3, files, thirdLevelSourcesfiles, languageIncludes.toString() );
+                archetypeFilesResolver.findOtherResources( 3, files, thirdLevelSourcesfiles,
+                                                           languageIncludes.toString() );
             if ( !thirdLevelResourcesfiles.isEmpty() )
             {
                 files.removeAll( thirdLevelResourcesfiles );
-                filteredFiles = archetypeFilesResolver.getFilteredFiles( thirdLevelResourcesfiles, filteredIncludes );
+                filteredFiles =
+                    archetypeFilesResolver.getFilteredFiles( thirdLevelResourcesfiles, filteredIncludes.toString() );
                 thirdLevelResourcesfiles.removeAll( filteredFiles );
                 unfilteredFiles = thirdLevelResourcesfiles;
                 if ( !filteredFiles.isEmpty() )
                 {
-                    resolvedFileSets.addAll( createFileSets( filteredFiles, 3, false, packageName, true,
-                                                             defaultEncoding ) );
+                    resolvedFileSets.addAll(
+                        createFileSets( filteredFiles, 3, false, packageName, true, defaultEncoding ) );
                 }
                 if ( !unfilteredFiles.isEmpty() )
                 {
-                    resolvedFileSets.addAll( createFileSets( unfilteredFiles, 3, false, packageName, false,
-                                                             defaultEncoding ) );
+                    resolvedFileSets.addAll(
+                        createFileSets( unfilteredFiles, 3, false, packageName, false, defaultEncoding ) );
                 }
             }
         } // end if
@@ -1575,7 +1597,7 @@ public class FilesetArchetypeCreator
             files.removeAll( secondLevelSourcesfiles );
 
             List<String> filteredFiles =
-                archetypeFilesResolver.getFilteredFiles( secondLevelSourcesfiles, filteredIncludes );
+                archetypeFilesResolver.getFilteredFiles( secondLevelSourcesfiles, filteredIncludes.toString() );
             secondLevelSourcesfiles.removeAll( filteredFiles );
 
             List<String> unfilteredFiles = secondLevelSourcesfiles;
@@ -1585,7 +1607,8 @@ public class FilesetArchetypeCreator
             }
             if ( !unfilteredFiles.isEmpty() )
             {
-                resolvedFileSets.addAll( createFileSets( unfilteredFiles, 2, true, packageName, false, defaultEncoding ) );
+                resolvedFileSets.addAll(
+                    createFileSets( unfilteredFiles, 2, true, packageName, false, defaultEncoding ) );
             }
         }
 
@@ -1597,17 +1620,19 @@ public class FilesetArchetypeCreator
             files.removeAll( secondLevelResourcesfiles );
 
             List<String> filteredFiles =
-                archetypeFilesResolver.getFilteredFiles( secondLevelResourcesfiles, filteredIncludes );
+                archetypeFilesResolver.getFilteredFiles( secondLevelResourcesfiles, filteredIncludes.toString() );
             secondLevelResourcesfiles.removeAll( filteredFiles );
 
             List<String> unfilteredFiles = secondLevelResourcesfiles;
             if ( !filteredFiles.isEmpty() )
             {
-                resolvedFileSets.addAll( createFileSets( filteredFiles, 2, false, packageName, true, defaultEncoding ) );
+                resolvedFileSets.addAll(
+                    createFileSets( filteredFiles, 2, false, packageName, true, defaultEncoding ) );
             }
             if ( !unfilteredFiles.isEmpty() )
             {
-                resolvedFileSets.addAll( createFileSets( unfilteredFiles, 2, false, packageName, false, defaultEncoding ) );
+                resolvedFileSets.addAll(
+                    createFileSets( unfilteredFiles, 2, false, packageName, false, defaultEncoding ) );
             }
         }
 
@@ -1618,17 +1643,20 @@ public class FilesetArchetypeCreator
         {
             files.removeAll( rootResourcesfiles );
 
-            List<String> filteredFiles = archetypeFilesResolver.getFilteredFiles( rootResourcesfiles, filteredIncludes );
+            List<String> filteredFiles =
+                archetypeFilesResolver.getFilteredFiles( rootResourcesfiles, filteredIncludes.toString() );
             rootResourcesfiles.removeAll( filteredFiles );
 
             List<String> unfilteredFiles = rootResourcesfiles;
             if ( !filteredFiles.isEmpty() )
             {
-                resolvedFileSets.addAll( createFileSets( filteredFiles, 0, false, packageName, true, defaultEncoding ) );
+                resolvedFileSets.addAll(
+                    createFileSets( filteredFiles, 0, false, packageName, true, defaultEncoding ) );
             }
             if ( !unfilteredFiles.isEmpty() )
             {
-                resolvedFileSets.addAll( createFileSets( unfilteredFiles, 0, false, packageName, false, defaultEncoding ) );
+                resolvedFileSets.addAll(
+                    createFileSets( unfilteredFiles, 0, false, packageName, false, defaultEncoding ) );
             }
         }
 

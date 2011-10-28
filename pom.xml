@@ -349,24 +349,6 @@ under the License.
           </execution>
         </executions>
       </plugin>
-      <!--<plugin>
-      <artifactId>maven-enforcer-plugin</artifactId>
-      <version>1.0-SNAPSHOT</version>
-      <executions>
-        <execution>
-        <goals>
-          <goal>enforce</goal>
-        </goals>
-        </execution>
-      </executions>
-      <configuration>
-        <rules>
-        <requirePluginVersions>
-          <banSnapshots>false</banSnapshots>
-        </requirePluginVersions>
-        </rules>
-      </configuration>
-      </plugin>-->
       <plugin>
         <groupId>org.apache.rat</groupId>
         <artifactId>apache-rat-plugin</artifactId>
