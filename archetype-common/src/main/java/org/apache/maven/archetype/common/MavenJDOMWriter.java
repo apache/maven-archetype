@@ -85,6 +85,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
@@ -197,7 +198,7 @@ public class MavenJDOMWriter
                 findAndReplaceSimpleElement( innerCounter, element, key, (String) props.get( key ), null );
             }
 
-            ArrayList lst = new ArrayList( props.keySet() );
+            List<String> lst = new ArrayList<String>( props.keySet() );
             it = element.getChildren().iterator();
             while ( it.hasNext() )
             {
