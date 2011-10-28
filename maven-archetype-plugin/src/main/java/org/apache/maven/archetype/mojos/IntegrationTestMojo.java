@@ -97,6 +97,16 @@ public class IntegrationTestMojo
      */
     private boolean skip = false;
 
+
+    /**
+     * Directory of test projects
+     *
+     * @parameter expression="${archetype.test.projectsDirectory}" default-value="${project.build.testOutputDirectory}"
+     * @required
+     * @since 2.2
+     */
+    private File testProjectsDirectory;
+
     public void execute()
         throws MojoExecutionException, MojoFailureException
     {
