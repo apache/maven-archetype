@@ -51,7 +51,7 @@ import java.util.Properties;
 /**
  * <p>Execute the archetype integration tests, consisting in generating projects from the current archetype and
  * optionally comparing generated projects with reference copy.</p>
- * 
+ * <p/>
  * <p>Each IT consists of a sub-directory in <code>src/test/resources/projects</code> containing:</p>
  * <ul>
  * <li>a <code>goal.txt</code> file, containing a list of goals to run against the generated project (can be empty,
@@ -59,7 +59,7 @@ import java.util.Properties;
  * <li>an <code>archetype.properties</code> file, containing properties for project generation,</li>
  * <li>an optional <code>reference/</code> directory containing a reference copy of the expected project created from the IT.</li>
  * </ul>
- *
+ * <p/>
  * Notice that it is expected to be run as part as of a build after the <code>package</code> phase and not directly
  * as a goal from CLI.
  *
@@ -70,10 +70,14 @@ import java.util.Properties;
 public class IntegrationTestMojo
     extends AbstractMojo
 {
-    /** @component */
+    /**
+     * @component
+     */
     private ArchetypeGenerator archetypeGenerator;
 
-    /** @component */
+    /**
+     * @component
+     */
     private Invoker invoker;
 
     /**
@@ -114,16 +118,15 @@ public class IntegrationTestMojo
 
         if ( archetypeFile == null )
         {
-            throw new MojoFailureException(
-                                            "Unable to get the archetypes' artifact which should have just been built:"
+            throw new MojoFailureException( "Unable to get the archetypes' artifact which should have just been built:"
                                                 + " you probably launched 'mvn archetype:integration-test' instead of"
                                                 + " 'mvn integration-test'." );
         }
 
         try
         {
-            @SuppressWarnings( "unchecked" )
-            List<File> projectsGoalFiles = FileUtils.getFiles( projectsDirectory, "*/goal.txt", "" );
+            @SuppressWarnings( "unchecked" ) List<File> projectsGoalFiles =
+                FileUtils.getFiles( projectsDirectory, "*/goal.txt", "" );
 
             if ( projectsGoalFiles.size() == 0 )
             {
@@ -162,18 +165,18 @@ public class IntegrationTestMojo
      * Checks that actual directory content is the same as reference.
      *
      * @param reference the reference directory
-     * @param actual the actual directory to compare with the reference
+     * @param actual    the actual directory to compare with the reference
      * @throws IntegrationTestFailure if content differs
      */
     private void assertDirectoryEquals( File reference, File actual )
         throws IntegrationTestFailure, IOException
     {
-        @SuppressWarnings( "unchecked" )
-        List<String> referenceFiles = FileUtils.getFileAndDirectoryNames( reference, "**", null, false, true, true, true );
+        @SuppressWarnings( "unchecked" ) List<String> referenceFiles =
+            FileUtils.getFileAndDirectoryNames( reference, "**", null, false, true, true, true );
         getLog().debug( "reference content: " + referenceFiles );
 
-        @SuppressWarnings( "unchecked" )
-        List<String> actualFiles = FileUtils.getFileAndDirectoryNames( actual, "**", null, false, true, true, true );
+        @SuppressWarnings( "unchecked" ) List<String> actualFiles =
+            FileUtils.getFileAndDirectoryNames( actual, "**", null, false, true, true, true );
         getLog().debug( "actual content: " + referenceFiles );
 
         boolean fileNamesEquals = CollectionUtils.isEqualCollection( referenceFiles, actualFiles );
@@ -197,8 +200,9 @@ public class IntegrationTestMojo
             }
             getLog().error( "Remains " + actualFiles );
 
-            throw new IntegrationTestFailure( "Reference and generated project differs (missing: " + missing
-                + ", unexpected: " + actualFiles.size() + ")" );
+            throw new IntegrationTestFailure(
+                "Reference and generated project differs (missing: " + missing + ", unexpected: " + actualFiles.size()
+                    + ")" );
         }
 
         boolean contentEquals = true;
@@ -271,16 +275,14 @@ public class IntegrationTestMojo
 
             FileUtils.mkdir( basedir );
 
-            ArchetypeGenerationRequest request = new ArchetypeGenerationRequest()
-                .setArchetypeGroupId( project.getGroupId() )
-                .setArchetypeArtifactId( project.getArtifactId() )
-                .setArchetypeVersion( project.getVersion() )
-                .setGroupId( properties.getProperty( Constants.GROUP_ID ) )
-                .setArtifactId( properties.getProperty( Constants.ARTIFACT_ID ) )
-                .setVersion( properties.getProperty( Constants.VERSION ) )
-                .setPackage( properties.getProperty( Constants.PACKAGE ) )
-                .setOutputDirectory( basedir )
-                .setProperties( properties );
+            ArchetypeGenerationRequest request =
+                new ArchetypeGenerationRequest().setArchetypeGroupId( project.getGroupId() ).setArchetypeArtifactId(
+                    project.getArtifactId() ).setArchetypeVersion( project.getVersion() ).setGroupId(
+                    properties.getProperty( Constants.GROUP_ID ) ).setArtifactId(
+                    properties.getProperty( Constants.ARTIFACT_ID ) ).setVersion(
+                    properties.getProperty( Constants.VERSION ) ).setPackage(
+                    properties.getProperty( Constants.PACKAGE ) ).setOutputDirectory( basedir ).setProperties(
+                    properties );
 
             ArchetypeGenerationResult result = new ArchetypeGenerationResult();
 
@@ -292,8 +294,9 @@ public class IntegrationTestMojo
                 {
                     ArchetypeNotConfigured anc = (ArchetypeNotConfigured) result.getCause();
 
-                    throw new IntegrationTestFailure( "Missing required properties in archetype.properties: "
-                        + StringUtils.join( anc.getMissingProperties().iterator(), ", " ), anc );
+                    throw new IntegrationTestFailure(
+                        "Missing required properties in archetype.properties: " + StringUtils.join(
+                            anc.getMissingProperties().iterator(), ", " ), anc );
                 }
 
                 throw new IntegrationTestFailure( result.getCause().getMessage(), result.getCause() );
@@ -339,9 +342,8 @@ public class IntegrationTestMojo
 
         getLog().info( "Invoking post-archetype-generation goals: " + goals );
 
-        InvocationRequest request = new DefaultInvocationRequest()
-            .setBaseDirectory( basedir )
-            .setGoals( Arrays.asList( StringUtils.split( goals, "," ) ) );
+        InvocationRequest request = new DefaultInvocationRequest().setBaseDirectory( basedir ).setGoals(
+            Arrays.asList( StringUtils.split( goals, "," ) ) );
 
         try
         {
