@@ -34,6 +34,8 @@ import org.apache.maven.shared.invoker.InvocationRequest;
 import org.apache.maven.shared.invoker.InvocationResult;
 import org.apache.maven.shared.invoker.Invoker;
 import org.apache.maven.shared.invoker.MavenInvocationException;
+import org.apache.maven.shared.scriptinterpreter.BuildFailureException;
+import org.apache.maven.shared.scriptinterpreter.ScriptRunner;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
@@ -45,6 +47,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Properties;
 
@@ -106,6 +109,42 @@ public class IntegrationTestMojo
      * @since 2.2
      */
     private File testProjectsDirectory;
+
+    /**
+     * Relative path of a cleanup/verification hook script to run after executing the build. This script may be written
+     * with either BeanShell or Groovy. If the file extension is omitted (e.g. <code>verify</code>), the
+     * plugin searches for the file by trying out the well-known extensions <code>.bsh</code> and <code>.groovy</code>.
+     * If this script exists for a particular project but returns any non-null value different from <code>true</code> or
+     * throws an exception, the corresponding build is flagged as a failure.
+     *
+     * @parameter expression="${archetype.test.verifyScript}" default-value="verify"
+     * @since 2.2
+     */
+    private String postBuildHookScript;
+
+    /**
+     * Suppress logging to the <code>build.log</code> file.
+     *
+     * @parameter expression="${archetype.test.noLog}" default-value="false"
+     * @since 2.2
+     */
+    private boolean noLog;
+
+    /**
+     * Flag used to determine whether the build logs should be output to the normal mojo log.
+     *
+     * @parameter expression="${archetype.test.streamLogs}" default-value="false"
+     * @since 2.2
+     */
+    private boolean streamLogs;
+
+    /**
+     * The file encoding for the post-build script.
+     *
+     * @parameter expression="${encoding}" default-value="${project.build.sourceEncoding}"
+     * @since 2.2
+     */
+    private String encoding;
 
     public void execute()
         throws MojoExecutionException, MojoFailureException
@@ -269,7 +308,7 @@ public class IntegrationTestMojo
     }
 
     private void processIntegrationTest( File goalFile, File archetypeFile )
-        throws IntegrationTestFailure
+        throws IntegrationTestFailure, MojoExecutionException
     {
         getLog().info( "Processing Archetype IT project: " + goalFile.getParentFile().getName() );
 
@@ -339,7 +378,7 @@ public class IntegrationTestMojo
     }
 
     private void invokePostArchetypeGenerationGoals( String goals, File basedir )
-        throws IntegrationTestFailure
+        throws IntegrationTestFailure, IOException, MojoExecutionException
     {
         if ( StringUtils.isBlank( goals ) )
         {
@@ -350,8 +389,17 @@ public class IntegrationTestMojo
 
         getLog().info( "Invoking post-archetype-generation goals: " + goals );
 
+        FileLogger logger = setupLogger( basedir );
+
         InvocationRequest request = new DefaultInvocationRequest().setBaseDirectory( basedir ).setGoals(
             Arrays.asList( StringUtils.split( goals, "," ) ) );
+
+        if ( logger != null )
+        {
+            request.setErrorHandler( logger );
+
+            request.setOutputHandler( logger );
+        }
 
         try
         {
@@ -369,6 +417,45 @@ public class IntegrationTestMojo
         {
             throw new IntegrationTestFailure( "Cannot run additions goals.", e );
         }
+
+        // verify result
+        ScriptRunner scriptRunner = new ScriptRunner( getLog() );
+        scriptRunner.setScriptEncoding( encoding );
+
+        try
+        {
+            scriptRunner.run( "post-build script", basedir, postBuildHookScript, new LinkedHashMap<String, Object>(),
+                              logger, "failure post script", true );
+        }
+        catch ( BuildFailureException e )
+        {
+            throw new IntegrationTestFailure( "post build script failure failure: " + e.getMessage(), e );
+        }
+    }
+
+    private FileLogger setupLogger( File basedir )
+        throws IOException
+    {
+        FileLogger logger = null;
+
+        if ( !noLog )
+        {
+            File outputLog = new File( basedir, "build.log" );
+
+            if ( streamLogs )
+            {
+                logger = new FileLogger( outputLog, getLog() );
+            }
+            else
+            {
+                logger = new FileLogger( outputLog );
+            }
+
+            getLog().debug( "build log initialized in: " + outputLog );
+
+        }
+
+        return logger;
     }
 
     class IntegrationTestFailure
