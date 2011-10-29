@@ -352,7 +352,6 @@ under the License.
       <plugin>
         <groupId>org.apache.rat</groupId>
         <artifactId>apache-rat-plugin</artifactId>
-        <version>0.7</version>
         <configuration>
           <excludes>
             <exclude>.gitignore</exclude>
