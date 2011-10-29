@@ -49,6 +49,7 @@ import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -361,7 +362,7 @@ public class IntegrationTestMojo
 
             String goals = FileUtils.fileRead( goalFile );
 
-            invokePostArchetypeGenerationGoals( goals, new File( basedir, request.getArtifactId() ) );
+            invokePostArchetypeGenerationGoals( goals, new File( basedir, request.getArtifactId() ), goalFile );
         }
         catch ( IOException ioe )
         {
@@ -377,55 +378,58 @@ public class IntegrationTestMojo
         return loadProperties( propertiesFile );
     }
 
-    private void invokePostArchetypeGenerationGoals( String goals, File basedir )
+    private void invokePostArchetypeGenerationGoals( String goals, File basedir, File goalFile )
         throws IntegrationTestFailure, IOException, MojoExecutionException
     {
-        if ( StringUtils.isBlank( goals ) )
-        {
-            getLog().info( "No post-archetype-generation goals to invoke." );
-
-            return;
-        }
-
-        getLog().info( "Invoking post-archetype-generation goals: " + goals );
-
         FileLogger logger = setupLogger( basedir );
 
-        InvocationRequest request = new DefaultInvocationRequest().setBaseDirectory( basedir ).setGoals(
-            Arrays.asList( StringUtils.split( goals, "," ) ) );
-
-        if ( logger != null )
+        if ( !StringUtils.isBlank( goals ) )
         {
-            request.setErrorHandler( logger );
 
-            request.setOutputHandler( logger );
-        }
+            getLog().info( "Invoking post-archetype-generation goals: " + goals );
 
-        try
-        {
-            InvocationResult result = invoker.execute( request );
+            InvocationRequest request = new DefaultInvocationRequest().setBaseDirectory( basedir ).setGoals(
+                Arrays.asList( StringUtils.split( goals, "," ) ) );
 
-            getLog().info( "Post-archetype-generation invoker exit code: " + result.getExitCode() );
-
-            if ( result.getExitCode() != 0 )
+            if ( logger != null )
             {
-                throw new IntegrationTestFailure( "Execution failure: exit code = " + result.getExitCode(),
-                                                  result.getExecutionException() );
+                request.setErrorHandler( logger );
+
+                request.setOutputHandler( logger );
+            }
+
+            try
+            {
+                InvocationResult result = invoker.execute( request );
+
+                getLog().info( "Post-archetype-generation invoker exit code: " + result.getExitCode() );
+
+                if ( result.getExitCode() != 0 )
+                {
+                    throw new IntegrationTestFailure( "Execution failure: exit code = " + result.getExitCode(),
+                                                      result.getExecutionException() );
+                }
+            }
+            catch ( MavenInvocationException e )
+            {
+                throw new IntegrationTestFailure( "Cannot run additions goals.", e );
             }
         }
-        catch ( MavenInvocationException e )
+        else
         {
-            throw new IntegrationTestFailure( "Cannot run additions goals.", e );
+            getLog().info( "No post-archetype-generation goals to invoke." );
         }
-
         // verify result
         ScriptRunner scriptRunner = new ScriptRunner( getLog() );
         scriptRunner.setScriptEncoding( encoding );
 
+        Map<String, Object> context = new LinkedHashMap<String, Object>();
+        context.put( "projectDir", basedir );
+
         try
         {
-            scriptRunner.run( "post-build script", basedir, postBuildHookScript, new LinkedHashMap<String, Object>(),
-                              logger, "failure post script", true );
+            scriptRunner.run( "post-build script", goalFile.getParentFile(), postBuildHookScript, context, logger,
+                              "failure post script", true );
         }
         catch ( BuildFailureException e )
         {
