@@ -146,7 +146,7 @@ under the License.
   <properties>
     <mavenVersion>2.0.8</mavenVersion><!-- with 2.0.9 proxy test fails-->
     <netbeans.hint.useExternalMaven>true</netbeans.hint.useExternalMaven>
-    <mavenPluginPluginVersion>2.8</mavenPluginPluginVersion>
+    <mavenPluginPluginVersion>2.9</mavenPluginPluginVersion>
     <wagonVersion>1.0</wagonVersion>
   </properties>
 
