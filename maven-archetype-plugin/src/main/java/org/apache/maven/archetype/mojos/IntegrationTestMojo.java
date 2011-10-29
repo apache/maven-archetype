@@ -101,7 +101,7 @@ public class IntegrationTestMojo
     /**
      * Directory of test projects
      *
-     * @parameter expression="${archetype.test.projectsDirectory}" default-value="${project.build.testOutputDirectory}"
+     * @parameter expression="${archetype.test.projectsDirectory}" default-value="${project.build.testOutputDirectory}/projects"
      * @required
      * @since 2.2
      */
@@ -115,9 +115,7 @@ public class IntegrationTestMojo
             return;
         }
 
-        File projectsDirectory = new File( project.getBasedir(), "target/test-classes/projects" );
-
-        if ( !projectsDirectory.exists() )
+        if ( !testProjectsDirectory.exists() )
         {
             getLog().warn( "No Archetype IT projects: root 'projects' directory not found." );
 
@@ -136,7 +134,7 @@ public class IntegrationTestMojo
         try
         {
             @SuppressWarnings( "unchecked" ) List<File> projectsGoalFiles =
-                FileUtils.getFiles( projectsDirectory, "*/goal.txt", "" );
+                FileUtils.getFiles( testProjectsDirectory, "*/goal.txt", "" );
 
             if ( projectsGoalFiles.size() == 0 )
             {
