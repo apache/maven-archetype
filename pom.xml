@@ -373,6 +373,7 @@ under the License.
             <!-- disable test directories -->
             <exclude>src/test/**</exclude>
             <exclude>src/it/**</exclude>
+            <exclude>.repository/**</exclude><!-- for CI -->
           </excludes>
         </configuration>
         <executions>
