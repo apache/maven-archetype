@@ -147,6 +147,15 @@ public class IntegrationTestMojo
      */
     private String encoding;
 
+    /**
+     * The local repository to run maven instance.
+     *
+     * @parameter expression="${archetype.test.localRepositoryPath}" default-value="${settings.localRepository}"
+     * @required
+     * @readonly
+     */
+    private File localRepositoryPath;
+
     public void execute()
         throws MojoExecutionException, MojoFailureException
     {
@@ -389,7 +398,7 @@ public class IntegrationTestMojo
             getLog().info( "Invoking post-archetype-generation goals: " + goals );
 
             InvocationRequest request = new DefaultInvocationRequest().setBaseDirectory( basedir ).setGoals(
-                Arrays.asList( StringUtils.split( goals, "," ) ) );
+                Arrays.asList( StringUtils.split( goals, "," ) ) ).setLocalRepositoryDirectory( localRepositoryPath );
 
             if ( logger != null )
             {
