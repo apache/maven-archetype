@@ -35,7 +35,7 @@ import org.apache.maven.shared.invoker.InvocationRequest;
 import org.apache.maven.shared.invoker.InvocationResult;
 import org.apache.maven.shared.invoker.Invoker;
 import org.apache.maven.shared.invoker.MavenInvocationException;
-import org.apache.maven.shared.scriptinterpreter.BuildFailureException;
+import org.apache.maven.shared.scriptinterpreter.RunFailureException;
 import org.apache.maven.shared.scriptinterpreter.ScriptRunner;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
@@ -524,7 +524,7 @@ public class IntegrationTestMojo
             scriptRunner.run( "post-build script", goalFile.getParentFile(), postBuildHookScript, context, logger,
                               "failure post script", true );
         }
-        catch ( BuildFailureException e )
+        catch ( RunFailureException e )
         {
             throw new IntegrationTestFailure( "post build script failure failure: " + e.getMessage(), e );
         }
