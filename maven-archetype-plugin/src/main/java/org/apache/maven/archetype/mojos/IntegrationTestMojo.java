@@ -153,8 +153,24 @@ public class IntegrationTestMojo
      * @parameter expression="${archetype.test.localRepositoryPath}" default-value="${settings.localRepository}"
      * @required
      * @readonly
+     * @since 2.2
      */
     private File localRepositoryPath;
+
+    /**
+     * flag to enable show mvn version used for running its (cli option : -V,--show-version )
+     * @parameter expression="${archetype.test.showVersion}" default-value="false"
+     * @since 2.2
+     */
+    private boolean showVersion;
+
+    /**
+     * Whether to show debug statements in the build output.
+     *
+     * @parameter expression="${archetype.test.debug}" default-value="false"
+     * @since 2.2
+     */
+    private boolean debug;
 
     public void execute()
         throws MojoExecutionException, MojoFailureException
@@ -400,6 +416,10 @@ public class IntegrationTestMojo
             InvocationRequest request = new DefaultInvocationRequest().setBaseDirectory( basedir ).setGoals(
                 Arrays.asList( StringUtils.split( goals, "," ) ) ).setLocalRepositoryDirectory(
                 localRepositoryPath ).setInteractive( false ).setShowErrors( true );
+
+            request.setDebug( debug );
+
+            request.setShowVersion( showVersion );
 
             if ( logger != null )
             {
