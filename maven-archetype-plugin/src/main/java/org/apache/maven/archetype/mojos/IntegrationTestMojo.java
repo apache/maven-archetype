@@ -29,6 +29,7 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.settings.Settings;
 import org.apache.maven.shared.invoker.DefaultInvocationRequest;
 import org.apache.maven.shared.invoker.InvocationRequest;
 import org.apache.maven.shared.invoker.InvocationResult;
@@ -38,19 +39,28 @@ import org.apache.maven.shared.scriptinterpreter.BuildFailureException;
 import org.apache.maven.shared.scriptinterpreter.ScriptRunner;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
+import org.codehaus.plexus.util.InterpolationFilterReader;
+import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.util.WriterFactory;
+import org.codehaus.plexus.util.introspection.ReflectionValueExtractor;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 /**
  * <p>Execute the archetype integration tests, consisting in generating projects from the current archetype and
@@ -159,6 +169,7 @@ public class IntegrationTestMojo
 
     /**
      * flag to enable show mvn version used for running its (cli option : -V,--show-version )
+     *
      * @parameter expression="${archetype.test.showVersion}" default-value="false"
      * @since 2.2
      */
@@ -171,6 +182,35 @@ public class IntegrationTestMojo
      * @since 2.2
      */
     private boolean debug;
+
+    /**
+     * A list of additional properties which will be used to filter tokens in settings.xml
+     *
+     * @parameter
+     * @since 2.2
+     */
+    private Map<String, String> filterProperties;
+
+    /**
+     * The current user system settings for use in Maven.
+     *
+     * @parameter expression="${settings}"
+     * @required
+     * @readonly
+     * @since 2.2
+     */
+    private Settings settings;
+
+    /**
+     * Path to an alternate <code>settings.xml</code> to use for Maven invocation with all ITs. Note that the
+     * <code>&lt;localRepository&gt;</code> element of this settings file is always ignored, i.e. the path given by the
+     * parameter {@link #localRepositoryPath} is dominant.
+     *
+     * @parameter expression="${archetype.test.settingsFile}"
+     * @since 2.2
+     */
+    private File settingsFile;
+
 
     public void execute()
         throws MojoExecutionException, MojoFailureException
@@ -413,6 +453,11 @@ public class IntegrationTestMojo
 
             getLog().info( "Invoking post-archetype-generation goals: " + goals );
 
+            if ( !localRepositoryPath.exists() )
+            {
+                localRepositoryPath.mkdirs();
+            }
+
             InvocationRequest request = new DefaultInvocationRequest().setBaseDirectory( basedir ).setGoals(
                 Arrays.asList( StringUtils.split( goals, "," ) ) ).setLocalRepositoryDirectory(
                 localRepositoryPath ).setInteractive( false ).setShowErrors( true );
@@ -426,6 +471,24 @@ public class IntegrationTestMojo
                 request.setErrorHandler( logger );
 
                 request.setOutputHandler( logger );
+            }
+
+            File interpolatedSettingsFile = null;
+            if ( settingsFile != null )
+            {
+                File interpolatedSettingsDirectory =
+                    new File( project.getBuild().getOutputDirectory(), "archetype-it" );
+                if ( interpolatedSettingsDirectory.exists() )
+                {
+                    FileUtils.deleteDirectory( interpolatedSettingsDirectory );
+                }
+                interpolatedSettingsDirectory.mkdir();
+                interpolatedSettingsFile =
+                    new File( interpolatedSettingsDirectory, "interpolated-" + settingsFile.getName() );
+
+                buildInterpolatedFile( settingsFile, interpolatedSettingsFile );
+
+                request.setUserSettingsFile( interpolatedSettingsFile );
             }
 
             try
@@ -514,5 +577,295 @@ public class IntegrationTestMojo
         {
             super( message, cause );
         }
+    }
+
+    /**
+     * Returns the map-based value source used to interpolate settings and other stuff.
+     *
+     * @return The map-based value source for interpolation, never <code>null</code>.
+     */
+    private Map<String, Object> getInterpolationValueSource()
+    {
+        Map<String, Object> props = new HashMap<String, Object>();
+        if ( filterProperties != null )
+        {
+            props.putAll( filterProperties );
+        }
+        if ( filterProperties != null )
+        {
+            props.putAll( filterProperties );
+        }
+        props.put( "basedir", this.project.getBasedir().getAbsolutePath() );
+        props.put( "baseurl", toUrl( this.project.getBasedir().getAbsolutePath() ) );
+        if ( settings.getLocalRepository() != null )
+        {
+            props.put( "localRepository", settings.getLocalRepository() );
+            props.put( "localRepositoryUrl", toUrl( settings.getLocalRepository() ) );
+        }
+        return new CompositeMap( this.project, props );
+    }
+
+    protected void buildInterpolatedFile( File originalFile, File interpolatedFile )
+        throws MojoExecutionException
+    {
+        getLog().debug( "Interpolate " + originalFile.getPath() + " to " + interpolatedFile.getPath() );
+
+        try
+        {
+            String xml;
+
+            Reader reader = null;
+            try
+            {
+                // interpolation with token @...@
+                Map<String, Object> composite = getInterpolationValueSource();
+                reader = ReaderFactory.newXmlReader( originalFile );
+                reader = new InterpolationFilterReader( reader, composite, "@", "@" );
+                xml = IOUtil.toString( reader );
+            }
+            finally
+            {
+                IOUtil.close( reader );
+            }
+
+            Writer writer = null;
+            try
+            {
+                interpolatedFile.getParentFile().mkdirs();
+                writer = WriterFactory.newXmlWriter( interpolatedFile );
+                writer.write( xml );
+                writer.flush();
+            }
+            finally
+            {
+                IOUtil.close( writer );
+            }
+        }
+        catch ( IOException e )
+        {
+            throw new MojoExecutionException( "Failed to interpolate file " + originalFile.getPath(), e );
+        }
+    }
+
+    private static class CompositeMap
+        implements Map<String, Object>
+    {
+
+        /**
+         * The Maven project from which to extract interpolated values, never <code>null</code>.
+         */
+        private MavenProject mavenProject;
+
+        /**
+         * The set of additional properties from which to extract interpolated values, never <code>null</code>.
+         */
+        private Map<String, Object> properties;
+
+        /**
+         * Creates a new interpolation source backed by the specified Maven project and some user-specified properties.
+         *
+         * @param mavenProject The Maven project from which to extract interpolated values, must not be <code>null</code>.
+         * @param properties   The set of additional properties from which to extract interpolated values, may be
+         *                     <code>null</code>.
+         */
+        protected CompositeMap( MavenProject mavenProject, Map<String, Object> properties )
+        {
+            if ( mavenProject == null )
+            {
+                throw new IllegalArgumentException( "no project specified" );
+            }
+            this.mavenProject = mavenProject;
+            this.properties = properties == null ? (Map) new Properties() : properties;
+        }
+
+        /**
+         * {@inheritDoc}
+         *
+         * @see java.util.Map#clear()
+         */
+        public void clear()
+        {
+            // nothing here
+        }
+
+        /**
+         * {@inheritDoc}
+         *
+         * @see java.util.Map#containsKey(java.lang.Object)
+         */
+        public boolean containsKey( Object key )
+        {
+            if ( !( key instanceof String ) )
+            {
+                return false;
+            }
+
+            String expression = (String) key;
+            if ( expression.startsWith( "project." ) || expression.startsWith( "pom." ) )
+            {
+                try
+                {
+                    Object evaluated = ReflectionValueExtractor.evaluate( expression, this.mavenProject );
+                    if ( evaluated != null )
+                    {
+                        return true;
+                    }
+                }
+                catch ( Exception e )
+                {
+                    // uhm do we have to throw a RuntimeException here ?
+                }
+            }
+
+            return properties.containsKey( key ) || mavenProject.getProperties().containsKey( key );
+        }
+
+        /**
+         * {@inheritDoc}
+         *
+         * @see java.util.Map#containsValue(java.lang.Object)
+         */
+        public boolean containsValue( Object value )
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * {@inheritDoc}
+         *
+         * @see java.util.Map#entrySet()
+         */
+        public Set<Entry<String, Object>> entrySet()
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * {@inheritDoc}
+         *
+         * @see java.util.Map#get(java.lang.Object)
+         */
+        public Object get( Object key )
+        {
+            if ( !( key instanceof String ) )
+            {
+                return null;
+            }
+
+            String expression = (String) key;
+            if ( expression.startsWith( "project." ) || expression.startsWith( "pom." ) )
+            {
+                try
+                {
+                    Object evaluated = ReflectionValueExtractor.evaluate( expression, this.mavenProject );
+                    if ( evaluated != null )
+                    {
+                        return evaluated;
+                    }
+                }
+                catch ( Exception e )
+                {
+                    // uhm do we have to throw a RuntimeException here ?
+                }
+            }
+
+            Object value = properties.get( key );
+
+            return ( value != null ? value : this.mavenProject.getProperties().get( key ) );
+
+        }
+
+        /**
+         * {@inheritDoc}
+         *
+         * @see java.util.Map#isEmpty()
+         */
+        public boolean isEmpty()
+        {
+            return this.mavenProject == null && this.mavenProject.getProperties().isEmpty()
+                && this.properties.isEmpty();
+        }
+
+        /**
+         * {@inheritDoc}
+         *
+         * @see java.util.Map#keySet()
+         */
+        public Set<String> keySet()
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * {@inheritDoc}
+         *
+         * @see java.util.Map#put(java.lang.Object, java.lang.Object)
+         */
+        public Object put( String key, Object value )
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * {@inheritDoc}
+         *
+         * @see java.util.Map#putAll(java.util.Map)
+         */
+        public void putAll( Map<? extends String, ? extends Object> t )
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * {@inheritDoc}
+         *
+         * @see java.util.Map#remove(java.lang.Object)
+         */
+        public Object remove( Object key )
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * {@inheritDoc}
+         *
+         * @see java.util.Map#size()
+         */
+        public int size()
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * {@inheritDoc}
+         *
+         * @see java.util.Map#values()
+         */
+        public Collection<Object> values()
+        {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+
+    /**
+     * Converts the specified filesystem path to a URL. The resulting URL has no trailing slash regardless whether the
+     * path denotes a file or a directory.
+     *
+     * @param filename The filesystem path to convert, must not be <code>null</code>.
+     * @return The <code>file:</code> URL for the specified path, never <code>null</code>.
+     */
+    private static String toUrl( String filename )
+    {
+        /*
+         * NOTE: Maven fails to properly handle percent-encoded "file:" URLs (WAGON-111) so don't use File.toURI() here
+         * as-is but use the decoded path component in the URL.
+         */
+        String url = "file://" + new File( filename ).toURI().getPath();
+        if ( url.endsWith( "/" ) )
+        {
+            url = url.substring( 0, url.length() - 1 );
+        }
+        return url;
     }
 }

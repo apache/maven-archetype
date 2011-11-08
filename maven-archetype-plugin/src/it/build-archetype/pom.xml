@@ -45,6 +45,11 @@ under the License.
         <plugin>
           <artifactId>maven-archetype-plugin</artifactId>
           <version>@project.version@</version>
+          <configuration>
+            <settingsFile>${basedir}/test-settings.xml</settingsFile>
+            <localRepositoryPath>${basedir}/target/local-repo</localRepositoryPath>
+          </configuration>
+
         </plugin>
         <plugin>
           <artifactId>maven-resources-plugin</artifactId>
