@@ -19,6 +19,7 @@
  */
 
 import java.io.*;
+import org.codehaus.plexus.util.*;
 
 basedir = new File( basedir, "target/test-classes/projects/basic/project/basic" );
 
@@ -63,4 +64,12 @@ if ( !appClass.isFile() )
     throw new Exception( appClass + " not here: generated project not compiled?" );
 }
 
-return true;
+File buildLog = new File(basedir, "build.log");
+
+String content = FileUtils.fileRead( buildLog, "UTF-8" );
+
+int idx = content.indexOf( "Yeah Baby it rocks!");
+if ( idx < 0 )
+{
+    throw new Exception( "build.log missing out.println from verify.groovy" );
+}
