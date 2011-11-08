@@ -134,7 +134,7 @@ public class IntegrationTestMojo
     /**
      * Flag used to determine whether the build logs should be output to the normal mojo log.
      *
-     * @parameter expression="${archetype.test.streamLogs}" default-value="false"
+     * @parameter expression="${archetype.test.streamLogs}" default-value="true"
      * @since 2.2
      */
     private boolean streamLogs;
