@@ -398,7 +398,8 @@ public class IntegrationTestMojo
             getLog().info( "Invoking post-archetype-generation goals: " + goals );
 
             InvocationRequest request = new DefaultInvocationRequest().setBaseDirectory( basedir ).setGoals(
-                Arrays.asList( StringUtils.split( goals, "," ) ) ).setLocalRepositoryDirectory( localRepositoryPath );
+                Arrays.asList( StringUtils.split( goals, "," ) ) ).setLocalRepositoryDirectory(
+                localRepositoryPath ).setInteractive( false ).setShowErrors( true );
 
             if ( logger != null )
             {
