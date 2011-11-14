@@ -181,6 +181,7 @@ public class CreateArchetypeFromProjectMojo
             List<String> filtereds = getFilteredExtensions( archetypeFilteredExtentions, propertyFile );
 
             ArchetypeCreationRequest request = new ArchetypeCreationRequest()
+                .setDefaultEncoding( defaultEncoding )
                 .setProject( project )
                 /* Used when in interactive mode */
                 .setProperties( properties )
