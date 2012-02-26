@@ -32,15 +32,18 @@ import org.apache.maven.archetype.ui.ArchetypeConfiguration;
 import org.apache.maven.archetype.ui.ArchetypeDefinition;
 import org.apache.maven.archetype.ui.ArchetypeFactory;
 import org.apache.maven.artifact.repository.ArtifactRepository;
-
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.Velocity;
+import org.apache.velocity.context.Context;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.IOException;
-
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -101,9 +104,8 @@ public class DefaultArchetypeGenerationConfigurator
         }
         if ( request.getArchetypeRepository() != null )
         {
-            archetypeRepository =
-                archetypeRegistryManager.createRepository( request.getArchetypeRepository(),
-                                                           ad.getArtifactId() + "-repo" );
+            archetypeRepository = archetypeRegistryManager.createRepository( request.getArchetypeRepository(),
+                                                                             ad.getArtifactId() + "-repo" );
             repositories.add( archetypeRepository );
         }
         if ( request.getRemoteArtifactRepositories() != null )
@@ -114,8 +116,9 @@ public class DefaultArchetypeGenerationConfigurator
         if ( !archetypeArtifactManager.exists( ad.getGroupId(), ad.getArtifactId(), ad.getVersion(),
                                                archetypeRepository, localRepository, repositories ) )
         {
-            throw new UnknownArchetype( "The desired archetype does not exist (" + ad.getGroupId() + ":"
-                + ad.getArtifactId() + ":" + ad.getVersion() + ")" );
+            throw new UnknownArchetype(
+                "The desired archetype does not exist (" + ad.getGroupId() + ":" + ad.getArtifactId() + ":"
+                    + ad.getVersion() + ")" );
         }
 
         request.setArchetypeVersion( ad.getVersion() );
@@ -150,7 +153,10 @@ public class DefaultArchetypeGenerationConfigurator
         if ( interactiveMode.booleanValue() )
         {
             boolean confirmed = false;
-
+            Context context = new VelocityContext();
+            context.put( Constants.GROUP_ID, ad.getGroupId() );
+            context.put( Constants.ARTIFACT_ID, ad.getArtifactId() );
+            context.put( Constants.VERSION, ad.getVersion() );
             while ( !confirmed )
             {
                 List<String> propertiesRequired = archetypeConfiguration.getRequiredProperties();
@@ -170,32 +176,41 @@ public class DefaultArchetypeGenerationConfigurator
                                 // use its default and if not defined,
                                 // use the 'groupId' property value.
                                 String packageDefault = archetypeConfiguration.getDefaultValue( requiredProperty );
-                                packageDefault =
-                                    ( null == packageDefault || "".equals( packageDefault ) ) ? archetypeConfiguration.getProperty( "groupId" )
-                                                    : archetypeConfiguration.getDefaultValue( requiredProperty );
+                                packageDefault = ( null == packageDefault || "".equals( packageDefault ) )
+                                    ? archetypeConfiguration.getProperty( "groupId" )
+                                    : archetypeConfiguration.getDefaultValue( requiredProperty );
 
-                                String value = getTransitiveDefaultValue( packageDefault, archetypeConfiguration );
+                                String value =
+                                    getTransitiveDefaultValue( packageDefault, archetypeConfiguration, requiredProperty,
+                                                               context );
 
                                 value = archetypeGenerationQueryer.getPropertyValue( requiredProperty, value );
 
                                 archetypeConfiguration.setProperty( requiredProperty, value );
+
+                                context.put( Constants.PACKAGE, value );
                             }
                             else
                             {
                                 String value = archetypeConfiguration.getDefaultValue( requiredProperty );
 
-                                value = getTransitiveDefaultValue( value, archetypeConfiguration );
+                                value = getTransitiveDefaultValue( value, archetypeConfiguration, requiredProperty,
+                                                                   context );
 
                                 value = archetypeGenerationQueryer.getPropertyValue( requiredProperty, value );
 
                                 archetypeConfiguration.setProperty( requiredProperty, value );
+
+                                context.put( requiredProperty, value );
                             }
                         }
                         else
                         {
                             getLogger().info(
-                                              "Using property: " + requiredProperty + " = "
-                                                  + archetypeConfiguration.getProperty( requiredProperty ) );
+                                "Using property: " + requiredProperty + " = " + archetypeConfiguration.getProperty(
+                                    requiredProperty ) );
+                            archetypeConfiguration.setProperty( requiredProperty, archetypeConfiguration.getProperty(
+                                requiredProperty ) );
                         }
                     }
                 }
@@ -205,8 +220,8 @@ public class DefaultArchetypeGenerationConfigurator
                     for ( String requiredProperty : propertiesRequired )
                     {
                         getLogger().info(
-                                          "Using property: " + requiredProperty + " = "
-                                              + archetypeConfiguration.getProperty( requiredProperty ) );
+                            "Using property: " + requiredProperty + " = " + archetypeConfiguration.getProperty(
+                                requiredProperty ) );
                     }
                 }
 
@@ -234,11 +249,11 @@ public class DefaultArchetypeGenerationConfigurator
             {
                 for ( String requiredProperty : archetypeConfiguration.getRequiredProperties() )
                 {
-                    if ( !archetypeConfiguration.isConfigured( requiredProperty )
-                        && ( archetypeConfiguration.getDefaultValue( requiredProperty ) != null ) )
+                    if ( !archetypeConfiguration.isConfigured( requiredProperty ) && (
+                        archetypeConfiguration.getDefaultValue( requiredProperty ) != null ) )
                     {
-                        archetypeConfiguration.setProperty( requiredProperty,
-                                                            archetypeConfiguration.getDefaultValue( requiredProperty ) );
+                        archetypeConfiguration.setProperty( requiredProperty, archetypeConfiguration.getDefaultValue(
+                            requiredProperty ) );
                     }
                 }
 
@@ -263,8 +278,7 @@ public class DefaultArchetypeGenerationConfigurator
                             exceptionMessage.append( requiredProperty );
                             missingProperties.add( requiredProperty );
                             exceptionMessage.append( " is missing." );
-                            getLogger().warn(
-                                              "Property " + requiredProperty + " is missing. Add -D" + requiredProperty
+                            getLogger().warn( "Property " + requiredProperty + " is missing. Add -D" + requiredProperty
                                                   + "=someValue" );
                         }
                     }
@@ -287,7 +301,8 @@ public class DefaultArchetypeGenerationConfigurator
         request.setProperties( properties );
     }
 
-    private String getTransitiveDefaultValue( String defaultValue, ArchetypeConfiguration archetypeConfiguration )
+    private String getTransitiveDefaultValue( String defaultValue, ArchetypeConfiguration archetypeConfiguration,
+                                              String requiredProperty, Context context )
     {
         String result = defaultValue;
         if ( null == result )
@@ -298,12 +313,37 @@ public class DefaultArchetypeGenerationConfigurator
         {
             if ( result.indexOf( "${" + property + "}" ) >= 0 )
             {
+
                 result = StringUtils.replace( result, "${" + property + "}",
                                               archetypeConfiguration.getProperty( property ) );
             }
         }
+        if ( result.contains( "${" ) )
+        {
+            result = evaluateProperty( context, requiredProperty, defaultValue );
+        }
         return result;
     }
+
+
+    private String evaluateProperty( Context context, String property, String value )
+    {
+        StringWriter stringWriter = new StringWriter();
+        try
+        {
+            Velocity.evaluate( context, stringWriter, property, value );
+            return stringWriter.toString();
+        }
+        catch ( Exception ex )
+        {
+            return value;
+        }
+        finally
+        {
+            IOUtil.close( stringWriter );
+        }
+    }
+
 
     private void restoreCommandLineProperties( ArchetypeConfiguration archetypeConfiguration,
                                                Properties executionProperties )
