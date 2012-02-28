@@ -224,7 +224,7 @@ public class MavenArchetypeMojo
                 .setRemoteArtifactRepositories( archetypeRemoteRepositories )
                 .setOutputDirectory( basedir );
 
-            archetype.createArchetype( request, createRepository( "http://repo1.maven.org/maven2", "central" ) );
+            archetype.createArchetype( request, createRepository( "http://repo.maven.apache.org/maven2", "central" ) );
         }
         catch ( UnknownArchetype e )
         {

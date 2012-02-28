@@ -202,7 +202,7 @@ public class DefaultArchetypeManager
 
     public ArchetypeCatalog getRemoteCatalog()
     {
-        return getRemoteCatalog( "http://repo1.maven.org/maven2" );
+        return getRemoteCatalog( "http://repo.maven.apache.org/maven2" );
     }
 
     public ArchetypeCatalog getRemoteCatalog( String url )

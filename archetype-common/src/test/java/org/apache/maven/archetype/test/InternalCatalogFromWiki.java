@@ -51,7 +51,7 @@ import java.util.Properties;
 public class InternalCatalogFromWiki
     extends PlexusTestCase
 {
-    private static final String CENTRAL = "http://repo1.maven.org/maven2";
+    private static final String CENTRAL = "http://repo.maven.apache.org/maven2";
 
     private ArtifactRepository localRepository;
 

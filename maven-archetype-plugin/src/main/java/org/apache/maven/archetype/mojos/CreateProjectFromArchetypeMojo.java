@@ -103,7 +103,7 @@ public class CreateProjectFromArchetypeMojo
      * <li>'<code>file://...</code>' with <code>archetype-catalog.xml</code> automatically appended when pointing to a directory</li>
      * <li>'<code>http://...</code>' or '<code>https://...</code>' with <code>archetype-catalog.xml</code> always appended</li>
      * <li>'<code>local</code>' which is the shortcut for '<code>file://~/.m2/archetype-catalog.xml</code>'</li>
-     * <li>'<code>remote</code>' which is the shortcut for Maven Central repository, ie '<code>http://repo1.maven.org/maven2</code>'</li>
+     * <li>'<code>remote</code>' which is the shortcut for Maven Central repository, ie '<code>http://repo.maven.apache.org/maven2</code>'</li>
      * <li>'<code>internal</code>' which is an internal catalog</li>
      * </ul>
      *
