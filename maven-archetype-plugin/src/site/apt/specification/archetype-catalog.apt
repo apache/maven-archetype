@@ -111,7 +111,7 @@ How does the Archetype Plugin know about archetypes?
 
     <<<local>>> represents the <<<~/.m2/archetype-catalog.xml>>> catalog file.
 
-    <<<remote>>> represents the <<<http://repo1.maven.org/maven2/archetype-catalog.xml>>> catalog file.
+    <<<remote>>> represents the <<<http://repo.maven.apache.org/maven2/archetype-catalog.xml>>> catalog file.
 
     The Archetype Plugin can also read catalogs from filesystem/HTTP by
     providing the path/URL of a catalog file or of a directory containing an

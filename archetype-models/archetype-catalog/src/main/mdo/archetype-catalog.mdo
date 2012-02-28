@@ -33,7 +33,7 @@
     about the <code>local</code> and <code>remote</code> catalogs:</p>
     <ul>
       <li><code>local</code> represents the <code>~/.m2/archetype-catalog.xml</code> catalog file,</li>
-      <li><code>remote</code> represents the <code>http://repo1.maven.org/maven2/archetype-catalog.xml</code> catalog file.</li>
+      <li><code>remote</code> represents the <code>http://repo.maven.apache.org/maven2/archetype-catalog.xml</code> catalog file.</li>
     </ul>
     <p>The Archetype Plugin can also read catalogs from filesystem/HTTP by providing the path/URL of a catalog file or
     of a directory containing an <code>archetype-catalog.xml</code> file.</p>]]>

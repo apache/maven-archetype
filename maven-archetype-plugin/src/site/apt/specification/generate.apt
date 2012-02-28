@@ -75,7 +75,7 @@ What is done during the creation of a project?
 
        * <<<local>>> uses the <<<~/.m2/archetype-catalog.xml>>> file
 
-       * <<<remote>>> uses the <<<http://repo1.maven.org/maven2/archetype-catalog.xml>>>
+       * <<<remote>>> uses the <<<http://repo.maven.apache.org/maven2/archetype-catalog.xml>>>
          file
 
        * <<<file://path>>> uses the catalog file defined by path (or the

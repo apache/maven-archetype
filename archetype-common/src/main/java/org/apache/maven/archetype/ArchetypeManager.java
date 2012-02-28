@@ -71,7 +71,7 @@ public interface ArchetypeManager
     ArchetypeCatalog getLocalCatalog( String path );
 
     /**
-     * Gives the catalog of archetypes located at <code>http://repo1.maven.org/maven2/archetype-catalog.xml</code>.
+     * Gives the catalog of archetypes located at <code>http://repo.maven.apache.org/maven2/archetype-catalog.xml</code>.
      * @return the catalog.
      */
     ArchetypeCatalog getRemoteCatalog();

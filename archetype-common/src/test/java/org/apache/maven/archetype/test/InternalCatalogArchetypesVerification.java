@@ -73,7 +73,7 @@ public class InternalCatalogArchetypesVerification
             ar.setRepository( a.getRepository() );
             if ( ar.getRepository() == null )
             {
-                ar.setRepository( "http://repo1.maven.org/maven2" );
+                ar.setRepository( "http://repo.maven.apache.org/maven2" );
             }
             System.err.println( "\n\n\n\n\n\nTesting archetype " + ar );
             ArchetypeGenerationRequest request =

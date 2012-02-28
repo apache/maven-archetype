@@ -34,7 +34,7 @@ public class WikiArchetypeDataSourceTest
         {
             { "appfuse-basic-jsf", "org.appfuse.archetypes", "2.0", "http://static.appfuse.org/releases",
                 "AppFuse archetype for creating a web application with Hibernate, Spring and JSF" },
-            { "maven-archetype-profiles", "org.apache.maven.archetypes", "RELEASE", "http://repo1.maven.org/maven2", "" },
+            { "maven-archetype-profiles", "org.apache.maven.archetypes", "RELEASE", "http://repo.maven.apache.org/maven2", "" },
             { "struts2-archetype-starter", "org.apache.struts", "2.0.9-SNAPSHOT",
                 "http://people.apache.org/repo/m2-snapshot-repository",
                 "A starter Struts 2 application with Sitemesh, DWR, and Spring" },

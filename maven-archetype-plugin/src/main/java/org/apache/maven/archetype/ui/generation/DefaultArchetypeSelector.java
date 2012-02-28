@@ -99,11 +99,11 @@ public class DefaultArchetypeSelector
             else
             {
                 getLogger().warn(
-                    "Archetype not found in any catalog. Falling back to central repository (http://repo1.maven.org/maven2)." );
+                    "Archetype not found in any catalog. Falling back to central repository (http://repo.maven.apache.org/maven2)." );
                 getLogger().warn(
                     "Use -DarchetypeRepository=<your repository> if archetype's repository is elsewhere." );
 
-                definition.setRepository( "http://repo1.maven.org/maven2" );
+                definition.setRepository( "http://repo.maven.apache.org/maven2" );
             }
         }
 
