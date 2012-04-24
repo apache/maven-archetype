@@ -55,18 +55,18 @@ Maven Archetype
 
  Maven Archetype is composed of several modules:
 
-*----------------------------------------------------------+----------------+
-|| Module                                                  || Description   ||
-*----------------------------------------------------------+----------------+
-| {{{./archetype-models/}archetype-models}}                | descriptors classes and reference documentation,
-*----------------------------------------------------------+----------------+
-| {{{./archetype-common/}archetype-common}}                | core classes,
-*----------------------------------------------------------+----------------+
-| {{{./maven-archetype-plugin/}maven-archetype-plugin}}    | Archetype Plugin to use archetypes with Maven,
-*----------------------------------------------------------+----------------+
-| {{{./archetype-packaging/}archetype-packaging}}          | Archetype lifecycle and packaging definition,
-*----------------------------------------------------------+----------------+
-| {{{./archetype-testing/}archetype-testing}}              | components used internally to test Maven Archetype,
-*----------------------------------------------------------+----------------+
-| {{{/archetype/maven-archetype-bundles/}maven-archetype-bundles}}  | some Archetypes provided by Maven.
-*----------------------------------------------------------+----------------+
+*-----------------------------------------------------------+----------------+
+|| Module                                                   || Description   ||
+*-----------------------------------------------------------+----------------+
+| <<{{{./maven-archetype-plugin/}maven-archetype-plugin}}>> | Archetype Plugin to use archetypes with Maven,
+*-----------------------------------------------------------+----------------+
+| {{{./archetype-packaging/}archetype-packaging}}           | Archetype lifecycle and packaging definition,
+*-----------------------------------------------------------+----------------+
+| {{{./archetype-models/}archetype-models}}                 | Descriptors classes and reference documentation,
+*-----------------------------------------------------------+----------------+
+| {{{./archetype-common/}archetype-common}}                 | Core classes,
+*-----------------------------------------------------------+----------------+
+| {{{./archetype-testing/}archetype-testing}}               | Components used internally to test Maven Archetype,
+*-----------------------------------------------------------+----------------+
+
+ Some archetypes are also provided by Maven: see {{{/archetype/maven-archetype-bundles/}maven-archetype-bundles}}.
