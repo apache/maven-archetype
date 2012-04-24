@@ -51,6 +51,17 @@ Maven Archetype
  for EJBs, or WARs, or for your web services. Once these archetypes are created and deployed in your organization's
  repository they are available for use by all developers within your organization.
 
+* Using an Archetype
+
+  To create a new project based on an Archetype, you need to call <<<mvn archetype:generate>>> goal, like the following:
+
++---+
+mvn archetype:generate
++---+
+
+  Please refer to {{{http://maven.apache.org/plugins/maven-archetype-plugin/usage.html}Archetype Plugin Page}} for more
+  details.
+
 * Content
 
  Maven Archetype is composed of several modules:
