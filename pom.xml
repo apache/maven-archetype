@@ -329,6 +329,11 @@ under the License.
           <artifactId>maven-jetty-plugin</artifactId>
           <version>6.1.6</version>
         </plugin>
+        <plugin>
+          <groupId>org.apache.rat</groupId>
+          <artifactId>apache-rat-plugin</artifactId>
+          <version>0.8</version>
+        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
