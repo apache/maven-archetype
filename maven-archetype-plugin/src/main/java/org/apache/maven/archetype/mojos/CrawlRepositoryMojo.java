@@ -57,8 +57,7 @@ public class CrawlRepositoryMojo
     public void execute()
         throws MojoExecutionException, MojoFailureException
     {
-        System.err.println( "repository " + repository );
-        System.err.println( "catalogFile " + catalogFile );
+        getLog().debug( "repository " + repository + ", catalogFile " + catalogFile );
 
         if ( repository == null )
         {
