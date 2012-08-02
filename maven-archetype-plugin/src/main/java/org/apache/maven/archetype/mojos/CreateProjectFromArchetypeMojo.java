@@ -20,9 +20,9 @@ package org.apache.maven.archetype.mojos;
  */
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
+import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.ui.generation.ArchetypeGenerationConfigurator;
 import org.apache.maven.archetype.ui.generation.ArchetypeSelector;
 import org.apache.maven.artifact.repository.ArtifactRepository;
@@ -31,6 +31,11 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.ContextEnabled;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Execute;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.shared.invoker.DefaultInvocationRequest;
 import org.apache.maven.shared.invoker.InvocationRequest;
 import org.apache.maven.shared.invoker.Invoker;
@@ -47,52 +52,47 @@ import java.util.Properties;
  * If the project is updated with a partial archetype, it is done in the current directory.
  *
  * @author rafale
- * @requiresProject false
- * @goal generate
- * @execute phase="generate-sources"
  */
+@Mojo( name = "generate", requiresProject = false )
+@Execute( phase = LifecyclePhase.GENERATE_SOURCES )
 public class CreateProjectFromArchetypeMojo
     extends AbstractMojo
     implements ContextEnabled
 {
-    /** @component */
+    @Component
     private ArchetypeManager manager;
 
-    /** @component */
+    @Component
     private ArchetypeSelector selector;
 
-    /** @component */
+    @Component
     private ArchetypeGenerationConfigurator configurator;
 
-    /** @component */
+    @Component
     private Invoker invoker;
 
     /**
      * The archetype's artifactId.
-     *
-     * @parameter expression="${archetypeArtifactId}"
      */
+    @Parameter( property = "archetypeArtifactId" )
     private String archetypeArtifactId;
 
     /**
      * The archetype's groupId.
-     *
-     * @parameter expression="${archetypeGroupId}"
      */
+    @Parameter( property = "archetypeGroupId" )
     private String archetypeGroupId;
 
     /**
      * The archetype's version.
-     *
-     * @parameter expression="${archetypeVersion}"
      */
+    @Parameter( property = "archetypeVersion" )
     private String archetypeVersion;
 
     /**
      * The archetype's repository.
-     *
-     * @parameter expression="${archetypeRepository}"
      */
+    @Parameter( property = "archetypeRepository" )
     private String archetypeRepository;
 
     /**
@@ -106,66 +106,54 @@ public class CreateProjectFromArchetypeMojo
      * <li>'<code>remote</code>' which is the shortcut for Maven Central repository, ie '<code>http://repo.maven.apache.org/maven2</code>'</li>
      * <li>'<code>internal</code>' which is an internal catalog</li>
      * </ul>
-     *
+     * <p/>
      * Since 2.0-alpha-5, default value is no longer <code>internal,local</code> but <code>remote,local</code>.
      * If Maven Central repository catalog file is empty, <code>internal</code> catalog is used instead.
-     *
-     * @parameter expression="${archetypeCatalog}" default-value="remote,local"
      */
+    @Parameter( property = "archetypeCatalog", defaultValue = "remote,local" )
     private String archetypeCatalog;
 
     /**
      * Local Maven repository.
-     *
-     * @parameter expression="${localRepository}"
-     * @required
-     * @readonly
      */
+    @Parameter( defaultValue = "${localRepository}", readonly = true, required = true )
     private ArtifactRepository localRepository;
 
     /**
      * List of remote repositories used by the resolver.
-     *
-     * @parameter expression="${project.remoteArtifactRepositories}"
-     * @readonly
-     * @required
      */
+    @Parameter( defaultValue = "${project.remoteArtifactRepositories}", readonly = true, required = true )
     private List<ArtifactRepository> remoteArtifactRepositories;
 
     /**
      * User settings use to check the interactiveMode.
-     *
-     * @parameter expression="${interactiveMode}" default-value="${settings.interactiveMode}"
-     * @required
      */
+    @Parameter( property = "interactiveMode", defaultValue = "${settings.interactiveMode}", required = true )
     private Boolean interactiveMode;
 
-    /** @parameter expression="${basedir}" */
+    @Parameter( defaultValue = "${basedir}" )
     private File basedir;
 
-    /**
-     *  @parameter expression="${session}"
-     *  @readonly
-     */
+    @Parameter( defaultValue = "${session}", readonly = true )
     private MavenSession session;
 
     /**
      * Additional goals to immediately run on the project created from the archetype.
-     *
-     * @parameter expression="${goals}"
      */
+    @Parameter( property = "goals" )
     private String goals;
 
     /**
-     *  Applying some filter on displayed archetypes list: format is <code>artifactId</code> or <code>groupId:artifactId</code>.
-     *  <ul>
-     *    <li><code>org.apache:</code> -> displays all archetypes which contain org.apache in groupId</li>
-     *    <li><code>:jee</code> or <code>jee</code> -> displays all archetypes which contain jee in artifactId</li>
-     *    <li><code>org.apache:jee</code> -> displays all archetypes which contain org.apache in groupId AND jee in artifactId</li>
-     *  </ul>
-     *  @parameter expression="${filter}"
-     *  @since 2.1
+     * Applying some filter on displayed archetypes list: format is <code>artifactId</code> or <code>groupId:artifactId</code>.
+     * <ul>
+     * <li><code>org.apache:</code> -> displays all archetypes which contain org.apache in groupId</li>
+     * <li><code>:jee</code> or <code>jee</code> -> displays all archetypes which contain jee in artifactId</li>
+     * <li><code>org.apache:jee</code> -> displays all archetypes which contain org.apache in groupId AND jee in artifactId</li>
+     * </ul>
+     *
+     * @since 2.1
      */
+    @Parameter( property = "filter" )
     private String filter;
 
     public void execute()
@@ -173,15 +161,11 @@ public class CreateProjectFromArchetypeMojo
     {
         Properties executionProperties = session.getExecutionProperties();
 
-        ArchetypeGenerationRequest request = new ArchetypeGenerationRequest()
-            .setArchetypeGroupId( archetypeGroupId )
-            .setArchetypeArtifactId( archetypeArtifactId )
-            .setArchetypeVersion( archetypeVersion )
-            .setOutputDirectory( basedir.getAbsolutePath() )
-            .setLocalRepository( localRepository )
-            .setArchetypeRepository( archetypeRepository )
-            .setRemoteArtifactRepositories( remoteArtifactRepositories )
-            .setFilter( filter );
+        ArchetypeGenerationRequest request =
+            new ArchetypeGenerationRequest().setArchetypeGroupId( archetypeGroupId ).setArchetypeArtifactId(
+                archetypeArtifactId ).setArchetypeVersion( archetypeVersion ).setOutputDirectory(
+                basedir.getAbsolutePath() ).setLocalRepository( localRepository ).setArchetypeRepository(
+                archetypeRepository ).setRemoteArtifactRepositories( remoteArtifactRepositories ).setFilter( filter );
 
         try
         {
@@ -245,9 +229,8 @@ public class CreateProjectFromArchetypeMojo
 
         if ( projectBasedir.exists() )
         {
-            InvocationRequest request = new DefaultInvocationRequest()
-                .setBaseDirectory( projectBasedir )
-                .setGoals( Arrays.asList( StringUtils.split( goals, "," ) ) );
+            InvocationRequest request = new DefaultInvocationRequest().setBaseDirectory( projectBasedir ).setGoals(
+                Arrays.asList( StringUtils.split( goals, "," ) ) );
 
             try
             {

@@ -23,30 +23,29 @@ import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Updates the local catalog
  *
- * @phase install
- * @goal update-local-catalog
- *
  * @author rafale
  */
+@Mojo( name = "update-local-catalog", defaultPhase = LifecyclePhase.INSTALL )
 public class UpdateLocalCatalogMojo
     extends AbstractMojo
 {
-    /** @component */
+
+    @Component
     private ArchetypeManager manager;
 
     /**
      * The archetype project to add/update to the local catalog.
-     *
-     * @parameter expression="${project}"
-     * @required
-     * @readonly
      */
+    @Component
     private MavenProject project;
 
     public void execute()

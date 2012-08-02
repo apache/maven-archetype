@@ -28,6 +28,9 @@ import org.apache.maven.archetype.generator.ArchetypeGenerator;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.settings.Settings;
 import org.apache.maven.shared.invoker.DefaultInvocationRequest;
@@ -78,47 +81,38 @@ import java.util.Set;
  * as a goal from CLI.
  *
  * @author rafale
- * @requiresProject true
- * @goal integration-test
  */
+@Mojo( name = "integration-test", requiresProject = true )
 public class IntegrationTestMojo
     extends AbstractMojo
 {
-    /**
-     * @component
-     */
+
+    @Component
     private ArchetypeGenerator archetypeGenerator;
 
-    /**
-     * @component
-     */
+    @Component
     private Invoker invoker;
 
     /**
      * The archetype project to execute the integration tests on.
-     *
-     * @parameter expression="${project}"
-     * @required
-     * @readonly
      */
+    @Component
     private MavenProject project;
 
     /**
      * Skip the integration test.
-     *
-     * @parameter expression="${archetype.test.skip}"
-     * @readonly
      */
+    @Parameter( property = "archetype.test.skip" )
     private boolean skip = false;
 
 
     /**
      * Directory of test projects
      *
-     * @parameter expression="${archetype.test.projectsDirectory}" default-value="${project.build.testOutputDirectory}/projects"
-     * @required
      * @since 2.2
      */
+    @Parameter( property = "archetype.test.projectsDirectory",
+                defaultValue = "${project.build.testOutputDirectory}/projects", required = true )
     private File testProjectsDirectory;
 
     /**
@@ -128,77 +122,74 @@ public class IntegrationTestMojo
      * If this script exists for a particular project but returns any non-null value different from <code>true</code> or
      * throws an exception, the corresponding build is flagged as a failure.
      *
-     * @parameter expression="${archetype.test.verifyScript}" default-value="verify"
      * @since 2.2
      */
+    @Parameter( property = "archetype.test.verifyScript", defaultValue = "verify" )
     private String postBuildHookScript;
 
     /**
      * Suppress logging to the <code>build.log</code> file.
      *
-     * @parameter expression="${archetype.test.noLog}" default-value="false"
      * @since 2.2
      */
+    @Parameter( property = "archetype.test.noLog", defaultValue = "false" )
     private boolean noLog;
 
     /**
      * Flag used to determine whether the build logs should be output to the normal mojo log.
      *
-     * @parameter expression="${archetype.test.streamLogs}" default-value="true"
      * @since 2.2
      */
+    @Parameter( property = "archetype.test.streamLogs", defaultValue = "true" )
     private boolean streamLogs;
 
     /**
      * The file encoding for the post-build script.
      *
-     * @parameter expression="${encoding}" default-value="${project.build.sourceEncoding}"
      * @since 2.2
      */
+    @Parameter( property = "encoding", defaultValue = "${project.build.sourceEncoding}" )
     private String encoding;
 
     /**
      * The local repository to run maven instance.
      *
-     * @parameter expression="${archetype.test.localRepositoryPath}" default-value="${settings.localRepository}"
-     * @required
-     * @readonly
      * @since 2.2
      */
+    @Parameter( property = "archetype.test.localRepositoryPath", defaultValue = "${settings.localRepository}",
+                required = true )
     private File localRepositoryPath;
 
     /**
      * flag to enable show mvn version used for running its (cli option : -V,--show-version )
      *
-     * @parameter expression="${archetype.test.showVersion}" default-value="false"
      * @since 2.2
      */
+    @Parameter( property = "archetype.test.showVersion", defaultValue = "false" )
     private boolean showVersion;
 
     /**
      * Whether to show debug statements in the build output.
      *
-     * @parameter expression="${archetype.test.debug}" default-value="false"
      * @since 2.2
      */
+    @Parameter( property = "archetype.test.debug", defaultValue = "false" )
     private boolean debug;
 
     /**
      * A list of additional properties which will be used to filter tokens in settings.xml
      *
-     * @parameter
      * @since 2.2
      */
+    @Parameter
     private Map<String, String> filterProperties;
 
     /**
      * The current user system settings for use in Maven.
      *
-     * @parameter expression="${settings}"
-     * @required
-     * @readonly
      * @since 2.2
      */
+    @Parameter( defaultValue = "${settings}", required = true, readonly = true )
     private Settings settings;
 
     /**
@@ -206,9 +197,9 @@ public class IntegrationTestMojo
      * <code>&lt;localRepository&gt;</code> element of this settings file is always ignored, i.e. the path given by the
      * parameter {@link #localRepositoryPath} is dominant.
      *
-     * @parameter expression="${archetype.test.settingsFile}"
      * @since 2.2
      */
+    @Parameter( property = "archetype.test.settingsFile" )
     private File settingsFile;
 
 

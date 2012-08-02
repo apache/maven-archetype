@@ -24,36 +24,34 @@ import org.apache.maven.archetype.repositorycrawler.RepositoryCrawler;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 
 import java.io.File;
 
 /**
  * Crawl a Maven repository (filesystem, not HTTP) and creates a catalog file.
  *
- * @author           rafale
- * @requiresProject  false
- * @goal             crawl
+ * @author rafale
  */
+@Mojo( name = "crawl", requiresProject = false )
 public class CrawlRepositoryMojo
     extends AbstractMojo
 {
     /**
      * The archetype's catalog to update.
-     *
-     * @parameter  expression="${catalog}"
      */
+    @Parameter( property = "catalog" )
     private File catalogFile;
 
-    /**
-     * @component
-     */
+    @Component
     private RepositoryCrawler crawler;
 
     /**
      * The repository to crawl.
-     *
-     * @parameter  expression="${repository}" default-value="${settings.localRepository}"
      */
+    @Parameter( property = "repository", defaultValue = "${settings.localRepository}" )
     private File repository;
 
     public void execute()
