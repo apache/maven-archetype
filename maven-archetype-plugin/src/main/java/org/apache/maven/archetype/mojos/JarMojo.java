@@ -28,6 +28,10 @@ import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
 import java.io.File;
@@ -36,59 +40,46 @@ import java.io.IOException;
 /**
  * Build a JAR from the current Archetype project.
  *
- * @author           rafale
- * @goal             jar
- * @phase            package
- * @requiresProject
+ * @author rafale
  */
+@Mojo( name = "jar", defaultPhase = LifecyclePhase.PACKAGE, requiresProject = true )
 public class JarMojo
     extends AbstractMojo
 {
     /**
      * Directory containing the classes.
-     *
-     * @parameter  expression="${project.build.outputDirectory}"
-     * @required
      */
+    @Parameter( defaultValue = "${project.build.outputDirectory}", required = true )
     private File archetypeDirectory;
 
     /**
      * Name of the generated JAR.
-     *
-     * @parameter  alias="jarName" expression="${project.build.finalName}"
-     * @required
      */
+    @Parameter( defaultValue = "${project.build.finalName}", alias = "jarName", required = true )
     private String finalName;
 
     /**
      * Directory containing the generated JAR.
-     *
-     * @parameter  expression="${project.build.directory}"
-     * @required
      */
+    @Parameter( defaultValue = "${project.build.directory}", required = true )
     private File outputDirectory;
 
     /**
      * The Maven project.
-     *
-     * @parameter  expression="${project}"
-     * @required
-     * @readonly
      */
+    @Component
     private MavenProject project;
 
     /**
      * The archetype manager component.
-     *
-     * @component
      */
+    @Component
     private ArchetypeManager manager;
 
     /**
      * The archetype artifact manager component.
-     *
-     * @component
      */
+    @Component
     private ArchetypeArtifactManager archetypeArtifactManager;
 
     public void execute()

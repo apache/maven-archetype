@@ -29,6 +29,11 @@ import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Execute;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.PropertyUtils;
 import org.codehaus.plexus.util.StringUtils;
@@ -46,9 +51,9 @@ import java.util.Properties;
  * <p>
  * This goal reads your source and resource files, the values of its parameters,
  * and properties you specify in a <code>.property</code> file, and uses them to
- * create a Maven archetype project using the maven-archetype packaging. 
+ * create a Maven archetype project using the maven-archetype packaging.
  * If you build the resulting project, it will create the archetype. You can then
- * use this archetype to create new projects that resemble the original.  
+ * use this archetype to create new projects that resemble the original.
  * </p>
  * <p>
  * The maven-archetype-plugin uses Velocity to expand template files, and this documentation
@@ -63,14 +68,14 @@ import java.util.Properties;
  * <dl>
  * <dt>GAV</dt><dd>The GAV values for the current project are replaced by properties: groupId, artifactId, and version.
  * The user chooses new values for these when generating a project from the archetype.</dd>
- * <dt>package</dt><dd>All the files under one specified Java (or cognate) package are relocated to a project 
+ * <dt>package</dt><dd>All the files under one specified Java (or cognate) package are relocated to a project
  * that the user chooses when generating a project. References to the class name are replaced by a property reference. For
- * example, if the current project's sources are in the package <code>org.apache.saltedpeanuts</code>, then 
+ * example, if the current project's sources are in the package <code>org.apache.saltedpeanuts</code>, then
  * any example of the string <code>org.apache.saltedpeanuts</code> is replaced with the Velocity property
  * reference <code>${packageName}</code>. When the user generates a project, this is in turn replaced by
- * his or her choice of a package.  
+ * his or her choice of a package.
  * </dd>
- * <dt>custom properties</dt><dd>You may identify additional strings that should be replaced by parameters. 
+ * <dt>custom properties</dt><dd>You may identify additional strings that should be replaced by parameters.
  * To add custom properties, you must use the <code>propertyFile</code> parameter to specify a property file.
  * See the documentation for <code>propertyFile</code> for the details.
  * </dl>
@@ -83,90 +88,76 @@ import java.util.Properties;
  * </p>
  *
  * @author rafale
- * @requiresProject true
- * @goal create-from-project
- * @execute phase="generate-sources"
- * @aggregator
  */
+@Mojo( name = "create-from-project", requiresProject = true, aggregator = true )
+@Execute( phase = LifecyclePhase.GENERATE_SOURCES )
 public class CreateArchetypeFromProjectMojo
     extends AbstractMojo
 {
-    /** @component */
+
+    @Component
     private ArchetypeCreationConfigurator configurator;
 
     /**
      * Enable the interactive mode to define the archetype from the project.
-     *
-     * @parameter expression="${interactive}" default-value="false"
      */
+    @Parameter( property = "interactive", defaultValue = "false" )
     private boolean interactive;
 
-    /** @component */
+    @Component
     private ArchetypeManager manager;
 
     /**
      * File extensions which are checked for project's text files (vs binary files).
-     *
-     * @parameter expression="${archetype.filteredExtentions}"
      */
+    @Parameter( property = "archetype.filteredExtentions" )
     private String archetypeFilteredExtentions;
 
     /**
      * Directory names which are checked for project's sources main package.
-     *
-     * @parameter expression="${archetype.languages}"
      */
+    @Parameter( property = "archetype.languages" )
     private String archetypeLanguages;
 
     /**
      * The location of the registry file.
-     *
-     * @parameter expression="${user.home}/.m2/archetype.xml"
      */
+    @Parameter( defaultValue = "${user.home}/.m2/archetype.xml" )
     private File archetypeRegistryFile;
 
     /**
      * Velocity templates encoding.
-     *
-     * @parameter default-value="UTF-8" expression="${archetype.encoding}"
      */
+    @Parameter( property = "archetype.encoding", defaultValue = "UTF-8" )
     private String defaultEncoding;
 
     /**
      * Create a partial archetype.
-     *
-     * @parameter expression="${archetype.partialArchetype}"
      */
+    @Parameter( property = "archetype.partialArchetype" )
     private boolean partialArchetype = false;
 
     /**
      * Create pom's velocity templates with CDATA preservation. This uses the <code>String.replaceAll()</code>
      * method and risks to have some overly replacement capabilities (beware of '1.0' value).
-     *
-     * @parameter expression="${archetype.preserveCData}"
      */
+    @Parameter( property = "archetype.preserveCData" )
     private boolean preserveCData = false;
 
-    /** @parameter expression="${localRepository}"
-     * @readonly
-     **/
+    @Parameter( defaultValue = "${localRepository}", readonly = true )
     private ArtifactRepository localRepository;
 
     /**
      * POMs in archetype are created with their initial parent.
      * This property is ignored when preserveCData is true.
-     *
-     * @parameter expression="${archetype.keepParent}"
      */
+    @Parameter( property = "archetype.keepParent" )
     private boolean keepParent = true;
 
     /**
      * The Maven project to create an archetype from.
-     *
-     * @parameter expression="${project}"
-     * @required
-     * @readonly
      */
+    @Component
     private MavenProject project;
 
     /**
@@ -175,68 +166,61 @@ public class CreateArchetypeFromProjectMojo
      * properties listed below or custom properties for this archetype. The standard properties
      * are below. Several of them overlap parameters of this goal; it's better to just
      * set the parameter.
-     * 
-     *  <dl><dt>package</dt><dd>See the packageName parameter.</dd>
-     *  <dt>archetype.languages</dt><dd>See the archetypeLanguages parameter.</dd>
-     *  <dt>groupId</dt><dd>The default groupId of the generated project.</dd>
-     *  <dt>artifactId</dt><dd>The default artifactId of the generated project.</dd> 
-     *  <dt>version</dt><dd>The default version of the generated project.</dd>
-     *  <dt>archetype.filteredExtensions</dt><dd>See the filteredExensions parameter.</dd>
-     *  </dl>
-     *  <strong>Custom Properties</strong>
-     *  <p>
-     *  Custom properties allow you to replace some constant values in the project's files
-     *  with Velocity macro references. When a user generates a project from your archetype
-     *  he or she gets the opportunity to replace the value from the source project. 
-     *  </p>
-     *  <p>
-     *  Custom property names <strong>may not contain the '.' character</strong>.
-     *  </p>
-     *  <p>
-     *  For example, if you include a line like the following in your property file:
-     *  <pre>
+     * <p/>
+     * <dl><dt>package</dt><dd>See the packageName parameter.</dd>
+     * <dt>archetype.languages</dt><dd>See the archetypeLanguages parameter.</dd>
+     * <dt>groupId</dt><dd>The default groupId of the generated project.</dd>
+     * <dt>artifactId</dt><dd>The default artifactId of the generated project.</dd>
+     * <dt>version</dt><dd>The default version of the generated project.</dd>
+     * <dt>archetype.filteredExtensions</dt><dd>See the filteredExensions parameter.</dd>
+     * </dl>
+     * <strong>Custom Properties</strong>
+     * <p>
+     * Custom properties allow you to replace some constant values in the project's files
+     * with Velocity macro references. When a user generates a project from your archetype
+     * he or she gets the opportunity to replace the value from the source project.
+     * </p>
+     * <p>
+     * Custom property names <strong>may not contain the '.' character</strong>.
+     * </p>
+     * <p>
+     * For example, if you include a line like the following in your property file:
+     * <pre>
      *  	cxf-version=2.5.1-SNAPSHOT
      *  </pre>
-     *  the plugin will search your files for the string <pre>2.5.1-SNAPSHOT</pre> and
-     *  replace them with references to a velocity macro <pre>cxf-version</pre>. It will 
-     *  then list <pre>cxf-version</pre> as a <pre>requiredProperty</pre> in the 
-     *  archetype-metadata.xml, with <pre>2.5.1-SNAPSHOT</pre> as the default value.
-     *  </p>
-     *  
-     *
-     * @parameter expression="${archetype.properties}"
+     * the plugin will search your files for the string <pre>2.5.1-SNAPSHOT</pre> and
+     * replace them with references to a velocity macro <pre>cxf-version</pre>. It will
+     * then list <pre>cxf-version</pre> as a <pre>requiredProperty</pre> in the
+     * archetype-metadata.xml, with <pre>2.5.1-SNAPSHOT</pre> as the default value.
+     * </p>
      */
+    @Parameter( property = "archetype.properties" )
     private File propertyFile;
 
     /**
      * The property telling which phase to call on the generated archetype.
      * Interesting values are: <code>package</code>, <code>integration-test</code>, <code>install</code> and <code>deploy</code>.
-     *
-     * @parameter expression="${archetype.postPhase}" default-value="package"
      */
+    @Parameter( property = "archetype.postPhase", defaultValue = "package" )
     private String archetypePostPhase;
 
     /**
      * The directory where the archetype should be created.
-     * 
-     * @parameter expression="${project.build.directory}/generated-sources/archetype"
      */
+    @Parameter( defaultValue = "${project.build.directory}/generated-sources/archetype" )
     private File outputDirectory;
 
-    /** @parameter expression="${testMode}" */
+    @Parameter( property = "testMode" )
     private boolean testMode;
 
-    /** 
-     * The package name for Java source files to be incorporated in the archetype and 
+    /**
+     * The package name for Java source files to be incorporated in the archetype and
      * and relocated to the package that the user selects.
-     * 
-     * @parameter expression="${packageName}" */
+     */
+    @Parameter( property = "packageName" )
     private String packageName; //Find a better way to resolve the package!!! enforce usage of the configurator
 
-    /**
-     *  @parameter expression="${session}"
-     *  @readonly
-     */
+    @Component
     private MavenSession session;
 
     public void execute()
@@ -258,25 +242,16 @@ public class CreateArchetypeFromProjectMojo
 
             List<String> filtereds = getFilteredExtensions( archetypeFilteredExtentions, propertyFile );
 
-            ArchetypeCreationRequest request = new ArchetypeCreationRequest()
-                .setDefaultEncoding( defaultEncoding )
-                .setProject( project )
-                /* Used when in interactive mode */
-                .setProperties( properties )
-                .setLanguages( languages )
-                /* Should be refactored to use some ant patterns */
-                .setFiltereds( filtereds )
-                /* This should be correctly handled */
-                .setPreserveCData( preserveCData )
-                .setKeepParent( keepParent )
-                .setPartialArchetype( partialArchetype )
-                /* This should be used before there and use only languages and filtereds */
-                .setArchetypeRegistryFile( archetypeRegistryFile )
-                .setLocalRepository( localRepository )
-                /* this should be resolved and asked for user to verify */
-                .setPackageName( packageName )
-                .setPostPhase( archetypePostPhase )
-                .setOutputDirectory( outputDirectory );
+            ArchetypeCreationRequest request =
+                new ArchetypeCreationRequest().setDefaultEncoding( defaultEncoding ).setProject( project )
+                /* Used when in interactive mode */.setProperties( properties ).setLanguages( languages )
+                /* Should be refactored to use some ant patterns */.setFiltereds( filtereds )
+                /* This should be correctly handled */.setPreserveCData( preserveCData ).setKeepParent(
+                    keepParent ).setPartialArchetype( partialArchetype )
+                /* This should be used before there and use only languages and filtereds */.setArchetypeRegistryFile(
+                    archetypeRegistryFile ).setLocalRepository( localRepository )
+                /* this should be resolved and asked for user to verify */.setPackageName( packageName ).setPostPhase(
+                    archetypePostPhase ).setOutputDirectory( outputDirectory );
 
             ArchetypeCreationResult result = manager.createArchetypeFromProject( request );
 
