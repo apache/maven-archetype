@@ -215,6 +215,11 @@ under the License.
         <version>1.5.8</version>
       </dependency>
       <dependency>
+        <groupId>commons-io</groupId>
+        <artifactId>commons-io</artifactId>
+        <version>2.2</version>
+      </dependency>
+      <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-interactivity-api</artifactId>
         <version>1.0-alpha-5</version>
