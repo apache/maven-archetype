@@ -47,7 +47,7 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- * Generates a new project from an archetype, or updated the actual project if using a partial archetype.
+ * Generates a new project from an archetype, or updates the actual project if using a partial archetype.
  * If the project is fully generated, it is generated in a directory corresponding to its artifactId.
  * If the project is updated with a partial archetype, it is done in the current directory.
  *
@@ -98,7 +98,7 @@ public class CreateProjectFromArchetypeMojo
     /**
      * The archetype catalogs to use to build a list and let the user choose from.
      * It is a comma separated list of catalogs.
-     * Catalogs use following schemes:
+     * Catalogs use the following schemes:
      * <ul>
      * <li>'<code>file://...</code>' with <code>archetype-catalog.xml</code> automatically appended when pointing to a directory</li>
      * <li>'<code>http://...</code>' or '<code>https://...</code>' with <code>archetype-catalog.xml</code> always appended</li>
@@ -126,7 +126,7 @@ public class CreateProjectFromArchetypeMojo
     private List<ArtifactRepository> remoteArtifactRepositories;
 
     /**
-     * User settings use to check the interactiveMode.
+     * User settings used to check the interactiveMode.
      */
     @Parameter( property = "interactiveMode", defaultValue = "${settings.interactiveMode}", required = true )
     private Boolean interactiveMode;
