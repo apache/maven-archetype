@@ -312,7 +312,16 @@ public class ArchetypeGenerationRequest
         return mirrors;
     }
 
+    /**
+     * @deprecated Use {@link #addServer(Server)} instead
+     */
+    @Deprecated
     public ArchetypeGenerationRequest addMirror( Server server )
+    {
+        return addServer( server );
+    }
+
+    public ArchetypeGenerationRequest addServer( Server server )
     {
         servers.add( server );
 
