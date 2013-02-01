@@ -93,7 +93,7 @@ public class DefaultArchetypeSelector
 
                 updateRepository( definition, archetype, catalogKey );
 
-                getLogger().info( "Archetype repository missing. Using the one from " + archetype + " found in catalog "
+                getLogger().info( "Archetype repository not defined. Using the one from " + archetype + " found in catalog "
                                       + catalogKey );
             }
             else
@@ -180,7 +180,7 @@ public class DefaultArchetypeSelector
     {
         if ( catalogs == null )
         {
-            throw new NullPointerException( "catalogs cannot be null" );
+            throw new NullPointerException( "Catalogs cannot be null" );
         }
 
         Map<String, List<Archetype>> archetypes = new LinkedHashMap<String, List<Archetype>>();
