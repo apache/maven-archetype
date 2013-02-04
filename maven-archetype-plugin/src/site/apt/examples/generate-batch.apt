@@ -28,52 +28,50 @@
 
 Generate project in batch mode
 
-   It is possible to get rid of the interactivity of the archetype plugin
+   It is possible to get rid of the interactivity of the Maven Archetype Plugin
    by setting the <<<interactive>>> property to <<<false>>> or by using the -B
    flag.
-   A couple of meaningful properties are then required.
+   A couple of meaningful properties are then required:
    
-   The archetypeGroupId, archetypeArtifactId and archetypeVersion defines the 
+   * The archetypeGroupId, archetypeArtifactId and archetypeVersion defines the 
    archetype to use for project generation.
 
-   The groupId, artifactId, version and package are the main properties to be 
-   set. Each archetype require these properties. Some archetypes defines other 
-   properties; refers to the appropriate archetype documentation if needed.
+   * The groupId, artifactId, version and package are the main properties to be 
+   set. Each archetype require these properties. Some archetypes define other 
+   properties; refer to the appropriate archetype's documentation if needed.
 
+   []
 
-+--
-$ mvn archetype:generate -B -DarchetypeGroupId=org.apache.maven.archetypes -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.0 -DgroupId=com.company -DartifactId=project -Dversion=1.0 -Dpackage=1.5
++----
+$ mvn archetype:generate -B -DarchetypeGroupId=org.apache.maven.archetypes -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.1 -DgroupId=com.company -DartifactId=project -Dversion=1.0-SNAPSHOT -Dpackage=com.company.project
 [INFO] Scanning for projects...
-[INFO] Searching repository for plugin with prefix: 'archetype'.
+[INFO]                                                                         
 [INFO] ------------------------------------------------------------------------
-[INFO] Building Maven Default Project
-[INFO]    task-segment: [archetype:generate] (aggregator-style)
+[INFO] Building Maven Stub Project (No POM) 1
 [INFO] ------------------------------------------------------------------------
-[INFO] Preparing archetype:generate
-[INFO] No goals needed for project - skipping
-[INFO] Setting property: classpath.resource.loader.class => 'org.codehaus.plexus.velocity.ContextClassLoaderResourceLoader'.
-[INFO] Setting property: velocimacro.messages.on => 'false'.
-[INFO] Setting property: resource.loader => 'classpath'.
-[INFO] Setting property: resource.manager.logwhenfound => 'false'.
-[INFO] [archetype:generate]
+[INFO] 
+[INFO] >>> maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom >>>
+[INFO] 
+[INFO] <<< maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom <<<
+[INFO] 
+[INFO] --- maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom ---
 [INFO] Generating project in Batch mode
-[INFO] Archetype repository missing. Using the one from [org.apache.maven.archetypes:maven-archetype-quickstart:RELEASE] found in catalog internal
+[INFO] Archetype repository missing. Using the one from [org.apache.maven.archetypes:maven-archetype-quickstart:1.1] found in catalog remote
 [INFO] ----------------------------------------------------------------------------
-[INFO] Using following parameters for creating OldArchetype: maven-archetype-quickstart:1.0
+[INFO] Using following parameters for creating project from Old (1.x) Archetype: maven-archetype-quickstart:1.1
 [INFO] ----------------------------------------------------------------------------
 [INFO] Parameter: groupId, Value: com.company
-[INFO] Parameter: packageName, Value: 1.5
-[INFO] Parameter: package, Value: 1.5
+[INFO] Parameter: packageName, Value: com.company.project
+[INFO] Parameter: package, Value: com.company.project
 [INFO] Parameter: artifactId, Value: project
-[INFO] Parameter: basedir, Value: /private/tmp/archetype
-[INFO] Parameter: version, Value: 1.0
-[INFO] OldArchetype created in dir: /private/tmp/archetype/project
+[INFO] Parameter: basedir, Value: /Users/maven/dev
+[INFO] Parameter: version, Value: 1.0-SNAPSHOT
+[INFO] project created from Old (1.x) Archetype in dir: /Users/maven/dev/project
 [INFO] ------------------------------------------------------------------------
-[INFO] BUILD SUCCESSFUL
+[INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time: 2 seconds
-[INFO] Finished at: Tue Sep 09 18:59:24 CEST 2008
-[INFO] Final Memory: 8M/15M
+[INFO] Total time: 9.184s
+[INFO] Finished at: Mon Feb 04 11:53:24 CET 2013
+[INFO] Final Memory: 9M/265M
 [INFO] ------------------------------------------------------------------------
-
-+--
++----
