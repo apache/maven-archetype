@@ -168,32 +168,6 @@ under the License.
 
   <profiles>
     <profile>
-      <id>reporting</id>
-      <reporting>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-changes-plugin</artifactId>
-            <version>2.4</version>
-            <configuration>
-              <columnNames>Fix Version,Type,Key,Summary,Resolution</columnNames>
-              <resolutionIds>Closed</resolutionIds>
-              <sortColumnNames>Fix Version DESC</sortColumnNames>
-              <maxEntries>1000</maxEntries>
-              <fixVersionIds>16795,14604,14254</fixVersionIds> <!-- 2.1, 2.0, 2.0-alpha-5 -->
-            </configuration>
-            <reportSets>
-              <reportSet>
-                <reports>
-                  <report>jira-report</report>
-                </reports>
-              </reportSet>
-            </reportSets>
-          </plugin>
-        </plugins>
-      </reporting>
-    </profile>
-    <profile>
       <id>run-its</id>
       <build>
         <plugins>
