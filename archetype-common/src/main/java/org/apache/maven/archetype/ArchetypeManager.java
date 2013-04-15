@@ -51,12 +51,14 @@ public interface ArchetypeManager
 
     /**
      * Gives the catalog of archetypes internal to the plugin.
+     * 
      * @return the catalog.
      */
     ArchetypeCatalog getInternalCatalog();
 
     /**
      * Gives the catalog of archetypes located in <code>${user.home}/.m2/repository/archetype-catalog.xml</code>.
+     * 
      * @return the catalog.
      */
     ArchetypeCatalog getDefaultLocalCatalog();
@@ -65,6 +67,7 @@ public interface ArchetypeManager
      * Gives the catalog of archetypes located in the given path.
      * if path is a file, it used as is.
      * if path is a directory, archetype-catalog.xml is appended to it.
+     * 
      * @param path the catalog file path or directory containing the catalog file.
      * @return the catalog.
      */
@@ -72,6 +75,7 @@ public interface ArchetypeManager
 
     /**
      * Gives the catalog of archetypes located at <code>http://repo.maven.apache.org/maven2/archetype-catalog.xml</code>.
+     * 
      * @return the catalog.
      */
     ArchetypeCatalog getRemoteCatalog();
@@ -79,6 +83,7 @@ public interface ArchetypeManager
     /**
      * Gives the catalog of archetypes located at the given url.
      * if the url doesn't define a catalog, then <code>'archetype-catalog.xml'</code> is appended to it for search.
+     * 
      * @param url the catalog url or base url containing the catalog file.
      * @return the catalog.
      */
@@ -92,7 +97,6 @@ public interface ArchetypeManager
      * @param finalName
      * @return The File to the generated jar
      * @throws org.apache.maven.artifact.DependencyResolutionRequiredException
-     *
      * @throws java.io.IOException
      */
     File archiveArchetype( File archetypeDirectory, File outputDirectory, String finalName )
