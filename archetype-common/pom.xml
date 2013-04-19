@@ -246,21 +246,21 @@ under the License.
             <id>archetype-test</id>
             <phase>process-test-resources</phase>
             <configuration>
-              <tasks>
+              <target>
                 <property name="test.archetype.name" value="basic" />
                 <property name="test.archetype.version" value="1.0" />
 
                 <property name="test.projects.repository" value="repositories/central" />
                 <property name="test.archetype.name-version" value="${test.archetype.name}-${test.archetype.version}" />
-                <property name="test.source.directory" value="${basedir}/src/test/archetypes/${test.archetype.name-version}" />
-                <property name="test.target.directory" value="${basedir}/target/test-classes/${test.projects.repository}/archetypes/${test.archetype.name}/${test.archetype.version}" />
+                <property name="test.source.directory" value="${project.basedir}/src/test/archetypes/${test.archetype.name-version}" />
+                <property name="test.target.directory" value="${project.build.directory}/test-classes/${test.projects.repository}/archetypes/${test.archetype.name}/${test.archetype.version}" />
 
                 <mkdir dir="${test.target.directory}" />
 
                 <jar destfile="${test.target.directory}/${test.archetype.name-version}.jar" basedir="${test.source.directory}/" />
 
                 <copy tofile="${test.target.directory}/${test.archetype.name-version}.pom" file="${test.source.directory}/META-INF/maven/archetypes/${test.archetype.name}/pom.xml" />
-              </tasks>
+              </target>
             </configuration>
             <goals>
               <goal>run</goal>
@@ -271,21 +271,21 @@ under the License.
             <id>archetype-test-partial</id>
             <phase>process-test-resources</phase>
             <configuration>
-              <tasks>
+              <target>
                 <property name="test.archetype.name" value="partial" />
                 <property name="test.archetype.version" value="1.0" />
 
                 <property name="test.projects.repository" value="repositories/central" />
                 <property name="test.archetype.name-version" value="${test.archetype.name}-${test.archetype.version}" />
-                <property name="test.source.directory" value="${basedir}/src/test/archetypes/${test.archetype.name-version}" />
-                <property name="test.target.directory" value="${basedir}/target/test-classes/${test.projects.repository}/archetypes/${test.archetype.name}/${test.archetype.version}" />
+                <property name="test.source.directory" value="${project.basedir}/src/test/archetypes/${test.archetype.name-version}" />
+                <property name="test.target.directory" value="${project.build.directory}/test-classes/${test.projects.repository}/archetypes/${test.archetype.name}/${test.archetype.version}" />
 
                 <mkdir dir="${test.target.directory}" />
 
                 <jar destfile="${test.target.directory}/${test.archetype.name-version}.jar" basedir="${test.source.directory}/" />
 
                 <copy tofile="${test.target.directory}/${test.archetype.name-version}.pom" file="${test.source.directory}/META-INF/maven/archetypes/${test.archetype.name}/pom.xml" />
-              </tasks>
+              </target>
             </configuration>
             <goals>
               <goal>run</goal>
@@ -296,21 +296,21 @@ under the License.
             <id>archetype-test-site</id>
             <phase>process-test-resources</phase>
             <configuration>
-              <tasks>
+              <target>
                 <property name="test.archetype.name" value="site" />
                 <property name="test.archetype.version" value="1.0" />
 
                 <property name="test.projects.repository" value="repositories/central" />
                 <property name="test.archetype.name-version" value="${test.archetype.name}-${test.archetype.version}" />
-                <property name="test.source.directory" value="${basedir}/src/test/archetypes/${test.archetype.name-version}" />
-                <property name="test.target.directory" value="${basedir}/target/test-classes/${test.projects.repository}/archetypes/${test.archetype.name}/${test.archetype.version}" />
+                <property name="test.source.directory" value="${project.basedir}/src/test/archetypes/${test.archetype.name-version}" />
+                <property name="test.target.directory" value="${project.build.directory}/test-classes/${test.projects.repository}/archetypes/${test.archetype.name}/${test.archetype.version}" />
 
                 <mkdir dir="${test.target.directory}" />
 
                 <jar destfile="${test.target.directory}/${test.archetype.name-version}.jar" basedir="${test.source.directory}/" />
 
                 <copy tofile="${test.target.directory}/${test.archetype.name-version}.pom" file="${test.source.directory}/META-INF/maven/archetypes/${test.archetype.name}/pom.xml" />
-              </tasks>
+              </target>
             </configuration>
             <goals>
               <goal>run</goal>
@@ -321,21 +321,21 @@ under the License.
             <id>archetype-test-old</id>
             <phase>process-test-resources</phase>
             <configuration>
-              <tasks>
+              <target>
                 <property name="test.archetype.name" value="old" />
                 <property name="test.archetype.version" value="1.0" />
 
                 <property name="test.projects.repository" value="repositories/central" />
                 <property name="test.archetype.name-version" value="${test.archetype.name}-${test.archetype.version}" />
-                <property name="test.source.directory" value="${basedir}/src/test/archetypes/${test.archetype.name-version}" />
-                <property name="test.target.directory" value="${basedir}/target/test-classes/${test.projects.repository}/archetypes/${test.archetype.name}/${test.archetype.version}" />
+                <property name="test.source.directory" value="${project.basedir}/src/test/archetypes/${test.archetype.name-version}" />
+                <property name="test.target.directory" value="${project.build.directory}/test-classes/${test.projects.repository}/archetypes/${test.archetype.name}/${test.archetype.version}" />
 
                 <mkdir dir="${test.target.directory}" />
 
                 <jar destfile="${test.target.directory}/${test.archetype.name-version}.jar" basedir="${test.source.directory}/" />
 
                 <copy tofile="${test.target.directory}/${test.archetype.name-version}.pom" file="${test.source.directory}/META-INF/maven/archetypes/${test.archetype.name}/pom.xml" />
-              </tasks>
+              </target>
             </configuration>
             <goals>
               <goal>run</goal>
@@ -346,21 +346,21 @@ under the License.
             <id>archetype-test-fileset</id>
             <phase>process-test-resources</phase>
             <configuration>
-              <tasks>
+              <target>
                 <property name="test.archetype.name" value="fileset" />
                 <property name="test.archetype.version" value="1.0" />
 
                 <property name="test.projects.repository" value="repositories/central" />
                 <property name="test.archetype.name-version" value="${test.archetype.name}-${test.archetype.version}" />
-                <property name="test.source.directory" value="${basedir}/src/test/archetypes/${test.archetype.name-version}" />
-                <property name="test.target.directory" value="${basedir}/target/test-classes/${test.projects.repository}/archetypes/${test.archetype.name}/${test.archetype.version}" />
+                <property name="test.source.directory" value="${project.basedir}/src/test/archetypes/${test.archetype.name-version}" />
+                <property name="test.target.directory" value="${project.build.directory}/test-classes/${test.projects.repository}/archetypes/${test.archetype.name}/${test.archetype.version}" />
 
                 <mkdir dir="${test.target.directory}" />
 
                 <jar destfile="${test.target.directory}/${test.archetype.name-version}.jar" basedir="${test.source.directory}/" />
 
                 <copy tofile="${test.target.directory}/${test.archetype.name-version}.pom" file="${test.source.directory}/META-INF/maven/archetypes/${test.archetype.name}/pom.xml" />
-              </tasks>
+              </target>
             </configuration>
             <goals>
               <goal>run</goal>
@@ -371,13 +371,13 @@ under the License.
             <id>repository-metadata</id>
             <phase>process-test-resources</phase>
             <configuration>
-              <tasks>
+              <target>
                 <property name="test.projects.source.directory" value="${test.projects.archetype}" />
                 <property name="test.projects.target.directory" value="archetypes" />
                 <property name="test.projects.repository" value="repositories/central" />
 
-                <mkdir dir="${basedir}/target/test-classes/${test.projects.repository}/${test.projects.target.directory}" />
-              </tasks>
+                <mkdir dir="${project.build.directory}/test-classes/${test.projects.repository}/${test.projects.target.directory}" />
+              </target>
             </configuration>
             <goals>
               <goal>run</goal>
