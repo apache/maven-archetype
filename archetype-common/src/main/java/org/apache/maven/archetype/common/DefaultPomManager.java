@@ -317,7 +317,7 @@ public class DefaultPomManager
             outputStreamWriter =
                 new OutputStreamWriter( new FileOutputStream( pomFile ), fileEncoding );
 
-            Format form = Format.getRawFormat().setEncoding( fileEncoding );
+            Format form = Format.getRawFormat().setEncoding( fileEncoding ).setLineSeparator(System.getProperty("line.separator"));
             writer.write( model, doc, outputStreamWriter, form );
         }
         catch ( JDOMException exc )
