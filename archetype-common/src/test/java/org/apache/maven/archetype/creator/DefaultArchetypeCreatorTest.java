@@ -329,6 +329,23 @@ public class DefaultArchetypeCreatorTest
         assertContent( template, "${packageInPathFormat}/test" );
     }
 
+    public void testCreateFilesetArchetype4()
+            throws Exception
+    {
+        String project = "create-4";
+
+        createFilesetArchetype( project );
+
+        File template = getTemplateFile( project, "subModuleEAR/pom.xml" );
+        assertExists( template );
+        assertContent( template, "${groupId}" );
+        assertContent( template, "${artifactId}" );
+        assertContent( template, "${version}" );
+        assertContent( template, "Maven archetype Test create-4-subModuleEAR" );
+        assertContent( template, "<packaging>ear</packaging>" );
+        assertContent( template, "<parent>" );
+    }
+    
     protected void tearDown()
         throws Exception
     {
