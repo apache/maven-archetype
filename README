@@ -2,3 +2,6 @@ Maven Archetype
 http://maven.apache.org/archetype/
 
 Developers list: dev@maven.apache.org
+
+To deploy website
+sh ./deploySite.sh -Dusername=apacheuid -Dpassword=apachepaswword
