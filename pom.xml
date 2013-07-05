@@ -67,7 +67,7 @@ under the License.
   <distributionManagement>
     <site>
       <id>apache.website</id>
-      <url>scp://people.apache.org/www/maven.apache.org/archetype/</url>
+      <url>scm:svn:https://svn.apache.org/repos/infra/websites/production/maven/content/${maven.site.path}</url>
     </site>
   </distributionManagement>
 
@@ -76,6 +76,7 @@ under the License.
     <netbeans.hint.useExternalMaven>true</netbeans.hint.useExternalMaven>
     <mavenPluginPluginVersion>3.2</mavenPluginPluginVersion>
     <wagonVersion>1.0</wagonVersion>
+    <maven.site.path>archetype-archives/archetype-LATEST</maven.site.path>
   </properties>
 
   <dependencyManagement>
@@ -262,6 +263,14 @@ under the License.
           <groupId>org.apache.rat</groupId>
           <artifactId>apache-rat-plugin</artifactId>
           <version>0.8</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-scm-publish-plugin</artifactId>
+          <configuration>
+            <checkoutDirectory>${maven.site.cache}/${maven.site.path}</checkoutDirectory>
+            <tryUpdate>true</tryUpdate>
+          </configuration>
         </plugin>
       </plugins>
     </pluginManagement>
