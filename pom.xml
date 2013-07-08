@@ -75,7 +75,7 @@ under the License.
     <mavenVersion>2.0.8</mavenVersion><!-- with 2.0.9 proxy test fails-->
     <netbeans.hint.useExternalMaven>true</netbeans.hint.useExternalMaven>
     <mavenPluginPluginVersion>3.2</mavenPluginPluginVersion>
-    <wagonVersion>1.0</wagonVersion>
+    <wagonVersion>2.4</wagonVersion>
     <maven.site.path>archetype-archives/archetype-LATEST</maven.site.path>
   </properties>
 
@@ -146,7 +146,7 @@ under the License.
       <dependency>
         <groupId>commons-io</groupId>
         <artifactId>commons-io</artifactId>
-        <version>2.4</version>
+        <version>2.2</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
@@ -318,6 +318,8 @@ under the License.
             <exclude>src/test/**</exclude>
             <exclude>src/it/**</exclude>
             <exclude>.repository/**</exclude><!-- for CI -->
+            <!-- Used by JEnv -->
+            <exclude>.java-version</exclude>
           </excludes>
         </configuration>
         <executions>
