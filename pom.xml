@@ -75,7 +75,7 @@ under the License.
     <mavenVersion>2.0.8</mavenVersion><!-- with 2.0.9 proxy test fails-->
     <netbeans.hint.useExternalMaven>true</netbeans.hint.useExternalMaven>
     <mavenPluginPluginVersion>3.2</mavenPluginPluginVersion>
-    <wagonVersion>2.4</wagonVersion>
+    <wagonVersion>1.0</wagonVersion>
     <maven.site.path>archetype-archives/archetype-LATEST</maven.site.path>
   </properties>
 
