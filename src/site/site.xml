@@ -27,10 +27,14 @@ under the License.
     <breadcrumbs>
       <item name="Maven" href="http://maven.apache.org/index.html" />
       <item name="Maven Archetype" href="http://maven.apache.org/maven-archetype/index.html" />
+    </breadcrumbs>
+
+    <menu name="Overview">
+      <item name="Introduction" href="/index.html"/>
       <!-- According to http://jira.codehaus.org/browse/MNGSITE-152 -->
       <item name="License" href="http://www.apache.org/licenses/"/>
       <item name="Download" href="download.html"/>
-    </breadcrumbs>
+    </menu>
 
     <menu ref="modules" inherit="bottom" />
     <menu ref="reports" inherit="bottom" />
