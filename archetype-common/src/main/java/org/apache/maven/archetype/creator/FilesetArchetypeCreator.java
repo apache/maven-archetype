@@ -1245,14 +1245,12 @@ public class FilesetArchetypeCreator
 
         for ( String inputFileName : fileSetResources )
         {
-            String outputFileName = packaged
+            String initialFilename = packaged
                 ? StringUtils.replace( inputFileName, packageAsDirectory + File.separator, "" )
                 : inputFileName;
 
             getLogger().debug( "InputFileName:" + inputFileName );
-            getLogger().debug( "OutputFileName:" + outputFileName );
-
-            File outputFile = new File( archetypeFilesDirectory, outputFileName );
+            
             File inputFile = new File( basedir, inputFileName );
 
             FileCharsetDetector detector = new FileCharsetDetector( inputFile );
@@ -1274,7 +1272,11 @@ public class FilesetArchetypeCreator
             }
 
             String content = getReversedContent( initialcontent, reverseProperties );
+            String outputFilename = getReversedFilename( initialFilename, reverseProperties );
 
+            getLogger().debug( "OutputFileName:" + outputFilename );
+            
+            File outputFile = new File( archetypeFilesDirectory, outputFilename );
             outputFile.getParentFile().mkdirs();
 
             org.apache.commons.io.IOUtils.write( content, new FileOutputStream( outputFile ), fileEncoding );
@@ -1659,6 +1661,20 @@ public class FilesetArchetypeCreator
         // TODO: Replace velocity to a better engine...
         return "#set( $symbol_pound = '#' )\n" + "#set( $symbol_dollar = '$' )\n" + "#set( $symbol_escape = '\\' )\n"
             + StringUtils.replace( result, "#", "${symbol_pound}" );
+    }
+    
+    private String getReversedFilename( String filename, Properties properties ) 
+    {
+        String result = filename;
+
+        for (  Iterator<?> propertyIterator = properties.keySet().iterator(); propertyIterator.hasNext(); ) 
+        {
+            String propertyKey = (String) propertyIterator.next();
+
+            result = StringUtils.replace(result, properties.getProperty(propertyKey), "__" + propertyKey + "__");
+        }
+
+        return result;
     }
 
     private String getTemplateOutputDirectory()
