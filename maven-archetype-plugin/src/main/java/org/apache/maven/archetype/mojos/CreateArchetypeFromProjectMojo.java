@@ -157,7 +157,7 @@ public class CreateArchetypeFromProjectMojo
     /**
      * The Maven project to create an archetype from.
      */
-    @Component
+    @Parameter( defaultValue = "${project}", readonly = true, required = true )
     private MavenProject project;
 
     /**
@@ -220,7 +220,7 @@ public class CreateArchetypeFromProjectMojo
     @Parameter( property = "packageName" )
     private String packageName; //Find a better way to resolve the package!!! enforce usage of the configurator
 
-    @Component
+    @Parameter( defaultValue = "${session}", readonly = true, required = true )
     private MavenSession session;
 
     public void execute()
