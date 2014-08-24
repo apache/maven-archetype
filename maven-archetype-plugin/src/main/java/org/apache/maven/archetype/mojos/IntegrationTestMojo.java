@@ -96,7 +96,7 @@ public class IntegrationTestMojo
     /**
      * The archetype project to execute the integration tests on.
      */
-    @Component
+    @Parameter( defaultValue = "${project}", readonly = true, required = true )
     private MavenProject project;
 
     /**
