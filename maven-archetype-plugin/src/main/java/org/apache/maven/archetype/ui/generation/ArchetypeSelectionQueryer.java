@@ -35,7 +35,7 @@ public interface ArchetypeSelectionQueryer
 {
     String ROLE = ArchetypeSelectionQueryer.class.getName();
 
-    public Archetype selectArchetype( Map<String, List<Archetype>> map )
+    Archetype selectArchetype( Map<String, List<Archetype>> map )
         throws PrompterException;
 
     boolean confirmSelection( ArchetypeDefinition archetypeDefinition )

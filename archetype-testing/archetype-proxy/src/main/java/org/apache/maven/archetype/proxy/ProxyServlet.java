@@ -1,21 +1,23 @@
-/*
- *  Copyright 2007 rafale.
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- *  under the License.
- */
 package org.apache.maven.archetype.proxy;
 
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,6 +30,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.Set;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -36,6 +40,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.mortbay.util.IO;
 
 /**
@@ -46,18 +51,18 @@ import org.mortbay.util.IO;
 public class ProxyServlet
     extends HttpServlet
 {
-    protected HashSet _DontProxyHeaders = new HashSet();
+    protected Set<String> dontProxyHeaders = new HashSet<String>();
 
     {
-        _DontProxyHeaders.add( "proxy-connection" );
-        _DontProxyHeaders.add( "connection" );
-        _DontProxyHeaders.add( "keep-alive" );
-        _DontProxyHeaders.add( "transfer-encoding" );
-        _DontProxyHeaders.add( "te" );
-        _DontProxyHeaders.add( "trailer" );
-        _DontProxyHeaders.add( "proxy-authorization" );
-        _DontProxyHeaders.add( "proxy-authenticate" );
-        _DontProxyHeaders.add( "upgrade" );
+        dontProxyHeaders.add( "proxy-connection" );
+        dontProxyHeaders.add( "connection" );
+        dontProxyHeaders.add( "keep-alive" );
+        dontProxyHeaders.add( "transfer-encoding" );
+        dontProxyHeaders.add( "te" );
+        dontProxyHeaders.add( "trailer" );
+        dontProxyHeaders.add( "proxy-authorization" );
+        dontProxyHeaders.add( "proxy-authenticate" );
+        dontProxyHeaders.add( "upgrade" );
     }
 
     private ServletConfig config;
@@ -85,6 +90,7 @@ public class ProxyServlet
     /* (non-Javadoc)
      * @see javax.servlet.Servlet#service(javax.servlet.ServletRequest, javax.servlet.ServletResponse)
      */
+    @SuppressWarnings( "checkstyle:methodlength" )
     public void service( ServletRequest req, ServletResponse res )
         throws ServletException,
                IOException
@@ -142,7 +148,7 @@ public class ProxyServlet
                 String hdr = (String) enm.nextElement();
                 String lhdr = hdr.toLowerCase();
 
-                if ( _DontProxyHeaders.contains( lhdr ) )
+                if ( dontProxyHeaders.contains( lhdr ) )
                 {
                     continue;
                 }
@@ -174,9 +180,9 @@ public class ProxyServlet
                 connection.addRequestProperty( "X-Forwarded-For", request.getRemoteAddr() );
             }
             // a little bit of cache control
-            String cache_control = request.getHeader( "Cache-Control" );
-            if ( cache_control != null &&
-                (cache_control.indexOf( "no-cache" ) >= 0 || cache_control.indexOf( "no-store" ) >= 0) )
+            String cacheControl = request.getHeader( "Cache-Control" );
+            if ( cacheControl != null
+                && ( cacheControl.indexOf( "no-cache" ) >= 0 || cacheControl.indexOf( "no-store" ) >= 0 ) )
             {
                 connection.setUseCaches( false );
 
@@ -202,29 +208,29 @@ public class ProxyServlet
                 context.log( "proxy", e );
             }
 
-            InputStream proxy_in = null;
+            InputStream proxyIn = null;
 
             // handler status codes etc.
-            int code = 500;
+            int code = HttpURLConnection.HTTP_INTERNAL_ERROR;
             if ( http != null )
             {
-                proxy_in = http.getErrorStream();
+                proxyIn = http.getErrorStream();
 
                 code = http.getResponseCode();
                 response.setStatus( code, http.getResponseMessage() );
                 context.log( "response = " + http.getResponseCode() );
             }
 
-            if ( proxy_in == null )
+            if ( proxyIn == null )
             {
                 try
                 {
-                    proxy_in = connection.getInputStream();
+                    proxyIn = connection.getInputStream();
                 }
                 catch ( Exception e )
                 {
                     context.log( "stream", e );
-                    proxy_in = http.getErrorStream();
+                    proxyIn = http.getErrorStream();
                 }
             }
 
@@ -239,7 +245,7 @@ public class ProxyServlet
             while ( hdr != null || val != null )
             {
                 String lhdr = hdr != null ? hdr.toLowerCase() : null;
-                if ( hdr != null && val != null && !_DontProxyHeaders.contains( lhdr ) )
+                if ( hdr != null && val != null && !dontProxyHeaders.contains( lhdr ) )
                 {
                     response.addHeader( hdr, val );
                 }
@@ -252,9 +258,9 @@ public class ProxyServlet
             response.addHeader( "Via", "1.1 (jetty)" );
 
             // Handle
-            if ( proxy_in != null )
+            if ( proxyIn != null )
             {
-                IO.copy( proxy_in, response.getOutputStream() );
+                IO.copy( proxyIn, response.getOutputStream() );
             }
         }
     }
@@ -291,7 +297,7 @@ public class ProxyServlet
         Socket socket = new Socket( inetAddress.getAddress(), inetAddress.getPort() );
         context.log( "Socket: " + socket );
 
-        response.setStatus( 200 );
+        response.setStatus( HttpURLConnection.HTTP_OK );
         response.setHeader( "Connection", "close" );
         response.flushBuffer();
 
@@ -347,36 +353,4 @@ public class ProxyServlet
             out.close();
         }
     }
-
-//    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-//    /**
-//     * Handles the HTTP <code>GET</code> method.
-//     * @param request servlet request
-//     * @param response servlet response
-//     */
-//    protected void doGet( HttpServletRequest request,
-//        HttpServletResponse response ) throws ServletException, IOException
-//    {
-//        processRequest( request, response );
-//    }
-//
-//    /**
-//     * Handles the HTTP <code>POST</code> method.
-//     * @param request servlet request
-//     * @param response servlet response
-//     */
-//    protected void doPost( HttpServletRequest request,
-//        HttpServletResponse response ) throws ServletException, IOException
-//    {
-//        processRequest( request, response );
-//    }
-//
-//    /**
-//     * Returns a short description of the servlet.
-//     */
-//    public String getServletInfo( )
-//    {
-//        return "Short description";
-//    }
-//    // </editor-fold>
 }

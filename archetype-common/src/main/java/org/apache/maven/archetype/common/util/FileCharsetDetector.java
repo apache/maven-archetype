@@ -48,6 +48,7 @@ public class FileCharsetDetector
 
         det.Init( new nsICharsetDetectionObserver()
         {
+            @SuppressWarnings( "checkstyle:methodname" )
             public void Notify( String charset )
             {
                 FileCharsetDetector.this.charset = charset;
@@ -113,6 +114,7 @@ public class FileCharsetDetector
 
         det.Init( new nsICharsetDetectionObserver()
         {
+            @SuppressWarnings( "checkstyle:methodname" )
             public void Notify( String charset )
             {
                 FileCharsetDetector.this.charset = charset;

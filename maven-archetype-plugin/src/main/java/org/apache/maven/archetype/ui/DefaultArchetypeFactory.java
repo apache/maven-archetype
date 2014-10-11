@@ -79,6 +79,7 @@ public class DefaultArchetypeFactory
         getLogger().debug( "Setting property " + key + "=" + configuration.getProperty( key ) );
     }
 
+    @SuppressWarnings( "checkstyle:linelength" )
     public ArchetypeConfiguration createArchetypeConfiguration( org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor archetypeDescriptor,
                                                                 Properties properties )
     {
@@ -109,6 +110,7 @@ public class DefaultArchetypeFactory
         }
     }
 
+    @SuppressWarnings( "checkstyle:linelength" )
     public ArchetypeConfiguration createArchetypeConfiguration( org.apache.maven.archetype.metadata.ArchetypeDescriptor archetypeDescriptor,
                                                                 Properties properties )
     {
@@ -214,8 +216,8 @@ public class DefaultArchetypeFactory
                 configuration.addRequiredProperty( requiredProperty );
 
                 configuration.setProperty( requiredProperty, properties.getProperty( requiredProperty ) );
-                getLogger().debug( "Setting property " + requiredProperty + "=" +
-                                       configuration.getProperty( requiredProperty ) );
+                getLogger().debug( "Setting property " + requiredProperty + "="
+                                       + configuration.getProperty( requiredProperty ) );
             }
         }
 

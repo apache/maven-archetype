@@ -32,20 +32,20 @@ public interface ArchetypeManager
     String ROLE = ArchetypeManager.class.getName();
 
     /**
-     * A command to create an archetype from an existing Maven project given the supplied
-     * creation request.
+     * A command to create an archetype from an existing Maven project given the supplied creation request.
      *
      * @param request
-     * @return The result of creating the archetype from the existing project. It contains any errors that might have occurred.
+     * @return The result of creating the archetype from the existing project. It contains any errors that might have
+     *         occurred.
      */
     ArchetypeCreationResult createArchetypeFromProject( ArchetypeCreationRequest request );
 
     /**
-     * A command to generate a Maven project from an archetype given the supplied
-     * generation request.
+     * A command to generate a Maven project from an archetype given the supplied generation request.
      *
      * @param request
-     * @return The result of creating the project from the existing archetype. It contains any errors that might have occurred.
+     * @return The result of creating the project from the existing archetype. It contains any errors that might have
+     *         occurred.
      */
     ArchetypeGenerationResult generateProjectFromArchetype( ArchetypeGenerationRequest request );
 
@@ -74,7 +74,8 @@ public interface ArchetypeManager
     ArchetypeCatalog getLocalCatalog( String path );
 
     /**
-     * Gives the catalog of archetypes located at <code>http://repo.maven.apache.org/maven2/archetype-catalog.xml</code>.
+     * Gives the catalog of archetypes located at
+     * <code>http://repo.maven.apache.org/maven2/archetype-catalog.xml</code>.
      * 
      * @return the catalog.
      */

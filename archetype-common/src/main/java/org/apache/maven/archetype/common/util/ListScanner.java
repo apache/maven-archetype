@@ -435,7 +435,6 @@ public class ListScanner
 
         for ( String fileName : files )
         {
-//            System.err.println("Checking "+(isIncluded ( fileName )?"I":"-")+(isExcluded ( fileName )?"E":"-")+fileName);
             if ( isIncluded( fileName ) && !isExcluded( fileName ) )
             {
                 result.add( fileName );

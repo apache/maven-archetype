@@ -67,7 +67,7 @@ public class ArchetypePrompter
         return line;
     }
 
-    @SuppressWarnings( { "rawtypes", "unchecked" })
+    @SuppressWarnings( { "rawtypes", "unchecked" } )
     public String prompt( String message, List possibleValues, String defaultReply )
         throws PrompterException
     {

@@ -186,7 +186,8 @@ public class DefaultOldArchetype
 
             if ( is == null )
             {
-                throw new ArchetypeDescriptorException( "The " + ARCHETYPE_DESCRIPTOR + " descriptor cannot be found." );
+                throw new ArchetypeDescriptorException( "The " + ARCHETYPE_DESCRIPTOR
+                                                        + " descriptor cannot be found." );
             }
 
             descriptor = builder.build( new XmlStreamReader( is ) );

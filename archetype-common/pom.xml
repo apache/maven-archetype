@@ -37,6 +37,8 @@ under the License.
 
   <properties>
     <cargoVersion>1.0-alpha-6</cargoVersion>
+    <checkstyle.violation.ignore>RedundantThrows,NewlineAtEndOfFile,ParameterNumber,MethodLength,FileLength,javadoc,EmptyBlock,InterfaceIsType</checkstyle.violation.ignore>
+    <checkstyle.excludes>**/MavenJDOMWriter.java,**/XMLOutputter.java,**/Format.java,**/NamespaceStack.java</checkstyle.excludes>
   </properties>
 
   <dependencies>

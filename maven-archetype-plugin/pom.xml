@@ -40,6 +40,10 @@ under the License.
 
   <name>Maven Archetype Plugin</name>
 
+  <properties>
+    <checkstyle.violation.ignore>RedundantThrows,NewlineAtEndOfFile,ParameterNumber,MethodLength,FileLength,javadoc,LineLength</checkstyle.violation.ignore>
+  </properties>
+
   <prerequisites>
     <maven>2.0.7</maven>
   </prerequisites>

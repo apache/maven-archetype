@@ -29,12 +29,15 @@ public interface ArchetypeFactory
 
     ArchetypeDefinition createArchetypeDefinition( Properties properties );
 
+    @SuppressWarnings( "checkstyle:linelength" )
     ArchetypeConfiguration createArchetypeConfiguration( org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor archetypeDescriptor,
                                                          Properties properties );
 
+    @SuppressWarnings( "checkstyle:linelength" )
     ArchetypeConfiguration createArchetypeConfiguration( org.apache.maven.archetype.metadata.ArchetypeDescriptor archetypeDescriptor,
                                                          Properties properties );
 
+    @SuppressWarnings( "checkstyle:linelength" )
     ArchetypeConfiguration createArchetypeConfiguration( MavenProject project, ArchetypeDefinition archetypeDefinition,
                                                          Properties properties );
 
