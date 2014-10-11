@@ -185,9 +185,7 @@ public class CreateArchetypeFromProjectMojo
      * </p>
      * <p>
      * For example, if you include a line like the following in your property file:
-     * <pre>
-     *  	cxf-version=2.5.1-SNAPSHOT
-     *  </pre>
+     * <pre>cxf-version=2.5.1-SNAPSHOT</pre>
      * the plugin will search your files for the string <pre>2.5.1-SNAPSHOT</pre> and
      * replace them with references to a velocity macro <pre>cxf-version</pre>. It will
      * then list <pre>cxf-version</pre> as a <pre>requiredProperty</pre> in the

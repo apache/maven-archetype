@@ -87,7 +87,8 @@ public class DefaultDownloader
         }
         catch ( ArtifactNotFoundException e )
         {
-            throw new DownloadNotFoundException( "Requested " + artifact.getId() + " download's POM does not exist.", e );
+            throw new DownloadNotFoundException( "Requested " + artifact.getId()
+                                                 + " download's POM does not exist.", e );
         }
 
         return artifact.getFile();

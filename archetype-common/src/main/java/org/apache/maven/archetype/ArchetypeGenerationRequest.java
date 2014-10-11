@@ -338,7 +338,8 @@ public class ArchetypeGenerationRequest
         return remoteArtifactRepositories;
     }
 
-    public ArchetypeGenerationRequest setRemoteArtifactRepositories( List<ArtifactRepository>  remoteArtifactRepositories )
+    @SuppressWarnings( "checkstyle:linelength" )
+    public ArchetypeGenerationRequest setRemoteArtifactRepositories( List<ArtifactRepository> remoteArtifactRepositories )
     {
         this.remoteArtifactRepositories = remoteArtifactRepositories;
 
