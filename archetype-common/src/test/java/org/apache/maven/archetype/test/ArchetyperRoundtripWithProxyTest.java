@@ -31,8 +31,11 @@ import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Writer;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 import org.apache.maven.artifact.manager.WagonManager;
 import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.model.Model;
+import org.apache.maven.project.DefaultProjectBuilderConfiguration;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
+import org.apache.maven.project.interpolation.ModelInterpolator;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
@@ -139,18 +142,20 @@ public class ArchetyperRoundtripWithProxyTest
                                                          + "archetype" );
         File generatedArchetypePom = new File( generatedArchetypeDirectory, "pom.xml" );
         MavenProject generatedArchetypeProject = projectBuilder.build( generatedArchetypePom, localRepository, null );
+        ModelInterpolator modelInterpolator = (ModelInterpolator)lookup( ModelInterpolator.ROLE );
+        Model generatedArchetypeModel = modelInterpolator.interpolate( generatedArchetypeProject.getModel(), generatedArchetypePom.getParentFile(), new DefaultProjectBuilderConfiguration(), true );
 
         File archetypeDirectory =
             new File( generatedArchetypeDirectory, "src" + File.separator + "main" + File.separator + "resources" );
 
         File archetypeArchive = archetype.archiveArchetype( archetypeDirectory, new File(
-            generatedArchetypeProject.getBuild().getDirectory() ),
-                                                            generatedArchetypeProject.getBuild().getFinalName() );
+            generatedArchetypeModel.getBuild().getDirectory() ),
+                                                            generatedArchetypeModel.getBuild().getFinalName() );
 
         String baseName =
             StringUtils.replace( generatedArchetypeProject.getGroupId(), ".", File.separator ) + File.separator
                 + generatedArchetypeProject.getArtifactId() + File.separator + generatedArchetypeProject.getVersion()
-                + File.separator + generatedArchetypeProject.getBuild().getFinalName();
+                + File.separator + generatedArchetypeModel.getBuild().getFinalName();
         File archetypeInRepository = new File( centralRepository.getBasedir(), baseName + ".jar" );
         File archetypePomInRepository = new File( centralRepository.getBasedir(), baseName + ".pom" );
         archetypeInRepository.getParentFile().mkdirs();

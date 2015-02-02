@@ -73,10 +73,10 @@
   </distributionManagement>
 
   <properties>
-    <mavenVersion>2.0.8</mavenVersion><!-- with 2.0.9 proxy test fails -->
+    <mavenVersion>2.2.1</mavenVersion>
     <netbeans.hint.useExternalMaven>true</netbeans.hint.useExternalMaven>
     <mavenPluginPluginVersion>3.2</mavenPluginPluginVersion>
-    <wagonVersion>1.0</wagonVersion>
+    <wagonVersion>2.8</wagonVersion>
     <maven.site.path>archetype-archives/archetype-LATEST</maven.site.path>
   </properties>
 
@@ -142,7 +142,7 @@
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-utils</artifactId>
-        <version>1.5.8</version>
+        <version>3.0.21</version>
       </dependency>
       <dependency>
         <groupId>commons-io</groupId>
@@ -152,7 +152,7 @@
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-interactivity-api</artifactId>
-        <version>1.0-alpha-5</version>
+        <version>1.0-alpha-6</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
@@ -234,7 +234,7 @@
         <plugin>
           <groupId>org.codehaus.modello</groupId>
           <artifactId>modello-maven-plugin</artifactId>
-          <version>1.7</version><!-- regression in Modello 1.8 causing build failure -->
+          <version>1.8.3</version><!-- regression in Modello 1.8 causing build failure -->
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>

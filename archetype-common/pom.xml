@@ -195,13 +195,6 @@
             </goals>
           </execution>
           <execution>
-            <id>site-docs</id>
-            <phase>pre-site</phase>
-            <goals>
-              <goal>xdoc</goal>
-            </goals>
-          </execution>
-          <execution>
             <id>site-xsd</id>
             <phase>pre-site</phase>
             <goals>
