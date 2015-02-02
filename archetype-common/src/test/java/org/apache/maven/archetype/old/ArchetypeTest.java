@@ -66,15 +66,15 @@ public class ArchetypeTest
         // ----------------------------------------------------------------------
 
         ArtifactRepositoryLayout layout =
-            (ArtifactRepositoryLayout) container.lookup( ArtifactRepositoryLayout.ROLE, "legacy" );
+            (ArtifactRepositoryLayout) getContainer().lookup( ArtifactRepositoryLayout.ROLE, "legacy" );
 
-        String mavenRepoLocal = getTestFile( "target/local-repository" ).toURL().toString();
+        String mavenRepoLocal = getTestFile( "target/local-repository" ).toURI().toURL().toString();
 
         ArtifactRepository localRepository = new DefaultArtifactRepository( "local", mavenRepoLocal, layout );
 
         List<ArtifactRepository> remoteRepositories = new ArrayList<ArtifactRepository>();
 
-        String mavenRepoRemote = getTestFile( "src/test/repository" ).toURL().toString();
+        String mavenRepoRemote = getTestFile( "src/test/repository" ).toURI().toURL().toString();
 
         ArtifactRepository remoteRepository = new DefaultArtifactRepository( "remote", mavenRepoRemote, layout );
 
@@ -214,7 +214,7 @@ public class ArchetypeTest
         {
             URL[] urls = new URL[1];
 
-            urls[0] = archetypeArtifact.getFile().toURL();
+            urls[0] = archetypeArtifact.getFile().toURI().toURL();
 
             archetypeJarLoader = new URLClassLoader( urls );
         }

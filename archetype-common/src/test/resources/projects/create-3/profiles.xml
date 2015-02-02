@@ -1,4 +1,4 @@
 <!-- org/apache/maven/archetype/test
 A String to search for -->
-<profiles>
-</profiles>
+<profilesXml>
+</profilesXml>

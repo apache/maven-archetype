@@ -50,7 +50,7 @@ public class WikiArchetypeDataSourceTest
         assertTrue( wikiSource.exists() );
 
         Properties p = new Properties();
-        p.put( "url", wikiSource.toURL().toExternalForm() );
+        p.put( "url", wikiSource.toURI().toURL().toExternalForm() );
 
         ArchetypeDataSource ads = new WikiArchetypeDataSource();
 

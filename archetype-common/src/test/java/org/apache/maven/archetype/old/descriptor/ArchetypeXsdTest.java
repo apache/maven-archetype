@@ -41,7 +41,7 @@ public class ArchetypeXsdTest
     public void testXsd()
         throws Exception
     {
-        File archetypeXsd = new File( getBasedir(), "/target/generated-site/xsd/" + ARCHETYPE_XSD );
+        File archetypeXsd = new File( getBasedir(), "/target/generated-site/resources/xsd/" + ARCHETYPE_XSD );
 
         SAXParserFactory factory = SAXParserFactory.newInstance();
         factory.setValidating( true );
