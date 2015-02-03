@@ -26,7 +26,7 @@ import org.codehaus.plexus.components.interactivity.Prompter;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
-@Component( role = ArchetypeGenerationQueryer.class )
+@Component( role = ArchetypeGenerationQueryer.class, hint = "default" )
 public class DefaultArchetypeGenerationQueryer
     extends AbstractLogEnabled
     implements ArchetypeGenerationQueryer

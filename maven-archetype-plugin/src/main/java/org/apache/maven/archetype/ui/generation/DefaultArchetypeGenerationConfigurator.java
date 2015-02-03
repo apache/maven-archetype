@@ -51,7 +51,7 @@ import java.util.List;
 import java.util.Properties;
 
 // TODO: this seems to have more responsibilities than just a configurator
-@Component( role = ArchetypeGenerationConfigurator.class )
+@Component( role = ArchetypeGenerationConfigurator.class, hint = "default" )
 public class DefaultArchetypeGenerationConfigurator
     extends AbstractLogEnabled
     implements ArchetypeGenerationConfigurator

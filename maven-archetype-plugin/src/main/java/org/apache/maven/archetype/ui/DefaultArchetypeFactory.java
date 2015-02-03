@@ -29,7 +29,7 @@ import org.codehaus.plexus.logging.AbstractLogEnabled;
 import java.util.Iterator;
 import java.util.Properties;
 
-@Component( role = ArchetypeFactory.class )
+@Component( role = ArchetypeFactory.class, hint = "default" )
 public class DefaultArchetypeFactory
     extends AbstractLogEnabled
     implements ArchetypeFactory

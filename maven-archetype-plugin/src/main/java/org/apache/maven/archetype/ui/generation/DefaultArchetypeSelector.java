@@ -39,7 +39,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-@Component( role = ArchetypeSelector.class )
+@Component( role = ArchetypeSelector.class, hint = "default" )
 public class DefaultArchetypeSelector
     extends AbstractLogEnabled
     implements ArchetypeSelector

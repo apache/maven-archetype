@@ -47,7 +47,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
-@Component( role = ArchetypeCreationConfigurator.class )
+@Component( role = ArchetypeCreationConfigurator.class, hint = "default" )
 public class DefaultArchetypeCreationConfigurator
     extends AbstractLogEnabled
     implements ArchetypeCreationConfigurator
