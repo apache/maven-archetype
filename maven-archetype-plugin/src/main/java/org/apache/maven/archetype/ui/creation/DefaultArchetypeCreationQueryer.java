@@ -29,7 +29,7 @@ import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 import java.util.Iterator;
 
-@Component( role = ArchetypeCreationQueryer.class )
+@Component( role = ArchetypeCreationQueryer.class, hint = "default" )
 public class DefaultArchetypeCreationQueryer
     extends AbstractLogEnabled
     implements ArchetypeCreationQueryer

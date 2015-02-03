@@ -40,7 +40,7 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-@Component( role = ArchetypeSelectionQueryer.class )
+@Component( role = ArchetypeSelectionQueryer.class, hint = "default" )
 public class DefaultArchetypeSelectionQueryer
     extends AbstractLogEnabled
     implements ArchetypeSelectionQueryer
