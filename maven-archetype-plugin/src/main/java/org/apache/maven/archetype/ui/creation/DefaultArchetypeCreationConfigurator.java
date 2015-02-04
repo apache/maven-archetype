@@ -19,6 +19,17 @@ package org.apache.maven.archetype.ui.creation;
  * under the License.
  */
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Properties;
+
 import org.apache.maven.archetype.common.ArchetypeFilesResolver;
 import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
@@ -34,18 +45,6 @@ import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
 
 @Component( role = ArchetypeCreationConfigurator.class, hint = "default" )
 public class DefaultArchetypeCreationConfigurator
@@ -350,23 +349,4 @@ public class DefaultArchetypeCreationConfigurator
         return properties;
     }
 
-    private Properties removeDottedProperties( Properties properties )
-    {
-        List<String> toRemove = new ArrayList<String>( 0 );
-
-        for ( Iterator<?> keys = properties.keySet().iterator(); keys.hasNext(); )
-        {
-            String key = (String) keys.next();
-            if ( key.indexOf( "." ) >= 0 )
-            {
-                toRemove.add( key );
-            }
-        }
-
-        for ( String key : toRemove )
-        {
-            properties.remove( key );
-        }
-        return properties;
-    }
 }

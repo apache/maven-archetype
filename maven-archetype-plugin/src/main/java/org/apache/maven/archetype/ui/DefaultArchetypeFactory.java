@@ -139,8 +139,8 @@ public class DefaultArchetypeFactory
             else if ( ( defaultValue != null ) && !containsInnerProperty( defaultValue ) )
             {
                 // using default value
-                 configuration.setProperty( key, defaultValue );
-                 getLogger().debug( "Setting property " + key + "=" + defaultValue );
+                configuration.setProperty( key, defaultValue );
+                getLogger().debug( "Setting property " + key + "=" + defaultValue );
             }
 
             if ( defaultValue != null )
