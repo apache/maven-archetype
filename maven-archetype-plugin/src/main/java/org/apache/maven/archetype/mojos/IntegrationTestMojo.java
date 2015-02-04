@@ -66,19 +66,24 @@ import java.util.Properties;
 import java.util.Set;
 
 /**
- * <p>Execute the archetype integration tests, consisting in generating projects from the current archetype and
- * optionally comparing generated projects with reference copy.</p>
+ * <p>
+ * Execute the archetype integration tests, consisting in generating projects from the current archetype and optionally
+ * comparing generated projects with reference copy.
+ * </p>
  * <p/>
- * <p>Each IT consists of a sub-directory in <code>src/test/resources/projects</code> containing:</p>
+ * <p>
+ * Each IT consists of a sub-directory in <code>src/test/resources/projects</code> containing:
+ * </p>
  * <ul>
  * <li>a <code>goal.txt</code> file, containing a list of goals to run against the generated project (can be empty,
  * content ignored before maven-archetype-plugin 2.1),</li>
  * <li>an <code>archetype.properties</code> file, containing properties for project generation,</li>
- * <li>an optional <code>reference/</code> directory containing a reference copy of the expected project created from the IT.</li>
+ * <li>an optional <code>reference/</code> directory containing a reference copy of the expected project created from
+ * the IT.</li>
  * </ul>
  * <p/>
- * Notice that it is expected to be run as part as of a build after the <code>package</code> phase and not directly
- * as a goal from CLI.
+ * Notice that it is expected to be run as part as of a build after the <code>package</code> phase and not directly as a
+ * goal from CLI.
  *
  * @author rafale
  */
@@ -105,14 +110,12 @@ public class IntegrationTestMojo
     @Parameter( property = "archetype.test.skip" )
     private boolean skip = false;
 
-
     /**
      * Directory of test projects
      *
      * @since 2.2
      */
-    @Parameter( property = "archetype.test.projectsDirectory",
-                defaultValue = "${project.build.testOutputDirectory}/projects", required = true )
+    @Parameter( property = "archetype.test.projectsDirectory", defaultValue = "${project.build.testOutputDirectory}/projects", required = true )
     private File testProjectsDirectory;
 
     /**
@@ -156,8 +159,7 @@ public class IntegrationTestMojo
      *
      * @since 2.2
      */
-    @Parameter( property = "archetype.test.localRepositoryPath", defaultValue = "${settings.localRepository}",
-                required = true )
+    @Parameter( property = "archetype.test.localRepositoryPath", defaultValue = "${settings.localRepository}", required = true )
     private File localRepositoryPath;
 
     /**
@@ -202,7 +204,6 @@ public class IntegrationTestMojo
     @Parameter( property = "archetype.test.settingsFile" )
     private File settingsFile;
 
-
     public void execute()
         throws MojoExecutionException, MojoFailureException
     {
@@ -223,14 +224,12 @@ public class IntegrationTestMojo
         if ( archetypeFile == null )
         {
             throw new MojoFailureException( "Unable to get the archetypes' artifact which should have just been built:"
-                                                + " you probably launched 'mvn archetype:integration-test' instead of"
-                                                + " 'mvn integration-test'." );
+                + " you probably launched 'mvn archetype:integration-test' instead of" + " 'mvn integration-test'." );
         }
 
         try
         {
-            @SuppressWarnings( "unchecked" ) List<File> projectsGoalFiles =
-                FileUtils.getFiles( testProjectsDirectory, "*/goal.txt", "" );
+            List<File> projectsGoalFiles = FileUtils.getFiles( testProjectsDirectory, "*/goal.txt", "" );
 
             if ( projectsGoalFiles.size() == 0 )
             {
@@ -269,18 +268,17 @@ public class IntegrationTestMojo
      * Checks that actual directory content is the same as reference.
      *
      * @param reference the reference directory
-     * @param actual    the actual directory to compare with the reference
+     * @param actual the actual directory to compare with the reference
      * @throws IntegrationTestFailure if content differs
      */
     private void assertDirectoryEquals( File reference, File actual )
         throws IntegrationTestFailure, IOException
     {
-        @SuppressWarnings( "unchecked" ) List<String> referenceFiles =
+        List<String> referenceFiles =
             FileUtils.getFileAndDirectoryNames( reference, "**", null, false, true, true, true );
         getLog().debug( "reference content: " + referenceFiles );
 
-        @SuppressWarnings( "unchecked" ) List<String> actualFiles =
-            FileUtils.getFileAndDirectoryNames( actual, "**", null, false, true, true, true );
+        List<String> actualFiles = FileUtils.getFileAndDirectoryNames( actual, "**", null, false, true, true, true );
         getLog().debug( "actual content: " + referenceFiles );
 
         boolean fileNamesEquals = CollectionUtils.isEqualCollection( referenceFiles, actualFiles );
@@ -304,9 +302,8 @@ public class IntegrationTestMojo
             }
             getLog().error( "Remains " + actualFiles );
 
-            throw new IntegrationTestFailure(
-                "Reference and generated project differs (missing: " + missing + ", unexpected: " + actualFiles.size()
-                    + ")" );
+            throw new IntegrationTestFailure( "Reference and generated project differs (missing: " + missing
+                + ", unexpected: " + actualFiles.size() + ")" );
         }
 
         boolean contentEquals = true;
@@ -379,14 +376,18 @@ public class IntegrationTestMojo
 
             FileUtils.mkdir( basedir );
 
+            //@formatter:off
             ArchetypeGenerationRequest request =
-                new ArchetypeGenerationRequest().setArchetypeGroupId( project.getGroupId() ).setArchetypeArtifactId(
-                    project.getArtifactId() ).setArchetypeVersion( project.getVersion() ).setGroupId(
-                    properties.getProperty( Constants.GROUP_ID ) ).setArtifactId(
-                    properties.getProperty( Constants.ARTIFACT_ID ) ).setVersion(
-                    properties.getProperty( Constants.VERSION ) ).setPackage(
-                    properties.getProperty( Constants.PACKAGE ) ).setOutputDirectory( basedir ).setProperties(
-                    properties );
+                new ArchetypeGenerationRequest()
+                    .setArchetypeGroupId( project.getGroupId() )
+                    .setArchetypeArtifactId( project.getArtifactId() )
+                    .setArchetypeVersion( project.getVersion() )
+                    .setGroupId( properties.getProperty( Constants.GROUP_ID ) )
+                    .setArtifactId( properties.getProperty( Constants.ARTIFACT_ID ) )
+                    .setVersion( properties.getProperty( Constants.VERSION ) )
+                    .setPackage( properties.getProperty( Constants.PACKAGE ) )
+                    .setOutputDirectory( basedir ).setProperties( properties );
+            //@formatter:on
 
             ArchetypeGenerationResult result = new ArchetypeGenerationResult();
 
@@ -398,9 +399,8 @@ public class IntegrationTestMojo
                 {
                     ArchetypeNotConfigured anc = (ArchetypeNotConfigured) result.getCause();
 
-                    throw new IntegrationTestFailure(
-                        "Missing required properties in archetype.properties: " + StringUtils.join(
-                            anc.getMissingProperties().iterator(), ", " ), anc );
+                    throw new IntegrationTestFailure( "Missing required properties in archetype.properties: "
+                        + StringUtils.join( anc.getMissingProperties().iterator(), ", " ), anc );
                 }
 
                 throw new IntegrationTestFailure( result.getCause().getMessage(), result.getCause() );
@@ -449,9 +449,15 @@ public class IntegrationTestMojo
                 localRepositoryPath.mkdirs();
             }
 
-            InvocationRequest request = new DefaultInvocationRequest().setBaseDirectory( basedir ).setGoals(
-                Arrays.asList( StringUtils.split( goals, "," ) ) ).setLocalRepositoryDirectory(
-                localRepositoryPath ).setInteractive( false ).setShowErrors( true );
+            //@formatter:off
+            InvocationRequest request =
+                new DefaultInvocationRequest()
+                    .setBaseDirectory( basedir )
+                    .setGoals( Arrays.asList( StringUtils.split( goals, "," ) ) )
+                    .setLocalRepositoryDirectory( localRepositoryPath )
+                    .setInteractive( false )
+                    .setShowErrors( true );
+            //@formatter:on
 
             request.setDebug( debug );
 
@@ -467,8 +473,7 @@ public class IntegrationTestMojo
             File interpolatedSettingsFile = null;
             if ( settingsFile != null )
             {
-                File interpolatedSettingsDirectory =
-                    new File( project.getBuild().getOutputDirectory(), "archetype-it" );
+                File interpolatedSettingsDirectory = new File( project.getBuild().getOutputDirectory(), "archetype-it" );
                 if ( interpolatedSettingsDirectory.exists() )
                 {
                     FileUtils.deleteDirectory( interpolatedSettingsDirectory );
@@ -655,9 +660,10 @@ public class IntegrationTestMojo
         /**
          * Creates a new interpolation source backed by the specified Maven project and some user-specified properties.
          *
-         * @param mavenProject The Maven project from which to extract interpolated values, must not be <code>null</code>.
-         * @param properties   The set of additional properties from which to extract interpolated values, may be
-         *                     <code>null</code>.
+         * @param mavenProject The Maven project from which to extract interpolated values, must not be
+         *            <code>null</code>.
+         * @param properties The set of additional properties from which to extract interpolated values, may be
+         *            <code>null</code>.
          */
         protected CompositeMap( MavenProject mavenProject, Map<String, Object> properties )
         {
@@ -837,7 +843,6 @@ public class IntegrationTestMojo
             throw new UnsupportedOperationException();
         }
     }
-
 
     /**
      * Converts the specified filesystem path to a URL. The resulting URL has no trailing slash regardless whether the
