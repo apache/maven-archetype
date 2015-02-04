@@ -20,26 +20,25 @@ package org.apache.maven.archetype.test;
  */
 
 import java.io.File;
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
-import org.apache.maven.archetype.ArchetypeManager;
+
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
+import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
-import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Writer;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.util.FileUtils;
 
 /**
  *
  * @author rafale
  */
-public class InternalCatalogArchetypesVerification
+public class InternalCatalogArchetypesVerificationTest
     extends PlexusTestCase
 {
+    private static final String CENTRAL = "http://repo.maven.apache.org/maven2";
 
     public void testInternalCatalog()
         throws Exception
@@ -52,74 +51,41 @@ public class InternalCatalogArchetypesVerification
 
         File outputDirectory = new File( getBasedir(), "target/internal-archetypes-projects" );
         outputDirectory.mkdirs();
+        FileUtils.cleanDirectory( outputDirectory );
 
         ArchetypeManager archetype = (ArchetypeManager) lookup( ArchetypeManager.class.getName() );
 
-        ArchetypeCatalog result = archetype.getInternalCatalog();
+        ArchetypeCatalog catalog = archetype.getInternalCatalog();
 
-        List<Archetype> archetypesUsed = new ArrayList<Archetype>();
-        List<Archetype> archetypesRemoved = new ArrayList<Archetype>();
         int count = 1;
-        for ( Archetype a : result.getArchetypes() )
+        for ( Archetype a : catalog.getArchetypes() )
         {
             Archetype ar = new Archetype();
-
             ar.setGroupId( a.getGroupId() );
             ar.setArtifactId( a.getArtifactId() );
-            ar.setVersion( "RELEASE" );
+            ar.setVersion( a.getVersion() );
             ar.setDescription( a.getDescription() );
             ar.setGoals( a.getGoals() );
             ar.setProperties( a.getProperties() );
             ar.setRepository( a.getRepository() );
             if ( ar.getRepository() == null )
             {
-                ar.setRepository( "http://repo.maven.apache.org/maven2" );
+                ar.setRepository( CENTRAL );
             }
-            System.err.println( "\n\n\n\n\n\nTesting archetype " + ar );
+
             ArchetypeGenerationRequest request =
                 new ArchetypeGenerationRequest( ar )
-                .setGroupId( "groupId" + count )
-                .setArtifactId( "artifactId" + count )
-                .setVersion( "version" + count )
-                .setPackage( "package" + count )
+                .setGroupId( "org.apache.maven.archetype.test" )
+                .setArtifactId( "archetype" + count )
+                .setVersion( "1.0-SNAPSHOT" )
+                .setPackage( "com.acme" )
                 .setOutputDirectory( outputDirectory.getPath() )
                 .setLocalRepository( localRepository );
             ArchetypeGenerationResult generationResult = archetype.generateProjectFromArchetype( request );
-            if ( generationResult != null && generationResult.getCause() != null )
-            {
-                ar.setVersion( a.getVersion() );
-                request =
-                    new ArchetypeGenerationRequest( ar )
-                    .setGroupId( "groupId" + count )
-                    .setArtifactId( "artifactId" + count )
-                    .setVersion( "version" + count )
-                    .setPackage( "package" + count )
-                    .setOutputDirectory( outputDirectory.getPath() )
-                    .setLocalRepository( localRepository );
-                generationResult = archetype.generateProjectFromArchetype( request );
-                if ( generationResult != null && generationResult.getCause() != null )
-                {
-                    archetypesRemoved.add( a );
-                }
-                else
-                {
-                    archetypesUsed.add( a );
-                }
-            }
-            else
-            {
-                archetypesUsed.add( a );
-            }
+            
+            assertTrue ( "Archetype wasn't generated successfully", generationResult.getCause() == null );
+            
             count++;
-            System.err.println( "\n\n\n\n\n" );
         }
-        result.setArchetypes( archetypesUsed );
-
-        StringWriter sw = new StringWriter();
-        ArchetypeCatalogXpp3Writer acxw = new ArchetypeCatalogXpp3Writer();
-        acxw.write( sw, result );
-
-        System.err.println( "Resulting catalog is\n" + sw.toString() );
-        System.err.println( "Removed archetypes are \n" + archetypesRemoved );
     }
 }
