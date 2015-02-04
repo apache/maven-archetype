@@ -75,7 +75,6 @@
   <properties>
     <mavenVersion>2.2.1</mavenVersion>
     <netbeans.hint.useExternalMaven>true</netbeans.hint.useExternalMaven>
-    <mavenPluginPluginVersion>3.2</mavenPluginPluginVersion>
     <wagonVersion>2.8</wagonVersion>
     <maven.site.path>archetype-archives/archetype-LATEST</maven.site.path>
   </properties>
@@ -244,11 +243,6 @@
             <preparationGoals>clean install</preparationGoals>
             <autoVersionSubmodules>true</autoVersionSubmodules>
           </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-plugin-plugin</artifactId>
-          <version>${mavenPluginPluginVersion}</version>
         </plugin>
         <plugin>
           <groupId>org.mortbay.jetty</groupId>
