@@ -78,7 +78,7 @@ public class MavenArchetypeMojo
     /**
      * Maven's local repository.
      *
-     * @parameter expression="${localRepository}"
+     * @parameter property="localRepository"
      * @required
      */
     private ArtifactRepository localRepository;
@@ -86,7 +86,7 @@ public class MavenArchetypeMojo
     /**
      * The Archetype Group Id to be used.
      *
-     * @parameter expression="${archetypeGroupId}" default-value="org.apache.maven.archetypes"
+     * @parameter property="archetypeGroupId" default-value="org.apache.maven.archetypes"
      * @required
      */
     private String archetypeGroupId;
@@ -94,7 +94,7 @@ public class MavenArchetypeMojo
     /**
      * The Archetype Artifact Id to be used.
      *
-     * @parameter expression="${archetypeArtifactId}" default-value="maven-archetype-quickstart"
+     * @parameter property="archetypeArtifactId" default-value="maven-archetype-quickstart"
      * @required
      */
     private String archetypeArtifactId;
@@ -102,7 +102,7 @@ public class MavenArchetypeMojo
     /**
      * The Archetype Version to be used.
      *
-     * @parameter expression="${archetypeVersion}" default-value="RELEASE"
+     * @parameter property="archetypeVersion" default-value="RELEASE"
      * @required
      */
     private String archetypeVersion;
@@ -110,21 +110,21 @@ public class MavenArchetypeMojo
     /**
      * The Group Id of the project to be build.
      *
-     * @parameter expression="${groupId}"
+     * @parameter property="groupId"
      */
     private String groupId;
 
     /**
      * The Artifact Id of the project to be build.
      *
-     * @parameter expression="${artifactId}"
+     * @parameter property="artifactId"
      */
     private String artifactId;
 
     /**
      * The Version of the project to be build.
      *
-     * @parameter expression="${version}" default-value="1.0-SNAPSHOT"
+     * @parameter property="version" default-value="1.0-SNAPSHOT"
      * @required
      */
     private String version;
@@ -132,7 +132,7 @@ public class MavenArchetypeMojo
     /**
      * The Package Name of the project to be build.
      *
-     * @parameter expression="${packageName}" alias="package"
+     * @parameter property="packageName" alias="package"
      */
     private String packageName;
 
@@ -140,7 +140,7 @@ public class MavenArchetypeMojo
      * The remote repositories available for discovering dependencies and extensions as indicated
      * by the POM.
      *
-     * @parameter expression="${project.remoteArtifactRepositories}"
+     * @parameter property="project.remoteArtifactRepositories"
      * @required
      */
     private List<ArtifactRepository> pomRemoteRepositories;
@@ -148,19 +148,19 @@ public class MavenArchetypeMojo
     /**
      * Other remote repositories available for discovering dependencies and extensions.
      *
-     * @parameter expression="${remoteRepositories}"
+     * @parameter property="remoteRepositories"
      */
     private String remoteRepositories;
 
     /**
      * The project to be created an archetype of.
      *
-     * @parameter expression="${project}"
+     * @parameter property="project"
      */
     private MavenProject project;
 
     /**
-     * @parameter expression="${basedir}" default-value="${user.dir}"
+     * @parameter property="basedir" default-value="${user.dir}"
      */
     private String basedir;
 
