@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -18,26 +17,45 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
-
-<project xmlns="http://maven.apache.org/DECORATION/1.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0 http://maven.apache.org/xsd/decoration-1.0.0.xsd">
-
-  <body>
-    <breadcrumbs>
-      <item name="Maven" href="http://maven.apache.org/index.html" />
-      <item name="Maven Archetype" href="http://maven.apache.org/maven-archetype/index.html" />
-    </breadcrumbs>
-
-    <menu name="Overview">
-      <item name="Introduction" href="/index.html"/>
-      <item name="Maven Archetype Plugin" href="./archetype-plugin/index.html"/>
-      <!-- According to http://jira.codehaus.org/browse/MNGSITE-152 -->
-      <item name="License" href="http://www.apache.org/licenses/"/>
-      <item name="Download" href="download.html"/>
-    </menu>
-
-    <menu ref="modules" inherit="bottom" />
-    <menu ref="reports" inherit="bottom" />
-  </body>
+<project xmlns="http://maven.apache.org/DECORATION/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0                       http://maven.apache.org/xsd/decoration-1.0.0.xsd">
+    <skin>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-fluido-skin</artifactId>
+        <version>1.3.0</version>
+    </skin>
+    <custom>
+        <fluidoSkin>
+            <topBarEnabled>true</topBarEnabled>
+            <sideBarEnabled>true</sideBarEnabled>
+            <googleSearch>
+                <sitesearch>${project.url}</sitesearch>
+            </googleSearch>
+            <gitHub>
+                <projectId>apache/maven-archetype</projectId>
+                <ribbonOrientation>right</ribbonOrientation>
+                <ribbonColor>gray</ribbonColor>
+            </gitHub>
+        </fluidoSkin>
+    </custom>
+    <body>
+        <breadcrumbs>
+            <item name="Maven" href="http://maven.apache.org/index.html"/>
+            <item name="Maven Archetype" href="http://maven.apache.org/maven-archetype/index.html"/>
+        </breadcrumbs>
+        <menu name="Overview">
+            <item name="Introduction" href="/index.html"/>
+            <item name="Maven Archetype Plugin" href="./archetype-plugin/index.html"/>
+            <!-- According to http://jira.codehaus.org/browse/MNGSITE-152 -->
+            <item name="License" href="http://www.apache.org/licenses/"/>
+            <item name="Download" href="download.html"/>
+        </menu>
+        <menu ref="modules" inherit="bottom"/>
+        <menu ref="reports" inherit="bottom"/>
+        <footer>
+            <div class="row pull-left">Apache ${project.name}, ${project.name}, Apache, the Apache feather logo, and the Apache ${project.name} project logos are trademarks of The Apache Software Foundation.</div>
+            <div class="row pull-left">
+                <a href="${project.url}privacy-policy.html">Privacy Policy</a>
+            </div>
+        </footer>
+    </body>
 </project>
