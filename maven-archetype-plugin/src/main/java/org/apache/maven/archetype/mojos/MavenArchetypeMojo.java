@@ -80,6 +80,7 @@ public class MavenArchetypeMojo
      *
      * @parameter property="localRepository"
      * @required
+     * @read-only
      */
     private ArtifactRepository localRepository;
 
@@ -140,8 +141,9 @@ public class MavenArchetypeMojo
      * The remote repositories available for discovering dependencies and extensions as indicated
      * by the POM.
      *
-     * @parameter property="project.remoteArtifactRepositories"
+     * @parameter default-value="project.remoteArtifactRepositories"
      * @required
+     * @read-only
      */
     private List<ArtifactRepository> pomRemoteRepositories;
 
@@ -155,7 +157,9 @@ public class MavenArchetypeMojo
     /**
      * The project to be created an archetype of.
      *
-     * @parameter property="project"
+     * @parameter default-value="project"
+     * @required
+     * @read-only
      */
     private MavenProject project;
 
