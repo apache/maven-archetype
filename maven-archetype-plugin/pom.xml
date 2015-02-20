@@ -147,6 +147,11 @@
     </plugins>
     <pluginManagement>
       <plugins>
+        <!-- With default surefire configuration, some of the tests in
+             here bog down inside the old plexus container when
+             running in 3.2.5. Since the long-term plan is to stop
+             using that, this big hammer gets the problem out of our way.
+        -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
