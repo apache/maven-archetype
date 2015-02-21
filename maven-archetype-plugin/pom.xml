@@ -51,6 +51,15 @@
   </prerequisites>
 
   <dependencies>
+    <!-- This dependency compensates for two different classworlds
+         reached from different bits of Maven 2.2.1. Fix from 	Stuart
+         McCulloch <mcculls@gmail.com>.
+    This avoids needs lots of extra memory. --> 
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+     <artifactId>plexus-container-default</artifactId>
+     <scope>test</scope>
+   </dependency>
     <dependency>
       <groupId>org.apache.maven.archetype</groupId>
       <artifactId>archetype-catalog</artifactId>
@@ -145,25 +154,6 @@
         </executions>
       </plugin>
     </plugins>
-    <pluginManagement>
-      <plugins>
-        <!-- With default surefire configuration, some of the tests in
-             here bog down inside the old plexus container when
-             running in 3.2.5. Since the long-term plan is to stop
-             using that, this big hammer gets the problem out of our way.
-        -->
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.18.1</version>
-          <configuration>
-            <argLine>-Xmx2g</argLine>
-            <forkCount>1</forkCount>
-            <reuseForks>false</reuseForks>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
   </build>
 
   <reporting>
