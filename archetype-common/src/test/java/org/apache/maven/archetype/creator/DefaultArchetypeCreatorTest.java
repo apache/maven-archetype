@@ -142,6 +142,18 @@ public class DefaultArchetypeCreatorTest
         System.out.println( "<<<<<< testCreateFilesetArchetype( \"" + project + "\" )" );
     }
 
+    public void testChangeJavaFilenameWhenCustomPropertyEqualsClassName()
+        throws Exception
+    {
+        String project = "change-file-with-property";
+
+        createFilesetArchetype( project );
+
+        File template = getTemplateFile( project, "src/main/java/__someProperty__.java" );
+        assertExists( template );
+		assertContent( template, "class ${someProperty}" );
+    }
+
     public void testCreateFilesetArchetype1()
         throws Exception
     {
