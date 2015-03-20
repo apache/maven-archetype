@@ -120,7 +120,7 @@ public class JarMojo
             }
             else
             {
-                throw new MojoExecutionException( "The current project does not built an archetype" );
+                throw new MojoExecutionException( "The current project does not build an archetype" );
             }
         }
         catch ( UnknownArchetype ua )
