@@ -259,7 +259,7 @@ public class CreateArchetypeFromProjectMojo
                                                 result.getCause().getMessage() );
             }
 
-            getLog().info( "Archetype created in " + outputDirectory );
+            getLog().info( "Archetype project created in " + outputDirectory );
 
             if ( testMode )
             {
