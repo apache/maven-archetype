@@ -1671,7 +1671,7 @@ public class FilesetArchetypeCreator
         {
             String propertyKey = (String) propertyIterator.next();
 
-            result = StringUtils.replace(result, properties.getProperty(propertyKey), "__" + propertyKey + "__");
+            result = StringUtils.replace( result, properties.getProperty( propertyKey ), "__" + propertyKey + "__" );
         }
 
         return result;
