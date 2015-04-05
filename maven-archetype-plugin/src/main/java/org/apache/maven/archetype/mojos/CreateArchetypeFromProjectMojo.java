@@ -186,10 +186,10 @@ public class CreateArchetypeFromProjectMojo
      * <p>
      * For example, if you include a line like the following in your property file:
      * <pre>cxf-version=2.5.1-SNAPSHOT</pre>
-     * the plugin will search your files for the string <pre>2.5.1-SNAPSHOT</pre> and
-     * replace them with references to a velocity macro <pre>cxf-version</pre>. It will
-     * then list <pre>cxf-version</pre> as a <pre>requiredProperty</pre> in the
-     * archetype-metadata.xml, with <pre>2.5.1-SNAPSHOT</pre> as the default value.
+     * the plugin will search your files for the <code>2.5.1-SNAPSHOT</code> string and
+     * replace them with references to a velocity macro <code>cxf-version</cpde>. It will
+     * then list <code>cxf-version</code> as a <code>requiredProperty</code> in the
+     * <code>archetype-metadata.xml</code>, with <code>2.5.1-SNAPSHOT</code> as the default value.
      * </p>
      */
     @Parameter( property = "archetype.properties" )
