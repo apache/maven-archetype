@@ -28,8 +28,8 @@
     <artifactId>test-create-4</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <name>Maven archetype Test create-4 A String to search for</name>
-    <description>Some description A String to search for</description>
+    <name>Maven archetype Test create-4</name>
+    <description>Some description</description>
     <packaging>pom</packaging>
 
     <modules>

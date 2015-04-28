@@ -179,7 +179,7 @@ public class DefaultArchetypeCreatorTest
         assertExists( template );
         assertContent( template, "// ${someProperty}" );
         assertContent( template, "package ${package}.subfolder1;" );
-        assertNotContent( template, "${packageInPathFormat}" );
+        assertNotContent(template, "${packageInPathFormat}");
     }
 
     public void testCreateFilesetArchetype2()
@@ -356,36 +356,22 @@ public class DefaultArchetypeCreatorTest
     }
 
     public void testCreateFilesetArchetype4()
-            throws Exception
+                    throws Exception
     {
         String project = "create-4";
 
         createFilesetArchetype( project );
 
-        File template = getTemplateFile( project, "pom.xml" );
+        File template = getTemplateFile( project, "subModuleEAR/pom.xml" );
         assertExists( template );
-        assertContent( template, "Maven archetype Test create-4 ${someProperty}" );
-        assertContent( template, "<packaging>pom</packaging>" );
-
-        File earTemplate = getTemplateFile( project, "subModuleEAR/pom.xml" );
-        assertExists( earTemplate );
-        assertContent( earTemplate, "${groupId}" );
-        assertContent( earTemplate, "${artifactId}" );
-        assertContent( earTemplate, "${version}" );
-        assertContent( earTemplate, "Maven archetype Test create-4-subModuleEAR" );
-        assertContent( earTemplate, "<packaging>ear</packaging>" );
-        assertContent( earTemplate, "<parent>" );
-
-        File warTemplate = getTemplateFile( project, "subModuleWar/pom.xml" );
-        assertExists( warTemplate );
-        assertContent( warTemplate, "${groupId}" );
-        assertContent( warTemplate, "${artifactId}" );
-        assertContent( warTemplate, "${version}" );
-        assertContent( warTemplate, "Maven archetype Test create-4-subModuleWar ${someProperty}" );
-        assertContent( warTemplate, "<packaging>war</packaging>" );
-        assertContent( warTemplate, "<parent>" );
+        assertContent( template, "${groupId}" );
+        assertContent( template, "${artifactId}" );
+        assertContent( template, "${version}" );
+        assertContent( template, "Maven archetype Test create-4-subModuleEAR" );
+        assertContent( template, "<packaging>ear</packaging>" );
+        assertContent( template, "<parent>" );
     }
-    
+
     protected void tearDown()
         throws Exception
     {
@@ -438,9 +424,8 @@ public class DefaultArchetypeCreatorTest
         assertTrue( in.exists() );
     }
 
-    private File getDescriptorFile( String project )
-    {
-        return getFile( project, "target/generated-sources/archetype/src/main/resources/META-INF/maven/archetype.xml" );
+    private File getDescriptorFile( String project) {
+        return getFile(project, "target/generated-sources/archetype/src/main/resources/META-INF/maven/archetype.xml" );
     }
 
     private File getFile( String project, String file )

@@ -31,8 +31,8 @@
   </parent>
 
   <artifactId>test-create-4-war</artifactId>
-  <name>Maven archetype Test create-4-subModuleWar A String to search for</name>
-  <description>Some description A String to search for</description>
+  <name>Maven archetype Test create-4-subModuleWar</name>
+  <description>Some description</description>
   <packaging>war</packaging>
 
 </project>
