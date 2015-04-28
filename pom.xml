@@ -307,6 +307,7 @@
             <exclude>.repository/**</exclude><!-- for CI -->
             <!-- Used by JEnv -->
             <exclude>.java-version</exclude>
+            <exclude>*.state</exclude>
           </excludes>
         </configuration>
         <executions>

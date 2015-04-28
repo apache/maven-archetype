@@ -855,6 +855,10 @@ public class FilesetArchetypeCreator
             pom.setArtifactId( "${" + Constants.ARTIFACT_ID + "}" );
             pom.setVersion( "${" + Constants.VERSION + "}" );
 
+            pom.setName( getReversedPlainContent( pom.getName(), pomReversedProperties ) );
+            pom.setDescription( getReversedPlainContent( pom.getDescription(), pomReversedProperties ) );
+            pom.setUrl( getReversedPlainContent( pom.getUrl(), pomReversedProperties ) );
+
             rewriteReferences( pom, pomReversedProperties.getProperty( Constants.ARTIFACT_ID ),
                                pomReversedProperties.getProperty( Constants.GROUP_ID ) );
 
@@ -1100,6 +1104,10 @@ public class FilesetArchetypeCreator
             {
                 pom.setVersion( "${" + Constants.VERSION + "}" );
             }
+
+            pom.setName( getReversedPlainContent( pom.getName(), pomReversedProperties ) );
+            pom.setDescription( getReversedPlainContent( pom.getDescription(), pomReversedProperties ) );
+            pom.setUrl( getReversedPlainContent( pom.getUrl(), pomReversedProperties ) );
 
             rewriteReferences( pom, rootArtifactId, pomReversedProperties.getProperty( Constants.GROUP_ID ) );
 
@@ -1652,15 +1660,26 @@ public class FilesetArchetypeCreator
         String result =
             StringUtils.replace( StringUtils.replace( content, "$", "${symbol_dollar}" ), "\\", "${symbol_escape}" );
 
+        result = getReversedPlainContent( result, properties );
+
+        // TODO: Replace velocity to a better engine...
+        return "#set( $symbol_pound = '#' )\n" + "#set( $symbol_dollar = '$' )\n" + "#set( $symbol_escape = '\\' )\n"
+            + StringUtils.replace( result, "#", "${symbol_pound}" );
+    }
+
+    private String getReversedPlainContent( String content, Properties properties )
+    {
+
+        String result = content;
+
         for ( Iterator<?> propertyIterator = properties.keySet().iterator(); propertyIterator.hasNext(); )
         {
             String propertyKey = (String) propertyIterator.next();
 
             result = StringUtils.replace( result, properties.getProperty( propertyKey ), "${" + propertyKey + "}" );
         }
-        // TODO: Replace velocity to a better engine...
-        return "#set( $symbol_pound = '#' )\n" + "#set( $symbol_dollar = '$' )\n" + "#set( $symbol_escape = '\\' )\n"
-            + StringUtils.replace( result, "#", "${symbol_pound}" );
+
+        return result;
     }
     
     private String getReversedFilename( String filename, Properties properties ) 
