@@ -18,21 +18,17 @@
   ~ under the License.
   -->
 <project
-  xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-  <parent>
     <groupId>org.apache.maven.archetype.test</groupId>
-    <artifactId>test-create-4-war</artifactId>
+    <artifactId>exclude-patterns</artifactId>
     <version>1.0-SNAPSHOT</version>
-  </parent>
 
-  <artifactId>test-create-4-war</artifactId>
-  <name>Maven archetype Test create-4-subModuleWar</name>
-  <description>Some description</description>
-  <packaging>war</packaging>
+    <name>Maven archetype Test ExcludePatterns Property</name>
+    <packaging>pom</packaging>
 
 </project>

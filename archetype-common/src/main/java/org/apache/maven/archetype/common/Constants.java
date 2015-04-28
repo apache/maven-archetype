@@ -52,6 +52,8 @@ public interface Constants
 
     String ARCHETYPE_DESCRIPTION = "archetype.description";
 
+    String EXCLUDE_PATTERNS = "excludePatterns";
+
     List<String> DEFAULT_FILTERED_EXTENSIONS =
         Arrays.asList(
             new String[]

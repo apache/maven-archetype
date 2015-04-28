@@ -154,6 +154,20 @@ public class DefaultArchetypeCreatorTest
 		assertContent( template, "class ${someProperty}" );
     }
 
+    public void testExcludePatternsMustExcludeDirectory()
+                    throws Exception
+    {
+        String project = "exclude-patterns";
+
+        createFilesetArchetype( project );
+
+        File template = getTemplateFile( project, ".toexclude/dummy.file");
+        assertNotExists(template);
+
+        File template1 = getTemplateFile( project, "nottoexclude/dummy.file" );
+        assertExists(template1);
+    }
+
     public void testCreateFilesetArchetype1()
         throws Exception
     {
@@ -161,11 +175,11 @@ public class DefaultArchetypeCreatorTest
 
         createFilesetArchetype( project );
 
-        File template = getTemplateFile( project, "src/main/java/subfolder1/App.java" );
+        File template = getTemplateFile(project, "src/main/java/subfolder1/App.java" );
         assertExists( template );
         assertContent( template, "// ${someProperty}" );
         assertContent( template, "package ${package}.subfolder1;" );
-        assertNotContent( template, "${packageInPathFormat}" );
+        assertNotContent(template, "${packageInPathFormat}");
     }
 
     public void testCreateFilesetArchetype2()
@@ -342,7 +356,7 @@ public class DefaultArchetypeCreatorTest
     }
 
     public void testCreateFilesetArchetype4()
-            throws Exception
+                    throws Exception
     {
         String project = "create-4";
 
@@ -357,7 +371,7 @@ public class DefaultArchetypeCreatorTest
         assertContent( template, "<packaging>ear</packaging>" );
         assertContent( template, "<parent>" );
     }
-    
+
     protected void tearDown()
         throws Exception
     {
@@ -374,7 +388,7 @@ public class DefaultArchetypeCreatorTest
            new DefaultRepositoryLayout() );
     }
 
-    private void assertContent( File template, String content )
+    private void assertContent(File template, String content )
         throws FileNotFoundException, IOException
     {
         String templateContent = FileUtils.fileRead( template, "UTF-8" );
@@ -385,6 +399,11 @@ public class DefaultArchetypeCreatorTest
     private void assertExists( File file )
     {
         assertTrue( "File doesn't exist: " + file.getAbsolutePath(), file.exists() );
+    }
+
+    private void assertNotExists( File file )
+    {
+        assertFalse( "File exists: " + file.getAbsolutePath(), file.exists() );
     }
 
     private void assertNotContent( File template, String content )
@@ -405,9 +424,8 @@ public class DefaultArchetypeCreatorTest
         assertTrue( in.exists() );
     }
 
-    private File getDescriptorFile( String project )
-    {
-        return getFile( project, "target/generated-sources/archetype/src/main/resources/META-INF/maven/archetype.xml" );
+    private File getDescriptorFile( String project) {
+        return getFile(project, "target/generated-sources/archetype/src/main/resources/META-INF/maven/archetype.xml" );
     }
 
     private File getFile( String project, String file )
