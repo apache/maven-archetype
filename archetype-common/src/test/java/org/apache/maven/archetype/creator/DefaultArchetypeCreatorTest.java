@@ -154,6 +154,20 @@ public class DefaultArchetypeCreatorTest
 		assertContent( template, "class ${someProperty}" );
     }
 
+    public void testExcludePatternsMustExcludeDirectory()
+        throws Exception
+    {
+        String project = "exclude-patterns";
+
+        createFilesetArchetype( project );
+
+        File template = getTemplateFile( project, ".toexclude/dummy.file");
+        assertNotExists(template);
+
+        File template1 = getTemplateFile( project, "nottoexclude/dummy.file" );
+        assertExists(template1);
+    }
+
     public void testCreateFilesetArchetype1()
         throws Exception
     {
@@ -408,6 +422,11 @@ public class DefaultArchetypeCreatorTest
     private File getDescriptorFile( String project )
     {
         return getFile( project, "target/generated-sources/archetype/src/main/resources/META-INF/maven/archetype.xml" );
+    }
+
+    private void assertNotExists( File file )
+    {
+        assertFalse( "File exists: " + file.getAbsolutePath(), file.exists() );
     }
 
     private File getFile( String project, String file )

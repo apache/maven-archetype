@@ -167,7 +167,12 @@ public class FilesetArchetypeCreator
 
             Model pom = pomManager.readPom( FileUtils.resolveFile( basedir, Constants.ARCHETYPE_POM ) );
 
-            List<String> fileNames = resolveFileNames( pom, basedir );
+            List<String> excludePatterns = configurationProperties.getProperty( Constants.EXCLUDE_PATTERNS ) != null
+                ? Arrays.asList(
+                StringUtils.split( configurationProperties.getProperty( Constants.EXCLUDE_PATTERNS ), "," ) )
+                : Collections.<String>emptyList();
+
+            List<String> fileNames = resolveFileNames( pom, basedir, excludePatterns );
             if ( getLogger().isDebugEnabled() )
             {
                 getLogger().debug( "Scanned for files " + fileNames.size() );
@@ -983,7 +988,12 @@ public class FilesetArchetypeCreator
 
         setArtifactId( reverseProperties, pom.getArtifactId() );
 
-        List<String> fileNames = resolveFileNames( pom, basedir );
+        List<String> excludePatterns = reverseProperties.getProperty( Constants.EXCLUDE_PATTERNS ) != null
+            ? Arrays.asList(
+            StringUtils.split( reverseProperties.getProperty( Constants.EXCLUDE_PATTERNS ), "," ) )
+            : Collections.<String>emptyList();
+
+        List<String> fileNames = resolveFileNames( pom, basedir, excludePatterns );
 
         List<FileSet> filesets = resolveFileSets( packageName, fileNames, languages, filtereds, defaultEncoding );
         getLogger().debug( "Resolved filesets for module " + archetypeDescriptor.getName() );
@@ -1324,7 +1334,7 @@ public class FilesetArchetypeCreator
         return reversedProperties;
     }
 
-    private List<String> resolveFileNames( final Model pom, final File basedir )
+    private List<String> resolveFileNames( final Model pom, final File basedir, List<String> excludePatterns )
         throws IOException
     {
         getLogger().debug( "Resolving files for " + pom.getId() + " in " + basedir );
@@ -1338,6 +1348,11 @@ public class FilesetArchetypeCreator
         for ( String defaultExclude : ListScanner.DEFAULTEXCLUDES )
         {
             buff.append( ',' ).append( defaultExclude ).append( "/**" );
+        }
+
+        for ( String excludePattern : excludePatterns )
+        {
+            buff.append( ',' ).append( excludePattern );
         }
 
         String excludes = PathUtils.convertPathForOS( buff.toString() );
