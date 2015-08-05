@@ -193,7 +193,10 @@ public class DefaultArchetypeArtifactManager
         }
         finally
         {
-            closeZipFile( zipFile );
+            if ( zipFile != null )
+            {
+                closeZipFile( zipFile );
+            }
         }
     }
 
@@ -238,7 +241,10 @@ public class DefaultArchetypeArtifactManager
         }
         finally
         {
-            closeZipFile( zipFile );
+            if ( zipFile != null )
+            {
+                closeZipFile( zipFile );
+            }
         }
     }
 
