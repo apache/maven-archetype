@@ -172,6 +172,8 @@ public class CreateArchetypeFromProjectMojo
      * <dt>groupId</dt><dd>The default groupId of the generated project.</dd>
      * <dt>artifactId</dt><dd>The default artifactId of the generated project.</dd>
      * <dt>version</dt><dd>The default version of the generated project.</dd>
+     * <dt>excludePatterns</dt><dd>A comma-separated list of paths that will not be included in the resulting
+     * archetype.</dd>
      * <dt>archetype.filteredExtensions</dt><dd>See the filteredExensions parameter.</dd>
      * </dl>
      * <strong>Custom Properties</strong>
