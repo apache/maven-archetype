@@ -371,6 +371,17 @@ public class DefaultArchetypeCreatorTest
         assertContent( template, "<packaging>ear</packaging>" );
         assertContent( template, "<parent>" );
     }
+
+    public void testCreateFilesetArchetype5()
+        throws Exception
+    {
+        String project = "create-5";
+
+        createFilesetArchetype( project );
+
+        File template = getTemplateFile( project, "dummy.file" );
+        assertExists( template );
+    }
     
     protected void tearDown()
         throws Exception

@@ -167,10 +167,11 @@ public class FilesetArchetypeCreator
 
             Model pom = pomManager.readPom( FileUtils.resolveFile( basedir, Constants.ARCHETYPE_POM ) );
 
-            List<String> excludePatterns = configurationProperties.getProperty( Constants.EXCLUDE_PATTERNS ) != null
-                ? Arrays.asList(
-                StringUtils.split( configurationProperties.getProperty( Constants.EXCLUDE_PATTERNS ), "," ) )
-                : Collections.<String>emptyList();
+            List<String> excludePatterns =
+                configurationProperties.getProperty( Constants.EXCLUDE_PATTERNS ) != null
+                    ? Arrays.asList(
+                    StringUtils.split( configurationProperties.getProperty( Constants.EXCLUDE_PATTERNS ), "," ) )
+                    : Collections.<String>emptyList();
 
             List<String> fileNames = resolveFileNames( pom, basedir, excludePatterns );
             if ( getLogger().isDebugEnabled() )
@@ -650,12 +651,12 @@ public class FilesetArchetypeCreator
         {
             if ( dependency.getGroupId() != null )
             {
-                dependency.setGroupId( StringUtils.replace( dependency.getGroupId(), groupId, "${" + Constants.GROUP_ID
-                    + "}" ) );
+                dependency.setGroupId(
+                    StringUtils.replace( dependency.getGroupId(), groupId, "${" + Constants.GROUP_ID + "}" ) );
             }
 
-            dependency.setArtifactId( StringUtils.replace( dependency.getArtifactId(), rootArtifactId,
-                                                           "${rootArtifactId}" ) );
+            dependency.setArtifactId(
+                StringUtils.replace( dependency.getArtifactId(), rootArtifactId, "${rootArtifactId}" ) );
 
             if ( dependency.getVersion() != null )
             {
@@ -691,44 +692,47 @@ public class FilesetArchetypeCreator
     private void rewriteEARPluginReferences( Plugin plugin, String rootArtifactId, String groupId )
     {
         Xpp3Dom configuration = (Xpp3Dom) plugin.getConfiguration();
-        Xpp3Dom[] modules = configuration.getChild( "modules" ).getChildren();
-        for ( int i = 0; i < modules.length; i++ )
+        if ( configuration != null )
         {
-            Xpp3Dom module = modules[i];
-            Xpp3Dom moduleGroupId = module.getChild( "groupId" );
-            Xpp3Dom moduleArtifactId = module.getChild( "artifactId" );
-            Xpp3Dom moduleBundleFileName = module.getChild( "bundleFileName" );
-            Xpp3Dom moduleModuleId = module.getChild( "moduleId" );
-            Xpp3Dom moduleContextRoot = module.getChild( "contextRoot" );
-
-            if ( moduleGroupId != null )
+            Xpp3Dom[] modules = configuration.getChild( "modules" ).getChildren();
+            for ( int i = 0; i < modules.length; i++ )
             {
-                moduleGroupId.setValue( StringUtils.replace( moduleGroupId.getValue(), groupId, "${"
-                    + Constants.GROUP_ID + "}" ) );
-            }
+                Xpp3Dom module = modules[i];
+                Xpp3Dom moduleGroupId = module.getChild( "groupId" );
+                Xpp3Dom moduleArtifactId = module.getChild( "artifactId" );
+                Xpp3Dom moduleBundleFileName = module.getChild( "bundleFileName" );
+                Xpp3Dom moduleModuleId = module.getChild( "moduleId" );
+                Xpp3Dom moduleContextRoot = module.getChild( "contextRoot" );
 
-            if ( moduleArtifactId != null )
-            {
-                moduleArtifactId.setValue( StringUtils.replace( moduleArtifactId.getValue(), rootArtifactId,
-                                                                "${rootArtifactId}" ) );
-            }
+                if ( moduleGroupId != null )
+                {
+                    moduleGroupId.setValue(
+                        StringUtils.replace( moduleGroupId.getValue(), groupId, "${" + Constants.GROUP_ID + "}" ) );
+                }
 
-            if ( moduleBundleFileName != null )
-            {
-                moduleBundleFileName.setValue( StringUtils.replace( moduleBundleFileName.getValue(), rootArtifactId,
-                                                                    "${rootArtifactId}" ) );
-            }
+                if ( moduleArtifactId != null )
+                {
+                    moduleArtifactId.setValue(
+                        StringUtils.replace( moduleArtifactId.getValue(), rootArtifactId, "${rootArtifactId}" ) );
+                }
 
-            if ( moduleModuleId != null )
-            {
-                moduleModuleId.setValue( StringUtils.replace( moduleModuleId.getValue(), rootArtifactId,
-                                                              "${rootArtifactId}" ) );
-            }
+                if ( moduleBundleFileName != null )
+                {
+                    moduleBundleFileName.setValue(
+                        StringUtils.replace( moduleBundleFileName.getValue(), rootArtifactId, "${rootArtifactId}" ) );
+                }
 
-            if ( moduleContextRoot != null )
-            {
-                moduleContextRoot.setValue( StringUtils.replace( moduleContextRoot.getValue(), rootArtifactId,
-                                                                 "${rootArtifactId}" ) );
+                if ( moduleModuleId != null )
+                {
+                    moduleModuleId.setValue(
+                        StringUtils.replace( moduleModuleId.getValue(), rootArtifactId, "${rootArtifactId}" ) );
+                }
+
+                if ( moduleContextRoot != null )
+                {
+                    moduleContextRoot.setValue(
+                        StringUtils.replace( moduleContextRoot.getValue(), rootArtifactId, "${rootArtifactId}" ) );
+                }
             }
         }
     }
@@ -988,10 +992,10 @@ public class FilesetArchetypeCreator
 
         setArtifactId( reverseProperties, pom.getArtifactId() );
 
-        List<String> excludePatterns = reverseProperties.getProperty( Constants.EXCLUDE_PATTERNS ) != null
-            ? Arrays.asList(
-            StringUtils.split( reverseProperties.getProperty( Constants.EXCLUDE_PATTERNS ), "," ) )
-            : Collections.<String>emptyList();
+        List<String> excludePatterns =
+            reverseProperties.getProperty( Constants.EXCLUDE_PATTERNS ) != null
+                ? Arrays.asList( StringUtils.split( reverseProperties.getProperty( Constants.EXCLUDE_PATTERNS ), "," ) )
+                : Collections.<String>emptyList();
 
         List<String> fileNames = resolveFileNames( pom, basedir, excludePatterns );
 
@@ -1260,7 +1264,7 @@ public class FilesetArchetypeCreator
                 : inputFileName;
 
             getLogger().debug( "InputFileName:" + inputFileName );
-            
+
             File inputFile = new File( basedir, inputFileName );
 
             FileCharsetDetector detector = new FileCharsetDetector( inputFile );
@@ -1285,7 +1289,7 @@ public class FilesetArchetypeCreator
             String outputFilename = getReversedFilename( initialFilename, reverseProperties );
 
             getLogger().debug( "OutputFileName:" + outputFilename );
-            
+
             File outputFile = new File( archetypeFilesDirectory, outputFilename );
             outputFile.getParentFile().mkdirs();
 
@@ -1677,12 +1681,12 @@ public class FilesetArchetypeCreator
         return "#set( $symbol_pound = '#' )\n" + "#set( $symbol_dollar = '$' )\n" + "#set( $symbol_escape = '\\' )\n"
             + StringUtils.replace( result, "#", "${symbol_pound}" );
     }
-    
-    private String getReversedFilename( String filename, Properties properties ) 
+
+    private String getReversedFilename( String filename, Properties properties )
     {
         String result = filename;
 
-        for (  Iterator<?> propertyIterator = properties.keySet().iterator(); propertyIterator.hasNext(); ) 
+        for ( Iterator<?> propertyIterator = properties.keySet().iterator(); propertyIterator.hasNext(); )
         {
             String propertyKey = (String) propertyIterator.next();
 
