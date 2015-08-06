@@ -362,14 +362,28 @@ public class DefaultArchetypeCreatorTest
 
         createFilesetArchetype( project );
 
-        File template = getTemplateFile( project, "subModuleEAR/pom.xml" );
+        File template = getTemplateFile( project, "pom.xml" );
         assertExists( template );
-        assertContent( template, "${groupId}" );
-        assertContent( template, "${artifactId}" );
-        assertContent( template, "${version}" );
-        assertContent( template, "Maven archetype Test create-4-subModuleEAR" );
-        assertContent( template, "<packaging>ear</packaging>" );
-        assertContent( template, "<parent>" );
+        assertContent( template, "Maven archetype Test create-4 ${someProperty}" );
+        assertContent( template, "<packaging>pom</packaging>" );
+
+        File earTemplate = getTemplateFile( project, "subModuleEAR/pom.xml" );
+        assertExists( earTemplate );
+        assertContent( earTemplate, "${groupId}" );
+        assertContent( earTemplate, "${artifactId}" );
+        assertContent( earTemplate, "${version}" );
+        assertContent( earTemplate, "Maven archetype Test create-4-subModuleEAR" );
+        assertContent( earTemplate, "<packaging>ear</packaging>" );
+        assertContent( earTemplate, "<parent>" );
+
+        File warTemplate = getTemplateFile( project, "subModuleWar/pom.xml" );
+        assertExists( warTemplate );
+        assertContent( warTemplate, "${groupId}" );
+        assertContent( warTemplate, "${artifactId}" );
+        assertContent( warTemplate, "${version}" );
+        assertContent( warTemplate, "Maven archetype Test create-4-subModuleWar ${someProperty}" );
+        assertContent( warTemplate, "<packaging>war</packaging>" );
+        assertContent( warTemplate, "<parent>" );
     }
 
     public void testCreateFilesetArchetype5()
