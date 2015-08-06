@@ -48,9 +48,11 @@ import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.util.introspection.ReflectionValueExtractor;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -171,6 +173,14 @@ public class IntegrationTestMojo
     private boolean showVersion;
 
     /**
+     * Ignores the EOL encoding for comparing files (default and original behaviour is false).
+     *
+     * @since 2.3
+     */
+    @Parameter( property = "archetype.test.ignoreEOLStyle", defaultValue = "false" )
+    private boolean ignoreEOLStyle;
+
+    /**
      * Whether to show debug statements in the build output.
      *
      * @since 2.2
@@ -224,7 +234,8 @@ public class IntegrationTestMojo
         if ( archetypeFile == null )
         {
             throw new MojoFailureException( "Unable to get the archetypes' artifact which should have just been built:"
-                + " you probably launched 'mvn archetype:integration-test' instead of" + " 'mvn integration-test'." );
+                                                + " you probably launched 'mvn archetype:integration-test' instead of"
+                                                + " 'mvn integration-test'." );
         }
 
         try
@@ -268,7 +279,7 @@ public class IntegrationTestMojo
      * Checks that actual directory content is the same as reference.
      *
      * @param reference the reference directory
-     * @param actual the actual directory to compare with the reference
+     * @param actual    the actual directory to compare with the reference
      * @throws IntegrationTestFailure if content differs
      */
     private void assertDirectoryEquals( File reference, File actual )
@@ -302,8 +313,9 @@ public class IntegrationTestMojo
             }
             getLog().error( "Remains " + actualFiles );
 
-            throw new IntegrationTestFailure( "Reference and generated project differs (missing: " + missing
-                + ", unexpected: " + actualFiles.size() + ")" );
+            throw new IntegrationTestFailure(
+                "Reference and generated project differs (missing: " + missing + ", unexpected: " + actualFiles.size()
+                    + ")" );
         }
 
         boolean contentEquals = true;
@@ -329,7 +341,7 @@ public class IntegrationTestMojo
                     contentEquals = false;
                 }
             }
-            else if ( !FileUtils.contentEquals( referenceFile, actualFile ) )
+            else if ( !contentEquals( referenceFile, actualFile ) )
             {
                 getLog().warn( "Contents of file " + file + " are not equal" );
                 contentEquals = false;
@@ -338,6 +350,51 @@ public class IntegrationTestMojo
         if ( !contentEquals )
         {
             throw new IntegrationTestFailure( "Some content are not equals" );
+        }
+    }
+
+    /**
+     * Uses the {@link #ignoreEOLStyle} attribute to compare the two files. If {@link #ignoreEOLStyle} is true,
+     * then the comparison does not take care about the EOL (aka newline) character.
+     */
+    private boolean contentEquals( File referenceFile, File actualFile )
+        throws IOException
+    {
+        // Original behaviour
+        if ( !ignoreEOLStyle )
+        {
+            getLog().warn( "Property ignoreEOLStyle was not set - files will be compared considering their EOL style!" );
+            return FileUtils.contentEquals( referenceFile, actualFile );
+        }
+
+        getLog().debug( "Comparing files with EOL style ignored." );
+        BufferedReader referenceFileReader = null;
+        BufferedReader actualFileReader = null;
+        try
+        {
+            referenceFileReader = new BufferedReader( new FileReader( referenceFile ) );
+            actualFileReader = new BufferedReader( new FileReader( actualFile ) );
+
+            String refLine = null;
+            String actualLine = null;
+
+            do
+            {
+                refLine = referenceFileReader.readLine();
+                actualLine = actualFileReader.readLine();
+                if ( !StringUtils.equals( refLine, actualLine ) )
+                {
+                    return false;
+                }
+            }
+            while ( refLine != null || actualLine != null );
+
+            return true;
+        }
+        finally
+        {
+            IOUtil.close( referenceFileReader );
+            IOUtil.close( actualFileReader );
         }
     }
 
@@ -378,15 +435,13 @@ public class IntegrationTestMojo
 
             //@formatter:off
             ArchetypeGenerationRequest request =
-                new ArchetypeGenerationRequest()
-                    .setArchetypeGroupId( project.getGroupId() )
-                    .setArchetypeArtifactId( project.getArtifactId() )
-                    .setArchetypeVersion( project.getVersion() )
-                    .setGroupId( properties.getProperty( Constants.GROUP_ID ) )
-                    .setArtifactId( properties.getProperty( Constants.ARTIFACT_ID ) )
-                    .setVersion( properties.getProperty( Constants.VERSION ) )
-                    .setPackage( properties.getProperty( Constants.PACKAGE ) )
-                    .setOutputDirectory( basedir ).setProperties( properties );
+                new ArchetypeGenerationRequest().setArchetypeGroupId( project.getGroupId() ).setArchetypeArtifactId(
+                    project.getArtifactId() ).setArchetypeVersion( project.getVersion() ).setGroupId(
+                    properties.getProperty( Constants.GROUP_ID ) ).setArtifactId(
+                    properties.getProperty( Constants.ARTIFACT_ID ) ).setVersion(
+                    properties.getProperty( Constants.VERSION ) ).setPackage(
+                    properties.getProperty( Constants.PACKAGE ) ).setOutputDirectory( basedir ).setProperties(
+                    properties );
             //@formatter:on
 
             ArchetypeGenerationResult result = new ArchetypeGenerationResult();
@@ -399,8 +454,9 @@ public class IntegrationTestMojo
                 {
                     ArchetypeNotConfigured anc = (ArchetypeNotConfigured) result.getCause();
 
-                    throw new IntegrationTestFailure( "Missing required properties in archetype.properties: "
-                        + StringUtils.join( anc.getMissingProperties().iterator(), ", " ), anc );
+                    throw new IntegrationTestFailure(
+                        "Missing required properties in archetype.properties: " + StringUtils.join(
+                            anc.getMissingProperties().iterator(), ", " ), anc );
                 }
 
                 throw new IntegrationTestFailure( result.getCause().getMessage(), result.getCause() );
@@ -420,7 +476,8 @@ public class IntegrationTestMojo
 
             if ( StringUtils.isNotEmpty( goals ) )
             {
-                invokePostArchetypeGenerationGoals( goals.trim(), new File( basedir, request.getArtifactId() ), goalFile );
+                invokePostArchetypeGenerationGoals( goals.trim(), new File( basedir, request.getArtifactId() ),
+                                                    goalFile );
             }
         }
         catch ( IOException ioe )
@@ -453,13 +510,9 @@ public class IntegrationTestMojo
             }
 
             //@formatter:off
-            InvocationRequest request =
-                new DefaultInvocationRequest()
-                    .setBaseDirectory( basedir )
-                    .setGoals( Arrays.asList( StringUtils.split( goals, "," ) ) )
-                    .setLocalRepositoryDirectory( localRepositoryPath )
-                    .setInteractive( false )
-                    .setShowErrors( true );
+            InvocationRequest request = new DefaultInvocationRequest().setBaseDirectory( basedir ).setGoals(
+                Arrays.asList( StringUtils.split( goals, "," ) ) ).setLocalRepositoryDirectory(
+                localRepositoryPath ).setInteractive( false ).setShowErrors( true );
             //@formatter:on
 
             request.setDebug( debug );
@@ -476,7 +529,8 @@ public class IntegrationTestMojo
             File interpolatedSettingsFile = null;
             if ( settingsFile != null )
             {
-                File interpolatedSettingsDirectory = new File( project.getBuild().getOutputDirectory(), "archetype-it" );
+                File interpolatedSettingsDirectory =
+                    new File( project.getBuild().getOutputDirectory(), "archetype-it" );
                 if ( interpolatedSettingsDirectory.exists() )
                 {
                     FileUtils.deleteDirectory( interpolatedSettingsDirectory );
@@ -664,9 +718,9 @@ public class IntegrationTestMojo
          * Creates a new interpolation source backed by the specified Maven project and some user-specified properties.
          *
          * @param mavenProject The Maven project from which to extract interpolated values, must not be
-         *            <code>null</code>.
-         * @param properties The set of additional properties from which to extract interpolated values, may be
-         *            <code>null</code>.
+         *                     <code>null</code>.
+         * @param properties   The set of additional properties from which to extract interpolated values, may be
+         *                     <code>null</code>.
          */
         protected CompositeMap( MavenProject mavenProject, Map<String, Object> properties )
         {
