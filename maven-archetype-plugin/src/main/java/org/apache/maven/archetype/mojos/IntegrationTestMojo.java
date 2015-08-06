@@ -418,7 +418,10 @@ public class IntegrationTestMojo
 
             String goals = FileUtils.fileRead( goalFile );
 
-            invokePostArchetypeGenerationGoals( goals, new File( basedir, request.getArtifactId() ), goalFile );
+            if ( StringUtils.isNotEmpty( goals ) )
+            {
+                invokePostArchetypeGenerationGoals( goals.trim(), new File( basedir, request.getArtifactId() ), goalFile );
+            }
         }
         catch ( IOException ioe )
         {
