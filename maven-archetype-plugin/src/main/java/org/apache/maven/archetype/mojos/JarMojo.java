@@ -114,7 +114,7 @@ public class JarMojo
             {
                 checkFileSetArchetypeFile( jarFile );
             }
-            else if ( !archetypeArtifactManager.isOldArchetype( jarFile ) )
+            else if ( archetypeArtifactManager.isOldArchetype( jarFile ) )
             {
                 getLog().warn( "Building an Old (1.x) Archetype: consider migrating it to current 2.x Archetype." );
             }
