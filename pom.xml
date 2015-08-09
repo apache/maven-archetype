@@ -78,6 +78,9 @@
     <netbeans.hint.useExternalMaven>true</netbeans.hint.useExternalMaven>
     <wagonVersion>2.8</wagonVersion>
     <maven.site.path>archetype-archives/archetype-LATEST</maven.site.path>
+    <javaVersion>5</javaVersion>
+    <maven.compiler.source>1.${javaVersion}</maven.compiler.source>
+    <maven.compiler.target>1.${javaVersion}</maven.compiler.target>    
   </properties>
 
   <dependencyManagement>
