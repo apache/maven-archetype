@@ -335,7 +335,7 @@ public class ListScanner
      * <p/>
      * <p>When a pattern ends with a '/' or '\', "**" is appended.</p>
      *
-     * @param excludes A list of exclude patterns. May be <code>null</code>, indicating that no
+     * @param excludesList A list of exclude patterns. May be <code>null</code>, indicating that no
      *                 files should be excluded. If a non-<code>null</code> list is given, all
      *                 elements must be non-<code>null</code>.
      */
@@ -371,7 +371,7 @@ public class ListScanner
      * <p/>
      * <p>When a pattern ends with a '/' or '\', "**" is appended.</p>
      *
-     * @param includes A list of include patterns. May be <code>null</code>, indicating that all
+     * @param includesList A list of include patterns. May be <code>null</code>, indicating that all
      *                 files should be included. If a non-<code>null</code> list is given, all
      *                 elements must be non-<code>null</code>.
      */

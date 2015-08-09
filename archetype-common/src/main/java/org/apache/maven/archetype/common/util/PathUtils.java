@@ -32,7 +32,7 @@ public class PathUtils
      * This method converts all \ or / chars to File.separatorChar.
      *
      * @param path
-     * @return
+     * @return converted path
      */
     public static String convertPathForOS( String path )
     {
