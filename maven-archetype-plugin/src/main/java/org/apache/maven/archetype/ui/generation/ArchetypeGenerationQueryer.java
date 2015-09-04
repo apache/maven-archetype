@@ -22,6 +22,8 @@ package org.apache.maven.archetype.ui.generation;
 import org.apache.maven.archetype.ui.ArchetypeConfiguration;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 
+import java.util.regex.Pattern;
+
 /**
  * User interaction component to query informations necessary for a project generation from an archetype.
  * 
@@ -32,6 +34,6 @@ public interface ArchetypeGenerationQueryer
     boolean confirmConfiguration( ArchetypeConfiguration archetypeConfiguration )
         throws PrompterException;
 
-    String getPropertyValue( String requiredProperty, String defaultValue )
+    String getPropertyValue( String requiredProperty, String defaultValue, Pattern validationRegex )
         throws PrompterException;
 }

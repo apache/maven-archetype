@@ -184,7 +184,7 @@ public class DefaultArchetypeGenerationConfigurator
                                     getTransitiveDefaultValue( packageDefault, archetypeConfiguration, requiredProperty,
                                                                context );
 
-                                value = archetypeGenerationQueryer.getPropertyValue( requiredProperty, value );
+                                value = archetypeGenerationQueryer.getPropertyValue( requiredProperty, value, null );
 
                                 archetypeConfiguration.setProperty( requiredProperty, value );
 
@@ -197,7 +197,8 @@ public class DefaultArchetypeGenerationConfigurator
                                 value = getTransitiveDefaultValue( value, archetypeConfiguration, requiredProperty,
                                                                    context );
 
-                                value = archetypeGenerationQueryer.getPropertyValue( requiredProperty, value );
+                                value = archetypeGenerationQueryer.getPropertyValue( requiredProperty, value,
+                                    archetypeConfiguration.getPropertyValidationRegex( requiredProperty ) );
 
                                 archetypeConfiguration.setProperty( requiredProperty, value );
 

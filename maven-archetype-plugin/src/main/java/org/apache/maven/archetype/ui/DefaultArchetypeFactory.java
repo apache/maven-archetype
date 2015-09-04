@@ -22,7 +22,6 @@ package org.apache.maven.archetype.ui;
 import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.metadata.RequiredProperty;
 import org.apache.maven.project.MavenProject;
-
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
@@ -128,6 +127,7 @@ public class DefaultArchetypeFactory
             configuration.addRequiredProperty( key );
 
             String defaultValue = requiredProperty.getDefaultValue();
+            String validationRegex = requiredProperty.getValidationRegex();
 
             if ( properties.getProperty( key ) != null )
             {
@@ -147,6 +147,12 @@ public class DefaultArchetypeFactory
             {
                 configuration.setDefaultProperty( key, defaultValue );
                 getLogger().debug( "Setting defaultProperty " + key + "=" + defaultValue );
+            }
+
+            if ( validationRegex != null )
+            {
+                configuration.setPropertyValidationRegex( key, validationRegex );
+                getLogger().debug( "Setting validation regular expression " + key + "=" + defaultValue );
             }
         }
 
@@ -269,7 +275,7 @@ public class DefaultArchetypeFactory
 
     /**
      * Check if the given value references a property, ie contains <code>${...}</code>.
-     * 
+     *
      * @param defaultValue the value to check
      * @return <code>true</code> if the value contains <code>${</code> followed by <code>}</code>
      */
