@@ -26,6 +26,8 @@ import org.codehaus.plexus.components.interactivity.Prompter;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
+import java.util.regex.Pattern;
+
 @Component( role = ArchetypeGenerationQueryer.class, hint = "default" )
 public class DefaultArchetypeGenerationQueryer
     extends AbstractLogEnabled
@@ -49,20 +51,53 @@ public class DefaultArchetypeGenerationQueryer
         return "Y".equalsIgnoreCase( answer );
     }
 
-    public String getPropertyValue( String requiredProperty, String defaultValue )
+    public String getPropertyValue( String requiredProperty, String defaultValue, Pattern validationRegex )
         throws PrompterException
     {
-        String query = "Define value for property '" + requiredProperty + "': ";
-        String answer;
+        StringBuilder queryBuilder = new StringBuilder();
+        queryBuilder.append( "Define value for property '" );
+        queryBuilder.append( requiredProperty );
+        queryBuilder.append( '\'' );
 
-        if ( ( defaultValue != null ) && !defaultValue.equals( "null" ) )
+        if ( validationRegex != null )
         {
-            answer = prompter.prompt( query, defaultValue );
+            queryBuilder.append( " (should match expression '" );
+            queryBuilder.append( validationRegex );
+            queryBuilder.append( "')" );
         }
-        else
+
+        String query = queryBuilder.toString();
+        String answer;
+        boolean validAnswer = false;
+
+        do
         {
-            answer = prompter.prompt( query );
+            if ( ( defaultValue != null ) && !defaultValue.equals( "null" ) )
+            {
+                answer = prompter.prompt( query, defaultValue );
+            }
+            else
+            {
+                answer = prompter.prompt( query );
+            }
+
+            if ( validationRegex == null || validationRegex.matcher( answer ).matches() )
+            {
+                validAnswer = true;
+            }
+            else
+            {
+                query = "Value does not match the expression, please try again";
+            }
+
         }
+        while ( !validAnswer );
+
         return answer;
+    }
+
+    public void setPrompter( Prompter prompter )
+    {
+        this.prompter = prompter;
     }
 }

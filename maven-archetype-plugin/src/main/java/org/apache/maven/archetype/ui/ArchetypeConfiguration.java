@@ -20,8 +20,11 @@ package org.apache.maven.archetype.ui;
  */
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 import org.apache.maven.archetype.common.Constants;
 import org.codehaus.plexus.util.StringUtils;
@@ -214,4 +217,27 @@ public class ArchetypeConfiguration
     {
         return defaultProperties;
     }
+
+    Map<String, Pattern> propertiesValidationPatterns = new HashMap<String, Pattern>();
+
+    public void setPropertyValidationRegex( String requiredProperty, String regex )
+    {
+        propertiesValidationPatterns.put( requiredProperty, Pattern.compile( regex ) );
+    }
+
+    public Pattern getPropertyValidationRegex( String requiredProperty )
+    {
+        return propertiesValidationPatterns.get( requiredProperty );
+    }
+
+    public boolean validatePropertyValue( String property, String value )
+    {
+        Pattern pattern = propertiesValidationPatterns.get( property );
+        if ( pattern == null )
+        {
+            return true;
+        }
+        return pattern.matcher( value ).matches();
+    }
+
 }

@@ -209,6 +209,12 @@
           <required>false</required>
           <description>Default value of the property.</description>
         </field>
+        <field>
+          <name>validationRegex</name>
+          <type>String</type>
+          <required>false</required>
+          <description>A regular expression used to validate the property.</description>
+        </field>
       </fields>
     </class>
   </classes>
