@@ -19,12 +19,37 @@ package org.apache.maven.archetype.mojos;
  * under the License.
  */
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
 import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
 import org.apache.maven.archetype.generator.ArchetypeGenerator;
+import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.factory.ArtifactFactory;
+import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
+import org.apache.maven.artifact.resolver.ArtifactResolutionException;
+import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -48,25 +73,6 @@ import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.util.introspection.ReflectionValueExtractor;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-
 /**
  * <p>
  * Execute the archetype integration tests, consisting in generating projects from the current archetype and optionally
@@ -84,6 +90,43 @@ import java.util.Set;
  * the IT.</li>
  * </ul>
  * <p/>
+ * To let the IT create a Maven module below some other Maven project (being generated from another archetype)
+ * one can additionally specify an optional <code>archetype.pom.properties</code> file in the parent directory,
+ * specifying the archetype's <code>groupId</code>, <code>artifactId</code> and <code>version</code> along with its 
+ * <code>archetype.properties</code> file, containing properties for project generation. Both files are leveraged
+ * to create the parent project for this IT. Parent projects can be nested.
+ * An example structure for such an integration test looks like this
+ * <table>
+ * <tr>
+ * <th>File/Directory</code></td>
+ * <th>Description</td>
+ * </tr>
+ * <tr>
+ * <td><code>src/test/resources/projects/it1</code></td>
+ * <td>Directory for integration test 1</td>
+ * </tr>
+ * <tr>
+ * <td><code>src/test/resources/projects/it1/archetype.pom.properties</code></td>
+ * <td>GAV for the archetype from which to generate the parent</td>
+ * </tr>
+ * <tr>
+ * <td><code>src/test/resources/projects/it1/archetype.properties</code></td>
+ * <td>All required properties for the archetype being specified by <code>archetype.pom.properties</code> on this level</td>
+ * </tr>
+ * <tr>
+ * <td><code>src/test/resources/projects/it1/child</code></td>
+ * <td>Directory for maven module within integration test 1 (this folder's name is not relevant)</td>
+ * </tr>
+ * <tr>
+ * <td><code>src/test/resources/projects/it1/child/goal.txt</code></td>
+ * <td>The file containing the list of goals to be executed against the generated project</td>
+ * </tr>
+ * <tr>
+ * <td><code>src/test/resources/projects/it1/child/archetype.properties</code></td>
+ * <td>All required properties for this project's archetype</td>
+ * </tr>
+ * </table> 
+ * <p/>
  * Notice that it is expected to be run as part as of a build after the <code>package</code> phase and not directly as a
  * goal from CLI.
  *
@@ -100,6 +143,18 @@ public class IntegrationTestMojo
     @Component
     private Invoker invoker;
 
+    @Component
+    private ArtifactFactory artifactFactory;
+    
+    @Component
+    private ArtifactResolver artifactResolver;
+    
+    @Parameter( defaultValue = "${project.remoteArtifactRepositories}", readonly = true, required = true )
+    protected List remoteRepositories;
+
+    @Parameter( defaultValue = "${localRepository}", readonly = true, required = true )
+    protected ArtifactRepository localRepository;
+    
     /**
      * The archetype project to execute the integration tests on.
      */
@@ -240,7 +295,7 @@ public class IntegrationTestMojo
 
         try
         {
-            List<File> projectsGoalFiles = FileUtils.getFiles( testProjectsDirectory, "*/goal.txt", "" );
+            List<File> projectsGoalFiles = FileUtils.getFiles( testProjectsDirectory, "**/goal.txt", "" );
 
             if ( projectsGoalFiles.size() == 0 )
             {
@@ -427,40 +482,15 @@ public class IntegrationTestMojo
         {
             Properties properties = getProperties( goalFile );
 
-            String basedir = goalFile.getParentFile().getPath() + "/project";
+            File basedir = new File( goalFile.getParentFile(), "project" );
 
             FileUtils.deleteDirectory( basedir );
 
-            FileUtils.mkdir( basedir );
+            FileUtils.mkdir( basedir.toString() );
+            
+            basedir = setupParentProjects( goalFile.getParentFile().getParentFile(), basedir );
 
-            //@formatter:off
-            ArchetypeGenerationRequest request =
-                new ArchetypeGenerationRequest().setArchetypeGroupId( project.getGroupId() ).setArchetypeArtifactId(
-                    project.getArtifactId() ).setArchetypeVersion( project.getVersion() ).setGroupId(
-                    properties.getProperty( Constants.GROUP_ID ) ).setArtifactId(
-                    properties.getProperty( Constants.ARTIFACT_ID ) ).setVersion(
-                    properties.getProperty( Constants.VERSION ) ).setPackage(
-                    properties.getProperty( Constants.PACKAGE ) ).setOutputDirectory( basedir ).setProperties(
-                    properties );
-            //@formatter:on
-
-            ArchetypeGenerationResult result = new ArchetypeGenerationResult();
-
-            archetypeGenerator.generateArchetype( request, archetypeFile, result );
-
-            if ( result.getCause() != null )
-            {
-                if ( result.getCause() instanceof ArchetypeNotConfigured )
-                {
-                    ArchetypeNotConfigured anc = (ArchetypeNotConfigured) result.getCause();
-
-                    throw new IntegrationTestFailure(
-                        "Missing required properties in archetype.properties: " + StringUtils.join(
-                            anc.getMissingProperties().iterator(), ", " ), anc );
-                }
-
-                throw new IntegrationTestFailure( result.getCause().getMessage(), result.getCause() );
-            }
+            ArchetypeGenerationRequest request = generate( project.getGroupId(), project.getArtifactId(), project.getVersion(), archetypeFile, properties, basedir.toString() );
 
             File reference = new File( goalFile.getParentFile(), "reference" );
 
@@ -484,6 +514,97 @@ public class IntegrationTestMojo
         {
             throw new IntegrationTestFailure( ioe );
         }
+    }
+
+    private ArchetypeGenerationRequest generate( String archetypeGroupId, String archetypeArtifactId, String archetypeVersion, File archetypeFile, Properties properties, String basedir ) throws IntegrationTestFailure
+    {
+        //@formatter:off
+        ArchetypeGenerationRequest request =
+            new ArchetypeGenerationRequest().setArchetypeGroupId( archetypeGroupId ).setArchetypeArtifactId(
+                archetypeArtifactId ).setArchetypeVersion( archetypeVersion ).setGroupId(
+                properties.getProperty( Constants.GROUP_ID ) ).setArtifactId(
+                properties.getProperty( Constants.ARTIFACT_ID ) ).setVersion(
+                properties.getProperty( Constants.VERSION ) ).setPackage(
+                properties.getProperty( Constants.PACKAGE ) ).setOutputDirectory( basedir ).setProperties(
+                properties );
+        //@formatter:on
+
+        ArchetypeGenerationResult result = new ArchetypeGenerationResult();
+
+        archetypeGenerator.generateArchetype( request, archetypeFile, result );
+
+        if ( result.getCause() != null )
+        {
+            if ( result.getCause() instanceof ArchetypeNotConfigured )
+            {
+                ArchetypeNotConfigured anc = (ArchetypeNotConfigured) result.getCause();
+
+                throw new IntegrationTestFailure(
+                    "Missing required properties in archetype.properties: " + StringUtils.join(
+                        anc.getMissingProperties().iterator(), ", " ), anc );
+            }
+
+            throw new IntegrationTestFailure( result.getCause().getMessage(), result.getCause() );
+        }
+        return request;
+    }
+
+    private File setupParentProjects( File configFolder, File buildFolder )
+        throws IOException, MojoExecutionException, IntegrationTestFailure
+    {
+        // look for 'archetype.pom.properties'
+        File archetypePomPropertiesFile = new File( configFolder, "archetype.pom.properties" );
+        if ( !archetypePomPropertiesFile.exists() ) 
+        {
+            getLog().debug( "No 'archetype.pom.properties' file found in " + configFolder );
+            return buildFolder;
+        }
+        
+        // go up to the parent configuration folder
+        buildFolder = setupParentProjects( configFolder.getParentFile(), buildFolder );
+        
+        Properties archetypePomProperties = loadProperties( archetypePomPropertiesFile );
+        String groupId = archetypePomProperties.getProperty( Constants.GROUP_ID );
+        if ( StringUtils.isEmpty( groupId ) )
+        {
+            throw new MojoExecutionException( "Property " + Constants.GROUP_ID + " not set in " + archetypePomPropertiesFile );
+        }
+        String artifactId = archetypePomProperties.getProperty( Constants.ARTIFACT_ID );
+        if ( StringUtils.isEmpty( artifactId ) )
+        {
+            throw new MojoExecutionException( "Property " + Constants.ARTIFACT_ID + " not set in " + archetypePomPropertiesFile );
+        }
+        String version = archetypePomProperties.getProperty( Constants.VERSION );
+        if ( StringUtils.isEmpty( version ) )
+        {
+            throw new MojoExecutionException( "Property " + Constants.VERSION + " not set in " + archetypePomPropertiesFile );
+        }
+        
+        File archetypeFile;
+        try
+        {
+            archetypeFile = getArchetypeFile( groupId, artifactId, version );
+        }
+        catch ( ArtifactResolutionException e )
+        {
+            throw new MojoExecutionException( "Could not resolve archetype artifact " , e );
+        }
+        catch ( ArtifactNotFoundException e )
+        {
+            throw new MojoExecutionException( "Could not find archetype artifact " , e );
+        }
+        Properties archetypeProperties = getProperties( archetypePomPropertiesFile );
+        getLog().info( "Setting up parent project in " + buildFolder );
+        ArchetypeGenerationRequest request = generate( groupId, artifactId, version, archetypeFile, archetypeProperties, buildFolder.toString() );
+        return new File( buildFolder, request.getArtifactId() );
+    }
+
+    private File getArchetypeFile( String groupId, String artifactId, String version ) 
+        throws ArtifactResolutionException, ArtifactNotFoundException
+    {
+        Artifact archetypeArtifact = artifactFactory.createBuildArtifact( groupId, artifactId, version, "maven-archetype" );
+        artifactResolver.resolve( archetypeArtifact, remoteRepositories, localRepository );
+        return archetypeArtifact.getFile();
     }
 
     private Properties getProperties( File goalFile )
