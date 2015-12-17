@@ -19,6 +19,8 @@ package org.apache.maven.archetype.generator;
  * under the License.
  */
 
+import groovy.lang.Binding;
+import groovy.lang.GroovyShell;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
 import org.apache.maven.archetype.common.ArchetypeFilesResolver;
@@ -59,6 +61,7 @@ import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -202,6 +205,29 @@ public class DefaultFilesetArchetypeGenerator
 
                 processFilesetModule( artifactId, artifactId, archetypeResources, pom, archetypeZipFile, "", basedirPom,
                                       outputDirectoryFile, packageName, archetypeDescriptor, context );
+            }
+
+            String postGenerationScript = archetypeArtifactManager.getPostGenerationScript( archetypeFile );
+            if ( postGenerationScript != null )
+            {
+                getLogger().info( "Executing post-generation script" );
+                Binding binding = new Binding();
+
+                if ( request.getProperties() != null )
+                {
+
+                    request.getProperties().putAll( System.getProperties() );
+                    Enumeration e = request.getProperties().propertyNames();
+                    while ( e.hasMoreElements() )
+                    {
+                        String key = (String) e.nextElement();
+                        binding.setVariable( key, request.getProperties().getProperty( key ) );
+                    }
+                }
+
+                GroovyShell shell = new GroovyShell( binding );
+
+                shell.evaluate( postGenerationScript );
             }
 
             // ----------------------------------------------------------------------
@@ -468,7 +494,7 @@ public class DefaultFilesetArchetypeGenerator
 
             if ( maybeVelocityExpression( value ) )
             {
-                value =  evaluateExpression( context, key, value );
+                value = evaluateExpression( context, key, value );
             }
 
             context.put( key, value );

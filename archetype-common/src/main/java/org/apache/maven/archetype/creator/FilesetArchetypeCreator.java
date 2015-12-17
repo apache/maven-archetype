@@ -147,6 +147,19 @@ public class FilesetArchetypeCreator
             File archetypeDescriptorFile = new File( archetypeResourcesDirectory, Constants.ARCHETYPE_DESCRIPTOR );
             archetypeDescriptorFile.getParentFile().mkdirs();
 
+            if ( request.getPostScript() != null )
+            {
+                File archetypePostGenerationScript = new File( archetypeResourcesDirectory,
+                                                               Constants.ARCHETYPE_POST_GENERATION_SCRIPT );
+                archetypePostGenerationScript.getParentFile().mkdirs();
+
+                File inputFile = new File( request.getPostScript() );
+                if ( inputFile.exists() )
+                {
+                    FileUtils.copyFile( inputFile, archetypePostGenerationScript );
+                }
+            }
+
             getLogger().debug( "Starting archetype's descriptor " + project.getArtifactId() );
             ArchetypeDescriptor archetypeDescriptor = new ArchetypeDescriptor();
 

@@ -205,6 +205,13 @@ public class CreateArchetypeFromProjectMojo
     private String archetypePostPhase;
 
     /**
+     * The property telling the location of a groovy script which will be included in the archetype. This script is executed after
+     * a project is created from this artchetype.
+     */
+    @Parameter( property = "archetype.postScript", defaultValue = "${project.build.resources[0].directory}/post_create.groovy" )
+    private String archetypePostScript;
+
+    /**
      * The directory where the archetype should be created.
      */
     @Parameter( defaultValue = "${project.build.directory}/generated-sources/archetype" )
@@ -251,7 +258,7 @@ public class CreateArchetypeFromProjectMojo
                 /* This should be used before there and use only languages and filtereds */.setArchetypeRegistryFile(
                     archetypeRegistryFile ).setLocalRepository( localRepository )
                 /* this should be resolved and asked for user to verify */.setPackageName( packageName ).setPostPhase(
-                    archetypePostPhase ).setOutputDirectory( outputDirectory );
+                    archetypePostPhase ).setPostScript( archetypePostScript ).setOutputDirectory( outputDirectory );
 
             ArchetypeCreationResult result = manager.createArchetypeFromProject( request );
 

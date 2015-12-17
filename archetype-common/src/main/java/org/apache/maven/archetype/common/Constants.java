@@ -34,6 +34,8 @@ public interface Constants
 
     String ARCHETYPE_DESCRIPTOR = "META-INF/maven/archetype-metadata.xml";
 
+    String ARCHETYPE_POST_GENERATION_SCRIPT = "META-INF/post_create.groovy";
+
     String ARCHETYPE_POST_GENERATION_GOALS = "archetype.goals";
 
     String ARCHETYPE_POM = "pom.xml";
