@@ -19,6 +19,7 @@ package org.apache.maven.archetype.creator;
  * under the License.
  */
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.maven.archetype.ArchetypeCreationRequest;
 import org.apache.maven.archetype.ArchetypeCreationResult;
 import org.apache.maven.archetype.common.ArchetypeFilesResolver;
@@ -147,13 +148,16 @@ public class FilesetArchetypeCreator
             File archetypeDescriptorFile = new File( archetypeResourcesDirectory, Constants.ARCHETYPE_DESCRIPTOR );
             archetypeDescriptorFile.getParentFile().mkdirs();
 
-            if ( request.getPostScript() != null )
-            {
-                File archetypePostGenerationScript = new File( archetypeResourcesDirectory,
-                                                               Constants.ARCHETYPE_POST_GENERATION_SCRIPT );
-                archetypePostGenerationScript.getParentFile().mkdirs();
+            File archetypePostGenerationScript =
+                new File( archetypeResourcesDirectory, Constants.ARCHETYPE_POST_GENERATION_SCRIPT );
+            archetypePostGenerationScript.getParentFile().mkdirs();
 
-                File inputFile = new File( request.getPostScript() );
+            if ( request.getProject().getBuild() != null && CollectionUtils.isNotEmpty(
+                request.getProject().getBuild().getResources() ) )
+            {
+                File inputFile = new File(
+                    request.getProject().getBuild().getResources().get( 0 ).getDirectory() + File.separator
+                        + Constants.ARCHETYPE_POST_GENERATION_SCRIPT );
                 if ( inputFile.exists() )
                 {
                     FileUtils.copyFile( inputFile, archetypePostGenerationScript );
@@ -627,7 +631,7 @@ public class FilesetArchetypeCreator
                     && !profile.getDependencyManagement().getDependencies().isEmpty() )
                 {
                     for ( Iterator<Dependency> dependencies =
-                              profile.getDependencyManagement().getDependencies().iterator(); dependencies.hasNext(); )
+                          profile.getDependencyManagement().getDependencies().iterator(); dependencies.hasNext(); )
                     {
                         rewriteDependencyReferences( dependencies.next(), rootArtifactId, groupId );
                     }
@@ -879,7 +883,6 @@ public class FilesetArchetypeCreator
             pom.setName( getReversedPlainContent( pom.getName(), pomReversedProperties ) );
             pom.setDescription( getReversedPlainContent( pom.getDescription(), pomReversedProperties ) );
             pom.setUrl( getReversedPlainContent( pom.getUrl(), pomReversedProperties ) );
-
 
             rewriteReferences( pom, pomReversedProperties.getProperty( Constants.ARTIFACT_ID ),
                                pomReversedProperties.getProperty( Constants.GROUP_ID ) );

@@ -56,8 +56,6 @@ public class ArchetypeCreationRequest
 
     private String postPhase;
 
-    private String postScript;
-
     private File outputDirectory;
 
     public String getPostPhase()
@@ -68,18 +66,6 @@ public class ArchetypeCreationRequest
     public ArchetypeCreationRequest setPostPhase( String postPhase )
     {
         this.postPhase = postPhase;
-
-        return this;
-    }
-
-    public String getPostScript()
-    {
-        return postScript;
-    }
-
-    public ArchetypeCreationRequest setPostScript( String postScript )
-    {
-        this.postScript = postScript;
 
         return this;
     }

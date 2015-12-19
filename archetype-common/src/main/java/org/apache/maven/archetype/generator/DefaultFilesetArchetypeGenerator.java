@@ -235,7 +235,7 @@ public class DefaultFilesetArchetypeGenerator
             // ----------------------------------------------------------------------
             if ( getLogger().isInfoEnabled() )
             {
-                getLogger().info( "project created from Archetype in dir: " + outputDirectoryFile.getAbsolutePath() );
+                getLogger().info( "Project created from Archetype in dir: " + outputDirectoryFile.getAbsolutePath() );
             }
         }
         catch ( FileNotFoundException ex )
