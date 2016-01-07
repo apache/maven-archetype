@@ -164,6 +164,11 @@
       <type>war</type>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.codehaus.groovy</groupId>
+      <artifactId>groovy</artifactId>
+      <version>1.8.3</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -361,7 +366,30 @@
               <goal>run</goal>
             </goals>
           </execution>
+          <execution>
+            <id>archetype-test-fileset-with-postscript</id>
+            <phase>process-test-resources</phase>
+            <configuration>
+              <target>
+                <property name="test.archetype.name" value="fileset_with_postscript" />
+                <property name="test.archetype.version" value="1.0" />
 
+                <property name="test.projects.repository" value="repositories/central" />
+                <property name="test.archetype.name-version" value="${test.archetype.name}-${test.archetype.version}" />
+                <property name="test.source.directory" value="${project.basedir}/src/test/archetypes/${test.archetype.name-version}" />
+                <property name="test.target.directory" value="${project.build.directory}/test-classes/${test.projects.repository}/archetypes/${test.archetype.name}/${test.archetype.version}" />
+
+                <mkdir dir="${test.target.directory}" />
+
+                <jar destfile="${test.target.directory}/${test.archetype.name-version}.jar" basedir="${test.source.directory}/" />
+
+                <copy tofile="${test.target.directory}/${test.archetype.name-version}.pom" file="${test.source.directory}/META-INF/maven/archetypes/${test.archetype.name}/pom.xml" />
+              </target>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
           <execution>
             <id>repository-metadata</id>
             <phase>process-test-resources</phase>

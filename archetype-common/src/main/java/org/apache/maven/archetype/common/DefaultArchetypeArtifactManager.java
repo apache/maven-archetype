@@ -19,6 +19,7 @@ package org.apache.maven.archetype.common;
  * under the License.
  */
 
+import org.apache.commons.io.IOUtils;
 import org.apache.maven.archetype.downloader.DownloadException;
 import org.apache.maven.archetype.downloader.DownloadNotFoundException;
 import org.apache.maven.archetype.downloader.Downloader;
@@ -296,6 +297,25 @@ public class DefaultArchetypeArtifactManager
                               "Archetype " + archetypeGroupId + ":" + archetypeArtifactId + ":" + archetypeVersion
                                   + " doesn't exist", e );
             return false;
+        }
+    }
+
+    public String getPostGenerationScript( File archetypeFile ) throws UnknownArchetype
+    {
+        ZipFile zipFile = null;
+        try
+        {
+            zipFile = getArchetypeZipFile( archetypeFile );
+            Reader reader = getDescriptorReader( zipFile, Constants.ARCHETYPE_POST_GENERATION_SCRIPT );
+            return reader == null ? null : IOUtils.toString( reader );
+        }
+        catch ( IOException e )
+        {
+            throw new UnknownArchetype( e );
+        }
+        finally
+        {
+            closeZipFile( zipFile );
         }
     }
 

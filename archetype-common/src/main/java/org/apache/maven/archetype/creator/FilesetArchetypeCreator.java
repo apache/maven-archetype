@@ -19,6 +19,7 @@ package org.apache.maven.archetype.creator;
  * under the License.
  */
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.maven.archetype.ArchetypeCreationRequest;
 import org.apache.maven.archetype.ArchetypeCreationResult;
 import org.apache.maven.archetype.common.ArchetypeFilesResolver;
@@ -146,6 +147,22 @@ public class FilesetArchetypeCreator
 
             File archetypeDescriptorFile = new File( archetypeResourcesDirectory, Constants.ARCHETYPE_DESCRIPTOR );
             archetypeDescriptorFile.getParentFile().mkdirs();
+
+            File archetypePostGenerationScript =
+                new File( archetypeResourcesDirectory, Constants.ARCHETYPE_POST_GENERATION_SCRIPT );
+            archetypePostGenerationScript.getParentFile().mkdirs();
+
+            if ( request.getProject().getBuild() != null && CollectionUtils.isNotEmpty(
+                request.getProject().getBuild().getResources() ) )
+            {
+                File inputFile = new File(
+                    request.getProject().getBuild().getResources().get( 0 ).getDirectory() + File.separator
+                        + Constants.ARCHETYPE_POST_GENERATION_SCRIPT );
+                if ( inputFile.exists() )
+                {
+                    FileUtils.copyFile( inputFile, archetypePostGenerationScript );
+                }
+            }
 
             getLogger().debug( "Starting archetype's descriptor " + project.getArtifactId() );
             ArchetypeDescriptor archetypeDescriptor = new ArchetypeDescriptor();

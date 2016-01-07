@@ -81,6 +81,8 @@ public interface ArchetypeArtifactManager
                     ArtifactRepository archetypeRepository, ArtifactRepository localRepository,
                     List<ArtifactRepository> repos );
 
+    String getPostGenerationScript( File archetypeFile ) throws UnknownArchetype;
+
     /**
      */
     ArchetypeDescriptor getFileSetArchetypeDescriptor( File archetypeFile )

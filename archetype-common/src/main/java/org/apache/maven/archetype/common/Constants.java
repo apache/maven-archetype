@@ -36,6 +36,8 @@ public interface Constants
 
     String ARCHETYPE_POST_GENERATION_GOALS = "archetype.goals";
 
+    String ARCHETYPE_POST_GENERATION_SCRIPT = "META-INF/archetype-post-generate.groovy";
+
     String ARCHETYPE_POM = "pom.xml";
 
     String ARCHETYPE_RESOURCES = "archetype-resources";
