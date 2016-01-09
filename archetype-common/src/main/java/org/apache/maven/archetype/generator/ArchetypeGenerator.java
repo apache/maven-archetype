@@ -25,7 +25,7 @@ import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
 
 /**
- * Create a Maven project from an archetype.
+ * Generate a Maven project from an archetype.
  */
 public interface ArchetypeGenerator
 {

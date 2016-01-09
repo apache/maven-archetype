@@ -61,9 +61,9 @@ import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -210,18 +210,18 @@ public class DefaultFilesetArchetypeGenerator
             String postGenerationScript = archetypeArtifactManager.getPostGenerationScript( archetypeFile );
             if ( postGenerationScript != null )
             {
-                getLogger().info( "Executing post-generation script" );
+                getLogger().info( "Executing " + Constants.ARCHETYPE_POST_GENERATION_SCRIPT
+                    + " post-generation script" );
+
                 Binding binding = new Binding();
 
                 if ( request.getProperties() != null )
                 {
-
                     request.getProperties().putAll( System.getProperties() );
-                    Enumeration e = request.getProperties().propertyNames();
-                    while ( e.hasMoreElements() )
+
+                    for ( Map.Entry<Object, Object> entry : request.getProperties().entrySet() )
                     {
-                        String key = (String) e.nextElement();
-                        binding.setVariable( key, request.getProperties().getProperty( key ) );
+                        binding.setVariable( entry.getKey().toString(), entry.getValue() );
                     }
                 }
 

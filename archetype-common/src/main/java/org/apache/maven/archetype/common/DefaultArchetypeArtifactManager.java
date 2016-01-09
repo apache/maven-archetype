@@ -577,7 +577,7 @@ public class DefaultArchetypeArtifactManager
             throw new IOException( "The " + descriptor + " descriptor cannot be read in " + zipFile.getName() + "." );
         }
 
-        return ReaderFactory.newXmlReader( is );
+        return ReaderFactory.newReader( is, ReaderFactory.UTF_8 );
     }
 
     private ZipEntry searchEntry( ZipFile zipFile, String searchString )

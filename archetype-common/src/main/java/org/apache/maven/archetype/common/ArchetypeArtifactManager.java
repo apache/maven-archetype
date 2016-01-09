@@ -81,7 +81,16 @@ public interface ArchetypeArtifactManager
                     ArtifactRepository archetypeRepository, ArtifactRepository localRepository,
                     List<ArtifactRepository> repos );
 
-    String getPostGenerationScript( File archetypeFile ) throws UnknownArchetype;
+    /**
+     * Get the archetype file's post-generation script content, read as UTF-8 content.
+     * 
+     * @param archetypeFile the archetype file
+     * @return the archetype file's post-generation script content or <code>null</code> if there is no script in the
+     *   archetype
+     * @throws UnknownArchetype
+     */
+    String getPostGenerationScript( File archetypeFile )
+        throws UnknownArchetype;
 
     /**
      */
