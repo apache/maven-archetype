@@ -43,6 +43,7 @@ import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.model.PluginManagement;
 import org.apache.maven.model.Profile;
+import org.apache.maven.model.Resource;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.project.ProjectBuildingException;
@@ -155,12 +156,14 @@ public class FilesetArchetypeCreator
             if ( request.getProject().getBuild() != null && CollectionUtils.isNotEmpty(
                 request.getProject().getBuild().getResources() ) )
             {
-                File inputFile = new File(
-                    request.getProject().getBuild().getResources().get( 0 ).getDirectory() + File.separator
-                        + Constants.ARCHETYPE_POST_GENERATION_SCRIPT );
-                if ( inputFile.exists() )
+                for ( Resource resource : request.getProject().getBuild().getResources() )
                 {
-                    FileUtils.copyFile( inputFile, archetypePostGenerationScript );
+                    File inputFile = new File(
+                        resource.getDirectory() + File.separator + Constants.ARCHETYPE_POST_GENERATION_SCRIPT );
+                    if ( inputFile.exists() )
+                    {
+                        FileUtils.copyFile( inputFile, archetypePostGenerationScript );
+                    }
                 }
             }
 
