@@ -64,6 +64,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -215,14 +216,17 @@ public class DefaultFilesetArchetypeGenerator
 
                 Binding binding = new Binding();
 
+                final Properties archetypeGeneratorProperties = new Properties();
+                archetypeGeneratorProperties.putAll( System.getProperties() );
+
                 if ( request.getProperties() != null )
                 {
-                    request.getProperties().putAll( System.getProperties() );
+                    archetypeGeneratorProperties.putAll( request.getProperties() );
+                }
 
-                    for ( Map.Entry<Object, Object> entry : request.getProperties().entrySet() )
-                    {
-                        binding.setVariable( entry.getKey().toString(), entry.getValue() );
-                    }
+                for ( Map.Entry<Object, Object> entry : archetypeGeneratorProperties.entrySet() )
+                {
+                    binding.setVariable( entry.getKey().toString(), entry.getValue() );
                 }
 
                 GroovyShell shell = new GroovyShell( binding );
