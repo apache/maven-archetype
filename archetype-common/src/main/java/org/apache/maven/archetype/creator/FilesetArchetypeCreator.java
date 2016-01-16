@@ -266,6 +266,23 @@ public class FilesetArchetypeCreator
 
             createArchetypeBasicIt( archetypeDescriptor, outputDirectory );
 
+            // Copy archetype integration tests.
+            File archetypeIntegrationTestInputFolder =
+                new File( basedir, Constants.SRC + File.separator + "it" + File.separator + "projects" );
+            File archetypeIntegrationTestOutputFolder = new File( outputDirectory,
+                                                                  Constants.SRC + File.separator + Constants.TEST
+                                                                      + File.separator + Constants.RESOURCES
+                                                                      + File.separator + "projects" );
+
+            if ( archetypeIntegrationTestInputFolder.exists() )
+            {
+                getLogger().info( "Copying: " + archetypeIntegrationTestInputFolder.getAbsolutePath() + " into "
+                                      + archetypeIntegrationTestOutputFolder.getAbsolutePath() );
+
+                FileUtils.copyDirectoryStructure( archetypeIntegrationTestInputFolder,
+                                                  archetypeIntegrationTestOutputFolder );
+
+            }
             InvocationRequest internalRequest = new DefaultInvocationRequest();
             internalRequest.setPomFile( archetypePomFile );
             internalRequest.setGoals( Collections.singletonList( request.getPostPhase() ) );
@@ -886,7 +903,6 @@ public class FilesetArchetypeCreator
             pom.setName( getReversedPlainContent( pom.getName(), pomReversedProperties ) );
             pom.setDescription( getReversedPlainContent( pom.getDescription(), pomReversedProperties ) );
             pom.setUrl( getReversedPlainContent( pom.getUrl(), pomReversedProperties ) );
-
 
             rewriteReferences( pom, pomReversedProperties.getProperty( Constants.ARTIFACT_ID ),
                                pomReversedProperties.getProperty( Constants.GROUP_ID ) );
