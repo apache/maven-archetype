@@ -138,6 +138,13 @@ Choose archetype:
 Choose a number or apply filter (format: [groupId:]artifactId, case sensitive contains): 1:
 +---
 
+Testing
+	
+	The user can provide archetype test projects by placing them in <<<src/it/projects>>>
+	folder of their project. Upon creating archetype from the existing project all the test
+	projects will be executed to verify the archetype created by this project is good.
+	{{{./integration-test-mojo.html}Read more}} about testing maven archetype.
+
 Configuration
 
     The <<<create-from-project>>> goal enable the user to provide some sensible
@@ -149,3 +156,13 @@ Configuration
 
     When used, the property file takes precedence over the system properties.
     It is also the only way to define additional properties in the archetype.
+    
+Post-generation script
+
+	If the user wants to customize the generated project even further, a groovy script
+	named <<<archetype-post-generate.groovy>>> can be added in <<<src/main/resources/META-INF/>>>.
+	This script will end up in the generated archetype's <<<META-INF>>> folder and will be executed
+	upon creating a project from this archetype. This groovy script has access to the 
+	<<<ArchetypeGenerationRequest>>> object, as well as all the <<<System.getProperties()>>> and all
+	the archetype generation properties the user has specified.
+	
