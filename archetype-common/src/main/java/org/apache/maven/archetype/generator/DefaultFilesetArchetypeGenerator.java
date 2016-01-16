@@ -229,6 +229,8 @@ public class DefaultFilesetArchetypeGenerator
                     binding.setVariable( entry.getKey().toString(), entry.getValue() );
                 }
 
+                binding.setVariable( "request", request );
+
                 GroovyShell shell = new GroovyShell( binding );
                 shell.evaluate( postGenerationScript );
             }
