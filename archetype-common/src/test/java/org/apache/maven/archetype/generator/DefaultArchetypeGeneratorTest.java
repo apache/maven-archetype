@@ -445,7 +445,7 @@ public class DefaultArchetypeGeneratorTest
         assertTemplateCopiedWithFileSetArchetype( "src/main/java/file/value/package/App.ogg" );
 
         File templateFile = new File( projectDirectory, "src/main/java/file/value/package/ToDelete.java" );
-        assertFalse( templateFile.exists() );
+        assertFalse( templateFile + " should have been removed (by post-generate.groovy script", templateFile.exists() );
 
         assertTemplateContentGeneratedWithFileSetArchetype( "src/main/resources/App.properties", "file-value" );
         assertTemplateContentGeneratedWithFileSetArchetype( "src/main/resources/file-value/touch.txt", "file-value" );

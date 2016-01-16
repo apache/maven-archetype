@@ -42,8 +42,9 @@ public class DefaultRepositoryCrawlerTest
         RepositoryCrawler instance = (RepositoryCrawler) lookup( RepositoryCrawler.class.getName() );
 
         ArchetypeCatalog result = instance.crawl( repository );
-        System.err.println( "result = " + result );
-        assertTrue( ( 5 <= result.getArchetypes().size() ) && ( result.getArchetypes().size() <= 8 ) );
+        assertTrue( "result.getArchetypes().size() = " + result.getArchetypes().size()
+            + " should be in [5,8], result = " + result,
+                    ( 5 <= result.getArchetypes().size() ) && ( result.getArchetypes().size() <= 8 ) );
         
         // TODO: should write to another directory 
 //        instance.writeCatalog(result, new File(repository, "archetype-catalog.xml"));
@@ -66,16 +67,4 @@ public class DefaultRepositoryCrawlerTest
 //        // TODO review the generated test code and remove the default call to fail.
 ////        fail ( "The test case is a prototype." );
 //    }
-
-    protected void tearDown()
-        throws Exception
-    {
-        super.tearDown();
-    }
-
-    protected void setUp()
-        throws Exception
-    {
-        super.setUp();
-    }
 }
