@@ -26,6 +26,7 @@ import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Properties;
 
@@ -255,6 +256,16 @@ public class DefaultArchetypeFactory
         configuration.setUrl( properties.getProperty( Constants.ARCHETYPE_URL ) );
 
         configuration.setDescription( properties.getProperty( Constants.ARCHETYPE_DESCRIPTION ) );
+
+        Enumeration<?> propertyNames = properties.propertyNames();
+        while ( propertyNames.hasMoreElements() )
+        {
+            String key = (String) propertyNames.nextElement();
+            if ( key.startsWith( Constants.GENERATE_MODULE_PROPERTY_PREFIX ) )
+            {
+                configuration.setProperty ( key, properties.getProperty( key ) );
+            }
+        }
 
         return configuration;
     }
