@@ -115,6 +115,7 @@ public class FilesetArchetypeCreator
         boolean partialArchetype = request.isPartialArchetype();
         ArtifactRepository localRepository = request.getLocalRepository();
         File outputDirectory = request.getOutputDirectory();
+        boolean generateEnableProperties = request.isGenerateEnableProperties();
         File basedir = project.getBasedir();
 
         Properties properties = new Properties();
@@ -232,7 +233,7 @@ public class FilesetArchetypeCreator
                     createModule( reverseProperties, rootArtifactId, moduleId, packageName,
                                   FileUtils.resolveFile( basedir, moduleId ),
                                   new File( archetypeFilesDirectory, moduleIdDirectory ), languages, filtereds,
-                                  defaultEncoding, preserveCData, keepParent );
+                                  defaultEncoding, preserveCData, keepParent, generateEnableProperties );
 
                 archetypeDescriptor.addModule( moduleDescriptor );
 
@@ -1002,7 +1003,7 @@ public class FilesetArchetypeCreator
     private ModuleDescriptor createModule( Properties reverseProperties, String rootArtifactId, String moduleId,
                                            String packageName, File basedir, File archetypeFilesDirectory,
                                            List<String> languages, List<String> filtereds, String defaultEncoding,
-                                           boolean preserveCData, boolean keepParent )
+                                           boolean preserveCData, boolean keepParent, boolean generateEnableProperties )
         throws IOException, XmlPullParserException
     {
         ModuleDescriptor archetypeDescriptor = new ModuleDescriptor();
@@ -1029,6 +1030,10 @@ public class FilesetArchetypeCreator
         archetypeDescriptor.setName( replacementId );
         archetypeDescriptor.setId( replacementId );
         archetypeDescriptor.setDir( moduleDirectory );
+        if ( generateEnableProperties )
+        {
+            archetypeDescriptor.setEnableProperty( Constants.GENERATE_MODULE_PROPERTY_PREFIX + moduleId );
+        }
 
         setArtifactId( reverseProperties, pom.getArtifactId() );
 
@@ -1067,7 +1072,7 @@ public class FilesetArchetypeCreator
                 createModule( reverseProperties, rootArtifactId, subModuleId, packageName,
                               FileUtils.resolveFile( basedir, subModuleId ),
                               FileUtils.resolveFile( archetypeFilesDirectory, subModuleIdDirectory ), languages,
-                              filtereds, defaultEncoding, preserveCData, keepParent );
+                              filtereds, defaultEncoding, preserveCData, keepParent, generateEnableProperties );
 
             archetypeDescriptor.addModule( moduleDescriptor );
 
