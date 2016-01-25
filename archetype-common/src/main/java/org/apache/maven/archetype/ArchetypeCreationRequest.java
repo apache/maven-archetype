@@ -58,6 +58,8 @@ public class ArchetypeCreationRequest
 
     private File outputDirectory;
 
+    private boolean generateEnableProperties;
+
     public String getPostPhase()
     {
         return postPhase;
@@ -223,6 +225,17 @@ public class ArchetypeCreationRequest
     {
         this.outputDirectory = outputDirectory;
 
+        return this;
+    }
+
+    public boolean isGenerateEnableProperties()
+    {
+        return this.generateEnableProperties;
+    }
+
+    public ArchetypeCreationRequest setGenerateEnableProperies( boolean generateEnableProperties )
+    {
+        this.generateEnableProperties = generateEnableProperties;
         return this;
     }
 }
