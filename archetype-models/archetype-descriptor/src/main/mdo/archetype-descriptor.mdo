@@ -87,6 +87,12 @@
           <required>true</required>
           <description>The module's name.</description>
         </field>
+        <field xml.attribute="true">
+          <name>enableProperty</name>
+          <type>String</type>
+          <required>false</required>
+          <description>The name of a property used to enable/disable the generation of the module.</description>
+        </field>
       </fields>
     </class>
 
@@ -159,7 +165,7 @@
             <multiplicity>*</multiplicity>
           </association>
           <required>false</required>
-          <description>Inclusion definition "à la" Ant.</description>
+          <description>Inclusion definition "Ã  la" Ant.</description>
         </field>
         <field>
           <name>excludes</name>
@@ -168,7 +174,7 @@
             <multiplicity>*</multiplicity>
           </association>
           <required>false</required>
-          <description>Exclusion definition "à la" Ant.</description>
+          <description>Exclusion definition "Ã  la" Ant.</description>
         </field>
       </fields>
       <codeSegments>

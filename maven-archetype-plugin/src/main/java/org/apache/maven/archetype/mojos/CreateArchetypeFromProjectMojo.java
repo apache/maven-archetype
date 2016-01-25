@@ -220,6 +220,12 @@ public class CreateArchetypeFromProjectMojo
     @Parameter( property = "packageName" )
     private String packageName; //Find a better way to resolve the package!!! enforce usage of the configurator
 
+    /**
+     * Create properties that would be used to enable/disable the generation of specific modules.
+     */
+    @Parameter( property = "generateEnableProperties" )
+    private boolean generateEnableProperties;
+
     @Parameter( defaultValue = "${session}", readonly = true, required = true )
     private MavenSession session;
 
@@ -251,7 +257,7 @@ public class CreateArchetypeFromProjectMojo
                 /* This should be used before there and use only languages and filtereds */.setArchetypeRegistryFile(
                     archetypeRegistryFile ).setLocalRepository( localRepository )
                 /* this should be resolved and asked for user to verify */.setPackageName( packageName ).setPostPhase(
-                    archetypePostPhase ).setOutputDirectory( outputDirectory );
+                    archetypePostPhase ).setOutputDirectory( outputDirectory ).setGenerateEnableProperies( generateEnableProperties );
 
             ArchetypeCreationResult result = manager.createArchetypeFromProject( request );
 
