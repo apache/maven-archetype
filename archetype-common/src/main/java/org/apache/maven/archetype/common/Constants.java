@@ -97,4 +97,6 @@ public interface Constants
     String TMP = ".tmp";
 
     String VERSION = "version";
+
+    String GENERATE_MODULE_PROPERTY_PREFIX = "generate.module.";
 }
