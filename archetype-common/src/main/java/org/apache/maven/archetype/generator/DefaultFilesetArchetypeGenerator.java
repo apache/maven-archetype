@@ -612,20 +612,30 @@ public class DefaultFilesetArchetypeGenerator
         {
             ModuleDescriptor project = subprojects.next();
 
-            File moduleOutputDirectoryFile = new File( outputDirectoryFile,
-                                                       StringUtils.replace( project.getDir(), "__rootArtifactId__",
-                                                                            rootArtifactId ) );
+            String enableProperty = project.getEnableProperty();
+            String enablePropertyValue = (String) context.get( enableProperty );
 
-            context.put( Constants.ARTIFACT_ID,
-                         StringUtils.replace( project.getId(), "${rootArtifactId}", rootArtifactId ) );
+            if ( StringUtils.equals( enablePropertyValue, "false" ) )
+            {
+                getLogger().info( "Skipping disabled module " + project.getId() );
+            }
+            else
+            {
+                File moduleOutputDirectoryFile = new File( outputDirectoryFile,
+                        StringUtils.replace( project.getDir(), "__rootArtifactId__",
+                                rootArtifactId ) );
 
-            processFilesetModule( rootArtifactId,
-                                  StringUtils.replace( project.getDir(), "__rootArtifactId__", rootArtifactId ),
-                                  archetypeResources, new File( moduleOutputDirectoryFile, Constants.ARCHETYPE_POM ),
-                                  archetypeZipFile,
-                                  ( StringUtils.isEmpty( moduleOffset ) ? "" : ( moduleOffset + "/" ) )
-                                      + StringUtils.replace( project.getDir(), "${rootArtifactId}", rootArtifactId ),
-                                  pom, moduleOutputDirectoryFile, packageName, project, context );
+                context.put( Constants.ARTIFACT_ID,
+                        StringUtils.replace( project.getId(), "${rootArtifactId}", rootArtifactId ) );
+
+                processFilesetModule( rootArtifactId,
+                        StringUtils.replace( project.getDir(), "__rootArtifactId__", rootArtifactId ),
+                        archetypeResources, new File( moduleOutputDirectoryFile, Constants.ARCHETYPE_POM ),
+                        archetypeZipFile,
+                        ( StringUtils.isEmpty( moduleOffset ) ? "" : ( moduleOffset + "/" ) )
+                        + StringUtils.replace( project.getDir(), "${rootArtifactId}", rootArtifactId ),
+                        pom, moduleOutputDirectoryFile, packageName, project, context );
+            }
         }
 
         restoreParentArtifactId( context, parentArtifactId );
