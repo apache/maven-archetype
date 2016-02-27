@@ -168,6 +168,17 @@ public class DefaultArchetypeCreatorTest
         assertExists(template1);
     }
 
+    public void testIncludeFileWithNoExtension()
+                    throws Exception
+    {
+        String project = "include-file-with-no-extension";
+
+        createFilesetArchetype( project );
+
+        File template1 = getTemplateFile( project, "src/main/csharp/filewithnoextension" );
+        assertExists(template1);
+    }
+
     public void testCreateFilesetArchetype1()
         throws Exception
     {

@@ -1784,7 +1784,14 @@ public class FilesetArchetypeCreator
             }
             else
             {
-                includes.add( "**/*." + extension );
+                if ( StringUtils.isEmpty( extension ) )
+                {
+                    includes.add( "**/*" );
+                }
+                else
+                {
+                    includes.add( "**/*." + extension );
+                }
             }
         }
 
