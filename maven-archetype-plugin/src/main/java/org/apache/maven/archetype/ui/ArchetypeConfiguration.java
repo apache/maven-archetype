@@ -19,12 +19,12 @@ package org.apache.maven.archetype.ui;
  * under the License.
  */
 
+import org.apache.maven.archetype.common.Constants;
+import org.codehaus.plexus.util.StringUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-
-import org.apache.maven.archetype.common.Constants;
-import org.codehaus.plexus.util.StringUtils;
 
 public class ArchetypeConfiguration
 {
