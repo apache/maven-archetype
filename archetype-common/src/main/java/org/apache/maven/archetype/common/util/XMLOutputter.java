@@ -52,6 +52,7 @@ package org.apache.maven.archetype.common.util;
  * on the JDOM Project, please see <http://www.jdom.org/>.
  */
 
+import org.codehaus.plexus.util.StringUtils;
 import org.jdom.Attribute;
 import org.jdom.CDATA;
 import org.jdom.Comment;
@@ -854,7 +855,7 @@ public class XMLOutputter
         throws IOException
     {
         out.write( "<!--" );
-        out.write( comment.getText() );
+        out.write( StringUtils.unifyLineSeparators( comment.getText(), currentFormat.lineSeparator ) );
         out.write( "-->" );
     }
 
