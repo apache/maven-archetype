@@ -498,6 +498,7 @@ public class FilesetArchetypeCreator
         requiredProperties.remove( Constants.ARTIFACT_ID );
         requiredProperties.remove( Constants.VERSION );
         requiredProperties.remove( Constants.PACKAGE );
+        requiredProperties.remove( Constants.EXCLUDE_PATTERNS );
 
         for ( Iterator<?> propertiesIterator = requiredProperties.keySet().iterator(); propertiesIterator.hasNext(); )
         {
