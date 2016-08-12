@@ -198,7 +198,7 @@ public class ArchetypeConfiguration
 
     public boolean isConfigured( String requiredProperties )
     {
-        return StringUtils.isNotEmpty( properties.getProperty( requiredProperties ) );
+        return StringUtils.isNotBlank( properties.getProperty( requiredProperties ) );
     }
 
     private Properties defaultProperties = new Properties();
