@@ -50,6 +50,11 @@ What is done during the creation of an archetype?
 
     Finishing by creating the POM for the archetype as a project.
 
+* Archetype testing
+
+    If you are creating an archetype from existing project all the tests from src/<it/projects> folder
+    will be executed at this point.
+
 * Archetype installation
 
     Optionally, after creating the archetype, the Archetype Plugin installs the

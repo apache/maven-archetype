@@ -78,6 +78,14 @@ import java.util.Properties;
  * <dt>custom properties</dt><dd>You may identify additional strings that should be replaced by parameters.
  * To add custom properties, you must use the <code>propertyFile</code> parameter to specify a property file.
  * See the documentation for <code>propertyFile</code> for the details.
+ * </dd>
+ * <dt>integration tests</dt><dd>You may also specify a set of integration tests to be executed right after
+ * you create archetype from the project. Each test consists of a separate folder under src/it/projects folder and
+ * in there you specify <code>archetype.properties</code>, <code>goal.txt</code> and <code>verify.groovy</code> files.
+ * The <code>archetype.properties</code> file is the file used to generate a new project from the newly created archetype
+ * and the <code>goal.txt</code> a single-line file to specify the maven goal to invoke after generation of the test-project.
+ * Finally the <code>verify.groovy</code> is a groovy file that you can use to specify your assertions on the generated project.
+ * </dd>
  * </dl>
  * <p>
  * Note that you may need to edit the results of this goal. This goal has no way to exclude unwanted files,
