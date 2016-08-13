@@ -48,6 +48,7 @@ under the License.
           <configuration>
             <settingsFile>${basedir}/test-settings.xml</settingsFile>
             <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
+            <ignoreEOLStyle>true</ignoreEOLStyle>
           </configuration>
 
         </plugin>

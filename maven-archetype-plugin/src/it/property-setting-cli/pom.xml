@@ -45,6 +45,9 @@ under the License.
         <plugin>
           <artifactId>maven-archetype-plugin</artifactId>
           <version>@project.version@</version>
+          <configuration>
+            <ignoreEOLStyle>true</ignoreEOLStyle>
+          </configuration>
         </plugin>
       </plugins>
     </pluginManagement>
