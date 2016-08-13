@@ -50,6 +50,7 @@ import org.apache.maven.project.ProjectBuildingException;
 import org.apache.maven.shared.invoker.DefaultInvocationRequest;
 import org.apache.maven.shared.invoker.DefaultInvoker;
 import org.apache.maven.shared.invoker.InvocationRequest;
+import org.apache.maven.shared.invoker.InvocationResult;
 import org.apache.maven.shared.invoker.Invoker;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
@@ -288,7 +289,12 @@ public class FilesetArchetypeCreator
             internalRequest.setGoals( Collections.singletonList( request.getPostPhase() ) );
 
             Invoker invoker = new DefaultInvoker();
-            invoker.execute( internalRequest );
+            InvocationResult invokerResult = invoker.execute( internalRequest );
+            if ( invokerResult.getExitCode() != 0 )
+            {
+                throw invokerResult.getExecutionException();
+            }
+
         }
         catch ( Exception e )
         {
