@@ -41,7 +41,6 @@
   <name>Maven Archetype Plugin</name>
 
   <properties>
-    <mavenPluginToolsVersion>3.4</mavenPluginToolsVersion><!-- TODO remove when upgrading maven-parent to 27 -->
     <checkstyle.violation.ignore>RedundantThrows,NewlineAtEndOfFile,ParameterNumber,MethodLength,FileLength,javadoc,LineLength</checkstyle.violation.ignore>
   </properties>
 
