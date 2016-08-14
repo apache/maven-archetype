@@ -48,6 +48,11 @@
     </dependency>
     <dependency>
       <groupId>org.apache.maven.archetype</groupId>
+      <artifactId>archetype-packaging</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.archetype</groupId>
       <artifactId>archetype-descriptor</artifactId>
     </dependency>
     <dependency>
