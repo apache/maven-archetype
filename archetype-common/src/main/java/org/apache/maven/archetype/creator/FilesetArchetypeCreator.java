@@ -298,7 +298,7 @@ public class FilesetArchetypeCreator
                 }
                 else
                 {
-                    throw new Exception( "Invoker process ended with redult different than 0!" );
+                    throw new Exception( "Invoker process ended with result different than 0!" );
                 }
             }
 
