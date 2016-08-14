@@ -292,7 +292,14 @@ public class FilesetArchetypeCreator
             InvocationResult invokerResult = invoker.execute( internalRequest );
             if ( invokerResult.getExitCode() != 0 )
             {
-                throw invokerResult.getExecutionException();
+                if ( invokerResult.getExecutionException() != null )
+                {
+                    throw invokerResult.getExecutionException();
+                }
+                else
+                {
+                    throw new Exception( "Invoker process ended with redult different than 0!" );
+                }
             }
 
         }
