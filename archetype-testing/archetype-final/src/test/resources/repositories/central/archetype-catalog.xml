@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><archetype-catalog>
+  <archetypes>
+    <archetype>
+      <groupId>archetypes</groupId>
+      <artifactId>fileset</artifactId>
+      <version>1.0</version>
+      <description>Fileset test archetype</description>
+      <repository>file://${basedir}/target/test-classes/repositories/central</repository>
+    </archetype>
+  </archetypes>
+</archetype-catalog>

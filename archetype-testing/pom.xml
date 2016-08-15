@@ -36,6 +36,7 @@
   <description>Tools used to test Maven Archetype.</description>
 
   <modules>
+	<module>archetype-final</module>
     <module>archetype-proxy</module>
     <module>archetype-repository</module>
   </modules>
