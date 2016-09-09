@@ -65,6 +65,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -612,19 +613,24 @@ public class DefaultFilesetArchetypeGenerator
         {
             ModuleDescriptor project = subprojects.next();
 
+            String subdirName = StringUtils.replace( project.getDir(), "__rootArtifactId__",
+            rootArtifactId );
+            subdirName = replaceDirectorynameTokens( context, subdirName );
             File moduleOutputDirectoryFile = new File( outputDirectoryFile,
-                                                       StringUtils.replace( project.getDir(), "__rootArtifactId__",
-                                                                            rootArtifactId ) );
-
+                                                       subdirName );
+            
+             String childArtifactId = StringUtils.replace( project.getId(), "${rootArtifactId}", rootArtifactId );
+            childArtifactId = expandDollarProperties( childArtifactId, context );
             context.put( Constants.ARTIFACT_ID,
-                         StringUtils.replace( project.getId(), "${rootArtifactId}", rootArtifactId ) );
-
+                         childArtifactId );
+            
+            String moduleOffsetSuffix = StringUtils.replace( project.getDir(), "${rootArtifactId}", rootArtifactId );
             processFilesetModule( rootArtifactId,
-                                  StringUtils.replace( project.getDir(), "__rootArtifactId__", rootArtifactId ),
+                                  subdirName,
                                   archetypeResources, new File( moduleOutputDirectoryFile, Constants.ARCHETYPE_POM ),
                                   archetypeZipFile,
                                   ( StringUtils.isEmpty( moduleOffset ) ? "" : ( moduleOffset + "/" ) )
-                                      + StringUtils.replace( project.getDir(), "${rootArtifactId}", rootArtifactId ),
+                                      + moduleOffsetSuffix,
                                   pom, moduleOutputDirectoryFile, packageName, project, context );
         }
 
@@ -633,6 +639,31 @@ public class DefaultFilesetArchetypeGenerator
         getLogger().debug( "Processed " + artifactId );
     }
 
+    private String expandDollarProperties( String value, Context context )
+    {
+        final String pattern = "\\$\\{([a-zA-Z0-9_.\\-]+)\\}";
+        final Pattern compiledPattern = Pattern.compile( pattern );
+        final Matcher matcher = compiledPattern.matcher( value );
+        if ( matcher.find() )
+        {
+            final String property = matcher.group( 1 );
+            if ( context.get( property ) != null )
+            {
+                value = value.replaceAll( pattern, ( String ) context.get( property ) );
+            }
+        }
+        return value;
+    }
+
+    private String replaceDirectorynameTokens( final Context context, String outputFileName )
+    {
+        if ( TOKEN_PATTERN.matcher( outputFileName ).matches() )
+        {
+            outputFileName = replaceFilenameTokens( outputFileName, context );
+        }
+        return outputFileName;
+    }
+    
     private void processFilesetProject( final AbstractArchetypeDescriptor archetypeDescriptor, final String moduleId,
                                         final List<String> archetypeResources, final File pom,
                                         final ZipFile archetypeZipFile, String moduleOffset, final Context context,
