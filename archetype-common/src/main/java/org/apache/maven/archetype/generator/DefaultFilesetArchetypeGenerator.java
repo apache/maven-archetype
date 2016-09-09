@@ -491,27 +491,53 @@ public class DefaultFilesetArchetypeGenerator
             getLogger().info( "Parameter: " + Constants.PACKAGE_IN_PATH_FORMAT + ", Value: " + packageInPathFormat );
         }
 
-        for ( Iterator<?> iterator = request.getProperties().keySet().iterator(); iterator.hasNext(); )
+        return withResolvedProperties( context, (Properties) request.getProperties().clone() );
+    }
+    
+    private Context withResolvedProperties( Context context, Properties properties ) 
+    {
+        boolean progress = false;
+         
+        for ( Iterator<?> iterator = properties.keySet().iterator(); iterator.hasNext(); )
         {
             String key = (String) iterator.next();
-
-            String value = request.getProperties().getProperty( key );
-
-            if ( maybeVelocityExpression( value ) )
+            String value = properties.getProperty( key );
+         
+      
+            String evaluated = evaluateExpression( context, key, value );
+            if ( !value.equals( evaluated ) ) 
             {
-                value = evaluateExpression( context, key, value );
-            }
-
-            context.put( key, value );
-
-            if ( getLogger().isInfoEnabled() )
+                // Update, but don't remove yet; resolution might not be complete.
+                properties.setProperty( key, evaluated );
+                progress = true;
+            } 
+            else 
             {
+                context.put( key, value );
+                iterator.remove();
+                progress = true;
                 getLogger().info( "Parameter: " + key + ", Value: " + value );
             }
         }
+         
+        if ( progress )
+        {
+            return withResolvedProperties( context, properties );
+        }   
+        
+        for ( Iterator<?> iterator = properties.keySet().iterator(); iterator.hasNext(); )
+        {
+            // Nothing interesting is happening with any remaining 
+            // maybeVelocityExpressions. Interpret them literally:
+            String key = ( String ) iterator.next();
+            String value = properties.getProperty( key );
+            getLogger().info( "Parameter: " + key + ", Value: " + value );
+        
+            context.put( key, value );
+        
+        }
         return context;
     }
-
     private boolean maybeVelocityExpression( String value )
     {
         return value != null && value.contains( "${" );
