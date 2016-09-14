@@ -150,10 +150,10 @@ public class DefaultArchetypeGenerationConfigurator
             throw new ArchetypeGenerationConfigurationFailure( "The defined artifact is not an archetype" );
         }
 
+        Context context = new VelocityContext();
         if ( interactiveMode.booleanValue() )
         {
             boolean confirmed = false;
-            Context context = new VelocityContext();
             context.put( Constants.GROUP_ID, ad.getGroupId() );
             context.put( Constants.ARTIFACT_ID, ad.getArtifactId() );
             context.put( Constants.VERSION, ad.getVersion() );
@@ -253,8 +253,13 @@ public class DefaultArchetypeGenerationConfigurator
                     if ( !archetypeConfiguration.isConfigured( requiredProperty ) && (
                         archetypeConfiguration.getDefaultValue( requiredProperty ) != null ) )
                     {
-                        archetypeConfiguration.setProperty( requiredProperty, archetypeConfiguration.getDefaultValue(
-                            requiredProperty ) );
+                        String value = archetypeConfiguration.getDefaultValue( requiredProperty );
+
+                        value = getTransitiveDefaultValue( value, archetypeConfiguration, requiredProperty, context );
+
+                        archetypeConfiguration.setProperty( requiredProperty, value );
+
+                        context.put( requiredProperty, value );                        
                     }
                 }
 
