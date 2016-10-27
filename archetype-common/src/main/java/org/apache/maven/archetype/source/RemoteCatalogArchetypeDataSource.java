@@ -86,10 +86,16 @@ public class RemoteCatalogArchetypeDataSource
             {
                 return downloadCatalog( repositoryPath, filename );
             }
-            catch ( Exception ex )
+            catch (ArchetypeDataSourceException ex)
             {
                 getLogger().warn( "Error reading archetype catalog " + repository, ex );
-                return new ArchetypeCatalog();
+                throw ex;
+            } catch (WagonException ex) {
+                getLogger().warn( "Error reading archetype catalog " + repository, ex );
+                throw new ArchetypeDataSourceException(ex);
+            } catch (IOException ex) {
+                getLogger().warn( "Error reading archetype catalog " + repository, ex );
+                throw new ArchetypeDataSourceException(ex);
             }
         }
     }
