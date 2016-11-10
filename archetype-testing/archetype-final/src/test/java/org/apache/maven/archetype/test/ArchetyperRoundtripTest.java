@@ -29,6 +29,7 @@ import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Writer;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
+import org.apache.maven.archetype.common.util.LinkedProperties;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.model.Model;
 import org.apache.maven.project.DefaultProjectBuilderConfiguration;
@@ -44,7 +45,6 @@ import org.mortbay.jetty.webapp.WebAppContext;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.Writer;
-import java.util.Properties;
 
 /**
  * @author Jason van Zyl
@@ -103,7 +103,7 @@ public class ArchetyperRoundtripTest
 
         MavenProject project = projectBuilder.build( pom, localRepository, null );
 
-        Properties properties = new Properties();
+        LinkedProperties properties = new LinkedProperties();
         properties.setProperty( "someProperty", "someValue" );
         ArchetypeCreationRequest acr = new ArchetypeCreationRequest().setProject( project ).
             setLocalRepository( localRepository ).setProperties( properties ).setPostPhase( "package" );

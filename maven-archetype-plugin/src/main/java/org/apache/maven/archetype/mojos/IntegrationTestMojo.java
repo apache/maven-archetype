@@ -42,6 +42,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
 import org.apache.maven.archetype.common.Constants;
+import org.apache.maven.archetype.common.util.LinkedProperties;
 import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
 import org.apache.maven.archetype.generator.ArchetypeGenerator;
 import org.apache.maven.artifact.Artifact;
@@ -453,10 +454,10 @@ public class IntegrationTestMojo
         }
     }
 
-    private Properties loadProperties( final File propertiesFile )
+    private LinkedProperties loadProperties( final File propertiesFile )
         throws IOException, FileNotFoundException
     {
-        Properties properties = new Properties();
+        LinkedProperties properties = new LinkedProperties();
 
         InputStream in = null;
         try
@@ -480,7 +481,7 @@ public class IntegrationTestMojo
 
         try
         {
-            Properties properties = getProperties( goalFile );
+            LinkedProperties properties = getProperties( goalFile );
 
             File basedir = new File( goalFile.getParentFile(), "project" );
 
@@ -516,7 +517,7 @@ public class IntegrationTestMojo
         }
     }
 
-    private ArchetypeGenerationRequest generate( String archetypeGroupId, String archetypeArtifactId, String archetypeVersion, File archetypeFile, Properties properties, String basedir ) throws IntegrationTestFailure
+    private ArchetypeGenerationRequest generate( String archetypeGroupId, String archetypeArtifactId, String archetypeVersion, File archetypeFile, LinkedProperties properties, String basedir ) throws IntegrationTestFailure
     {
         //@formatter:off
         ArchetypeGenerationRequest request =
@@ -593,7 +594,7 @@ public class IntegrationTestMojo
         {
             throw new MojoExecutionException( "Could not find archetype artifact " , e );
         }
-        Properties archetypeProperties = getProperties( archetypePomPropertiesFile );
+        LinkedProperties archetypeProperties = getProperties( archetypePomPropertiesFile );
         getLog().info( "Setting up parent project in " + buildFolder );
         ArchetypeGenerationRequest request = generate( groupId, artifactId, version, archetypeFile, archetypeProperties, buildFolder.toString() );
         return new File( buildFolder, request.getArtifactId() );
@@ -607,7 +608,7 @@ public class IntegrationTestMojo
         return archetypeArtifact.getFile();
     }
 
-    private Properties getProperties( File goalFile )
+    private LinkedProperties getProperties( File goalFile )
         throws IOException
     {
         File propertiesFile = new File( goalFile.getParentFile(), "archetype.properties" );

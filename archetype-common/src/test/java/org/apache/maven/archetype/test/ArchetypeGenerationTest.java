@@ -23,6 +23,7 @@ import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
 import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
+import org.apache.maven.archetype.common.util.LinkedProperties;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.codehaus.plexus.PlexusTestCase;
 
@@ -84,7 +85,7 @@ public class ArchetypeGenerationTest
             .setVersion( version )
             .setPackage( packageName );
 
-        Properties archetypeRequiredProperties = new Properties();
+        LinkedProperties archetypeRequiredProperties = new LinkedProperties();
         archetypeRequiredProperties.setProperty( "property-with-default-1", "value-1" );
         archetypeRequiredProperties.setProperty( "property-with-default-2", "value-2" );
         archetypeRequiredProperties.setProperty( "property-with-default-3", "value-3" );

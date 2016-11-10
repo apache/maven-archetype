@@ -20,6 +20,7 @@ package org.apache.maven.archetype.ui;
  */
 
 import org.apache.maven.archetype.common.Constants;
+import org.apache.maven.archetype.common.util.LinkedProperties;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.util.ArrayList;
@@ -147,7 +148,7 @@ public class ArchetypeConfiguration
         properties.clear();
     }
 
-    private Properties properties = new Properties();
+    private LinkedProperties properties = new LinkedProperties();
 
     public void setProperty( String requiredProperty, String propertyValue )
     {
@@ -159,7 +160,7 @@ public class ArchetypeConfiguration
         return properties.getProperty( property, null );
     }
 
-    public Properties getProperties()
+    public LinkedProperties getProperties()
     {
         return properties;
     }

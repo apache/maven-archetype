@@ -21,6 +21,7 @@ package org.apache.maven.archetype.generator;
 
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
+import org.apache.maven.archetype.common.util.LinkedProperties;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.DefaultArtifactRepository;
 import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
@@ -60,17 +61,17 @@ public class DefaultArchetypeGeneratorTest
     private final static Archetype ARCHETYPE_FILESET_WITH_POSTCREATE_SCRIPT =
         new Archetype( "archetypes", "fileset_with_postscript", "1.0" );
 
-    private final static Properties ADDITIONAL_PROPERTIES = new Properties();
+    private final static LinkedProperties ADDITIONAL_PROPERTIES = new LinkedProperties();
     static
     {
         ADDITIONAL_PROPERTIES.setProperty( "property-without-default-1", "file-value" );
         ADDITIONAL_PROPERTIES.setProperty( "property-without-default-2", "file-value" );
         ADDITIONAL_PROPERTIES.setProperty( "property-without-default-3", "file-value" );
-        ADDITIONAL_PROPERTIES.setProperty( "property-without-default-4", "file-value" );
+        ADDITIONAL_PROPERTIES.setProperty( "property-without-default-4", "${property-without-default-1.replaceAll(\"-\", \"_\")}" );
         ADDITIONAL_PROPERTIES.setProperty( "property-with-default-1", "file-value" );
         ADDITIONAL_PROPERTIES.setProperty( "property-with-default-2", "file-value" );
         ADDITIONAL_PROPERTIES.setProperty( "property-with-default-3", "file-value" );
-        ADDITIONAL_PROPERTIES.setProperty( "property-with-default-4", "file-value" );
+        ADDITIONAL_PROPERTIES.setProperty( "property-with-default-4", "${property-with-default-1.replaceAll(\"-\", \"_\")}" );
     }
 
     ArtifactRepository localRepository;
@@ -415,7 +416,7 @@ public class DefaultArchetypeGeneratorTest
 
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest( "generate-3", ARCHETYPE_BASIC );
         
-        request.setProperties( new Properties() );
+        request.setProperties( new LinkedProperties() );
 
         ArchetypeGenerationResult result = generateProjectFromArchetypeWithFailure( request );
 
@@ -569,11 +570,11 @@ public class DefaultArchetypeGeneratorTest
         assertEquals( "file-value", properties.getProperty( "property-with-default-1" ) );
         assertEquals( "file-value", properties.getProperty( "property-with-default-2" ) );
         assertEquals( "file-value", properties.getProperty( "property-with-default-3" ) );
-        assertEquals( "file-value", properties.getProperty( "property-with-default-4" ) );
+        assertEquals( "file_value", properties.getProperty( "property-with-default-4" ) );
         assertEquals( "file-value", properties.getProperty( "property-without-default-1" ) );
         assertEquals( "file-value", properties.getProperty( "property-without-default-2" ) );
         assertEquals( "file-value", properties.getProperty( "property-without-default-3" ) );
-        assertEquals( "file-value", properties.getProperty( "property-without-default-4" ) );
+        assertEquals( "file_value", properties.getProperty( "property-without-default-4" ) );
     }
 
     private void assertTemplateContentGeneratedWithFileSetArchetype( String template, String artifactId )

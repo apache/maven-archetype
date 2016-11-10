@@ -23,6 +23,7 @@ import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 import org.apache.maven.archetype.common.Constants;
+import org.apache.maven.archetype.common.util.LinkedProperties;
 import org.apache.maven.archetype.exception.ArchetypeGenerationConfigurationFailure;
 import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
 import org.apache.maven.archetype.exception.ArchetypeNotDefined;
@@ -297,9 +298,9 @@ public class DefaultArchetypeGenerationConfigurator
 
         request.setPackage( archetypeConfiguration.getProperty( Constants.PACKAGE ) );
 
-        properties = archetypeConfiguration.getProperties();
+        LinkedProperties archetypeConfigurationProperties = archetypeConfiguration.getProperties();
 
-        request.setProperties( properties );
+        request.setProperties( archetypeConfigurationProperties );
     }
 
     private String getTransitiveDefaultValue( String defaultValue, ArchetypeConfiguration archetypeConfiguration,

@@ -20,6 +20,7 @@ package org.apache.maven.archetype;
  */
 
 import org.apache.maven.archetype.catalog.Archetype;
+import org.apache.maven.archetype.common.util.LinkedProperties;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.settings.Mirror;
 import org.apache.maven.settings.Proxy;
@@ -28,7 +29,6 @@ import org.apache.maven.wagon.events.TransferListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 /** @author Jason van Zyl */
 public class ArchetypeGenerationRequest
@@ -73,7 +73,7 @@ public class ArchetypeGenerationRequest
 
     private String packageName;
 
-    private Properties properties = new Properties();
+    private LinkedProperties properties = new LinkedProperties();
 
     /**
      *  @since 2.1
@@ -216,12 +216,12 @@ public class ArchetypeGenerationRequest
         return this;
     }
 
-    public Properties getProperties()
+    public LinkedProperties getProperties()
     {
         return properties;
     }
 
-    public ArchetypeGenerationRequest setProperties( Properties additionalProperties )
+    public ArchetypeGenerationRequest setProperties( LinkedProperties additionalProperties )
     {
         this.properties = additionalProperties;
 
