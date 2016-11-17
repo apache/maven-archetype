@@ -211,7 +211,7 @@ public class FilesetArchetypeCreator
             archetypeDescriptor.setFileSets( filesets );
 
             createArchetypeFiles( reverseProperties, filesets, packageName, basedir, archetypeFilesDirectory,
-                                  defaultEncoding );
+                                  defaultEncoding, excludePatterns );
             getLogger().debug( "Created files for " + archetypeDescriptor.getName() );
 
             setParentArtifactId( reverseProperties, configurationProperties.getProperty( Constants.ARTIFACT_ID ) );
@@ -805,6 +805,14 @@ public class FilesetArchetypeCreator
         return result;
     }
 
+    private List<String> addLists( List<String> list, List<String> other )
+    {
+        List<String> result = new ArrayList<String>( list.size() + other.size() );
+        result.addAll( list );
+        result.addAll( other );
+        return result;
+    }
+
     private void copyFiles( File basedir, File archetypeFilesDirectory, String directory, List<String> fileSetResources,
                             boolean packaged, String packageName )
         throws IOException
@@ -832,7 +840,8 @@ public class FilesetArchetypeCreator
     }
 
     private void createArchetypeFiles( Properties reverseProperties, List<FileSet> fileSets, String packageName,
-                                       File basedir, File archetypeFilesDirectory, String defaultEncoding )
+                                       File basedir, File archetypeFilesDirectory, String defaultEncoding,
+                                       List<String> excludePatterns )
         throws IOException
     {
         getLogger().debug( "Creating Archetype/Module files from " + basedir + " to " + archetypeFilesDirectory );
@@ -843,7 +852,8 @@ public class FilesetArchetypeCreator
             scanner.setBasedir( basedir );
             scanner.setIncludes( (String[]) concatenateToList( fileSet.getIncludes(), fileSet.getDirectory() ).toArray(
                 new String[fileSet.getIncludes().size()] ) );
-            scanner.setExcludes( (String[]) fileSet.getExcludes().toArray( new String[fileSet.getExcludes().size()] ) );
+            scanner.setExcludes( (String[]) addLists( fileSet.getExcludes(), excludePatterns ).toArray(
+                new String[fileSet.getExcludes().size()] ) );
             scanner.addDefaultExcludes();
             getLogger().debug( "Using fileset " + fileSet );
             scanner.scan();
@@ -1059,7 +1069,7 @@ public class FilesetArchetypeCreator
         archetypeDescriptor.setFileSets( filesets );
 
         createArchetypeFiles( reverseProperties, filesets, packageName, basedir, archetypeFilesDirectory,
-                              defaultEncoding );
+                              defaultEncoding, excludePatterns );
         getLogger().debug( "Created files for module " + archetypeDescriptor.getName() );
 
         String parentArtifactId = reverseProperties.getProperty( Constants.PARENT_ARTIFACT_ID );

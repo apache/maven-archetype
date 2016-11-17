@@ -168,6 +168,18 @@ public class DefaultArchetypeCreatorTest
         assertExists(template1);
     }
 
+    public void testExcludePatternsContainingFilesSameExtension()
+        throws Exception
+    {
+        String project = "exclude-patterns-2";
+
+        createFilesetArchetype( project );
+
+        assertNotExists( getTemplateFile( project, ".sonar/file.txt" ) );
+        assertNotExists( getTemplateFile( project, "folder/.sonar/file.txt" ) );
+        assertExists( getTemplateFile( project, "folder/file.txt" ) );
+    }
+
     public void testIncludeFileWithNoExtension()
                     throws Exception
     {
