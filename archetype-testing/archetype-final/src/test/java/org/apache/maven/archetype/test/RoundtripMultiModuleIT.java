@@ -53,7 +53,7 @@ import java.util.Properties;
 /**
  * @author Jason van Zyl
  */
-public class RoundtripMultiModuleTest
+public class RoundtripMultiModuleIT
     extends PlexusTestCase
 {
     public void testArchetyper()

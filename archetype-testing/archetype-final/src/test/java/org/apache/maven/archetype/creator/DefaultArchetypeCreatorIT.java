@@ -39,7 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-public class DefaultArchetypeCreatorTest
+public class DefaultArchetypeCreatorIT
     extends AbstractMojoTestCase
 {
     private List<String> filtereds;
@@ -128,7 +128,8 @@ public class DefaultArchetypeCreatorTest
             .setPartialArchetype( false )
             .setPreserveCData( false )
             .setKeepParent( false )
-            .setPostPhase( "verify" );
+            .setPostPhase( "verify" )
+            .setLocalRepository( localRepository );
 
         ArchetypeCreationResult result = new ArchetypeCreationResult();
 

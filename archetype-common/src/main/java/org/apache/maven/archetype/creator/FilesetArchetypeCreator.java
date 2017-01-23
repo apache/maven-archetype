@@ -48,7 +48,6 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.project.ProjectBuildingException;
 import org.apache.maven.shared.invoker.DefaultInvocationRequest;
-import org.apache.maven.shared.invoker.DefaultInvoker;
 import org.apache.maven.shared.invoker.InvocationRequest;
 import org.apache.maven.shared.invoker.InvocationResult;
 import org.apache.maven.shared.invoker.Invoker;
@@ -104,6 +103,9 @@ public class FilesetArchetypeCreator
 
     @Requirement
     private MavenProjectBuilder projectBuilder;
+    
+    @Requirement
+    private Invoker invoker;
 
     public void createArchetype( ArchetypeCreationRequest request, ArchetypeCreationResult result )
     {
@@ -216,9 +218,8 @@ public class FilesetArchetypeCreator
 
             setParentArtifactId( reverseProperties, configurationProperties.getProperty( Constants.ARTIFACT_ID ) );
 
-            for ( Iterator<String> modules = pom.getModules().iterator(); modules.hasNext(); )
+            for ( String moduleId : pom.getModules() )
             {
-                String moduleId = (String) modules.next();
                 String rootArtifactId = configurationProperties.getProperty( Constants.ARTIFACT_ID );
                 String moduleIdDirectory = moduleId;
 
@@ -287,8 +288,11 @@ public class FilesetArchetypeCreator
             InvocationRequest internalRequest = new DefaultInvocationRequest();
             internalRequest.setPomFile( archetypePomFile );
             internalRequest.setGoals( Collections.singletonList( request.getPostPhase() ) );
+            if ( request.getLocalRepository() != null )
+            {
+                internalRequest.setLocalRepositoryDirectory( new File( request.getLocalRepository().getBasedir() ) );
+            }
 
-            Invoker invoker = new DefaultInvoker();
             InvocationResult invokerResult = invoker.execute( internalRequest );
             if ( invokerResult.getExitCode() != 0 )
             {
@@ -541,10 +545,8 @@ public class FilesetArchetypeCreator
         setParentArtifactId( pomReversedProperties, pomReversedProperties.getProperty( Constants.ARTIFACT_ID ) );
         setArtifactId( pomReversedProperties, pom.getArtifactId() );
 
-        for ( Iterator<String> modules = pom.getModules().iterator(); modules.hasNext(); )
+        for ( String subModuleId : pom.getModules() )
         {
-            String subModuleId = modules.next();
-
             String subModuleIdDirectory = subModuleId;
 
             if ( subModuleId.indexOf( rootArtifactId ) >= 0 )
@@ -571,10 +573,8 @@ public class FilesetArchetypeCreator
     {
         setArtifactId( pomReversedProperties, pom.getArtifactId() );
 
-        for ( Iterator<String> modules = pom.getModules().iterator(); modules.hasNext(); )
+        for ( String moduleId : pom.getModules() )
         {
-            String moduleId = modules.next();
-
             String moduleIdDirectory = moduleId;
 
             if ( moduleId.indexOf( rootArtifactId ) >= 0 )
@@ -604,9 +604,9 @@ public class FilesetArchetypeCreator
         // rewrite Dependencies
         if ( pom.getDependencies() != null && !pom.getDependencies().isEmpty() )
         {
-            for ( Iterator<Dependency> dependencies = pom.getDependencies().iterator(); dependencies.hasNext(); )
+            for ( Dependency dependency : pom.getDependencies() )
             {
-                rewriteDependencyReferences( dependencies.next(), rootArtifactId, groupId );
+                rewriteDependencyReferences( dependency, rootArtifactId, groupId );
             }
         }
 
@@ -614,19 +614,18 @@ public class FilesetArchetypeCreator
         if ( pom.getDependencyManagement() != null && pom.getDependencyManagement().getDependencies() != null
             && !pom.getDependencyManagement().getDependencies().isEmpty() )
         {
-            for ( Iterator<Dependency> dependencies = pom.getDependencyManagement().getDependencies().iterator();
-                  dependencies.hasNext(); )
+            for ( Dependency dependency : pom.getDependencyManagement().getDependencies() )
             {
-                rewriteDependencyReferences( dependencies.next(), rootArtifactId, groupId );
+                rewriteDependencyReferences( dependency, rootArtifactId, groupId );
             }
         }
 
         // rewrite Plugins
         if ( pom.getBuild() != null && pom.getBuild().getPlugins() != null && !pom.getBuild().getPlugins().isEmpty() )
         {
-            for ( Iterator<Plugin> plugins = pom.getBuild().getPlugins().iterator(); plugins.hasNext(); )
+            for ( Plugin plugin : pom.getBuild().getPlugins() )
             {
-                rewritePluginReferences( plugins.next(), rootArtifactId, groupId );
+                rewritePluginReferences( plugin, rootArtifactId, groupId );
             }
         }
 
@@ -635,27 +634,23 @@ public class FilesetArchetypeCreator
             && pom.getBuild().getPluginManagement().getPlugins() != null
             && !pom.getBuild().getPluginManagement().getPlugins().isEmpty() )
         {
-            for ( Iterator<Plugin> plugins = pom.getBuild().getPluginManagement().getPlugins().iterator();
-                  plugins.hasNext(); )
+            for ( Plugin plugin : pom.getBuild().getPluginManagement().getPlugins() )
             {
-                rewritePluginReferences( plugins.next(), rootArtifactId, groupId );
+                rewritePluginReferences( plugin, rootArtifactId, groupId );
             }
         }
 
         // rewrite Profiles
         if ( pom.getProfiles() != null )
         {
-            for ( Iterator<Profile> profiles = pom.getProfiles().iterator(); profiles.hasNext(); )
+            for ( Profile profile : pom.getProfiles() )
             {
-                Profile profile = profiles.next();
-
                 // rewrite Dependencies
                 if ( profile.getDependencies() != null && !profile.getDependencies().isEmpty() )
                 {
-                    for ( Iterator<Dependency> dependencies = profile.getDependencies().iterator();
-                          dependencies.hasNext(); )
+                    for ( Dependency dependency : profile.getDependencies() )
                     {
-                        rewriteDependencyReferences( dependencies.next(), rootArtifactId, groupId );
+                        rewriteDependencyReferences( dependency, rootArtifactId, groupId );
                     }
                 }
 
@@ -664,10 +659,9 @@ public class FilesetArchetypeCreator
                     && profile.getDependencyManagement().getDependencies() != null
                     && !profile.getDependencyManagement().getDependencies().isEmpty() )
                 {
-                    for ( Iterator<Dependency> dependencies =
-                              profile.getDependencyManagement().getDependencies().iterator(); dependencies.hasNext(); )
+                    for ( Dependency dependency : profile.getDependencyManagement().getDependencies() )
                     {
-                        rewriteDependencyReferences( dependencies.next(), rootArtifactId, groupId );
+                        rewriteDependencyReferences( dependency, rootArtifactId, groupId );
                     }
                 }
 
@@ -675,9 +669,9 @@ public class FilesetArchetypeCreator
                 if ( profile.getBuild() != null && profile.getBuild().getPlugins() != null
                     && !profile.getBuild().getPlugins().isEmpty() )
                 {
-                    for ( Iterator<Plugin> plugins = profile.getBuild().getPlugins().iterator(); plugins.hasNext(); )
+                    for ( Plugin plugin : profile.getBuild().getPlugins() )
                     {
-                        rewritePluginReferences( plugins.next(), rootArtifactId, groupId );
+                        rewritePluginReferences( plugin, rootArtifactId, groupId );
                     }
                 }
 
@@ -686,10 +680,9 @@ public class FilesetArchetypeCreator
                     && profile.getBuild().getPluginManagement().getPlugins() != null
                     && !profile.getBuild().getPluginManagement().getPlugins().isEmpty() )
                 {
-                    for ( Iterator<Plugin> plugins = profile.getBuild().getPluginManagement().getPlugins().iterator();
-                          plugins.hasNext(); )
+                    for ( Plugin plugin : profile.getBuild().getPluginManagement().getPlugins() )
                     {
-                        rewritePluginReferences( plugins.next(), rootArtifactId, groupId );
+                        rewritePluginReferences( plugin, rootArtifactId, groupId );
                     }
                 }
             }
@@ -1075,10 +1068,8 @@ public class FilesetArchetypeCreator
         String parentArtifactId = reverseProperties.getProperty( Constants.PARENT_ARTIFACT_ID );
         setParentArtifactId( reverseProperties, pom.getArtifactId() );
 
-        for ( Iterator<String> modules = pom.getModules().iterator(); modules.hasNext(); )
+        for ( String subModuleId : pom.getModules() )
         {
-            String subModuleId = modules.next();
-
             String subModuleIdDirectory = subModuleId;
             if ( subModuleId.indexOf( rootArtifactId ) >= 0 )
             {
@@ -1365,25 +1356,6 @@ public class FilesetArchetypeCreator
         }
     }
 
-    private List<String> removePackage( List<String> sources, String packageAsDirectory )
-    {
-        if ( sources == null )
-        {
-            return null;
-        }
-
-        List<String> unpackagedSources = new ArrayList<String>( sources.size() );
-
-        for ( String source : sources )
-        {
-            String unpackagedSource = StringUtils.replace( source, packageAsDirectory, "" );
-
-            unpackagedSources.add( unpackagedSource );
-        }
-
-        return unpackagedSources;
-    }
-
     private Properties getReversedProperties( ArchetypeDescriptor archetypeDescriptor, Properties properties )
     {
         Properties reversedProperties = new Properties();
@@ -1412,9 +1384,9 @@ public class FilesetArchetypeCreator
         getLogger().debug( "Resolving files for " + pom.getId() + " in " + basedir );
 
         StringBuffer buff = new StringBuffer( "pom.xml*,archetype.properties*,target/**," );
-        for ( Iterator<String> modules = pom.getModules().iterator(); modules.hasNext(); )
+        for ( String module : pom.getModules() )
         {
-            buff.append( ',' ).append( modules.next() ).append( "/**" );
+            buff.append( ',' ).append( module ).append( "/**" );
         }
 
         for ( String defaultExclude : ListScanner.DEFAULTEXCLUDES )
