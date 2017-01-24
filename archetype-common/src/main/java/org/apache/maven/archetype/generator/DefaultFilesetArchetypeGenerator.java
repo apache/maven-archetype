@@ -578,10 +578,11 @@ public class DefaultFilesetArchetypeGenerator
         return count;
     }
 
-    private void processFilesetModule( String rootArtifactId, String artifactId, final List<String> archetypeResources,
-                                       File pom, final ZipFile archetypeZipFile, String moduleOffset, File basedirPom,
-                                       File outputDirectoryFile, final String packageName,
-                                       final AbstractArchetypeDescriptor archetypeDescriptor, final Context context )
+    private void processFilesetModule( final String rootArtifactId, final String artifactId,
+                                       final List<String> archetypeResources, File pom, final ZipFile archetypeZipFile,
+                                       String moduleOffset, File basedirPom, File outputDirectoryFile,
+                                       final String packageName, final AbstractArchetypeDescriptor archetypeDescriptor,
+                                       final Context context )
         throws DocumentException, XmlPullParserException, ArchetypeGenerationFailure, InvalidPackaging, IOException,
         OutputFileExists
     {
@@ -612,15 +613,18 @@ public class DefaultFilesetArchetypeGenerator
         {
             ModuleDescriptor project = subprojects.next();
 
-            File moduleOutputDirectoryFile = new File( outputDirectoryFile,
-                                                       StringUtils.replace( project.getDir(), "__rootArtifactId__",
-                                                                            rootArtifactId ) );
+            String modulePath = StringUtils.replace( project.getDir(), "__rootArtifactId__", rootArtifactId );
+            modulePath = replaceFilenameTokens( modulePath, context );
+            
+            File moduleOutputDirectoryFile = new File( outputDirectoryFile, modulePath );
 
             context.put( Constants.ARTIFACT_ID,
                          StringUtils.replace( project.getId(), "${rootArtifactId}", rootArtifactId ) );
-
-            processFilesetModule( rootArtifactId,
-                                  StringUtils.replace( project.getDir(), "__rootArtifactId__", rootArtifactId ),
+            
+            String moduleArtifactId = StringUtils.replace( project.getDir(), "__rootArtifactId__", rootArtifactId );
+            moduleArtifactId = replaceFilenameTokens( moduleArtifactId, context );
+            
+            processFilesetModule( rootArtifactId, moduleArtifactId,
                                   archetypeResources, new File( moduleOutputDirectoryFile, Constants.ARCHETYPE_POM ),
                                   archetypeZipFile,
                                   ( StringUtils.isEmpty( moduleOffset ) ? "" : ( moduleOffset + "/" ) )
