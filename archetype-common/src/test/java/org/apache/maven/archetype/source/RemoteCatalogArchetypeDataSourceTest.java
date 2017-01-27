@@ -1,4 +1,4 @@
-package org.apache.maven.archetype;
+package org.apache.maven.archetype.source;
 
 /*
  *  Copyright 2007 rafale.
@@ -17,65 +17,23 @@ package org.apache.maven.archetype;
  *  under the License.
  */
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.Writer;
+
 import org.apache.commons.io.IOUtils;
+import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Writer;
 import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.ProjectBuildingRequest;
-import org.apache.maven.repository.internal.MavenRepositorySystemSession;
 import org.codehaus.plexus.PlexusTestCase;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.webapp.WebAppContext;
-import org.sonatype.aether.impl.internal.SimpleLocalRepositoryManager;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.Writer;
-
-/**
- * @author rafale
- */
-public class ArchetypeCatalogsTest
-    extends PlexusTestCase
+public class RemoteCatalogArchetypeDataSourceTest extends PlexusTestCase
 {
-    public void testRemoteCatalog()
-        throws Exception
-    {
-        ArchetypeManager archetype = lookup( ArchetypeManager.class );
-
-        ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
-        
-        ArchetypeCatalog result = archetype.getRemoteCatalog( buildingRequest, "http://localhost:" + port + "/repo/" );
-
-        assertEquals( 1, result.getArchetypes().size() );
-        assertEquals( "groupId", result.getArchetypes().get( 0 ).getGroupId() );
-        assertEquals( "artifactId", result.getArchetypes().get( 0 ).getArtifactId() );
-        assertEquals( "1", result.getArchetypes().get( 0 ).getVersion() );
-        assertEquals( "http://localhost:" + port + "/repo/", result.getArchetypes().get( 0 ).getRepository() );
-    }
-
-    public void testLocalCatalog()
-        throws Exception
-    {
-        ArchetypeManager archetype = lookup( ArchetypeManager.class );
-
-        ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
-        MavenRepositorySystemSession repositorySession = new MavenRepositorySystemSession();
-        repositorySession.setLocalRepositoryManager( new SimpleLocalRepositoryManager( getTestFile( "target/test-classes/repositories/test-catalog" ) ) );
-        buildingRequest.setRepositorySession( repositorySession );
-        
-        
-        ArchetypeCatalog result = archetype.getLocalCatalog( buildingRequest );
-
-        assertEquals( 1, result.getArchetypes().size() );
-        assertEquals( "groupId", result.getArchetypes().get( 0 ).getGroupId() );
-        assertEquals( "artifactId", result.getArchetypes().get( 0 ).getArtifactId() );
-        assertEquals( "1", result.getArchetypes().get( 0 ).getVersion() );
-        assertEquals( "http://localhost:" + port + "/repo/", result.getArchetypes().get( 0 ).getRepository() );
-    }
-
-
     private Server server;
 
     int port;
@@ -127,4 +85,21 @@ public class ArchetypeCatalogsTest
         // Stop Jetty
         server.stop();
     }
+    
+    public void testRemoteCatalog()
+        throws Exception
+    {
+        ArchetypeManager archetype = lookup( ArchetypeManager.class );
+
+        ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
+
+        ArchetypeCatalog result = archetype.getRemoteCatalog( buildingRequest, "http://localhost:" + port + "/repo/" );
+
+        assertEquals( 1, result.getArchetypes().size() );
+        assertEquals( "groupId", result.getArchetypes().get( 0 ).getGroupId() );
+        assertEquals( "artifactId", result.getArchetypes().get( 0 ).getArtifactId() );
+        assertEquals( "1", result.getArchetypes().get( 0 ).getVersion() );
+        assertEquals( "http://localhost:" + port + "/repo/", result.getArchetypes().get( 0 ).getRepository() );
+    }
+
 }
