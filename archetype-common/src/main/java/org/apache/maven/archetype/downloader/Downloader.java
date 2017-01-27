@@ -20,6 +20,7 @@ package org.apache.maven.archetype.downloader;
  */
 
 import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.project.ProjectBuildingRequest;
 
 import java.io.File;
 import java.util.List;
@@ -29,13 +30,13 @@ import java.util.List;
  */
 public interface Downloader
 {
-    String ROLE = Downloader.class.getName();
-
     File download( String groupId, String artifactId, String version, ArtifactRepository archetypeRepository,
-                   ArtifactRepository localRepository, List<ArtifactRepository> remoteRepositories )
+                   ArtifactRepository localRepository, List<ArtifactRepository> remoteRepositories,
+                   ProjectBuildingRequest buildingRequest )
         throws DownloadException, DownloadNotFoundException;
 
     File downloadOld( String groupId, String artifactId, String version, ArtifactRepository archetypeRepository,
-                      ArtifactRepository localRepository, List<ArtifactRepository> remoteRepositories )
+                      ArtifactRepository localRepository, List<ArtifactRepository> remoteRepositories,
+                      ProjectBuildingRequest buildingRequest )
         throws DownloadException, DownloadNotFoundException;
 }

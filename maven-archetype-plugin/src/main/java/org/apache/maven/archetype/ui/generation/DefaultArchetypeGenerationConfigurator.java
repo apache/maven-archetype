@@ -114,11 +114,11 @@ public class DefaultArchetypeGenerationConfigurator
         }
 
         if ( !archetypeArtifactManager.exists( ad.getGroupId(), ad.getArtifactId(), ad.getVersion(),
-                                               archetypeRepository, localRepository, repositories ) )
+                                               archetypeRepository, localRepository, repositories,
+                                               request.getProjectBuildingRequest() ) )
         {
-            throw new UnknownArchetype(
-                "The desired archetype does not exist (" + ad.getGroupId() + ":" + ad.getArtifactId() + ":"
-                    + ad.getVersion() + ")" );
+            throw new UnknownArchetype( "The desired archetype does not exist (" + ad.getGroupId() + ":"
+                + ad.getArtifactId() + ":" + ad.getVersion() + ")" );
         }
 
         request.setArchetypeVersion( ad.getVersion() );
@@ -126,22 +126,26 @@ public class DefaultArchetypeGenerationConfigurator
         ArchetypeConfiguration archetypeConfiguration;
 
         if ( archetypeArtifactManager.isFileSetArchetype( ad.getGroupId(), ad.getArtifactId(), ad.getVersion(),
-                                                          archetypeRepository, localRepository, repositories ) )
+                                                          archetypeRepository, localRepository, repositories,
+                                                          request.getProjectBuildingRequest() ) )
         {
             org.apache.maven.archetype.metadata.ArchetypeDescriptor archetypeDescriptor =
                 archetypeArtifactManager.getFileSetArchetypeDescriptor( ad.getGroupId(), ad.getArtifactId(),
                                                                         ad.getVersion(), archetypeRepository,
-                                                                        localRepository, repositories );
+                                                                        localRepository, repositories,
+                                                                        request.getProjectBuildingRequest() );
 
             archetypeConfiguration = archetypeFactory.createArchetypeConfiguration( archetypeDescriptor, properties );
         }
         else if ( archetypeArtifactManager.isOldArchetype( ad.getGroupId(), ad.getArtifactId(), ad.getVersion(),
-                                                           archetypeRepository, localRepository, repositories ) )
+                                                           archetypeRepository, localRepository, repositories,
+                                                           request.getProjectBuildingRequest() ) )
         {
             org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor archetypeDescriptor =
                 archetypeArtifactManager.getOldArchetypeDescriptor( ad.getGroupId(), ad.getArtifactId(),
                                                                     ad.getVersion(), archetypeRepository,
-                                                                    localRepository, repositories );
+                                                                    localRepository, repositories,
+                                                                    request.getProjectBuildingRequest() );
 
             archetypeConfiguration = archetypeFactory.createArchetypeConfiguration( archetypeDescriptor, properties );
         }

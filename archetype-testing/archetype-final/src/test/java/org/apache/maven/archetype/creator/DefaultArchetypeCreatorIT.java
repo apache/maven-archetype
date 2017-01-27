@@ -25,9 +25,13 @@ import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.artifact.repository.DefaultArtifactRepository;
 import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
+import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
-import org.apache.maven.project.MavenProjectBuildingResult;
+import org.apache.maven.project.ProjectBuilder;
+import org.apache.maven.project.ProjectBuildingRequest;
+import org.apache.maven.project.ProjectBuildingResult;
+//import org.apache.maven.project.MavenProjectBuildingResult;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.PropertyUtils;
 import org.codehaus.plexus.util.StringUtils;
@@ -53,7 +57,7 @@ public class DefaultArchetypeCreatorIT
     {
         System.out.println( ">>>>>> testCreateFilesetArchetype( \"" + project + "\" )" );
         
-        MavenProjectBuilder builder = (MavenProjectBuilder) lookup( MavenProjectBuilder.ROLE );
+        ProjectBuilder builder = lookup( ProjectBuilder.class );
 
         File projectFile = getProjectFile( project );
 
@@ -71,23 +75,10 @@ public class DefaultArchetypeCreatorIT
 
         Properties p = PropertyUtils.loadProperties( propertyFile );
 
-        MavenProject mavenProject = null;
-
-        {
-            Object result = builder.buildWithDependencies( projectFile, localRepository, null );
-            if ( result instanceof MavenProject )
-            { // Using Maven 2.0.x / x >= 7
-                mavenProject = (MavenProject) result;
-            }
-            else if ( result instanceof MavenProjectBuildingResult )
-            { // Using Maven 3
-                mavenProject = ( (MavenProjectBuildingResult) result ).getProject();
-            }
-            else
-            {
-                fail( "Wrong result class" );
-            }
-        }
+        ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
+        buildingRequest.setLocalRepository( localRepository );
+        
+        MavenProject mavenProject = builder.build( projectFile, buildingRequest ).getProject();
 
         FilesetArchetypeCreator instance =
             (FilesetArchetypeCreator) lookup( ArchetypeCreator.class.getName(), "fileset" );

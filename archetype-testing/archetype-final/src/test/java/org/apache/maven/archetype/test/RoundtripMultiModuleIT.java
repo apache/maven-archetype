@@ -1,5 +1,13 @@
 package org.apache.maven.archetype.test;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.OutputStream;
+import java.io.Writer;
+import java.util.Iterator;
+import java.util.Properties;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -33,22 +41,18 @@ import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.model.Model;
 import org.apache.maven.project.DefaultProjectBuilderConfiguration;
+import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.project.MavenProjectBuilder;
+import org.apache.maven.project.ProjectBuilder;
+import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.maven.project.interpolation.ModelInterpolator;
+import org.apache.maven.repository.internal.MavenRepositorySystemSession;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.webapp.WebAppContext;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.OutputStream;
-import java.io.Writer;
-import java.util.Iterator;
-import java.util.Properties;
+import org.sonatype.aether.impl.internal.SimpleLocalRepositoryManager;
 
 /**
  * @author Jason van Zyl
@@ -64,7 +68,7 @@ public class RoundtripMultiModuleIT
 
         ArchetypeRegistryManager registryManager = (ArchetypeRegistryManager) lookup( ArchetypeRegistryManager.ROLE );
 
-        MavenProjectBuilder projectBuilder = (MavenProjectBuilder) lookup( MavenProjectBuilder.ROLE );
+        ProjectBuilder projectBuilder = lookup( ProjectBuilder.class );
 
         ArtifactRepository localRepository = registryManager.createRepository( new File( getBasedir(),
                                                                                          "target" + File.separator
@@ -103,8 +107,14 @@ public class RoundtripMultiModuleIT
 
         // (2) create an archetype from the project
         File pom = new File( workingProject, "pom.xml" );
+        
+        ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
+        MavenRepositorySystemSession repositorySession = new MavenRepositorySystemSession();
+        repositorySession.setLocalRepositoryManager( new SimpleLocalRepositoryManager( localRepository.getBasedir() ) );
+        buildingRequest.setRepositorySession( repositorySession );
 
-        MavenProject project = projectBuilder.build( pom, localRepository, null );
+        
+        MavenProject project = projectBuilder.build( pom, buildingRequest ).getProject();
 
         ModelInterpolator modelInterpolator = (ModelInterpolator)lookup( ModelInterpolator.ROLE );
 
@@ -144,7 +154,7 @@ public class RoundtripMultiModuleIT
                                                      "target" + File.separator + "generated-sources" + File.separator
                                                          + "archetype" );
         File generatedArchetypePom = new File( generatedArchetypeDirectory, "pom.xml" );
-        MavenProject generatedArchetypeProject = projectBuilder.build( generatedArchetypePom, localRepository, null );
+        MavenProject generatedArchetypeProject = projectBuilder.build( generatedArchetypePom, buildingRequest ).getProject();
         Model generatedModel = modelInterpolator.interpolate( generatedArchetypeProject.getModel(), generatedArchetypePom.getParentFile(), new DefaultProjectBuilderConfiguration(), true );
 
         File archetypeDirectory =
@@ -190,7 +200,7 @@ public class RoundtripMultiModuleIT
             generatedArchetypeProject.getVersion() ).setGroupId( "com.mycompany" ).setArtifactId( "myapp" ).setVersion(
             "1.0-SNAPSHOT" ).setPackage( "com.mycompany.myapp" ).setOutputDirectory(
             outputDirectory ).setLocalRepository( localRepository ).setArchetypeRepository(
-            "http://localhost:" + port + "/repo/" );
+            "http://localhost:" + port + "/repo/" ).setProjectBuildingRequest( buildingRequest );
         ArchetypeGenerationResult generationResult = archetype.generateProjectFromArchetype( agr );
 
         if ( generationResult.getCause() != null )

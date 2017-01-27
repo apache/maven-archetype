@@ -33,11 +33,4 @@
   <name>Maven Archetype Packaging</name>
   <description>'maven-archetype' packaging configuration for archetypes.</description>
 
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
 </project>

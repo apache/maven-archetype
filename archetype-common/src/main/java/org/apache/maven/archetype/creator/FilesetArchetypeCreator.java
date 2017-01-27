@@ -19,6 +19,26 @@ package org.apache.maven.archetype.creator;
  * under the License.
  */
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.maven.archetype.ArchetypeCreationRequest;
 import org.apache.maven.archetype.ArchetypeCreationResult;
@@ -44,9 +64,11 @@ import org.apache.maven.model.Plugin;
 import org.apache.maven.model.PluginManagement;
 import org.apache.maven.model.Profile;
 import org.apache.maven.model.Resource;
+import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.project.MavenProjectBuilder;
+import org.apache.maven.project.ProjectBuilder;
 import org.apache.maven.project.ProjectBuildingException;
+import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.maven.shared.invoker.DefaultInvocationRequest;
 import org.apache.maven.shared.invoker.InvocationRequest;
 import org.apache.maven.shared.invoker.InvocationResult;
@@ -62,26 +84,6 @@ import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Reader;
-import java.io.Writer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
 
 /**
  * Create a 2.x Archetype project from a project. Since 2.0-alpha-5, an integration-test named "basic" is created along
@@ -102,7 +104,7 @@ public class FilesetArchetypeCreator
     private PomManager pomManager;
 
     @Requirement
-    private MavenProjectBuilder projectBuilder;
+    private ProjectBuilder projectBuilder;
     
     @Requirement
     private Invoker invoker;
@@ -430,8 +432,11 @@ public class FilesetArchetypeCreator
 
             try
             {
-                MavenProject p =
-                    projectBuilder.buildFromRepository( pa, project.getRemoteArtifactRepositories(), localRepository );
+                ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
+                buildingRequest.setLocalRepository( localRepository );
+                buildingRequest.setRemoteRepositories( project.getRemoteArtifactRepositories() );
+                
+                MavenProject p = projectBuilder.build( pa, buildingRequest ).getProject();
 
                 if ( p.getDistributionManagement() != null )
                 {
@@ -440,10 +445,8 @@ public class FilesetArchetypeCreator
 
                 if ( p.getBuildExtensions() != null )
                 {
-                    for ( Iterator<Extension> i = p.getBuildExtensions().iterator(); i.hasNext(); )
+                    for ( Extension be : p.getBuildExtensions() )
                     {
-                        Extension be = i.next();
-
                         model.getBuild().addExtension( be );
                     }
                 }

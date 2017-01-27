@@ -19,18 +19,18 @@ package org.apache.maven.archetype.downloader;
  * under the License.
  */
 
-import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.factory.ArtifactFactory;
-import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
-import org.apache.maven.artifact.resolver.ArtifactResolutionException;
-import org.apache.maven.artifact.resolver.ArtifactResolver;
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.project.ProjectBuildingRequest;
+import org.apache.maven.shared.artifact.DefaultArtifactCoordinate;
+import org.apache.maven.shared.artifact.resolve.ArtifactResolver;
+import org.apache.maven.shared.artifact.resolve.ArtifactResolverException;
+import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 
 /**
  * @author Jason van Zyl
@@ -42,17 +42,21 @@ public class DefaultDownloader
     @Requirement
     private ArtifactResolver artifactResolver;
 
-    @Requirement
-    private ArtifactFactory artifactFactory;
-
     public File download( String groupId, String artifactId, String version, ArtifactRepository archetypeRepository,
-                          ArtifactRepository localRepository, List<ArtifactRepository> remoteRepositories )
+                          ArtifactRepository localRepository, List<ArtifactRepository> remoteRepositories,
+                          ProjectBuildingRequest buildingRequest )
         throws DownloadException, DownloadNotFoundException
    {
-        Artifact artifact =
-            artifactFactory.createArtifact( groupId, artifactId, version, Artifact.SCOPE_RUNTIME, "jar" );
-        Artifact artifactPom =
-            artifactFactory.createArtifact( groupId, artifactId, version, Artifact.SCOPE_RUNTIME, "pom" );
+        DefaultArtifactCoordinate jarCoordinate = new DefaultArtifactCoordinate();
+        jarCoordinate.setGroupId( groupId );
+        jarCoordinate.setArtifactId( artifactId );
+        jarCoordinate.setVersion( version );
+        
+        DefaultArtifactCoordinate pomCoordinate = new DefaultArtifactCoordinate();
+        pomCoordinate.setGroupId( groupId );
+        pomCoordinate.setArtifactId( artifactId );
+        pomCoordinate.setVersion( version );
+        pomCoordinate.setExtension( "pom" );
 
         List<ArtifactRepository> repositories = new ArrayList<ArtifactRepository>( remoteRepositories );
         if ( repositories.isEmpty() && archetypeRepository != null )
@@ -65,54 +69,50 @@ public class DefaultDownloader
         }
 
         ArtifactRepository localRepo = localRepository;
+        
+        buildingRequest.setLocalRepository( localRepo );
+        buildingRequest.setRemoteRepositories( repositories );
+
+        Artifact artifact;
         try
         {
-            artifactResolver.resolve( artifact, repositories, localRepo );
+            artifact = artifactResolver.resolveArtifact( buildingRequest, jarCoordinate ).getArtifact();
         }
-        catch ( ArtifactResolutionException e )
+        catch ( ArtifactResolverException e )
         {
-            throw new DownloadException( "Error downloading " + artifact.getId() + ".", e );
+            throw new DownloadException( "Error downloading " + jarCoordinate + ".", e );
         }
-        catch ( ArtifactNotFoundException e )
-        {
-            throw new DownloadNotFoundException( "Requested " + artifact.getId() + " download does not exist.", e );
-        }
+
+        // still required???
         try
         {
-            artifactResolver.resolve( artifactPom, repositories, localRepo );
+            artifactResolver.resolveArtifact( buildingRequest, pomCoordinate );
         }
-        catch ( ArtifactResolutionException e )
+        catch ( ArtifactResolverException e )
         {
             throw new DownloadException( "Error downloading POM for " + artifact.getId() + ".", e );
-        }
-        catch ( ArtifactNotFoundException e )
-        {
-            throw new DownloadNotFoundException( "Requested " + artifact.getId()
-                                                 + " download's POM does not exist.", e );
         }
 
         return artifact.getFile();
     }
 
     public File downloadOld( String groupId, String artifactId, String version, ArtifactRepository archetypeRepository,
-                             ArtifactRepository localRepository, List<ArtifactRepository> remoteRepositories )
+                             ArtifactRepository localRepository, List<ArtifactRepository> remoteRepositories,
+                             ProjectBuildingRequest buildingRequest )
         throws DownloadException, DownloadNotFoundException
     {
-        Artifact artifact =
-            artifactFactory.createArtifact( groupId, artifactId, version, Artifact.SCOPE_RUNTIME, "jar" );
+        DefaultArtifactCoordinate jarCoordinate = new DefaultArtifactCoordinate();
+        jarCoordinate.setGroupId( groupId );
+        jarCoordinate.setArtifactId( artifactId );
+        jarCoordinate.setVersion( version );
+        
         try
         {
-            artifactResolver.resolve( artifact, remoteRepositories, localRepository );
+            return artifactResolver.resolveArtifact( buildingRequest, jarCoordinate ).getArtifact().getFile();
         }
-        catch ( ArtifactResolutionException e )
+        catch ( ArtifactResolverException e )
         {
-            throw new DownloadException( "Error downloading " + artifact.getId() + ".", e );
+            throw new DownloadException( "Error downloading " + jarCoordinate + ".", e );
         }
-        catch ( ArtifactNotFoundException e )
-        {
-            throw new DownloadNotFoundException( "Requested " + artifact.getId() + " download does not exist.", e );
-        }
-
-        return artifact.getFile();
     }
 }

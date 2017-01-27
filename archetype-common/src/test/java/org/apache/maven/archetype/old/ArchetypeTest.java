@@ -1,5 +1,17 @@
 package org.apache.maven.archetype.old;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /*
  * Copyright 2004-2006 The Apache Software Foundation.
  *
@@ -27,6 +39,9 @@ import org.apache.maven.artifact.resolver.ArtifactResolutionException;
 import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
+import org.apache.maven.project.DefaultProjectBuildingRequest;
+import org.apache.maven.project.ProjectBuildingRequest;
+import org.apache.maven.repository.internal.MavenRepositorySystemSession;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.context.Context;
 import org.codehaus.plexus.PlexusTestCase;
@@ -34,18 +49,7 @@ import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.codehaus.plexus.velocity.VelocityComponent;
 import org.dom4j.DocumentException;
-
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import org.sonatype.aether.impl.internal.SimpleLocalRepositoryManager;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -66,7 +70,7 @@ public class ArchetypeTest
         // ----------------------------------------------------------------------
 
         ArtifactRepositoryLayout layout =
-            (ArtifactRepositoryLayout) getContainer().lookup( ArtifactRepositoryLayout.ROLE, "legacy" );
+            (ArtifactRepositoryLayout) getContainer().lookup( ArtifactRepositoryLayout.ROLE );
 
         String mavenRepoLocal = getTestFile( "target/local-repository" ).toURI().toURL().toString();
 
@@ -79,8 +83,15 @@ public class ArchetypeTest
         ArtifactRepository remoteRepository = new DefaultArtifactRepository( "remote", mavenRepoRemote, layout );
 
         remoteRepositories.add( remoteRepository );
+        
+        ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
+        buildingRequest.setRemoteRepositories( remoteRepositories );
+        MavenRepositorySystemSession repositorySession = new MavenRepositorySystemSession();
+        repositorySession.setLocalRepositoryManager( new SimpleLocalRepositoryManager( localRepository.getBasedir() ) );
+        buildingRequest.setRepositorySession( repositorySession );
 
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest()
+            .setProjectBuildingRequest( buildingRequest )
             .setPackage( "org.apache.maven.quickstart" )
             .setGroupId( "maven" )
             .setArtifactId( "quickstart" )

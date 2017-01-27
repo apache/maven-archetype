@@ -19,9 +19,23 @@ package org.apache.maven.archetype.source;
  * under the License.
  */
 
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
-import org.apache.maven.artifact.manager.WagonManager;
+import org.apache.maven.execution.MavenExecutionRequest;
+import org.apache.maven.execution.MavenSession;
+import org.apache.maven.plugin.LegacySupport;
+import org.apache.maven.settings.Proxy;
+import org.apache.maven.settings.Server;
+import org.apache.maven.settings.crypto.DefaultSettingsDecryptionRequest;
+import org.apache.maven.settings.crypto.SettingsDecrypter;
+import org.apache.maven.settings.crypto.SettingsDecryptionResult;
+import org.apache.maven.wagon.UnsupportedProtocolException;
 import org.apache.maven.wagon.Wagon;
 import org.apache.maven.wagon.WagonException;
 import org.apache.maven.wagon.authentication.AuthenticationInfo;
@@ -31,10 +45,6 @@ import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.util.ReaderFactory;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Properties;
-
 /**
  * @author Jason van Zyl
  */
@@ -43,7 +53,13 @@ public class RemoteCatalogArchetypeDataSource
     extends CatalogArchetypeDataSource
 {
     @Requirement
-    private WagonManager wagonManager;
+    private Map<String, Wagon> wagons;
+    
+    @Requirement
+    private LegacySupport legacySupport;
+
+    @Requirement
+    private SettingsDecrypter settingsDecrypter;
 
     public static final String REPOSITORY_PROPERTY = "repository";
 
@@ -107,10 +123,10 @@ public class RemoteCatalogArchetypeDataSource
 
         // We use wagon to take advantage of a Proxy that has already been setup in a Maven environment.
         Repository wagonRepository = new Repository( REPOSITORY_ID, repositoryPath );
-        AuthenticationInfo authInfo = wagonManager.getAuthenticationInfo( wagonRepository.getId() );
-        ProxyInfo proxyInfo = wagonManager.getProxy( wagonRepository.getProtocol() );
+        AuthenticationInfo authInfo = getAuthenticationInfo( wagonRepository.getId() );
+        ProxyInfo proxyInfo = getProxy( wagonRepository.getProtocol() );
 
-        Wagon wagon = wagonManager.getWagon( wagonRepository );
+        Wagon wagon = getWagon( wagonRepository );
 
         File catalog = File.createTempFile( "archetype-catalog", ".xml" );
         try
@@ -137,6 +153,113 @@ public class RemoteCatalogArchetypeDataSource
         {
             getLogger().warn( "Problem disconnecting from wagon - ignoring: " + e.getMessage() );
         }
+    }
+
+    // 
+    
+    private Wagon getWagon( Repository repository )
+        throws UnsupportedProtocolException
+    {
+        return getWagon( repository.getProtocol() );
+    }
+
+    private Wagon getWagon( String protocol )
+        throws UnsupportedProtocolException
+    {
+        if ( protocol == null )
+        {
+            throw new UnsupportedProtocolException( "Unspecified protocol" );
+        }
+
+        String hint = protocol.toLowerCase( java.util.Locale.ENGLISH );
+
+        Wagon wagon = wagons.get( hint );
+        if ( wagon == null )
+        {
+            throw new UnsupportedProtocolException( "Cannot find wagon which supports the requested protocol: "
+                + protocol );
+        }
+
+        return wagon;
+    }
+    
+    private AuthenticationInfo getAuthenticationInfo( String id )
+    {
+        MavenSession session = legacySupport.getSession();
+
+        if ( session != null && id != null )
+        {
+            MavenExecutionRequest request = session.getRequest();
+
+            if ( request != null )
+            {
+                List<Server> servers = request.getServers();
+
+                if ( servers != null )
+                {
+                    for ( Server server : servers )
+                    {
+                        if ( id.equalsIgnoreCase( server.getId() ) )
+                        {
+                            SettingsDecryptionResult result =
+                                settingsDecrypter.decrypt( new DefaultSettingsDecryptionRequest( server ) );
+                            server = result.getServer();
+
+                            AuthenticationInfo authInfo = new AuthenticationInfo();
+                            authInfo.setUserName( server.getUsername() );
+                            authInfo.setPassword( server.getPassword() );
+                            authInfo.setPrivateKey( server.getPrivateKey() );
+                            authInfo.setPassphrase( server.getPassphrase() );
+
+                            return authInfo;
+                        }
+                    }
+                }
+            }
+        }
+
+        // empty one to prevent NPE
+       return new AuthenticationInfo();
+    }
+
+    private ProxyInfo getProxy( String protocol )
+    {
+        MavenSession session = legacySupport.getSession();
+
+        if ( session != null && protocol != null )
+        {
+            MavenExecutionRequest request = session.getRequest();
+
+            if ( request != null )
+            {
+                List<Proxy> proxies = request.getProxies();
+
+                if ( proxies != null )
+                {
+                    for ( Proxy proxy : proxies )
+                    {
+                        if ( proxy.isActive() && protocol.equalsIgnoreCase( proxy.getProtocol() ) )
+                        {
+                            SettingsDecryptionResult result =
+                                settingsDecrypter.decrypt( new DefaultSettingsDecryptionRequest( proxy ) );
+                            proxy = result.getProxy();
+
+                            ProxyInfo proxyInfo = new ProxyInfo();
+                            proxyInfo.setHost( proxy.getHost() );
+                            proxyInfo.setType( proxy.getProtocol() );
+                            proxyInfo.setPort( proxy.getPort() );
+                            proxyInfo.setNonProxyHosts( proxy.getNonProxyHosts() );
+                            proxyInfo.setUserName( proxy.getUsername() );
+                            proxyInfo.setPassword( proxy.getPassword() );
+
+                            return proxyInfo;
+                        }
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 
 }

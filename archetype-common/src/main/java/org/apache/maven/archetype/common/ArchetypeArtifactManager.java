@@ -23,7 +23,7 @@ import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.archetype.metadata.ArchetypeDescriptor;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.model.Model;
-
+import org.apache.maven.project.ProjectBuildingRequest;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import java.io.File;
@@ -40,10 +40,11 @@ public interface ArchetypeArtifactManager
         throws XmlPullParserException, UnknownArchetype, IOException;
 
     /**
+     * @param buildingRequest TODO
      */
     File getArchetypeFile( String groupId, String artifactId, String version,
                            ArtifactRepository archetypeRepository, ArtifactRepository localRepository,
-                           List<ArtifactRepository> repositories )
+                           List<ArtifactRepository> repositories, ProjectBuildingRequest buildingRequest )
         throws UnknownArchetype;
 
     /**
@@ -61,25 +62,29 @@ public interface ArchetypeArtifactManager
     boolean isFileSetArchetype( File archetypeFile );
 
     /**
+     * @param buildingRequest TODO
      */
     boolean isFileSetArchetype( String groupId, String artifactId, String version,
                                 ArtifactRepository archetypeRepository, ArtifactRepository localRepository,
-                                List<ArtifactRepository> repositories );
+                                List<ArtifactRepository> repositories, ProjectBuildingRequest buildingRequest );
 
     /**
      */
     boolean isOldArchetype( File archetypeFile );
 
     /**
+     * @param buildingRequest TODO
      */
     boolean isOldArchetype( String groupId, String artifactId, String version, ArtifactRepository archetypeRepository,
-                            ArtifactRepository localRepository, List<ArtifactRepository> repositories );
+                            ArtifactRepository localRepository, List<ArtifactRepository> repositories,
+                            ProjectBuildingRequest buildingRequest );
 
     /**
+     * @param buildingRequest TODO
      */
     boolean exists( String archetypeGroupId, String archetypeArtifactId, String archetypeVersion,
                     ArtifactRepository archetypeRepository, ArtifactRepository localRepository,
-                    List<ArtifactRepository> repos );
+                    List<ArtifactRepository> repos, ProjectBuildingRequest buildingRequest );
 
     /**
      * Get the archetype file's post-generation script content, read as UTF-8 content.
@@ -98,11 +103,13 @@ public interface ArchetypeArtifactManager
         throws UnknownArchetype;
 
     /**
+     * @param buildingRequest TODO
      */
     ArchetypeDescriptor getFileSetArchetypeDescriptor( String groupId, String artifactId, String version,
                                                        ArtifactRepository archetypeRepository,
                                                        ArtifactRepository localRepository,
-                                                       List<ArtifactRepository> repositories )
+                                                       List<ArtifactRepository> repositories,
+                                                       ProjectBuildingRequest buildingRequest )
         throws UnknownArchetype;
 
     /**
@@ -116,9 +123,14 @@ public interface ArchetypeArtifactManager
         throws UnknownArchetype;
 
     /**
+     * @param buildingRequest TODO
      */
-    org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor getOldArchetypeDescriptor(
-            String groupId, String artifactId, String version, ArtifactRepository archetypeRepository,
-            ArtifactRepository localRepository, List<ArtifactRepository> repositories )
+    org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor getOldArchetypeDescriptor( String groupId,
+                                                                     String artifactId,
+                                                                     String version,
+                                                                     ArtifactRepository archetypeRepository,
+                                                                     ArtifactRepository localRepository,
+                                                                     List<ArtifactRepository> repositories,
+                                                                     ProjectBuildingRequest buildingRequest )
         throws UnknownArchetype;
 }

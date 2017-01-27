@@ -111,9 +111,12 @@ public class DefaultOldArchetype
         // Download the archetype
         // ----------------------------------------------------------------------
 
-        File archetypeFile = archetypeArtifactManager.getArchetypeFile(
-                request.getArchetypeGroupId(), request.getArchetypeArtifactId(), request.getArchetypeVersion(),
-                archetypeRepository, request.getLocalRepository(), request.getRemoteArtifactRepositories() );
+        File archetypeFile =
+            archetypeArtifactManager.getArchetypeFile( request.getArchetypeGroupId(), request.getArchetypeArtifactId(),
+                                                       request.getArchetypeVersion(), archetypeRepository,
+                                                       request.getLocalRepository(),
+                                                       request.getRemoteArtifactRepositories(),
+                                                       request.getProjectBuildingRequest() );
 
         createArchetype( request, archetypeFile );
     }

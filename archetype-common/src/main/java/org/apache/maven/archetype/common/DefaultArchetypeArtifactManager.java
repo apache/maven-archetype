@@ -29,7 +29,7 @@ import org.apache.maven.archetype.metadata.io.xpp3.ArchetypeDescriptorXpp3Reader
 import org.apache.maven.archetype.old.descriptor.ArchetypeDescriptorBuilder;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.model.Model;
-
+import org.apache.maven.project.ProjectBuildingRequest;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -70,7 +70,7 @@ public class DefaultArchetypeArtifactManager
 
     public File getArchetypeFile( final String groupId, final String artifactId, final String version,
                                   ArtifactRepository archetypeRepository, final ArtifactRepository localRepository,
-                                  final List<ArtifactRepository> repositories )
+                                  final List<ArtifactRepository> repositories, ProjectBuildingRequest buildingRequest )
         throws UnknownArchetype
     {
         try
@@ -81,7 +81,7 @@ public class DefaultArchetypeArtifactManager
             {
                 archetype =
                     downloader.download( groupId, artifactId, version, archetypeRepository, localRepository,
-                                         repositories );
+                                         repositories, buildingRequest );
 
                 setArchetype( groupId, artifactId, version, archetype );
             }
@@ -203,12 +203,12 @@ public class DefaultArchetypeArtifactManager
 
     public boolean isFileSetArchetype( String groupId, String artifactId, String version,
                                        ArtifactRepository archetypeRepository, ArtifactRepository localRepository,
-                                       List<ArtifactRepository> repositories )
+                                       List<ArtifactRepository> repositories, ProjectBuildingRequest buildingRequest )
     {
         try
         {
             File archetypeFile = getArchetypeFile( groupId, artifactId, version, archetypeRepository,
-                                                   localRepository, repositories );
+                                                   localRepository, repositories, buildingRequest );
 
             return isFileSetArchetype( archetypeFile );
         }
@@ -251,12 +251,12 @@ public class DefaultArchetypeArtifactManager
 
     public boolean isOldArchetype( String groupId, String artifactId, String version,
                                    ArtifactRepository archetypeRepository, ArtifactRepository localRepository,
-                                   List<ArtifactRepository> repositories )
+                                   List<ArtifactRepository> repositories, ProjectBuildingRequest buildingRequest )
     {
         try
         {
             File archetypeFile = getArchetypeFile( groupId, artifactId, version, archetypeRepository,
-                                                   localRepository, repositories );
+                                                   localRepository, repositories, buildingRequest );
 
             return isOldArchetype( archetypeFile );
         }
@@ -269,7 +269,7 @@ public class DefaultArchetypeArtifactManager
 
     public boolean exists( String archetypeGroupId, String archetypeArtifactId, String archetypeVersion,
                            ArtifactRepository archetypeRepository, ArtifactRepository localRepository,
-                           List<ArtifactRepository> remoteRepositories )
+                           List<ArtifactRepository> remoteRepositories, ProjectBuildingRequest buildingRequest )
     {
         try
         {
@@ -278,7 +278,7 @@ public class DefaultArchetypeArtifactManager
             {
                 archetype =
                     downloader.download( archetypeGroupId, archetypeArtifactId, archetypeVersion, archetypeRepository,
-                                         localRepository, remoteRepositories );
+                                         localRepository, remoteRepositories, buildingRequest );
                 setArchetype( archetypeGroupId, archetypeArtifactId, archetypeVersion, archetype );
             }
 
@@ -343,13 +343,17 @@ public class DefaultArchetypeArtifactManager
         }
     }
 
-    public org.apache.maven.archetype.metadata.ArchetypeDescriptor getFileSetArchetypeDescriptor(
-            String groupId, String artifactId, String version, ArtifactRepository archetypeRepository,
-            ArtifactRepository localRepository, List<ArtifactRepository> repositories )
+    public org.apache.maven.archetype.metadata.ArchetypeDescriptor getFileSetArchetypeDescriptor( String groupId,
+                                                                          String artifactId,
+                                                                          String version,
+                                                                          ArtifactRepository archetypeRepository,
+                                                                          ArtifactRepository localRepository,
+                                                                          List<ArtifactRepository> repositories,
+                                                                          ProjectBuildingRequest buildingRequest )
         throws UnknownArchetype
     {
-        File archetypeFile =
-            getArchetypeFile( groupId, artifactId, version, archetypeRepository, localRepository, repositories );
+        File archetypeFile = getArchetypeFile( groupId, artifactId, version, archetypeRepository, localRepository,
+                                               repositories, buildingRequest );
 
         return getFileSetArchetypeDescriptor( archetypeFile );
     }
@@ -415,13 +419,17 @@ public class DefaultArchetypeArtifactManager
         }
     }
 
-    public org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor getOldArchetypeDescriptor(
-            String groupId, String artifactId, String version, ArtifactRepository archetypeRepository,
-            ArtifactRepository localRepository, List<ArtifactRepository> repositories )
+    public org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor getOldArchetypeDescriptor( String groupId,
+                                                                            String artifactId,
+                                                                            String version,
+                                                                            ArtifactRepository archetypeRepository,
+                                                                            ArtifactRepository localRepository,
+                                                                            List<ArtifactRepository> repositories,
+                                                                            ProjectBuildingRequest buildingRequest )
         throws UnknownArchetype
     {
-        File archetypeFile =
-            getArchetypeFile( groupId, artifactId, version, archetypeRepository, localRepository, repositories );
+        File archetypeFile = getArchetypeFile( groupId, artifactId, version, archetypeRepository, localRepository,
+                                               repositories, buildingRequest );
 
         return getOldArchetypeDescriptor( archetypeFile );
     }

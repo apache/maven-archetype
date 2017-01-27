@@ -162,10 +162,15 @@ public class CreateProjectFromArchetypeMojo
         Properties executionProperties = session.getExecutionProperties();
 
         ArchetypeGenerationRequest request =
-            new ArchetypeGenerationRequest().setArchetypeGroupId( archetypeGroupId ).setArchetypeArtifactId(
-                archetypeArtifactId ).setArchetypeVersion( archetypeVersion ).setOutputDirectory(
-                basedir.getAbsolutePath() ).setLocalRepository( localRepository ).setArchetypeRepository(
-                archetypeRepository ).setRemoteArtifactRepositories( remoteArtifactRepositories ).setFilter( filter );
+            new ArchetypeGenerationRequest().setArchetypeGroupId( archetypeGroupId )
+            .setArchetypeArtifactId( archetypeArtifactId )
+            .setArchetypeVersion( archetypeVersion )
+            .setOutputDirectory( basedir.getAbsolutePath() )
+            .setLocalRepository( localRepository )
+            .setArchetypeRepository( archetypeRepository )
+            .setRemoteArtifactRepositories( remoteArtifactRepositories )
+            .setFilter( filter )
+            .setProjectBuildingRequest( session.getProjectBuildingRequest() );
 
         try
         {

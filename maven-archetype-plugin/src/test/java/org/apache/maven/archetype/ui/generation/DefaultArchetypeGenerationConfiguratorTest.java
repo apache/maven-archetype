@@ -28,6 +28,7 @@ import org.apache.maven.archetype.exception.ArchetypeSelectionFailure;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.archetype.exception.UnknownGroup;
 import org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor;
+import org.apache.maven.project.ProjectBuildingRequest;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.easymock.MockControl;
@@ -50,18 +51,20 @@ public class DefaultArchetypeGenerationConfiguratorTest
 
         configurator = (DefaultArchetypeGenerationConfigurator) lookup( ArchetypeGenerationConfigurator.ROLE );
 
+        ProjectBuildingRequest buildingRequest = null;
+        
         MockControl control = MockControl.createControl( ArchetypeArtifactManager.class );
         control.setDefaultMatcher( MockControl.ALWAYS_MATCHER );
 
         ArchetypeArtifactManager manager = (ArchetypeArtifactManager) control.getMock();
-        manager.exists( "archetypeGroupId", "archetypeArtifactId", "archetypeVersion", null, null, null );
+        manager.exists( "archetypeGroupId", "archetypeArtifactId", "archetypeVersion", null, null, null, buildingRequest );
         control.setReturnValue( true );
-        manager.isFileSetArchetype( "archetypeGroupId", "archetypeArtifactId", "archetypeVersion", null, null, null );
+        manager.isFileSetArchetype( "archetypeGroupId", "archetypeArtifactId", "archetypeVersion", null, null, null, buildingRequest );
         control.setReturnValue( false );
-        manager.isOldArchetype( "archetypeGroupId", "archetypeArtifactId", "archetypeVersion", null, null, null );
+        manager.isOldArchetype( "archetypeGroupId", "archetypeArtifactId", "archetypeVersion", null, null, null, buildingRequest );
         control.setReturnValue( true );
         manager.getOldArchetypeDescriptor( "archetypeGroupId", "archetypeArtifactId", "archetypeVersion", null,
-                                               null, null );
+                                               null, null, buildingRequest );
         control.setReturnValue( new ArchetypeDescriptor() );
         control.replay();
         configurator.setArchetypeArtifactManager( manager );

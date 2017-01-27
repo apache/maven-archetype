@@ -79,7 +79,8 @@ public class DefaultArchetypeGenerator
         }
 
         if ( !archetypeArtifactManager.exists( request.getArchetypeGroupId(), request.getArchetypeArtifactId(),
-                                               request.getArchetypeVersion(), remoteRepo, localRepository, repos ) )
+                                               request.getArchetypeVersion(), remoteRepo, localRepository, repos,
+                                               request.getProjectBuildingRequest() ) )
         {
             throw new UnknownArchetype( "The desired archetype does not exist (" + request.getArchetypeGroupId() + ":"
                 + request.getArchetypeArtifactId() + ":" + request.getArchetypeVersion() + ")" );
@@ -88,7 +89,7 @@ public class DefaultArchetypeGenerator
         File archetypeFile =
             archetypeArtifactManager.getArchetypeFile( request.getArchetypeGroupId(), request.getArchetypeArtifactId(),
                                                        request.getArchetypeVersion(), remoteRepo, localRepository,
-                                                       repos );
+                                                       repos, request.getProjectBuildingRequest() );
         return archetypeFile;
     }
 

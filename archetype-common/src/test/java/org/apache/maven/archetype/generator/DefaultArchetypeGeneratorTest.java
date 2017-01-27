@@ -30,10 +30,14 @@ import org.apache.maven.model.Plugin;
 import org.apache.maven.model.ReportPlugin;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
+import org.apache.maven.project.DefaultProjectBuildingRequest;
+import org.apache.maven.project.ProjectBuildingRequest;
+import org.apache.maven.repository.internal.MavenRepositorySystemSession;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+import org.sonatype.aether.impl.internal.SimpleLocalRepositoryManager;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -554,6 +558,12 @@ public class DefaultArchetypeGeneratorTest
         request.setPackage( "file.value.package" );
 
         request.setProperties( ADDITIONAL_PROPERTIES );
+        
+        ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
+        MavenRepositorySystemSession repositorySession = new MavenRepositorySystemSession();
+        repositorySession.setLocalRepositoryManager( new SimpleLocalRepositoryManager( localRepository.getBasedir() ) );
+        buildingRequest.setRepositorySession( repositorySession );
+        request.setProjectBuildingRequest( buildingRequest );
 
         return request;
     }

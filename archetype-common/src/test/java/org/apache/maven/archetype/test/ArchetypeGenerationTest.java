@@ -24,6 +24,9 @@ import org.apache.maven.archetype.ArchetypeGenerationResult;
 import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.project.DefaultProjectBuildingRequest;
+import org.apache.maven.project.ProjectBuildingRequest;
+import org.apache.maven.repository.internal.MavenRepositorySystemSession;
 import org.codehaus.plexus.PlexusTestCase;
 
 import java.io.File;
@@ -32,6 +35,7 @@ import java.util.Properties;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.codehaus.plexus.util.FileUtils;
+import org.sonatype.aether.impl.internal.SimpleLocalRepositoryManager;
 
 /** @author Jason van Zyl */
 public class ArchetypeGenerationTest
@@ -94,6 +98,12 @@ public class ArchetypeGenerationTest
         archetypeRequiredProperties.setProperty( "property-without-default-3", "some-value-3" );
         archetypeRequiredProperties.setProperty( "property-without-default-4", "some-value-4" );
         agr.setProperties( archetypeRequiredProperties );
+        
+        ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
+        MavenRepositorySystemSession repositorySession = new MavenRepositorySystemSession();
+        repositorySession.setLocalRepositoryManager( new SimpleLocalRepositoryManager( localRepository.getBasedir() ) );
+        buildingRequest.setRepositorySession( repositorySession );
+        agr.setProjectBuildingRequest( buildingRequest );
 
         // Then generate away!
 

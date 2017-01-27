@@ -40,6 +40,16 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-compat</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>
@@ -63,24 +73,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.codehaus.cargo</groupId>
-      <artifactId>cargo-core-api-container</artifactId>
-      <version>${cargoVersion}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.cargo</groupId>
-      <artifactId>cargo-core-api-generic</artifactId>
-      <version>${cargoVersion}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.cargo</groupId>
-      <artifactId>cargo-core-container-jetty</artifactId>
-      <version>${cargoVersion}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.mortbay.jetty</groupId>
       <artifactId>jetty</artifactId>
       <version>6.1.11</version>
@@ -94,6 +86,11 @@
     <dependency>
       <groupId>org.apache.maven.wagon</groupId>
       <artifactId>wagon-http</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.sonatype.aether</groupId>
+      <artifactId>aether-connector-wagon</artifactId>
       <scope>test</scope>
     </dependency>
 

@@ -26,8 +26,8 @@ import org.apache.maven.archetype.old.ArchetypeDescriptorException;
 import org.apache.maven.archetype.old.ArchetypeNotFoundException;
 import org.apache.maven.archetype.old.ArchetypeTemplateProcessingException;
 import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.repository.ArtifactRepositoryFactory;
 import org.apache.maven.artifact.repository.ArtifactRepositoryPolicy;
+import org.apache.maven.artifact.repository.MavenArtifactRepository;
 import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -58,14 +58,6 @@ public class MavenArchetypeMojo
      * @component
      */
     private OldArchetype archetype;
-
-    /**
-     * Used to create ArtifactRepository objects given the urls of the remote
-     * repositories.
-     *
-     * @component
-     */
-    private ArtifactRepositoryFactory artifactRepositoryFactory;
 
     /**
      * Determines whether the layout is legacy or not.
@@ -267,8 +259,8 @@ public class MavenArchetypeMojo
         ArtifactRepositoryPolicy releasesPolicy =
             new ArtifactRepositoryPolicy( true, updatePolicyFlag, checksumPolicyFlag );
 
-        return artifactRepositoryFactory.createArtifactRepository( repositoryId, url, defaultArtifactRepositoryLayout,
-                                                                   snapshotsPolicy, releasesPolicy );
+        return new MavenArtifactRepository( repositoryId, url, defaultArtifactRepositoryLayout, snapshotsPolicy,
+                                            releasesPolicy );
     }
 }
 

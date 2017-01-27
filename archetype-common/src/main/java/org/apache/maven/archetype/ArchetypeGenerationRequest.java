@@ -21,6 +21,7 @@ package org.apache.maven.archetype;
 
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.maven.settings.Mirror;
 import org.apache.maven.settings.Proxy;
 import org.apache.maven.settings.Server;
@@ -33,6 +34,8 @@ import java.util.Properties;
 /** @author Jason van Zyl */
 public class ArchetypeGenerationRequest
 {
+    private ProjectBuildingRequest projectBuildingRequest;
+    
     private boolean offline;
 
     private boolean interactiveMode;
@@ -96,6 +99,17 @@ public class ArchetypeGenerationRequest
         this.archetypeRepository = archetype.getRepository();
     }
 
+    public ProjectBuildingRequest getProjectBuildingRequest()
+    {
+        return projectBuildingRequest;
+    }
+    
+    public ArchetypeGenerationRequest setProjectBuildingRequest( ProjectBuildingRequest projectBuildingRequest )
+    {
+        this.projectBuildingRequest = projectBuildingRequest;
+        return this;
+    }
+    
     public String getArchetypeGroupId()
     {
         return archetypeGroupId;

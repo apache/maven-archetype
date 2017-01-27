@@ -19,12 +19,20 @@ package org.apache.maven.archetype.common;
  * under the License.
  */
 
+import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.maven.archetype.registry.ArchetypeRegistry;
 import org.apache.maven.archetype.registry.io.xpp3.ArchetypeRegistryXpp3Reader;
 import org.apache.maven.archetype.registry.io.xpp3.ArchetypeRegistryXpp3Writer;
 import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.repository.ArtifactRepositoryFactory;
 import org.apache.maven.artifact.repository.ArtifactRepositoryPolicy;
+import org.apache.maven.artifact.repository.MavenArtifactRepository;
 import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
@@ -35,24 +43,11 @@ import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 @Component( role = ArchetypeRegistryManager.class )
 public class DefaultArchetypeRegistryManager
     extends AbstractLogEnabled
     implements ArchetypeRegistryManager
 {
-    /**
-     * Used to create ArtifactRepository objects given the urls of the remote repositories.
-     */
-    @Requirement
-    private ArtifactRepositoryFactory artifactRepositoryFactory;
 
     /**
      * Determines whether the layout is legacy or not.
@@ -176,6 +171,8 @@ public class DefaultArchetypeRegistryManager
      */
     public ArtifactRepository createRepository( String url, String repositoryId )
     {
+        
+        
         // snapshots vs releases
         // offline = to turning the update policy off
 
@@ -190,9 +187,9 @@ public class DefaultArchetypeRegistryManager
 
         ArtifactRepositoryPolicy releasesPolicy =
             new ArtifactRepositoryPolicy( true, updatePolicyFlag, checksumPolicyFlag );
-
-        return artifactRepositoryFactory.createArtifactRepository( repositoryId, url, defaultArtifactRepositoryLayout,
-                                                                   snapshotsPolicy, releasesPolicy );
+        
+        return new MavenArtifactRepository( repositoryId, url, defaultArtifactRepositoryLayout, snapshotsPolicy,
+                                            releasesPolicy );
     }
 
     public ArchetypeRegistry getDefaultArchetypeRegistry()

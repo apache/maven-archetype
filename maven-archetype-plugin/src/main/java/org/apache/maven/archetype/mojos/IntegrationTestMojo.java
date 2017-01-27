@@ -44,20 +44,21 @@ import org.apache.maven.archetype.ArchetypeGenerationResult;
 import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
 import org.apache.maven.archetype.generator.ArchetypeGenerator;
-import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
-import org.apache.maven.artifact.resolver.ArtifactResolutionException;
-import org.apache.maven.artifact.resolver.ArtifactResolver;
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.maven.settings.Settings;
+import org.apache.maven.shared.artifact.DefaultArtifactCoordinate;
+import org.apache.maven.shared.artifact.resolve.ArtifactResolver;
+import org.apache.maven.shared.artifact.resolve.ArtifactResolverException;
 import org.apache.maven.shared.invoker.DefaultInvocationRequest;
 import org.apache.maven.shared.invoker.InvocationRequest;
 import org.apache.maven.shared.invoker.InvocationResult;
@@ -142,15 +143,12 @@ public class IntegrationTestMojo
 
     @Component
     private Invoker invoker;
-
-    @Component
-    private ArtifactFactory artifactFactory;
     
     @Component
     private ArtifactResolver artifactResolver;
     
     @Parameter( defaultValue = "${project.remoteArtifactRepositories}", readonly = true, required = true )
-    protected List remoteRepositories;
+    protected List<ArtifactRepository> remoteRepositories;
 
     @Parameter( defaultValue = "${localRepository}", readonly = true, required = true )
     protected ArtifactRepository localRepository;
@@ -161,6 +159,9 @@ public class IntegrationTestMojo
     @Parameter( defaultValue = "${project}", readonly = true, required = true )
     private MavenProject project;
 
+    @Parameter( defaultValue = "${session}", readonly = true, required = true )
+    private MavenSession session;
+    
     /**
      * Skip the integration test.
      */
@@ -585,13 +586,9 @@ public class IntegrationTestMojo
         {
             archetypeFile = getArchetypeFile( groupId, artifactId, version );
         }
-        catch ( ArtifactResolutionException e )
+        catch ( ArtifactResolverException e )
         {
             throw new MojoExecutionException( "Could not resolve archetype artifact " , e );
-        }
-        catch ( ArtifactNotFoundException e )
-        {
-            throw new MojoExecutionException( "Could not find archetype artifact " , e );
         }
         Properties archetypeProperties = getProperties( archetypePomPropertiesFile );
         getLog().info( "Setting up parent project in " + buildFolder );
@@ -600,11 +597,24 @@ public class IntegrationTestMojo
     }
 
     private File getArchetypeFile( String groupId, String artifactId, String version ) 
-        throws ArtifactResolutionException, ArtifactNotFoundException
+        throws ArtifactResolverException
     {
-        Artifact archetypeArtifact = artifactFactory.createBuildArtifact( groupId, artifactId, version, "maven-archetype" );
-        artifactResolver.resolve( archetypeArtifact, remoteRepositories, localRepository );
-        return archetypeArtifact.getFile();
+        ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest( session.getProjectBuildingRequest() );
+        if ( localRepository != null )
+        {
+            buildingRequest = buildingRequest.setLocalRepository( localRepository );
+        }
+        if ( remoteRepositories != null && !remoteRepositories.isEmpty()  )
+        {
+            buildingRequest = buildingRequest.setRemoteRepositories( remoteRepositories );
+        }
+
+        DefaultArtifactCoordinate coordinate = new DefaultArtifactCoordinate();
+        coordinate.setGroupId( groupId );
+        coordinate.setArtifactId( artifactId );
+        coordinate.setVersion( version );
+        
+        return artifactResolver.resolveArtifact( buildingRequest, coordinate ).getArtifact().getFile();
     }
 
     private Properties getProperties( File goalFile )
