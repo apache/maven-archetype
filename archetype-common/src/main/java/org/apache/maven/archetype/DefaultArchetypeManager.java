@@ -26,6 +26,7 @@ import org.apache.maven.archetype.generator.ArchetypeGenerator;
 import org.apache.maven.archetype.source.ArchetypeDataSource;
 import org.apache.maven.archetype.source.ArchetypeDataSourceException;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
+import org.apache.maven.project.ProjectBuildingRequest;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -221,20 +222,13 @@ public class DefaultArchetypeManager
         }
     }
 
-    public void updateLocalCatalog( Archetype archetype )
-    {
-        updateLocalCatalog( archetype, "${user.home}/.m2/archetype-catalog.xml" );
-    }
-
-    public void updateLocalCatalog( Archetype archetype, String path )
+    public void updateLocalCatalog( ProjectBuildingRequest buildingRequest, Archetype archetype )
     {
         try
         {
-            Properties properties = new Properties();
-            properties.setProperty( "file", path );
             ArchetypeDataSource source = archetypeSources.get( "catalog" );
 
-            source.updateCatalog( properties, archetype );
+            source.updateCatalog( buildingRequest, archetype );
         }
         catch ( ArchetypeDataSourceException e )
         {

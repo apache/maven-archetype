@@ -22,6 +22,7 @@ package org.apache.maven.archetype;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
+import org.apache.maven.project.ProjectBuildingRequest;
 
 import java.io.File;
 import java.io.IOException;
@@ -103,7 +104,5 @@ public interface ArchetypeManager
     File archiveArchetype( File archetypeDirectory, File outputDirectory, String finalName )
         throws DependencyResolutionRequiredException, IOException;
 
-    void updateLocalCatalog( Archetype archetype, String path );
-
-    void updateLocalCatalog( Archetype archetype );
+    void updateLocalCatalog( ProjectBuildingRequest buildingRequest, Archetype archetype );
 }

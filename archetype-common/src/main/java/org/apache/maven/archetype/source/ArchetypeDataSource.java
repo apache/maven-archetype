@@ -21,6 +21,7 @@ package org.apache.maven.archetype.source;
 
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
+import org.apache.maven.project.ProjectBuildingRequest;
 
 import java.util.Properties;
 
@@ -40,6 +41,6 @@ public interface ArchetypeDataSource
     ArchetypeCatalog getArchetypeCatalog( Properties properties )
         throws ArchetypeDataSourceException;
 
-    void updateCatalog( Properties properties, Archetype archetype )
+    void updateCatalog( ProjectBuildingRequest buildingRequest, Archetype archetype )
         throws ArchetypeDataSourceException;
 }

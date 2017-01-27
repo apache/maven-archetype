@@ -23,6 +23,7 @@ import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.source.ArchetypeDataSource;
 import org.apache.maven.archetype.source.ArchetypeDataSourceException;
+import org.apache.maven.project.ProjectBuildingRequest;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.util.IOUtil;
 
@@ -131,7 +132,7 @@ public class WikiArchetypeDataSource
         return archetypes;
     }
 
-    public void updateCatalog( Properties properties, Archetype archetype )
+    public void updateCatalog( ProjectBuildingRequest buildingRequest, Archetype archetype )
         throws ArchetypeDataSourceException
     {
         throw new UnsupportedOperationException( "Not supported yet." );

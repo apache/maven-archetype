@@ -23,7 +23,10 @@ import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Reader;
 import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Writer;
+import org.apache.maven.project.ProjectBuildingRequest;
+import org.apache.maven.shared.repository.RepositoryManager;
 import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.ReaderFactory;
@@ -47,6 +50,9 @@ public class CatalogArchetypeDataSource
     extends AbstractLogEnabled
     implements ArchetypeDataSource
 {
+    @Requirement
+    private RepositoryManager repositoryManager;
+    
     public static final String ARCHETYPE_CATALOG_PROPERTY = "file";
 
     public static final String ARCHETYPE_CATALOG_FILENAME = "archetype-catalog.xml";
@@ -57,16 +63,14 @@ public class CatalogArchetypeDataSource
 
     public static final File DEFAULT_ARCHETYPE_CATALOG = new File( MAVEN_CONFIGURATION, ARCHETYPE_CATALOG_FILENAME );
 
-    public void updateCatalog( Properties properties, Archetype archetype )
+    public void updateCatalog( ProjectBuildingRequest buildingRequest, Archetype archetype )
         throws ArchetypeDataSourceException
     {
-        String s = properties.getProperty( ARCHETYPE_CATALOG_PROPERTY );
+        File localRepo = repositoryManager.getLocalRepositoryBasedir( buildingRequest );
+        
+        File catalogFile = new File( localRepo, ARCHETYPE_CATALOG_FILENAME );
 
-        s = StringUtils.replace( s, "${user.home}", System.getProperty( "user.home" ) );
-
-        getLogger().debug( "Using catalog " + s );
-
-        File catalogFile = new File( s );
+        getLogger().debug( "Using catalog " + catalogFile.getAbsolutePath() );
 
         ArchetypeCatalog catalog;
         if ( catalogFile.exists() )

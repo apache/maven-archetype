@@ -30,6 +30,7 @@ import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.LegacySupport;
+import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.maven.settings.Proxy;
 import org.apache.maven.settings.Server;
 import org.apache.maven.settings.crypto.DefaultSettingsDecryptionRequest;
@@ -110,7 +111,7 @@ public class RemoteCatalogArchetypeDataSource
         }
     }
 
-    public void updateCatalog( Properties properties, Archetype archetype )
+    public void updateCatalog( ProjectBuildingRequest buildingRequest, Archetype archetype )
         throws ArchetypeDataSourceException
     {
         throw new ArchetypeDataSourceException( "Not supported yet." );

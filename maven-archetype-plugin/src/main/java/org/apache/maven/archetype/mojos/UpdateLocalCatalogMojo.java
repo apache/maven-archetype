@@ -21,6 +21,7 @@ package org.apache.maven.archetype.mojos;
 
 import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.catalog.Archetype;
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Component;
@@ -39,7 +40,9 @@ import org.codehaus.plexus.util.StringUtils;
 public class UpdateLocalCatalogMojo
     extends AbstractMojo
 {
-
+    @Parameter( defaultValue = "${session}", readonly = true, required = true )
+    private MavenSession session;
+    
     @Component
     private ArchetypeManager manager;
 
@@ -66,6 +69,6 @@ public class UpdateLocalCatalogMojo
             archetype.setDescription( project.getName() );
         }
 
-        manager.updateLocalCatalog( archetype );
+        manager.updateLocalCatalog( session.getProjectBuildingRequest(), archetype );
     }
 }
