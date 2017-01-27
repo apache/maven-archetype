@@ -28,6 +28,7 @@ import org.apache.maven.archetype.exception.ArchetypeSelectionFailure;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.archetype.exception.UnknownGroup;
 import org.apache.maven.archetype.ui.ArchetypeDefinition;
+import org.apache.maven.project.ProjectBuildingRequest;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.components.interactivity.PrompterException;
@@ -68,7 +69,7 @@ public class DefaultArchetypeSelector
             return;
         }
 
-        Map<String, List<Archetype>> archetypes = getArchetypesByCatalog( catalogs );
+        Map<String, List<Archetype>> archetypes = getArchetypesByCatalog( request.getProjectBuildingRequest(), catalogs );
 
         if ( StringUtils.isNotBlank( request.getFilter() ) )
         {
@@ -176,7 +177,7 @@ public class DefaultArchetypeSelector
     }
 
 
-    private Map<String, List<Archetype>> getArchetypesByCatalog( String catalogs )
+    private Map<String, List<Archetype>> getArchetypesByCatalog( ProjectBuildingRequest buildingRequest, String catalogs )
     {
         if ( catalogs == null )
         {
@@ -193,11 +194,13 @@ public class DefaultArchetypeSelector
             }
             else if ( "local".equalsIgnoreCase( catalog ) )
             {
-                archetypes.put( "local", archetypeManager.getDefaultLocalCatalog().getArchetypes() );
+                archetypes.put( "local", archetypeManager.getLocalCatalog( buildingRequest ).getArchetypes() );
             }
             else if ( "remote".equalsIgnoreCase( catalog ) )
             {
-                List<Archetype> archetypesFromRemote = archetypeManager.getRemoteCatalog().getArchetypes();
+                List<Archetype> archetypesFromRemote =
+                    archetypeManager.getRemoteCatalog( buildingRequest ).getArchetypes();
+                
                 if ( archetypesFromRemote.size() > 0 )
                 {
                     archetypes.put( "remote", archetypesFromRemote );
@@ -207,15 +210,6 @@ public class DefaultArchetypeSelector
                     getLogger().warn( "No archetype found in remote catalog. Defaulting to internal catalog" );
                     archetypes.put( "internal", archetypeManager.getInternalCatalog().getArchetypes() );
                 }
-            }
-            else if ( catalog.startsWith( "file://" ) )
-            {
-                String path = catalog.substring( 7 );
-                archetypes.put( catalog, archetypeManager.getLocalCatalog( path ).getArchetypes() );
-            }
-            else if ( catalog.startsWith( "http://" ) || catalog.startsWith( "https://" ) )
-            {
-                archetypes.put( catalog, archetypeManager.getRemoteCatalog( catalog ).getArchetypes() );
             }
         }
 

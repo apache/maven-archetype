@@ -50,8 +50,7 @@ import org.codehaus.plexus.util.ReaderFactory;
  * @author Jason van Zyl
  */
 @Component( role = ArchetypeDataSource.class, hint = "remote-catalog" )
-public class RemoteCatalogArchetypeDataSource
-    extends CatalogArchetypeDataSource
+public class RemoteCatalogArchetypeDataSource extends CatalogArchetypeDataSource implements ArchetypeDataSource
 {
     @Requirement
     private Map<String, Wagon> wagons;
@@ -70,7 +69,8 @@ public class RemoteCatalogArchetypeDataSource
      */
     public static final String REPOSITORY_ID = "archetype";
 
-    public ArchetypeCatalog getArchetypeCatalog( Properties properties )
+    @Override
+    public ArchetypeCatalog getArchetypeCatalog( ProjectBuildingRequest buildingRequest, Properties properties )
         throws ArchetypeDataSourceException
     {
         String repository = properties.getProperty( REPOSITORY_PROPERTY );
@@ -124,6 +124,7 @@ public class RemoteCatalogArchetypeDataSource
 
         // We use wagon to take advantage of a Proxy that has already been setup in a Maven environment.
         Repository wagonRepository = new Repository( REPOSITORY_ID, repositoryPath );
+        
         AuthenticationInfo authInfo = getAuthenticationInfo( wagonRepository.getId() );
         ProxyInfo proxyInfo = getProxy( wagonRepository.getProtocol() );
 
@@ -262,5 +263,4 @@ public class RemoteCatalogArchetypeDataSource
 
         return null;
     }
-
 }

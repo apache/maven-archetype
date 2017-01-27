@@ -21,6 +21,7 @@ package org.apache.maven.archetype.source;
 
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
+import org.apache.maven.project.ProjectBuildingRequest;
 import org.codehaus.plexus.PlexusTestCase;
 
 import java.io.File;
@@ -54,7 +55,9 @@ public class WikiArchetypeDataSourceTest
 
         ArchetypeDataSource ads = new WikiArchetypeDataSource();
 
-        ArchetypeCatalog catalog = ads.getArchetypeCatalog( p );
+        ProjectBuildingRequest buildingRequest = null;
+        
+        ArchetypeCatalog catalog = ads.getArchetypeCatalog( buildingRequest, p );
 
         int catalogSize = catalog.getArchetypes().size();
 

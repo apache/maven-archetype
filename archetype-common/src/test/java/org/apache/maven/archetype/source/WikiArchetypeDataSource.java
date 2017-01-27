@@ -63,7 +63,7 @@ public class WikiArchetypeDataSource
         return val.replaceAll( "\\r|\\n|\\s{2,}|\\[|\\]|\\&nbsp;", "" );
     }
 
-    public ArchetypeCatalog getArchetypeCatalog( Properties properties )
+    public ArchetypeCatalog getArchetypeCatalog( ProjectBuildingRequest buildingRequest, Properties properties )
         throws ArchetypeDataSourceException
     {
         ArchetypeCatalog ac = new ArchetypeCatalog();

@@ -19,7 +19,9 @@ package org.apache.maven.archetype.source;
  * under the License.
  */
 
+import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
+import org.apache.maven.project.ProjectBuildingRequest;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.util.ReaderFactory;
 
@@ -36,7 +38,7 @@ public class InternalCatalogArchetypeDataSource
     extends CatalogArchetypeDataSource
 {
 
-    public ArchetypeCatalog getArchetypeCatalog( Properties properties )
+    public ArchetypeCatalog getArchetypeCatalog( ProjectBuildingRequest buildingRequest, Properties properties )
         throws ArchetypeDataSourceException
     {
         try
@@ -50,5 +52,12 @@ public class InternalCatalogArchetypeDataSource
         {
             throw new ArchetypeDataSourceException( "Error reading archetype catalog.", e );
         }
+    }
+
+    @Override
+    public void updateCatalog( ProjectBuildingRequest buildingRequest, Archetype archetype )
+        throws ArchetypeDataSourceException
+    {
+        throw new ArchetypeDataSourceException( "Not supported yet." );
     }
 }

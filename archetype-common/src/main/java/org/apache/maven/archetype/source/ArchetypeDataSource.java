@@ -36,9 +36,9 @@ import java.util.Properties;
  */
 public interface ArchetypeDataSource
 {
-    String ROLE = ArchetypeDataSource.class.getName();
+    String ARCHETYPE_CATALOG_FILENAME = "archetype-catalog.xml";
 
-    ArchetypeCatalog getArchetypeCatalog( Properties properties )
+    ArchetypeCatalog getArchetypeCatalog( ProjectBuildingRequest buildingRequest, Properties properties )
         throws ArchetypeDataSourceException;
 
     void updateCatalog( ProjectBuildingRequest buildingRequest, Archetype archetype )

@@ -54,10 +54,13 @@ public class ArchetypeGenerationTest
         ArtifactRepository localRepository = registryManager.createRepository(
             new File( getBasedir(), "target/test-classes/repositories/local" )
                 .toURI().toURL().toExternalForm(), "local-repo" );
+        
+        ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
+        MavenRepositorySystemSession repositorySession = new MavenRepositorySystemSession();
+        repositorySession.setLocalRepositoryManager( new SimpleLocalRepositoryManager( "target/test-classes/repositories/central" ) );
+        buildingRequest.setRepositorySession( repositorySession );
 
-        ArchetypeCatalog catalog = archetype.getLocalCatalog(
-            new File( getBasedir(), "target/test-classes/repositories/central" ).getAbsolutePath()
-                 );
+        ArchetypeCatalog catalog = archetype.getLocalCatalog( buildingRequest );
 
         System.err.println( "archetypes => " + catalog.getArchetypes() );
         // Here I am just grabbing a OldArchetype but in a UI you would take the OldArchetype objects and present
@@ -98,13 +101,8 @@ public class ArchetypeGenerationTest
         archetypeRequiredProperties.setProperty( "property-without-default-3", "some-value-3" );
         archetypeRequiredProperties.setProperty( "property-without-default-4", "some-value-4" );
         agr.setProperties( archetypeRequiredProperties );
-        
-        ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
-        MavenRepositorySystemSession repositorySession = new MavenRepositorySystemSession();
-        repositorySession.setLocalRepositoryManager( new SimpleLocalRepositoryManager( localRepository.getBasedir() ) );
-        buildingRequest.setRepositorySession( repositorySession );
         agr.setProjectBuildingRequest( buildingRequest );
-
+        
         // Then generate away!
 
         ArchetypeGenerationResult result = archetype.generateProjectFromArchetype( agr );

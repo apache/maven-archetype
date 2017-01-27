@@ -172,7 +172,7 @@ public class DefaultArchetypeManager
         {
             ArchetypeDataSource source = archetypeSources.get( "internal-catalog" );
 
-            return source.getArchetypeCatalog( new Properties() );
+            return source.getArchetypeCatalog( null, new Properties() );
         }
         catch ( ArchetypeDataSourceException e )
         {
@@ -180,20 +180,14 @@ public class DefaultArchetypeManager
         }
     }
 
-    public ArchetypeCatalog getDefaultLocalCatalog()
-    {
-        return getLocalCatalog( "${user.home}/.m2/archetype-catalog.xml" );
-    }
-
-    public ArchetypeCatalog getLocalCatalog( String path )
+    public ArchetypeCatalog getLocalCatalog( ProjectBuildingRequest buildingRequest )
     {
         try
         {
             Properties properties = new Properties();
-            properties.setProperty( "file", path );
             ArchetypeDataSource source = archetypeSources.get( "catalog" );
 
-            return source.getArchetypeCatalog( properties );
+            return source.getArchetypeCatalog( buildingRequest, properties );
         }
         catch ( ArchetypeDataSourceException e )
         {
@@ -201,12 +195,12 @@ public class DefaultArchetypeManager
         }
     }
 
-    public ArchetypeCatalog getRemoteCatalog()
+    public ArchetypeCatalog getRemoteCatalog( ProjectBuildingRequest buildingRequest )
     {
-        return getRemoteCatalog( "http://repo.maven.apache.org/maven2" );
+        return getRemoteCatalog( buildingRequest, "http://repo.maven.apache.org/maven2" );
     }
 
-    public ArchetypeCatalog getRemoteCatalog( String url )
+    public ArchetypeCatalog getRemoteCatalog( ProjectBuildingRequest buildingRequest, String url )
     {
         try
         {
@@ -214,7 +208,7 @@ public class DefaultArchetypeManager
             properties.setProperty( "repository", url );
             ArchetypeDataSource source = archetypeSources.get( "remote-catalog" );
 
-            return source.getArchetypeCatalog( properties );
+            return source.getArchetypeCatalog( buildingRequest, properties );
         }
         catch ( ArchetypeDataSourceException e )
         {
