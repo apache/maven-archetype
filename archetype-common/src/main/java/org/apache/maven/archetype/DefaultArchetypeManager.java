@@ -200,25 +200,18 @@ public class DefaultArchetypeManager
         }
     }
 
-    public ArchetypeCatalog getRemoteCatalog()
+    public ArchetypeCatalog getRemoteCatalog() throws ArchetypeDataSourceException
     {
         return getRemoteCatalog( "http://repo.maven.apache.org/maven2" );
     }
 
-    public ArchetypeCatalog getRemoteCatalog( String url )
+    public ArchetypeCatalog getRemoteCatalog( String url ) throws ArchetypeDataSourceException
     {
-        try
-        {
-            Properties properties = new Properties();
-            properties.setProperty( "repository", url );
-            ArchetypeDataSource source = archetypeSources.get( "remote-catalog" );
+        Properties properties = new Properties();
+        properties.setProperty( "repository", url );
+        ArchetypeDataSource source = archetypeSources.get( "remote-catalog" );
 
-            return source.getArchetypeCatalog( properties );
-        }
-        catch ( ArchetypeDataSourceException e )
-        {
-            return new ArchetypeCatalog();
-        }
+        return source.getArchetypeCatalog( properties );
     }
 
     public void updateLocalCatalog( Archetype archetype )

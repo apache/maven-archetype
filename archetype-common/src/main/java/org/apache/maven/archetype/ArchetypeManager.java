@@ -21,6 +21,7 @@ package org.apache.maven.archetype;
 
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
+import org.apache.maven.archetype.source.ArchetypeDataSourceException;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 
 import java.io.File;
@@ -78,8 +79,9 @@ public interface ArchetypeManager
      * <code>http://repo.maven.apache.org/maven2/archetype-catalog.xml</code>.
      * 
      * @return the catalog.
+     * @throws ArchetypeDataSourceException in case the catalog cannot be downloaded or is invalid.
      */
-    ArchetypeCatalog getRemoteCatalog();
+    ArchetypeCatalog getRemoteCatalog() throws ArchetypeDataSourceException;
 
     /**
      * Gives the catalog of archetypes located at the given url.
@@ -87,8 +89,8 @@ public interface ArchetypeManager
      * 
      * @param url the catalog url or base url containing the catalog file.
      * @return the catalog.
-     */
-    ArchetypeCatalog getRemoteCatalog( String url );
+     * @throws ArchetypeDataSourceException in case the catalog cannot be downloaded or is invalid. */
+    ArchetypeCatalog getRemoteCatalog( String url ) throws ArchetypeDataSourceException;
 
     /**
      * Creates a jar file for an archetype.
