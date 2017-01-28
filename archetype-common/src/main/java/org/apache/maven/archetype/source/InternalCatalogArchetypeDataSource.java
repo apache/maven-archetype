@@ -28,7 +28,6 @@ import org.codehaus.plexus.util.ReaderFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
-import java.util.Properties;
 
 /**
  * @author Jason van Zyl
@@ -38,7 +37,7 @@ public class InternalCatalogArchetypeDataSource
     extends CatalogArchetypeDataSource
 {
 
-    public ArchetypeCatalog getArchetypeCatalog( ProjectBuildingRequest buildingRequest, Properties properties )
+    public ArchetypeCatalog getArchetypeCatalog( ProjectBuildingRequest buildingRequest )
         throws ArchetypeDataSourceException
     {
         try

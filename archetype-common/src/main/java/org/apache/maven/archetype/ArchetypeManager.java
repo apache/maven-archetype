@@ -77,16 +77,6 @@ public interface ArchetypeManager
     ArchetypeCatalog getRemoteCatalog( ProjectBuildingRequest buildingRequest );
 
     /**
-     * Gives the catalog of archetypes located at the given url.
-     * if the url doesn't define a catalog, then <code>'archetype-catalog.xml'</code> is appended to it for search.
-     * @param buildingRequest TODO
-     * @param url the catalog url or base url containing the catalog file.
-     * 
-     * @return the catalog.
-     */
-    ArchetypeCatalog getRemoteCatalog( ProjectBuildingRequest buildingRequest, String url );
-
-    /**
      * Creates a jar file for an archetype.
      *
      * @param archetypeDirectory

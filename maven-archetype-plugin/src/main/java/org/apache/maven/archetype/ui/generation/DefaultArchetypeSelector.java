@@ -92,7 +92,7 @@ public class DefaultArchetypeSelector
                 String catalogKey = found.getKey();
                 Archetype archetype = found.getValue();
 
-                updateRepository( definition, archetype, catalogKey );
+                updateRepository( definition, archetype );
 
                 getLogger().info( "Archetype repository not defined. Using the one from " + archetype + " found in catalog "
                                       + catalogKey );
@@ -118,7 +118,7 @@ public class DefaultArchetypeSelector
                 String catalogKey = found.getKey();
                 Archetype archetype = found.getValue();
 
-                updateDefinition( definition, archetype, catalogKey );
+                updateDefinition( definition, archetype );
 
                 getLogger().info( "Archetype " + archetype + " found in catalog " + catalogKey );
             }
@@ -159,9 +159,7 @@ public class DefaultArchetypeSelector
             {
                 Archetype selectedArchetype = archetypeSelectionQueryer.selectArchetype( archetypes, definition );
 
-                String catalogKey = getCatalogKey( archetypes, selectedArchetype );
-
-                updateDefinition( definition, selectedArchetype, catalogKey );
+                updateDefinition( definition, selectedArchetype );
             }
 
             // Make sure the groupId and artifactId are valid, the version may just default to
@@ -222,29 +220,22 @@ public class DefaultArchetypeSelector
         return archetypes;
     }
 
-    private void updateRepository( ArchetypeDefinition definition, Archetype archetype, String catalogKey )
+    private void updateRepository( ArchetypeDefinition definition, Archetype archetype )
     {
         String repository = archetype.getRepository();
         if ( StringUtils.isNotEmpty( repository ) )
         {
             definition.setRepository( repository );
         }
-        else if ( catalogKey.indexOf( ':' ) > 1 )
-        {
-            // file: or http:
-            int lastIndex = catalogKey.lastIndexOf( '/' );
-            String catalogBase = catalogKey.substring( 0, ( lastIndex > 7 ? lastIndex : catalogKey.length() ) );
-            definition.setRepository( catalogBase );
-        }
     }
 
-    private void updateDefinition( ArchetypeDefinition definition, Archetype archetype, String catalogKey )
+    private void updateDefinition( ArchetypeDefinition definition, Archetype archetype )
     {
         definition.setGroupId( archetype.getGroupId() );
         definition.setArtifactId( archetype.getArtifactId() );
         definition.setVersion( archetype.getVersion() );
         definition.setName( archetype.getArtifactId() );
-        updateRepository( definition, archetype, catalogKey );
+        updateRepository( definition, archetype );
         definition.setGoals( StringUtils.join( archetype.getGoals().iterator(), "," ) );
     }
 

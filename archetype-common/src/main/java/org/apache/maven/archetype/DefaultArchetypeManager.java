@@ -37,7 +37,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Map;
-import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -172,7 +171,7 @@ public class DefaultArchetypeManager
         {
             ArchetypeDataSource source = archetypeSources.get( "internal-catalog" );
 
-            return source.getArchetypeCatalog( null, new Properties() );
+            return source.getArchetypeCatalog( null );
         }
         catch ( ArchetypeDataSourceException e )
         {
@@ -184,10 +183,9 @@ public class DefaultArchetypeManager
     {
         try
         {
-            Properties properties = new Properties();
             ArchetypeDataSource source = archetypeSources.get( "catalog" );
 
-            return source.getArchetypeCatalog( buildingRequest, properties );
+            return source.getArchetypeCatalog( buildingRequest );
         }
         catch ( ArchetypeDataSourceException e )
         {
@@ -197,18 +195,11 @@ public class DefaultArchetypeManager
 
     public ArchetypeCatalog getRemoteCatalog( ProjectBuildingRequest buildingRequest )
     {
-        return getRemoteCatalog( buildingRequest, "http://repo.maven.apache.org/maven2" );
-    }
-
-    public ArchetypeCatalog getRemoteCatalog( ProjectBuildingRequest buildingRequest, String url )
-    {
         try
         {
-            Properties properties = new Properties();
-            properties.setProperty( "repository", url );
             ArchetypeDataSource source = archetypeSources.get( "remote-catalog" );
 
-            return source.getArchetypeCatalog( buildingRequest, properties );
+            return source.getArchetypeCatalog( buildingRequest );
         }
         catch ( ArchetypeDataSourceException e )
         {

@@ -23,8 +23,6 @@ import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.project.ProjectBuildingRequest;
 
-import java.util.Properties;
-
 /**
  * Sources we can get Archetypes from. This may be the local registry, a Wiki, or,
  * a Maven Repository application. We might also want to get all the Archetypes based
@@ -38,7 +36,7 @@ public interface ArchetypeDataSource
 {
     String ARCHETYPE_CATALOG_FILENAME = "archetype-catalog.xml";
 
-    ArchetypeCatalog getArchetypeCatalog( ProjectBuildingRequest buildingRequest, Properties properties )
+    ArchetypeCatalog getArchetypeCatalog( ProjectBuildingRequest buildingRequest )
         throws ArchetypeDataSourceException;
 
     void updateCatalog( ProjectBuildingRequest buildingRequest, Archetype archetype )

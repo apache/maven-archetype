@@ -23,7 +23,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.Properties;
 
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
@@ -79,7 +78,7 @@ public class LocalCatalogArchetypeDataSource
         Archetype newArchetype = archetype;
         while ( !found && archetypes.hasNext() )
         {
-            Archetype a = (Archetype) archetypes.next();
+            Archetype a = archetypes.next();
             if ( a.getGroupId().equals( archetype.getGroupId() )
                 && a.getArtifactId().equals( archetype.getArtifactId() ) )
             {
@@ -101,7 +100,7 @@ public class LocalCatalogArchetypeDataSource
         writeLocalCatalog( catalog, catalogFile );
     }
 
-    public ArchetypeCatalog getArchetypeCatalog( ProjectBuildingRequest buildingRequest, Properties properties )
+    public ArchetypeCatalog getArchetypeCatalog( ProjectBuildingRequest buildingRequest )
         throws ArchetypeDataSourceException
     {
         File localRepo = repositoryManager.getLocalRepositoryBasedir( buildingRequest );

@@ -23,10 +23,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
+import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.LegacySupport;
@@ -61,8 +61,6 @@ public class RemoteCatalogArchetypeDataSource extends CatalogArchetypeDataSource
     @Requirement
     private SettingsDecrypter settingsDecrypter;
 
-    public static final String REPOSITORY_PROPERTY = "repository";
-
     /**
      * Id of the repository used to download catalog file. Proxy or authentication info can
      * be setup in settings.xml.
@@ -70,44 +68,40 @@ public class RemoteCatalogArchetypeDataSource extends CatalogArchetypeDataSource
     public static final String REPOSITORY_ID = "archetype";
 
     @Override
-    public ArchetypeCatalog getArchetypeCatalog( ProjectBuildingRequest buildingRequest, Properties properties )
+    public ArchetypeCatalog getArchetypeCatalog( ProjectBuildingRequest buildingRequest )
         throws ArchetypeDataSourceException
     {
-        String repository = properties.getProperty( REPOSITORY_PROPERTY );
-
-        if ( repository == null )
+        ArtifactRepository centralRepository = null;
+        ArtifactRepository archetypeRepository = null;
+        for ( ArtifactRepository remoteRepository : buildingRequest.getRemoteRepositories() )
         {
-            throw new ArchetypeDataSourceException( "To use the remote catalog you must specify the 'repository'"
-                + " property with an URL." );
+            if ( REPOSITORY_ID.equals( remoteRepository.getId() ) )
+            {
+                archetypeRepository = remoteRepository;
+                break;
+            }
+            else if ( "central".equals( remoteRepository.getId() ) )
+            {
+                centralRepository = remoteRepository;
+            }
         }
 
-        if ( repository.endsWith( "/" ) )
+        if ( archetypeRepository == null )
         {
-            repository = repository.substring( 0, repository.length() - 1 );
+            archetypeRepository = centralRepository;
         }
 
         try
         {
-            return downloadCatalog( repository, ARCHETYPE_CATALOG_FILENAME );
+            return downloadCatalog( archetypeRepository );
         }
-        catch ( ArchetypeDataSourceException e )
+        catch ( IOException e )
         {
-            throw e;
+            throw new ArchetypeDataSourceException( e );
         }
-        catch ( Exception e )
-        { // When the default archetype catalog name doesn't work, we assume the repository is the URL to a file
-            String repositoryPath = repository.substring( 0, repository.lastIndexOf( "/" ) );
-            String filename = repository.substring( repository.lastIndexOf( "/" ) + 1 );
-
-            try
-            {
-                return downloadCatalog( repositoryPath, filename );
-            }
-            catch ( Exception ex )
-            {
-                getLogger().warn( "Error reading archetype catalog " + repository, ex );
-                return new ArchetypeCatalog();
-            }
+        catch ( WagonException e )
+        {
+            throw new ArchetypeDataSourceException( e );
         }
     }
 
@@ -117,13 +111,13 @@ public class RemoteCatalogArchetypeDataSource extends CatalogArchetypeDataSource
         throw new ArchetypeDataSourceException( "Not supported yet." );
     }
 
-    private ArchetypeCatalog downloadCatalog( String repositoryPath, String filename )
+    private ArchetypeCatalog downloadCatalog( ArtifactRepository repository )
         throws WagonException, IOException, ArchetypeDataSourceException
     {
-        getLogger().debug( "Searching for remote catalog: " + repositoryPath + "/" + filename );
+        getLogger().debug( "Searching for remote catalog: " + repository.getUrl() + "/" + ARCHETYPE_CATALOG_FILENAME );
 
         // We use wagon to take advantage of a Proxy that has already been setup in a Maven environment.
-        Repository wagonRepository = new Repository( REPOSITORY_ID, repositoryPath );
+        Repository wagonRepository = new Repository( repository.getId(), repository.getUrl() );
         
         AuthenticationInfo authInfo = getAuthenticationInfo( wagonRepository.getId() );
         ProxyInfo proxyInfo = getProxy( wagonRepository.getProtocol() );
@@ -134,7 +128,7 @@ public class RemoteCatalogArchetypeDataSource extends CatalogArchetypeDataSource
         try
         {
             wagon.connect( wagonRepository, authInfo, proxyInfo );
-            wagon.get( filename, catalog );
+            wagon.get( ARCHETYPE_CATALOG_FILENAME, catalog );
 
             return readCatalog( ReaderFactory.newXmlReader( catalog ) );
         }

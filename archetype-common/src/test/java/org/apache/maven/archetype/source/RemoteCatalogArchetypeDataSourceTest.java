@@ -26,6 +26,8 @@ import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Writer;
+import org.apache.maven.artifact.repository.MavenArtifactRepository;
+import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
 import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.ProjectBuildingRequest;
 import org.codehaus.plexus.PlexusTestCase;
@@ -92,8 +94,12 @@ public class RemoteCatalogArchetypeDataSourceTest extends PlexusTestCase
         ArchetypeManager archetype = lookup( ArchetypeManager.class );
 
         ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
+        buildingRequest.getRemoteRepositories().add( new MavenArtifactRepository( "central",
+                                                                                  "http://localhost:" + port + "/repo/",
+                                                                                  new DefaultRepositoryLayout(), null,
+                                                                                  null ) );
 
-        ArchetypeCatalog result = archetype.getRemoteCatalog( buildingRequest, "http://localhost:" + port + "/repo/" );
+        ArchetypeCatalog result = archetype.getRemoteCatalog( buildingRequest );
 
         assertEquals( 1, result.getArchetypes().size() );
         assertEquals( "groupId", result.getArchetypes().get( 0 ).getGroupId() );
