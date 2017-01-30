@@ -31,6 +31,7 @@ import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.LegacySupport;
 import org.apache.maven.project.ProjectBuildingRequest;
+import org.apache.maven.settings.Mirror;
 import org.apache.maven.settings.Proxy;
 import org.apache.maven.settings.Server;
 import org.apache.maven.settings.crypto.DefaultSettingsDecryptionRequest;
@@ -45,6 +46,7 @@ import org.apache.maven.wagon.repository.Repository;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.util.ReaderFactory;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author Jason van Zyl
@@ -61,26 +63,57 @@ public class RemoteCatalogArchetypeDataSource extends CatalogArchetypeDataSource
     @Requirement
     private SettingsDecrypter settingsDecrypter;
 
+//    Should be used for mirror/proxy/authentication
+//    available since M3.2.3
+//    @Requirement
+//    private MavenRepositorySystem;
+
     /**
      * Id of the repository used to download catalog file. Proxy or authentication info can
      * be setup in settings.xml.
      */
-    public static final String REPOSITORY_ID = "archetype";
+    public static final String ARCHETYPE_REPOSITORY_ID = "archetype";
+
+    public static final String CENTRAL_REPOSITORY_ID = "central";
 
     @Override
     public ArchetypeCatalog getArchetypeCatalog( ProjectBuildingRequest buildingRequest )
         throws ArchetypeDataSourceException
     {
+        // With M3 artifactRepositories are already injected with their mirror, including the new id
+        // First look for mirrorId of both 'central' and 'archetype'
+        final String archetypeRepoId;
+        Mirror archetypeMirror = getMirror( ARCHETYPE_REPOSITORY_ID );
+        if ( archetypeMirror != null )
+        {
+            archetypeRepoId = archetypeMirror.getId();
+        }
+        else
+        {
+            archetypeRepoId = ARCHETYPE_REPOSITORY_ID;
+        }
+        
+        final String centralRepoId;
+        Mirror centralMirror = getMirror( CENTRAL_REPOSITORY_ID );
+        if ( centralMirror != null )
+        {
+            centralRepoId = centralMirror.getId();
+        }
+        else
+        {
+            centralRepoId = CENTRAL_REPOSITORY_ID;
+        }
+        
         ArtifactRepository centralRepository = null;
         ArtifactRepository archetypeRepository = null;
         for ( ArtifactRepository remoteRepository : buildingRequest.getRemoteRepositories() )
         {
-            if ( REPOSITORY_ID.equals( remoteRepository.getId() ) )
+            if ( archetypeRepoId.equals( remoteRepository.getId() ) )
             {
                 archetypeRepository = remoteRepository;
                 break;
             }
-            else if ( "central".equals( remoteRepository.getId() ) )
+            else if ( centralRepoId.equals( remoteRepository.getId() ) )
             {
                 centralRepository = remoteRepository;
             }
@@ -256,5 +289,164 @@ public class RemoteCatalogArchetypeDataSource extends CatalogArchetypeDataSource
         }
 
         return null;
+    }
+    
+    private Mirror getMirror( String repoId )
+    {
+        MavenSession session = legacySupport.getSession();
+
+        MavenExecutionRequest request = session.getRequest();
+
+        if ( request != null )
+        {
+            return getMirror( repoId, request.getMirrors() );
+        }
+        
+        return null;
+    }
+    
+    private static final String WILDCARD = "*";
+
+    private static final String EXTERNAL_WILDCARD = "external:*";
+
+    private Mirror getMirror( String repoId, List<Mirror> mirrors )
+    {
+        if ( repoId != null && mirrors != null )
+        {
+            for ( Mirror mirror : mirrors )
+            {
+                if ( repoId.equals( mirror.getMirrorOf() ) )
+                {
+                    return mirror;
+                }
+            }
+
+            for ( Mirror mirror : mirrors )
+            {
+                if ( matchPattern( repoId, mirror.getMirrorOf() ) )
+                {
+                    return mirror;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * This method checks if the pattern matches the originalRepository. Valid patterns: * =
+     * everything external:* = everything not on the localhost and not file based. repo,repo1 = repo
+     * or repo1 *,!repo1 = everything except repo1
+     *
+     * @param originalRepository to compare for a match.
+     * @param pattern used for match. Currently only '*' is supported.
+     * @return true if the repository is a match to this pattern.
+     */
+    static boolean matchPattern( String originalId, String pattern )
+    {
+        boolean result = false;
+
+        // simple checks first to short circuit processing below.
+        if ( WILDCARD.equals( pattern ) || pattern.equals( originalId ) )
+        {
+            result = true;
+        }
+        else
+        {
+            // process the list
+            String[] repos = pattern.split( "," );
+            for ( String repo : repos )
+            {
+                // see if this is a negative match
+                if ( repo.length() > 1 && repo.startsWith( "!" ) )
+                {
+                    if ( repo.substring( 1 ).equals( originalId ) )
+                    {
+                        // explicitly exclude. Set result and stop processing.
+                        result = false;
+                        break;
+                    }
+                }
+                // check for exact match
+                else if ( repo.equals( originalId ) )
+                {
+                    result = true;
+                    break;
+                }
+                // check for external:*
+                else if ( EXTERNAL_WILDCARD.equals( repo ) )
+                {
+                    result = true;
+                    // don't stop processing in case a future segment explicitly excludes this repo
+                }
+                else if ( WILDCARD.equals( repo ) )
+                {
+                    result = true;
+                    // don't stop processing in case a future segment explicitly excludes this repo
+                }
+            }
+        }
+        return result;
+    }
+
+
+
+    static boolean matchesLayout( ArtifactRepository repository, Mirror mirror )
+    {
+        return matchesLayout( repository.getLayout().getId(), mirror.getMirrorOfLayouts() );
+    }
+
+    /**
+     * Checks whether the layouts configured for a mirror match with the layout of the repository.
+     *
+     * @param repoLayout The layout of the repository, may be {@code null}.
+     * @param mirrorLayout The layouts supported by the mirror, may be {@code null}.
+     * @return {@code true} if the layouts associated with the mirror match the layout of the original repository,
+     *         {@code false} otherwise.
+     */
+    static boolean matchesLayout( String repoLayout, String mirrorLayout )
+    {
+        boolean result = false;
+
+        // simple checks first to short circuit processing below.
+        if ( StringUtils.isEmpty( mirrorLayout ) || WILDCARD.equals( mirrorLayout ) )
+        {
+            result = true;
+        }
+        else if ( mirrorLayout.equals( repoLayout ) )
+        {
+            result = true;
+        }
+        else
+        {
+            // process the list
+            String[] layouts = mirrorLayout.split( "," );
+            for ( String layout : layouts )
+            {
+                // see if this is a negative match
+                if ( layout.length() > 1 && layout.startsWith( "!" ) )
+                {
+                    if ( layout.substring( 1 ).equals( repoLayout ) )
+                    {
+                        // explicitly exclude. Set result and stop processing.
+                        result = false;
+                        break;
+                    }
+                }
+                // check for exact match
+                else if ( layout.equals( repoLayout ) )
+                {
+                    result = true;
+                    break;
+                }
+                else if ( WILDCARD.equals( layout ) )
+                {
+                    result = true;
+                    // don't stop processing in case a future segment explicitly excludes this repo
+                }
+            }
+        }
+
+        return result;
     }
 }

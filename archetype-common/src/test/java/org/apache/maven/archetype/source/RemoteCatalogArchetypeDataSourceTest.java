@@ -28,13 +28,15 @@ import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Writer;
 import org.apache.maven.artifact.repository.MavenArtifactRepository;
 import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
+import org.apache.maven.plugin.LegacySupport;
+import org.apache.maven.plugin.testing.AbstractMojoTestCase;
+import org.apache.maven.plugin.testing.stubs.MavenProjectStub;
 import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.ProjectBuildingRequest;
-import org.codehaus.plexus.PlexusTestCase;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.webapp.WebAppContext;
 
-public class RemoteCatalogArchetypeDataSourceTest extends PlexusTestCase
+public class RemoteCatalogArchetypeDataSourceTest extends AbstractMojoTestCase
 {
     private Server server;
 
@@ -92,6 +94,9 @@ public class RemoteCatalogArchetypeDataSourceTest extends PlexusTestCase
         throws Exception
     {
         ArchetypeManager archetype = lookup( ArchetypeManager.class );
+        
+        LegacySupport legacySupport = lookup( LegacySupport.class );
+        legacySupport.setSession( newMavenSession( new MavenProjectStub() ) );
 
         ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
         buildingRequest.getRemoteRepositories().add( new MavenArtifactRepository( "central",
