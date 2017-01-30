@@ -27,7 +27,6 @@
   <modules>
     <module>archetype-catalog</module>
     <module>archetype-descriptor</module>
-    <module>archetype-registry</module>
   </modules>
 
   <build>

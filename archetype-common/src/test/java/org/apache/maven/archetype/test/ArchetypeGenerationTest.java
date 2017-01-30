@@ -22,8 +22,10 @@ package org.apache.maven.archetype.test;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
 import org.apache.maven.archetype.ArchetypeManager;
-import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.artifact.repository.ArtifactRepositoryPolicy;
+import org.apache.maven.artifact.repository.MavenArtifactRepository;
+import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
 import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.maven.repository.internal.MavenRepositorySystemSession;
@@ -49,9 +51,7 @@ public class ArchetypeGenerationTest
         // In the embedder the localRepository will be retrieved from the embedder itself and users won't
         // have to go through this muck.
 
-        ArchetypeRegistryManager registryManager = (ArchetypeRegistryManager) lookup( ArchetypeRegistryManager.ROLE );
-
-        ArtifactRepository localRepository = registryManager.createRepository(
+        ArtifactRepository localRepository = createRepository(
             new File( getBasedir(), "target/test-classes/repositories/local" )
                 .toURI().toURL().toExternalForm(), "local-repo" );
         
@@ -113,5 +113,22 @@ public class ArchetypeGenerationTest
             fail( result.getCause().getMessage() );
         }
     }
+    
+    private ArtifactRepository createRepository( String url, String repositoryId )
+    {
+        String updatePolicyFlag = ArtifactRepositoryPolicy.UPDATE_POLICY_ALWAYS;
+
+        String checksumPolicyFlag = ArtifactRepositoryPolicy.CHECKSUM_POLICY_WARN;
+
+        ArtifactRepositoryPolicy snapshotsPolicy =
+            new ArtifactRepositoryPolicy( true, updatePolicyFlag, checksumPolicyFlag );
+
+        ArtifactRepositoryPolicy releasesPolicy =
+            new ArtifactRepositoryPolicy( true, updatePolicyFlag, checksumPolicyFlag );
+        
+        return new MavenArtifactRepository( repositoryId, url, new DefaultRepositoryLayout() , snapshotsPolicy,
+                                            releasesPolicy );
+    }
+
 
 }

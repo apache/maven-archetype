@@ -35,8 +35,10 @@ import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Writer;
-import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.artifact.repository.ArtifactRepositoryPolicy;
+import org.apache.maven.artifact.repository.MavenArtifactRepository;
+import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
 import org.apache.maven.model.Model;
 import org.apache.maven.project.DefaultProjectBuilderConfiguration;
 import org.apache.maven.project.DefaultProjectBuildingRequest;
@@ -71,11 +73,9 @@ public class ArchetyperRoundtripWithProxyIT
     {
         ArchetypeManager archetype = (ArchetypeManager) lookup( ArchetypeManager.ROLE );
 
-        ArchetypeRegistryManager registryManager = (ArchetypeRegistryManager) lookup( ArchetypeRegistryManager.ROLE );
-
         ProjectBuilder projectBuilder = lookup( ProjectBuilder.class );
 
-        ArtifactRepository localRepository = registryManager.createRepository( new File( getBasedir(),
+        ArtifactRepository localRepository = createRepository( new File( getBasedir(),
                                                                                          "target" + File.separator
                                                                                              + "test-classes"
                                                                                              + File.separator
@@ -83,7 +83,7 @@ public class ArchetyperRoundtripWithProxyIT
                                                                                              + File.separator
                                                                                              + "local" ).toURI().toURL().toExternalForm(),
                                                                                "local-repo" );
-        ArtifactRepository centralRepository = registryManager.createRepository( new File( getBasedir(),
+        ArtifactRepository centralRepository = createRepository( new File( getBasedir(),
                                                                                            "target" + File.separator
                                                                                                + "test-classes"
                                                                                                + File.separator
@@ -254,4 +254,21 @@ public class ArchetyperRoundtripWithProxyIT
         proxyServer.stop();
         server.stop();
     }
+    
+    private ArtifactRepository createRepository( String url, String repositoryId )
+    {
+        String updatePolicyFlag = ArtifactRepositoryPolicy.UPDATE_POLICY_ALWAYS;
+
+        String checksumPolicyFlag = ArtifactRepositoryPolicy.CHECKSUM_POLICY_WARN;
+
+        ArtifactRepositoryPolicy snapshotsPolicy =
+            new ArtifactRepositoryPolicy( true, updatePolicyFlag, checksumPolicyFlag );
+
+        ArtifactRepositoryPolicy releasesPolicy =
+            new ArtifactRepositoryPolicy( true, updatePolicyFlag, checksumPolicyFlag );
+        
+        return new MavenArtifactRepository( repositoryId, url, new DefaultRepositoryLayout() , snapshotsPolicy,
+                                            releasesPolicy );
+    }
+
 }

@@ -23,12 +23,14 @@ import org.apache.maven.archetype.old.OldArchetype;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
-import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 import org.apache.maven.archetype.exception.ArchetypeException;
 import org.apache.maven.archetype.exception.ArchetypeGenerationFailure;
 import org.apache.maven.archetype.exception.ArchetypeNotDefined;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.artifact.repository.ArtifactRepositoryPolicy;
+import org.apache.maven.artifact.repository.MavenArtifactRepository;
+import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -46,8 +48,11 @@ public class DefaultArchetypeGenerator
     extends AbstractLogEnabled
     implements ArchetypeGenerator
 {
+    /**
+     * Determines whether the layout is legacy or not.
+     */
     @Requirement
-    private ArchetypeRegistryManager archetypeRegistryManager;
+    private ArtifactRepositoryLayout defaultArtifactRepositoryLayout;
 
     @Requirement
     private ArchetypeArtifactManager archetypeArtifactManager;
@@ -72,7 +77,7 @@ public class DefaultArchetypeGenerator
         if ( request != null && request.getArchetypeRepository() != null )
         {
             remoteRepo =
-                archetypeRegistryManager.createRepository( request.getArchetypeRepository(),
+                createRepository( request.getArchetypeRepository(),
                                                            request.getArchetypeArtifactId() + "-repo" );
 
             repos.add( remoteRepo );
@@ -185,5 +190,28 @@ public class DefaultArchetypeGenerator
         {
             result.setCause( ex );
         }
+    }
+    
+    private ArtifactRepository createRepository( String url, String repositoryId )
+    {
+        
+        
+        // snapshots vs releases
+        // offline = to turning the update policy off
+
+        // TODO: we'll need to allow finer grained creation of repositories but this will do for now
+
+        String updatePolicyFlag = ArtifactRepositoryPolicy.UPDATE_POLICY_ALWAYS;
+
+        String checksumPolicyFlag = ArtifactRepositoryPolicy.CHECKSUM_POLICY_WARN;
+
+        ArtifactRepositoryPolicy snapshotsPolicy =
+            new ArtifactRepositoryPolicy( true, updatePolicyFlag, checksumPolicyFlag );
+
+        ArtifactRepositoryPolicy releasesPolicy =
+            new ArtifactRepositoryPolicy( true, updatePolicyFlag, checksumPolicyFlag );
+        
+        return new MavenArtifactRepository( repositoryId, url, defaultArtifactRepositoryLayout, snapshotsPolicy,
+                                            releasesPolicy );
     }
 }

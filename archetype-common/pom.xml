@@ -57,10 +57,6 @@
       <artifactId>archetype-descriptor</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.maven.archetype</groupId>
-      <artifactId>archetype-registry</artifactId>
-    </dependency>
-    <dependency>
       <groupId>net.sourceforge.jchardet</groupId>
       <artifactId>jchardet</artifactId>
     </dependency>

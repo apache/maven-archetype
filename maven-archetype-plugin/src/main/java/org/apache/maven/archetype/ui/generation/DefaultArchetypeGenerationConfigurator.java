@@ -21,7 +21,6 @@ package org.apache.maven.archetype.ui.generation;
 
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
-import org.apache.maven.archetype.common.ArchetypeRegistryManager;
 import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.exception.ArchetypeGenerationConfigurationFailure;
 import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
@@ -32,6 +31,9 @@ import org.apache.maven.archetype.ui.ArchetypeConfiguration;
 import org.apache.maven.archetype.ui.ArchetypeDefinition;
 import org.apache.maven.archetype.ui.ArchetypeFactory;
 import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.artifact.repository.ArtifactRepositoryPolicy;
+import org.apache.maven.artifact.repository.MavenArtifactRepository;
+import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.context.Context;
@@ -68,8 +70,11 @@ public class DefaultArchetypeGenerationConfigurator
     @Requirement
     private ArchetypeGenerationQueryer archetypeGenerationQueryer;
 
+    /**
+     * Determines whether the layout is legacy or not.
+     */
     @Requirement
-    private ArchetypeRegistryManager archetypeRegistryManager;
+    private ArtifactRepositoryLayout defaultArtifactRepositoryLayout;
 
     public void setArchetypeArtifactManager( ArchetypeArtifactManager archetypeArtifactManager )
     {
@@ -104,7 +109,7 @@ public class DefaultArchetypeGenerationConfigurator
         }
         if ( request.getArchetypeRepository() != null )
         {
-            archetypeRepository = archetypeRegistryManager.createRepository( request.getArchetypeRepository(),
+            archetypeRepository = createRepository( request.getArchetypeRepository(),
                                                                              ad.getArtifactId() + "-repo" );
             repositories.add( archetypeRepository );
         }
@@ -433,4 +438,28 @@ public class DefaultArchetypeGenerationConfigurator
             return left.compareTo( right );
         }
     }
+    
+    private ArtifactRepository createRepository( String url, String repositoryId )
+    {
+        
+        
+        // snapshots vs releases
+        // offline = to turning the update policy off
+
+        // TODO: we'll need to allow finer grained creation of repositories but this will do for now
+
+        String updatePolicyFlag = ArtifactRepositoryPolicy.UPDATE_POLICY_ALWAYS;
+
+        String checksumPolicyFlag = ArtifactRepositoryPolicy.CHECKSUM_POLICY_WARN;
+
+        ArtifactRepositoryPolicy snapshotsPolicy =
+            new ArtifactRepositoryPolicy( true, updatePolicyFlag, checksumPolicyFlag );
+
+        ArtifactRepositoryPolicy releasesPolicy =
+            new ArtifactRepositoryPolicy( true, updatePolicyFlag, checksumPolicyFlag );
+        
+        return new MavenArtifactRepository( repositoryId, url, defaultArtifactRepositoryLayout, snapshotsPolicy,
+                                            releasesPolicy );
+    }
+
 }

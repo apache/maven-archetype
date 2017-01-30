@@ -48,8 +48,6 @@ public class ArchetypeCreationRequest
 
     private boolean partialArchetype = false;
 
-    private File archetypeRegistryFile;
-
     private String packageName;
 
     private Properties properties;
@@ -174,18 +172,6 @@ public class ArchetypeCreationRequest
     public ArchetypeCreationRequest setPartialArchetype( boolean partialArchetype )
     {
         this.partialArchetype = partialArchetype;
-
-        return this;
-    }
-
-    public File getArchetypeRegistryFile()
-    {
-        return archetypeRegistryFile;
-    }
-
-    public ArchetypeCreationRequest setArchetypeRegistryFile( File archetypeRegistryFile )
-    {
-        this.archetypeRegistryFile = archetypeRegistryFile;
 
         return this;
     }

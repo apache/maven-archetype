@@ -128,12 +128,6 @@ public class CreateArchetypeFromProjectMojo
     private String archetypeLanguages;
 
     /**
-     * The location of the registry file.
-     */
-    @Parameter( defaultValue = "${user.home}/.m2/archetype.xml" )
-    private File archetypeRegistryFile;
-
-    /**
      * Velocity templates encoding.
      */
     @Parameter( property = "archetype.encoding", defaultValue = "UTF-8" )
@@ -256,8 +250,7 @@ public class CreateArchetypeFromProjectMojo
                 /* Should be refactored to use some ant patterns */.setFiltereds( filtereds )
                 /* This should be correctly handled */.setPreserveCData( preserveCData ).setKeepParent(
                     keepParent ).setPartialArchetype( partialArchetype )
-                /* This should be used before there and use only languages and filtereds */.setArchetypeRegistryFile(
-                    archetypeRegistryFile ).setLocalRepository( localRepository )
+                .setLocalRepository( localRepository )
                 /* this should be resolved and asked for user to verify */.setPackageName( packageName ).setPostPhase(
                     archetypePostPhase ).setOutputDirectory( outputDirectory );
 
