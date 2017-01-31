@@ -135,7 +135,7 @@ public class CreateProjectFromArchetypeMojo
     private MavenSession session;
 
     /**
-     * Additional goals to immediately run on the project created from the archetype.
+     * Goals to immediately run on the project created from the archetype.
      */
     @Parameter( property = "goals" )
     private String goals;
