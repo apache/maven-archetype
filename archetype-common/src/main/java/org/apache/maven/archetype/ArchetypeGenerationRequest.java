@@ -65,6 +65,11 @@ public class ArchetypeGenerationRequest
 
     private String archetypeGoals = "";
 
+    /**
+     * The URL to the archetype repository
+     * 
+     * @deprecated see ARCHETYPE-439
+     */
     private String archetypeRepository;
 
     // Archetype configuration
@@ -170,11 +175,22 @@ public class ArchetypeGenerationRequest
         return this;
     }
 
+    /**
+     * 
+     * @return the URL of the archetype repository
+     * @deprecated see ARCHETYPE-439
+     */
     public String getArchetypeRepository()
     {
         return archetypeRepository;
     }
 
+    /**
+     * 
+     * @param archetypeRepository the URL of the archetype repository
+     * @return this request
+     * @deprecated see ARCHETYPE-439
+     */
     public ArchetypeGenerationRequest setArchetypeRepository( String archetypeRepository )
     {
         this.archetypeRepository = archetypeRepository;

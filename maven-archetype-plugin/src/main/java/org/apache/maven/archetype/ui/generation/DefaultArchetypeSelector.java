@@ -82,7 +82,7 @@ public class DefaultArchetypeSelector
             }
         }
 
-        if ( definition.isDefined() && StringUtils.isEmpty( request.getArchetypeRepository() ) )
+        if ( definition.isDefined() )
         {
             Map.Entry<String, Archetype> found =
                 findArchetype( archetypes, request.getArchetypeGroupId(), request.getArchetypeArtifactId() );
@@ -107,8 +107,7 @@ public class DefaultArchetypeSelector
                 definition.setRepository( "http://repo.maven.apache.org/maven2" );
             }
         }
-
-        if ( !definition.isDefined() && definition.isPartiallyDefined() )
+        else if ( definition.isPartiallyDefined() )
         {
             Map.Entry<String, Archetype> found =
                 findArchetype( archetypes, request.getArchetypeGroupId(), request.getArchetypeArtifactId() );
@@ -242,20 +241,6 @@ public class DefaultArchetypeSelector
     public void setArchetypeSelectionQueryer( ArchetypeSelectionQueryer archetypeSelectionQueryer )
     {
         this.archetypeSelectionQueryer = archetypeSelectionQueryer;
-    }
-
-    private String getCatalogKey( Map<String, List<Archetype>> archetypes, Archetype selectedArchetype )
-    {
-        for ( Map.Entry<String, List<Archetype>> entry : archetypes.entrySet() )
-        {
-            List<Archetype> catalog = entry.getValue();
-
-            if ( catalog.contains( selectedArchetype ) )
-            {
-                return entry.getKey();
-            }
-        }
-        return "";
     }
 
     private Map.Entry<String, Archetype> findArchetype( Map<String, List<Archetype>> archetypes, String groupId,

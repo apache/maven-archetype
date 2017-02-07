@@ -97,8 +97,11 @@
           <name>repository</name>
           <type>String</type>
           <required>false</required>
-          <description>The repository where to find the archetype.
+          <description>The URL of the repository where to find the archetype.
            When omitted, the archetype is searched for in the repository where the catalog comes from.</description>
+           <annotations>
+             <annotation>@Deprecated</annotation>
+           </annotations>
         </field>
         <field>
           <name>description</name>

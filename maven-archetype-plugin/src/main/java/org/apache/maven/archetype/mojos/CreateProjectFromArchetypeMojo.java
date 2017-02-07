@@ -90,12 +90,6 @@ public class CreateProjectFromArchetypeMojo
     private String archetypeVersion;
 
     /**
-     * The archetype's repository.
-     */
-    @Parameter( property = "archetypeRepository" )
-    private String archetypeRepository;
-
-    /**
      * The archetype catalogs to use to build a list and let the user choose from.
      * It is a comma separated list of catalogs.
      * Catalogs use the following schemes:
@@ -156,7 +150,7 @@ public class CreateProjectFromArchetypeMojo
     public void execute()
         throws MojoExecutionException, MojoFailureException
     {
-        Properties executionProperties = session.getExecutionProperties();
+        Properties executionProperties = session.getUserProperties();
 
         ArchetypeGenerationRequest request =
             new ArchetypeGenerationRequest().setArchetypeGroupId( archetypeGroupId )
@@ -164,7 +158,6 @@ public class CreateProjectFromArchetypeMojo
             .setArchetypeVersion( archetypeVersion )
             .setOutputDirectory( basedir.getAbsolutePath() )
             .setLocalRepository( localRepository )
-            .setArchetypeRepository( archetypeRepository )
             .setRemoteArtifactRepositories( remoteArtifactRepositories )
             .setFilter( filter )
             .setProjectBuildingRequest( session.getProjectBuildingRequest() );
