@@ -38,6 +38,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.shared.invoker.DefaultInvocationRequest;
 import org.apache.maven.shared.invoker.InvocationRequest;
+import org.apache.maven.shared.invoker.InvocationResult;
 import org.apache.maven.shared.invoker.Invoker;
 import org.apache.maven.shared.invoker.MavenInvocationException;
 
@@ -229,7 +230,13 @@ public class CreateProjectFromArchetypeMojo
 
             try
             {
-                invoker.execute( request );
+                InvocationResult result = invoker.execute( request );
+                
+                if ( result.getExitCode() != 0 )
+                {
+                    throw new MojoExecutionException( "Failed to invoke goals",
+                                                      result.getExecutionException() );
+                }
             }
             catch ( MavenInvocationException e )
             {
