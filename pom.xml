@@ -101,11 +101,6 @@
       </dependency>
       <dependency>
         <groupId>org.apache.maven.archetype</groupId>
-        <artifactId>archetype-registry</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.maven.archetype</groupId>
         <artifactId>archetype-common</artifactId>
         <version>${project.version}</version>
       </dependency>

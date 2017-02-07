@@ -181,6 +181,7 @@
             <configuration>
               <debug>true</debug>
               <projectsDirectory>src/it</projectsDirectory>
+              <cloneClean>true</cloneClean>
               <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
               <pomIncludes>
                 <pomInclude>*</pomInclude>

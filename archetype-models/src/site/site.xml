@@ -26,7 +26,6 @@ under the License.
     <menu name="Reference">
       <item name="Archetype Descriptor" href="./archetype-descriptor/archetype-descriptor.html"/>
       <item name="Archetype Catalog" href="./archetype-catalog/archetype-catalog.html"/>
-      <item name="Archetype Registry" href="./archetype-registry/archetype-registry.html"/>
       <item name="Archetype 1.0.x Descriptor" href="../archetype-common/archetype.html"/>
     </menu>
     <menu ref="parent" inherit="top" />
