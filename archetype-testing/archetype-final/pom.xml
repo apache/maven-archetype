@@ -113,6 +113,21 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>org.apache.rat</groupId>
+        <artifactId>apache-rat-plugin</artifactId>
+        <configuration>
+          <excludes combine.children="append">
+            <exclude>src/test/archetypes/**</exclude>
+            <exclude>src/test/repository/**/*.jar</exclude>
+            <exclude>src/test/resources/**/.checkstyle</exclude>
+            <exclude>src/test/resources/**/.classpath</exclude>
+            <exclude>src/test/resources/**/dummy</exclude>
+            <exclude>src/test/resources/**/META-INF/MANIFEST.MF</exclude>
+            <exclude>src/test/resources/**/*.ogg</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
         <executions>
