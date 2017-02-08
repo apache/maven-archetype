@@ -320,7 +320,7 @@
             <exclude>**/XMLOutputter.java</exclude>
             <!-- disable test directories -->
             <exclude>src/test/**</exclude>
-            <exclude>src/it/**</exclude>
+            <exclude>src/it/**/goal.txt</exclude>
             <exclude>.repository/**</exclude><!-- for CI -->
             <!-- Used by JEnv -->
             <exclude>.java-version</exclude>
