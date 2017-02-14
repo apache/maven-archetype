@@ -250,7 +250,7 @@ public class CreateArchetypeFromProjectMojo
                 /* Should be refactored to use some ant patterns */.setFiltereds( filtereds )
                 /* This should be correctly handled */.setPreserveCData( preserveCData ).setKeepParent(
                     keepParent ).setPartialArchetype( partialArchetype )
-                .setLocalRepository( localRepository )
+                .setLocalRepository( localRepository ).setProjectBuildingRequest( session.getProjectBuildingRequest() )
                 /* this should be resolved and asked for user to verify */.setPackageName( packageName ).setPostPhase(
                     archetypePostPhase ).setOutputDirectory( outputDirectory );
 

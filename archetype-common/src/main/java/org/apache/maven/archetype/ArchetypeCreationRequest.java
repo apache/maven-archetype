@@ -21,6 +21,7 @@ package org.apache.maven.archetype;
 
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.project.ProjectBuildingRequest;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -30,6 +31,8 @@ import java.util.Properties;
 /** @author Jason van Zyl */
 public class ArchetypeCreationRequest
 {
+    private ProjectBuildingRequest projectBuildingRequest;
+
     private ArtifactRepository localRepository;
 
     private MavenProject project;
@@ -77,6 +80,18 @@ public class ArchetypeCreationRequest
     {
         this.localRepository = localRepository;
 
+        return this;
+    }
+
+    public ProjectBuildingRequest getProjectBuildingRequest()
+    {
+        return projectBuildingRequest;
+    }
+
+    public ArchetypeCreationRequest setProjectBuildingRequest( ProjectBuildingRequest projectBuildingRequest )
+    {
+        this.projectBuildingRequest = projectBuildingRequest;
+        
         return this;
     }
 

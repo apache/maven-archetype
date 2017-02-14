@@ -128,7 +128,8 @@ public class DefaultArchetypeCreatorIT
             .setPreserveCData( false )
             .setKeepParent( false )
             .setPostPhase( "verify" )
-            .setLocalRepository( localRepository );
+            .setLocalRepository( localRepository )
+            .setProjectBuildingRequest( buildingRequest );
 
         ArchetypeCreationResult result = new ArchetypeCreationResult();
 
@@ -191,17 +192,16 @@ public class DefaultArchetypeCreatorIT
         assertExists(template1);
     }
 
-//    @Ignore("ARCHETYPE-518")
-//    public void testSystemPropertiesAreIncluded()
-//                    throws Exception
-//    {
-//        String project = "included-system-properties";
-//
-//        createFilesetArchetype( project );
-//
-//        File template1 = getTemplateFile( project, "src/main/java/App.java" );
-//        assertExists(template1);
-//    }
+    public void testSystemPropertiesAreIncluded()
+                    throws Exception
+    {
+        String project = "included-system-properties";
+
+        createFilesetArchetype( project );
+
+        File template1 = getTemplateFile( project, "src/main/java/App.java" );
+        assertExists(template1);
+    }
 
     public void testCreateFilesetArchetype1()
         throws Exception

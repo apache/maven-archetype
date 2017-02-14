@@ -54,8 +54,6 @@ import org.apache.maven.archetype.metadata.FileSet;
 import org.apache.maven.archetype.metadata.ModuleDescriptor;
 import org.apache.maven.archetype.metadata.RequiredProperty;
 import org.apache.maven.archetype.metadata.io.xpp3.ArchetypeDescriptorXpp3Writer;
-import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Extension;
@@ -64,10 +62,7 @@ import org.apache.maven.model.Plugin;
 import org.apache.maven.model.PluginManagement;
 import org.apache.maven.model.Profile;
 import org.apache.maven.model.Resource;
-import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.project.ProjectBuilder;
-import org.apache.maven.project.ProjectBuildingException;
 import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.maven.shared.invoker.DefaultInvocationRequest;
 import org.apache.maven.shared.invoker.InvocationRequest;
@@ -102,9 +97,6 @@ public class FilesetArchetypeCreator
 
     @Requirement
     private PomManager pomManager;
-
-    @Requirement
-    private ProjectBuilder projectBuilder;
     
     @Requirement
     private Invoker invoker;
@@ -118,7 +110,6 @@ public class FilesetArchetypeCreator
         boolean preserveCData = request.isPreserveCData();
         boolean keepParent = request.isKeepParent();
         boolean partialArchetype = request.isPartialArchetype();
-        ArtifactRepository localRepository = request.getLocalRepository();
         File outputDirectory = request.getOutputDirectory();
         File basedir = project.getBasedir();
 
@@ -143,8 +134,8 @@ public class FilesetArchetypeCreator
 
         try
         {
-            File archetypePomFile =
-                createArchetypeProjectPom( project, localRepository, configurationProperties, outputDirectory );
+            File archetypePomFile = createArchetypeProjectPom( project, request.getProjectBuildingRequest(),
+                                                               configurationProperties, outputDirectory );
 
             File archetypeResourcesDirectory = new File( outputDirectory, getTemplateOutputDirectory() );
 
@@ -395,7 +386,7 @@ public class FilesetArchetypeCreator
     /**
      * Create the archetype project pom.xml file, that will be used to build the archetype.
      */
-    private File createArchetypeProjectPom( MavenProject project, ArtifactRepository localRepository,
+    private File createArchetypeProjectPom( MavenProject project, ProjectBuildingRequest buildingRequest,
                                             Properties configurationProperties, File projectDir )
         throws TemplateCreationException, IOException
     {
@@ -428,36 +419,19 @@ public class FilesetArchetypeCreator
 
         if ( project.getParent() != null )
         {
-            Artifact pa = project.getParentArtifact();
+            MavenProject p = project.getParent();
 
-            try
+            if ( p.getDistributionManagement() != null )
             {
-                ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
-                buildingRequest.setLocalRepository( localRepository );
-                buildingRequest.setRemoteRepositories( project.getRemoteArtifactRepositories() );
-//                buildingRequest.setSystemProperties( System.getProperties() );
-//                buildingRequest.setUserProperties( configurationProperties );
-                
-                MavenProject p = projectBuilder.build( pa, buildingRequest ).getProject();
-
-                if ( p.getDistributionManagement() != null )
-                {
-                    model.setDistributionManagement( p.getDistributionManagement() );
-                }
-
-                if ( p.getBuildExtensions() != null )
-                {
-                    for ( Extension be : p.getBuildExtensions() )
-                    {
-                        model.getBuild().addExtension( be );
-                    }
-                }
+                model.setDistributionManagement( p.getDistributionManagement() );
             }
-            catch ( ProjectBuildingException e )
+
+            if ( p.getBuildExtensions() != null )
             {
-                throw new TemplateCreationException(
-                    "Error reading parent POM of project: " + pa.getGroupId() + ":" + pa.getArtifactId() + ":"
-                        + pa.getVersion() );
+                for ( Extension be : p.getBuildExtensions() )
+                {
+                    model.getBuild().addExtension( be );
+                }
             }
         }
 
