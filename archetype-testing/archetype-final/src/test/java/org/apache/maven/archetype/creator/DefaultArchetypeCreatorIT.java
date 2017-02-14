@@ -21,6 +21,7 @@ package org.apache.maven.archetype.creator;
 
 import org.apache.maven.archetype.ArchetypeCreationRequest;
 import org.apache.maven.archetype.ArchetypeCreationResult;
+import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.artifact.repository.DefaultArtifactRepository;
 import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
@@ -32,9 +33,12 @@ import org.apache.maven.project.ProjectBuilder;
 import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.maven.project.ProjectBuildingResult;
 //import org.apache.maven.project.MavenProjectBuildingResult;
+import org.apache.maven.repository.internal.MavenRepositorySystemSession;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.PropertyUtils;
 import org.codehaus.plexus.util.StringUtils;
+import org.junit.Ignore;
+import org.sonatype.aether.impl.internal.SimpleLocalRepositoryManager;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -56,7 +60,7 @@ public class DefaultArchetypeCreatorIT
         throws Exception
     {
         System.out.println( ">>>>>> testCreateFilesetArchetype( \"" + project + "\" )" );
-        
+
         ProjectBuilder builder = lookup( ProjectBuilder.class );
 
         File projectFile = getProjectFile( project );
@@ -77,7 +81,11 @@ public class DefaultArchetypeCreatorIT
 
         ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
         buildingRequest.setLocalRepository( localRepository );
-        
+        buildingRequest.setSystemProperties(System.getProperties());
+        MavenRepositorySystemSession repositorySession = new MavenRepositorySystemSession();
+        repositorySession.setLocalRepositoryManager( new SimpleLocalRepositoryManager(localRepository.getBasedir() ) );
+        buildingRequest.setRepositorySession(repositorySession);
+
         MavenProject mavenProject = builder.build( projectFile, buildingRequest ).getProject();
 
         FilesetArchetypeCreator instance =
@@ -182,6 +190,18 @@ public class DefaultArchetypeCreatorIT
         File template1 = getTemplateFile( project, "src/main/csharp/filewithnoextension" );
         assertExists(template1);
     }
+
+//    @Ignore("ARCHETYPE-518")
+//    public void testSystemPropertiesAreIncluded()
+//                    throws Exception
+//    {
+//        String project = "included-system-properties";
+//
+//        createFilesetArchetype( project );
+//
+//        File template1 = getTemplateFile( project, "src/main/java/App.java" );
+//        assertExists(template1);
+//    }
 
     public void testCreateFilesetArchetype1()
         throws Exception

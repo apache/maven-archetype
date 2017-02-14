@@ -435,6 +435,8 @@ public class FilesetArchetypeCreator
                 ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
                 buildingRequest.setLocalRepository( localRepository );
                 buildingRequest.setRemoteRepositories( project.getRemoteArtifactRepositories() );
+//                buildingRequest.setSystemProperties( System.getProperties() );
+//                buildingRequest.setUserProperties( configurationProperties );
                 
                 MavenProject p = projectBuilder.build( pa, buildingRequest ).getProject();
 
