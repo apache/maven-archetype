@@ -95,11 +95,26 @@ public class CreateProjectFromArchetypeMojo
      * It is a comma separated list of catalogs.
      * Catalogs use the following schemes:
      * <ul>
-     * <li>'<code>local</code>' which is the shortcut for '<code>file://~/.m2/archetype-catalog.xml</code>'</li>
-     * <li>'<code>remote</code>' which is the shortcut for Maven Central repository, ie '<code>http://repo.maven.apache.org/maven2</code>'</li>
+     * <li>'<code>local</code>' which is the shortcut to the local repository</li>
+     * <li>'<code>remote</code>' which is the shortcut for Maven Central repository or its mirror</li>
      * <li>'<code>internal</code>' which is an internal catalog</li>
      * </ul>
      * <p/>
+     * If you want the catalogs to come from a different repository, please add the following to your 
+     * {@code settings.xml}
+     * <pre>
+     *   &lt;repository&gt;
+     *     &lt;id&gt;archetype&lt;/id&gt;
+     *     &lt;url&gt;https://repository.domain.com/path/to/repo/&lt;/url&gt;
+     *   &lt;/repository&gt;
+     *   
+     *   &lt;!-- in case of a repository with authentication --&gt;
+     *   &lt;server&gt;
+     *     &lt;id&gt;archetype&lt;/id&gt;
+     *     &lt;username&gt;user.name&lt;/username&gt;
+     *     &lt;password&gt;s3cr3t&lt;/password&gt;
+     *   &lt;/server&gt;
+     * </pre>
      * If Maven Central repository catalog file is empty, <code>internal</code> catalog is used instead.
      */
     @Parameter( property = "archetypeCatalog", defaultValue = "remote,local" )

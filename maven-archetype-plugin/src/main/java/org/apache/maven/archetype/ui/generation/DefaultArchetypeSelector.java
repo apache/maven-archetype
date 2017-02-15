@@ -100,11 +100,9 @@ public class DefaultArchetypeSelector
             else
             {
                 getLogger().warn(
-                    "Archetype not found in any catalog. Falling back to central repository (http://repo.maven.apache.org/maven2)." );
+                    "Archetype not found in any catalog. Falling back to central repository." );
                 getLogger().warn(
-                    "Use -DarchetypeRepository=<your repository> if archetype's repository is elsewhere." );
-
-                definition.setRepository( "http://repo.maven.apache.org/maven2" );
+                    "Add a repsoitory with id 'archetype' in your settings.xml if archetype's repository is elsewhere." );
             }
         }
         else if ( definition.isPartiallyDefined() )
@@ -207,6 +205,11 @@ public class DefaultArchetypeSelector
                     getLogger().warn( "No archetype found in remote catalog. Defaulting to internal catalog" );
                     archetypes.put( "internal", archetypeManager.getInternalCatalog().getArchetypes() );
                 }
+            }
+            else
+            {
+                throw new IllegalArgumentException( "archetypeCatalog '" + catalog + "' is not supported anymore. "
+                    + "Please read the plugin documentation for details." );
             }
         }
 
