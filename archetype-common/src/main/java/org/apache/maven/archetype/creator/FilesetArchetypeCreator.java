@@ -786,7 +786,7 @@ public class FilesetArchetypeCreator
     }
 
     private void copyFiles( File basedir, File archetypeFilesDirectory, String directory, List<String> fileSetResources,
-                            boolean packaged, String packageName )
+                            boolean packaged, String packageName, Properties reverseProperties )
         throws IOException
     {
         String packageAsDirectory = StringUtils.replace( packageName, ".", File.separator );
@@ -801,7 +801,11 @@ public class FilesetArchetypeCreator
             getLogger().debug( "InputFileName:" + inputFileName );
             getLogger().debug( "OutputFileName:" + outputFileName );
 
-            File outputFile = new File( archetypeFilesDirectory, outputFileName );
+            reverseProperties.remove( "archetype.languages" );
+
+            String reversedOutputFilename = getReversedFilename( outputFileName, reverseProperties );
+
+            File outputFile = new File( archetypeFilesDirectory, reversedOutputFilename );
 
             File inputFile = new File( basedir, inputFileName );
 
@@ -842,7 +846,7 @@ public class FilesetArchetypeCreator
             else
             {
                 copyFiles( basedir, archetypeFilesDirectory, fileSet.getDirectory(), fileSetResources,
-                           fileSet.isPackaged(), packageName );
+                           fileSet.isPackaged(), packageName, reverseProperties );
                 getLogger().debug( "Copied " + fileSet.getDirectory() + " files" );
             }
         }

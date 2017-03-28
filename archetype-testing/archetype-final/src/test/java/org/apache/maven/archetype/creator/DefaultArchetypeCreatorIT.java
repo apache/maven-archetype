@@ -431,6 +431,22 @@ public class DefaultArchetypeCreatorIT
         File template = getTemplateFile( project, "dummy.file" );
         assertExists( template );
     }
+
+    /**
+     * A test-case for ARCHETYPE-524
+     *
+     * @throws Exception
+     */
+    public void testCreateFilesetArchetype6()
+                    throws Exception
+    {
+        String project = "create-6";
+
+        createFilesetArchetype( project );
+
+        assertExists( getTemplateFile( project, "src/main/webapp/resources/__artifactId__/a.jsp" ) );
+        assertExists( getTemplateFile( project, "src/main/webapp/resources/__artifactId__/a.gif" ) );
+    }
     
     protected void tearDown()
         throws Exception
