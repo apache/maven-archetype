@@ -25,7 +25,7 @@ under the License.
       <id>mrm-maven-plugin</id>
       <name>Mock Repository Manager</name>
       <url>@repository.proxy.url@</url>
-      <mirrorOf>*</mirrorOf>
+      <mirrorOf>*,!archetype</mirrorOf>
     </mirror>
   </mirrors>
   <profiles>
@@ -66,6 +66,26 @@ under the License.
           </snapshots>
         </pluginRepository>
       </pluginRepositories>
+    </profile>
+    
+    <profile>
+      <id>acme</id>
+      <repositories>
+        <repository>
+          <id>archetype</id>
+          <url>@archetype-repo.proxy.url@</url>
+          <releases>
+            <enabled>true</enabled>
+            <checksumPolicy>ignore</checksumPolicy>
+            <updatePolicy>never</updatePolicy>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+            <checksumPolicy>ignore</checksumPolicy>
+            <updatePolicy>always</updatePolicy>
+          </snapshots>
+        </repository>
+      </repositories>
     </profile>
   </profiles>
 </settings>

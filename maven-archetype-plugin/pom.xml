@@ -181,21 +181,38 @@
             <version>1.1.0</version>
             <executions>
               <execution>
+                <id>mirror</id>
                 <goals>
                   <goal>start</goal>
                   <goal>stop</goal>
                 </goals>
+                <configuration>
+                  <repositories>
+                    <mockRepo>
+                      <source>src/it/mrm/repository</source>
+                      <cloneTo>target/mock-repo</cloneTo>
+                    </mockRepo>
+                    <proxyRepo/>
+                  </repositories>
+                </configuration>
+              </execution>
+              <execution>
+                <id>archetype-repository</id>
+                <goals>
+                  <goal>start</goal>
+                  <goal>stop</goal>
+                </goals>
+                <configuration>
+                  <propertyName>archetype-repo.proxy.url</propertyName>
+                  <repositories>
+                    <mockRepo>
+                      <source>src/it/mrm/archetype-repository</source>
+                      <cloneTo>target/archetype-repo</cloneTo>
+                    </mockRepo>
+                  </repositories>
+                </configuration>
               </execution>
             </executions>
-            <configuration>
-              <repositories>
-                <mockRepo>
-                  <source>src/it/mrm/repository</source>
-                  <cloneTo>target/mock-repo</cloneTo>
-                </mockRepo>
-                <proxyRepo/>
-              </repositories>
-            </configuration>
           </plugin>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
@@ -213,6 +230,7 @@
               <settingsFile>src/it/mrm/settings.xml</settingsFile>
               <filterProperties>
                 <repository.proxy.url>${mrm.repository.url}</repository.proxy.url>
+                <archetype-repo.proxy.url>${archetype-repo.proxy.url}</archetype-repo.proxy.url>
               </filterProperties>
             </configuration>
             <executions>
