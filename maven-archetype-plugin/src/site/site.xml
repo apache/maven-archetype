@@ -39,6 +39,7 @@
     <menu name="Reference">
       <item name="Archetype Descriptor" href="../archetype-models/archetype-descriptor/archetype-descriptor.html"/>
       <item name="maven-archetype Packaging" href="../archetype-packaging/"/>
+      <item name="Archetype repository" href="/archetype-repository.html"/>
     </menu>
 
     <menu name="Examples">

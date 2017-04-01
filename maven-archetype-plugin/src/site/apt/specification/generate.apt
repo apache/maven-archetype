@@ -68,21 +68,14 @@ What is done during the creation of a project?
     Archetype Plugin with all the needed values as system properties.
 
     * <<<archetypeCatalog>>> which specifies the catalog(s).
-       The valid catalogs are: <<<internal>>> (the default), <<<local>>>, <<<remote>>>,
-       <<<file://path>>>, <<<http://url>>>.
+       The valid catalogs are: <<<internal>>> (the default), <<<local>>>, <<<remote>>>.
 
        * <<<internal>>> uses an internal catalog
 
-       * <<<local>>> uses the <<<~/.m2/archetype-catalog.xml>>> file
+       * <<<local>>> uses the <<<archetype-catalog.xml>>> file from the local repository
 
-       * <<<remote>>> uses the <<<http://repo.maven.apache.org/maven2/archetype-catalog.xml>>>
+       * <<<remote>>> uses the <<<archetype-catalog.xml>>> from Maven Central, either direct or via a repository manager 
          file
-
-       * <<<file://path>>> uses the catalog file defined by path (or the
-         <<<archetype-catalog.xml>>> file located in path directory)
-
-       * <<<http://url>>> uses the catalog file defined by url (or the
-         <<<archetype-catalog.xml>>> file located in URL directory)
 
        []
 

@@ -32,6 +32,8 @@
 Project creation
 
     Creating a project from an archetype involves three steps:
+    
+    * prepare repository reference
 
     * the selection of the archetype,
 
@@ -42,6 +44,12 @@ Project creation
     []
 
 Usage
+
+   In general an archetype is coming from a remote repository. If that repository can
+   be reached via the setup of your Maven, you're ready to start. In cases where the
+   repository is not managed and you want to refer to it directly, you have to add the
+   repository to your <<<settings.xml>>>. Read the small set of instructions on the
+   {{{./archetype-repository.html}Archetype Repository}}-page.
 
    Calling <<<archetype:generate>>> the plugin will first ask to choose
    the archetype from the internal catalog. Just enter the number of the archetype.
