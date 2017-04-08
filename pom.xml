@@ -30,7 +30,7 @@
 
   <groupId>org.apache.maven.archetype</groupId>
   <artifactId>maven-archetype</artifactId>
-  <version>3.0.1-SNAPSHOT</version>
+  <version>3.0.1</version>
   <packaging>pom</packaging>
 
   <name>Maven Archetype</name>
@@ -54,7 +54,7 @@
     <connection>${maven.archetype.scm.devConnection}</connection>
     <developerConnection>${maven.archetype.scm.devConnection}</developerConnection>
     <url>https://git-wip-us.apache.org/repos/asf?p=maven-archetype.git;a=summary</url>
-    <tag>HEAD</tag>
+    <tag>maven-archetype-3.0.1</tag>
   </scm>
   <issueManagement>
     <system>jira</system>
