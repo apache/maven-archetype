@@ -18,4 +18,4 @@
  */
 
 buildLog = new File( basedir, "build.log" )
-assert !buildLog.text.contains( "://repo.maven.apache.org" )
+assert !buildLog.text.contains( "://repo.maven.apache.org/maven2/" )
