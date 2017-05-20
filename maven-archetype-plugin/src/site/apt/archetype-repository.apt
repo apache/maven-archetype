@@ -26,23 +26,25 @@
 ~~ NOTE: For help with the syntax of this file, see:
 ~~ http://maven.apache.org/doxia/references/apt-format.html
 
-  As of Maven Archetype Plugin 3.0.0 the archetype resolution has changed. It is not possible anymore to specify
-  the repository via the commandline, but instead the repositories as already specified for Maven are used.
-  This means that also the mirrors and proxies are respected, as well as the authentication on repositories.
+  As of Maven Archetype Plugin 3.0.0 the archetype resolution has changed: it is not possible anymore to specify
+  the repository via the command line (with <<<-DarchetypeRepository=repo.url>>>), but instead the repositories as
+  already defined for Maven are used.
+  This means also that the mirrors and proxies are respected, as well as the authentication on repositories.
 
   If you're not using a repository manager and the archetype is available at Maven Central, there's nothing you have to do.
 
   If you're using a repository manager and the archetype is available via this manager, there's nothing you have to do.
 
-  Only in case of a third party archetype which is not managed by a repository you have to add a repository entry to your <<<settings.xml>>> once:
+  Only in case of a third party archetype which is not managed by a repository you have to add a repository entry
+  with <<<archetype>> id to your <<<settings.xml>>> once:
 
----
++---+
 <settings>
   <mirrors>
     <mirror>
       <id>mrm-maven-plugin</id>
       <name>Mock Repository Manager</name>
-      <url>http://www.mycompany.com/maven-reporistory-manager</url>
+      <url>http://www.mycompany.com/maven-repository-manager</url>
       <mirrorOf>*,!archetype</mirrorOf>
     </mirror>
   </mirrors>
@@ -62,7 +64,7 @@
       <id>acme</id>
       <repositories>
         <repository>
-          <id>archetype</id>
+          <id>archetype</id><!-- id expected by maven-archetype-plugin to avoid fetching from everywhere -->
           <url>https://www.acme.com/repo</url>
           <releases>
             <enabled>true</enabled>
@@ -77,5 +79,4 @@
     </profile>
   </profiles>
 </settings>
----
-
++---+
