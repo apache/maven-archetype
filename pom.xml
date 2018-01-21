@@ -289,6 +289,11 @@
           <artifactId>maven-jetty-plugin</artifactId>
           <version>6.1.6</version>
         </plugin>
+        <plugin><!-- TODO remove when upgrading parent to 31 -->
+          <groupId>org.codehaus.plexus</groupId>
+          <artifactId>plexus-component-metadata</artifactId>
+          <version>1.7</version>
+        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
