@@ -31,6 +31,10 @@ under the License.
   <name>build-archetype</name>
   <description>packages an archetype then runs IT (archetype:integration-test)</description>
 
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
   <build>
     <extensions>
       <extension>
@@ -42,6 +46,10 @@ under the License.
 
     <pluginManagement>
       <plugins>
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.7.0</version>
+        </plugin>
         <plugin>
           <artifactId>maven-archetype-plugin</artifactId>
           <version>@project.version@</version>

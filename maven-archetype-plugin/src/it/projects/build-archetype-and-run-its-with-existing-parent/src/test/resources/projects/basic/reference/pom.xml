@@ -29,4 +29,22 @@ under the License.
   <version>0.1-SNAPSHOT</version>
 
   <name>archetype build IT</name>
+
+  <properties>
+    <javaVersion>6</javaVersion>
+    <maven.compiler.source>1.${javaVersion}</maven.compiler.source>
+    <maven.compiler.target>1.${javaVersion}</maven.compiler.target>    
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.7.0</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
 </project>
