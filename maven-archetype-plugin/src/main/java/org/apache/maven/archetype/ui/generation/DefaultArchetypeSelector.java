@@ -102,7 +102,7 @@ public class DefaultArchetypeSelector
                 getLogger().warn(
                     "Archetype not found in any catalog. Falling back to central repository." );
                 getLogger().warn(
-                    "Add a repsoitory with id 'archetype' in your settings.xml if archetype's repository is elsewhere." );
+                    "Add a repository with id 'archetype' in your settings.xml if archetype's repository is elsewhere." );
             }
         }
         else if ( definition.isPartiallyDefined() )
