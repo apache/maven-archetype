@@ -24,5 +24,9 @@ under the License.
   xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0 http://maven.apache.org/xsd/decoration-1.0.0.xsd">
   <body>
     <menu ref="parent" inherit="top" />
+
+    <menu name="Reference">
+      <item name="Plugin Bindings" href="archetype-packaging.html"/>
+    </menu>
   </body>
 </project>

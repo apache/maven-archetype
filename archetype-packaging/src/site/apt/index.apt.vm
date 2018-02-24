@@ -39,6 +39,9 @@ Maven Archetype Packaging
 
    []
 
+   in addition to classical resource/jar/install/deploy. See {{{./archetype-packaging.html}} Archetype Packaging Reference}
+   for details.
+
 Usage
 
    Declaring <<<maven-archetype>>> packaging to your pom is not the only step required:

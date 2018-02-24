@@ -24,6 +24,7 @@
       <role-hint>maven-archetype</role-hint>
       <implementation>org.apache.maven.lifecycle.mapping.DefaultLifecycleMapping</implementation>
       <configuration>
+        <!-- START SNIPPET: maven-archetype-lifecycle -->
         <phases>
           <process-resources>org.apache.maven.plugins:maven-resources-plugin:resources</process-resources>
           <process-test-resources>org.apache.maven.plugins:maven-resources-plugin:testResources</process-test-resources>
@@ -35,6 +36,7 @@
           <!-- Update the local catalog -->
           <deploy>org.apache.maven.plugins:maven-deploy-plugin:deploy</deploy>
         </phases>
+        <!-- END SNIPPET: maven-archetype-lifecycle -->
       </configuration>
     </component>
 
