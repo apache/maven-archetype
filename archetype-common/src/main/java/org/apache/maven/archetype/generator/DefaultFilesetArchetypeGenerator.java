@@ -65,6 +65,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -87,15 +88,10 @@ public class DefaultFilesetArchetypeGenerator
     private VelocityComponent velocity;
 
     /**
-     * Token delimiter.
-     */
-    private static final String DELIMITER = "__";
-
-    /**
      * Pattern used to detect tokens in a string. Tokens are any text surrounded
-     * by the delimiter.
+     * by the delimiter <code>__</code>.
      */
-    private static final Pattern TOKEN_PATTERN = Pattern.compile( ".*" + DELIMITER + ".*" + DELIMITER + ".*" );
+    private static final Pattern TOKEN_PATTERN = Pattern.compile( "__((?:[^_]+_)*[^_]+)__" );
 
     public void generateArchetype( ArchetypeGenerationRequest request, File archetypeFile )
         throws UnknownArchetype, ArchetypeNotConfigured, ProjectDirectoryExists, PomFileExists, OutputFileExists,
@@ -365,16 +361,13 @@ public class DefaultFilesetArchetypeGenerator
             directory + "/" + ( packaged ? getPackageAsDirectory( packageName ) : "" ) + "/" + templateName.substring(
                 moduleOffset.length() );
 
-        if ( TOKEN_PATTERN.matcher( outputFileName ).matches() )
-        {
-            outputFileName = replaceFilenameTokens( outputFileName, context );
-        }
+        outputFileName = replaceFilenameTokens( outputFileName, context );
 
         return new File( outputDirectoryFile, outputFileName );
     }
 
     /**
-     * Replaces all tokens (text surrounded by the {@link #DELIMITER}) within
+     * Replaces all tokens (text matching {@link #TOKEN_PATTERN}) within
      * the given string, using properties contained within the context. If a
      * property does not exist in the context, the token is left unmodified
      * and a warning is logged.
@@ -384,62 +377,38 @@ public class DefaultFilesetArchetypeGenerator
      */
     private String replaceFilenameTokens( final String filePath, final Context context )
     {
-        String interpolatedResult = filePath;
+        StringBuffer interpolatedResult = new StringBuffer();
+        Matcher matcher = TOKEN_PATTERN.matcher( filePath );
 
-        int start = 0;
-
-        while ( true )
+        while ( matcher.find() )
         {
-            start = interpolatedResult.indexOf( DELIMITER, start );
-
-            if ( start == -1 )
-            {
-                break;
-            }
-
-            int end = interpolatedResult.indexOf( DELIMITER, start + DELIMITER.length() );
-
-            if ( end == -1 )
-            {
-                break;
-            }
-
-            String propertyToken = interpolatedResult.substring( start + DELIMITER.length(), end );
-
+            String propertyToken = matcher.group( 1 );
             String contextPropertyValue = (String) context.get( propertyToken );
-
             if ( contextPropertyValue != null && contextPropertyValue.trim().length() > 0 )
             {
-                String search = DELIMITER + propertyToken + DELIMITER;
-
                 if ( getLogger().isDebugEnabled() )
                 {
-                    getLogger().debug(
-                        "Replacing '" + search + "' in file path '" + interpolatedResult + "' with value '"
-                            + contextPropertyValue + "'." );
+                    getLogger().debug( "Replacing property '" + propertyToken + "' in file path '" + filePath
+                        + "' with value '" + contextPropertyValue + "'." );
                 }
-
-                interpolatedResult = StringUtils.replace( interpolatedResult, search, contextPropertyValue );
-
-                end = end + contextPropertyValue.length() - search.length();
+                matcher.appendReplacement( interpolatedResult, contextPropertyValue );
             }
             else
             {
                 // Need to skip the undefined property
-                getLogger().warn(
-                    "Property '" + propertyToken + "' was not specified, so the token in '" + interpolatedResult
-                        + "' is not being replaced." );
+                getLogger().warn( "Property '" + propertyToken + "' was not specified, so the token in '" + filePath
+                    + "' is not being replaced." );
             }
-
-            start = end + DELIMITER.length() + 1;
         }
+
+        matcher.appendTail( interpolatedResult );
 
         if ( getLogger().isDebugEnabled() )
         {
             getLogger().debug( "Final interpolated file path: '" + interpolatedResult + "'" );
         }
 
-        return interpolatedResult;
+        return interpolatedResult.toString();
     }
 
     private String getPackageInPathFormat( String aPackage )

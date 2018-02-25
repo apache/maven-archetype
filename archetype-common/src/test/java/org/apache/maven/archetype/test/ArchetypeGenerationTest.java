@@ -100,6 +100,8 @@ public class ArchetypeGenerationTest
         archetypeRequiredProperties.setProperty( "property-without-default-2", "some-value-2" );
         archetypeRequiredProperties.setProperty( "property-without-default-3", "some-value-3" );
         archetypeRequiredProperties.setProperty( "property-without-default-4", "some-value-4" );
+        archetypeRequiredProperties.setProperty( "property_underscored_1", "prop1" );
+        archetypeRequiredProperties.setProperty( "property_underscored-2", "prop2" );
         agr.setProperties( archetypeRequiredProperties );
         agr.setProjectBuildingRequest( buildingRequest );
         

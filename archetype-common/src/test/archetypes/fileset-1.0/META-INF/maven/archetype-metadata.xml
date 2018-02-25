@@ -36,6 +36,8 @@
     <requiredProperty key="property-without-default-2"/>
     <requiredProperty key="property-without-default-3"/>
     <requiredProperty key="property-without-default-4"/>
+    <requiredProperty key="property_underscored_1"/>
+    <requiredProperty key="property_underscored-2"/>
   </requiredProperties>
 
   <fileSets>

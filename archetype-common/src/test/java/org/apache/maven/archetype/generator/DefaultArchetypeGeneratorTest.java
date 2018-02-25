@@ -75,6 +75,8 @@ public class DefaultArchetypeGeneratorTest
         ADDITIONAL_PROPERTIES.setProperty( "property-with-default-2", "file-value" );
         ADDITIONAL_PROPERTIES.setProperty( "property-with-default-3", "file-value" );
         ADDITIONAL_PROPERTIES.setProperty( "property-with-default-4", "file-value" );
+        ADDITIONAL_PROPERTIES.setProperty( "property_underscored_1", "prop1" );
+        ADDITIONAL_PROPERTIES.setProperty( "property_underscored-2", "prop2" );
     }
 
     ArtifactRepository localRepository;
@@ -371,6 +373,10 @@ public class DefaultArchetypeGeneratorTest
         assertTemplateContentGeneratedWithFileSetArchetype( "subproject/subsubproject/src/main/java/file/value/package/"
                                                             /* + "file-value/inner/subsubproject/innest/" + */
                                                             + "ArbitraryProperty-file-value.java", "subsubproject" );
+
+        assertTemplateContentGeneratedWithFileSetArchetype( "subproject/subsubproject/src/main/java/file/value/package/"
+                                                            /* + "file-value/inner/subsubproject/innest/" + */
+                                                            + "M_subsubproject_prop1Testprop2file-value.java", "subsubproject" );
 
         // Test that undefined properties are safely ignored (and skipped)
         assertTemplateContentGeneratedWithFileSetArchetype( "subproject/subsubproject/src/main/java/file/value/package/"

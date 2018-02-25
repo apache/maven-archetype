@@ -32,3 +32,5 @@ property-with-default-1=file-value
 property-with-default-2=file-value
 property-with-default-3=file-value
 property-with-default-4=file-value
+property_underscored_1=prop1
+property_underscored-2=prop2
