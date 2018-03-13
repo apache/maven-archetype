@@ -22,10 +22,10 @@ under the License.
 
  <!-- START SNIPPET: modello-model -->
 
-<model xmlns="http://modello.codehaus.org/MODELLO/1.4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://modello.codehaus.org/MODELLO/1.4.0 http://modello.codehaus.org/xsd/modello-1.4.0.xsd"
-  xml.namespace="http://maven.apache.org/plugins/maven-archetype-plugin/archetype/${version}"
-  xml.schemaLocation="http://maven.apache.org/xsd/archetype-${version}.xsd">
+<model xmlns="http://codehaus-plexus.github.io/MODELLO/1.8.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://codehaus-plexus.github.io/MODELLO/1.8.0 http://codehaus-plexus.github.io/modello/xsd/modello-1.8.0.xsd"
+  xml.namespace="https://maven.apache.org/plugins/maven-archetype-plugin/archetype/${version}"
+  xml.schemaLocation="https://maven.apache.org/xsd/archetype-${version}.xsd">
   <id>archetype</id>
   <name>Archetype</name>
   <description>
