@@ -19,9 +19,6 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-
- <!-- START SNIPPET: modello-model -->
-
 <model xmlns="http://codehaus-plexus.github.io/MODELLO/1.8.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://codehaus-plexus.github.io/MODELLO/1.8.0 http://codehaus-plexus.github.io/modello/xsd/modello-1.8.0.xsd"
   xml.namespace="https://maven.apache.org/plugins/maven-archetype-plugin/archetype/${version}"
@@ -163,6 +160,3 @@ under the License.
     </class>
   </classes>
 </model>
-
- <!-- END SNIPPET: modello-model -->
-
