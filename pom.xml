@@ -39,7 +39,7 @@
    An archetype knows which files will be part of the instantiated project and which properties to fill to properly customize
    the project.
   </description>
-  <url>http://maven.apache.org/archetype</url>
+  <url>https://maven.apache.org/archetype</url>
   <inceptionYear>2007</inceptionYear>
 
   <modules>
@@ -53,8 +53,8 @@
   <scm>
     <connection>${maven.archetype.scm.devConnection}</connection>
     <developerConnection>${maven.archetype.scm.devConnection}</developerConnection>
-    <url>https://git-wip-us.apache.org/repos/asf?p=maven-archetype.git;a=summary</url>
-    <tag>HEAD</tag>
+    <url>https://github.com/apache/maven-archetype/tree/${project.scm.tag}</url>
+    <tag>master</tag>
   </scm>
   <issueManagement>
     <system>jira</system>
@@ -62,7 +62,7 @@
   </issueManagement>
   <ciManagement>
     <system>Jenkins</system>
-    <url>https://builds.apache.org/job/maven-archetype-m3/</url>
+    <url>https://builds.apache.org/job/maven-box/job/maven-archetype/</url>
   </ciManagement>
 
   <distributionManagement>
@@ -73,7 +73,7 @@
   </distributionManagement>
 
   <properties>
-    <maven.archetype.scm.devConnection>scm:git:https://git-wip-us.apache.org/repos/asf/maven-archetype.git</maven.archetype.scm.devConnection>
+    <maven.archetype.scm.devConnection>scm:git:https://gitbox.apache.org/repos/asf/maven-archetype.git</maven.archetype.scm.devConnection>
     <mavenVersion>3.0</mavenVersion>
     <netbeans.hint.useExternalMaven>true</netbeans.hint.useExternalMaven>
     <wagonVersion>2.8</wagonVersion>
