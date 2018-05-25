@@ -280,6 +280,7 @@ public class FilesetArchetypeCreator
             }
             InvocationRequest internalRequest = new DefaultInvocationRequest();
             internalRequest.setPomFile( archetypePomFile );
+            internalRequest.setUserSettingsFile( request.getSettingsFile() );
             internalRequest.setGoals( Collections.singletonList( request.getPostPhase() ) );
             if ( request.getLocalRepository() != null )
             {

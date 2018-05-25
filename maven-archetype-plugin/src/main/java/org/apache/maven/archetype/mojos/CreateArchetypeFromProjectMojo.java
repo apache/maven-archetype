@@ -225,6 +225,9 @@ public class CreateArchetypeFromProjectMojo
     @Parameter( defaultValue = "${session}", readonly = true, required = true )
     private MavenSession session;
 
+//    @Parameter( defaultValue = "${session.settings}", readonly = true, required = true )
+//    private File settingsXml;
+
     public void execute()
         throws MojoExecutionException, MojoFailureException
     {
@@ -252,7 +255,7 @@ public class CreateArchetypeFromProjectMojo
                     keepParent ).setPartialArchetype( partialArchetype )
                 .setLocalRepository( localRepository ).setProjectBuildingRequest( session.getProjectBuildingRequest() )
                 /* this should be resolved and asked for user to verify */.setPackageName( packageName ).setPostPhase(
-                    archetypePostPhase ).setOutputDirectory( outputDirectory );
+                    archetypePostPhase ).setOutputDirectory( outputDirectory ).setSettingsFile( session.getRequest().getUserSettingsFile() );
 
             ArchetypeCreationResult result = manager.createArchetypeFromProject( request );
 

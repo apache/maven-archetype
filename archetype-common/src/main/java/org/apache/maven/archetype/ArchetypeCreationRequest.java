@@ -59,6 +59,8 @@ public class ArchetypeCreationRequest
 
     private File outputDirectory;
 
+    private File settingsFile;
+
     public String getPostPhase()
     {
         return postPhase;
@@ -223,6 +225,18 @@ public class ArchetypeCreationRequest
     public ArchetypeCreationRequest setOutputDirectory( File outputDirectory )
     {
         this.outputDirectory = outputDirectory;
+
+        return this;
+    }
+
+    public File getSettingsFile()
+    {
+        return settingsFile;
+    }
+
+    public ArchetypeCreationRequest setSettingsFile( File settingsFile )
+    {
+        this.settingsFile = settingsFile;
 
         return this;
     }
