@@ -270,6 +270,14 @@ public class IntegrationTestMojo
     @Parameter( property = "archetype.test.settingsFile" )
     private File settingsFile;
 
+    /**
+     * Common set of properties to pass in on each project's command line, via -D parameters.
+     *
+     * @since 3.0.2
+     */
+    @Parameter
+    private Map<String, String> properties = new HashMap<String, String>();
+
     public void execute()
         throws MojoExecutionException, MojoFailureException
     {
@@ -655,6 +663,19 @@ public class IntegrationTestMojo
                 request.setErrorHandler( logger );
 
                 request.setOutputHandler( logger );
+            }
+            
+            if ( !properties.isEmpty() )
+            {
+                Properties props = new Properties();
+                for ( Map.Entry<String, String> entry : properties.entrySet() )
+                {
+                    if ( entry.getValue() != null )
+                    {
+                        props.setProperty( entry.getKey(), entry.getValue() );
+                    }
+                }
+                request.setProperties( props );
             }
 
             File interpolatedSettingsFile = null;

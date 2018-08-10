@@ -53,8 +53,11 @@ under the License.
             <settingsFile>${basedir}/test-settings.xml</settingsFile>
             <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
             <ignoreEOLStyle>true</ignoreEOLStyle>
+            <properties>
+               <!-- e.g. ensure that Java7 picks up TLSv1.2 when connecting with Central -->
+              <https.protocols>${https.protocols}</https.protocols>
+            </properties>
           </configuration>
-
         </plugin>
         <plugin>
           <artifactId>maven-resources-plugin</artifactId>
