@@ -286,6 +286,14 @@ public class FilesetArchetypeCreator
             {
                 internalRequest.setLocalRepositoryDirectory( new File( request.getLocalRepository().getBasedir() ) );
             }
+            
+            String httpsProtocols = System.getProperty( "https.protocols" );
+            if ( httpsProtocols != null )
+            {
+                Properties userProperties = new Properties();
+                userProperties.setProperty( "https.protocols", httpsProtocols );
+                internalRequest.setProperties( userProperties );
+            }
 
             InvocationResult invokerResult = invoker.execute( internalRequest );
             if ( invokerResult.getExitCode() != 0 )

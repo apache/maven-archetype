@@ -24,12 +24,12 @@ under the License.
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.apache.maven.plugins.archetype.its</groupId>
-  <artifactId>build-archetype-and-run-its-with-existing-parent</artifactId>
+  <artifactId>build-archetype</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>maven-archetype</packaging>
 
-  <name>build-archetype-with-existing-parent</name>
-  <description>packages an archetype then runs IT (archetype:integration-test) within a Maven Project being created through another archetype</description>
+  <name>build-archetype</name>
+  <description>packages an archetype then runs IT (archetype:integration-test)</description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -47,14 +47,20 @@ under the License.
     <pluginManagement>
       <plugins>
         <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.7.0</version>
+        </plugin>
+        <plugin>
           <artifactId>maven-archetype-plugin</artifactId>
           <version>@project.version@</version>
           <configuration>
             <settingsFile>${basedir}/test-settings.xml</settingsFile>
-            <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
-            <ignoreEOLStyle>true</ignoreEOLStyle>
+            <localRepositoryPath>${basedir}/target/local-repo</localRepositoryPath>
+            <properties>
+               <!-- e.g. ensure that Java7 picks up TLSv1.2 when connecting with Central -->
+              <https.protocols>${https.protocols}</https.protocols>
+            </properties>
           </configuration>
-
         </plugin>
         <plugin>
           <artifactId>maven-resources-plugin</artifactId>

@@ -50,11 +50,15 @@ under the License.
           <artifactId>maven-archetype-plugin</artifactId>
           <version>@project.version@</version>
           <configuration>
+            <debug>true</debug>
             <settingsFile>${basedir}/test-settings.xml</settingsFile>
             <localRepositoryPath>${basedir}/target/local-repo</localRepositoryPath>
             <ignoreEOLStyle>true</ignoreEOLStyle>
+            <properties>
+               <!-- e.g. ensure that Java7 picks up TLSv1.2 when connecting with Central -->
+              <https.protocols>${https.protocols}</https.protocols>
+            </properties>
           </configuration>
-
         </plugin>
         <plugin>
           <artifactId>maven-resources-plugin</artifactId>

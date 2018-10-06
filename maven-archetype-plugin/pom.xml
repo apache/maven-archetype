@@ -232,6 +232,10 @@
                 <repository.proxy.url>${mrm.repository.url}</repository.proxy.url>
                 <archetype-repo.proxy.url>${archetype-repo.proxy.url}</archetype-repo.proxy.url>
               </filterProperties>
+              <properties>
+                <!-- e.g. ensure that Java7 picks up TLSv1.2 when connecting with Central -->
+                <https.protocols>${https.protocols}</https.protocols>
+              </properties>
             </configuration>
             <executions>
               <execution>
