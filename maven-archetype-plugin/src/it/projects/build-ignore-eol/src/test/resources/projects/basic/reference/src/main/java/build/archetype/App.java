@@ -23,7 +23,7 @@ package build.archetype;
  * Hello world!
  *
  */
-public class App 
+public class App
 {
     public static void main( String[] args )
     {

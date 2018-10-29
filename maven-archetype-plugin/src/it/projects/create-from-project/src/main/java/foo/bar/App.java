@@ -23,7 +23,7 @@ package foo.bar;
  * Hello world!
  * package foo.bar from foo/bar directory
  */
-public class App 
+public class App
 {
     public static void main( String[] args )
     {
