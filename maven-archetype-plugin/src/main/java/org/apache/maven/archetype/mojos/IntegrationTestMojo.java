@@ -636,7 +636,7 @@ public class IntegrationTestMojo
             //@formatter:off
             InvocationRequest request = new DefaultInvocationRequest().setBaseDirectory( basedir ).setGoals(
                 Arrays.asList( StringUtils.split( goals, "," ) ) ).setLocalRepositoryDirectory(
-                localRepositoryPath ).setInteractive( false ).setShowErrors( true );
+                localRepositoryPath ).setBatchMode( true ).setShowErrors( true );
             //@formatter:on
 
             request.setDebug( debug );
