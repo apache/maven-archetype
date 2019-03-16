@@ -43,7 +43,6 @@ import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
 
 @Component( role = ArchetypeCreationConfigurator.class, hint = "default" )
@@ -60,6 +59,7 @@ public class DefaultArchetypeCreationConfigurator
     @Requirement
     private ArchetypeFilesResolver archetypeFilesResolver;
 
+    @Override
     public Properties configureArchetypeCreation( MavenProject project, Boolean interactiveMode,
                                                   Properties commandLineProperties, File propertyFile,
                                                   List<String> languages )
@@ -279,17 +279,11 @@ public class DefaultArchetypeCreationConfigurator
     {
         getLogger().debug( "Reading property file " + propertyFile );
 
-        InputStream is = new FileInputStream( propertyFile );
-
-        try
+        try ( InputStream is = new FileInputStream( propertyFile ) ) 
         {
             properties.load( is );
 
             getLogger().debug( "Read " + properties.size() + " properties" );
-        }
-        finally
-        {
-            IOUtil.close( is );
         }
     }
 
@@ -315,17 +309,11 @@ public class DefaultArchetypeCreationConfigurator
             storedProperties.setProperty( propertyKey, properties.getProperty( propertyKey ) );
         }
 
-        OutputStream os = new FileOutputStream( propertyFile );
-
-        try
+        try ( OutputStream os = new FileOutputStream( propertyFile ) )
         {
             storedProperties.store( os, "" );
 
             getLogger().debug( "Stored " + storedProperties.size() + " properties" );
-        }
-        finally
-        {
-            IOUtil.close( os );
         }
     }
 

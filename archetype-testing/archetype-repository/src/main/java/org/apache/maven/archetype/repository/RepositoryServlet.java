@@ -58,15 +58,14 @@ public class RepositoryServlet
         return new File( filePath );
     }
 
+    @Override
     public void doGet( HttpServletRequest request, HttpServletResponse response )
         throws ServletException
     {
         log( "Getting file" );
-        InputStream is = null;
-        try
+        
+        try ( InputStream is = new FileInputStream( getFile( request ) ) )
         {
-            is = new FileInputStream( getFile( request ) );
-
             IO.copy( is, response.getOutputStream() );
             response.setStatus( HttpServletResponse.SC_OK );
             log( "File sent" );
@@ -80,10 +79,6 @@ public class RepositoryServlet
         {
             response.setStatus( HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
             log( "Cannot send file", iOException );
-        }
-        finally
-        {
-            IO.close( is );
         }
     }
 }

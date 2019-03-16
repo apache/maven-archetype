@@ -62,6 +62,7 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.HashMap;
@@ -103,6 +104,7 @@ public class DefaultOldArchetype
     // artifactId = maven-foo-archetype
     // version = latest
 
+    @Override
     public void createArchetype( ArchetypeGenerationRequest request, ArtifactRepository archetypeRepository )
         throws UnknownArchetype, ArchetypeNotFoundException, ArchetypeDescriptorException,
         ArchetypeTemplateProcessingException
@@ -121,6 +123,7 @@ public class DefaultOldArchetype
         createArchetype( request, archetypeFile );
     }
 
+    @Override
     public void createArchetype( ArchetypeGenerationRequest request, File archetypeFile )
         throws ArchetypeDescriptorException, ArchetypeTemplateProcessingException
     {
@@ -170,42 +173,25 @@ public class DefaultOldArchetype
 
         URLClassLoader archetypeJarLoader;
 
-        InputStream is = null;
-
+        URL[] urls;
         try
         {
-            URL[] urls = new URL[1];
+            urls = new URL[] {archetypeFile.toURL() };
+        }
+        catch ( MalformedURLException e )
+        {
+            throw new ArchetypeDescriptorException( e.getMessage() );
+        }
 
-            urls[0] = archetypeFile.toURL();
+        archetypeJarLoader = new URLClassLoader( urls );
 
-            archetypeJarLoader = new URLClassLoader( urls );
-
-            is = getStream( ARCHETYPE_DESCRIPTOR, archetypeJarLoader );
-
-            if ( is == null )
-            {
-                is = getStream( ARCHETYPE_OLD_DESCRIPTOR, archetypeJarLoader );
-            }
-
-            if ( is == null )
-            {
-                throw new ArchetypeDescriptorException( "The " + ARCHETYPE_DESCRIPTOR
-                                                        + " descriptor cannot be found." );
-            }
-
+        try ( InputStream is = getDescriptorInputStream( archetypeJarLoader ) )
+        {
             descriptor = builder.build( new XmlStreamReader( is ) );
         }
-        catch ( IOException e )
+        catch ( IOException | XmlPullParserException e )
         {
             throw new ArchetypeDescriptorException( "Error reading the " + ARCHETYPE_DESCRIPTOR + " descriptor.", e );
-        }
-        catch ( XmlPullParserException e )
-        {
-            throw new ArchetypeDescriptorException( "Error reading the " + ARCHETYPE_DESCRIPTOR + " descriptor.", e );
-        }
-        finally
-        {
-            IOUtil.close( is );
         }
 
         // ----------------------------------------------------------------------
@@ -298,11 +284,8 @@ public class DefaultOldArchetype
         {
             if ( parentPomFile.exists() )
             {
-                Reader fileReader = null;
-
-                try
+                try ( Reader fileReader = ReaderFactory.newXmlReader( parentPomFile ) )
                 {
-                    fileReader = ReaderFactory.newXmlReader( parentPomFile );
                     MavenXpp3Reader reader = new MavenXpp3Reader();
                     parentModel = reader.read( fileReader );
                     if ( !"pom".equals( parentModel.getPackaging() ) )
@@ -311,19 +294,10 @@ public class DefaultOldArchetype
                             "Unable to add module to the current project as it is not of packaging type 'pom'" );
                     }
                 }
-                catch ( IOException e )
+                catch ( IOException | XmlPullParserException e )
                 {
                     throw new ArchetypeTemplateProcessingException( "Unable to read parent POM", e );
                 }
-                catch ( XmlPullParserException e )
-                {
-                    throw new ArchetypeTemplateProcessingException( "Unable to read parent POM", e );
-                }
-                finally
-                {
-                    IOUtil.close( fileReader );
-                }
-
                 parentModel.getModules().add( artifactId );
             }
         }
@@ -360,42 +334,27 @@ public class DefaultOldArchetype
                 IOUtil.close( fileWriter );
             }
 */
-            Reader fileReader = null;
+            
             boolean added;
             StringWriter w = new StringWriter();
-            try
+            try ( Reader fileReader = ReaderFactory.newXmlReader( parentPomFile ) )
             {
-                fileReader = ReaderFactory.newXmlReader( parentPomFile );
                 added = addModuleToParentPom( artifactId, fileReader, w );
             }
-            catch ( IOException e )
+            catch ( IOException | DocumentException e )
             {
                 throw new ArchetypeTemplateProcessingException( "Unable to rewrite parent POM", e );
-            }
-            catch ( DocumentException e )
-            {
-                throw new ArchetypeTemplateProcessingException( "Unable to rewrite parent POM", e );
-            }
-            finally
-            {
-                IOUtil.close( fileReader );
             }
 
             if ( added )
             {
-                Writer out = null;
-                try
+                try ( Writer out = WriterFactory.newXmlWriter( parentPomFile ) )
                 {
-                    out = WriterFactory.newXmlWriter( parentPomFile );
                     IOUtil.copy( w.toString(), out );
                 }
                 catch ( IOException e )
                 {
                     throw new ArchetypeTemplateProcessingException( "Unable to rewrite parent POM", e );
-                }
-                finally
-                {
-                    IOUtil.close( out );
                 }
             }
         }
@@ -408,6 +367,24 @@ public class DefaultOldArchetype
             getLogger().info( "project created from Old (1.x) Archetype in dir: " + outputDirectory );
         }
 
+    }
+
+    private InputStream getDescriptorInputStream( ClassLoader archetypeJarLoader ) throws ArchetypeDescriptorException
+    {
+        InputStream is = getStream( ARCHETYPE_DESCRIPTOR, archetypeJarLoader );
+
+        if ( is == null )
+        {
+            is = getStream( ARCHETYPE_OLD_DESCRIPTOR, archetypeJarLoader );
+        }
+
+        if ( is == null )
+        {
+            throw new ArchetypeDescriptorException( "The " + ARCHETYPE_DESCRIPTOR
+                                                    + " descriptor cannot be found." );
+        }
+        
+        return is;
     }
 
     static boolean addModuleToParentPom( String artifactId, Reader fileReader, Writer fileWriter )
@@ -490,26 +467,16 @@ public class DefaultOldArchetype
         // ---------------------------------------------------------------------
 
         Model generatedModel;
-        Reader pomReader = null;
-        try
+        
+        try ( Reader pomReader = ReaderFactory.newXmlReader( pomFile ) )
         {
-            pomReader = ReaderFactory.newXmlReader( pomFile );
-
             MavenXpp3Reader reader = new MavenXpp3Reader();
 
             generatedModel = reader.read( pomReader );
         }
-        catch ( IOException e )
+        catch ( IOException | XmlPullParserException e )
         {
             throw new ArchetypeTemplateProcessingException( "Error reading POM", e );
-        }
-        catch ( XmlPullParserException e )
-        {
-            throw new ArchetypeTemplateProcessingException( "Error reading POM", e );
-        }
-        finally
-        {
-            IOUtil.close( pomReader );
         }
 
         if ( parentModel != null )
@@ -528,21 +495,14 @@ public class DefaultOldArchetype
             }
             generatedModel.setParent( parent );
 
-            Writer pomWriter = null;
-            try
+            try (  Writer pomWriter = WriterFactory.newXmlWriter( pomFile ) )
             {
-                pomWriter = WriterFactory.newXmlWriter( pomFile );
-
                 MavenXpp3Writer writer = new MavenXpp3Writer();
                 writer.write( pomWriter, generatedModel );
             }
             catch ( IOException e )
             {
                 throw new ArchetypeTemplateProcessingException( "Error rewriting POM", e );
-            }
-            finally
-            {
-                IOUtil.close( pomWriter );
             }
         }
 
@@ -841,16 +801,13 @@ public class DefaultOldArchetype
 
         if ( descriptor.isFiltered() )
         {
-            Writer writer = null;
-            try
+            try ( Writer writer = new OutputStreamWriter( new FileOutputStream( f ), descriptor.getEncoding() ) )
             {
                 StringWriter stringWriter = new StringWriter();
 
                 template = ARCHETYPE_RESOURCES + "/" + template;
 
                 velocity.getEngine().mergeTemplate( template, descriptor.getEncoding(), context, stringWriter );
-
-                writer = new OutputStreamWriter( new FileOutputStream( f ), descriptor.getEncoding() );
 
                 writer.write( StringUtils.unifyLineSeparators( stringWriter.toString() ) );
 
@@ -860,32 +817,17 @@ public class DefaultOldArchetype
             {
                 throw new ArchetypeTemplateProcessingException( "Error merging velocity templates", e );
             }
-            finally
-            {
-                IOUtil.close( writer );
-            }
         }
         else
         {
-            InputStream is = getStream( ARCHETYPE_RESOURCES + "/" + template, null );
-
-            OutputStream fos = null;
-
-            try
+            try ( InputStream is = getStream( ARCHETYPE_RESOURCES + "/" + template, null );
+                  OutputStream fos = new FileOutputStream( f ) )
             {
-                fos = new FileOutputStream( f );
-
                 IOUtil.copy( is, fos );
             }
             catch ( Exception e )
             {
                 throw new ArchetypeTemplateProcessingException( "Error copying file", e );
-            }
-            finally
-            {
-                IOUtil.close( fos );
-
-                IOUtil.close( is );
             }
         }
     }

@@ -138,6 +138,7 @@ public class RemoteCatalogArchetypeDataSource extends CatalogArchetypeDataSource
         }
     }
 
+    @Override
     public void updateCatalog( ProjectBuildingRequest buildingRequest, Archetype archetype )
         throws ArchetypeDataSourceException
     {

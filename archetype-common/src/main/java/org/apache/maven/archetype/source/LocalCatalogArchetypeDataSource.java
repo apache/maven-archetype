@@ -40,6 +40,7 @@ public class LocalCatalogArchetypeDataSource
     @Requirement
     private RepositoryManager repositoryManager;
 
+    @Override
     public void updateCatalog( ProjectBuildingRequest buildingRequest, Archetype archetype )
         throws ArchetypeDataSourceException
     {
@@ -100,6 +101,7 @@ public class LocalCatalogArchetypeDataSource
         writeLocalCatalog( catalog, catalogFile );
     }
 
+    @Override
     public ArchetypeCatalog getArchetypeCatalog( ProjectBuildingRequest buildingRequest )
         throws ArchetypeDataSourceException
     {

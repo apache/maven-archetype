@@ -66,7 +66,7 @@ public class ArchetypeGenerationTest
         // Here I am just grabbing a OldArchetype but in a UI you would take the OldArchetype objects and present
         // them to the user.
 
-        Archetype selection = (Archetype) catalog.getArchetypes().get( catalog.getArchetypes().size() - 1 );
+        Archetype selection = catalog.getArchetypes().get( catalog.getArchetypes().size() - 1 );
 
         System.err.println( "Selected OldArchetype = " + selection );
         // Now you will present a dialog, or whatever, and grab the following values.

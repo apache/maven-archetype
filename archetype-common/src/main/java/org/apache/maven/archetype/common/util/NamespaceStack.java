@@ -106,7 +106,7 @@ class NamespaceStack
      */
     public String pop()
     {
-        String prefix = (String) prefixes.pop();
+        String prefix = prefixes.pop();
         uris.pop();
 
         return prefix;
@@ -136,7 +136,7 @@ class NamespaceStack
         {
             return null;
         }
-        String uri = (String) uris.elementAt( index );
+        String uri = uris.elementAt( index );
         return uri;
     }
 
@@ -145,6 +145,7 @@ class NamespaceStack
      * most recently added <code>{@link Namespace}</code> to
      * the "oldest," all to <code>System.out</code>.
      */
+    @Override
     public String toString()
     {
         StringBuffer buf = new StringBuffer();

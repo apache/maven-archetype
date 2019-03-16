@@ -26,7 +26,6 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.codehaus.plexus.PlexusTestCase;
-import org.codehaus.plexus.util.IOUtil;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -51,26 +50,23 @@ public class ArchetypeXsdTest
                                "http://www.w3.org/2001/XMLSchema" );
         saxParser.setProperty( "http://java.sun.com/xml/jaxp/properties/schemaSource", archetypeXsd );
 
-        InputStream in = getClass().getResourceAsStream( "sample-archetype.xml" );
-        try
+        try ( InputStream in = getClass().getResourceAsStream( "sample-archetype.xml" ); )
         {
             saxParser.parse( new InputSource( in ), new Handler() );
-        }
-        finally
-        {
-            IOUtil.close( in );
         }
     }
 
     private static class Handler
         extends DefaultHandler
     {
+        @Override
         public void warning ( SAXParseException e )
             throws SAXException
         {
             throw e;
         }
 
+        @Override
         public void error ( SAXParseException e )
             throws SAXException
         {

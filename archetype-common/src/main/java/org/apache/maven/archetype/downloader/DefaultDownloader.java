@@ -42,6 +42,7 @@ public class DefaultDownloader
     @Requirement
     private ArtifactResolver artifactResolver;
 
+    @Override
     public File download( String groupId, String artifactId, String version, ArtifactRepository archetypeRepository,
                           ArtifactRepository localRepository, List<ArtifactRepository> remoteRepositories,
                           ProjectBuildingRequest buildingRequest )
@@ -96,6 +97,7 @@ public class DefaultDownloader
         return artifact.getFile();
     }
 
+    @Override
     public File downloadOld( String groupId, String artifactId, String version, ArtifactRepository archetypeRepository,
                              ArtifactRepository localRepository, List<ArtifactRepository> remoteRepositories,
                              ProjectBuildingRequest buildingRequest )

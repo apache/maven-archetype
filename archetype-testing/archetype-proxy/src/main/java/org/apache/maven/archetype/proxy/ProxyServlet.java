@@ -72,6 +72,7 @@ public class ProxyServlet
     /* (non-Javadoc)
      * @see javax.servlet.Servlet#init(javax.servlet.ServletConfig)
      */
+    @Override
     public void init( ServletConfig config )
         throws ServletException
     {
@@ -82,6 +83,7 @@ public class ProxyServlet
     /* (non-Javadoc)
      * @see javax.servlet.Servlet#getServletConfig()
      */
+    @Override
     public ServletConfig getServletConfig()
     {
         return config;
@@ -90,6 +92,7 @@ public class ProxyServlet
     /* (non-Javadoc)
      * @see javax.servlet.Servlet#service(javax.servlet.ServletRequest, javax.servlet.ServletResponse)
      */
+    @Override
     @SuppressWarnings( "checkstyle:methodlength" )
     public void service( ServletRequest req, ServletResponse res )
         throws ServletException,
@@ -312,6 +315,7 @@ public class ProxyServlet
     /* (non-Javadoc)
      * @see javax.servlet.Servlet#getServletInfo()
      */
+    @Override
     public String getServletInfo()
     {
         return "Proxy Servlet";
@@ -320,6 +324,7 @@ public class ProxyServlet
     /* (non-Javadoc)
      * @see javax.servlet.Servlet#destroy()
      */
+    @Override
     public void destroy()
     {
     }
@@ -334,8 +339,7 @@ public class ProxyServlet
         throws ServletException, IOException
     {
         response.setContentType( "text/html;charset=UTF-8" );
-        PrintWriter out = response.getWriter();
-        try
+        try ( PrintWriter out = response.getWriter()  )
         {
         /* TODO output your page here
         out.println("<html>");
@@ -347,10 +351,6 @@ public class ProxyServlet
         out.println("</body>");
         out.println("</html>");
          */
-        }
-        finally
-        {
-            out.close();
         }
     }
 }

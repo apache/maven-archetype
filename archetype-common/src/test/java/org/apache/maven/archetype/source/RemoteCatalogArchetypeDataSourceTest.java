@@ -17,11 +17,10 @@ package org.apache.maven.archetype.source;
  *  under the License.
  */
 
-import java.io.File;
 import java.io.FileWriter;
+import java.io.File;
 import java.io.Writer;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
@@ -42,6 +41,7 @@ public class RemoteCatalogArchetypeDataSourceTest extends AbstractMojoTestCase
 
     int port;
 
+    @Override
     protected void setUp()
         throws Exception
     {
@@ -77,11 +77,13 @@ public class RemoteCatalogArchetypeDataSourceTest extends AbstractMojoTestCase
 
         File catalogFile = new File( catalogDirectory, "archetype-catalog.xml" );
         ArchetypeCatalogXpp3Writer catalogWriter = new ArchetypeCatalogXpp3Writer();
-        Writer writer = new FileWriter( catalogFile );
-        catalogWriter.write( writer, catalog );
-        IOUtils.closeQuietly( writer );
+        try ( Writer writer = new FileWriter( catalogFile ) )
+        {
+            catalogWriter.write( writer, catalog );
+        }
     }
 
+    @Override
     protected void tearDown()
         throws Exception
     {

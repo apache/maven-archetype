@@ -26,7 +26,6 @@ import java.util.Properties;
  * under the License.
  */
 
-import org.apache.commons.io.IOUtils;
 import org.apache.maven.archetype.ArchetypeCreationRequest;
 import org.apache.maven.archetype.ArchetypeCreationResult;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
@@ -182,9 +181,10 @@ public class ArchetyperRoundtripWithProxyIT
         catalog.addArchetype( generatedArchetype );
 
         ArchetypeCatalogXpp3Writer catalogWriter = new ArchetypeCatalogXpp3Writer();
-        Writer writer = new FileWriter( catalogFile );
-        catalogWriter.write( writer, catalog );
-        IOUtils.closeQuietly( writer );
+        try ( Writer writer = new FileWriter( catalogFile ) )
+        {
+            catalogWriter.write( writer, catalog );
+        }
 
         // (6) create a project form the archetype we just created
         String outputDirectory = new File( getBasedir(),
@@ -212,6 +212,7 @@ public class ArchetyperRoundtripWithProxyIT
 
     }
 
+    @Override
     public void setUp()
         throws Exception
     {
@@ -245,6 +246,7 @@ public class ArchetyperRoundtripWithProxyIT
 
     }
 
+    @Override
     public void tearDown()
         throws Exception
     {

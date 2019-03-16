@@ -33,6 +33,7 @@ public class DefaultArchetypeFactory
     extends AbstractLogEnabled
     implements ArchetypeFactory
 {
+    @Override
     public ArchetypeDefinition createArchetypeDefinition( Properties properties )
     {
         ArchetypeDefinition definition = new ArchetypeDefinition();
@@ -78,6 +79,7 @@ public class DefaultArchetypeFactory
         getLogger().debug( "Setting property " + key + "=" + configuration.getProperty( key ) );
     }
 
+    @Override
     @SuppressWarnings( "checkstyle:linelength" )
     public ArchetypeConfiguration createArchetypeConfiguration( org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor archetypeDescriptor,
                                                                 Properties properties )
@@ -109,6 +111,7 @@ public class DefaultArchetypeFactory
         }
     }
 
+    @Override
     @SuppressWarnings( "checkstyle:linelength" )
     public ArchetypeConfiguration createArchetypeConfiguration( org.apache.maven.archetype.metadata.ArchetypeDescriptor archetypeDescriptor,
                                                                 Properties properties )
@@ -204,6 +207,7 @@ public class DefaultArchetypeFactory
         }
     }
 
+    @Override
     public ArchetypeConfiguration createArchetypeConfiguration( MavenProject project,
                                                                 ArchetypeDefinition archetypeDefinition,
                                                                 Properties properties )
@@ -265,6 +269,7 @@ public class DefaultArchetypeFactory
         return configuration;
     }
 
+    @Override
     public void updateArchetypeConfiguration( ArchetypeConfiguration archetypeConfiguration,
                                               ArchetypeDefinition archetypeDefinition )
     {

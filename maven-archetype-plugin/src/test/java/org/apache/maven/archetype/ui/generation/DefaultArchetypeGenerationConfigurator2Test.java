@@ -37,6 +37,7 @@ public class DefaultArchetypeGenerationConfigurator2Test
 {
     private DefaultArchetypeGenerationConfigurator configurator;
 
+    @Override
     public void setUp()
         throws Exception
     {

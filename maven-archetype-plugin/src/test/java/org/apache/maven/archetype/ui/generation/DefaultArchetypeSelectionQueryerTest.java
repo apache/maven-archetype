@@ -38,6 +38,7 @@ public class DefaultArchetypeSelectionQueryerTest
 {
     private DefaultArchetypeSelectionQueryer queryer;
 
+    @Override
     public void setUp()
         throws Exception
     {
@@ -211,11 +212,13 @@ public class DefaultArchetypeSelectionQueryerTest
                 return value;
             }
 
+            @Override
             protected boolean argumentMatches( Object o, Object o1 )
             {
                 return isPromptString( o1 ) || super.argumentMatches( o, o1 );
             }
 
+            @Override
             protected String argumentToString( Object o )
             {
                 return isPromptString( o ) ? "..." : super.argumentToString( o );

@@ -1708,6 +1708,7 @@ public class XMLOutputter
     }
 
     /** Returns a copy of this XMLOutputter. */
+    @Override
     public Object clone()
     {
         // Implementation notes: Since all state of an XMLOutputter is
@@ -1735,6 +1736,7 @@ public class XMLOutputter
      *
      * @return a string listing the settings for this XMLOutputter instance
      */
+    @Override
     public String toString()
     {
         StringBuffer buffer = new StringBuffer();

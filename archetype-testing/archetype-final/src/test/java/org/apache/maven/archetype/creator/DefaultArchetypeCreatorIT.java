@@ -21,23 +21,19 @@ package org.apache.maven.archetype.creator;
 
 import org.apache.maven.archetype.ArchetypeCreationRequest;
 import org.apache.maven.archetype.ArchetypeCreationResult;
-import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.artifact.repository.DefaultArtifactRepository;
 import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.project.ProjectBuilder;
 import org.apache.maven.project.ProjectBuildingRequest;
-import org.apache.maven.project.ProjectBuildingResult;
 //import org.apache.maven.project.MavenProjectBuildingResult;
 import org.apache.maven.repository.internal.MavenRepositorySystemSession;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.PropertyUtils;
 import org.codehaus.plexus.util.StringUtils;
-import org.junit.Ignore;
 import org.sonatype.aether.impl.internal.SimpleLocalRepositoryManager;
 
 import java.io.File;
@@ -448,12 +444,14 @@ public class DefaultArchetypeCreatorIT
         assertExists( getTemplateFile( project, "src/main/webapp/resources/__artifactId__/a.gif" ) );
     }
     
+    @Override
     protected void tearDown()
         throws Exception
     {
         super.tearDown();
     }
 
+    @Override
     protected void setUp()
         throws Exception
     {

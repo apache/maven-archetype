@@ -22,7 +22,6 @@ package org.apache.maven.archetype.mojos;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -278,6 +277,7 @@ public class IntegrationTestMojo
     @Parameter
     private Map<String, String> properties = new HashMap<String, String>();
 
+    @Override
     public void execute()
         throws MojoExecutionException, MojoFailureException
     {
@@ -432,13 +432,10 @@ public class IntegrationTestMojo
         }
 
         getLog().debug( "Comparing files with EOL style ignored." );
-        BufferedReader referenceFileReader = null;
-        BufferedReader actualFileReader = null;
-        try
+        
+        try ( BufferedReader referenceFileReader = new BufferedReader( new FileReader( referenceFile ) ); 
+              BufferedReader actualFileReader = new BufferedReader( new FileReader( actualFile ) ) )
         {
-            referenceFileReader = new BufferedReader( new FileReader( referenceFile ) );
-            actualFileReader = new BufferedReader( new FileReader( actualFile ) );
-
             String refLine = null;
             String actualLine = null;
 
@@ -455,28 +452,16 @@ public class IntegrationTestMojo
 
             return true;
         }
-        finally
-        {
-            IOUtil.close( referenceFileReader );
-            IOUtil.close( actualFileReader );
-        }
     }
 
     private Properties loadProperties( final File propertiesFile )
-        throws IOException, FileNotFoundException
+        throws IOException
     {
         Properties properties = new Properties();
 
-        InputStream in = null;
-        try
+        try ( InputStream in = new FileInputStream( propertiesFile ) )
         {
-            in = new FileInputStream( propertiesFile );
-
             properties.load( in );
-        }
-        finally
-        {
-            IOUtil.close( in );
         }
 
         return properties;
@@ -819,31 +804,22 @@ public class IntegrationTestMojo
         {
             String xml;
 
-            Reader reader = null;
-            try
+            // interpolation with token @...@
+            Map<String, Object> composite = getInterpolationValueSource();
+
+            try ( Reader xmlStreamReader = ReaderFactory.newXmlReader( originalFile );
+                  Reader reader = new InterpolationFilterReader( xmlStreamReader, composite, "@", "@" ) )
             {
-                // interpolation with token @...@
-                Map<String, Object> composite = getInterpolationValueSource();
-                reader = ReaderFactory.newXmlReader( originalFile );
-                reader = new InterpolationFilterReader( reader, composite, "@", "@" );
                 xml = IOUtil.toString( reader );
             }
-            finally
-            {
-                IOUtil.close( reader );
-            }
 
-            Writer writer = null;
-            try
+            
+            try ( Writer writer = WriterFactory.newXmlWriter( interpolatedFile ) )
             {
                 interpolatedFile.getParentFile().mkdirs();
-                writer = WriterFactory.newXmlWriter( interpolatedFile );
+                
                 writer.write( xml );
                 writer.flush();
-            }
-            finally
-            {
-                IOUtil.close( writer );
             }
         }
         catch ( IOException e )
@@ -889,6 +865,7 @@ public class IntegrationTestMojo
          *
          * @see java.util.Map#clear()
          */
+        @Override
         public void clear()
         {
             // nothing here
@@ -899,6 +876,7 @@ public class IntegrationTestMojo
          *
          * @see java.util.Map#containsKey(java.lang.Object)
          */
+        @Override
         public boolean containsKey( Object key )
         {
             if ( !( key instanceof String ) )
@@ -931,6 +909,7 @@ public class IntegrationTestMojo
          *
          * @see java.util.Map#containsValue(java.lang.Object)
          */
+        @Override
         public boolean containsValue( Object value )
         {
             throw new UnsupportedOperationException();
@@ -941,6 +920,7 @@ public class IntegrationTestMojo
          *
          * @see java.util.Map#entrySet()
          */
+        @Override
         public Set<Entry<String, Object>> entrySet()
         {
             throw new UnsupportedOperationException();
@@ -951,6 +931,7 @@ public class IntegrationTestMojo
          *
          * @see java.util.Map#get(java.lang.Object)
          */
+        @Override
         public Object get( Object key )
         {
             if ( !( key instanceof String ) )
@@ -986,6 +967,7 @@ public class IntegrationTestMojo
          *
          * @see java.util.Map#isEmpty()
          */
+        @Override
         public boolean isEmpty()
         {
             return this.mavenProject == null && this.mavenProject.getProperties().isEmpty()
@@ -997,6 +979,7 @@ public class IntegrationTestMojo
          *
          * @see java.util.Map#keySet()
          */
+        @Override
         public Set<String> keySet()
         {
             throw new UnsupportedOperationException();
@@ -1007,6 +990,7 @@ public class IntegrationTestMojo
          *
          * @see java.util.Map#put(java.lang.Object, java.lang.Object)
          */
+        @Override
         public Object put( String key, Object value )
         {
             throw new UnsupportedOperationException();
@@ -1017,6 +1001,7 @@ public class IntegrationTestMojo
          *
          * @see java.util.Map#putAll(java.util.Map)
          */
+        @Override
         public void putAll( Map<? extends String, ? extends Object> t )
         {
             throw new UnsupportedOperationException();
@@ -1027,6 +1012,7 @@ public class IntegrationTestMojo
          *
          * @see java.util.Map#remove(java.lang.Object)
          */
+        @Override
         public Object remove( Object key )
         {
             throw new UnsupportedOperationException();
@@ -1037,6 +1023,7 @@ public class IntegrationTestMojo
          *
          * @see java.util.Map#size()
          */
+        @Override
         public int size()
         {
             throw new UnsupportedOperationException();
@@ -1047,6 +1034,7 @@ public class IntegrationTestMojo
          *
          * @see java.util.Map#values()
          */
+        @Override
         public Collection<Object> values()
         {
             throw new UnsupportedOperationException();

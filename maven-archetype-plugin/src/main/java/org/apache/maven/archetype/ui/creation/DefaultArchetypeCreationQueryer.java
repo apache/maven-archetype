@@ -37,30 +37,35 @@ public class DefaultArchetypeCreationQueryer
     @Requirement
     private Prompter prompter;
 
+    @Override
     public String getArchetypeArtifactId( String defaultValue )
         throws PrompterException
     {
         return getValue( Constants.ARCHETYPE_ARTIFACT_ID, defaultValue );
     }
 
+    @Override
     public String getArchetypeGroupId( String defaultValue )
         throws PrompterException
     {
         return getValue( Constants.ARCHETYPE_GROUP_ID, defaultValue );
     }
 
+    @Override
     public String getArchetypeVersion( String defaultValue )
         throws PrompterException
     {
         return getValue( Constants.ARCHETYPE_VERSION, defaultValue );
     }
 
+    @Override
     public String getArtifactId( String defaultValue )
         throws PrompterException
     {
         return getValue( Constants.ARTIFACT_ID, defaultValue );
     }
 
+    @Override
     public boolean askAddAnotherProperty()
         throws PrompterException
     {
@@ -71,6 +76,7 @@ public class DefaultArchetypeCreationQueryer
         return "Y".equalsIgnoreCase( answer );
     }
 
+    @Override
     public String askNewPropertyKey()
         throws PrompterException
     {
@@ -81,12 +87,14 @@ public class DefaultArchetypeCreationQueryer
         return answer;
     }
 
+    @Override
     public String askReplacementValue( String propertyKey, String defaultValue )
         throws PrompterException
     {
         return getValue( propertyKey, defaultValue );
     }
 
+    @Override
     public boolean confirmConfiguration( ArchetypeConfiguration archetypeConfiguration )
         throws PrompterException
     {
@@ -108,18 +116,21 @@ public class DefaultArchetypeCreationQueryer
         return "Y".equalsIgnoreCase( answer );
     }
 
+    @Override
     public String getGroupId( String defaultValue )
         throws PrompterException
     {
         return getValue( Constants.GROUP_ID, defaultValue );
     }
 
+    @Override
     public String getPackage( String defaultValue )
         throws PrompterException
     {
         return getValue( Constants.PACKAGE, defaultValue );
     }
 
+    @Override
     public String getVersion( String defaultValue )
         throws PrompterException
     {

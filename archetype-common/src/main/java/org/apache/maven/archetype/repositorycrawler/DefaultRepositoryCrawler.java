@@ -31,7 +31,6 @@ import org.apache.maven.model.Model;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
@@ -53,6 +52,7 @@ public class DefaultRepositoryCrawler
     @Requirement
     private ArchetypeArtifactManager archetypeArtifactManager;
 
+    @Override
     public ArchetypeCatalog crawl( File repository )
     {
         if ( !repository.isDirectory() )
@@ -149,14 +149,13 @@ public class DefaultRepositoryCrawler
         return catalog;
     }
 
+    @Override
     public boolean writeCatalog( ArchetypeCatalog archetypeCatalog, File archetypeCatalogFile )
     {
-        Writer fileWriter = null;
-        try
-        {
-            ArchetypeCatalogXpp3Writer catalogWriter = new ArchetypeCatalogXpp3Writer();
+        ArchetypeCatalogXpp3Writer catalogWriter = new ArchetypeCatalogXpp3Writer();
 
-            fileWriter = WriterFactory.newXmlWriter( archetypeCatalogFile );
+        try ( Writer fileWriter = WriterFactory.newXmlWriter( archetypeCatalogFile ) )
+        {
             catalogWriter.write( fileWriter, archetypeCatalog );
             return true;
         }
@@ -164,10 +163,6 @@ public class DefaultRepositoryCrawler
         {
             getLogger().warn( "Catalog can not be writen to " + archetypeCatalogFile, ex );
             return false;
-        }
-        finally
-        {
-            IOUtil.close( fileWriter );
         }
     }
 }

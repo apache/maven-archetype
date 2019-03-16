@@ -57,6 +57,7 @@ public class DefaultArchetypeSelector
     @Requirement
     private ArchetypeManager archetypeManager;
 
+    @Override
     public void selectArchetype( ArchetypeGenerationRequest request, Boolean interactiveMode, String catalogs )
         throws ArchetypeNotDefined, UnknownArchetype, UnknownGroup, IOException, PrompterException,
         ArchetypeSelectionFailure

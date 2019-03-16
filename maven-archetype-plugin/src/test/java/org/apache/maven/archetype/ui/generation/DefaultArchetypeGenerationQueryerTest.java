@@ -34,6 +34,7 @@ public class DefaultArchetypeGenerationQueryerTest
 
     private DefaultArchetypeGenerationQueryer queryer;
 
+    @Override
     public void setUp()
         throws Exception
     {
@@ -68,11 +69,13 @@ public class DefaultArchetypeGenerationQueryerTest
     {
         return new AbstractMatcher()
         {
+            @Override
             protected boolean argumentMatches( Object o, Object o1 )
             {
                 return true;
             }
 
+            @Override
             protected String argumentToString( Object o )
             {
                 return "...";

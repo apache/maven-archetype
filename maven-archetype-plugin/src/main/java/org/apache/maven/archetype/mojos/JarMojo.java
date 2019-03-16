@@ -82,6 +82,7 @@ public class JarMojo
     @Component
     private ArchetypeArtifactManager archetypeArtifactManager;
 
+    @Override
     public void execute()
         throws MojoExecutionException, MojoFailureException
     {

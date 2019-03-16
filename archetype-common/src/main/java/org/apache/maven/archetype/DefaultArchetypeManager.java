@@ -57,6 +57,7 @@ public class DefaultArchetypeManager
     @Requirement( role = ArchetypeDataSource.class )
     private Map<String, ArchetypeDataSource> archetypeSources;
 
+    @Override
     public ArchetypeCreationResult createArchetypeFromProject( ArchetypeCreationRequest request )
     {
         ArchetypeCreationResult result = new ArchetypeCreationResult();
@@ -66,6 +67,7 @@ public class DefaultArchetypeManager
         return result;
     }
 
+    @Override
     public ArchetypeGenerationResult generateProjectFromArchetype( ArchetypeGenerationRequest request )
     {
         ArchetypeGenerationResult result = new ArchetypeGenerationResult();
@@ -75,6 +77,7 @@ public class DefaultArchetypeManager
         return result;
     }
 
+    @Override
     public File archiveArchetype( File archetypeDirectory, File outputDirectory, String finalName )
         throws DependencyResolutionRequiredException, IOException
     {
@@ -93,20 +96,12 @@ public class DefaultArchetypeManager
             archive.getParentFile().mkdirs();
         }
 
-        ZipOutputStream zos = null;
-        try
+        try ( ZipOutputStream zos = new ZipOutputStream( new FileOutputStream( archive ) ) )
         {
-            zos = new ZipOutputStream( new FileOutputStream( archive ) );
-
             zos.setLevel( 9 );
 
             zipper( zos, sourceDirectory.getAbsolutePath().length(), sourceDirectory );
         }
-        finally
-        {
-            IOUtil.close( zos );
-        }
-
     }
 
     private void zipper( ZipOutputStream zos, int offset, File currentSourceDirectory )
@@ -146,16 +141,9 @@ public class DefaultArchetypeManager
 
                 zos.putNextEntry( e );
 
-                FileInputStream is = null;
-                try
+                try ( FileInputStream is = new FileInputStream( files[i] ) )
                 {
-                    is = new FileInputStream( files[i] );
-
                     IOUtil.copy( is, zos );
-                }
-                finally
-                {
-                    IOUtil.close( is );
                 }
 
                 zos.flush();
@@ -165,6 +153,7 @@ public class DefaultArchetypeManager
         }
     }
 
+    @Override
     public ArchetypeCatalog getInternalCatalog()
     {
         try
@@ -179,6 +168,7 @@ public class DefaultArchetypeManager
         }
     }
 
+    @Override
     public ArchetypeCatalog getLocalCatalog( ProjectBuildingRequest buildingRequest )
     {
         try
@@ -193,6 +183,7 @@ public class DefaultArchetypeManager
         }
     }
 
+    @Override
     public ArchetypeCatalog getRemoteCatalog( ProjectBuildingRequest buildingRequest )
     {
         try
@@ -207,6 +198,7 @@ public class DefaultArchetypeManager
         }
     }
 
+    @Override
     public void updateLocalCatalog( ProjectBuildingRequest buildingRequest, Archetype archetype )
     {
         try

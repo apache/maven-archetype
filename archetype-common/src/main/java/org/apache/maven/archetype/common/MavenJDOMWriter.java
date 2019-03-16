@@ -130,6 +130,7 @@ public class MavenJDOMWriter
      * @param document
      * @deprecated
      */
+    @Deprecated
     public void write( Model project, Document document, OutputStream stream )
         throws java.io.IOException
     {

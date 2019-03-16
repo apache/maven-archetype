@@ -40,6 +40,7 @@ public class DefaultArchetypeFilesResolver
     extends AbstractLogEnabled
     implements ArchetypeFilesResolver
 {
+    @Override
     public List<String> getFilesWithExtension( List<String> files, String extension )
     {
         ListScanner scanner = new ListScanner();
@@ -51,6 +52,7 @@ public class DefaultArchetypeFilesResolver
         return scanner.scan( files );
     }
 
+    @Override
     public List<String> getFilteredFiles( List<String> files, String filtered )
     {
         ListScanner scanner = new ListScanner();
@@ -65,6 +67,7 @@ public class DefaultArchetypeFilesResolver
         return result;
     }
 
+    @Override
     public List<String> filterFiles( String moduleOffset, FileSet fileSet, List<String> archetypeResources )
     {
         ListScanner scanner = new ListScanner();
@@ -77,6 +80,7 @@ public class DefaultArchetypeFilesResolver
         return scanner.scan( archetypeResources );
     }
 
+    @Override
     public List<String> findOtherResources( int level, List<String> files, String languages )
     {
         ListScanner scanner = new ListScanner();
@@ -100,6 +104,7 @@ public class DefaultArchetypeFilesResolver
         return result;
     }
 
+    @Override
     public List<String> findOtherResources( int level, List<String> files, List<String> sourcesFiles, String languages )
     {
         ListScanner scanner = new ListScanner();
@@ -130,6 +135,7 @@ public class DefaultArchetypeFilesResolver
         return result;
     }
 
+    @Override
     public List<String> findOtherSources( int level, List<String> files, String languages )
     {
         ListScanner scanner = new ListScanner();
@@ -157,6 +163,7 @@ public class DefaultArchetypeFilesResolver
         return result;
     }
 
+    @Override
     public List<String> findResourcesMainFiles( List<String> files, String languages )
     {
         ListScanner scanner = new ListScanner();
@@ -171,6 +178,7 @@ public class DefaultArchetypeFilesResolver
         return result;
     }
 
+    @Override
     public List<String> findResourcesTestFiles( List<String> files, String languages )
     {
         ListScanner scanner = new ListScanner();
@@ -185,6 +193,7 @@ public class DefaultArchetypeFilesResolver
         return result;
     }
 
+    @Override
     public List<String> findSiteFiles( List<String> files, String languages )
     {
         ListScanner scanner = new ListScanner();
@@ -199,6 +208,7 @@ public class DefaultArchetypeFilesResolver
         return result;
     }
 
+    @Override
     public List<String> findSourcesMainFiles( List<String> files, String languages )
     {
         ListScanner scanner = new ListScanner();
@@ -212,6 +222,7 @@ public class DefaultArchetypeFilesResolver
         return result;
     }
 
+    @Override
     public List<String> findSourcesTestFiles( List<String> files, String languages )
     {
         ListScanner scanner = new ListScanner();
@@ -225,6 +236,7 @@ public class DefaultArchetypeFilesResolver
         return result;
     }
 
+    @Override
     public List<String> getPackagedFiles( List<String> files, String packageName )
     {
         List<String> packagedFiles = new ArrayList<String>();
@@ -239,6 +251,7 @@ public class DefaultArchetypeFilesResolver
         return packagedFiles;
     }
 
+    @Override
     public String resolvePackage( File basedir, List<String> languages )
         throws IOException
     {
@@ -249,6 +262,7 @@ public class DefaultArchetypeFilesResolver
         return resolvePackage( files );
     }
 
+    @Override
     public List<String> getUnpackagedFiles( List<String> files, String packageName )
     {
         List<String> unpackagedFiles = new ArrayList<String>();

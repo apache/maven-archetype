@@ -19,15 +19,20 @@ package org.apache.maven.archetype.generator;
  * under the License.
  */
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.util.Properties;
+
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.DefaultArtifactRepository;
 import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
-import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
-import org.apache.maven.model.Plugin;
-import org.apache.maven.model.ReportPlugin;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.apache.maven.project.DefaultProjectBuildingRequest;
@@ -38,14 +43,6 @@ import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.sonatype.aether.impl.internal.SimpleLocalRepositoryManager;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
-import java.util.Properties;
 
 public class DefaultArchetypeGeneratorTest
     extends AbstractMojoTestCase
@@ -239,11 +236,11 @@ public class DefaultArchetypeGeneratorTest
         assertEquals( "1.0-SNAPSHOT", model.getVersion() );
         assertTrue( model.getModules().isEmpty() );
         assertFalse( model.getDependencies().isEmpty() );
-        assertEquals( "1.0", ( (Dependency) model.getDependencies().get( 0 ) ).getVersion() );
+        assertEquals( "1.0", model.getDependencies().get( 0 ).getVersion() );
         assertFalse( model.getBuild().getPlugins().isEmpty() );
-        assertEquals( "1.0", ( (Plugin) model.getBuild().getPlugins().get( 0 ) ).getVersion() );
+        assertEquals( "1.0", model.getBuild().getPlugins().get( 0 ).getVersion() );
         assertFalse( model.getReporting().getPlugins().isEmpty() );
-        assertEquals( "1.0", ( (ReportPlugin) model.getReporting().getPlugins().get( 0 ) ).getVersion() );
+        assertEquals( "1.0", model.getReporting().getPlugins().get( 0 ).getVersion() );
     }
 
     public void testGenerateArchetypePartialOnParent()
@@ -516,6 +513,7 @@ public class DefaultArchetypeGeneratorTest
 
     }
 
+    @Override
     protected void tearDown()
         throws Exception
     {
@@ -524,6 +522,7 @@ public class DefaultArchetypeGeneratorTest
         outputDirectory = null;
     }
 
+    @Override
     protected void setUp()
         throws Exception
     {
@@ -640,15 +639,10 @@ public class DefaultArchetypeGeneratorTest
         throws IOException, FileNotFoundException
     {
         Properties properties = new Properties();
-        InputStream in = new FileInputStream( propertyFile );
-        try
+        try ( InputStream in = new FileInputStream( propertyFile ) )
         {
             properties.load( in );
             return properties;
-        }
-        finally
-        {
-            IOUtil.close( in );
         }
     }
 
@@ -675,31 +669,14 @@ public class DefaultArchetypeGeneratorTest
         return new File( outputDirectory, "/pom.xml.sample" );
     }
 
-    private File getPropertiesFile()
-    {
-        return new File( outputDirectory, "/archetype.properties" );
-    }
-
-    private File getPropertiesSampleFile()
-    {
-        return new File( outputDirectory, "/archetype.properties.sample" );
-    }
-
     private Model readPom( final File pomFile )
         throws IOException, XmlPullParserException
     {
-        Reader pomReader = null;
-        try
+        try ( Reader pomReader = ReaderFactory.newXmlReader( pomFile ) )
         {
-            pomReader = ReaderFactory.newXmlReader( pomFile );
-
             MavenXpp3Reader reader = new MavenXpp3Reader();
 
             return reader.read( pomReader );
-        }
-        finally
-        {
-            IOUtil.close( pomReader );
         }
     }
     

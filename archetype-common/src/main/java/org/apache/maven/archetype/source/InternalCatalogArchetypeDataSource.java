@@ -37,6 +37,7 @@ public class InternalCatalogArchetypeDataSource
     extends CatalogArchetypeDataSource
 {
 
+    @Override
     public ArchetypeCatalog getArchetypeCatalog( ProjectBuildingRequest buildingRequest )
         throws ArchetypeDataSourceException
     {

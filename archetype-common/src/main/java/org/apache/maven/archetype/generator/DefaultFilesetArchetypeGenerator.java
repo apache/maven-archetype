@@ -93,6 +93,7 @@ public class DefaultFilesetArchetypeGenerator
      */
     private static final Pattern TOKEN_PATTERN = Pattern.compile( "__((?:[^_]+_)*[^_]+)__" );
 
+    @Override
     public void generateArchetype( ArchetypeGenerationRequest request, File archetypeFile )
         throws UnknownArchetype, ArchetypeNotConfigured, ProjectDirectoryExists, PomFileExists, OutputFileExists,
         ArchetypeGenerationFailure
@@ -299,22 +300,12 @@ public class DefaultFilesetArchetypeGenerator
         }
         else
         {
-            InputStream inputStream = null;
-            OutputStream out = null;
-            try
+            outFile.getParentFile().mkdirs();
+
+            try ( InputStream inputStream = archetypeZipFile.getInputStream( input );
+                  OutputStream out = new FileOutputStream( outFile ) )
             {
-                inputStream = archetypeZipFile.getInputStream( input );
-
-                outFile.getParentFile().mkdirs();
-
-                out = new FileOutputStream( outFile );
-
                 IOUtil.copy( inputStream, out );
-            }
-            finally
-            {
-                IOUtil.close( inputStream );
-                IOUtil.close( out );
             }
         }
 
@@ -488,8 +479,7 @@ public class DefaultFilesetArchetypeGenerator
 
     private String evaluateExpression( Context context, String key, String value )
     {
-        StringWriter stringWriter = new StringWriter();
-        try
+        try ( StringWriter stringWriter = new StringWriter() )
         {
             Velocity.evaluate( context, stringWriter, key, value );
             return stringWriter.toString();
@@ -498,11 +488,6 @@ public class DefaultFilesetArchetypeGenerator
         {
             return value;
         }
-        finally
-        {
-            IOUtil.close( stringWriter );
-        }
-
     }
 
     private void processArchetypeTemplates( AbstractArchetypeDescriptor archetypeDescriptor,
@@ -730,15 +715,11 @@ public class DefaultFilesetArchetypeGenerator
 
         getLogger().debug( "Merging into " + outFile );
 
-        Writer writer = null;
-
-        try
+        try ( Writer writer = new OutputStreamWriter( new FileOutputStream( outFile ), encoding ) )
         {
             StringWriter stringWriter = new StringWriter();
 
             velocity.getEngine().mergeTemplate( templateFileName, encoding, context, stringWriter );
-
-            writer = new OutputStreamWriter( new FileOutputStream( outFile ), encoding );
 
             writer.write( StringUtils.unifyLineSeparators( stringWriter.toString() ) );
 
@@ -747,10 +728,6 @@ public class DefaultFilesetArchetypeGenerator
         catch ( Exception e )
         {
             throw new ArchetypeGenerationFailure( "Error merging velocity templates: " + e.getMessage(), e );
-        }
-        finally
-        {
-            IOUtil.close( writer );
         }
 
         return true;

@@ -21,7 +21,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.Writer;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
@@ -35,6 +34,7 @@ import org.sonatype.aether.impl.internal.SimpleLocalRepositoryManager;
 public class LocalCatalogArchetypeDataSourceTest extends PlexusTestCase
 {
 
+    @Override
     protected void setUp()
                     throws Exception
     {
@@ -53,9 +53,10 @@ public class LocalCatalogArchetypeDataSourceTest extends PlexusTestCase
 
         File catalogFile = new File( catalogDirectory, "archetype-catalog.xml" );
         ArchetypeCatalogXpp3Writer catalogWriter = new ArchetypeCatalogXpp3Writer();
-        Writer writer = new FileWriter( catalogFile );
-        catalogWriter.write( writer, catalog );
-        IOUtils.closeQuietly( writer );
+        try ( Writer writer = new FileWriter( catalogFile ) )
+        {
+            catalogWriter.write( writer, catalog );
+        }
     }
     
     public void testLocalCatalog()

@@ -438,6 +438,7 @@ public class Format
         return encoding;
     }
 
+    @Override
     protected Object clone()
     {
         Format format = null;
@@ -503,6 +504,7 @@ public class Format
             }
         }
 
+        @Override
         public boolean shouldEscape( char ch )
         {
             if ( bits == 16 )
@@ -511,11 +513,11 @@ public class Format
             }
             if ( bits == 8 )
             {
-                return ( (int) ch > 255 );
+                return ( ch > 255 );
             }
             if ( bits == 7 )
             {
-                return ( (int) ch > 127 );
+                return ( ch > 127 );
             }
             else
             {
@@ -639,6 +641,7 @@ public class Format
             this.name = name;
         }
 
+        @Override
         public String toString()
         {
             return name;

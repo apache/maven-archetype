@@ -41,7 +41,6 @@ import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.IOException;
@@ -81,6 +80,7 @@ public class DefaultArchetypeGenerationConfigurator
         this.archetypeArtifactManager = archetypeArtifactManager;
     }
 
+    @Override
     public void configureArchetype( ArchetypeGenerationRequest request, Boolean interactiveMode,
                                     Properties executionProperties )
         throws ArchetypeNotDefined, UnknownArchetype, ArchetypeNotConfigured, IOException, PrompterException,
@@ -340,8 +340,8 @@ public class DefaultArchetypeGenerationConfigurator
 
     private String evaluateProperty( Context context, String property, String value )
     {
-        StringWriter stringWriter = new StringWriter();
-        try
+        
+        try ( StringWriter stringWriter = new StringWriter() )
         {
             Velocity.evaluate( context, stringWriter, property, value );
             return stringWriter.toString();
@@ -349,10 +349,6 @@ public class DefaultArchetypeGenerationConfigurator
         catch ( Exception ex )
         {
             return value;
-        }
-        finally
-        {
-            IOUtil.close( stringWriter );
         }
     }
 
@@ -382,6 +378,7 @@ public class DefaultArchetypeGenerationConfigurator
             this.archetypeConfiguration = archetypeConfiguration;
         }
 
+        @Override
         public int compare( String left, String right )
         {
             String leftDefault = archetypeConfiguration.getDefaultValue( left );

@@ -101,6 +101,7 @@ public class FilesetArchetypeCreator
     @Requirement
     private Invoker invoker;
 
+    @Override
     public void createArchetype( ArchetypeCreationRequest request, ArchetypeCreationResult result )
     {
         MavenProject project = request.getProject();
@@ -243,20 +244,14 @@ public class FilesetArchetypeCreator
                         pomReversedProperties, preserveCData, keepParent );
             getLogger().debug( "Created Archetype " + archetypeDescriptor.getName() + " template pom(s)" );
 
-            Writer out = null;
-            try
+            
+            try ( Writer out = WriterFactory.newXmlWriter( archetypeDescriptorFile ) )
             {
-                out = WriterFactory.newXmlWriter( archetypeDescriptorFile );
-
                 ArchetypeDescriptorXpp3Writer writer = new ArchetypeDescriptorXpp3Writer();
 
                 writer.write( out, archetypeDescriptor );
 
                 getLogger().debug( "Archetype " + archetypeDescriptor.getName() + " descriptor written" );
-            }
-            finally
-            {
-                IOUtil.close( out );
             }
 
             createArchetypeBasicIt( archetypeDescriptor, outputDirectory );
@@ -332,13 +327,9 @@ public class FilesetArchetypeCreator
         File basicItDirectory = new File( generatedSourcesDirectory, basic );
         basicItDirectory.mkdirs();
 
-        InputStream in = null;
-        OutputStream out = null;
-
-        try
+        try ( InputStream in = FilesetArchetypeCreator.class.getResourceAsStream( "archetype.properties" );
+              OutputStream out = new FileOutputStream( new File( basicItDirectory, "archetype.properties" ) ) )
         {
-            in = FilesetArchetypeCreator.class.getResourceAsStream( "archetype.properties" );
-
             Properties archetypeProperties = new Properties();
             archetypeProperties.load( in );
 
@@ -347,14 +338,9 @@ public class FilesetArchetypeCreator
                 archetypeProperties.put( req.getKey(), req.getDefaultValue() );
             }
 
-            out = new FileOutputStream( new File( basicItDirectory, "archetype.properties" ) );
             archetypeProperties.store( out, null );
         }
-        finally
-        {
-            IOUtil.close( in );
-            IOUtil.close( out );
-        }
+
         copyResource( "goal.txt", new File( basicItDirectory, "goal.txt" ) );
 
         getLogger().debug( "Added basic integration test" );
@@ -475,20 +461,10 @@ public class FilesetArchetypeCreator
     private void copyResource( String name, File destination )
         throws IOException
     {
-        InputStream in = null;
-        OutputStream out = null;
-
-        try
+        try ( InputStream in = FilesetArchetypeCreator.class.getResourceAsStream( name );
+              OutputStream out = new FileOutputStream( destination ) )
         {
-            in = FilesetArchetypeCreator.class.getResourceAsStream( name );
-            out = new FileOutputStream( destination );
-
             IOUtil.copy( in, out );
-        }
-        finally
-        {
-            IOUtil.close( in );
-            IOUtil.close( out );
         }
     }
 
@@ -835,9 +811,9 @@ public class FilesetArchetypeCreator
         {
             DirectoryScanner scanner = new DirectoryScanner();
             scanner.setBasedir( basedir );
-            scanner.setIncludes( (String[]) concatenateToList( fileSet.getIncludes(), fileSet.getDirectory() ).toArray(
+            scanner.setIncludes( concatenateToList( fileSet.getIncludes(), fileSet.getDirectory() ).toArray(
                 new String[fileSet.getIncludes().size()] ) );
-            scanner.setExcludes( (String[]) addLists( fileSet.getExcludes(), excludePatterns ).toArray(
+            scanner.setExcludes( addLists( fileSet.getExcludes(), excludePatterns ).toArray(
                 new String[fileSet.getExcludes().size()] ) );
             scanner.addDefaultExcludes();
             getLogger().debug( "Using fileset " + fileSet );
@@ -874,26 +850,16 @@ public class FilesetArchetypeCreator
 
             FileUtils.copyFile( initialPomFile, inputFile );
 
-            Reader in = null;
-            Writer out = null;
-            try
+            try ( Reader in = ReaderFactory.newXmlReader( inputFile );
+                  Writer out = WriterFactory.newXmlWriter( outputFile ) )
             {
-                in = ReaderFactory.newXmlReader( inputFile );
-
                 String initialcontent = IOUtil.toString( in );
 
                 String content = getReversedContent( initialcontent, pomReversedProperties );
 
                 outputFile.getParentFile().mkdirs();
 
-                out = WriterFactory.newXmlWriter( outputFile );
-
                 IOUtil.copy( content, out );
-            }
-            finally
-            {
-                IOUtil.close( in );
-                IOUtil.close( out );
             }
 
             inputFile.delete();
@@ -919,10 +885,8 @@ public class FilesetArchetypeCreator
             pomManager.writePom( pom, outputFile, initialPomFile );
         }
 
-        Reader in = null;
-        try
+        try ( Reader in = ReaderFactory.newXmlReader( initialPomFile ) )
         {
-            in = ReaderFactory.newXmlReader( initialPomFile );
             String initialcontent = IOUtil.toString( in );
 
             Iterator<?> properties = pomReversedProperties.keySet().iterator();
@@ -937,10 +901,6 @@ public class FilesetArchetypeCreator
                             + " contains this property already" );
                 }
             }
-        }
-        finally
-        {
-            IOUtil.close( in );
         }
     }
 
@@ -1103,26 +1063,16 @@ public class FilesetArchetypeCreator
 
             FileUtils.copyFile( initialPomFile, inputFile );
 
-            Reader in = null;
-            Writer out = null;
-            try
+            try ( Reader in = ReaderFactory.newXmlReader( inputFile );
+                  Writer out = WriterFactory.newXmlWriter( outputFile ) )
             {
-                in = ReaderFactory.newXmlReader( inputFile );
-
                 String initialcontent = IOUtil.toString( in );
 
                 String content = getReversedContent( initialcontent, pomReversedProperties );
 
                 outputFile.getParentFile().mkdirs();
 
-                out = WriterFactory.newXmlWriter( outputFile );
-
                 IOUtil.copy( content, out );
-            }
-            finally
-            {
-                IOUtil.close( in );
-                IOUtil.close( out );
             }
 
             inputFile.delete();
@@ -1171,10 +1121,8 @@ public class FilesetArchetypeCreator
             pomManager.writePom( pom, outputFile, initialPomFile );
         }
 
-        Reader in = null;
-        try
+        try ( Reader in = ReaderFactory.newXmlReader( initialPomFile ) )
         {
-            in = ReaderFactory.newXmlReader( initialPomFile );
             String initialcontent = IOUtil.toString( in );
 
             for ( Iterator<?> properties = pomReversedProperties.keySet().iterator(); properties.hasNext(); )
@@ -1188,10 +1136,6 @@ public class FilesetArchetypeCreator
                             + " contains this property already" );
                 }
             }
-        }
-        finally
-        {
-            IOUtil.close( in );
         }
     }
 
@@ -1791,17 +1735,13 @@ public class FilesetArchetypeCreator
 
     public String getArchetypeVersion()
     {
-        InputStream is = null;
-
         // This should actually come from the pom.properties at testing but it's not generated and put into the JAR, it
         // happens as part of the JAR plugin which is crap as it makes testing inconsistent.
         String version = "version";
 
-        try
+        try ( InputStream is = getClass().getClassLoader().getResourceAsStream( MAVEN_PROPERTIES ) )
         {
             Properties properties = new Properties();
-
-            is = getClass().getClassLoader().getResourceAsStream( MAVEN_PROPERTIES );
 
             if ( is != null )
             {
@@ -1820,10 +1760,6 @@ public class FilesetArchetypeCreator
         catch ( IOException e )
         {
             return version;
-        }
-        finally
-        {
-            IOUtil.close( is );
         }
     }
 }

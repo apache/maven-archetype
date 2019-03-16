@@ -44,6 +44,7 @@ public class ArchetypePrompter
     @Requirement
     private InputHandler inputHandler;
 
+    @Override
     public String prompt( String message )
         throws PrompterException
     {
@@ -52,6 +53,7 @@ public class ArchetypePrompter
         return readLine();
     }
 
+    @Override
     public String prompt( String message, String defaultReply )
         throws PrompterException
     {
@@ -67,6 +69,7 @@ public class ArchetypePrompter
         return line;
     }
 
+    @Override
     @SuppressWarnings( { "rawtypes", "unchecked" } )
     public String prompt( String message, List possibleValues, String defaultReply )
         throws PrompterException
@@ -103,6 +106,7 @@ public class ArchetypePrompter
         return line;
     }
 
+    @Override
     @SuppressWarnings( "rawtypes" )
     public String prompt( String message, List possibleValues )
         throws PrompterException
@@ -110,6 +114,7 @@ public class ArchetypePrompter
         return prompt( message, possibleValues, null );
     }
 
+    @Override
     public String promptForPassword( String message )
         throws PrompterException
     {
@@ -163,6 +168,7 @@ public class ArchetypePrompter
         }
     }
 
+    @Override
     public void showMessage( String message )
         throws PrompterException
     {

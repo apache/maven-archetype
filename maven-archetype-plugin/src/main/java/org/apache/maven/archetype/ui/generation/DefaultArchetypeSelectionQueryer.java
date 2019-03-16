@@ -48,6 +48,7 @@ public class DefaultArchetypeSelectionQueryer
     @Requirement( hint = "archetype" )
     private Prompter prompter;
 
+    @Override
     public boolean confirmSelection( ArchetypeDefinition archetypeDefinition )
         throws PrompterException
     {
@@ -60,12 +61,14 @@ public class DefaultArchetypeSelectionQueryer
         return "Y".equalsIgnoreCase( answer );
     }
 
+    @Override
     public Archetype selectArchetype( Map<String, List<Archetype>> catalogs )
         throws PrompterException
     {
         return selectArchetype( catalogs, null );
     }
 
+    @Override
     public Archetype selectArchetype( Map<String, List<Archetype>> catalogs, ArchetypeDefinition defaultDefinition )
         throws PrompterException
     {

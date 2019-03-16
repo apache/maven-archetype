@@ -29,7 +29,6 @@ import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Reader;
 import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Writer;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
@@ -45,11 +44,8 @@ public abstract  class CatalogArchetypeDataSource
     protected void writeLocalCatalog( ArchetypeCatalog catalog, File catalogFile )
         throws ArchetypeDataSourceException
     {
-        Writer writer = null;
-        try
+        try ( Writer writer = WriterFactory.newXmlWriter( catalogFile ) )
         {
-            writer = WriterFactory.newXmlWriter( catalogFile );
-
             ArchetypeCatalogXpp3Writer catalogWriter = new ArchetypeCatalogXpp3Writer();
 
             catalogWriter.write( writer, catalog );
@@ -58,20 +54,16 @@ public abstract  class CatalogArchetypeDataSource
         {
             throw new ArchetypeDataSourceException( "Error writing archetype catalog.", e );
         }
-        finally
-        {
-            IOUtil.close( writer );
-        }
     }
 
     protected ArchetypeCatalog readCatalog( Reader reader )
         throws ArchetypeDataSourceException
     {
-        try
+        try ( Reader catReader = reader )
         {
             ArchetypeCatalogXpp3Reader catalogReader = new ArchetypeCatalogXpp3Reader();
 
-            return catalogReader.read( reader );
+            return catalogReader.read( catReader );
         }
         catch ( IOException e )
         {
@@ -80,10 +72,6 @@ public abstract  class CatalogArchetypeDataSource
         catch ( XmlPullParserException e )
         {
             throw new ArchetypeDataSourceException( "Error parsing archetype catalog.", e );
-        }
-        finally
-        {
-            IOUtil.close( reader );
         }
     }
 }

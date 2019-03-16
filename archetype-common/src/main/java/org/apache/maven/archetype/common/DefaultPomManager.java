@@ -36,7 +36,6 @@ import org.apache.maven.model.Plugin;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.FileUtils;
-import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
@@ -72,18 +71,16 @@ public class DefaultPomManager
     extends AbstractLogEnabled
     implements PomManager
 {
+    @Override
     public void addModule( File pom, String artifactId )
         throws IOException, XmlPullParserException, DocumentException, InvalidPackaging
     {
         boolean found = false;
 
         StringWriter writer = new StringWriter();
-        Reader fileReader = null;
-
-        try
+        
+        try ( Reader fileReader = ReaderFactory.newXmlReader( pom ) )
         {
-            fileReader = ReaderFactory.newXmlReader( pom );
-
             SAXReader reader = new SAXReader();
             Document document = reader.read( fileReader );
             Element project = document.getRootElement();
@@ -150,12 +147,9 @@ public class DefaultPomManager
                 FileUtils.fileWrite( pom.getAbsolutePath(), writer.toString() );
             } // end if
         }
-        finally
-        {
-            IOUtil.close( fileReader );
-        }
     }
 
+    @Override
     public void addParent( File pom, File parentPom )
         throws IOException, XmlPullParserException
     {
@@ -185,6 +179,7 @@ public class DefaultPomManager
         writePom( generatedModel, pom, pom );
     }
 
+    @Override
     public void mergePoms( File pom, File temporaryPom )
         throws IOException, XmlPullParserException
     {
@@ -262,64 +257,43 @@ public class DefaultPomManager
         writePom( model, pom, pom );
     }
 
+    @Override
     public Model readPom( final File pomFile )
         throws IOException, XmlPullParserException
     {
-        Model model;
-        Reader pomReader = null;
-        try
+        try ( Reader pomReader = ReaderFactory.newXmlReader( pomFile ) )
         {
-            pomReader = ReaderFactory.newXmlReader( pomFile );
-
             MavenXpp3Reader reader = new MavenXpp3Reader();
 
-            model = reader.read( pomReader );
+            return reader.read( pomReader );
         }
-        finally
-        {
-            IOUtil.close( pomReader );
-        }
-        return model;
     }
 
 
+    @Override
     public Model readPom( InputStream pomStream )
         throws IOException, XmlPullParserException
     {
-        Reader pomReader = ReaderFactory.newXmlReader( pomStream );
+        try ( Reader pomReader = ReaderFactory.newXmlReader( pomStream ) )
+        {
+            MavenXpp3Reader reader = new MavenXpp3Reader();
 
-        MavenXpp3Reader reader = new MavenXpp3Reader();
-
-        return reader.read( pomReader );
+            return reader.read( pomReader );
+        }
     }
 
+    @Override
     public void writePom( final Model model, final File pomFile, final File initialPomFile )
         throws IOException
     {
-        InputStream inputStream = null;
-        Writer outputStreamWriter = null;
-
         String fileEncoding =
             StringUtils.isEmpty( model.getModelEncoding() ) ? "UTF-8" : model.getModelEncoding();
 
-        try
+        org.jdom.Document doc;
+        try ( InputStream inputStream = new FileInputStream( initialPomFile ) )
         {
-            inputStream = new FileInputStream( initialPomFile );
-
             SAXBuilder builder = new SAXBuilder();
-            org.jdom.Document doc = builder.build( inputStream );
-            inputStream.close();
-            inputStream = null;
-
-            // The cdata parts of the pom are not preserved from initial to target
-            MavenJDOMWriter writer = new MavenJDOMWriter();
-
-            outputStreamWriter =
-                new OutputStreamWriter( new FileOutputStream( pomFile ), fileEncoding );
-
-            final String ls = System.getProperty( "line.separator" );
-            Format form = Format.getRawFormat().setEncoding( fileEncoding ).setLineSeparator( ls );
-            writer.write( model, doc, outputStreamWriter, form );
+            doc = builder.build( inputStream );
         }
         catch ( JDOMException exc )
         {
@@ -328,29 +302,25 @@ public class DefaultPomManager
             ioe.initCause( exc );
             throw ioe;
         }
+        
+        try ( Writer outputStreamWriter = new OutputStreamWriter( new FileOutputStream( pomFile ), fileEncoding ) ) 
+        {
+            // The cdata parts of the pom are not preserved from initial to target
+            MavenJDOMWriter writer = new MavenJDOMWriter();
+
+            final String ls = System.lineSeparator();
+            Format form = Format.getRawFormat().setEncoding( fileEncoding ).setLineSeparator( ls );
+            writer.write( model, doc, outputStreamWriter, form );
+        }
         catch ( FileNotFoundException e )
         {
             getLogger().debug( "Creating pom file " + pomFile );
 
-            Writer pomWriter = null;
-
-            try
+            try ( Writer pomWriter = new OutputStreamWriter( new FileOutputStream( pomFile ), fileEncoding ) )
             {
-                pomWriter =
-                    new OutputStreamWriter( new FileOutputStream( pomFile ), fileEncoding );
-
                 MavenXpp3Writer writer = new MavenXpp3Writer();
                 writer.write( pomWriter, model );
             }
-            finally
-            {
-                IOUtil.close( pomWriter );
-            }
-        }
-        finally
-        {
-            IOUtil.close( inputStream );
-            IOUtil.close( outputStreamWriter );
         }
     }
 
@@ -380,11 +350,9 @@ public class DefaultPomManager
 
     private void mergeProfiles( Model model, Model generatedModel )
     {
-        @SuppressWarnings( "unchecked" )
         List<Profile> generatedProfiles = generatedModel.getProfiles();
         if ( generatedProfiles != null && generatedProfiles.size() > 0 )
         {
-            @SuppressWarnings( "unchecked" )
             List<Profile> modelProfiles = model.getProfiles();
             Map<String, Profile> modelProfileIdMap = new HashMap<String, Profile>();
             if ( modelProfiles == null )
@@ -411,8 +379,8 @@ public class DefaultPomManager
                 else
                 {
                     getLogger().warn( "Try to merge profiles with id " + generatedProfileId );
-                    mergeModelBase( (Profile) modelProfileIdMap.get( generatedProfileId ), generatedProfile );
-                    mergeProfileBuild( (Profile) modelProfileIdMap.get( generatedProfileId ), generatedProfile );
+                    mergeModelBase( modelProfileIdMap.get( generatedProfileId ), generatedProfile );
+                    mergeProfileBuild( modelProfileIdMap.get( generatedProfileId ), generatedProfile );
                 }
             }
         }
@@ -434,17 +402,15 @@ public class DefaultPomManager
     private void mergeModelBase( ModelBase model, ModelBase generatedModel )
     {
         // ModelBase can be a Model or a Profile...
-
-        @SuppressWarnings( "unchecked" )
         Map<String, Dependency> dependenciesByIds = createDependencyMap( model.getDependencies() );
-        @SuppressWarnings( "unchecked" )
+
         Map<String, Dependency> generatedDependenciesByIds = createDependencyMap( generatedModel.getDependencies() );
 
         for ( String generatedDependencyId : generatedDependenciesByIds.keySet() )
         {
             if ( !dependenciesByIds.containsKey( generatedDependencyId ) )
             {
-                model.addDependency( (Dependency) generatedDependenciesByIds.get( generatedDependencyId ) );
+                model.addDependency( generatedDependenciesByIds.get( generatedDependencyId ) );
             }
             else
             {
@@ -467,9 +433,8 @@ public class DefaultPomManager
                 model.setReporting( new Reporting() );
             }
 
-            @SuppressWarnings( "unchecked" )
             Map<String, ReportPlugin> reportPluginsByIds = model.getReporting().getReportPluginsAsMap();
-            @SuppressWarnings( "unchecked" )
+
             Map<String, ReportPlugin> generatedReportPluginsByIds =
                 generatedModel.getReporting().getReportPluginsAsMap();
 
@@ -489,9 +454,8 @@ public class DefaultPomManager
 
     private void mergeBuildPlugins( BuildBase modelBuild, BuildBase generatedModelBuild )
     {
-        @SuppressWarnings( "unchecked" )
         Map<String, Plugin> pluginsByIds = modelBuild.getPluginsAsMap();
-        @SuppressWarnings( "unchecked" )
+
         List<Plugin> generatedPlugins = generatedModelBuild.getPlugins();
 
         for ( Plugin generatedPlugin : generatedPlugins )
@@ -505,7 +469,7 @@ public class DefaultPomManager
             else
             {
                 getLogger().info( "Try to merge plugin configuration of plugins with id: " + generatedPluginsId );
-                Plugin modelPlugin = (Plugin) pluginsByIds.get( generatedPluginsId );
+                Plugin modelPlugin = pluginsByIds.get( generatedPluginsId );
 
                 modelPlugin.setConfiguration( Xpp3DomUtils.mergeXpp3Dom( (Xpp3Dom) generatedPlugin.getConfiguration(),
                                                                          (Xpp3Dom) modelPlugin.getConfiguration() ) );

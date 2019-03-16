@@ -228,6 +228,7 @@ public class CreateArchetypeFromProjectMojo
 //    @Parameter( defaultValue = "${session.settings}", readonly = true, required = true )
 //    private File settingsXml;
 
+    @Override
     public void execute()
         throws MojoExecutionException, MojoFailureException
     {

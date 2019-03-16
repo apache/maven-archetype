@@ -48,6 +48,7 @@ public class FileCharsetDetector
 
         det.Init( new nsICharsetDetectionObserver()
         {
+            @Override
             @SuppressWarnings( "checkstyle:methodname" )
             public void Notify( String charset )
             {
@@ -56,11 +57,9 @@ public class FileCharsetDetector
             }
         } );
 
-        FileInputStream fileInputStream = new FileInputStream( detectedFile );
-        BufferedInputStream imp = new BufferedInputStream( fileInputStream );
-        try
+        try ( FileInputStream fileInputStream = new FileInputStream( detectedFile );
+              BufferedInputStream imp = new BufferedInputStream( fileInputStream ) )
         {
-
             byte[] buf = new byte[1024];
             int len;
             boolean done = false;
@@ -98,11 +97,6 @@ public class FileCharsetDetector
                 charset = "ASCII";
             }
         }
-        finally
-        {
-            imp.close();
-            fileInputStream.close();
-        }
     }
 
 
@@ -114,6 +108,7 @@ public class FileCharsetDetector
 
         det.Init( new nsICharsetDetectionObserver()
         {
+            @Override
             @SuppressWarnings( "checkstyle:methodname" )
             public void Notify( String charset )
             {

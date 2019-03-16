@@ -33,7 +33,6 @@ import org.apache.maven.project.ProjectBuildingRequest;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
@@ -52,7 +51,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
 @Component( role = ArchetypeArtifactManager.class )
@@ -68,6 +66,7 @@ public class DefaultArchetypeArtifactManager
 
     private Map<String, File> archetypeCache = new TreeMap<String, File>();
 
+    @Override
     public File getArchetypeFile( final String groupId, final String artifactId, final String version,
                                   ArtifactRepository archetypeRepository, final ArtifactRepository localRepository,
                                   final List<ArtifactRepository> repositories, ProjectBuildingRequest buildingRequest )
@@ -97,6 +96,7 @@ public class DefaultArchetypeArtifactManager
         }
     }
 
+    @Override
     public ClassLoader getArchetypeJarLoader( File archetypeFile )
         throws UnknownArchetype
     {
@@ -114,19 +114,19 @@ public class DefaultArchetypeArtifactManager
         }
     }
 
+    @Override
     public Model getArchetypePom( File jar )
         throws XmlPullParserException, UnknownArchetype, IOException
     {
-        ZipFile zipFile = null;
-        try
+        
+        try ( ZipFile zipFile = getArchetypeZipFile( jar ) )
         {
             String pomFileName = null;
-            zipFile = getArchetypeZipFile( jar );
 
             Enumeration<? extends ZipEntry> enumeration = zipFile.entries();
             while ( enumeration.hasMoreElements() )
             {
-                ZipEntry el = (ZipEntry) enumeration.nextElement();
+                ZipEntry el = enumeration.nextElement();
 
                 String entry = el.getName();
                 if ( entry.startsWith( "META-INF" ) && entry.endsWith( "pom.xml" ) )
@@ -148,12 +148,9 @@ public class DefaultArchetypeArtifactManager
             }
             return pomManager.readPom( zipFile.getInputStream( pom ) );
         }
-        finally
-        {
-            closeZipFile( zipFile );
-        }
     }
 
+    @Override
     public ZipFile getArchetypeZipFile( File archetypeFile )
         throws UnknownArchetype
     {
@@ -161,46 +158,29 @@ public class DefaultArchetypeArtifactManager
         {
             return new ZipFile( archetypeFile );
         }
-        catch ( ZipException e )
-        {
-            throw new UnknownArchetype( e );
-        }
         catch ( IOException e )
         {
             throw new UnknownArchetype( e );
         }
     }
 
+    @Override
     public boolean isFileSetArchetype( File archetypeFile )
     {
-        ZipFile zipFile = null;
-        try
+        getLogger().debug( "checking fileset archetype status on " + archetypeFile );
+        
+        try ( ZipFile zipFile = getArchetypeZipFile( archetypeFile ) )
         {
-            getLogger().debug( "checking fileset archetype status on " + archetypeFile );
-
-            zipFile = getArchetypeZipFile( archetypeFile );
-
             return isFileSetArchetype( zipFile );
         }
-        catch ( IOException e )
+        catch ( IOException | UnknownArchetype e )
         {
             getLogger().debug( e.toString() );
             return false;
-        }
-        catch ( UnknownArchetype e )
-        {
-            getLogger().debug( e.toString() );
-            return false;
-        }
-        finally
-        {
-            if ( zipFile != null )
-            {
-                closeZipFile( zipFile );
-            }
         }
     }
 
+    @Override
     public boolean isFileSetArchetype( String groupId, String artifactId, String version,
                                        ArtifactRepository archetypeRepository, ArtifactRepository localRepository,
                                        List<ArtifactRepository> repositories, ProjectBuildingRequest buildingRequest )
@@ -219,36 +199,23 @@ public class DefaultArchetypeArtifactManager
         }
     }
 
+    @Override
     public boolean isOldArchetype( File archetypeFile )
     {
-        ZipFile zipFile = null;
-        try
+        getLogger().debug( "checking old archetype status on " + archetypeFile );
+
+        try ( ZipFile zipFile = getArchetypeZipFile( archetypeFile ) )
         {
-            getLogger().debug( "checking old archetype status on " + archetypeFile );
-
-            zipFile = getArchetypeZipFile( archetypeFile );
-
             return isOldArchetype( zipFile );
         }
-        catch ( IOException e )
+        catch ( IOException | UnknownArchetype e )
         {
             getLogger().debug( e.toString() );
             return false;
-        }
-        catch ( UnknownArchetype e )
-        {
-            getLogger().debug( e.toString() );
-            return false;
-        }
-        finally
-        {
-            if ( zipFile != null )
-            {
-                closeZipFile( zipFile );
-            }
         }
     }
 
+    @Override
     public boolean isOldArchetype( String groupId, String artifactId, String version,
                                    ArtifactRepository archetypeRepository, ArtifactRepository localRepository,
                                    List<ArtifactRepository> repositories, ProjectBuildingRequest buildingRequest )
@@ -267,6 +234,7 @@ public class DefaultArchetypeArtifactManager
         }
     }
 
+    @Override
     public boolean exists( String archetypeGroupId, String archetypeArtifactId, String archetypeVersion,
                            ArtifactRepository archetypeRepository, ArtifactRepository localRepository,
                            List<ArtifactRepository> remoteRepositories, ProjectBuildingRequest buildingRequest )
@@ -300,12 +268,11 @@ public class DefaultArchetypeArtifactManager
         }
     }
 
+    @Override
     public String getPostGenerationScript( File archetypeFile ) throws UnknownArchetype
     {
-        ZipFile zipFile = null;
-        try
+        try ( ZipFile zipFile = getArchetypeZipFile( archetypeFile ) )
         {
-            zipFile = getArchetypeZipFile( archetypeFile );
             Reader reader = getDescriptorReader( zipFile, Constants.ARCHETYPE_POST_GENERATION_SCRIPT );
             return reader == null ? null : IOUtils.toString( reader );
         }
@@ -313,36 +280,23 @@ public class DefaultArchetypeArtifactManager
         {
             throw new UnknownArchetype( e );
         }
-        finally
-        {
-            closeZipFile( zipFile );
-        }
     }
 
+    @Override
     public ArchetypeDescriptor getFileSetArchetypeDescriptor( File archetypeFile )
         throws UnknownArchetype
     {
-        ZipFile zipFile = null;
-        try
+        try ( ZipFile zipFile = getArchetypeZipFile( archetypeFile ) )
         {
-            zipFile = getArchetypeZipFile( archetypeFile );
-
             return loadFileSetArchetypeDescriptor( zipFile );
         }
-        catch ( XmlPullParserException e )
+        catch ( XmlPullParserException | IOException e )
         {
             throw new UnknownArchetype( e );
-        }
-        catch ( IOException e )
-        {
-            throw new UnknownArchetype( e );
-        }
-        finally
-        {
-            closeZipFile( zipFile );
         }
     }
 
+    @Override
     public org.apache.maven.archetype.metadata.ArchetypeDescriptor getFileSetArchetypeDescriptor( String groupId,
                                                                           String artifactId,
                                                                           String version,
@@ -358,21 +312,19 @@ public class DefaultArchetypeArtifactManager
         return getFileSetArchetypeDescriptor( archetypeFile );
     }
 
+    @Override
     public List<String> getFilesetArchetypeResources( File archetypeFile )
         throws UnknownArchetype
     {
         getLogger().debug( "getFilesetArchetypeResources( \"" + archetypeFile.getAbsolutePath() + "\" )" );
-        List<String> archetypeResources = new ArrayList<String>();
+        List<String> archetypeResources = new ArrayList<>();
 
-        ZipFile zipFile = null;
-        try
+        try ( ZipFile zipFile = getArchetypeZipFile( archetypeFile )  ) 
         {
-            zipFile = getArchetypeZipFile( archetypeFile );
-
             Enumeration<? extends ZipEntry> enumeration = zipFile.entries();
             while ( enumeration.hasMoreElements() )
             {
-                ZipEntry entry = (ZipEntry) enumeration.nextElement();
+                ZipEntry entry = enumeration.nextElement();
 
                 if ( entry.getName().startsWith( Constants.ARCHETYPE_RESOURCES ) )
                 {
@@ -389,36 +341,27 @@ public class DefaultArchetypeArtifactManager
             }
             return archetypeResources;
         }
-        finally
-        {
-            closeZipFile( zipFile );
-        }
-    }
-
-    public org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor getOldArchetypeDescriptor( File archetypeFile )
-        throws UnknownArchetype
-    {
-        ZipFile zipFile = null;
-        try
-        {
-            zipFile = getArchetypeZipFile( archetypeFile );
-
-            return loadOldArchetypeDescriptor( zipFile );
-        }
-        catch ( XmlPullParserException e )
-        {
-            throw new UnknownArchetype( e );
-        }
         catch ( IOException e )
         {
             throw new UnknownArchetype( e );
         }
-        finally
+    }
+
+    @Override
+    public org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor getOldArchetypeDescriptor( File archetypeFile )
+        throws UnknownArchetype
+    {
+        try ( ZipFile zipFile = getArchetypeZipFile( archetypeFile ) )
         {
-            closeZipFile( zipFile );
+            return loadOldArchetypeDescriptor( zipFile );
+        }
+        catch ( XmlPullParserException | IOException e )
+        {
+            throw new UnknownArchetype( e );
         }
     }
 
+    @Override
     public org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor getOldArchetypeDescriptor( String groupId,
                                                                             String artifactId,
                                                                             String version,
@@ -460,43 +403,27 @@ public class DefaultArchetypeArtifactManager
     private boolean isFileSetArchetype( ZipFile zipFile )
         throws IOException
     {
-        Reader reader = null;
-        try
+        try ( Reader reader = getArchetypeDescriptorReader( zipFile ); )
         {
-            reader = getArchetypeDescriptorReader( zipFile );
-
             return ( reader != null );
-        }
-        finally
-        {
-            IOUtil.close( reader );
         }
     }
 
     private boolean isOldArchetype( ZipFile zipFile )
         throws IOException
     {
-        Reader reader = null;
-        try
+        try ( Reader reader = getOldArchetypeDescriptorReader( zipFile ) )
         {
-            reader = getOldArchetypeDescriptorReader( zipFile );
-
             return ( reader != null );
-        }
-        finally
-        {
-            IOUtil.close( reader );
         }
     }
 
     private org.apache.maven.archetype.metadata.ArchetypeDescriptor loadFileSetArchetypeDescriptor( ZipFile zipFile )
         throws IOException, XmlPullParserException
     {
-        Reader reader = null;
-        try
+        
+        try ( Reader reader = getArchetypeDescriptorReader( zipFile ) )
         {
-            reader = getArchetypeDescriptorReader( zipFile );
-
             if ( reader == null )
             {
                 return null;
@@ -505,28 +432,17 @@ public class DefaultArchetypeArtifactManager
             ArchetypeDescriptorXpp3Reader archetypeReader = new ArchetypeDescriptorXpp3Reader();
             return archetypeReader.read( reader, false );
         }
-        catch ( IOException e )
+        catch ( IOException | XmlPullParserException e )
         {
             throw e;
-        }
-        catch ( XmlPullParserException e )
-        {
-            throw e;
-        }
-        finally
-        {
-            IOUtil.close( reader );
         }
     }
 
     private org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor loadOldArchetypeDescriptor( ZipFile zipFile )
         throws IOException, XmlPullParserException
     {
-        Reader reader = null;
-        try
+        try ( Reader reader = getOldArchetypeDescriptorReader( zipFile ) )
         {
-            reader = getOldArchetypeDescriptorReader( zipFile );
-
             if ( reader == null )
             {
                 return null;
@@ -535,17 +451,9 @@ public class DefaultArchetypeArtifactManager
             ArchetypeDescriptorBuilder builder = new ArchetypeDescriptorBuilder();
             return builder.build( reader );
         }
-        catch ( IOException ex )
+        catch ( IOException | XmlPullParserException  ex )
         {
             throw ex;
-        }
-        catch ( XmlPullParserException ex )
-        {
-            throw ex;
-        }
-        finally
-        {
-            IOUtil.close( reader );
         }
     }
 
@@ -595,7 +503,7 @@ public class DefaultArchetypeArtifactManager
         Enumeration<? extends ZipEntry> enu = zipFile.entries();
         while ( enu.hasMoreElements() )
         {
-            ZipEntry entryfound = (ZipEntry) enu.nextElement();
+            ZipEntry entryfound = enu.nextElement();
             getLogger().debug( "  - " + entryfound.getName() );
 
             if ( searchString.equals( entryfound.getName() ) )
@@ -607,15 +515,4 @@ public class DefaultArchetypeArtifactManager
         return null;
     }
 
-    private void closeZipFile( ZipFile zipFile )
-    {
-        try
-        {
-            zipFile.close();
-        }
-        catch ( Exception e )
-        {
-            getLogger().error( "Failed to close " + zipFile.getName() + " zipFile." );
-        }
-    }
 }

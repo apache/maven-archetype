@@ -36,6 +36,7 @@ public class DefaultArchetypeGenerationQueryer
     @Requirement
     private Prompter prompter;
 
+    @Override
     public boolean confirmConfiguration( ArchetypeConfiguration archetypeConfiguration )
         throws PrompterException
     {
@@ -51,6 +52,7 @@ public class DefaultArchetypeGenerationQueryer
         return "Y".equalsIgnoreCase( answer );
     }
 
+    @Override
     public String getPropertyValue( String requiredProperty, String defaultValue, Pattern validationRegex )
         throws PrompterException
     {

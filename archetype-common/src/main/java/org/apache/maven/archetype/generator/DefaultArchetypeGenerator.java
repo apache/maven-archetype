@@ -141,6 +141,7 @@ public class DefaultArchetypeGenerator
         oldArchetype.createArchetype( request, archetypeFile );
     }
 
+    @Override
     public void generateArchetype( ArchetypeGenerationRequest request, File archetypeFile,
                                    ArchetypeGenerationResult result )
     {
@@ -166,6 +167,7 @@ public class DefaultArchetypeGenerator
         }
     }
 
+    @Override
     public void generateArchetype( ArchetypeGenerationRequest request, ArchetypeGenerationResult result )
     {
         try

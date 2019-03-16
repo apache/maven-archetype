@@ -42,6 +42,7 @@ public class DefaultArchetypeSelectorTest
 {
     private DefaultArchetypeSelector selector;
 
+    @Override
     public void setUp()
         throws Exception
     {
@@ -199,6 +200,7 @@ public class DefaultArchetypeSelectorTest
     {
         return new AbstractMatcher()
         {
+            @Override
             protected boolean argumentMatches( Object o, Object o1 )
             {
                 return !( o instanceof ArchetypeDefinition ) ||
@@ -248,6 +250,7 @@ public class DefaultArchetypeSelectorTest
                 return true;
             }
 
+            @Override
             protected String argumentToString( Object o )
             {
                 return o instanceof Map ? "..." : toString( (ArchetypeDefinition) o );

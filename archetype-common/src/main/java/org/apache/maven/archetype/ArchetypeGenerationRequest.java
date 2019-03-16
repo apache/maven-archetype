@@ -70,6 +70,7 @@ public class ArchetypeGenerationRequest
      * 
      * @deprecated see ARCHETYPE-439
      */
+    @Deprecated
     private String archetypeRepository;
 
     // Archetype configuration
@@ -180,6 +181,7 @@ public class ArchetypeGenerationRequest
      * @return the URL of the archetype repository
      * @deprecated see ARCHETYPE-439
      */
+    @Deprecated
     public String getArchetypeRepository()
     {
         return archetypeRepository;
@@ -191,6 +193,7 @@ public class ArchetypeGenerationRequest
      * @return this request
      * @deprecated see ARCHETYPE-439
      */
+    @Deprecated
     public ArchetypeGenerationRequest setArchetypeRepository( String archetypeRepository )
     {
         this.archetypeRepository = archetypeRepository;

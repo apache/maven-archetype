@@ -54,6 +54,7 @@ public class CrawlRepositoryMojo
     @Parameter( property = "repository", defaultValue = "${settings.localRepository}" )
     private File repository;
 
+    @Override
     public void execute()
         throws MojoExecutionException, MojoFailureException
     {
