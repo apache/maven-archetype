@@ -32,4 +32,4 @@ Maven Archetype Packaging Reference
 
 %{snippet|id=maven-archetype-lifecycle|file=${project.basedir}/src/main/resources/META-INF/plexus/components.xml}
 
-  (see {{{/ref/current/maven-core/default-bindings.html}} plugin bindings for Maven-provided packagings})
+  (see {{{/ref/current/maven-core/default-bindings.html} plugin bindings for Maven-provided packagings}})
