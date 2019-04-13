@@ -26,7 +26,7 @@
 
   <parent>
     <groupId>org.apache.maven.archetype.test</groupId>
-    <artifactId>test-create-4-war</artifactId>
+    <artifactId>test-create-4</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
 

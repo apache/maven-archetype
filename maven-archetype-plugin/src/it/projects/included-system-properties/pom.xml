@@ -28,7 +28,7 @@
         <groupId>com.test</groupId>
         <artifactId>test</artifactId>
         <version>1.0-SNAPSHOT</version>
-        <relativePath>./pom-parent.xml.sample</relativePath>
+        <relativePath>./pom-parent.xml</relativePath>
     </parent>
 
     <groupId>org.apache.maven.archetype.test</groupId>

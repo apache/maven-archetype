@@ -196,7 +196,7 @@ public class CreateArchetypeFromProjectMojo
      * <code>archetype-metadata.xml</code>, with <code>2.5.1-SNAPSHOT</code> as the default value.
      * </p>
      */
-    @Parameter( property = "archetype.properties" )
+    @Parameter( defaultValue = "archetype.properties", property = "archetype.properties" )
     private File propertyFile;
 
     /**

@@ -26,40 +26,12 @@
 
   <parent>
     <groupId>org.apache.maven.archetype.test</groupId>
-    <artifactId>test-create-4-ear</artifactId>
+    <artifactId>test-create-2</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>test-create-4-ear</artifactId>
-  <name>Maven archetype Test create-4-subModuleEAR</name>
-  <packaging>ear</packaging>
-
-  <dependencies>
-    <dependency>
-      <groupId>org.apache.maven.archetype.test</groupId>
-      <artifactId>test-create-4-war</artifactId>
-      <version>1.0-SNAPSHOT</version>
-      <type>war</type>
-    </dependency>
-  </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-ear-plugin</artifactId>
-        <configuration>
-          <modules>
-            <webModule>
-              <groupId>org.apache.maven.archetype.test</groupId>
-              <artifactId>test-create-4-war</artifactId>
-              <contextRoot>test-create-4</contextRoot>
-              <bundleFileName>test-create-4.war</bundleFileName>
-            </webModule>
-          </modules>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+  <artifactId>test-create-2-subModule</artifactId>
+  <name>Maven archetype Test create-2-subModule</name>
+  <packaging>pom</packaging>
 
 </project>

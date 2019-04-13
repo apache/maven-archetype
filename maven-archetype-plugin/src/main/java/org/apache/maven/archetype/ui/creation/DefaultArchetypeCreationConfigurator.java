@@ -330,7 +330,7 @@ public class DefaultArchetypeCreationConfigurator
             }
             catch ( FileNotFoundException ex )
             {
-                getLogger().debug( "archetype.properties does not exist" );
+                getLogger().debug( propertyFile.getName() + "  does not exist" );
             }
         }
 
