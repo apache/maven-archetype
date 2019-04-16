@@ -186,6 +186,9 @@
   <profiles>
     <profile>
       <id>run-its</id>
+      <properties>
+        <maven.it.failure.ignore>false</maven.it.failure.ignore>
+      </properties>
       <build>
         <plugins>
           <plugin>
@@ -251,6 +254,7 @@
                 <!-- e.g. ensure that Java7 picks up TLSv1.2 when connecting with Central -->
                 <https.protocols>${https.protocols}</https.protocols>
               </properties>
+              <ignoreFailures>${maven.it.failure.ignore}</ignoreFailures>
             </configuration>
             <executions>
               <execution>

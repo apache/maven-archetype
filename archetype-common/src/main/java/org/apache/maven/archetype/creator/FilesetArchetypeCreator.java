@@ -182,7 +182,7 @@ public class FilesetArchetypeCreator
 
             String packageName = configurationProperties.getProperty( Constants.PACKAGE );
 
-            Model pom = pomManager.readPom( FileUtils.resolveFile( basedir, Constants.ARCHETYPE_POM ) );
+            Model pom = pomManager.readPom( project.getFile() );
 
             List<String> excludePatterns =
                 configurationProperties.getProperty( Constants.EXCLUDE_PATTERNS ) != null
@@ -241,7 +241,7 @@ public class FilesetArchetypeCreator
 
             createPoms( pom, configurationProperties.getProperty( Constants.ARTIFACT_ID ),
                         configurationProperties.getProperty( Constants.ARTIFACT_ID ), archetypeFilesDirectory, basedir,
-                        pomReversedProperties, preserveCData, keepParent );
+                        project.getFile(), pomReversedProperties, preserveCData, keepParent );
             getLogger().debug( "Created Archetype " + archetypeDescriptor.getName() + " template pom(s)" );
 
             
@@ -532,7 +532,8 @@ public class FilesetArchetypeCreator
     }
 
     private void createPoms( Model pom, String rootArtifactId, String artifactId, File archetypeFilesDirectory,
-                             File basedir, Properties pomReversedProperties, boolean preserveCData, boolean keepParent )
+                             File basedir, File rootPom, Properties pomReversedProperties, boolean preserveCData,
+                             boolean keepParent )
         throws IOException, FileNotFoundException, XmlPullParserException
     {
         setArtifactId( pomReversedProperties, pom.getArtifactId() );
@@ -554,8 +555,7 @@ public class FilesetArchetypeCreator
         restoreParentArtifactId( pomReversedProperties, null );
         restoreArtifactId( pomReversedProperties, artifactId );
 
-        createArchetypePom( pom, archetypeFilesDirectory, pomReversedProperties,
-                            FileUtils.resolveFile( basedir, Constants.ARCHETYPE_POM ), preserveCData, keepParent );
+        createArchetypePom( pom, archetypeFilesDirectory, pomReversedProperties, rootPom, preserveCData, keepParent );
     }
 
     private String getPackageInPathFormat( String aPackage )

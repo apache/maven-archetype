@@ -138,8 +138,8 @@ public class CreateProjectFromArchetypeMojo
     @Parameter( property = "interactiveMode", defaultValue = "${settings.interactiveMode}", required = true )
     private Boolean interactiveMode;
 
-    @Parameter( defaultValue = "${basedir}" )
-    private File basedir;
+    @Parameter( defaultValue = "${basedir}", property = "outputDirectory" )
+    private File outputDirectory;
 
     @Parameter( defaultValue = "${session}", readonly = true )
     private MavenSession session;
@@ -173,7 +173,7 @@ public class CreateProjectFromArchetypeMojo
             new ArchetypeGenerationRequest().setArchetypeGroupId( archetypeGroupId )
             .setArchetypeArtifactId( archetypeArtifactId )
             .setArchetypeVersion( archetypeVersion )
-            .setOutputDirectory( basedir.getAbsolutePath() )
+            .setOutputDirectory( outputDirectory.getAbsolutePath() )
             .setLocalRepository( localRepository )
             .setRemoteArtifactRepositories( remoteArtifactRepositories )
             .setFilter( filter )
@@ -237,7 +237,7 @@ public class CreateProjectFromArchetypeMojo
     {
         getLog().info( "Invoking post-archetype-generation goals: " + goals );
 
-        File projectBasedir = new File( basedir, artifactId );
+        File projectBasedir = new File( outputDirectory, artifactId );
 
         if ( projectBasedir.exists() )
         {

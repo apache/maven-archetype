@@ -43,7 +43,6 @@
   <inceptionYear>2007</inceptionYear>
 
   <modules>
-    <module>archetype-testing</module>
     <module>archetype-models</module>
     <module>archetype-common</module>
     <module>maven-archetype-plugin</module>
