@@ -57,22 +57,15 @@ import org.jdom.Namespace;
 import java.util.Stack;
 
 /**
- * A non-public utility class used by both <code>{@link XMLOutputter}</code> and
- * <code>{@link SAXOutputter}</code> to manage namespaces in a JDOM Document
- * during output.
+ * A non-public utility class used by <code>{@link XMLOutputter}</code>
+ * to manage namespaces in a JDOM Document during output.
  *
  * @author Elliotte Rusty Harolde
  * @author Fred Trimble
  * @author Brett McLaughlin
- * @version $Revision: 1.13 $, $Date: 2004/02/06 09:28:32 $
  */
 class NamespaceStack
 {
-
-    @SuppressWarnings( "unused" )
-    private static final String CVS_ID =
-        "@(#) $RCSfile: NamespaceStack.java,v $ $Revision: 1.13 $ $Date: 2004/02/06 09:28:32 $ $Name: jdom_1_0 $";
-
     /** The prefixes available */
     private Stack<String> prefixes;
 
@@ -82,8 +75,8 @@ class NamespaceStack
     /** This creates the needed storage. */
     NamespaceStack()
     {
-        prefixes = new Stack<String>();
-        uris = new Stack<String>();
+        prefixes = new Stack<>();
+        uris = new Stack<>();
     }
 
     /**
@@ -148,8 +141,8 @@ class NamespaceStack
     @Override
     public String toString()
     {
-        StringBuffer buf = new StringBuffer();
-        String sep = System.getProperty( "line.separator" );
+        StringBuilder buf = new StringBuilder();
+        String sep = System.lineSeparator();
         buf.append( "Stack: " + prefixes.size() + sep );
         for ( int i = 0; i < prefixes.size(); i++ )
         {

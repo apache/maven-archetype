@@ -112,11 +112,11 @@ public class DefaultFilesetArchetypeGenerator
                     throw new ArchetypeNotConfigured( "No archetype was chosen.", null );
                 }
 
-                StringBuffer exceptionMessage = new StringBuffer(
+                StringBuilder exceptionMessage = new StringBuilder(
                     "Archetype " + request.getArchetypeGroupId() + ":" + request.getArchetypeArtifactId() + ":"
                         + request.getArchetypeVersion() + " is not configured" );
 
-                List<String> missingProperties = new ArrayList<String>( 0 );
+                List<String> missingProperties = new ArrayList<>( 0 );
                 for ( RequiredProperty requiredProperty : archetypeDescriptor.getRequiredProperties() )
                 {
                     if ( StringUtils.isEmpty( request.getProperties().getProperty( requiredProperty.getKey() ) ) )

@@ -111,9 +111,9 @@ public class DefaultArchetypeFilesResolver
 
         scanner.setBasedir( "" );
 
-        Set<String> selectedDirectories = new HashSet<String>();
+        Set<String> selectedDirectories = new HashSet<>();
 
-        List<String> includes = new ArrayList<String>();
+        List<String> includes = new ArrayList<>();
 
         for ( String sourcesFile : sourcesFiles )
         {
@@ -239,7 +239,7 @@ public class DefaultArchetypeFilesResolver
     @Override
     public List<String> getPackagedFiles( List<String> files, String packageName )
     {
-        List<String> packagedFiles = new ArrayList<String>();
+        List<String> packagedFiles = new ArrayList<>();
         for ( String file : files )
         {
             if ( file.startsWith( packageName ) )
@@ -265,7 +265,7 @@ public class DefaultArchetypeFilesResolver
     @Override
     public List<String> getUnpackagedFiles( List<String> files, String packageName )
     {
-        List<String> unpackagedFiles = new ArrayList<String>();
+        List<String> unpackagedFiles = new ArrayList<>();
         for ( String file : files )
         {
             if ( !file.startsWith( packageName ) )
@@ -319,12 +319,12 @@ public class DefaultArchetypeFilesResolver
             excludes += "," + defaultExclude + "/**";
         }
 
-        @SuppressWarnings( "unchecked" ) List<File> absoluteFiles =
+        List<File> absoluteFiles =
             FileUtils.getFiles( basedir, StringUtils.join( languagesPathesArray, "," ), excludes );
 
         getLogger().debug( "Found " + absoluteFiles.size() + " potential archetype files" );
 
-        List<String> files = new ArrayList<String>( absoluteFiles.size() );
+        List<String> files = new ArrayList<>( absoluteFiles.size() );
 
         for ( File file : absoluteFiles )
         {

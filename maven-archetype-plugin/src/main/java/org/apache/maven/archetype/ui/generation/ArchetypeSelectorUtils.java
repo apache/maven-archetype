@@ -65,11 +65,11 @@ public class ArchetypeSelectorUtils
             return Collections.emptyMap();
         }
         Map<String, List<Archetype>> filtered =
-            new LinkedHashMap<String, List<Archetype>>( archetypesPerCatalog.size() );
+            new LinkedHashMap<>( archetypesPerCatalog.size() );
 
         for ( Map.Entry<String, List<Archetype>> entry : archetypesPerCatalog.entrySet() )
         {
-            List<Archetype> archetypes = new ArrayList<Archetype>();
+            List<Archetype> archetypes = new ArrayList<>();
 
             for ( Archetype archetype : entry.getValue() )
             {

@@ -132,7 +132,7 @@ public class ArchetypePrompter
 
     private String formatMessage( String message, List<String> possibleValues, String defaultReply )
     {
-        StringBuffer formatted = new StringBuffer( message.length() * 2 );
+        StringBuilder formatted = new StringBuilder( message.length() * 2 );
 
         formatted.append( message );
         /*

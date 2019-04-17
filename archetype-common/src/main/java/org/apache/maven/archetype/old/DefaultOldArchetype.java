@@ -127,7 +127,7 @@ public class DefaultOldArchetype
     public void createArchetype( ArchetypeGenerationRequest request, File archetypeFile )
         throws ArchetypeDescriptorException, ArchetypeTemplateProcessingException
     {
-        Map<String, String> parameters = new HashMap<String, String>();
+        Map<String, String> parameters = new HashMap<>();
 
         parameters.put( "basedir", request.getOutputDirectory() );
 

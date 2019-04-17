@@ -83,25 +83,25 @@ public class ArchetypeDescriptor
 
     public ArchetypeDescriptor()
     {
-        sources = new ArrayList<String>();
+        sources = new ArrayList<>();
 
-        resources = new ArrayList<String>();
+        resources = new ArrayList<>();
 
-        testSources = new ArrayList<String>();
+        testSources = new ArrayList<>();
 
-        testResources = new ArrayList<String>();
+        testResources = new ArrayList<>();
 
-        siteResources = new ArrayList<String>();
+        siteResources = new ArrayList<>();
 
-        sourcesDescriptors = new HashMap<String, TemplateDescriptor>();
+        sourcesDescriptors = new HashMap<>();
 
-        testSourcesDescriptors = new HashMap<String, TemplateDescriptor>();
+        testSourcesDescriptors = new HashMap<>();
 
-        resourcesDescriptors = new HashMap<String, TemplateDescriptor>();
+        resourcesDescriptors = new HashMap<>();
 
-        testResourcesDescriptors = new HashMap<String, TemplateDescriptor>();
+        testResourcesDescriptors = new HashMap<>();
 
-        siteResourcesDescriptors = new HashMap<String, TemplateDescriptor>();
+        siteResourcesDescriptors = new HashMap<>();
     }
 
     // ----------------------------------------------------------------------

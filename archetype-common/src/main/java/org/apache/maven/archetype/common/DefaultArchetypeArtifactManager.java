@@ -64,7 +64,7 @@ public class DefaultArchetypeArtifactManager
     @Requirement
     private PomManager pomManager;
 
-    private Map<String, File> archetypeCache = new TreeMap<String, File>();
+    private Map<String, File> archetypeCache = new TreeMap<>();
 
     @Override
     public File getArchetypeFile( final String groupId, final String artifactId, final String version,

@@ -76,7 +76,7 @@ public class ArchetypeTest
 
         ArtifactRepository localRepository = new DefaultArtifactRepository( "local", mavenRepoLocal, layout );
 
-        List<ArtifactRepository> remoteRepositories = new ArrayList<ArtifactRepository>();
+        List<ArtifactRepository> remoteRepositories = new ArrayList<>();
 
         String mavenRepoRemote = getTestFile( "src/test/repository" ).toURI().toURL().toString();
 
@@ -110,7 +110,7 @@ public class ArchetypeTest
         // Set up the Velocity context
         // ----------------------------------------------------------------------
 
-        Map<String, Object> parameters = new HashMap<String, Object>();
+        Map<String, Object> parameters = new HashMap<>();
         parameters.put( "basedir", request.getOutputDirectory() );
         parameters.put( "package", request.getPackage() );
         parameters.put( "packageName", request.getPackage() );

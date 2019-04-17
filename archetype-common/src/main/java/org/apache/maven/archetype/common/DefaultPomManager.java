@@ -326,7 +326,7 @@ public class DefaultPomManager
 
     private Map<String, Dependency> createDependencyMap( List<Dependency> dependencies )
     {
-        Map<String, Dependency> dependencyMap = new HashMap<String, Dependency>();
+        Map<String, Dependency> dependencyMap = new HashMap<>();
         for ( Dependency dependency : dependencies )
         {
             dependencyMap.put( dependency.getManagementKey(), dependency );
@@ -354,10 +354,10 @@ public class DefaultPomManager
         if ( generatedProfiles != null && generatedProfiles.size() > 0 )
         {
             List<Profile> modelProfiles = model.getProfiles();
-            Map<String, Profile> modelProfileIdMap = new HashMap<String, Profile>();
+            Map<String, Profile> modelProfileIdMap = new HashMap<>();
             if ( modelProfiles == null )
             {
-                modelProfiles = new ArrayList<Profile>();
+                modelProfiles = new ArrayList<>();
                 model.setProfiles( modelProfiles );
             }
             else if ( modelProfiles.size() > 0 )

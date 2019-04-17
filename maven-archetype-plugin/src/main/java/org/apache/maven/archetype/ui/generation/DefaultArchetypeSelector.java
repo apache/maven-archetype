@@ -180,7 +180,7 @@ public class DefaultArchetypeSelector
             throw new NullPointerException( "Catalogs cannot be null" );
         }
 
-        Map<String, List<Archetype>> archetypes = new LinkedHashMap<String, List<Archetype>>();
+        Map<String, List<Archetype>> archetypes = new LinkedHashMap<>();
 
         for ( String catalog : StringUtils.split( catalogs, "," ) )
         {
@@ -271,7 +271,7 @@ public class DefaultArchetypeSelector
 
     private static <K, V> Map.Entry<K, V> newMapEntry( K key, V value )
     {
-        Map<K, V> map = new HashMap<K, V>( 1 );
+        Map<K, V> map = new HashMap<>( 1 );
         map.put( key, value );
 
         return map.entrySet().iterator().next();

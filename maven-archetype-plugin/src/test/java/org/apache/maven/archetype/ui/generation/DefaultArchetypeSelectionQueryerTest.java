@@ -178,7 +178,7 @@ public class DefaultArchetypeSelectionQueryerTest
 
     private static Map<String, List<Archetype>> createDefaultArchetypeCatalog()
     {
-        List<Archetype> list = new ArrayList<Archetype>();
+        List<Archetype> list = new ArrayList<>();
         list.add( createArchetype( "set-groupId", "set-artifactId", "set-version" ) );
         list.add( createArchetype( "default-groupId", "default-artifactId", "default-version" ) );
         return Collections.singletonMap( "internal", list );

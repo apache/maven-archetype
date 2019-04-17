@@ -30,7 +30,7 @@ public class TestListScanner
 {
     public void testUnixPaths()
     {
-        List<String> archetypeResources = new ArrayList<String>();
+        List<String> archetypeResources = new ArrayList<>();
 
         archetypeResources.add( "pom.xml" );
         archetypeResources.add( "App.java" );
@@ -59,7 +59,7 @@ public class TestListScanner
 
     public void testWindowsPaths()
     {
-        List<String> archetypeResources = new ArrayList<String>();
+        List<String> archetypeResources = new ArrayList<>();
 
         archetypeResources.add( "pom.xml" );
         archetypeResources.add( "App.java" );

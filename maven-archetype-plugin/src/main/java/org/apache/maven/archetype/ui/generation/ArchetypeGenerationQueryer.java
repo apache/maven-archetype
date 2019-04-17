@@ -25,9 +25,9 @@ import org.codehaus.plexus.components.interactivity.PrompterException;
 import java.util.regex.Pattern;
 
 /**
- * User interaction component to query informations necessary for a project generation from an archetype.
+ * <p>User interaction component to query informations necessary for a project generation from an archetype.</p>
  * 
- * @todo this interface is bound to its implementation through the prompter exception
+ * TODO this interface is bound to its implementation through the prompter exception
  */
 public interface ArchetypeGenerationQueryer
 {

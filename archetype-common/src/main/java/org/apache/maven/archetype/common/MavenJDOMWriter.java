@@ -91,8 +91,6 @@ import java.util.Map;
 
 /**
  * Class MavenJDOMWriter.
- *
- * @version $Revision$ $Date$
  */
 public class MavenJDOMWriter
 {
@@ -199,7 +197,7 @@ public class MavenJDOMWriter
                 findAndReplaceSimpleElement( innerCounter, element, key, (String) props.get( key ), null );
             }
 
-            List<String> lst = new ArrayList<String>( props.keySet() );
+            List<String> lst = new ArrayList<>( props.keySet() );
             it = element.getChildren().iterator();
             while ( it.hasNext() )
             {
@@ -2290,8 +2288,6 @@ public class MavenJDOMWriter
 
     /**
      * Class Counter.
-     *
-     * @version $Revision$ $Date$
      */
     public class Counter
     {

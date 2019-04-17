@@ -39,9 +39,9 @@ public class ArchetypeCreationRequest
 
 //    private File propertyFile;
 
-    private List<String> languages = new ArrayList<String>();
+    private List<String> languages = new ArrayList<>();
 
-    private List<String> filtereds = new ArrayList<String>();
+    private List<String> filtereds = new ArrayList<>();
 
     private String defaultEncoding = "UTF-8";
 

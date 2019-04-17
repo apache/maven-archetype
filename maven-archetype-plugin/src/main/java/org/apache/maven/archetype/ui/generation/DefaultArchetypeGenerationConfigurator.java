@@ -90,7 +90,7 @@ public class DefaultArchetypeGenerationConfigurator
 
         ArtifactRepository archetypeRepository = null;
 
-        List<ArtifactRepository> repositories = new ArrayList<ArtifactRepository>();
+        List<ArtifactRepository> repositories = new ArrayList<>();
 
         Properties properties = new Properties( executionProperties );
 
@@ -272,7 +272,7 @@ public class DefaultArchetypeGenerationConfigurator
                 // in batch mode, we assume the defaults, and if still not configured fail
                 if ( !archetypeConfiguration.isConfigured() )
                 {
-                    StringBuffer exceptionMessage = new StringBuffer();
+                    StringBuilder exceptionMessage = new StringBuilder();
                     exceptionMessage.append( "Archetype " );
                     exceptionMessage.append( request.getArchetypeGroupId() );
                     exceptionMessage.append( ":" );
@@ -281,7 +281,7 @@ public class DefaultArchetypeGenerationConfigurator
                     exceptionMessage.append( request.getArchetypeVersion() );
                     exceptionMessage.append( " is not configured" );
 
-                    List<String> missingProperties = new ArrayList<String>( 0 );
+                    List<String> missingProperties = new ArrayList<>( 0 );
                     for ( String requiredProperty : archetypeConfiguration.getRequiredProperties() )
                     {
                         if ( !archetypeConfiguration.isConfigured( requiredProperty ) )

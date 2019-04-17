@@ -45,7 +45,7 @@ public class PathUtils
         file = convertPathForOS( file );
 
         String[] fileAsArray = StringUtils.split( file, File.separator );
-        List<String> directoryAsArray = new ArrayList<String>();
+        List<String> directoryAsArray = new ArrayList<>();
 
         for ( int i = 0; ( i < level ) && ( i < ( fileAsArray.length - 1 ) ); i++ )
         {

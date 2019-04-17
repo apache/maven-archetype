@@ -50,9 +50,9 @@ public class ArchetypeGenerationRequest
 
     private Proxy activeProxy;
 
-    private List<Server> servers = new ArrayList<Server>();
+    private List<Server> servers = new ArrayList<>();
 
-    private List<Mirror> mirrors = new ArrayList<Mirror>();
+    private List<Mirror> mirrors = new ArrayList<>();
 
     // Archetype definition
     private String archetypeName;

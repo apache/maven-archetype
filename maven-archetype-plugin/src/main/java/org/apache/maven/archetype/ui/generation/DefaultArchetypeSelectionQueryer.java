@@ -79,9 +79,9 @@ public class DefaultArchetypeSelectionQueryer
         {
             StringBuilder query = new StringBuilder( "Choose archetype:\n" );
 
-            Set<String> archetypeKeys = new HashSet<String>();
-            List<String> answers = new ArrayList<String>();
-            Map<String, Archetype> archetypeAnswerMap = new HashMap<String, Archetype>();
+            Set<String> archetypeKeys = new HashSet<>();
+            List<String> answers = new ArrayList<>();
+            Map<String, Archetype> archetypeAnswerMap = new HashMap<>();
 
             int counter = 0;
             int defaultSelection = 0;
@@ -160,7 +160,7 @@ public class DefaultArchetypeSelectionQueryer
     private Archetype selectVersion( Map<String, List<Archetype>> catalogs, String groupId, String artifactId )
         throws PrompterException
     {
-        SortedMap<ArtifactVersion, Archetype> archetypeVersionsMap = new TreeMap<ArtifactVersion, Archetype>();
+        SortedMap<ArtifactVersion, Archetype> archetypeVersionsMap = new TreeMap<>();
 
         for ( Map.Entry<String, List<Archetype>> entry : catalogs.entrySet() )
         {
@@ -189,8 +189,8 @@ public class DefaultArchetypeSelectionQueryer
         // let the user choose between available versions
         StringBuilder query = new StringBuilder( "Choose " + groupId + ":" + artifactId + " version: \n" );
 
-        List<String> answers = new ArrayList<String>();
-        Map<String, Archetype> answerMap = new HashMap<String, Archetype>();
+        List<String> answers = new ArrayList<>();
+        Map<String, Archetype> answerMap = new HashMap<>();
 
         int counter = 1;
         String mapKey = null;

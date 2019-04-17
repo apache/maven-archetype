@@ -294,7 +294,7 @@ public class CreateArchetypeFromProjectMojo
 
     private List<String> getFilteredExtensions( String archetypeFilteredExtentions, File propertyFile )
     {
-        List<String> filteredExtensions = new ArrayList<String>();
+        List<String> filteredExtensions = new ArrayList<>();
 
         if ( StringUtils.isNotEmpty( archetypeFilteredExtentions ) )
         {
@@ -328,7 +328,7 @@ public class CreateArchetypeFromProjectMojo
 
     private List<String> getLanguages( String archetypeLanguages, File propertyFile )
     {
-        List<String> resultingLanguages = new ArrayList<String>();
+        List<String> resultingLanguages = new ArrayList<>();
 
         if ( StringUtils.isNotEmpty( archetypeLanguages ) )
         {

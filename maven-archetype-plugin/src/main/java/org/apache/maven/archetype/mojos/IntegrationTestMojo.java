@@ -74,14 +74,11 @@ import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.util.introspection.ReflectionValueExtractor;
 
 /**
- * <p>
- * Execute the archetype integration tests, consisting in generating projects from the current archetype and optionally
- * comparing generated projects with reference copy.
- * </p>
- * <p/>
- * <p>
- * Each IT consists of a sub-directory in <code>src/test/resources/projects</code> containing:
- * </p>
+ * <p>Execute the archetype integration tests, consisting in generating projects from the current archetype and optionally
+ * comparing generated projects with reference copy.</p>
+ * 
+ * <p>Each IT consists of a sub-directory in <code>src/test/resources/projects</code> containing:</p>
+ * 
  * <ul>
  * <li>a <code>goal.txt</code> file, containing a list of goals to run against the generated project (can be empty,
  * content ignored before maven-archetype-plugin 2.1),</li>
@@ -89,17 +86,17 @@ import org.codehaus.plexus.util.introspection.ReflectionValueExtractor;
  * <li>an optional <code>reference/</code> directory containing a reference copy of the expected project created from
  * the IT.</li>
  * </ul>
- * <p/>
- * To let the IT create a Maven module below some other Maven project (being generated from another archetype)
+ * <p>To let the IT create a Maven module below some other Maven project (being generated from another archetype)
  * one can additionally specify an optional <code>archetype.pom.properties</code> file in the parent directory,
  * specifying the archetype's <code>groupId</code>, <code>artifactId</code> and <code>version</code> along with its 
  * <code>archetype.properties</code> file, containing properties for project generation. Both files are leveraged
- * to create the parent project for this IT. Parent projects can be nested.
- * An example structure for such an integration test looks like this
- * <table>
+ * to create the parent project for this IT. Parent projects can be nested.</p>
+ * 
+ * <p>An example structure for such an integration test looks like this</p>
+ * <table summary="integration test folder structure">
  * <tr>
- * <th>File/Directory</code></td>
- * <th>Description</td>
+ * <th>File/Directory</th>
+ * <th>Description</th>
  * </tr>
  * <tr>
  * <td><code>src/test/resources/projects/it1</code></td>
@@ -125,10 +122,10 @@ import org.codehaus.plexus.util.introspection.ReflectionValueExtractor;
  * <td><code>src/test/resources/projects/it1/child/archetype.properties</code></td>
  * <td>All required properties for this project's archetype</td>
  * </tr>
- * </table> 
- * <p/>
- * Notice that it is expected to be run as part as of a build after the <code>package</code> phase and not directly as a
- * goal from CLI.
+ * </table>
+ *  
+ * <p>Notice that it is expected to be run as part as of a build after the <code>package</code> phase and not directly as a
+ * goal from CLI.</p>
  *
  * @author rafale
  */
@@ -275,7 +272,7 @@ public class IntegrationTestMojo
      * @since 3.0.2
      */
     @Parameter
-    private Map<String, String> properties = new HashMap<String, String>();
+    private Map<String, String> properties = new HashMap<>();
 
     @Override
     public void execute()
@@ -706,7 +703,7 @@ public class IntegrationTestMojo
         ScriptRunner scriptRunner = new ScriptRunner( getLog() );
         scriptRunner.setScriptEncoding( encoding );
 
-        Map<String, Object> context = new LinkedHashMap<String, Object>();
+        Map<String, Object> context = new LinkedHashMap<>();
         context.put( "projectDir", basedir );
 
         try
@@ -776,7 +773,7 @@ public class IntegrationTestMojo
      */
     private Map<String, Object> getInterpolationValueSource()
     {
-        Map<String, Object> props = new HashMap<String, Object>();
+        Map<String, Object> props = new HashMap<>();
         if ( filterProperties != null )
         {
             props.putAll( filterProperties );

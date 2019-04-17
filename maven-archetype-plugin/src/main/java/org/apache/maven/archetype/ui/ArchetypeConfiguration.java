@@ -96,7 +96,7 @@ public class ArchetypeConfiguration
     {
         if ( requiredProperties == null )
         {
-            requiredProperties = new ArrayList<String>();
+            requiredProperties = new ArrayList<>();
         }
 
         return requiredProperties;
@@ -218,7 +218,7 @@ public class ArchetypeConfiguration
         return defaultProperties;
     }
 
-    Map<String, Pattern> propertiesValidationPatterns = new HashMap<String, Pattern>();
+    Map<String, Pattern> propertiesValidationPatterns = new HashMap<>();
 
     public void setPropertyValidationRegex( String requiredProperty, String regex )
     {

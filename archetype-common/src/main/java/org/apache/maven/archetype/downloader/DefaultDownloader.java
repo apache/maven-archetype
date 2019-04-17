@@ -59,7 +59,7 @@ public class DefaultDownloader
         pomCoordinate.setVersion( version );
         pomCoordinate.setExtension( "pom" );
 
-        List<ArtifactRepository> repositories = new ArrayList<ArtifactRepository>( remoteRepositories );
+        List<ArtifactRepository> repositories = new ArrayList<>( remoteRepositories );
         if ( repositories.isEmpty() && archetypeRepository != null )
         {
             repositories.add( archetypeRepository );

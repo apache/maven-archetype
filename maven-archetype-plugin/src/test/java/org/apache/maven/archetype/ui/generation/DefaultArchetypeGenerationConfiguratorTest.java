@@ -37,7 +37,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 /**
- * @todo probably testing a little deep, could just test ArchetypeConfiguration
+ * TODO probably testing a little deep, could just test ArchetypeConfiguration
  */
 public class DefaultArchetypeGenerationConfiguratorTest
     extends PlexusTestCase

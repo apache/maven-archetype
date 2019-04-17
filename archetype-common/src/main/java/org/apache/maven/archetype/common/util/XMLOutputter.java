@@ -76,16 +76,17 @@ import java.io.Writer;
 import java.util.List;
 
 /**
- * This class is a fork from jdom 1.0 modified to preserve CData and comments parts.
- * <p/>
- * Outputs a JDOM document as a stream of bytes. The outputter can manage many
+ * <p>This class is a fork from jdom 1.0 modified to preserve CData and
+ * comments parts.</p>
+ * 
+ * <p>Outputs a JDOM document as a stream of bytes. The outputter can manage many
  * styles of document formatting, from untouched to pretty printed. The default
  * is to output the document content exactly as created, but this can be changed
  * by setting a new Format object. For pretty-print output, use
  * <code>{@link Format#getPrettyFormat()}</code>. For whitespace-normalized
- * output, use <code>{@link Format#getCompactFormat()}</code>.
- * <p/>
- * There are <code>{@link #output output(...)}</code> methods to print any of
+ * output, use <code>{@link Format#getCompactFormat()}</code>.</p>
+ * 
+ * <p>There are <code>{@link #output output(...)}</code> methods to print any of
  * the standard JDOM classes, including Document and Element, to either a Writer
  * or an OutputStream. <b>Warning</b>: When outputting to a Writer, make sure
  * the writer's encoding matches the encoding setting in the Format object. This
@@ -95,24 +96,24 @@ import java.util.List;
  * queried for its encoding, the information must be passed to the Format
  * manually in its constructor or via the
  * <code>{@link Format#setEncoding}</code> method. The default encoding is
- * UTF-8.
- * <p/>
- * The methods <code>{@link #outputString outputString(...)}</code> are for
+ * UTF-8.</p>
+ * 
+ * <p>The methods <code>{@link #outputString outputString(...)}</code> are for
  * convenience only; for top performance you should call one of the <code>{@link
  * #output output(...)}</code> methods and pass in your own Writer or
- * OutputStream if possible.
- * <p/>
- * XML declarations are always printed on their own line followed by a line
+ * OutputStream if possible.</p>
+ * 
+ * <p>XML declarations are always printed on their own line followed by a line
  * seperator (this doesn't change the semantics of the document). To omit
  * printing of the declaration use
  * <code>{@link Format#setOmitDeclaration}</code>. To omit printing of the
  * encoding in the declaration use <code>{@link Format#setOmitEncoding}</code>.
  * Unfortunatly there is currently no way to know the original encoding of the
- * document.
- * <p/>
- * Empty elements are by default printed as &lt;empty/&gt;, but this can be
+ * document.</p>
+ * 
+ * <p>Empty elements are by default printed as &lt;empty/&gt;, but this can be
  * configured with <code>{@link Format#setExpandEmptyElements}</code> to cause
- * them to be expanded to &lt;empty&gt;&lt;/empty&gt;.
+ * them to be expanded to &lt;empty&gt;&lt;/empty&gt;.</p>
  *
  * @author Brett McLaughlin
  * @author Jason Hunter
@@ -123,17 +124,11 @@ import java.util.List;
  * @author Dan Schaffer
  * @author Alex Chaffee
  * @author Bradley S. Huffman
- * @version $Revision: 1.112 $, $Date: 2004/09/01 06:08:18 $
  */
 
 public class XMLOutputter
     implements Cloneable
 {
-
-    @SuppressWarnings( "unused" )
-    private static final String CVS_ID =
-        "@(#) $RCSfile: XMLOutputter.java,v $ $Revision: 1.112 $ $Date: 2004/09/01 06:08:18 $ $Name: jdom_1_0 $";
-
     // For normal output
     private Format userFormat = Format.getRawFormat();
 
@@ -384,14 +379,12 @@ public class XMLOutputter
     // * * * * * * * * * * Output to a Writer * * * * * * * * * *
 
     /**
-     * This will print the <code>Document</code> to the given Writer.
-     * <p/>
-     * <p/>
-     * Warning: using your own Writer may cause the outputter's
+     * <p>This will print the <code>Document</code> to the given Writer.</p>
+     * 
+     * <p>Warning: using your own Writer may cause the outputter's
      * preferred character encoding to be ignored.  If you use
      * encodings other than UTF-8, we recommend using the method that
-     * takes an OutputStream instead.
-     * </p>
+     * takes an OutputStream instead.</p>
      *
      * @param doc <code>Document</code> to format.
      * @param out <code>Writer</code> to use.
@@ -1541,7 +1534,7 @@ public class XMLOutputter
      */
     public String escapeAttributeEntities( String str )
     {
-        StringBuffer buffer;
+        StringBuilder buffer;
         char ch;
         String entity;
         EscapeStrategy strategy = currentFormat.escapeStrategy;
@@ -1593,9 +1586,9 @@ public class XMLOutputter
             {
                 if ( entity != null )
                 {
-                    // An entity occurred, so we'll have to use StringBuffer
+                    // An entity occurred, so we'll have to use StringBuilder
                     // (allocate room for it plus a few more entities).
-                    buffer = new StringBuffer( str.length() + 20 );
+                    buffer = new StringBuilder( str.length() + 20 );
                     // Copy previous skipped characters and fall through
                     // to pickup current character
                     buffer.append( str.substring( 0, i ) );
@@ -1616,7 +1609,7 @@ public class XMLOutputter
         }
 
         // If there were any entities, return the escaped characters
-        // that we put in the StringBuffer. Otherwise, just return
+        // that we put in the StringBuilder. Otherwise, just return
         // the unmodified input string.
         return ( buffer == null ) ? str : buffer.toString();
     }
@@ -1638,7 +1631,7 @@ public class XMLOutputter
             return str;
         }
 
-        StringBuffer buffer;
+        StringBuilder buffer;
         char ch;
         String entity;
         EscapeStrategy strategy = currentFormat.escapeStrategy;
@@ -1679,9 +1672,9 @@ public class XMLOutputter
             {
                 if ( entity != null )
                 {
-                    // An entity occurred, so we'll have to use StringBuffer
+                    // An entity occurred, so we'll have to use StringBuilder
                     // (allocate room for it plus a few more entities).
-                    buffer = new StringBuffer( str.length() + 20 );
+                    buffer = new StringBuilder( str.length() + 20 );
                     // Copy previous skipped characters and fall through
                     // to pickup current character
                     buffer.append( str.substring( 0, i ) );
@@ -1702,7 +1695,7 @@ public class XMLOutputter
         }
 
         // If there were any entities, return the escaped characters
-        // that we put in the StringBuffer. Otherwise, just return
+        // that we put in the StringBuilder. Otherwise, just return
         // the unmodified input string.
         return ( buffer == null ) ? str : buffer.toString();
     }
@@ -1739,7 +1732,7 @@ public class XMLOutputter
     @Override
     public String toString()
     {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         for ( int i = 0; i < userFormat.lineSeparator.length(); i++ )
         {
             char ch = userFormat.lineSeparator.charAt( i );
@@ -1796,7 +1789,7 @@ public class XMLOutputter
     }
 
     // Support method to print a name without using elt.getQualifiedName()
-    // and thus avoiding a StringBuffer creation and memory churn
+    // and thus avoiding a StringBuilder creation and memory churn
     private void printQualifiedName( Writer out, Element e )
         throws IOException
     {
@@ -1813,7 +1806,7 @@ public class XMLOutputter
     }
 
     // Support method to print a name without using att.getQualifiedName()
-    // and thus avoiding a StringBuffer creation and memory churn
+    // and thus avoiding a StringBuilder creation and memory churn
     private void printQualifiedName( Writer out, Attribute a )
         throws IOException
     {

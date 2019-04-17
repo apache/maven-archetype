@@ -42,7 +42,7 @@ public class TemplateDescriptor
     private String encoding;
 
     /**
-     * Creates a new instance of <code>TemplateDescriptor<code> that should be filtered
+     * Creates a new instance of <code>TemplateDescriptor</code> that should be filtered
      * and has the default encoding.
      */
     public TemplateDescriptor()

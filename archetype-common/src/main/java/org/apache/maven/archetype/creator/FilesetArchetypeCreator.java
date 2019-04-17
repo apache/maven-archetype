@@ -752,7 +752,7 @@ public class FilesetArchetypeCreator
 
     private List<String> concatenateToList( List<String> toConcatenate, String with )
     {
-        List<String> result = new ArrayList<String>( toConcatenate.size() );
+        List<String> result = new ArrayList<>( toConcatenate.size() );
 
         for ( String concatenate : toConcatenate )
         {
@@ -764,7 +764,7 @@ public class FilesetArchetypeCreator
 
     private List<String> addLists( List<String> list, List<String> other )
     {
-        List<String> result = new ArrayList<String>( list.size() + other.size() );
+        List<String> result = new ArrayList<>( list.size() + other.size() );
         result.addAll( list );
         result.addAll( other );
         return result;
@@ -924,7 +924,7 @@ public class FilesetArchetypeCreator
     private List<FileSet> createFileSets( List<String> files, int level, boolean packaged, String packageName,
                                           boolean filtered, String defaultEncoding )
     {
-        List<FileSet> fileSets = new ArrayList<FileSet>();
+        List<FileSet> fileSets = new ArrayList<>();
 
         if ( !files.isEmpty() )
         {
@@ -934,8 +934,8 @@ public class FilesetArchetypeCreator
                     : "" ) + " at level " + level );
             if ( level == 0 )
             {
-                List<String> includes = new ArrayList<String>( files );
-                List<String> excludes = new ArrayList<String>();
+                List<String> includes = new ArrayList<>( files );
+                List<String> excludes = new ArrayList<>();
 
                 if ( !includes.isEmpty() )
                 {
@@ -1141,7 +1141,7 @@ public class FilesetArchetypeCreator
 
     private Set<String> getExtensions( List<String> files )
     {
-        Set<String> extensions = new HashSet<String>();
+        Set<String> extensions = new HashSet<>();
 
         for ( String file : files )
         {
@@ -1153,7 +1153,7 @@ public class FilesetArchetypeCreator
 
     private Map<String, List<String>> getGroupsMap( final List<String> files, final int level )
     {
-        Map<String, List<String>> groups = new HashMap<String, List<String>>();
+        Map<String, List<String>> groups = new HashMap<>();
 
         for ( String file : files )
         {
@@ -1185,8 +1185,8 @@ public class FilesetArchetypeCreator
                                         final String group, final Set<String> unpackagedExtensions,
                                         final List<String> unpackagedFiles, String defaultEncoding )
     {
-        List<String> includes = new ArrayList<String>();
-        List<String> excludes = new ArrayList<String>();
+        List<String> includes = new ArrayList<>();
+        List<String> excludes = new ArrayList<>();
 
         for ( String extension : packagedExtensions )
         {
@@ -1207,7 +1207,7 @@ public class FilesetArchetypeCreator
     {
         String packageAsDir = StringUtils.replace( packageName, ".", "/" );
 
-        List<FileSet> packagedFileSets = new ArrayList<FileSet>();
+        List<FileSet> packagedFileSets = new ArrayList<>();
         List<String> packagedFiles = archetypeFilesResolver.getPackagedFiles( groupFiles, packageAsDir );
         getLogger().debug( "Found packaged Files:" + packagedFiles );
 
@@ -1319,7 +1319,7 @@ public class FilesetArchetypeCreator
     {
         getLogger().debug( "Resolving files for " + pom.getId() + " in " + basedir );
 
-        StringBuffer buff = new StringBuffer( "pom.xml*,archetype.properties*,target/**," );
+        StringBuilder buff = new StringBuilder( "pom.xml*,archetype.properties*,target/**," );
         for ( String module : pom.getModules() )
         {
             buff.append( ',' ).append( module ).append( "/**" );
@@ -1348,12 +1348,12 @@ public class FilesetArchetypeCreator
     private List<FileSet> resolveFileSets( String packageName, List<String> fileNames, List<String> languages,
                                            List<String> filtereds, String defaultEncoding )
     {
-        List<FileSet> resolvedFileSets = new ArrayList<FileSet>();
+        List<FileSet> resolvedFileSets = new ArrayList<>();
         getLogger().debug(
             "Resolving filesets with package=" + packageName + ", languages=" + languages + " and extentions="
                 + filtereds );
 
-        List<String> files = new ArrayList<String>( fileNames );
+        List<String> files = new ArrayList<>( fileNames );
 
         StringBuilder languageIncludes = new StringBuilder();
 
@@ -1690,8 +1690,8 @@ public class FilesetArchetypeCreator
     {
         Set<String> extensions = getExtensions( groupFiles );
 
-        List<String> includes = new ArrayList<String>();
-        List<String> excludes = new ArrayList<String>();
+        List<String> includes = new ArrayList<>();
+        List<String> excludes = new ArrayList<>();
 
         for ( String extension : extensions )
         {
@@ -1705,8 +1705,8 @@ public class FilesetArchetypeCreator
                                           final List<String> unpackagedFiles, final String group,
                                           final Set<String> packagedExtensions, String defaultEncoding )
     {
-        List<String> includes = new ArrayList<String>();
-        List<String> excludes = new ArrayList<String>();
+        List<String> includes = new ArrayList<>();
+        List<String> excludes = new ArrayList<>();
 
         for ( String extension : unpackagedExtensions )
         {
