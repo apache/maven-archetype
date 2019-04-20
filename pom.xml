@@ -30,7 +30,7 @@
 
   <groupId>org.apache.maven.archetype</groupId>
   <artifactId>maven-archetype</artifactId>
-  <version>3.1.0</version>
+  <version>3.1.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Maven Archetype</name>
@@ -53,7 +53,7 @@
     <connection>${maven.archetype.scm.devConnection}</connection>
     <developerConnection>${maven.archetype.scm.devConnection}</developerConnection>
     <url>https://github.com/apache/maven-archetype/tree/${project.scm.tag}</url>
-    <tag>maven-archetype-3.1.0</tag>
+    <tag>master</tag>
   </scm>
   <issueManagement>
     <system>jira</system>
