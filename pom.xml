@@ -22,7 +22,7 @@
 
 	<groupId>org.apache.maven.archetype</groupId>
 	<artifactId>maven-archetype</artifactId>
-	<version>3.0.2-TECHEDGE</version>
+	<version>3.0.3-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Maven Archetype</name>
@@ -44,7 +44,7 @@
 
 	<scm>
 		<developerConnection>scm:git:https://github.com/dcasagu/maven-archetype.git</developerConnection>
-		<tag>v3.0.2-TECHEDGE</tag>
+		<tag>V${project.version}</tag>
 	</scm>
 
 	<issueManagement>

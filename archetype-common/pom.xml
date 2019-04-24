@@ -26,7 +26,7 @@
   <parent>
     <groupId>org.apache.maven.archetype</groupId>
     <artifactId>maven-archetype</artifactId>
-    <version>3.0.2-TECHEDGE</version>
+    <version>3.0.3-SNAPSHOT</version>
   </parent>
 
   <artifactId>archetype-common</artifactId>
