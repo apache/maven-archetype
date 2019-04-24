@@ -1,357 +1,350 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!--
-  Licensed to the Apache Software Foundation (ASF) under one
-  or more contributor license agreements. See the NOTICE file
-  distributed with this work for additional information
-  regarding copyright ownership. The ASF licenses this file
-  to you under the Apache License, Version 2.0 (the
-  "License"); you may not use this file except in compliance
-  with the License. You may obtain a copy of the License at
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
+	license agreements. See the NOTICE file distributed with this work for additional 
+	information regarding copyright ownership. The ASF licenses this file to 
+	you under the Apache License, Version 2.0 (the "License"); you may not use 
+	this file except in compliance with the License. You may obtain a copy of 
+	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+	by applicable law or agreed to in writing, software distributed under the 
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+	OF ANY KIND, either express or implied. See the License for the specific 
+	language governing permissions and limitations under the License. -->
 
-  http://www.apache.org/licenses/LICENSE-2.0
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-  Unless required by applicable law or agreed to in writing,
-  software distributed under the License is distributed on an
-  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-  KIND, either express or implied. See the License for the
-  specific language governing permissions and limitations
-  under the License.
--->
+	<parent>
+		<groupId>org.apache.maven</groupId>
+		<artifactId>maven-parent</artifactId>
+		<version>30</version>
+	</parent>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+	<groupId>org.apache.maven.archetype</groupId>
+	<artifactId>maven-archetype</artifactId>
+	<version>3.0.2-SNAPSHOT</version>
+	<packaging>pom</packaging>
 
-  <parent>
-    <groupId>org.apache.maven</groupId>
-    <artifactId>maven-parent</artifactId>
-    <version>30</version>
-  </parent>
-
-  <groupId>org.apache.maven.archetype</groupId>
-  <artifactId>maven-archetype</artifactId>
-  <version>3.0.2-SNAPSHOT</version>
-  <packaging>pom</packaging>
-
-  <name>Maven Archetype</name>
-  <description>Maven Archetype is a set of tools to deal with archetypes, i.e. an abstract representation of a kind of project
+	<name>Maven Archetype</name>
+	<description>Maven Archetype is a set of tools to deal with archetypes, i.e. an abstract representation of a kind of project
    that can be instantiated into a concrete customized Maven project.
    An archetype knows which files will be part of the instantiated project and which properties to fill to properly customize
    the project.
   </description>
-  <url>http://maven.apache.org/archetype</url>
-  <inceptionYear>2007</inceptionYear>
+	<url>http://maven.apache.org/archetype</url>
+	<inceptionYear>2007</inceptionYear>
 
-  <modules>
-    <module>archetype-testing</module>
-    <module>archetype-models</module>
-    <module>archetype-common</module>
-    <module>maven-archetype-plugin</module>
-    <module>archetype-packaging</module>
-  </modules>
+	<modules>
+		<module>archetype-testing</module>
+		<module>archetype-models</module>
+		<module>archetype-common</module>
+		<module>maven-archetype-plugin</module>
+		<module>archetype-packaging</module>
+	</modules>
 
-  <scm>
-    <connection>${maven.archetype.scm.devConnection}</connection>
-    <developerConnection>${maven.archetype.scm.devConnection}</developerConnection>
-    <url>https://git-wip-us.apache.org/repos/asf?p=maven-archetype.git;a=summary</url>
-    <tag>HEAD</tag>
-  </scm>
-  <issueManagement>
-    <system>jira</system>
-    <url>https://issues.apache.org/jira/browse/ARCHETYPE</url>
-  </issueManagement>
-  <ciManagement>
-    <system>Jenkins</system>
-    <url>https://builds.apache.org/job/maven-archetype-m3/</url>
-  </ciManagement>
+	<scm>
+		<developerConnection>scm:git:https://github.com/dcasagu/maven-archetype.git</developerConnection>
+		<tag>V${project.version}</tag>
+	</scm>
 
-  <distributionManagement>
-    <site>
-      <id>apache.website</id>
-      <url>scm:svn:https://svn.apache.org/repos/infra/websites/production/maven/components/${maven.site.path}</url>
-    </site>
-  </distributionManagement>
+	<issueManagement>
+		<system>jira</system>
+		<url>https://issues.apache.org/jira/browse/ARCHETYPE</url>
+	</issueManagement>
+	<ciManagement>
+		<system>Jenkins</system>
+		<url>https://builds.apache.org/job/maven-archetype-m3/</url>
+	</ciManagement>
 
-  <properties>
-    <maven.archetype.scm.devConnection>scm:git:https://git-wip-us.apache.org/repos/asf/maven-archetype.git</maven.archetype.scm.devConnection>
-    <mavenVersion>3.0</mavenVersion>
-    <netbeans.hint.useExternalMaven>true</netbeans.hint.useExternalMaven>
-    <wagonVersion>2.8</wagonVersion>
-    <maven.site.path>archetype-archives/archetype-LATEST</maven.site.path>
-  </properties>
+	<distributionManagement>
+		<site>
+			<id>apache.website</id>
+			<url>scm:svn:https://svn.apache.org/repos/infra/websites/production/maven/components/${maven.site.path}</url>
+		</site>
+	</distributionManagement>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.apache.maven</groupId>
-        <artifactId>maven-compat</artifactId>
-        <version>${mavenVersion}</version>
-        <scope>test</scope>
-      </dependency>
-    
-      <dependency>
-        <groupId>org.apache.maven.archetype</groupId>
-        <artifactId>archetype-catalog</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.maven.archetype</groupId>
-        <artifactId>archetype-descriptor</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.maven.archetype</groupId>
-        <artifactId>archetype-common</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.maven.archetype</groupId>
-        <artifactId>archetype-packaging</artifactId>
-        <version>${project.version}</version>
-      </dependency>
+	<properties>
+		<maven.archetype.scm.devConnection>scm:git:https://git-wip-us.apache.org/repos/asf/maven-archetype.git</maven.archetype.scm.devConnection>
+		<mavenVersion>3.0</mavenVersion>
+		<netbeans.hint.useExternalMaven>true</netbeans.hint.useExternalMaven>
+		<wagonVersion>2.8</wagonVersion>
+		<maven.site.path>archetype-archives/archetype-LATEST</maven.site.path>
+	</properties>
 
-      <dependency>
-        <groupId>org.apache.maven</groupId>
-        <artifactId>maven-artifact</artifactId>
-        <version>${mavenVersion}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.maven</groupId>
-        <artifactId>maven-core</artifactId>
-        <version>${mavenVersion}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.maven</groupId>
-        <artifactId>maven-model</artifactId>
-        <version>${mavenVersion}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.maven</groupId>
-        <artifactId>maven-plugin-api</artifactId>
-        <version>${mavenVersion}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.maven</groupId>
-        <artifactId>maven-settings</artifactId>
-        <version>${mavenVersion}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.maven</groupId>
-        <artifactId>maven-settings-builder</artifactId>
-        <version>${mavenVersion}</version>
-      </dependency>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.apache.maven</groupId>
+				<artifactId>maven-compat</artifactId>
+				<version>${mavenVersion}</version>
+				<scope>test</scope>
+			</dependency>
 
-      <dependency>
-        <groupId>org.apache.maven.shared</groupId>
-        <artifactId>maven-invoker</artifactId>
-        <version>2.2</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.maven.shared</groupId>
-        <artifactId>maven-artifact-transfer</artifactId>
-        <version>0.9.0</version>
-      </dependency>
-      <dependency>
-        <groupId>org.codehaus.plexus</groupId>
-        <artifactId>plexus-utils</artifactId>
-        <version>3.0.21</version>
-      </dependency>
-      <dependency>
-        <groupId>commons-io</groupId>
-        <artifactId>commons-io</artifactId>
-        <version>2.2</version>
-      </dependency>
-      <dependency>
-        <groupId>org.codehaus.plexus</groupId>
-        <artifactId>plexus-interactivity-api</artifactId>
-        <version>1.0-alpha-6</version>
-         <exclusions>
-          <exclusion>
-            <groupId>org.codehaus.plexus</groupId>
-            <artifactId>plexus-component-api</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>org.codehaus.plexus</groupId>
-        <artifactId>plexus-velocity</artifactId>
-        <version>1.1.8</version>
-        <exclusions>
-          <exclusion>
-            <groupId>velocity</groupId>
-            <artifactId>velocity</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>velocity</groupId>
-            <artifactId>velocity-api</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>org.codehaus.plexus</groupId>
-            <artifactId>plexus-container-default</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>dom4j</groupId>
-        <artifactId>dom4j</artifactId>
-        <version>1.6.1</version>
-      </dependency>
-      <dependency>
-        <groupId>jdom</groupId>
-        <artifactId>jdom</artifactId>
-        <version>1.0</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.velocity</groupId>
-        <artifactId>velocity</artifactId>
-        <version>1.7</version>
-      </dependency>
-      <dependency>
-        <groupId>net.sourceforge.jchardet</groupId>
-        <artifactId>jchardet</artifactId>
-        <version>1.0</version>
-      </dependency>
-      <dependency>
-        <groupId>commons-collections</groupId>
-        <artifactId>commons-collections</artifactId>
-        <version>3.2.1</version>
-      </dependency>
-      <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>4.11</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.maven.plugin-testing</groupId>
-        <artifactId>maven-plugin-testing-harness</artifactId>
-        <version>2.1</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.maven.wagon</groupId>
-        <artifactId>wagon-provider-api</artifactId>
-        <version>${wagonVersion}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.maven.wagon</groupId>
-        <artifactId>wagon-file</artifactId>
-        <version>${wagonVersion}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.maven.wagon</groupId>
-        <artifactId>wagon-http</artifactId>
-        <version>${wagonVersion}</version>
-        <scope>test</scope>
-      </dependency>
-      
-      <dependency>
-        <groupId>org.sonatype.aether</groupId>
-        <artifactId>aether-connector-file</artifactId>
-        <version>1.7</version>
-      </dependency>
-      <dependency>
-        <groupId>org.sonatype.aether</groupId>
-        <artifactId>aether-connector-wagon</artifactId>
-        <version>1.7</version>
-      </dependency>
-      
-    </dependencies>
-  </dependencyManagement>
+			<dependency>
+				<groupId>org.apache.maven.archetype</groupId>
+				<artifactId>archetype-catalog</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.maven.archetype</groupId>
+				<artifactId>archetype-descriptor</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.maven.archetype</groupId>
+				<artifactId>archetype-common</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.maven.archetype</groupId>
+				<artifactId>archetype-packaging</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 
-  <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-site-plugin</artifactId>
-          <configuration>
-            <topSiteURL>scm:svn:https://svn.apache.org/repos/infra/websites/production/maven/components/${maven.site.path}</topSiteURL>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.codehaus.modello</groupId>
-          <artifactId>modello-maven-plugin</artifactId>
-          <version>1.8.3</version><!-- regression in Modello 1.8 causing build failure -->
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-release-plugin</artifactId>
-          <configuration>
-            <tagBase>https://svn.apache.org/repos/asf/maven/archetype/tags</tagBase>
-            <preparationGoals>clean install</preparationGoals>
-            <autoVersionSubmodules>true</autoVersionSubmodules>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.mortbay.jetty</groupId>
-          <artifactId>maven-jetty-plugin</artifactId>
-          <version>6.1.6</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-    <plugins>
-      <plugin>
-        <groupId>org.codehaus.plexus</groupId>
-        <artifactId>plexus-component-metadata</artifactId>
-        <executions>
-          <execution>
-            <goals>
-              <goal>generate-metadata</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.rat</groupId>
-        <artifactId>apache-rat-plugin</artifactId>
-        <configuration>
-          <excludes combine.children="append">
-            <exclude>README.txt</exclude>
-            <exclude>*.sh</exclude>
-            <exclude>archetype-samples/**</exclude>
-            <exclude>**/*.sha1</exclude>
-            <!-- exclude template files for generated content -->
-            <exclude>src/main/resources/org/apache/maven/archetype/creator/*</exclude>
-            <!-- exclude some classes coming from dom4j -->
-            <exclude>**/Format.java</exclude>
-            <exclude>**/NamespaceStack.java</exclude>
-            <exclude>**/XMLOutputter.java</exclude>
-            <!-- disable test directories -->
-            <exclude>src/it/**/goal.txt</exclude>
-            <exclude>.repository/**</exclude><!-- for CI -->
-            <!-- Used by JEnv -->
-            <exclude>.java-version</exclude>
-          </excludes>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-enforcer-plugin</artifactId>
-        <dependencies>
-          <dependency>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>extra-enforcer-rules</artifactId>
-            <version>1.0-beta-6</version>
-          </dependency>
-        </dependencies>
-      </plugin>
-    </plugins>
-  </build>
+			<dependency>
+				<groupId>org.apache.maven</groupId>
+				<artifactId>maven-artifact</artifactId>
+				<version>${mavenVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.maven</groupId>
+				<artifactId>maven-core</artifactId>
+				<version>${mavenVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.maven</groupId>
+				<artifactId>maven-model</artifactId>
+				<version>${mavenVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.maven</groupId>
+				<artifactId>maven-plugin-api</artifactId>
+				<version>${mavenVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.maven</groupId>
+				<artifactId>maven-settings</artifactId>
+				<version>${mavenVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.maven</groupId>
+				<artifactId>maven-settings-builder</artifactId>
+				<version>${mavenVersion}</version>
+			</dependency>
 
-  <profiles>
-    <profile>
-      <id>reporting</id>
-      <reporting>
-        <plugins>
-          <plugin>
-            <groupId>org.codehaus.plexus</groupId>
-            <artifactId>plexus-maven-plugin</artifactId>
-            <version>1.3.8</version>
-          </plugin>
-        </plugins>
-      </reporting>
-    </profile>
-  </profiles>
+			<dependency>
+				<groupId>org.apache.maven.shared</groupId>
+				<artifactId>maven-invoker</artifactId>
+				<version>2.2</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.maven.shared</groupId>
+				<artifactId>maven-artifact-transfer</artifactId>
+				<version>0.9.0</version>
+			</dependency>
+			<dependency>
+				<groupId>org.codehaus.plexus</groupId>
+				<artifactId>plexus-utils</artifactId>
+				<version>3.0.21</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>2.2</version>
+			</dependency>
+			<dependency>
+				<groupId>org.codehaus.plexus</groupId>
+				<artifactId>plexus-interactivity-api</artifactId>
+				<version>1.0-alpha-6</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.codehaus.plexus</groupId>
+						<artifactId>plexus-component-api</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.codehaus.plexus</groupId>
+				<artifactId>plexus-velocity</artifactId>
+				<version>1.1.8</version>
+				<exclusions>
+					<exclusion>
+						<groupId>velocity</groupId>
+						<artifactId>velocity</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>velocity</groupId>
+						<artifactId>velocity-api</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.codehaus.plexus</groupId>
+						<artifactId>plexus-container-default</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>dom4j</groupId>
+				<artifactId>dom4j</artifactId>
+				<version>1.6.1</version>
+			</dependency>
+			<dependency>
+				<groupId>jdom</groupId>
+				<artifactId>jdom</artifactId>
+				<version>1.0</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.velocity</groupId>
+				<artifactId>velocity</artifactId>
+				<version>1.7</version>
+			</dependency>
+			<dependency>
+				<groupId>net.sourceforge.jchardet</groupId>
+				<artifactId>jchardet</artifactId>
+				<version>1.0</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-collections</groupId>
+				<artifactId>commons-collections</artifactId>
+				<version>3.2.1</version>
+			</dependency>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.11</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.maven.plugin-testing</groupId>
+				<artifactId>maven-plugin-testing-harness</artifactId>
+				<version>2.1</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-provider-api</artifactId>
+				<version>${wagonVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-file</artifactId>
+				<version>${wagonVersion}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-http</artifactId>
+				<version>${wagonVersion}</version>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.sonatype.aether</groupId>
+				<artifactId>aether-connector-file</artifactId>
+				<version>1.7</version>
+			</dependency>
+			<dependency>
+				<groupId>org.sonatype.aether</groupId>
+				<artifactId>aether-connector-wagon</artifactId>
+				<version>1.7</version>
+			</dependency>
+
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-site-plugin</artifactId>
+					<configuration>
+						<topSiteURL>scm:svn:https://svn.apache.org/repos/infra/websites/production/maven/components/${maven.site.path}</topSiteURL>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.modello</groupId>
+					<artifactId>modello-maven-plugin</artifactId>
+					<version>1.8.3</version><!-- regression in Modello 1.8 causing build 
+						failure -->
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>
+					<configuration>
+						<tagBase>https://svn.apache.org/repos/asf/maven/archetype/tags</tagBase>
+						<preparationGoals>clean install</preparationGoals>
+						<autoVersionSubmodules>true</autoVersionSubmodules>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.mortbay.jetty</groupId>
+					<artifactId>maven-jetty-plugin</artifactId>
+					<version>6.1.6</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.plexus</groupId>
+				<artifactId>plexus-component-metadata</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>generate-metadata</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.rat</groupId>
+				<artifactId>apache-rat-plugin</artifactId>
+				<configuration>
+					<excludes combine.children="append">
+						<exclude>README.txt</exclude>
+						<exclude>*.sh</exclude>
+						<exclude>archetype-samples/**</exclude>
+						<exclude>**/*.sha1</exclude>
+						<!-- exclude template files for generated content -->
+						<exclude>src/main/resources/org/apache/maven/archetype/creator/*</exclude>
+						<!-- exclude some classes coming from dom4j -->
+						<exclude>**/Format.java</exclude>
+						<exclude>**/NamespaceStack.java</exclude>
+						<exclude>**/XMLOutputter.java</exclude>
+						<!-- disable test directories -->
+						<exclude>src/it/**/goal.txt</exclude>
+						<exclude>.repository/**</exclude><!-- for CI -->
+						<!-- Used by JEnv -->
+						<exclude>.java-version</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<dependencies>
+					<dependency>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>extra-enforcer-rules</artifactId>
+						<version>1.0-beta-6</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>reporting</id>
+			<reporting>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.plexus</groupId>
+						<artifactId>plexus-maven-plugin</artifactId>
+						<version>1.3.8</version>
+					</plugin>
+				</plugins>
+			</reporting>
+		</profile>
+	</profiles>
 </project>
