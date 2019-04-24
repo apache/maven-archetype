@@ -90,12 +90,13 @@ public class DefaultArchetypeGenerationConfigurator3Test
         RequiredProperty snakeCaseProperty = new RequiredProperty();
         snakeCaseProperty.setKey( "snakeCaseProperty" );
         snakeCaseProperty.setDefaultValue( "${projectName.toUpperCase()}_${domainName.toUpperCase()}" );
-        descriptor.addRequiredProperty( projectName );
-        descriptor.addRequiredProperty( groupId );
-        descriptor.addRequiredProperty( domainName );
-        descriptor.addRequiredProperty( artifactId );
-        descriptor.addRequiredProperty( thePackage );
         descriptor.addRequiredProperty(snakeCaseProperty);
+        descriptor.addRequiredProperty( thePackage );
+        descriptor.addRequiredProperty( projectName );
+        descriptor.addRequiredProperty( domainName );
+        descriptor.addRequiredProperty( groupId );
+        descriptor.addRequiredProperty( artifactId );
+        
         control.setReturnValue( descriptor );
         control.replay();
         configurator.setArchetypeArtifactManager( manager );   
@@ -110,7 +111,7 @@ public class DefaultArchetypeGenerationConfigurator3Test
         
         Field prompterField = DefaultArchetypeGenerationQueryer.class.getDeclaredField("prompter");
         prompterField.setAccessible(true);
-      //  prompterField.set(archetypeGenerationQueryer, keyboardMock);
+        prompterField.set(archetypeGenerationQueryer, keyboardMock);
         
     }
 
@@ -142,9 +143,9 @@ public class DefaultArchetypeGenerationConfigurator3Test
         keyboardMock.prompt("Confirm properties configuration:\n"
                 + "projectName: myprojectname\n"
                 + "groupId: com.example.myprojectname\n"
+                + "version: 1.0-SNAPSHOT\n"
                 + "domainName: mydomainname\n"
                 + "artifactId: myprojectname-mydomainname\n"
-                + "version: 1.0-SNAPSHOT\n"
                 + "package: com.example.myprojectname.mydomainname\n"
                 + "snakeCaseProperty: MYPROJECTNAME_MYDOMAINNAME\n", "Y");  // Accept config (Default Y)
         keyboardControl.setReturnValue("Y");

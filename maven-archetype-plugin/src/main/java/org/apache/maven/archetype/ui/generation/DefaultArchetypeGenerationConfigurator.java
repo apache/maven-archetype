@@ -51,6 +51,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 // TODO: this seems to have more responsibilities than just a configurator
 @Component( role = ArchetypeGenerationConfigurator.class, hint = "default" )
@@ -169,10 +171,15 @@ public class DefaultArchetypeGenerationConfigurator
             while ( !confirmed )
             {
                 List<String> propertiesRequired = archetypeConfiguration.getRequiredProperties();
-                getLogger().debug( "Required properties before content sort: " + propertiesRequired );
-                Collections.sort( propertiesRequired, new RequiredPropertyComparator( archetypeConfiguration ) );
-                getLogger().debug( "Required properties after content sort: " + propertiesRequired );
-
+                List<String> unorderedrequiredList;
+                do{
+                    unorderedrequiredList = (List<String>) ((ArrayList) propertiesRequired).clone();
+                    getLogger().debug( "Required properties before content sort: " + unorderedrequiredList );
+                    Collections.sort( propertiesRequired, new RequiredPropertyComparator( archetypeConfiguration ) ); 
+                    getLogger().debug( "Required properties after content sort: " + propertiesRequired );
+                }
+                while(!unorderedrequiredList.equals(propertiesRequired));
+                    
                 if ( !archetypeConfiguration.isConfigured() )
                 {
                     for ( String requiredProperty : propertiesRequired )
@@ -323,11 +330,19 @@ public class DefaultArchetypeGenerationConfigurator
         }
         for ( String property : archetypeConfiguration.getRequiredProperties() )
         {
-            if ( result.indexOf( "${" + property + "}" ) >= 0 )
+            Pattern p = Pattern.compile( "\\$\\{" + property + "(\\..*?)?\\}" );
+            Matcher m = p.matcher(result);
+            if (m.find()) 
             {
-
-                result = StringUtils.replace( result, "${" + property + "}",
-                                              archetypeConfiguration.getProperty( property ) );
+                String transitiveProperty = archetypeConfiguration.getProperty( property );
+                String methods = m.group( 1 );
+               if( !StringUtils.isEmpty( methods ) ){
+                   result = m.replaceAll( "\\${\"" + transitiveProperty +  "\"" + methods + "}" );
+               }
+               else 
+               {
+                   result = m.replaceAll(transitiveProperty);
+               }
             }
         }
         if ( result.contains( "${" ) )
@@ -386,14 +401,14 @@ public class DefaultArchetypeGenerationConfigurator
         {
             String leftDefault = archetypeConfiguration.getDefaultValue( left );
 
-            if ( ( leftDefault != null ) && leftDefault.indexOf( "${" + right + "}" ) >= 0 )
+            if ( ( leftDefault != null ) && leftDefault.matches( ".*?\\$\\{" + right + "(?:\\..*?)?\\}.*?" ) )
             { //left contains right
                 return 1;
             }
 
             String rightDefault = archetypeConfiguration.getDefaultValue( right );
 
-            if ( ( rightDefault != null ) && rightDefault.indexOf( "${" + left + "}" ) >= 0 )
+            if ( ( rightDefault != null ) && rightDefault.matches( ".*?\\$\\{" + left + "(?:\\..*?)?\\}.*?" ) )
             { //right contains left
                 return -1;
             }
@@ -435,7 +450,7 @@ public class DefaultArchetypeGenerationConfigurator
             {
                 return 1;
             }
-            return left.compareTo( right );
+            return -1; //.compareTo( right ); // Do not compare alphabetically
         }
     }
     
