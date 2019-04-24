@@ -172,13 +172,14 @@ public class DefaultArchetypeGenerationConfigurator
             {
                 List<String> propertiesRequired = archetypeConfiguration.getRequiredProperties();
                 List<String> unorderedrequiredList;
-                do{
-                    unorderedrequiredList = (List<String>) ((ArrayList) propertiesRequired).clone();
+                do
+                {
+                    unorderedrequiredList = ( List<String> ) ( ( ArrayList ) propertiesRequired ).clone();
                     getLogger().debug( "Required properties before content sort: " + unorderedrequiredList );
                     Collections.sort( propertiesRequired, new RequiredPropertyComparator( archetypeConfiguration ) ); 
                     getLogger().debug( "Required properties after content sort: " + propertiesRequired );
                 }
-                while(!unorderedrequiredList.equals(propertiesRequired));
+                while ( !unorderedrequiredList.equals( propertiesRequired ) );
                     
                 if ( !archetypeConfiguration.isConfigured() )
                 {
@@ -331,17 +332,18 @@ public class DefaultArchetypeGenerationConfigurator
         for ( String property : archetypeConfiguration.getRequiredProperties() )
         {
             Pattern p = Pattern.compile( "\\$\\{" + property + "(\\..*?)?\\}" );
-            Matcher m = p.matcher(result);
-            if (m.find()) 
+            Matcher m = p.matcher( result );
+            if ( m.find() ) 
             {
                 String transitiveProperty = archetypeConfiguration.getProperty( property );
                 String methods = m.group( 1 );
-               if( !StringUtils.isEmpty( methods ) ){
+               if ( !StringUtils.isEmpty( methods ) )
+               {
                    result = m.replaceAll( "\\${\"" + transitiveProperty +  "\"" + methods + "}" );
                }
                else 
                {
-                   result = m.replaceAll(transitiveProperty);
+                   result = m.replaceAll( transitiveProperty );
                }
             }
         }
