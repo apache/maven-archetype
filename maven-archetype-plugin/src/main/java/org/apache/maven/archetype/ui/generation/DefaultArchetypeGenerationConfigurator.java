@@ -47,10 +47,15 @@ import org.codehaus.plexus.util.StringUtils;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Properties;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -60,6 +65,8 @@ public class DefaultArchetypeGenerationConfigurator
     extends AbstractLogEnabled
     implements ArchetypeGenerationConfigurator
 {
+    public static final int MAX_TRANSITIVE_CYCLES = 10;
+
     @Requirement
     OldArchetype oldArchetype;
 
@@ -171,15 +178,124 @@ public class DefaultArchetypeGenerationConfigurator
             while ( !confirmed )
             {
                 List<String> propertiesRequired = archetypeConfiguration.getRequiredProperties();
-                List<String> unorderedrequiredList;
+                
+                // Preordering by GAV (only as first step)
+                Collections.sort(propertiesRequired, new Comparator<String>() {
+
+                    @Override
+                    public int compare(String left, String right) {
+                        
+                        if(StringUtils.isNotBlank( left ) && StringUtils.isNotBlank( right ) )
+                        {
+                            if( "groupId".equals( left ) )
+                            {
+                                return -1;
+                            }
+                            if( "groupId".equals( right ) )
+                            {
+                                return 1;
+                            }
+                            if( "artifactId".equals( left ) )
+                            {
+                                return -1;
+                            }
+                            if( "artifactId".equals( right ) )
+                            {
+                                return 1;
+                            }
+                            if( "version".equals( left ) )
+                            {
+                                return -1;
+                            }
+                            if( "version".equals( right ) )
+                            {
+                                return 1;
+                            }
+                            if( "package".equals( left ) )
+                            {
+                                return -1;
+                            }
+                            if( "package".equals( right ) )
+                            {
+                                return 1;
+                            }
+                                
+                        }
+                        return 0;
+                    }
+                    
+                });
+                
+                LinkedList<String> orderedList = new LinkedList<>();
+                RequiredPropertyComparator comparator = new RequiredPropertyComparator( archetypeConfiguration );
+                int transitiveDependenciesCyclesCount = 0;
                 do
                 {
-                    unorderedrequiredList = ( List<String> ) ( ( ArrayList ) propertiesRequired ).clone();
-                    getLogger().debug( "Required properties before content sort: " + unorderedrequiredList );
-                    Collections.sort( propertiesRequired, new RequiredPropertyComparator( archetypeConfiguration ) ); 
-                    getLogger().debug( "Required properties after content sort: " + propertiesRequired );
+                    if( !orderedList.isEmpty() )
+                    {
+                        propertiesRequired.clear();
+                        propertiesRequired.addAll(orderedList);
+                        orderedList.clear();
+                    }
+                    
+                    getLogger().debug( "Required properties before content sort: " + propertiesRequired );
+                    ListIterator<String> propIterator = propertiesRequired.listIterator(propertiesRequired.size());
+                    
+                    String pivotProperty = null;
+                    while( propIterator.hasPrevious() )
+                    {    
+                        pivotProperty = propIterator.previous();
+                        getLogger().debug( "Pivot property:" + pivotProperty);
+                             
+                        if( orderedList.isEmpty() )
+                        {
+                            orderedList.addFirst(pivotProperty);
+                            getLogger().debug( " - > " + pivotProperty + " pushed on top");
+                        }
+                        else
+                        {
+                            int lastTransitiveDepIndex = -1;
+                            for ( int i = 0 ; i < orderedList.size() ; i++ )
+                            {
+                                String comparedProperty = orderedList.get( i );
+                                getLogger().debug( " - Compared property:" + comparedProperty );
+                                if ( comparator.compare( pivotProperty, comparedProperty ) > 0 )
+                                {
+                                    lastTransitiveDepIndex = i;
+                                    getLogger().debug( " - > " + pivotProperty + " enqued after " + comparedProperty );
+                                }
+                            }
+                            if( lastTransitiveDepIndex == -1 )
+                            {
+                                orderedList.push(pivotProperty);
+                                getLogger().debug( " - > " + pivotProperty + " pushed on top");
+                            }
+                            else if (lastTransitiveDepIndex == orderedList.size()){
+                                orderedList.add(pivotProperty);
+                                getLogger().debug( " - > " + pivotProperty + " pushed to the tail");
+                            }
+                            else{
+                                orderedList.add(lastTransitiveDepIndex + 1, pivotProperty);
+                                getLogger().debug( " - > " + pivotProperty + " inserted at position " + (lastTransitiveDepIndex + 1));
+                            }
+                        }
+                    }                
+                    getLogger().debug( "Required properties after content sort: " + orderedList );
                 }
-                while ( !unorderedrequiredList.equals( propertiesRequired ) );
+                while ( ++transitiveDependenciesCyclesCount < MAX_TRANSITIVE_CYCLES && !orderedList.equals( propertiesRequired ) );
+                
+                if ( transitiveDependenciesCyclesCount == MAX_TRANSITIVE_CYCLES )
+                {
+                    StringBuilder exceptionMessage = new StringBuilder();
+                    exceptionMessage.append( "Archetype " );
+                    exceptionMessage.append( request.getArchetypeGroupId() );
+                    exceptionMessage.append( ":" );
+                    exceptionMessage.append( request.getArchetypeArtifactId() );
+                    exceptionMessage.append( ":" );
+                    exceptionMessage.append( request.getArchetypeVersion() );
+                    exceptionMessage.append( " evaluated transitive dependencies :(" + MAX_TRANSITIVE_CYCLES + ") times. Did you may define loop cycles?" );
+                    throw new ArchetypeNotConfigured( exceptionMessage.toString(), Collections.<String>emptyList());
+                }
                     
                 if ( !archetypeConfiguration.isConfigured() )
                 {
@@ -415,45 +531,9 @@ public class DefaultArchetypeGenerationConfigurator
                 return -1;
             }
 
-            return comparePropertyName( left, right );
+            return -1;
         }
 
-        private int comparePropertyName( String left, String right )
-        {
-            if ( "groupId".equals( left ) )
-            {
-                return -1;
-            }
-            if ( "groupId".equals( right ) )
-            {
-                return 1;
-            }
-            if ( "artifactId".equals( left ) )
-            {
-                return -1;
-            }
-            if ( "artifactId".equals( right ) )
-            {
-                return 1;
-            }
-            if ( "version".equals( left ) )
-            {
-                return -1;
-            }
-            if ( "version".equals( right ) )
-            {
-                return 1;
-            }
-            if ( "package".equals( left ) )
-            {
-                return -1;
-            }
-            if ( "package".equals( right ) )
-            {
-                return 1;
-            }
-            return -1; //.compareTo( right ); // Do not compare alphabetically
-        }
     }
     
     private ArtifactRepository createRepository( String url, String repositoryId )

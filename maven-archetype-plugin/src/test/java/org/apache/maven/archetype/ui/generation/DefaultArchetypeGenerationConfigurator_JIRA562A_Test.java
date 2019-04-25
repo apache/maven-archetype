@@ -1,6 +1,5 @@
 package org.apache.maven.archetype.ui.generation;
 
-import java.io.ByteArrayInputStream;
 import java.lang.reflect.Field;
 
 /*
@@ -23,25 +22,20 @@ import java.lang.reflect.Field;
  */
 
 import java.util.Properties;
-
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
 import org.apache.maven.archetype.metadata.ArchetypeDescriptor;
 import org.apache.maven.archetype.metadata.RequiredProperty;
 import org.apache.maven.project.ProjectBuildingRequest;
 import org.codehaus.plexus.PlexusTestCase;
-import org.codehaus.plexus.components.interactivity.DefaultInputHandler;
-import org.codehaus.plexus.components.interactivity.DefaultPrompter;
-import org.codehaus.plexus.components.interactivity.InputHandler;
 import org.codehaus.plexus.components.interactivity.Prompter;
+import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.easymock.MockControl;
-import org.junit.Ignore;
-import org.junit.Test;
 
 /**
  * Tests the ability to use variables in default fields in batch mode
  */
-public class DefaultArchetypeGenerationConfigurator3Test
+public class DefaultArchetypeGenerationConfigurator_JIRA562A_Test
     extends PlexusTestCase
 {
     private DefaultArchetypeGenerationConfigurator configurator;
@@ -87,16 +81,19 @@ public class DefaultArchetypeGenerationConfigurator3Test
         RequiredProperty domainName = new RequiredProperty();
         domainName.setKey( "domainName" );
         domainName.setDefaultValue( null );
-        RequiredProperty snakeCaseProperty = new RequiredProperty();
-        snakeCaseProperty.setKey( "snakeCaseProperty" );
-        snakeCaseProperty.setDefaultValue( "${projectName.toUpperCase()}_${domainName.toUpperCase()}" );
-        descriptor.addRequiredProperty(snakeCaseProperty);
+        RequiredProperty snakeCase = new RequiredProperty();
+        snakeCase.setKey( "snakeCase" );
+        snakeCase.setDefaultValue( "${projectName.toUpperCase()}_${domainName.toUpperCase()}" );
+        RequiredProperty className = new RequiredProperty();
+        className.setKey( "className" );
+        className.setDefaultValue( "${domainName.substring(0,1).toUpperCase()}${domainName.substring(1)}" );
+        descriptor.addRequiredProperty(snakeCase);
         descriptor.addRequiredProperty( thePackage );
         descriptor.addRequiredProperty( projectName );
         descriptor.addRequiredProperty( domainName );
         descriptor.addRequiredProperty( groupId );
         descriptor.addRequiredProperty( artifactId );
-        
+        descriptor.addRequiredProperty( className );
         control.setReturnValue( descriptor );
         control.replay();
         configurator.setArchetypeArtifactManager( manager );   
@@ -114,10 +111,36 @@ public class DefaultArchetypeGenerationConfigurator3Test
         prompterField.set(archetypeGenerationQueryer, keyboardMock);
         
     }
-
+    
     public void testJIRA_562_PropertiesReferringEachOtherIndirectly() throws Exception
     {
                 
+        reproduceKeyboardInput();
+               
+        // Reproduce maven archetype generation (interactive mode)
+        ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
+        request.setArchetypeGroupId( "archetypeGroupId" );
+        request.setArchetypeArtifactId( "archetypeArtifactId" );
+        request.setArchetypeVersion( "archetypeVersion" );
+        Properties properties = new Properties();
+                
+        // Simulate interactive mode to force param ordering
+        configurator.configureArchetype( request, Boolean.TRUE, properties );
+                
+        keyboardControl.verify();
+        
+        assertEquals( "com.example.myprojectname", request.getGroupId() );
+        assertEquals( "myprojectname-mydomainname", request.getArtifactId() );
+        assertEquals( "1.0-SNAPSHOT", request.getVersion() );
+        assertEquals( "com.example.myprojectname.mydomainname", request.getPackage() );
+        assertEquals( "MYPROJECTNAME_MYDOMAINNAME", request.getProperties().get( "snakeCase" ) );
+        assertEquals( "Mydomainname", request.getProperties().get( "className" ) );
+        
+        
+    }
+    
+    private void reproduceKeyboardInput() throws PrompterException {
+        
         // Record Keyboard Inputs
         keyboardMock.prompt("Define value for property 'projectName'"); // projectName property without default value
         keyboardControl.setReturnValue("myprojectname");
@@ -137,39 +160,23 @@ public class DefaultArchetypeGenerationConfigurator3Test
         keyboardMock.prompt("Define value for property 'package'", "com.example.myprojectname.mydomainname"); // package property (confirm default proposed value)
         keyboardControl.setReturnValue("com.example.myprojectname.mydomainname");
         
-        keyboardMock.prompt("Define value for property 'snakeCaseProperty'", "MYPROJECTNAME_MYDOMAINNAME");  // snake case property (confirm default proposed value)
+        keyboardMock.prompt("Define value for property 'snakeCase'", "MYPROJECTNAME_MYDOMAINNAME");  // snake case property (confirm default proposed value)
         keyboardControl.setReturnValue("MYPROJECTNAME_MYDOMAINNAME");
         
+        keyboardMock.prompt("Define value for property 'className'", "Mydomainname");  // snake case property (confirm default proposed value)
+        keyboardControl.setReturnValue("Mydomainname");
+        
         keyboardMock.prompt("Confirm properties configuration:\n"
+                + "version: 1.0-SNAPSHOT\n"
                 + "projectName: myprojectname\n"
                 + "groupId: com.example.myprojectname\n"
-                + "version: 1.0-SNAPSHOT\n"
                 + "domainName: mydomainname\n"
                 + "artifactId: myprojectname-mydomainname\n"
                 + "package: com.example.myprojectname.mydomainname\n"
-                + "snakeCaseProperty: MYPROJECTNAME_MYDOMAINNAME\n", "Y");  // Accept config (Default Y)
+                + "snakeCase: MYPROJECTNAME_MYDOMAINNAME\n"
+                + "className: Mydomainname\n", "Y");  // Accept config (Default Y)
         keyboardControl.setReturnValue("Y");
         keyboardControl.replay();
-        
-        // Reproduce maven archetype generation (interactive mode)
-        ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
-        request.setArchetypeGroupId( "archetypeGroupId" );
-        request.setArchetypeArtifactId( "archetypeArtifactId" );
-        request.setArchetypeVersion( "archetypeVersion" );
-        Properties properties = new Properties();
-                
-        // Simulate interactive mode to force param ordering
-        configurator.configureArchetype( request, Boolean.TRUE, properties );
-                
-        keyboardControl.verify();
-        
-        assertEquals( "com.example.myprojectname", request.getGroupId() );
-        assertEquals( "myprojectname-mydomainname", request.getArtifactId() );
-        assertEquals( "1.0-SNAPSHOT", request.getVersion() );
-        assertEquals( "com.example.myprojectname.mydomainname", request.getPackage() );
-        assertEquals( "MYPROJECTNAME_MYDOMAINNAME", request.getProperties().get( "snakeCaseProperty" ) );
-        
-        
     }
           
 }
