@@ -19,6 +19,15 @@ package org.apache.maven.archetype.ui.generation;
  * under the License.
  */
 
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Properties;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
 import org.apache.maven.archetype.common.Constants;
@@ -43,21 +52,6 @@ import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
-
-import java.io.IOException;
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Properties;
-import java.util.function.Consumer;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 // TODO: this seems to have more responsibilities than just a configurator
 @Component( role = ArchetypeGenerationConfigurator.class, hint = "default" )
@@ -180,42 +174,43 @@ public class DefaultArchetypeGenerationConfigurator
                 List<String> propertiesRequired = archetypeConfiguration.getRequiredProperties();
                 
                 // Preordering by GAV (only as first step)
-                Collections.sort(propertiesRequired, new Comparator<String>() {
-
+                Collections.sort( propertiesRequired, new Comparator<String>()
+                {
                     @Override
-                    public int compare(String left, String right) {
+                    public int compare( String left, String right )
+                    {
                         
-                        if(StringUtils.isNotBlank( left ) && StringUtils.isNotBlank( right ) )
+                        if ( StringUtils.isNotBlank( left ) && StringUtils.isNotBlank( right ) )
                         {
-                            if( "groupId".equals( left ) )
+                            if ( "groupId".equals( left ) )
                             {
                                 return -1;
                             }
-                            if( "groupId".equals( right ) )
+                            if ( "groupId".equals( right ) )
                             {
                                 return 1;
                             }
-                            if( "artifactId".equals( left ) )
+                            if ( "artifactId".equals( left ) )
                             {
                                 return -1;
                             }
-                            if( "artifactId".equals( right ) )
+                            if ( "artifactId".equals( right ) )
                             {
                                 return 1;
                             }
-                            if( "version".equals( left ) )
+                            if ( "version".equals( left ) )
                             {
                                 return -1;
                             }
-                            if( "version".equals( right ) )
+                            if ( "version".equals( right ) )
                             {
                                 return 1;
                             }
-                            if( "package".equals( left ) )
+                            if ( "package".equals( left ) )
                             {
                                 return -1;
                             }
-                            if( "package".equals( right ) )
+                            if ( "package".equals( right ) )
                             {
                                 return 1;
                             }
@@ -224,33 +219,33 @@ public class DefaultArchetypeGenerationConfigurator
                         return 0;
                     }
                     
-                });
+                } );
                 
-                LinkedList<String> orderedList = new LinkedList<>();
+                LinkedList<String> orderedList = new LinkedList<String>();
                 RequiredPropertyComparator comparator = new RequiredPropertyComparator( archetypeConfiguration );
                 int transitiveDependenciesCyclesCount = 0;
                 do
                 {
-                    if( !orderedList.isEmpty() )
-                    {
+                    if ( !orderedList.isEmpty() )
+                    { 
                         propertiesRequired.clear();
-                        propertiesRequired.addAll(orderedList);
+                        propertiesRequired.addAll( orderedList );
                         orderedList.clear();
                     }
                     
-                    getLogger().debug( "Required properties before content sort: " + propertiesRequired );
-                    ListIterator<String> propIterator = propertiesRequired.listIterator(propertiesRequired.size());
+                    getLogger().debug( "[X] Required properties before content sort: " + propertiesRequired );
+                    ListIterator<String> propIterator = propertiesRequired.listIterator( propertiesRequired.size() );
                     
                     String pivotProperty = null;
-                    while( propIterator.hasPrevious() )
+                    while ( propIterator.hasPrevious() )
                     {    
                         pivotProperty = propIterator.previous();
-                        getLogger().debug( "Pivot property:" + pivotProperty);
+                        getLogger().debug( "Pivot property:" + pivotProperty );
                              
-                        if( orderedList.isEmpty() )
+                        if ( orderedList.isEmpty() )
                         {
-                            orderedList.addFirst(pivotProperty);
-                            getLogger().debug( " - > " + pivotProperty + " pushed on top");
+                            orderedList.addFirst( pivotProperty );
+                            getLogger().debug( " - > " + pivotProperty + " pushed on top" );
                         }
                         else
                         {
@@ -265,22 +260,25 @@ public class DefaultArchetypeGenerationConfigurator
                                     getLogger().debug( " - > " + pivotProperty + " enqued after " + comparedProperty );
                                 }
                             }
-                            if( lastTransitiveDepIndex == -1 )
+                            if ( lastTransitiveDepIndex == -1 )
                             {
-                                orderedList.push(pivotProperty);
-                                getLogger().debug( " - > " + pivotProperty + " pushed on top");
+                                orderedList.push( pivotProperty );
+                                getLogger().debug( " - > " + pivotProperty + " pushed on top" );
                             }
-                            else if (lastTransitiveDepIndex == orderedList.size()){
-                                orderedList.add(pivotProperty);
-                                getLogger().debug( " - > " + pivotProperty + " pushed to the tail");
+                            else if ( lastTransitiveDepIndex == orderedList.size() )
+                            {
+                                orderedList.add( pivotProperty );
+                                getLogger().debug( " - > " + pivotProperty + " pushed to the tail" );
                             }
-                            else{
-                                orderedList.add(lastTransitiveDepIndex + 1, pivotProperty);
-                                getLogger().debug( " - > " + pivotProperty + " inserted at position " + (lastTransitiveDepIndex + 1));
+                            else
+                            {
+                                orderedList.add( lastTransitiveDepIndex + 1, pivotProperty );
+                                getLogger().debug( " - > " + pivotProperty + " inserted at position " + ( lastTransitiveDepIndex + 1 ) );
                             }
                         }
                     }                
-                    getLogger().debug( "Required properties after content sort: " + orderedList );
+                    getLogger().debug( " Required properties after content sort: " + orderedList );
+                    getLogger().debug( String.format( "[Exec: %s/%s]", transitiveDependenciesCyclesCount, MAX_TRANSITIVE_CYCLES ) );
                 }
                 while ( ++transitiveDependenciesCyclesCount < MAX_TRANSITIVE_CYCLES && !orderedList.equals( propertiesRequired ) );
                 
@@ -294,7 +292,7 @@ public class DefaultArchetypeGenerationConfigurator
                     exceptionMessage.append( ":" );
                     exceptionMessage.append( request.getArchetypeVersion() );
                     exceptionMessage.append( " evaluated transitive dependencies :(" + MAX_TRANSITIVE_CYCLES + ") times. Did you may define loop cycles?" );
-                    throw new ArchetypeNotConfigured( exceptionMessage.toString(), Collections.<String>emptyList());
+                    throw new ArchetypeGenerationConfigurationFailure( exceptionMessage.toString() );
                 }
                     
                 if ( !archetypeConfiguration.isConfigured() )
@@ -438,31 +436,24 @@ public class DefaultArchetypeGenerationConfigurator
     }
 
     private String getTransitiveDefaultValue( String defaultValue, ArchetypeConfiguration archetypeConfiguration,
-                                              String requiredProperty, Context context )
+                                              String requiredProperty, Context context ) throws ArchetypeGenerationConfigurationFailure
     {
         String result = defaultValue;
         if ( null == result )
         {
             return null;
         }
+        
         for ( String property : archetypeConfiguration.getRequiredProperties() )
         {
-            Pattern p = Pattern.compile( "\\$\\{" + property + "(\\..*?)?\\}" );
-            Matcher m = p.matcher( result );
-            if ( m.find() ) 
+            if ( result.indexOf( "${" + property + "}" ) >= 0 )
             {
-                String transitiveProperty = archetypeConfiguration.getProperty( property );
-                String methods = m.group( 1 );
-               if ( !StringUtils.isEmpty( methods ) )
-               {
-                   result = m.replaceAll( "\\${\"" + transitiveProperty +  "\"" + methods + "}" );
-               }
-               else 
-               {
-                   result = m.replaceAll( transitiveProperty );
-               }
+
+                result = StringUtils.replace( result, "${" + property + "}",
+                                              archetypeConfiguration.getProperty( property ) );
             }
         }
+        
         if ( result.contains( "${" ) )
         {
             result = evaluateProperty( context, requiredProperty, defaultValue );

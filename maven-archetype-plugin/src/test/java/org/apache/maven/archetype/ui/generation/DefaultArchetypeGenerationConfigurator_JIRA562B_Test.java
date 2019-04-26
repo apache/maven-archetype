@@ -24,15 +24,15 @@ import java.lang.reflect.Field;
 import java.util.Properties;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
+import org.apache.maven.archetype.exception.ArchetypeGenerationConfigurationFailure;
 import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
 import org.apache.maven.archetype.metadata.ArchetypeDescriptor;
 import org.apache.maven.archetype.metadata.RequiredProperty;
 import org.apache.maven.project.ProjectBuildingRequest;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.components.interactivity.Prompter;
-import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.easymock.MockControl;
-import junit.framework.Assert;
+import org.junit.Assert;
 
 /**
  * Tests the ability to use variables in default fields in batch mode
@@ -112,8 +112,9 @@ public class DefaultArchetypeGenerationConfigurator_JIRA562B_Test
         try
         {
             configurator.configureArchetype( request, Boolean.TRUE, properties );
+            Assert.fail("Excepted transitive dependency exception");
         }
-        catch ( ArchetypeNotConfigured e)
+        catch ( ArchetypeGenerationConfigurationFailure e)
         {
             assertEquals("Archetype gid:aid:ver evaluated transitive dependencies :(" 
                         + DefaultArchetypeGenerationConfigurator.MAX_TRANSITIVE_CYCLES + ") times. "
