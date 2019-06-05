@@ -49,8 +49,10 @@ import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.codehaus.plexus.velocity.VelocityComponent;
-import org.dom4j.DocumentException;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -95,8 +97,8 @@ public class DefaultFilesetArchetypeGenerator
 
     @Override
     public void generateArchetype( ArchetypeGenerationRequest request, File archetypeFile )
-        throws UnknownArchetype, ArchetypeNotConfigured, ProjectDirectoryExists, PomFileExists, OutputFileExists,
-        ArchetypeGenerationFailure
+            throws UnknownArchetype, ArchetypeNotConfigured, ProjectDirectoryExists, PomFileExists, OutputFileExists,
+            ArchetypeGenerationFailure, InvalidPackaging
     {
         ClassLoader old = Thread.currentThread().getContextClassLoader();
 
@@ -240,29 +242,10 @@ public class DefaultFilesetArchetypeGenerator
                 getLogger().info( "Project created from Archetype in dir: " + outputDirectoryFile.getAbsolutePath() );
             }
         }
-        catch ( FileNotFoundException ex )
+        catch ( IOException | XmlPullParserException | ParserConfigurationException | TransformerException
+                | SAXException e )
         {
-            throw new ArchetypeGenerationFailure( ex );
-        }
-        catch ( IOException ex )
-        {
-            throw new ArchetypeGenerationFailure( ex );
-        }
-        catch ( XmlPullParserException ex )
-        {
-            throw new ArchetypeGenerationFailure( ex );
-        }
-        catch ( DocumentException ex )
-        {
-            throw new ArchetypeGenerationFailure( ex );
-        }
-        catch ( ArchetypeGenerationFailure ex )
-        {
-            throw new ArchetypeGenerationFailure( ex );
-        }
-        catch ( InvalidPackaging ex )
-        {
-            throw new ArchetypeGenerationFailure( ex );
+            throw new ArchetypeGenerationFailure( e );
         }
         finally
         {
@@ -277,7 +260,7 @@ public class DefaultFilesetArchetypeGenerator
 
     private boolean copyFile( final File outFile, final String template, final boolean failIfExists,
                               final ZipFile archetypeZipFile )
-        throws FileNotFoundException, OutputFileExists, IOException
+        throws OutputFileExists, IOException
     {
         getLogger().debug( "Copying file " + template );
 
@@ -536,9 +519,9 @@ public class DefaultFilesetArchetypeGenerator
                                        final List<String> archetypeResources, File pom, final ZipFile archetypeZipFile,
                                        String moduleOffset, File basedirPom, File outputDirectoryFile,
                                        final String packageName, final AbstractArchetypeDescriptor archetypeDescriptor,
-                                       final Context context )
-        throws DocumentException, XmlPullParserException, ArchetypeGenerationFailure, InvalidPackaging, IOException,
-        OutputFileExists
+                                       final Context context ) throws XmlPullParserException, IOException,
+            ParserConfigurationException, SAXException, TransformerException,
+            OutputFileExists, ArchetypeGenerationFailure, InvalidPackaging
     {
         outputDirectoryFile.mkdirs();
         getLogger().debug( "Processing module " + artifactId );
@@ -596,8 +579,8 @@ public class DefaultFilesetArchetypeGenerator
                                         final ZipFile archetypeZipFile, String moduleOffset, final Context context,
                                         final String packageName, final File outputDirectoryFile,
                                         final File basedirPom )
-        throws DocumentException, XmlPullParserException, ArchetypeGenerationFailure, InvalidPackaging, IOException,
-        FileNotFoundException, OutputFileExists
+            throws XmlPullParserException, IOException, ParserConfigurationException, SAXException,
+            TransformerException, OutputFileExists, ArchetypeGenerationFailure, InvalidPackaging
     {
         getLogger().debug( "Processing fileset project moduleId " + moduleId );
         getLogger().debug( "Processing fileset project pom " + pom );
@@ -655,8 +638,8 @@ public class DefaultFilesetArchetypeGenerator
 
     private void processPomWithParent( Context context, File pom, String moduleOffset, File basedirPom,
                                        String moduleId )
-        throws OutputFileExists, XmlPullParserException, DocumentException, IOException, InvalidPackaging,
-        ArchetypeGenerationFailure
+            throws XmlPullParserException, IOException, ParserConfigurationException, SAXException,
+            TransformerException, OutputFileExists, ArchetypeGenerationFailure, InvalidPackaging
     {
         getLogger().debug( "Processing pom " + pom + " with parent " + basedirPom );
 
@@ -736,7 +719,7 @@ public class DefaultFilesetArchetypeGenerator
     private void processTemplates( String packageName, File outputDirectoryFile, Context context,
                                    AbstractArchetypeDescriptor archetypeDescriptor, List<String> archetypeResources,
                                    ZipFile archetypeZipFile, String moduleOffset, boolean failIfExists )
-        throws OutputFileExists, ArchetypeGenerationFailure, FileNotFoundException, IOException
+        throws OutputFileExists, ArchetypeGenerationFailure, IOException
     {
         Iterator<FileSet> iterator = archetypeDescriptor.getFileSets().iterator();
         if ( iterator.hasNext() )

@@ -20,10 +20,13 @@ package org.apache.maven.archetype.common;
  */
 
 import org.apache.maven.archetype.exception.InvalidPackaging;
+import org.apache.maven.archetype.old.ArchetypeTemplateProcessingException;
 import org.apache.maven.model.Model;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-import org.dom4j.DocumentException;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,7 +36,8 @@ public interface PomManager
     String ROLE = PomManager.class.getName();
 
     void addModule( File basedirPom, String artifactId )
-        throws IOException, XmlPullParserException, DocumentException, InvalidPackaging;
+            throws IOException, ParserConfigurationException, TransformerException, SAXException, InvalidPackaging,
+            ArchetypeTemplateProcessingException;
 
     void addParent( File pom, File basedirPom )
         throws IOException, XmlPullParserException;

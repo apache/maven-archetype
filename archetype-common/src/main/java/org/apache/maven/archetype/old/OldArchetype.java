@@ -19,6 +19,7 @@ package org.apache.maven.archetype.old;
  * under the License.
  */
 
+import org.apache.maven.archetype.exception.InvalidPackaging;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 
 import java.io.File;
@@ -49,12 +50,12 @@ public interface OldArchetype
      * Download an archetype then create a project from it.
      */
     void createArchetype( ArchetypeGenerationRequest request, ArtifactRepository archetypeRepository )
-        throws UnknownArchetype, ArchetypeNotFoundException, ArchetypeDescriptorException,
-        ArchetypeTemplateProcessingException;
+            throws UnknownArchetype, ArchetypeNotFoundException, ArchetypeDescriptorException,
+            ArchetypeTemplateProcessingException, InvalidPackaging;
 
     /**
      * Create a project from an archetype file.
      */
     void createArchetype( ArchetypeGenerationRequest request, File archetypeFile )
-        throws ArchetypeDescriptorException, ArchetypeTemplateProcessingException;
+            throws ArchetypeDescriptorException, ArchetypeTemplateProcessingException, InvalidPackaging;
 }

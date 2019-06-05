@@ -20,36 +20,35 @@ package org.apache.maven.archetype.common;
  */
 
 import org.apache.maven.archetype.common.util.Format;
+import org.apache.maven.archetype.common.util.PomUtils;
 import org.apache.maven.archetype.exception.InvalidPackaging;
+import org.apache.maven.archetype.old.ArchetypeTemplateProcessingException;
+import org.apache.maven.model.Build;
+import org.apache.maven.model.BuildBase;
+import org.apache.maven.model.Dependency;
+import org.apache.maven.model.Model;
+import org.apache.maven.model.ModelBase;
+import org.apache.maven.model.Parent;
+import org.apache.maven.model.Plugin;
+import org.apache.maven.model.Profile;
+import org.apache.maven.model.ReportPlugin;
+import org.apache.maven.model.Reporting;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
-import org.apache.maven.model.Model;
-import org.apache.maven.model.Parent;
-import org.apache.maven.model.Dependency;
-import org.apache.maven.model.Build;
-import org.apache.maven.model.Profile;
-import org.apache.maven.model.ModelBase;
-import org.apache.maven.model.Reporting;
-import org.apache.maven.model.ReportPlugin;
-import org.apache.maven.model.BuildBase;
-import org.apache.maven.model.Plugin;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.StringUtils;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-import org.codehaus.plexus.util.xml.Xpp3DomUtils;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
-import org.dom4j.Node;
-import org.dom4j.io.SAXReader;
-import org.dom4j.io.XMLWriter;
+import org.codehaus.plexus.util.xml.Xpp3DomUtils;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -62,7 +61,6 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -72,80 +70,14 @@ public class DefaultPomManager
     implements PomManager
 {
     @Override
-    public void addModule( File pom, String artifactId )
-        throws IOException, XmlPullParserException, DocumentException, InvalidPackaging
+    public void addModule( File pom, String artifactId ) throws IOException, ParserConfigurationException,
+            TransformerException, SAXException, InvalidPackaging, ArchetypeTemplateProcessingException
     {
-        boolean found = false;
-
-        StringWriter writer = new StringWriter();
-        
-        try ( Reader fileReader = ReaderFactory.newXmlReader( pom ) )
+        StringWriter out = new StringWriter();
+        boolean found = PomUtils.addNewModule( artifactId, ReaderFactory.newXmlReader( pom ), out );
+        if ( found )
         {
-            SAXReader reader = new SAXReader();
-            Document document = reader.read( fileReader );
-            Element project = document.getRootElement();
-
-            String packaging = null;
-            Element packagingElement = project.element( "packaging" );
-            if ( packagingElement != null )
-            {
-                packaging = packagingElement.getStringValue();
-            }
-            if ( !"pom".equals( packaging ) )
-            {
-                throw new InvalidPackaging(
-                    "Unable to add module to the current project as it is not of packaging type 'pom'"
-                );
-            }
-
-            Element modules = project.element( "modules" );
-            if ( modules == null )
-            {
-                modules = project.addText( "  " ).addElement( "modules" );
-                modules.setText( "\n  " );
-                project.addText( "\n" );
-            }
-            // TODO: change to while loop
-            for ( @SuppressWarnings( "unchecked" )
-            Iterator<Element> i = modules.elementIterator( "module" ); i.hasNext() && !found; )
-            {
-                Element module = i.next();
-                if ( module.getText().equals( artifactId ) )
-                {
-                    found = true;
-                }
-            }
-            if ( !found )
-            {
-                Node lastTextNode = null;
-                for ( @SuppressWarnings( "unchecked" )
-                Iterator<Node> i = modules.nodeIterator(); i.hasNext(); )
-                {
-                    Node node = i.next();
-                    if ( node.getNodeType() == Node.ELEMENT_NODE )
-                    {
-                        lastTextNode = null;
-                    }
-                    else if ( node.getNodeType() == Node.TEXT_NODE )
-                    {
-                        lastTextNode = node;
-                    }
-                }
-
-                if ( lastTextNode != null )
-                {
-                    modules.remove( lastTextNode );
-                }
-
-                modules.addText( "\n    " );
-                modules.addElement( "module" ).setText( artifactId );
-                modules.addText( "\n  " );
-
-                XMLWriter xmlWriter = new XMLWriter( writer );
-                xmlWriter.write( document );
-
-                FileUtils.fileWrite( pom.getAbsolutePath(), writer.toString() );
-            } // end if
+            FileUtils.fileWrite( pom.getAbsolutePath(), out.toString() );
         }
     }
 
