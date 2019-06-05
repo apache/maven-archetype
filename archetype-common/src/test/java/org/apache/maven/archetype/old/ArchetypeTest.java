@@ -29,6 +29,7 @@ import java.util.Map;
  */
 
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
+import org.apache.maven.archetype.exception.InvalidPackaging;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.repository.ArtifactRepository;
@@ -48,8 +49,10 @@ import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.codehaus.plexus.velocity.VelocityComponent;
-import org.dom4j.DocumentException;
 import org.sonatype.aether.impl.internal.SimpleLocalRepositoryManager;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.xmlunit.matchers.CompareMatcher.isIdenticalTo;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -239,7 +242,7 @@ public class ArchetypeTest
     }
 
     public void testAddModuleToParentPOM()
-        throws DocumentException, IOException, ArchetypeTemplateProcessingException
+        throws Exception
     {
         String pom = "<project>\n"
             + "  <packaging>pom</packaging>\n"
@@ -248,14 +251,13 @@ public class ArchetypeTest
         StringWriter out = new StringWriter();
         assertTrue( DefaultOldArchetype.addModuleToParentPom( "myArtifactId1", new StringReader( pom ), out ) );
 
-        assertEquals(
-                     "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-                     + "<project>\n"
-                     + "  <packaging>pom</packaging>\n"
-                     + "  <modules>\n"
-                     + "    <module>myArtifactId1</module>\n"
-                     + "  </modules>\n"
-                     + "</project>", out.toString() );
+        assertThat( out.toString(), isIdenticalTo( "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
+                + "<project>\n"
+                + "  <packaging>pom</packaging>\n"
+                + "  <modules>\n"
+                + "    <module>myArtifactId1</module>\n"
+                + "  </modules>\n"
+                + "</project>" ).normalizeWhitespace() );
 
         pom = "<project>\n"
             + "  <modelVersion>4.0.0</modelVersion>\n"
@@ -265,14 +267,14 @@ public class ArchetypeTest
         out = new StringWriter();
         assertTrue( DefaultOldArchetype.addModuleToParentPom( "myArtifactId2", new StringReader( pom ), out ) );
 
-        assertEquals( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-                      + "<project>\n"
-                      + "  <modelVersion>4.0.0</modelVersion>\n"
-                      + "  <packaging>pom</packaging>\n"
-                      + "  <modules>\n"
-                      + "    <module>myArtifactId2</module>\n"
-                      + "  </modules>\n"
-                      + "</project>", out.toString() );
+        assertThat( out.toString(), isIdenticalTo( "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
+                + "<project>\n"
+                + "  <modelVersion>4.0.0</modelVersion>\n"
+                + "  <packaging>pom</packaging>\n"
+                + "  <modules>\n"
+                + "    <module>myArtifactId2</module>\n"
+                + "  </modules>\n"
+                + "</project>" ).normalizeWhitespace() );
 
         pom = "<project><modelVersion>4.0.0</modelVersion>\n"
             + "  <packaging>pom</packaging>\n"
@@ -283,13 +285,13 @@ public class ArchetypeTest
         out = new StringWriter();
         assertTrue( DefaultOldArchetype.addModuleToParentPom( "myArtifactId3", new StringReader( pom ), out ) );
 
-        assertEquals( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-                      + "<project><modelVersion>4.0.0</modelVersion>\n"
-                      + "  <packaging>pom</packaging>\n"
-                      + "  <modules>\n"
-                      + "    <module>myArtifactId3</module>\n"
-                      + "  </modules>\n"
-                      + "</project>", out.toString() );
+        assertThat( out.toString(), isIdenticalTo("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
+                + "<project><modelVersion>4.0.0</modelVersion>\n"
+                + "  <packaging>pom</packaging>\n"
+                + "  <modules>\n"
+                + "    <module>myArtifactId3</module>\n"
+                + "  </modules>\n"
+                + "</project>" ).normalizeWhitespace() );
 
         pom = "<project><modelVersion>4.0.0</modelVersion>\n"
             + "  <packaging>pom</packaging>\n"
@@ -301,14 +303,14 @@ public class ArchetypeTest
         out = new StringWriter();
         assertTrue( DefaultOldArchetype.addModuleToParentPom( "myArtifactId4", new StringReader( pom ), out ) );
 
-        assertEquals( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-                      + "<project><modelVersion>4.0.0</modelVersion>\n"
-                      + "  <packaging>pom</packaging>\n"
-                      + "  <modules>\n"
-                      + "    <module>myArtifactId3</module>\n"
-                      + "    <module>myArtifactId4</module>\n"
-                      + "  </modules>\n"
-                      + "</project>", out.toString() );
+        assertThat( out.toString(), isIdenticalTo("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
+                + "<project><modelVersion>4.0.0</modelVersion>\n"
+                + "  <packaging>pom</packaging>\n"
+                + "  <modules>\n"
+                + "    <module>myArtifactId3</module>\n"
+                + "    <module>myArtifactId4</module>\n"
+                + "  </modules>\n"
+                + "</project>" ).normalizeWhitespace() );
 
         pom = "<project><modelVersion>4.0.0</modelVersion>\n"
             + "  <packaging>pom</packaging>\n"
@@ -321,11 +323,11 @@ public class ArchetypeTest
         assertFalse( DefaultOldArchetype.addModuleToParentPom( "myArtifactId3", new StringReader( pom ), out ) );
 
         // empty means unchanged
-        assertEquals( "", out.toString() );
+        assertEquals( "", out.toString().trim() );
     }
 
     public void testAddModuleToParentPOMNoPackaging()
-        throws DocumentException, IOException
+        throws Exception
     {
         try
         {
@@ -333,15 +335,16 @@ public class ArchetypeTest
             DefaultOldArchetype.addModuleToParentPom( "myArtifactId1", new StringReader( pom ), new StringWriter() );
             fail( "Should fail to add a module to a JAR packaged project" );
         }
-        catch ( ArchetypeTemplateProcessingException e )
+        catch ( InvalidPackaging e )
         {
             // great!
-            assertTrue( true );
+            assertEquals( "Unable to add module to the current project as it is not of packaging type 'pom'",
+                    e.getLocalizedMessage() );
         }
     }
 
     public void testAddModuleToParentPOMJarPackaging()
-        throws DocumentException, IOException
+        throws Exception
     {
         try
         {
@@ -349,10 +352,11 @@ public class ArchetypeTest
             DefaultOldArchetype.addModuleToParentPom( "myArtifactId1", new StringReader( pom ), new StringWriter() );
             fail( "Should fail to add a module to a JAR packaged project" );
         }
-        catch ( ArchetypeTemplateProcessingException e )
+        catch ( InvalidPackaging e )
         {
             // great!
-            assertTrue( true );
+            assertEquals( "Unable to add module to the current project as it is not of packaging type 'pom'",
+                    e.getLocalizedMessage() );
         }
     }
 
