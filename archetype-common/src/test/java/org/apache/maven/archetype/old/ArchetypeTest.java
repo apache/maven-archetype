@@ -324,6 +324,58 @@ public class ArchetypeTest
 
         // empty means unchanged
         assertEquals( "", out.toString().trim() );
+
+
+        pom = "<project><modelVersion>4.0.0</modelVersion>\n"
+                + "  <packaging>pom</packaging>\n"
+                + "  <modules>\n"
+                + "    <module>myArtifactId1</module>\n"
+                + "    <module>myArtifactId2</module>\n"
+                + "    <module>myArtifactId3</module>\n"
+                + "  </modules>\n"
+                + "  <profiles>\n"
+                + "    <profile>\n"
+                + "      <id>profile1</id>\n"
+                + "      <modules>\n"
+                + "        <module>module1</module>\n"
+                + "      </modules>\n"
+                + "    </profile>\n"
+                + "    <profile>\n"
+                + "      <id>profile2</id>\n"
+                + "      <modules>\n"
+                + "        <module>module2</module>\n"
+                + "      </modules>\n"
+                + "    </profile>\n"
+                + "  </profiles>\n"
+                + "</project>";
+
+        out = new StringWriter();
+        assertTrue( DefaultOldArchetype.addModuleToParentPom( "module1", new StringReader( pom ), out ) );
+
+        assertThat( out.toString(), isIdenticalTo("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
+                + "<project><modelVersion>4.0.0</modelVersion>\n"
+                + "  <packaging>pom</packaging>\n"
+                + "  <modules>\n"
+                + "    <module>myArtifactId1</module>\n"
+                + "    <module>myArtifactId2</module>\n"
+                + "    <module>myArtifactId3</module>\n"
+                + "    <module>module1</module>\n"
+                + "  </modules>\n"
+                + "  <profiles>\n"
+                + "    <profile>\n"
+                + "      <id>profile1</id>\n"
+                + "      <modules>\n"
+                + "        <module>module1</module>\n"
+                + "      </modules>\n"
+                + "    </profile>\n"
+                + "    <profile>\n"
+                + "      <id>profile2</id>\n"
+                + "      <modules>\n"
+                + "        <module>module2</module>\n"
+                + "      </modules>\n"
+                + "    </profile>\n"
+                + "  </profiles>\n"
+                + "</project>" ).normalizeWhitespace() );
     }
 
     public void testAddModuleToParentPOMNoPackaging()

@@ -102,37 +102,17 @@ public final class PomUtils
                     "Unable to add module to the current project as it is not of packaging type 'pom'" );
         }
 
-        NodeList modulesList = project.getElementsByTagName( "modules" );
-        final Element modules;
-        if ( modulesList.getLength() == 0 )
-        {
-            modules = document.createElement( "modules" );
-            project.appendChild( modules );
-        }
-        else if ( modulesList.getLength() == 1 )
-        {
-            modules = (Element) modulesList.item( 0 );
-        }
-        else
-        {
-            throw new ArchetypeTemplateProcessingException( "Illegal to use multiple <modules/> sections." );
-        }
-        boolean found = false;
-        NodeList moduleList = modules.getElementsByTagName( "module" );
-        for ( int len = moduleList.getLength(), i = 0; i < len; i++ )
-        {
-            Node module = moduleList.item( i );
-            String moduleValue = module.getTextContent();
-            if ( moduleValue != null && moduleValue.equals( artifactId ) )
-            {
-                found = true;
-                break;
-            }
-        }
-        if ( !found )
+        Node modules = getModulesNode( project );
+
+        if ( !hasArtifactIdInModules( artifactId, modules ) )
         {
             Element module = document.createElement( "module" );
             module.setTextContent( artifactId );
+            if ( modules == null )
+            {
+                modules = document.createElement( "modules" );
+                project.appendChild( modules );
+            }
             modules.appendChild( module );
 
             TransformerFactory tf = TransformerFactory.newInstance();
@@ -146,7 +126,44 @@ public final class PomUtils
             tr.setOutputProperty( OutputKeys.ENCODING, "UTF-8" );
             tr.setOutputProperty( "{http://xml.apache.org/xslt}indent-amount", "2" );
             tr.transform( new DOMSource( document ), new StreamResult( fileWriter ) );
+            return true;
         }
-        return !found;
+        else
+        {
+            return false;
+        }
+    }
+
+    private static Node getModulesNode( Element project )
+    {
+        Node modules = null;
+        NodeList nodes = project.getChildNodes();
+        for ( int len = nodes.getLength(), i = 0; i < len; i++ )
+        {
+            Node node = nodes.item( i );
+            if ( node.getNodeType() == Node.ELEMENT_NODE && "modules".equals( node.getNodeName() ) )
+            {
+                modules = node;
+                break;
+            }
+        }
+        return modules;
+    }
+
+    private static boolean hasArtifactIdInModules( String artifactId, Node modules )
+    {
+        if ( modules != null )
+        {
+            Node module = modules.getFirstChild();
+            while ( module != null )
+            {
+                if ( module.getNodeType() == Node.ELEMENT_NODE && artifactId.equals( module.getTextContent() ) )
+                {
+                    return true;
+                }
+                module = module.getNextSibling();
+            }
+        }
+        return false;
     }
 }
