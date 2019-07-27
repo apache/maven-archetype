@@ -305,6 +305,10 @@ public class DefaultOldArchetype
         {
             processTemplates( pomFile, outputDirectory, context, descriptor, packageName, parentModel );
         }
+        catch ( IOException e )
+        {
+            throw new ArchetypeTemplateProcessingException( "Unable to process template", e );
+        }
         finally
         {
             Thread.currentThread().setContextClassLoader( old );
@@ -395,7 +399,7 @@ public class DefaultOldArchetype
 
     private void processTemplates( File pomFile, String outputDirectory, Context context,
                                    ArchetypeDescriptor descriptor, String packageName, Model parentModel )
-        throws ArchetypeTemplateProcessingException
+            throws ArchetypeTemplateProcessingException, IOException
     {
         if ( !pomFile.exists() )
         {
@@ -616,7 +620,7 @@ public class DefaultOldArchetype
 
     private void processTemplate( String outputDirectory, Context context, String template,
                                   TemplateDescriptor descriptor, boolean packageInFileName, String packageName )
-        throws ArchetypeTemplateProcessingException
+            throws ArchetypeTemplateProcessingException, IOException
     {
         processTemplate( outputDirectory, context, template, descriptor, packageInFileName, packageName, null );
     }
@@ -633,7 +637,7 @@ public class DefaultOldArchetype
 
     protected void processSources( String outputDirectory, Context context, ArchetypeDescriptor descriptor,
                                    String packageName, String sourceDirectory )
-        throws ArchetypeTemplateProcessingException
+            throws ArchetypeTemplateProcessingException, IOException
     {
         for ( String template : descriptor.getSources() )
         {
@@ -644,7 +648,7 @@ public class DefaultOldArchetype
 
     protected void processTestSources( String outputDirectory, Context context, ArchetypeDescriptor descriptor,
                                        String packageName, String testSourceDirectory )
-        throws ArchetypeTemplateProcessingException
+            throws ArchetypeTemplateProcessingException, IOException
     {
         for ( String template : descriptor.getTestSources() )
         {
@@ -655,7 +659,7 @@ public class DefaultOldArchetype
 
     protected void processResources( String outputDirectory, Context context, ArchetypeDescriptor descriptor,
                                      String packageName )
-        throws ArchetypeTemplateProcessingException
+        throws IOException, ArchetypeTemplateProcessingException
     {
         for ( String template : descriptor.getResources() )
         {
@@ -666,7 +670,7 @@ public class DefaultOldArchetype
 
     protected void processTestResources( String outputDirectory, Context context, ArchetypeDescriptor descriptor,
                                          String packageName )
-        throws ArchetypeTemplateProcessingException
+        throws IOException, ArchetypeTemplateProcessingException
     {
         for ( String template : descriptor.getTestResources() )
         {
@@ -677,7 +681,7 @@ public class DefaultOldArchetype
 
     protected void processSiteResources( String outputDirectory, Context context, ArchetypeDescriptor descriptor,
                                          String packageName )
-        throws ArchetypeTemplateProcessingException
+        throws IOException, ArchetypeTemplateProcessingException
     {
         for ( String template : descriptor.getSiteResources() )
         {
@@ -689,7 +693,7 @@ public class DefaultOldArchetype
     protected void processTemplate( String outputDirectory, Context context, String template,
                                     TemplateDescriptor descriptor, boolean packageInFileName, String packageName,
                                     String sourceDirectory )
-        throws ArchetypeTemplateProcessingException
+        throws IOException, ArchetypeTemplateProcessingException
     {
         File f;
 
@@ -737,6 +741,11 @@ public class DefaultOldArchetype
         if ( !f.getParentFile().exists() )
         {
             f.getParentFile().mkdirs();
+        }
+
+        if ( !f.exists() && !f.createNewFile() )
+        {
+            getLogger().warn( "Could not create new file \"" + f.getPath() + "\" or the file already exists." );
         }
 
         if ( descriptor.isFiltered() )

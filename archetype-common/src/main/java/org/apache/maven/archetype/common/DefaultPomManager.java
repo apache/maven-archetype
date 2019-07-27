@@ -234,6 +234,12 @@ public class DefaultPomManager
             ioe.initCause( exc );
             throw ioe;
         }
+
+
+        if ( !pomFile.exists() && !pomFile.createNewFile() )
+        {
+            getLogger().warn( "Could not create new file \"" + pomFile.getPath() + "\" or the file already exists." );
+        }
         
         try ( Writer outputStreamWriter = new OutputStreamWriter( new FileOutputStream( pomFile ), fileEncoding ) ) 
         {

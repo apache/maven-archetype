@@ -172,10 +172,8 @@ public class ArchetypeTest
         File artifactDir = getTestFile( "target", (String) parameters.get( "artifactId" ) );
         File pomFile = getTestFile( artifactDir.getAbsolutePath(), OldArchetype.ARCHETYPE_POM );
 
-        try
+        try ( FileReader pomReader = new FileReader( pomFile ) )
         {
-            FileReader pomReader = new FileReader( pomFile );
-
             MavenXpp3Reader reader = new MavenXpp3Reader();
 
             generatedModel = reader.read( pomReader );

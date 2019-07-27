@@ -284,6 +284,11 @@ public class DefaultFilesetArchetypeGenerator
         else
         {
             outFile.getParentFile().mkdirs();
+            if ( !outFile.exists() && !outFile.createNewFile() )
+            {
+                getLogger().warn( "Could not create new file \"" + outFile.getPath()
+                        + "\" or the file already exists." );
+            }
 
             try ( InputStream inputStream = archetypeZipFile.getInputStream( input );
                   OutputStream out = new FileOutputStream( outFile ) )
@@ -496,7 +501,7 @@ public class DefaultFilesetArchetypeGenerator
     private int processFileSet( String directory, List<String> fileSetResources, boolean packaged, String packageName,
                                 Context context, File outputDirectoryFile, String moduleOffset,
                                 String archetypeEncoding, boolean failIfExists )
-        throws OutputFileExists, ArchetypeGenerationFailure
+        throws IOException, OutputFileExists, ArchetypeGenerationFailure
     {
         int count = 0;
 
@@ -602,7 +607,7 @@ public class DefaultFilesetArchetypeGenerator
     }
 
     private void processPom( Context context, File pom, String moduleOffset )
-        throws OutputFileExists, ArchetypeGenerationFailure
+        throws IOException, OutputFileExists, ArchetypeGenerationFailure
     {
         getLogger().debug( "Processing pom " + pom );
 
@@ -657,7 +662,7 @@ public class DefaultFilesetArchetypeGenerator
     @SuppressWarnings( "deprecation" )
     private boolean processTemplate( File outFile, Context context, String templateFileName, String encoding,
                                      boolean failIfExists )
-        throws OutputFileExists, ArchetypeGenerationFailure
+        throws IOException, OutputFileExists, ArchetypeGenerationFailure
     {
         templateFileName = templateFileName.replace( File.separatorChar, '/' );
 
@@ -694,6 +699,11 @@ public class DefaultFilesetArchetypeGenerator
         if ( !outFile.getParentFile().exists() )
         {
             outFile.getParentFile().mkdirs();
+        }
+
+        if ( !outFile.exists() && !outFile.createNewFile() )
+        {
+            getLogger().warn( "Could not create new file \"" + outFile.getPath() + "\" or the file already exists." );
         }
 
         getLogger().debug( "Merging into " + outFile );
