@@ -437,8 +437,6 @@ public class XMLOutputter
         // Output final line separator
         // We output this no matter what the newline flags say
         out.write( currentFormat.lineSeparator );
-
-        out.flush();
     }
 
     /**
@@ -451,7 +449,6 @@ public class XMLOutputter
         throws IOException
     {
         printDocType( out, doctype );
-        out.flush();
     }
 
     /**
@@ -468,7 +465,6 @@ public class XMLOutputter
         // If this is the root element we could pre-initialize the
         // namespace stack with the namespaces
         printElement( out, element, 0, createNamespaceStack() );
-        out.flush();
     }
 
     /**
@@ -487,7 +483,6 @@ public class XMLOutputter
         List<?> content = element.getContent();
         printContentRange( out, content, 0, content.size(),
             0, createNamespaceStack() );
-        out.flush();
     }
 
     /**
@@ -503,7 +498,6 @@ public class XMLOutputter
         throws IOException
     {
         printContentRange( out, list, 0, list.size(), 0, createNamespaceStack() );
-        out.flush();
     }
 
     /**
@@ -516,7 +510,6 @@ public class XMLOutputter
         throws IOException
     {
         printCDATA( out, cdata );
-        out.flush();
     }
 
     /**
@@ -530,7 +523,6 @@ public class XMLOutputter
         throws IOException
     {
         printText( out, text );
-        out.flush();
     }
 
     /**
@@ -543,7 +535,6 @@ public class XMLOutputter
         throws IOException
     {
         printComment( out, comment );
-        out.flush();
     }
 
     /**
@@ -561,8 +552,6 @@ public class XMLOutputter
         currentFormat.setIgnoreTrAXEscapingPIs( true );
         printProcessingInstruction( out, pi );
         currentFormat.setIgnoreTrAXEscapingPIs( currentEscapingPolicy );
-
-        out.flush();
     }
 
     /**
@@ -575,7 +564,6 @@ public class XMLOutputter
         throws IOException
     {
         printEntityRef( out, entity );
-        out.flush();
     }
 
     // * * * * * * * * * * Output to a String * * * * * * * * * *

@@ -816,7 +816,6 @@ public class IntegrationTestMojo
                 interpolatedFile.getParentFile().mkdirs();
                 
                 writer.write( xml );
-                writer.flush();
             }
         }
         catch ( IOException e )

@@ -715,8 +715,6 @@ public class DefaultFilesetArchetypeGenerator
             velocity.getEngine().mergeTemplate( templateFileName, encoding, context, stringWriter );
 
             writer.write( StringUtils.unifyLineSeparators( stringWriter.toString() ) );
-
-            writer.flush();
         }
         catch ( Exception e )
         {

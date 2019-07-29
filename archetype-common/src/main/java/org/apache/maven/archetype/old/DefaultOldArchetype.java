@@ -759,8 +759,6 @@ public class DefaultOldArchetype
                 velocity.getEngine().mergeTemplate( template, descriptor.getEncoding(), context, stringWriter );
 
                 writer.write( StringUtils.unifyLineSeparators( stringWriter.toString() ) );
-
-                writer.flush();
             }
             catch ( Exception e )
             {

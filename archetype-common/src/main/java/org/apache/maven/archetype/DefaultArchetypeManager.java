@@ -152,8 +152,6 @@ public class DefaultArchetypeManager
                     IOUtil.copy( is, zos );
                 }
 
-                zos.flush();
-
                 zos.closeEntry();
             }
         }
