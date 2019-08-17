@@ -17,4 +17,5 @@
  * under the License.
  */
 
-System.out.println("Yeah Baby, it rocks!")
+println( 'Yeah Baby, it rocks!' )
+System.out.flush()
