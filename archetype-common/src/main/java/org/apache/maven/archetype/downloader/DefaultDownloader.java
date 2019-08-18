@@ -26,9 +26,9 @@ import java.util.List;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.project.ProjectBuildingRequest;
-import org.apache.maven.shared.artifact.DefaultArtifactCoordinate;
-import org.apache.maven.shared.artifact.resolve.ArtifactResolver;
-import org.apache.maven.shared.artifact.resolve.ArtifactResolverException;
+import org.apache.maven.shared.transfer.artifact.DefaultArtifactCoordinate;
+import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver;
+import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolverException;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 

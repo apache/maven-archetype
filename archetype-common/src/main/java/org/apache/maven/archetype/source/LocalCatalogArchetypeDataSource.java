@@ -27,7 +27,7 @@ import java.util.Iterator;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.project.ProjectBuildingRequest;
-import org.apache.maven.shared.repository.RepositoryManager;
+import org.apache.maven.shared.transfer.repository.RepositoryManager;
 
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
