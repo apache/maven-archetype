@@ -132,6 +132,8 @@ public final class PomUtils
             tr.setOutputProperty( OutputKeys.METHOD, "xml" );
             tr.setOutputProperty( OutputKeys.ENCODING, "UTF-8" );
             tr.setOutputProperty( "{http://xml.apache.org/xslt}indent-amount", "2" );
+            document.getDomConfig().setParameter( "infoset", Boolean.TRUE );
+            document.getDocumentElement().normalize();
             tr.transform( new DOMSource( document ), new StreamResult( fileWriter ) );
             return true;
         }
