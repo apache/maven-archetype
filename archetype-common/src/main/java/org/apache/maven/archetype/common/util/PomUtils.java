@@ -113,7 +113,14 @@ public final class PomUtils
                 modules = document.createElement( "modules" );
                 project.appendChild( modules );
             }
+
+            // shift the child node by next two spaces after the parent node spaces
+            modules.appendChild( document.createTextNode( "  " ) );
+
             modules.appendChild( module );
+
+            // shift the end tag </modules>
+            modules.appendChild( document.createTextNode( "\n  " ) );
 
             TransformerFactory tf = TransformerFactory.newInstance();
             tf.setAttribute( XMLConstants.ACCESS_EXTERNAL_DTD, "" );
