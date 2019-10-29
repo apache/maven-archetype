@@ -41,7 +41,9 @@ public class ArchetypeCreationRequest
 
     private List<String> languages = new ArrayList<>();
 
-    private List<String> filtereds = new ArrayList<>();
+    private List<String> filteredFileNames = new ArrayList<>();
+
+    private List<String> filteredFileExtensions = new ArrayList<>();
 
     private String defaultEncoding = "UTF-8";
 
@@ -133,14 +135,26 @@ public class ArchetypeCreationRequest
         return this;
     }
 
-    public List<String> getFiltereds()
+    public List<String> getFilteredFileNames()
     {
-        return filtereds;
+        return filteredFileNames;
     }
 
-    public ArchetypeCreationRequest setFiltereds( List<String> filtereds )
+    public ArchetypeCreationRequest setFilteredFileNames( List<String> filteredFileNames )
     {
-        this.filtereds = filtereds;
+        this.filteredFileNames = filteredFileNames;
+
+        return this;
+    }
+
+    public List<String> getFilteredFileExtensions()
+    {
+        return filteredFileExtensions;
+    }
+
+    public ArchetypeCreationRequest setFilteredFileExtensions( List<String> filteredFileExtensions )
+    {
+        this.filteredFileExtensions = filteredFileExtensions;
 
         return this;
     }

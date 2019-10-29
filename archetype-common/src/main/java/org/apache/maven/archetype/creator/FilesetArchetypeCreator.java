@@ -108,7 +108,8 @@ public class FilesetArchetypeCreator
     {
         MavenProject project = request.getProject();
         List<String> languages = request.getLanguages();
-        List<String> filtereds = request.getFiltereds();
+        List<String> filteredFileNames = request.getFilteredFileNames();
+        List<String> filteredFileExtensions = request.getFilteredFileExtensions();
         String defaultEncoding = request.getDefaultEncoding();
         boolean preserveCData = request.isPreserveCData();
         boolean keepParent = request.isKeepParent();
@@ -203,7 +204,8 @@ public class FilesetArchetypeCreator
                 }
             }
 
-            List<FileSet> filesets = resolveFileSets( packageName, fileNames, languages, filtereds, defaultEncoding );
+            List<FileSet> filesets = resolveFileSets( packageName, fileNames, languages,
+                                                      filteredFileNames, filteredFileExtensions, defaultEncoding );
             getLogger().debug( "Resolved filesets for " + archetypeDescriptor.getName() );
 
             archetypeDescriptor.setFileSets( filesets );
@@ -229,7 +231,8 @@ public class FilesetArchetypeCreator
                 ModuleDescriptor moduleDescriptor =
                     createModule( reverseProperties, rootArtifactId, moduleId, packageName,
                                   FileUtils.resolveFile( basedir, moduleId ),
-                                  new File( archetypeFilesDirectory, moduleIdDirectory ), languages, filtereds,
+                                  new File( archetypeFilesDirectory, moduleIdDirectory ),
+                                  languages, filteredFileNames, filteredFileExtensions,
                                   defaultEncoding, preserveCData, keepParent );
 
                 archetypeDescriptor.addModule( moduleDescriptor );
@@ -985,7 +988,9 @@ public class FilesetArchetypeCreator
 
     private ModuleDescriptor createModule( Properties reverseProperties, String rootArtifactId, String moduleId,
                                            String packageName, File basedir, File archetypeFilesDirectory,
-                                           List<String> languages, List<String> filtereds, String defaultEncoding,
+                                           List<String> languages, List<String> filteredFileNames,
+                                           List<String> filteredFileExtensions,
+                                           String defaultEncoding,
                                            boolean preserveCData, boolean keepParent )
         throws IOException, XmlPullParserException
     {
@@ -1023,7 +1028,8 @@ public class FilesetArchetypeCreator
 
         List<String> fileNames = resolveFileNames( pom, basedir, excludePatterns );
 
-        List<FileSet> filesets = resolveFileSets( packageName, fileNames, languages, filtereds, defaultEncoding );
+        List<FileSet> filesets = resolveFileSets( packageName, fileNames, languages,
+                                                  filteredFileNames, filteredFileExtensions, defaultEncoding );
         getLogger().debug( "Resolved filesets for module " + archetypeDescriptor.getName() );
 
         archetypeDescriptor.setFileSets( filesets );
@@ -1048,8 +1054,9 @@ public class FilesetArchetypeCreator
             ModuleDescriptor moduleDescriptor =
                 createModule( reverseProperties, rootArtifactId, subModuleId, packageName,
                               FileUtils.resolveFile( basedir, subModuleId ),
-                              FileUtils.resolveFile( archetypeFilesDirectory, subModuleIdDirectory ), languages,
-                              filtereds, defaultEncoding, preserveCData, keepParent );
+                              FileUtils.resolveFile( archetypeFilesDirectory, subModuleIdDirectory ),
+                              languages, filteredFileNames,
+                              filteredFileExtensions, defaultEncoding, preserveCData, keepParent );
 
             archetypeDescriptor.addModule( moduleDescriptor );
 
@@ -1370,12 +1377,13 @@ public class FilesetArchetypeCreator
     }
 
     private List<FileSet> resolveFileSets( String packageName, List<String> fileNames, List<String> languages,
-                                           List<String> filtereds, String defaultEncoding )
+                                           List<String> filteredFileNames,
+                                           List<String> filteredExtensions, String defaultEncoding )
     {
         List<FileSet> resolvedFileSets = new ArrayList<>();
         getLogger().debug(
-            "Resolving filesets with package=" + packageName + ", languages=" + languages + " and extentions="
-                + filtereds );
+            "Resolving filesets with package=" + packageName + ", languages=" + languages
+                            + ", fileNames=" + filteredFileNames + " and extentions=" + filteredExtensions );
 
         List<String> files = new ArrayList<>( fileNames );
 
@@ -1389,7 +1397,12 @@ public class FilesetArchetypeCreator
         getLogger().debug( "Using languages includes " + languageIncludes );
 
         StringBuilder filteredIncludes = new StringBuilder();
-        for ( String filtered : filtereds )
+        for ( String filtered : filteredFileNames )
+        {
+            filteredIncludes.append( ( ( filteredIncludes.length() == 0 ) ? "" : "," ) + "**/" + filtered );
+        }
+
+        for ( String filtered : filteredExtensions )
         {
             filteredIncludes.append(
                 ( ( filteredIncludes.length() == 0 ) ? "" : "," ) + "**/" + ( filtered.startsWith( "." ) ? "" : "*." )
@@ -1718,9 +1731,9 @@ public class FilesetArchetypeCreator
         List<String> excludes = new ArrayList<>();
 
         for ( String extension : extensions )
-        {
+            {
             includes.add( "**/*." + extension );
-        }
+            }
 
         return createFileSet( excludes, false, filtered, group, includes, defaultEncoding );
     }

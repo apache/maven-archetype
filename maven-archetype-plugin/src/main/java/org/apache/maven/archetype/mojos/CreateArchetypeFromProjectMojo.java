@@ -117,6 +117,12 @@ public class CreateArchetypeFromProjectMojo
     private ArchetypeManager manager;
 
     /**
+     * File file names which are checked for project's text files (vs binary files).
+     */
+    @Parameter( property = "archetype.filteredFileNames" )
+    private String archetypeFilteredFileNames;
+
+    /**
      * File extensions which are checked for project's text files (vs binary files).
      */
     @Parameter( property = "archetype.filteredExtentions" )
@@ -247,12 +253,14 @@ public class CreateArchetypeFromProjectMojo
                 configurator.configureArchetypeCreation( project, Boolean.valueOf( interactive ), executionProperties,
                                                          propertyFile, languages );
 
-            List<String> filtereds = getFilteredExtensions( archetypeFilteredExtentions, propertyFile );
+            List<String> filteredFileNames = getFilteredFileNames( archetypeFilteredFileNames, propertyFile );
+            List<String> filteredFileExtensions = getFilteredExtensions( archetypeFilteredExtentions, propertyFile );
 
             ArchetypeCreationRequest request =
                 new ArchetypeCreationRequest().setDefaultEncoding( defaultEncoding ).setProject( project )
                 /* Used when in interactive mode */.setProperties( properties ).setLanguages( languages )
-                /* Should be refactored to use some ant patterns */.setFiltereds( filtereds )
+                                              .setFilteredFileNames( filteredFileNames )
+                /* Should be refactored to use some ant patterns */.setFilteredFileExtensions( filteredFileExtensions )
                 /* This should be correctly handled */.setPreserveCData( preserveCData ).setKeepParent(
                     keepParent ).setPartialArchetype( partialArchetype )
                 .setLocalRepository( localRepository ).setProjectBuildingRequest( session.getProjectBuildingRequest() )
@@ -291,6 +299,33 @@ public class CreateArchetypeFromProjectMojo
         {
             throw new MojoFailureException( ex, ex.getMessage(), ex.getMessage() );
         }
+    }
+
+    private List<String> getFilteredFileNames( String archetypeFilteredFileNames, File propertyFile ) throws IOException
+    {
+        List<String> filteredFileNames = new ArrayList<>();
+
+        if ( StringUtils.isNotEmpty( archetypeFilteredFileNames ) )
+        {
+            filteredFileNames.addAll( Arrays.asList( StringUtils.split( archetypeFilteredFileNames, "," ) ) );
+
+            getLog().debug( "Found in command line fileNames = " + filteredFileNames );
+        }
+
+        if ( filteredFileNames.isEmpty() && propertyFile != null && propertyFile.exists() )
+        {
+            Properties properties = PropertyUtils.loadProperties( propertyFile );
+
+            String fileNames = properties.getProperty( Constants.ARCHETYPE_FILTERED_FILENAMES );
+            if ( StringUtils.isNotEmpty( fileNames ) )
+            {
+                filteredFileNames.addAll( Arrays.asList( fileNames.split( "," ) ) );
+            }
+
+            getLog().debug( "Found in propertyFile " + propertyFile.getName() + " fileNames = " + filteredFileNames );
+        }
+
+        return filteredFileNames;
     }
 
     private List<String> getFilteredExtensions( String archetypeFilteredExtentions, File propertyFile ) throws IOException

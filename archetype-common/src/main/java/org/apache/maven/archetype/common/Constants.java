@@ -46,6 +46,8 @@ public interface Constants
 
     String ARTIFACT_ID = "artifactId";
 
+    String ARCHETYPE_FILTERED_FILENAMES = "archetype.filteredFileNames";
+
     String ARCHETYPE_FILTERED_EXTENSIONS = "archetype.filteredExtensions";
 
     String ARCHETYPE_LANGUAGES = "archetype.languages";
