@@ -48,14 +48,14 @@ public class LocalCatalogArchetypeDataSource
 
         File catalogFile = new File( localRepo, ARCHETYPE_CATALOG_FILENAME );
 
-        getLogger().debug( "Using catalog " + catalogFile.getAbsolutePath() );
+        getLogger().debug( "Catalog to be used for update: " + catalogFile.getAbsolutePath() );
 
         ArchetypeCatalog catalog;
         if ( catalogFile.exists() )
         {
             try
             {
-                getLogger().debug( "Reading the catalog " + catalogFile );
+                getLogger().debug( "Reading catalog to be updated: " + catalogFile );
                 catalog = readCatalog( ReaderFactory.newXmlReader( catalogFile ) );
             }
             catch ( FileNotFoundException ex )
@@ -113,7 +113,7 @@ public class LocalCatalogArchetypeDataSource
         {
             catalogFile = new File( catalogFile, ARCHETYPE_CATALOG_FILENAME );
         }
-        getLogger().debug( "Using catalog " + catalogFile );
+        getLogger().debug( "Getting archetypes from catalog: " + catalogFile );
 
         if ( catalogFile.exists() )
         {
