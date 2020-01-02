@@ -296,13 +296,18 @@ public class RemoteCatalogArchetypeDataSource extends CatalogArchetypeDataSource
     {
         MavenSession session = legacySupport.getSession();
 
-        MavenExecutionRequest request = session.getRequest();
+        MavenExecutionRequest request = null;
+
+        if ( session != null )
+        {
+            request = session.getRequest();
+        }
 
         if ( request != null )
         {
             return getMirror( repoId, request.getMirrors() );
         }
-        
+
         return null;
     }
     
