@@ -63,10 +63,12 @@ public class ArchetypeTest
 {
     private static final String XML_VERSION_1_0 =
             "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n";
-    private static final String PROJECT_ELEMENT = "<project xmlns=\"http://maven.apache.org/POM/4.0.0\" " +
-            "xmlns:xsi=\"http://www.w3" +
-            ".org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven" +
-            ".apache.org/xsd/maven-4.0.0.xsd\">\n";
+    private static final String PROJECT_ELEMENT = "<project " +
+            "xmlns=\"http://maven.apache.org/POM/4.0.0\" " +
+            "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
+            "xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 " +
+            "http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n";
+    private static final String PROJECT_ELEMENT_END = "</project>";
     private static final String MODEL_VERSION = "  <modelVersion>4.0.0</modelVersion>\n";
     private static final String PACKAGING = "  <packaging>pom</packaging>\n";
 
@@ -251,12 +253,12 @@ public class ArchetypeTest
     public void testAddModuleToParentBasic()
             throws Exception
     {
-        String pom = PROJECT_ELEMENT +
-                PACKAGING;
+        String pom = PROJECT_ELEMENT
+                + PACKAGING
+                + PROJECT_ELEMENT_END;
 
         StringWriter out = new StringWriter();
-        StringReader fileReader = new StringReader( pom + "</project>" );
-        assertTrue( DefaultOldArchetype.addModuleToParentPom( "myArtifactId1", fileReader, out ) );
+        assertTrue( DefaultOldArchetype.addModuleToParentPom( "myArtifactId1", new StringReader( pom ), out ) );
 
         assertThat( out.toString(), isIdenticalTo( XML_VERSION_1_0
                 + PROJECT_ELEMENT
@@ -264,7 +266,7 @@ public class ArchetypeTest
                 + "  <modules>\n"
                 + "    <module>myArtifactId1</module>\n"
                 + "  </modules>\n"
-                + "</project>" ) );
+                + PROJECT_ELEMENT_END ) );
     }
 
     public void testAddModuleToParentWithModelVersion()
@@ -272,11 +274,11 @@ public class ArchetypeTest
     {
         String pom = PROJECT_ELEMENT
                 + MODEL_VERSION
-                + PACKAGING;
+                + PACKAGING
+                + PROJECT_ELEMENT_END;
 
         StringWriter out = new StringWriter();
-        StringReader fileReader = new StringReader( pom + "</project>" );
-        assertTrue( DefaultOldArchetype.addModuleToParentPom( "myArtifactId2", fileReader, out ) );
+        assertTrue( DefaultOldArchetype.addModuleToParentPom( "myArtifactId2", new StringReader( pom ), out ) );
 
         assertThat( out.toString(), isIdenticalTo( XML_VERSION_1_0
                 + PROJECT_ELEMENT
@@ -285,7 +287,7 @@ public class ArchetypeTest
                 + "  <modules>\n"
                 + "    <module>myArtifactId2</module>\n"
                 + "  </modules>\n"
-                + "</project>" ) );
+                + PROJECT_ELEMENT_END ) );
     }
 
     public void testAddModuleToParentWithEmptyModulesElement()
@@ -295,11 +297,11 @@ public class ArchetypeTest
                 + MODEL_VERSION
                 + PACKAGING
                 + "  <modules>\n"
-                + "  </modules>\n";
+                + "  </modules>\n"
+                + PROJECT_ELEMENT_END;
 
         StringWriter out = new StringWriter();
-        StringReader fileReader = new StringReader( pom + "</project>" );
-        assertTrue( DefaultOldArchetype.addModuleToParentPom( "myArtifactId3", fileReader, out ) );
+        assertTrue( DefaultOldArchetype.addModuleToParentPom( "myArtifactId3", new StringReader( pom ), out ) );
 
         assertThat( out.toString(), isIdenticalTo( XML_VERSION_1_0
                 + PROJECT_ELEMENT
@@ -308,7 +310,7 @@ public class ArchetypeTest
                 + "  <modules>\n"
                 + "    <module>myArtifactId3</module>\n"
                 + "  </modules>\n"
-                + "</project>" ) );
+                + PROJECT_ELEMENT_END ) );
     }
 
     public void testAddModuleToParentWithOneModulePresent()
@@ -319,11 +321,11 @@ public class ArchetypeTest
                 + PACKAGING
                 + "  <modules>\n"
                 + "    <module>myArtifactId3</module>\n"
-                + "  </modules>\n";
+                + "  </modules>\n"
+                + PROJECT_ELEMENT_END;
 
         StringWriter out = new StringWriter();
-        StringReader fileReader = new StringReader( pom + "</project>" );
-        assertTrue( DefaultOldArchetype.addModuleToParentPom( "myArtifactId4", fileReader, out ) );
+        assertTrue( DefaultOldArchetype.addModuleToParentPom( "myArtifactId4", new StringReader( pom ), out ) );
 
         assertThat( out.toString(), isIdenticalTo( XML_VERSION_1_0
                 + PROJECT_ELEMENT
@@ -333,7 +335,7 @@ public class ArchetypeTest
                 + "    <module>myArtifactId3</module>\n"
                 + "    <module>myArtifactId4</module>\n"
                 + "  </modules>\n"
-                + "</project>" ) );
+                + PROJECT_ELEMENT_END ) );
     }
 
     public void testAddModuleToParentDoesNothingWhenSameModuleAdded()
@@ -344,11 +346,11 @@ public class ArchetypeTest
                 + "  <packaging>pom</packaging>\n"
                 + "  <modules>\n"
                 + "    <module>myArtifactId3</module>\n"
-                + "  </modules>\n";
+                + "  </modules>\n"
+                + PROJECT_ELEMENT_END;
 
         StringWriter out = new StringWriter();
-        StringReader fileReader = new StringReader( pom + "</project>" );
-        assertFalse( DefaultOldArchetype.addModuleToParentPom( "myArtifactId3", fileReader, out ) );
+        assertFalse( DefaultOldArchetype.addModuleToParentPom( "myArtifactId3", new StringReader( pom ), out ) );
 
         // empty means unchanged
         assertEquals( "", out.toString().trim() );
@@ -378,12 +380,11 @@ public class ArchetypeTest
                 + "        <module>module2</module>\n"
                 + "      </modules>\n"
                 + "    </profile>\n"
-                + "  </profiles>\n"
-                + "</project>";
+                + "  </profiles>\n" +
+                PROJECT_ELEMENT_END;
 
         StringWriter out = new StringWriter();
-        StringReader fileReader = new StringReader( pom );
-        assertTrue( DefaultOldArchetype.addModuleToParentPom( "module1", fileReader, out ) );
+        assertTrue( DefaultOldArchetype.addModuleToParentPom( "module1", new StringReader( pom ), out ) );
 
         assertThat( out.toString(), isIdenticalTo(XML_VERSION_1_0
                 + PROJECT_ELEMENT
@@ -409,7 +410,7 @@ public class ArchetypeTest
                 + "      </modules>\n"
                 + "    </profile>\n"
                 + "  </profiles>\n"
-                + "</project>" ) );
+                + PROJECT_ELEMENT_END ) );
     }
 
     public void testAddModuleToParentPOMNoPackaging()
