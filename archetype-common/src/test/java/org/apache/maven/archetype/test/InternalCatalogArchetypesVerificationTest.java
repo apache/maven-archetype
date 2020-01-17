@@ -44,7 +44,7 @@ import org.sonatype.aether.impl.internal.SimpleLocalRepositoryManager;
 public class InternalCatalogArchetypesVerificationTest
     extends PlexusTestCase
 {
-    private static final String CENTRAL = "http://repo.maven.apache.org/maven2";
+    private static final String CENTRAL = "https://repo.maven.apache.org/maven2";
 
     public void testInternalCatalog()
         throws Exception

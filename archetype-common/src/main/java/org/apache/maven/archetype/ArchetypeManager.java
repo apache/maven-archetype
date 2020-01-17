@@ -69,7 +69,7 @@ public interface ArchetypeManager
 
     /**
      * Gives the catalog of archetypes located at
-     * <code>http://repo.maven.apache.org/maven2/archetype-catalog.xml</code>.
+     * <code>https://repo.maven.apache.org/maven2/archetype-catalog.xml</code>.
      * @param buildingRequest TODO
      * 
      * @return the catalog.
