@@ -429,6 +429,37 @@ public class DefaultArchetypeGeneratorTest
                     result.getCause().getMessage().startsWith( "Archetype archetypes:basic:1.0 is not configured" )
                         && result.getCause().getMessage().endsWith( "Property property-without-default-4 is missing." ) );
     }
+    
+    public void testGenerateArchetypeWithSameDirectoryExcution()
+            throws Exception
+    {
+        System.out.println( "testGenerateArchetypeWithSameDirectoryExcution" );
+        ArchetypeGenerationRequest request = createArchetypeGenerationRequest( "generate-14", ARCHETYPE_BASIC );
+        request.setCreteBaseDir( false );
+        projectDirectory = new File( outputDirectory );
+        FileUtils.forceDelete( projectDirectory );
+        
+        generateProjectFromArchetype(request);
+        assertTemplateContentGeneratedWithFileSetArchetype( "src/main/java/file/value/package/App.java", "file-value" );
+        assertTemplateContentGeneratedWithFileSetArchetype( "src/main/java/file/value/package/inner/package/App2.java","file-value" );
+    
+        assertTemplateCopiedWithFileSetArchetype( "src/main/java/file/value/package/App.ogg" );
+    
+        File templateFile = new File( projectDirectory, "src/main/java/file/value/package/ToDelete.java" );
+        assertFalse( templateFile + " should have been removed (by post-generate.groovy script", templateFile.exists() );
+    
+        assertTemplateContentGeneratedWithFileSetArchetype( "src/main/resources/App.properties", "file-value" );
+        assertTemplateContentGeneratedWithFileSetArchetype( "src/main/resources/file-value/touch.txt", "file-value" );
+        assertTemplateContentGeneratedWithFileSetArchetype( "src/main/resources/file-value/touch_root.txt",
+                "file-value" );
+    
+        assertTemplateCopiedWithFileSetArchetype( "src/main/resources/some-dir/App.png" );
+    
+        assertTemplateContentGeneratedWithFileSetArchetype( "src/site/site.xml", "file-value" );
+        assertTemplateContentGeneratedWithFileSetArchetype( "src/site/apt/usage.apt", "file-value" );
+        assertTemplateContentGeneratedWithFileSetArchetype( ".classpath", "file-value" );
+        assertTemplateContentGeneratedWithFileSetArchetype( "profiles.xml", "file-value" );
+    }
 
     public void testGenerateArchetypeWithPostScriptIncluded()
         throws Exception
