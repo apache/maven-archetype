@@ -25,7 +25,7 @@
   <parent>
     <groupId>org.apache.maven</groupId>
     <artifactId>maven-parent</artifactId>
-    <version>33</version>
+    <version>34</version>
   </parent>
 
   <groupId>org.apache.maven.archetype</groupId>
@@ -79,6 +79,7 @@
     <wagonVersion>3.3.3</wagonVersion>
     <surefire.version>2.21.0</surefire.version>
     <maven.site.path>archetype-archives/archetype-LATEST</maven.site.path>
+    <project.build.outputTimestamp>2020-02-02T18:03:59Z</project.build.outputTimestamp>
   </properties>
 
   <dependencyManagement>
@@ -266,9 +267,7 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-release-plugin</artifactId>
           <configuration>
-            <tagBase>https://svn.apache.org/repos/asf/maven/archetype/tags</tagBase>
             <preparationGoals>clean install</preparationGoals>
-            <autoVersionSubmodules>true</autoVersionSubmodules>
           </configuration>
         </plugin>
         <plugin>
