@@ -440,25 +440,23 @@ public class DefaultArchetypeGeneratorTest
         FileUtils.forceDelete( projectDirectory );
         
         generateProjectFromArchetype(request);
-        assertTemplateContentGeneratedWithFileSetArchetype( "src/main/java/file/value/package/App.java", "file-value" );
-        assertTemplateContentGeneratedWithFileSetArchetype( "src/main/java/file/value/package/inner/package/App2.java","file-value" );
+        
+        assertTemplateContent( "src/main/java/file/value/package/App.java" );
+        assertTemplateContent( "src/main/java/file/value/package/inner/package/App2.java" );
+        assertTemplateContent( "src/main/c/file/value/package/App.c" );
+        assertTemplateContent( "src/test/java/file/value/package/AppTest.java" );
+        assertTemplateContent( "src/test/c/file/value/package/AppTest.c" );
+        assertTemplateContent( "src/main/resources/App.properties" );
+        assertTemplateContent( "src/main/resources/inner/dir/App2.properties" );
+        assertTemplateContent( "src/main/mdo/App.mdo" );
+        assertTemplateContent( "src/test/resources/AppTest.properties" );
+        assertTemplateContent( "src/test/mdo/AppTest.mdo" );
     
-        assertTemplateCopiedWithFileSetArchetype( "src/main/java/file/value/package/App.ogg" );
-    
-        File templateFile = new File( projectDirectory, "src/main/java/file/value/package/ToDelete.java" );
-        assertFalse( templateFile + " should have been removed (by post-generate.groovy script", templateFile.exists() );
-    
-        assertTemplateContentGeneratedWithFileSetArchetype( "src/main/resources/App.properties", "file-value" );
-        assertTemplateContentGeneratedWithFileSetArchetype( "src/main/resources/file-value/touch.txt", "file-value" );
-        assertTemplateContentGeneratedWithFileSetArchetype( "src/main/resources/file-value/touch_root.txt",
-                "file-value" );
-    
-        assertTemplateCopiedWithFileSetArchetype( "src/main/resources/some-dir/App.png" );
-    
-        assertTemplateContentGeneratedWithFileSetArchetype( "src/site/site.xml", "file-value" );
-        assertTemplateContentGeneratedWithFileSetArchetype( "src/site/apt/usage.apt", "file-value" );
-        assertTemplateContentGeneratedWithFileSetArchetype( ".classpath", "file-value" );
-        assertTemplateContentGeneratedWithFileSetArchetype( "profiles.xml", "file-value" );
+        Model model = readPom( new File( projectDirectory, "pom.xml" ) );
+        assertNull( model.getParent() );
+        assertEquals( "file-value", model.getGroupId() );
+        assertEquals( "file-value", model.getArtifactId() );
+        assertEquals( "file-value", model.getVersion() );
     }
 
     public void testGenerateArchetypeWithPostScriptIncluded()
