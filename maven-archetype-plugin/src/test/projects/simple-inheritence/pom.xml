@@ -111,7 +111,7 @@
       </releases>
       <id>codehaus.snapshots</id>
       <name>Codehaus Snapshot Development Repository</name>
-      <url>http://snapshots.repository.codehaus.org</url>
+      <url>https://snapshots.repository.codehaus.org</url>
     </repository>
   </repositories>
 
