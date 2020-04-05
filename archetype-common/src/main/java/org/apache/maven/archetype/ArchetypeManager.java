@@ -85,7 +85,9 @@ public interface ArchetypeManager
      * @return The File to the generated jar
      * @throws org.apache.maven.artifact.DependencyResolutionRequiredException
      * @throws java.io.IOException
+     * @deprecated replaced by archetype plugin's JarMojo using maven-archiver component for Reproducible Builds
      */
+    @Deprecated
     File archiveArchetype( File archetypeDirectory, File outputDirectory, String finalName )
         throws DependencyResolutionRequiredException, IOException;
 
