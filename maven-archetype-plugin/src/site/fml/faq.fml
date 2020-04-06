@@ -27,7 +27,7 @@ under the License.
       <question>What packaging should I use: <code>maven-archetype</code> or <code>jar</code>? What is the difference?</question>
       <answer>
         <p><code>maven-archetype</code> packaging is available since 2.0-alpha-1: it should be used instead of <code>jar</code>, which was used
-        for Archetype 1.x.</p>
+        for Old Archetype 1.0.x.</p>
         <p>Using <code>maven-archetype</code> packaging helps identifying archetypes in repositories and adds archetype related bindings to
         build lifecycle: see <a href="../archetype-packaging/"><code>maven-archetype</code> packaging documentation</a>
         for more information.</p>
@@ -38,8 +38,20 @@ under the License.
       <question>How to generate a project from an archetype in an authenticated repository?</question>
       <answer>
         <p>The server id used to download the artifact is <code><i>[archetypeArtifactId]</i>-repo</code>: you have to
-        <a href="http://maven.apache.org/settings.html#Servers">define corresponding server configuration in
+        <a href="/settings.html#Servers">define corresponding server configuration in
         <code>settings.xml</code></a> with this id.</p>
+      </answer>
+    </faq>
+
+    <faq id="old">
+      <question>What is "Old Archetype 1.0.x"?</question>
+      <answer>
+        <p>Old Archetype 1.0.x was using a <code>archetype</code> XML descriptor defined in <code>/xsd/archetype-1.0.0.xsd</code>:
+        see <a href="/archetype/archetype-common/archetype.html">old descriptor reference</a>.</p>
+        <p>Archetype is now using <code>archetype-descriptor</code> XML descriptor defined in <code>/xsd/archetype-descriptor-1.1.0.xsd</code>:
+        see <a href="/archetype/archetype-models/archetype-descriptor/archetype-descriptor.html">Archetype descriptor reference</a>.</p>
+        <p>For compatibility, old archetypes can still be used to generate new projects, but archetypes should be updated to the new
+        descriptor format: in the future, old format will be removed.</p>
       </answer>
     </faq>
 
