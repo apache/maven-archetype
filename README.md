@@ -61,7 +61,7 @@ There are some guidelines which will make applying PRs easier for us:
   + Check for unnecessary whitespace with `git diff --check` before committing.
 + Make sure your commit messages are in the proper format. Your commit message should contain the key of the JIRA issue.
 ```
-[MASSEMBLY-XXX] - Subject of the JIRA Ticket
+[ARCHETYPE-XXX] - Subject of the JIRA Ticket
  Optional supplemental description.
 ```
 + Make sure you have added the necessary tests (JUnit/IT) for your changes.
