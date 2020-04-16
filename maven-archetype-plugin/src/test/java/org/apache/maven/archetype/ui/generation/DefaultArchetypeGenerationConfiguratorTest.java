@@ -28,12 +28,16 @@ import org.apache.maven.archetype.exception.ArchetypeSelectionFailure;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.archetype.exception.UnknownGroup;
 import org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor;
+import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.project.ProjectBuildingRequest;
 import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.components.interactivity.Prompter;
 import org.codehaus.plexus.components.interactivity.PrompterException;
-import org.easymock.MockControl;
+import org.easymock.EasyMock;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -53,21 +57,22 @@ public class DefaultArchetypeGenerationConfiguratorTest
         configurator = (DefaultArchetypeGenerationConfigurator) lookup( ArchetypeGenerationConfigurator.ROLE );
 
         ProjectBuildingRequest buildingRequest = null;
-        
-        MockControl control = MockControl.createControl( ArchetypeArtifactManager.class );
-        control.setDefaultMatcher( MockControl.ALWAYS_MATCHER );
 
-        ArchetypeArtifactManager manager = (ArchetypeArtifactManager) control.getMock();
-        manager.exists( "archetypeGroupId", "archetypeArtifactId", "archetypeVersion", null, null, null, buildingRequest );
-        control.setReturnValue( true );
-        manager.isFileSetArchetype( "archetypeGroupId", "archetypeArtifactId", "archetypeVersion", null, null, null, buildingRequest );
-        control.setReturnValue( false );
-        manager.isOldArchetype( "archetypeGroupId", "archetypeArtifactId", "archetypeVersion", null, null, null, buildingRequest );
-        control.setReturnValue( true );
-        manager.getOldArchetypeDescriptor( "archetypeGroupId", "archetypeArtifactId", "archetypeVersion", null,
-                                               null, null, buildingRequest );
-        control.setReturnValue( new ArchetypeDescriptor() );
-        control.replay();
+        ArchetypeArtifactManager manager = EasyMock.createMock ( ArchetypeArtifactManager.class );
+        
+        List<ArtifactRepository> x = new ArrayList<>();
+        EasyMock.expect( manager.exists( "archetypeGroupId", "archetypeArtifactId", "archetypeVersion", null, null, x,
+                                         buildingRequest ) ).andReturn( true );
+        EasyMock.expect( manager.isFileSetArchetype( "archetypeGroupId", "archetypeArtifactId", "archetypeVersion",
+                                                     null, null, x, buildingRequest ) ).andReturn( false );
+        EasyMock.expect( manager.isOldArchetype( "archetypeGroupId", "archetypeArtifactId", "archetypeVersion", null,
+                                                 null, x, buildingRequest ) ).andReturn( true );
+
+        EasyMock.expect( manager.getOldArchetypeDescriptor( "archetypeGroupId", "archetypeArtifactId",
+                                                            "archetypeVersion", null, null, x,
+                                                            buildingRequest ) ).andReturn( new ArchetypeDescriptor() );
+       
+        EasyMock.replay( manager );
         configurator.setArchetypeArtifactManager( manager );
     }
 
