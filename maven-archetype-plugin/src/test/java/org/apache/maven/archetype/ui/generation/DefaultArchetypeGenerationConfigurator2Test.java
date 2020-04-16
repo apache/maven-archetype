@@ -50,26 +50,6 @@ public class DefaultArchetypeGenerationConfigurator2Test
         configurator = (DefaultArchetypeGenerationConfigurator) lookup( ArchetypeGenerationConfigurator.ROLE );
 
         ProjectBuildingRequest buildingRequest = null;
-//        MavenRepositorySystemSession repositorySession = new MavenRepositorySystemSession();
-//        repositorySession.setLocalRepositoryManager( new SimpleLocalRepositoryManager( localRepository.getBasedir() ) );
-//        buildingRequest.setRepositorySession( repositorySession );
-//        request.setProjectBuildingRequest( buildingRequest );
-        
-     /*   MockControl control = MockControl.createControl( ArchetypeArtifactManager.class );
-        control.setDefaultMatcher( MockControl.ALWAYS_MATCHER );
-
-        ArchetypeArtifactManager manager = (ArchetypeArtifactManager) control.getMock();
-        manager.exists( "archetypeGroupId", "archetypeArtifactId", "archetypeVersion", null, null, null, buildingRequest );
-        control.setReturnValue( true );
-        manager.isFileSetArchetype( "archetypeGroupId", "archetypeArtifactId", "archetypeVersion", null, null, null, buildingRequest );
-        control.setReturnValue( true );
-        manager.isOldArchetype( "archetypeGroupId", "archetypeArtifactId", "archetypeVersion", null, null, null, buildingRequest );
-        control.setReturnValue( false );
-        manager.getFileSetArchetypeDescriptor( "archetypeGroupId", "archetypeArtifactId", "archetypeVersion", null,
-                                               null, null, buildingRequest );
-        
-        */
-        
         
         ArchetypeDescriptor descriptor = new ArchetypeDescriptor();
         RequiredProperty groupId = new RequiredProperty();

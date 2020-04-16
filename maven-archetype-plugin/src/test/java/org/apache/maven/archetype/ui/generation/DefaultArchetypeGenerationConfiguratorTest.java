@@ -31,7 +31,6 @@ import org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.project.ProjectBuildingRequest;
 import org.codehaus.plexus.PlexusTestCase;
-import org.codehaus.plexus.components.interactivity.Prompter;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.easymock.EasyMock;
 
