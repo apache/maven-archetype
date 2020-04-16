@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.Set;
 
@@ -440,7 +441,7 @@ public class IntegrationTestMojo
             {
                 refLine = referenceFileReader.readLine();
                 actualLine = actualFileReader.readLine();
-                if ( !StringUtils.equals( refLine, actualLine ) )
+                if ( !Objects.equals( refLine, actualLine ) )
                 {
                     return false;
                 }

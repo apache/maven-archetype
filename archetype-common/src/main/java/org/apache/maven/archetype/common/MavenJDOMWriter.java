@@ -252,7 +252,7 @@ public class MavenJDOMWriter
      * @param list
      * @param parent
      */
-    protected Element findAndReplaceSimpleLists( Counter counter, Element parent, java.util.Collection list,
+    protected Element findAndReplaceSimpleLists( Counter counter, Element parent, Collection list,
                                                  String parentName, String childName )
     {
         boolean shouldExist = ( list != null ) && ( list.size() > 0 );
@@ -297,8 +297,7 @@ public class MavenJDOMWriter
             }
         }
         return element;
-    } // -- Element findAndReplaceSimpleLists(Counter, Element, java.util.Collection, String,
-    // String)
+    } // -- Element findAndReplaceSimpleLists(Counter, Element, Collection, String, String)
 
     /**
      * Method findAndReplaceXpp3DOM.
@@ -380,8 +379,8 @@ public class MavenJDOMWriter
      * @param list
      * @param parent
      */
-    protected void iterateContributor( Counter counter, Element parent, java.util.Collection list,
-                                       java.lang.String parentTag, java.lang.String childTag )
+    protected void iterateContributor( Counter counter, Element parent, Collection list,
+                                       String parentTag, String childTag )
     {
         boolean shouldExist = ( list != null ) && ( list.size() > 0 );
         Element element = updateElement( counter, parent, parentTag, shouldExist );
@@ -424,8 +423,8 @@ public class MavenJDOMWriter
                 }
             }
         }
-    } // -- void iterateContributor(Counter, Element, java.util.Collection, java.lang.String,
-    // java.lang.String)
+    } // -- void iterateContributor(Counter, Element, Collection, String,
+    // String)
 
     /**
      * Method iterateDependency.
@@ -436,8 +435,8 @@ public class MavenJDOMWriter
      * @param list
      * @param parent
      */
-    protected void iterateDependency( Counter counter, Element parent, java.util.Collection list,
-                                      java.lang.String parentTag, java.lang.String childTag )
+    protected void iterateDependency( Counter counter, Element parent, Collection list,
+                                      String parentTag, String childTag )
     {
         boolean shouldExist = ( list != null ) && ( list.size() > 0 );
         Element element = updateElement( counter, parent, parentTag, shouldExist );
@@ -480,8 +479,8 @@ public class MavenJDOMWriter
                 }
             }
         }
-    } // -- void iterateDependency(Counter, Element, java.util.Collection, java.lang.String,
-    // java.lang.String)
+    } // -- void iterateDependency(Counter, Element, java.util.Collection, String,
+    // String)
 
     /**
      * Method iterateDeveloper.
@@ -492,8 +491,8 @@ public class MavenJDOMWriter
      * @param list
      * @param parent
      */
-    protected void iterateDeveloper( Counter counter, Element parent, java.util.Collection list,
-                                     java.lang.String parentTag, java.lang.String childTag )
+    protected void iterateDeveloper( Counter counter, Element parent, Collection list,
+                                     String parentTag, String childTag )
     {
         boolean shouldExist = ( list != null ) && ( list.size() > 0 );
         Element element = updateElement( counter, parent, parentTag, shouldExist );
@@ -536,8 +535,8 @@ public class MavenJDOMWriter
                 }
             }
         }
-    } // -- void iterateDeveloper(Counter, Element, java.util.Collection, java.lang.String,
-    // java.lang.String)
+    } // -- void iterateDeveloper(Counter, Element, java.util.Collection, String,
+    // String)
 
     /**
      * Method iterateExclusion.
@@ -548,8 +547,8 @@ public class MavenJDOMWriter
      * @param list
      * @param parent
      */
-    protected void iterateExclusion( Counter counter, Element parent, java.util.Collection list,
-                                     java.lang.String parentTag, java.lang.String childTag )
+    protected void iterateExclusion( Counter counter, Element parent, Collection list,
+                                     String parentTag, String childTag )
     {
         boolean shouldExist = ( list != null ) && ( list.size() > 0 );
         Element element = updateElement( counter, parent, parentTag, shouldExist );
@@ -592,8 +591,7 @@ public class MavenJDOMWriter
                 }
             }
         }
-    } // -- void iterateExclusion(Counter, Element, java.util.Collection, java.lang.String,
-    // java.lang.String)
+    } // -- void iterateExclusion(Counter, Element, Collection, String, String)
 
     /**
      * Method iterateExtension.
@@ -604,8 +602,8 @@ public class MavenJDOMWriter
      * @param list
      * @param parent
      */
-    protected void iterateExtension( Counter counter, Element parent, java.util.Collection list,
-                                     java.lang.String parentTag, java.lang.String childTag )
+    protected void iterateExtension( Counter counter, Element parent, Collection list,
+                                     String parentTag, String childTag )
     {
         boolean shouldExist = ( list != null ) && ( list.size() > 0 );
         Element element = updateElement( counter, parent, parentTag, shouldExist );
@@ -648,8 +646,7 @@ public class MavenJDOMWriter
                 }
             }
         }
-    } // -- void iterateExtension(Counter, Element, java.util.Collection, java.lang.String,
-    // java.lang.String)
+    } // -- void iterateExtension(Counter, Element, Collection, String, String)
 
     /**
      * Method iterateLicense.
@@ -660,8 +657,8 @@ public class MavenJDOMWriter
      * @param list
      * @param parent
      */
-    protected void iterateLicense( Counter counter, Element parent, java.util.Collection list,
-                                   java.lang.String parentTag, java.lang.String childTag )
+    protected void iterateLicense( Counter counter, Element parent, Collection list,
+                                   String parentTag, String childTag )
     {
         boolean shouldExist = ( list != null ) && ( list.size() > 0 );
         Element element = updateElement( counter, parent, parentTag, shouldExist );
@@ -704,8 +701,8 @@ public class MavenJDOMWriter
                 }
             }
         }
-    } // -- void iterateLicense(Counter, Element, java.util.Collection, java.lang.String,
-    // java.lang.String)
+    } // -- void iterateLicense(Counter, Element, java.util.Collection, String,
+    // String)
 
     /**
      * Method iterateMailingList.
@@ -717,7 +714,7 @@ public class MavenJDOMWriter
      * @param parent
      */
     protected void iterateMailingList( Counter counter, Element parent, java.util.Collection list,
-                                       java.lang.String parentTag, java.lang.String childTag )
+                                       String parentTag, String childTag )
     {
         boolean shouldExist = ( list != null ) && ( list.size() > 0 );
         Element element = updateElement( counter, parent, parentTag, shouldExist );
@@ -760,8 +757,8 @@ public class MavenJDOMWriter
                 }
             }
         }
-    } // -- void iterateMailingList(Counter, Element, java.util.Collection, java.lang.String,
-    // java.lang.String)
+    } // -- void iterateMailingList(Counter, Element, java.util.Collection, String,
+    // String)
 
     /**
      * Method iterateNotifier.
@@ -773,7 +770,7 @@ public class MavenJDOMWriter
      * @param parent
      */
     protected void iterateNotifier( Counter counter, Element parent, java.util.Collection list,
-                                    java.lang.String parentTag, java.lang.String childTag )
+                                    String parentTag, String childTag )
     {
         boolean shouldExist = ( list != null ) && ( list.size() > 0 );
         Element element = updateElement( counter, parent, parentTag, shouldExist );
@@ -816,8 +813,8 @@ public class MavenJDOMWriter
                 }
             }
         }
-    } // -- void iterateNotifier(Counter, Element, java.util.Collection, java.lang.String,
-    // java.lang.String)
+    } // -- void iterateNotifier(Counter, Element, java.util.Collection, String,
+    // String)
 
     /**
      * Method iteratePlugin.
@@ -829,7 +826,7 @@ public class MavenJDOMWriter
      * @param parent
      */
     protected void iteratePlugin( Counter counter, Element parent, java.util.Collection list,
-                                  java.lang.String parentTag, java.lang.String childTag )
+                                  String parentTag, String childTag )
     {
         boolean shouldExist = ( list != null ) && ( list.size() > 0 );
         Element element = updateElement( counter, parent, parentTag, shouldExist );
@@ -872,8 +869,8 @@ public class MavenJDOMWriter
                 }
             }
         }
-    } // -- void iteratePlugin(Counter, Element, java.util.Collection, java.lang.String,
-    // java.lang.String)
+    } // -- void iteratePlugin(Counter, Element, java.util.Collection, String,
+    // String)
 
     /**
      * Method iteratePluginExecution.
@@ -885,7 +882,7 @@ public class MavenJDOMWriter
      * @param parent
      */
     protected void iteratePluginExecution( Counter counter, Element parent, java.util.Collection list,
-                                           java.lang.String parentTag, java.lang.String childTag )
+                                           String parentTag, String childTag )
     {
         boolean shouldExist = ( list != null ) && ( list.size() > 0 );
         Element element = updateElement( counter, parent, parentTag, shouldExist );
@@ -928,8 +925,8 @@ public class MavenJDOMWriter
                 }
             }
         }
-    } // -- void iteratePluginExecution(Counter, Element, java.util.Collection, java.lang.String,
-    // java.lang.String)
+    } // -- void iteratePluginExecution(Counter, Element, java.util.Collection, String,
+    // String)
 
     /**
      * Method iterateProfile.
@@ -941,7 +938,7 @@ public class MavenJDOMWriter
      * @param parent
      */
     protected void iterateProfile( Counter counter, Element parent, java.util.Collection list,
-                                   java.lang.String parentTag, java.lang.String childTag )
+                                   String parentTag, String childTag )
     {
         boolean shouldExist = ( list != null ) && ( list.size() > 0 );
         Element element = updateElement( counter, parent, parentTag, shouldExist );
@@ -984,8 +981,8 @@ public class MavenJDOMWriter
                 }
             }
         }
-    } // -- void iterateProfile(Counter, Element, java.util.Collection, java.lang.String,
-    // java.lang.String)
+    } // -- void iterateProfile(Counter, Element, java.util.Collection, String,
+    // String)
 
     /**
      * Method iterateReportPlugin.
@@ -997,7 +994,7 @@ public class MavenJDOMWriter
      * @param parent
      */
     protected void iterateReportPlugin( Counter counter, Element parent, java.util.Collection list,
-                                        java.lang.String parentTag, java.lang.String childTag )
+                                        String parentTag, String childTag )
     {
         boolean shouldExist = ( list != null ) && ( list.size() > 0 );
         Element element = updateElement( counter, parent, parentTag, shouldExist );
@@ -1040,8 +1037,8 @@ public class MavenJDOMWriter
                 }
             }
         }
-    } // -- void iterateReportPlugin(Counter, Element, java.util.Collection, java.lang.String,
-    // java.lang.String)
+    } // -- void iterateReportPlugin(Counter, Element, java.util.Collection, String,
+    // String)
 
     /**
      * Method iterateReportSet.
@@ -1053,7 +1050,7 @@ public class MavenJDOMWriter
      * @param parent
      */
     protected void iterateReportSet( Counter counter, Element parent, java.util.Collection list,
-                                     java.lang.String parentTag, java.lang.String childTag )
+                                     String parentTag, String childTag )
     {
         boolean shouldExist = ( list != null ) && ( list.size() > 0 );
         Element element = updateElement( counter, parent, parentTag, shouldExist );
@@ -1096,8 +1093,8 @@ public class MavenJDOMWriter
                 }
             }
         }
-    } // -- void iterateReportSet(Counter, Element, java.util.Collection, java.lang.String,
-    // java.lang.String)
+    } // -- void iterateReportSet(Counter, Element, java.util.Collection, String,
+    // String)
 
     /**
      * Method iterateRepository.
@@ -1109,7 +1106,7 @@ public class MavenJDOMWriter
      * @param parent
      */
     protected void iterateRepository( Counter counter, Element parent, java.util.Collection list,
-                                      java.lang.String parentTag, java.lang.String childTag )
+                                      String parentTag, String childTag )
     {
         boolean shouldExist = ( list != null ) && ( list.size() > 0 );
         Element element = updateElement( counter, parent, parentTag, shouldExist );
@@ -1152,8 +1149,8 @@ public class MavenJDOMWriter
                 }
             }
         }
-    } // -- void iterateRepository(Counter, Element, java.util.Collection, java.lang.String,
-    // java.lang.String)
+    } // -- void iterateRepository(Counter, Element, java.util.Collection, String,
+    // String)
 
     /**
      * Method iterateResource.
@@ -1165,7 +1162,7 @@ public class MavenJDOMWriter
      * @param parent
      */
     protected void iterateResource( Counter counter, Element parent, java.util.Collection list,
-                                    java.lang.String parentTag, java.lang.String childTag )
+                                    String parentTag, String childTag )
     {
         boolean shouldExist = ( list != null ) && ( list.size() > 0 );
         Element element = updateElement( counter, parent, parentTag, shouldExist );
@@ -1208,8 +1205,7 @@ public class MavenJDOMWriter
                 }
             }
         }
-    } // -- void iterateResource(Counter, Element, java.util.Collection, java.lang.String,
-    // java.lang.String)
+    } // -- void iterateResource(Counter, Element, Collection, String, String)
 
     /**
      * Method replaceXpp3DOM.
@@ -1229,7 +1225,6 @@ public class MavenJDOMWriter
                 domChilds.add( childs[i] );
             }
 
-            int domIndex = 0;
             ListIterator it = parent.getChildren().listIterator();
             while ( it.hasNext() )
             {
