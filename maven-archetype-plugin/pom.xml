@@ -124,7 +124,7 @@
     <dependency>
       <groupId>easymock</groupId>
       <artifactId>easymock</artifactId>
-      <version>1.2_Java1.3</version><!-- with 2.0 compilation failure -->
+      <version>2.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
