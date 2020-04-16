@@ -175,7 +175,7 @@ public class DefaultOldArchetype
         URL[] urls;
         try
         {
-            urls = new URL[] {archetypeFile.toURL() };
+            urls = new URL[] {archetypeFile.toURI().toURL() };
         }
         catch ( MalformedURLException e )
         {
