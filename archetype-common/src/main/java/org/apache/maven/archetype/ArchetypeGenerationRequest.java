@@ -398,7 +398,7 @@ public class ArchetypeGenerationRequest
         return createBaseDir;
     }
     
-    public ArchetypeGenerationRequest setCreteBaseDir( boolean createBaseDir )
+    public ArchetypeGenerationRequest setCreateBaseDir( boolean createBaseDir )
     {
         this.createBaseDir = createBaseDir;
         
