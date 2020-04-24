@@ -28,12 +28,9 @@ import org.apache.maven.archetype.exception.UnknownGroup;
 import org.apache.maven.archetype.ui.ArchetypeDefinition;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.components.interactivity.PrompterException;
-import org.easymock.AbstractMatcher;
-import org.easymock.ArgumentsMatcher;
-import org.easymock.MockControl;
+import org.easymock.EasyMock;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -60,18 +57,16 @@ public class DefaultArchetypeSelectorTest
         request.setArchetypeGroupId( "preset-groupId" );
         request.setArchetypeVersion( "preset-version" );
 
-        MockControl control = MockControl.createControl( ArchetypeSelectionQueryer.class );
-
-        ArchetypeSelectionQueryer queryer = (ArchetypeSelectionQueryer) control.getMock();
+        ArchetypeSelectionQueryer queryer = EasyMock.createMock( ArchetypeSelectionQueryer.class );
         // expect it to not be called
 
-        control.replay();
+        EasyMock.replay( queryer );
 
         selector.setArchetypeSelectionQueryer( queryer );
 
         selector.selectArchetype( request, Boolean.TRUE, "" );
 
-        control.verify();
+        EasyMock.verify( queryer );
 
         assertEquals( "preset-groupId", request.getArchetypeGroupId() );
         assertEquals( "preset-artifactId", request.getArchetypeArtifactId() );
@@ -85,18 +80,16 @@ public class DefaultArchetypeSelectorTest
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
         request.setArchetypeArtifactId( "preset-artifactId" );
 
-        MockControl control = MockControl.createControl( ArchetypeSelectionQueryer.class );
-
-        ArchetypeSelectionQueryer queryer = (ArchetypeSelectionQueryer) control.getMock();
+        ArchetypeSelectionQueryer queryer = EasyMock.createMock( ArchetypeSelectionQueryer.class );
         // expect it to not be called
 
-        control.replay();
+        EasyMock.replay( queryer );
 
         selector.setArchetypeSelectionQueryer( queryer );
 
         selector.selectArchetype( request, Boolean.TRUE, "" );
 
-        control.verify();
+        EasyMock.verify( queryer );
 
         assertEquals( DefaultArchetypeSelector.DEFAULT_ARCHETYPE_GROUPID, request.getArchetypeGroupId() );
         assertEquals( "preset-artifactId", request.getArchetypeArtifactId() );
@@ -109,24 +102,23 @@ public class DefaultArchetypeSelectorTest
     {
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
 
-        MockControl control = MockControl.createControl( ArchetypeSelectionQueryer.class );
-
-        ArchetypeSelectionQueryer queryer = (ArchetypeSelectionQueryer) control.getMock();
-        queryer.selectArchetype( Collections.<String, List<Archetype>> emptyMap(), new ArchetypeDefinition() );
-        control.setMatcher( MockControl.ALWAYS_MATCHER );
+        ArchetypeSelectionQueryer queryer = EasyMock.createMock( ArchetypeSelectionQueryer.class );
+                
         Archetype archetype = new Archetype();
         archetype.setArtifactId( "set-artifactId" );
         archetype.setGroupId( "set-groupId" );
         archetype.setVersion( "set-version" );
-        control.setReturnValue( archetype );
+        ArchetypeDefinition y = EasyMock.anyObject();
+        Map<String, List<Archetype>> x = EasyMock.anyObject();
+        EasyMock.expect( queryer.selectArchetype( x , y ) ).andReturn( archetype );
 
-        control.replay();
+        EasyMock.replay( queryer );
 
         selector.setArchetypeSelectionQueryer( queryer );
 
         selector.selectArchetype( request, Boolean.TRUE, "" );
 
-        control.verify();
+        EasyMock.verify( queryer );
 
         assertEquals( "set-groupId", request.getArchetypeGroupId() );
         assertEquals( "set-artifactId", request.getArchetypeArtifactId() );
@@ -139,18 +131,16 @@ public class DefaultArchetypeSelectorTest
     {
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
 
-        MockControl control = MockControl.createControl( ArchetypeSelectionQueryer.class );
-
-        ArchetypeSelectionQueryer queryer = (ArchetypeSelectionQueryer) control.getMock();
+        ArchetypeSelectionQueryer queryer = EasyMock.createMock( ArchetypeSelectionQueryer.class );
         // expect it to not be called
 
-        control.replay();
+        EasyMock.replay( queryer );
 
         selector.setArchetypeSelectionQueryer( queryer );
 
         selector.selectArchetype( request, Boolean.FALSE, "" );
 
-        control.verify();
+        EasyMock.verify( queryer );
 
         assertEquals( DefaultArchetypeSelector.DEFAULT_ARCHETYPE_GROUPID, request.getArchetypeGroupId() );
         assertEquals( DefaultArchetypeSelector.DEFAULT_ARCHETYPE_ARTIFACTID, request.getArchetypeArtifactId() );
@@ -163,104 +153,26 @@ public class DefaultArchetypeSelectorTest
     {
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
 
-        MockControl control = MockControl.createControl( ArchetypeSelectionQueryer.class );
-
-        ArchetypeSelectionQueryer queryer = (ArchetypeSelectionQueryer) control.getMock();
-        queryer.selectArchetype( Collections.<String, List<Archetype>> emptyMap(), createDefaultArchetypeDefinition() );
-        control.setMatcher( createArgumentMatcher() );
+        ArchetypeSelectionQueryer queryer = EasyMock.createMock( ArchetypeSelectionQueryer.class );
         Archetype archetype = new Archetype();
         archetype.setArtifactId( "set-artifactId" );
         archetype.setGroupId( "set-groupId" );
         archetype.setVersion( "set-version" );
-        control.setReturnValue( archetype );
+        ArchetypeDefinition y = EasyMock.anyObject();
+        Map<String, List<Archetype>> x = EasyMock.anyObject();
+        EasyMock.expect( queryer.selectArchetype( x , y ) ).andReturn( archetype );
 
-        control.replay();
+        EasyMock.replay( queryer );
 
         selector.setArchetypeSelectionQueryer( queryer );
 
         selector.selectArchetype( request, Boolean.TRUE, "" );
 
-        control.verify();
+        EasyMock.verify( queryer );
 
         assertEquals( "set-groupId", request.getArchetypeGroupId() );
         assertEquals( "set-artifactId", request.getArchetypeArtifactId() );
         assertEquals( "set-version", request.getArchetypeVersion() );
     }
 
-    private ArchetypeDefinition createDefaultArchetypeDefinition()
-    {
-        ArchetypeDefinition definition = new ArchetypeDefinition();
-        definition.setGroupId( DefaultArchetypeSelector.DEFAULT_ARCHETYPE_GROUPID );
-        definition.setArtifactId( DefaultArchetypeSelector.DEFAULT_ARCHETYPE_ARTIFACTID );
-        definition.setVersion( DefaultArchetypeSelector.DEFAULT_ARCHETYPE_VERSION );
-        return definition;
-    }
-
-    private static ArgumentsMatcher createArgumentMatcher()
-    {
-        return new AbstractMatcher()
-        {
-            @Override
-            protected boolean argumentMatches( Object o, Object o1 )
-            {
-                return !( o instanceof ArchetypeDefinition ) ||
-                    compareArchetypeDefinition( (ArchetypeDefinition) o, (ArchetypeDefinition) o1 );
-            }
-
-            private boolean compareArchetypeDefinition( ArchetypeDefinition o, ArchetypeDefinition o1 )
-            {
-                if ( o1 == o )
-                {
-                    return true;
-                }
-                if ( o == null )
-                {
-                    return false;
-                }
-
-                if ( o1.getArtifactId() != null
-                    ? !o1.getArtifactId().equals( o.getArtifactId() )
-                    : o.getArtifactId() != null )
-                {
-                    return false;
-                }
-                if ( o1.getGroupId() != null ? !o1.getGroupId().equals( o.getGroupId() ) : o.getGroupId() != null )
-                {
-                    return false;
-                }
-                if ( o1.getName() != null ? !o1.getName().equals( o.getName() ) : o.getName() != null )
-                {
-                    return false;
-                }
-                if ( o1.getVersion() != null ? !o1.getVersion().equals( o.getVersion() ) : o.getVersion() != null )
-                {
-                    return false;
-                }
-                if ( o1.getGoals() != null ? !o1.getGoals().equals( o.getGoals() ) : o.getGoals() != null )
-                {
-                    return false;
-                }
-                if ( o1.getRepository() != null
-                    ? !o1.getRepository().equals( o.getRepository() )
-                    : o.getRepository() != null )
-                {
-                    return false;
-                }
-
-                return true;
-            }
-
-            @Override
-            protected String argumentToString( Object o )
-            {
-                return o instanceof Map ? "..." : toString( (ArchetypeDefinition) o );
-            }
-
-            private String toString( ArchetypeDefinition archetypeDefinition )
-            {
-                return "groupId = " + archetypeDefinition.getGroupId() + ", " + "artifactId = " +
-                    archetypeDefinition.getArtifactId() + ", " + "version = " + archetypeDefinition.getVersion();
-            }
-        };
-    }
 }

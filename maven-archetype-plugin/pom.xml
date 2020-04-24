@@ -122,9 +122,9 @@
       <artifactId>maven-artifact-transfer</artifactId>
     </dependency>
     <dependency>
-      <groupId>easymock</groupId>
+      <groupId>org.easymock</groupId>
       <artifactId>easymock</artifactId>
-      <version>1.2_Java1.3</version><!-- with 2.0 compilation failure -->
+      <version>3.6</version>
       <scope>test</scope>
     </dependency>
     <dependency>

@@ -22,9 +22,7 @@ package org.apache.maven.archetype.ui.generation;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.components.interactivity.Prompter;
 import org.codehaus.plexus.components.interactivity.PrompterException;
-import org.easymock.AbstractMatcher;
-import org.easymock.ArgumentsMatcher;
-import org.easymock.MockControl;
+import org.easymock.EasyMock;
 
 import java.util.regex.Pattern;
 
@@ -46,41 +44,18 @@ public class DefaultArchetypeGenerationQueryerTest
     public void testPropertyRegexValidationRetry()
         throws PrompterException
     {
-
-        MockControl control = MockControl.createControl( Prompter.class );
-
-        Prompter prompter = (Prompter) control.getMock();
-        prompter.prompt( "" );
-        control.setMatcher( createArgumentMatcher() );
-        control.setReturnValue( "invalid-answer" );
+        Prompter prompter = EasyMock.createMock( Prompter.class );
+        
+        EasyMock.expect(prompter.prompt( EasyMock.<String>anyObject() )).andReturn( "invalid-answer" );
+        EasyMock.expect(prompter.prompt( EasyMock.<String>anyObject() )).andReturn( "valid-answer" );
+        
+        EasyMock.replay( prompter );
         queryer.setPrompter( prompter );
-        prompter.prompt( "" );
-        control.setReturnValue( "valid-answer" );
-        queryer.setPrompter( prompter );
-        control.replay();
 
         String value = queryer.getPropertyValue( "custom-property", null, Pattern.compile( "^valid-.*" ) );
 
         assertEquals( "valid-answer", value );
 
-    }
-
-    private static ArgumentsMatcher createArgumentMatcher()
-    {
-        return new AbstractMatcher()
-        {
-            @Override
-            protected boolean argumentMatches( Object o, Object o1 )
-            {
-                return true;
-            }
-
-            @Override
-            protected String argumentToString( Object o )
-            {
-                return "...";
-            }
-        };
     }
 
 }
