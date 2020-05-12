@@ -253,7 +253,6 @@ public class ArchetypeTest
                 + "  <packaging>pom</packaging>\n"
                 + "</project>";
 
-        out = new StringWriter();
         assertTrue( DefaultOldArchetype.addModuleToParentPom( "myArtifactId1", new StringReader( pom ), out ) );
 
         assertThat( out.toString(), isIdenticalTo( "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
@@ -281,7 +280,6 @@ public class ArchetypeTest
                 + "  <packaging>pom</packaging>\n"
                 + "</project>";
 
-        out = new StringWriter();
         assertTrue( DefaultOldArchetype.addModuleToParentPom( "myArtifactId2", new StringReader( pom ), out ) );
 
         assertThat( out.toString(), isIdenticalTo( "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
@@ -312,7 +310,6 @@ public class ArchetypeTest
                 + "  </modules>\n"
                 + "</project>";
 
-        out = new StringWriter();
         assertTrue( DefaultOldArchetype.addModuleToParentPom( "myArtifactId3", new StringReader( pom ), out ) );
 
         assertThat( out.toString(), isIdenticalTo( "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
@@ -344,7 +341,6 @@ public class ArchetypeTest
                 + "  </modules>\n"
                 + "</project>";
 
-        out = new StringWriter();
         assertTrue( DefaultOldArchetype.addModuleToParentPom( "myArtifactId4", new StringReader( pom ), out ) );
 
         assertThat( out.toString(), isIdenticalTo( "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
@@ -377,7 +373,6 @@ public class ArchetypeTest
                 + "  </modules>\n"
                 + "</project>";
 
-        out = new StringWriter();
         assertFalse( DefaultOldArchetype.addModuleToParentPom( "myArtifactId3", new StringReader( pom ), out ) );
 
         // empty means unchanged
@@ -415,7 +410,6 @@ public class ArchetypeTest
                 + "  </profiles>\n" +
                 "</project>";
 
-        out = new StringWriter();
         assertTrue( DefaultOldArchetype.addModuleToParentPom( "module1", new StringReader( pom ), out ) );
 
         assertThat( out.toString(), isIdenticalTo("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
