@@ -301,7 +301,7 @@
             <exclude>**/*.sha1</exclude>
             <!-- exclude template files for generated content -->
             <exclude>src/main/resources/org/apache/maven/archetype/creator/*</exclude>
-            <!-- exclude some classes coming from dom4j -->
+            <!-- exclude some classes coming from JDOM -->
             <exclude>**/Format.java</exclude>
             <exclude>**/NamespaceStack.java</exclude>
             <exclude>**/XMLOutputter.java</exclude>
