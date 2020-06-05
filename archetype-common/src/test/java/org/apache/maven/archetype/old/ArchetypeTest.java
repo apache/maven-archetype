@@ -64,7 +64,7 @@ public class ArchetypeTest
 
     private OldArchetype archetype;
 
-    private StringWriter out;
+    private StringWriter out = new StringWriter();;
 
     public void testArchetype()
         throws Exception
@@ -483,6 +483,5 @@ public class ArchetypeTest
     {
         super.setUp();
         archetype = (OldArchetype) lookup( OldArchetype.ROLE );
-        out = new StringWriter();
     }
 }

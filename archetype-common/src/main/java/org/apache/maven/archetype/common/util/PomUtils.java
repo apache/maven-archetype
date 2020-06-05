@@ -82,8 +82,8 @@ public final class PomUtils
         dbf.setXIncludeAware( false );
         dbf.setExpandEntityReferences( false );
 
-        Schema schema = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
-                .newSchema( new File(PomUtils.class.getClassLoader().getResource("maven-4.0.0.xsd").getFile())) ;
+        Schema schema = SchemaFactory.newInstance( XMLConstants.W3C_XML_SCHEMA_NS_URI )
+                .newSchema( new File( PomUtils.class.getClassLoader().getResource( "maven-4.0.0.xsd" ).getFile() ) );
         dbf.setSchema( schema );
         dbf.setIgnoringElementContentWhitespace( true );
         dbf.setNamespaceAware( true );
