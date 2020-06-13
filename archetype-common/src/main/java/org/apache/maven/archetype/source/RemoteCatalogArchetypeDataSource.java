@@ -339,7 +339,7 @@ public class RemoteCatalogArchetypeDataSource extends CatalogArchetypeDataSource
      * everything external:* = everything not on the localhost and not file based. repo,repo1 = repo
      * or repo1 *,!repo1 = everything except repo1
      *
-     * @param originalRepository to compare for a match.
+     * @param originalId to compare for a match.
      * @param pattern used for match. Currently only '*' is supported.
      * @return true if the repository is a match to this pattern.
      */
