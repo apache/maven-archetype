@@ -193,7 +193,7 @@ public class DefaultFilesetArchetypeGenerator
                 if ( outputDirectoryFile.exists() && pom.exists() )
                 {
                     throw new ProjectDirectoryExists(
-                        "A Maven 2 project already exists in the directory " + outputDirectoryFile.getPath() );
+                        "A Maven project already exists in the directory " + outputDirectoryFile.getPath() );
                 }
 
                 if ( outputDirectoryFile.exists() )
