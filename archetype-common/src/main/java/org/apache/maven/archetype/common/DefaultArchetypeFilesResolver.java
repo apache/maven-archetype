@@ -113,15 +113,9 @@ public class DefaultArchetypeFilesResolver
 
         Set<String> selectedDirectories = new HashSet<>();
 
-        List<String> includes = new ArrayList<>();
-
         for ( String sourcesFile : sourcesFiles )
         {
             String directory = PathUtils.getDirectory( sourcesFile, level - 1 );
-            if ( !selectedDirectories.contains( directory ) )
-            {
-                includes.add( directory + "/**" );
-            }
 
             selectedDirectories.add( directory );
         }

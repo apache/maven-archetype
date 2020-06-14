@@ -80,7 +80,6 @@ public class DefaultArchetypeSelectionQueryer
             StringBuilder query = new StringBuilder( "Choose archetype:\n" );
 
             Set<String> archetypeKeys = new HashSet<>();
-            List<String> answers = new ArrayList<>();
             Map<String, Archetype> archetypeAnswerMap = new HashMap<>();
 
             int counter = 0;
@@ -111,8 +110,6 @@ public class DefaultArchetypeSelectionQueryer
 
                     query.append( answer + ": " + catalog + " -> " + archetype.getGroupId() + ":"
                         + archetype.getArtifactId() + " (" + description + ")\n" );
-
-                    answers.add( answer );
 
                     archetypeAnswerMap.put( answer, archetype );
 
