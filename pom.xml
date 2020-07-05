@@ -31,7 +31,7 @@
 
   <groupId>org.apache.maven.archetype</groupId>
   <artifactId>maven-archetype</artifactId>
-  <version>3.2.0-SNAPSHOT</version>
+  <version>3.2.0-${revlist}-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Maven Archetype</name>
@@ -90,7 +90,8 @@
         <artifactId>maven-compat</artifactId>
         <version>${mavenVersion}</version>
       </dependency>
-      <dependency>
+      <!-- not needed any more with build/consumer POM -->
+      <!--dependency>
         <groupId>org.apache.maven.archetype</groupId>
         <artifactId>archetype-catalog</artifactId>
         <version>${project.version}</version>
@@ -109,7 +110,7 @@
         <groupId>org.apache.maven.archetype</groupId>
         <artifactId>archetype-packaging</artifactId>
         <version>${project.version}</version>
-      </dependency>
+      </dependency-->
       <dependency>
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-artifact</artifactId>

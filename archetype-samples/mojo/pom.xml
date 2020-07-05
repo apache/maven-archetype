@@ -24,7 +24,7 @@ under the License.
   <parent>
     <groupId>org.apache.maven.archetypes</groupId>
     <artifactId>archetype-samples</artifactId>
-    <version>2.0-alpha-5-SNAPSHOT</version>
+    <!--version>3.2.0-SNAPSHOT</version--><!-- not needed any more with build/consumer POM -->
   </parent>
 
   <artifactId>maven-mojo</artifactId>

@@ -6,7 +6,7 @@
   <parent>
     <artifactId>maven-archetype</artifactId>
     <groupId>org.apache.maven.archetype</groupId>
-    <version>2.0-alpha-5-SNAPSHOT</version>
+    <!--version>3.2.0-SNAPSHOT</version--><!-- not needed any more with build/consumer POM -->
   </parent>
 
   <groupId>org.apache.maven.archetypes</groupId>
