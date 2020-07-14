@@ -78,7 +78,7 @@
     <javaVersion>7</javaVersion>
     <netbeans.hint.useExternalMaven>true</netbeans.hint.useExternalMaven>
     <wagonVersion>3.3.3</wagonVersion>
-    <surefire.version>2.21.0</surefire.version>
+    <surefire.version>2.22.2</surefire.version>
     <maven.site.path>archetype-archives/archetype-LATEST</maven.site.path>
     <project.build.outputTimestamp>2020-07-13T21:44:31Z</project.build.outputTimestamp>
   </properties>
