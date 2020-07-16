@@ -76,8 +76,8 @@ import java.io.Writer;
 import java.util.List;
 
 /**
- * <p>This class is a fork from jdom 1.0 modified to preserve CData and
- * comments parts.</p>
+ * <p>This class is a fork from JDOM 1.0 modified to preserve CData sections and
+ * comments.</p>
  * 
  * <p>Outputs a JDOM document as a stream of bytes. The outputter can manage many
  * styles of document formatting, from untouched to pretty printed. The default
@@ -104,11 +104,11 @@ import java.util.List;
  * OutputStream if possible.</p>
  * 
  * <p>XML declarations are always printed on their own line followed by a line
- * seperator (this doesn't change the semantics of the document). To omit
+ * separator (this doesn't change the semantics of the document). To omit
  * printing of the declaration use
  * <code>{@link Format#setOmitDeclaration}</code>. To omit printing of the
  * encoding in the declaration use <code>{@link Format#setOmitEncoding}</code>.
- * Unfortunatly there is currently no way to know the original encoding of the
+ * Unfortunately there is currently no way to know the original encoding of the
  * document.</p>
  * 
  * <p>Empty elements are by default printed as &lt;empty/&gt;, but this can be
@@ -364,13 +364,6 @@ public class XMLOutputter
     private static Writer makeWriter( OutputStream out, String enc )
         throws java.io.UnsupportedEncodingException
     {
-        // "UTF-8" is not recognized before JDK 1.1.6, so we'll translate
-        // into "UTF8" which works with all JDKs.
-        if ( "UTF-8".equals( enc ) )
-        {
-            enc = "UTF8";
-        }
-
         Writer writer = new BufferedWriter( ( new OutputStreamWriter( new BufferedOutputStream( out ), enc ) ) );
         return writer;
     }
