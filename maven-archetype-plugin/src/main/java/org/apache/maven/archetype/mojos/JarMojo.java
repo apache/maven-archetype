@@ -37,6 +37,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.archiver.Archiver;
 import org.codehaus.plexus.archiver.jar.JarArchiver;
+import org.codehaus.plexus.archiver.util.DefaultFileSet;
 
 import java.io.File;
 import java.util.Map;
@@ -55,6 +56,17 @@ public class JarMojo
      */
     @Parameter( defaultValue = "${project.build.outputDirectory}", required = true )
     private File archetypeDirectory;
+
+    /**
+     * By default files like .gitignore, .gitattributes etc. are excluded, which
+     * means they will not be added to the jar. You can add them by setting this
+     * parameter to {@code false}. The files excluded by default are defined by
+     * FileUtils.getDefaultExcludes() in plexus-utils.
+     *
+     * @since 3.3.0
+     */
+    @Parameter( defaultValue = "true", required = true )
+    private boolean addDefaultExcludes;
 
     /**
      * Name of the generated JAR.
@@ -136,7 +148,9 @@ public class JarMojo
 
         try
         {
-            archiver.getArchiver().addDirectory( archetypeDirectory );
+            DefaultFileSet fileSet = new DefaultFileSet( archetypeDirectory );
+            fileSet.setUsingDefaultExcludes( addDefaultExcludes );
+            archiver.getArchiver().addFileSet( fileSet );
 
             archiver.createArchive( session, project, archive );
         }
