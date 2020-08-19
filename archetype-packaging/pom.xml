@@ -33,4 +33,25 @@
   <name>Maven Archetype Packaging</name>
   <description>'maven-archetype' packaging configuration for archetypes.</description>
 
+<!-- 
+  All Maven plugins have an implicit dependency on plexus-utils.
+  If no version is explicitly specified, they will have a 
+  dependency on plexus-utils:1.1 injected by 
+  org.apache.maven.plugin.internal.PlexusUtilsInjector.
+  
+  This is an extremely old version, with many known vulnerabilities,
+  so this change makes the dependency explicit in order to
+  respect the parents' dependencyManagement.
+  
+  Better solutions would be to remove that injection or make 
+  it respect the dependencyManagement declarations.
+  
+  See MNG-6965
+ -->
+  <dependencies>
+  	<dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+  	</dependency>
+  </dependencies>
 </project>
