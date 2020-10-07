@@ -36,7 +36,7 @@ under the License.
     <menu name="Reference">
       <item name="Archetype Descriptor" href="../archetype-models/archetype-descriptor/archetype-descriptor.html"/>
       <item name="Archetype Catalog" href="../archetype-models/archetype-catalog/archetype-catalog.html"/>
-      <item name="Archetype 1.0.x Descriptor" href="./archetype.html"/>
+      <item name="Old Archetype 1.0.x Descriptor" href="./archetype.html"/>
     </menu>
     <menu ref="parent" inherit="top" />
   </body>

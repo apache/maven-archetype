@@ -96,6 +96,12 @@ public class DefaultArchetypeManager
             archive.getParentFile().mkdirs();
         }
 
+
+        if ( !archive.exists() && !archive.createNewFile() )
+        {
+            getLogger().warn( "Could not create new file \"" + archive.getPath() + "\" or the file already exists." );
+        }
+
         try ( ZipOutputStream zos = new ZipOutputStream( new FileOutputStream( archive ) ) )
         {
             zos.setLevel( 9 );
@@ -145,8 +151,6 @@ public class DefaultArchetypeManager
                 {
                     IOUtil.copy( is, zos );
                 }
-
-                zos.flush();
 
                 zos.closeEntry();
             }

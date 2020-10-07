@@ -21,13 +21,15 @@ package org.apache.maven.archetype.old;
 
 import org.apache.commons.io.input.XmlStreamReader;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
+import org.apache.maven.archetype.common.ArchetypeArtifactManager;
+import org.apache.maven.archetype.common.Constants;
+import org.apache.maven.archetype.common.util.PomUtils;
+import org.apache.maven.archetype.exception.InvalidPackaging;
+import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor;
 import org.apache.maven.archetype.old.descriptor.ArchetypeDescriptorBuilder;
 import org.apache.maven.archetype.old.descriptor.TemplateDescriptor;
 import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.archetype.common.ArchetypeArtifactManager;
-import org.apache.maven.archetype.common.Constants;
-import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Parent;
@@ -46,13 +48,10 @@ import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.codehaus.plexus.velocity.VelocityComponent;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
-import org.dom4j.Node;
-import org.dom4j.io.SAXReader;
-import org.dom4j.io.XMLWriter;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -106,8 +105,8 @@ public class DefaultOldArchetype
 
     @Override
     public void createArchetype( ArchetypeGenerationRequest request, ArtifactRepository archetypeRepository )
-        throws UnknownArchetype, ArchetypeNotFoundException, ArchetypeDescriptorException,
-        ArchetypeTemplateProcessingException
+            throws UnknownArchetype, ArchetypeDescriptorException, ArchetypeTemplateProcessingException,
+            InvalidPackaging
     {
         // ----------------------------------------------------------------------
         // Download the archetype
@@ -125,7 +124,7 @@ public class DefaultOldArchetype
 
     @Override
     public void createArchetype( ArchetypeGenerationRequest request, File archetypeFile )
-        throws ArchetypeDescriptorException, ArchetypeTemplateProcessingException
+            throws ArchetypeDescriptorException, ArchetypeTemplateProcessingException, InvalidPackaging
     {
         Map<String, String> parameters = new HashMap<>();
 
@@ -176,7 +175,7 @@ public class DefaultOldArchetype
         URL[] urls;
         try
         {
-            urls = new URL[] {archetypeFile.toURL() };
+            urls = new URL[] {archetypeFile.toURI().toURL() };
         }
         catch ( MalformedURLException e )
         {
@@ -306,6 +305,10 @@ public class DefaultOldArchetype
         {
             processTemplates( pomFile, outputDirectory, context, descriptor, packageName, parentModel );
         }
+        catch ( IOException e )
+        {
+            throw new ArchetypeTemplateProcessingException( "Unable to process template", e );
+        }
         finally
         {
             Thread.currentThread().setContextClassLoader( old );
@@ -341,7 +344,7 @@ public class DefaultOldArchetype
             {
                 added = addModuleToParentPom( artifactId, fileReader, w );
             }
-            catch ( IOException | DocumentException e )
+            catch ( IOException | SAXException | ParserConfigurationException | TransformerException  e )
             {
                 throw new ArchetypeTemplateProcessingException( "Unable to rewrite parent POM", e );
             }
@@ -388,74 +391,15 @@ public class DefaultOldArchetype
     }
 
     static boolean addModuleToParentPom( String artifactId, Reader fileReader, Writer fileWriter )
-        throws DocumentException, IOException, ArchetypeTemplateProcessingException
+            throws ArchetypeTemplateProcessingException, InvalidPackaging, IOException, ParserConfigurationException,
+            SAXException, TransformerException
     {
-        SAXReader reader = new SAXReader();
-        Document document = reader.read( fileReader );
-        Element project = document.getRootElement();
-
-        String packaging = null;
-        Element packagingElement = project.element( "packaging" );
-        if ( packagingElement != null )
-        {
-            packaging = packagingElement.getStringValue();
-        }
-        if ( !"pom".equals( packaging ) )
-        {
-            throw new ArchetypeTemplateProcessingException(
-                "Unable to add module to the current project as it is not of packaging type 'pom'" );
-        }
-
-        Element modules = project.element( "modules" );
-        if ( modules == null )
-        {
-            modules = project.addText( "  " ).addElement( "modules" );
-            modules.setText( "\n  " );
-            project.addText( "\n" );
-        }
-        boolean found = false;
-        for ( Iterator<?> i = modules.elementIterator( "module" ); i.hasNext() && !found; )
-        {
-            Element module = (Element) i.next();
-            if ( module.getText().equals( artifactId ) )
-            {
-                found = true;
-            }
-        }
-        if ( !found )
-        {
-            Node lastTextNode = null;
-            for ( Iterator<?> i = modules.nodeIterator(); i.hasNext(); )
-            {
-                Node node = (Node) i.next();
-                if ( node.getNodeType() == Node.ELEMENT_NODE )
-                {
-                    lastTextNode = null;
-                }
-                else if ( node.getNodeType() == Node.TEXT_NODE )
-                {
-                    lastTextNode = node;
-                }
-            }
-
-            if ( lastTextNode != null )
-            {
-                modules.remove( lastTextNode );
-            }
-
-            modules.addText( "\n    " );
-            modules.addElement( "module" ).setText( artifactId );
-            modules.addText( "\n  " );
-
-            XMLWriter writer = new XMLWriter( fileWriter );
-            writer.write( document );
-        }
-        return !found;
+        return PomUtils.addNewModule( artifactId, fileReader, fileWriter );
     }
 
     private void processTemplates( File pomFile, String outputDirectory, Context context,
                                    ArchetypeDescriptor descriptor, String packageName, Model parentModel )
-        throws ArchetypeTemplateProcessingException
+            throws ArchetypeTemplateProcessingException, IOException
     {
         if ( !pomFile.exists() )
         {
@@ -676,7 +620,7 @@ public class DefaultOldArchetype
 
     private void processTemplate( String outputDirectory, Context context, String template,
                                   TemplateDescriptor descriptor, boolean packageInFileName, String packageName )
-        throws ArchetypeTemplateProcessingException
+            throws ArchetypeTemplateProcessingException, IOException
     {
         processTemplate( outputDirectory, context, template, descriptor, packageInFileName, packageName, null );
     }
@@ -693,7 +637,7 @@ public class DefaultOldArchetype
 
     protected void processSources( String outputDirectory, Context context, ArchetypeDescriptor descriptor,
                                    String packageName, String sourceDirectory )
-        throws ArchetypeTemplateProcessingException
+            throws ArchetypeTemplateProcessingException, IOException
     {
         for ( String template : descriptor.getSources() )
         {
@@ -704,7 +648,7 @@ public class DefaultOldArchetype
 
     protected void processTestSources( String outputDirectory, Context context, ArchetypeDescriptor descriptor,
                                        String packageName, String testSourceDirectory )
-        throws ArchetypeTemplateProcessingException
+            throws ArchetypeTemplateProcessingException, IOException
     {
         for ( String template : descriptor.getTestSources() )
         {
@@ -715,7 +659,7 @@ public class DefaultOldArchetype
 
     protected void processResources( String outputDirectory, Context context, ArchetypeDescriptor descriptor,
                                      String packageName )
-        throws ArchetypeTemplateProcessingException
+        throws IOException, ArchetypeTemplateProcessingException
     {
         for ( String template : descriptor.getResources() )
         {
@@ -726,7 +670,7 @@ public class DefaultOldArchetype
 
     protected void processTestResources( String outputDirectory, Context context, ArchetypeDescriptor descriptor,
                                          String packageName )
-        throws ArchetypeTemplateProcessingException
+        throws IOException, ArchetypeTemplateProcessingException
     {
         for ( String template : descriptor.getTestResources() )
         {
@@ -737,7 +681,7 @@ public class DefaultOldArchetype
 
     protected void processSiteResources( String outputDirectory, Context context, ArchetypeDescriptor descriptor,
                                          String packageName )
-        throws ArchetypeTemplateProcessingException
+        throws IOException, ArchetypeTemplateProcessingException
     {
         for ( String template : descriptor.getSiteResources() )
         {
@@ -749,7 +693,7 @@ public class DefaultOldArchetype
     protected void processTemplate( String outputDirectory, Context context, String template,
                                     TemplateDescriptor descriptor, boolean packageInFileName, String packageName,
                                     String sourceDirectory )
-        throws ArchetypeTemplateProcessingException
+        throws IOException, ArchetypeTemplateProcessingException
     {
         File f;
 
@@ -799,6 +743,11 @@ public class DefaultOldArchetype
             f.getParentFile().mkdirs();
         }
 
+        if ( !f.exists() && !f.createNewFile() )
+        {
+            getLogger().warn( "Could not create new file \"" + f.getPath() + "\" or the file already exists." );
+        }
+
         if ( descriptor.isFiltered() )
         {
             try ( Writer writer = new OutputStreamWriter( new FileOutputStream( f ), descriptor.getEncoding() ) )
@@ -810,8 +759,6 @@ public class DefaultOldArchetype
                 velocity.getEngine().mergeTemplate( template, descriptor.getEncoding(), context, stringWriter );
 
                 writer.write( StringUtils.unifyLineSeparators( stringWriter.toString() ) );
-
-                writer.flush();
             }
             catch ( Exception e )
             {

@@ -73,7 +73,7 @@
 <br>A quick reference of available archetypes and their repositories.  This list is designed so it can be automatically retrieved from archetype front-ends such as Archy - [http://code.google.com/p/archy].  Only archetypes that don&#39;t have any &quot;released&quot; artifacts need a version number.
 <br>|| Artifact || Group || Version || Repository || Description ||
 <br>| appfuse-basic-jsf | org.appfuse.archetypes | 2.0 | [http://static.appfuse.org/releases] | AppFuse archetype for creating a web application with Hibernate, Spring and JSF |
-<br>| maven-archetype-profiles | org.apache.maven.archetypes | | [http://repo.maven.apache.org/maven2] | |
+<br>| maven-archetype-profiles | org.apache.maven.archetypes | | [https://repo.maven.apache.org/maven2] | |
 <br>| struts2-archetype-starter | org.apache.struts | 2.0.9-SNAPSHOT | [http://people.apache.org/repo/m2-snapshot-repository] | A starter Struts 2 application with Sitemesh, DWR, and Spring |
 <br>| maven-archetype-har | net.sf.maven-har | 0.9 | | [Hibernate|http://hibernate.org] Archive |
 <br>| maven-archetype-archetype | org.apache.maven.archetypes | | | |

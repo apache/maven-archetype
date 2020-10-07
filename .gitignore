@@ -9,8 +9,11 @@ target
 .project
 .classpath
 .settings
+.checkstyle
 
 # OSX
 .DS_Store
 
 .java-version
+*.versionsBackup
+

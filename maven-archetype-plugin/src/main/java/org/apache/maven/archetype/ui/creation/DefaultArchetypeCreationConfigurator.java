@@ -309,6 +309,14 @@ public class DefaultArchetypeCreationConfigurator
             storedProperties.setProperty( propertyKey, properties.getProperty( propertyKey ) );
         }
 
+        propertyFile.getParentFile().mkdirs();
+
+        if ( !propertyFile.exists() && !propertyFile.createNewFile() )
+        {
+            getLogger().warn( "Could not create new file \"" + propertyFile.getPath()
+                    + "\" or the file already exists." );
+        }
+
         try ( OutputStream os = new FileOutputStream( propertyFile ) )
         {
             storedProperties.store( os, "" );

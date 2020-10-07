@@ -24,7 +24,9 @@ import org.apache.maven.archetype.common.ArchetypeArtifactManager;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.archetype.metadata.ArchetypeDescriptor;
 import org.apache.maven.archetype.metadata.RequiredProperty;
-import org.apache.maven.artifact.DependencyResolutionRequiredException;
+import org.apache.maven.archiver.MavenArchiveConfiguration;
+import org.apache.maven.archiver.MavenArchiver;
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -33,9 +35,11 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.archiver.Archiver;
+import org.codehaus.plexus.archiver.jar.JarArchiver;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.Map;
 
 /**
  * Build a JAR from the current Archetype project.
@@ -71,6 +75,37 @@ public class JarMojo
     private MavenProject project;
 
     /**
+     * The {@link MavenSession}.
+     */
+    @Parameter( defaultValue = "${session}", readonly = true, required = true )
+    private MavenSession session;
+
+    /**
+     * The Jar archiver.
+     */
+    @Component
+    private Map<String, Archiver> archivers;
+
+    /**
+     * The archive configuration to use. See <a href="https://maven.apache.org/shared/maven-archiver/index.html">Maven
+     * Archiver Reference</a>.
+     *
+     * @since 3.2.0
+     */
+    @Parameter
+    private MavenArchiveConfiguration archive = new MavenArchiveConfiguration();
+
+    /**
+     * Timestamp for reproducible output archive entries, either formatted as ISO 8601
+     * <code>yyyy-MM-dd'T'HH:mm:ssXXX</code> or as an int representing seconds since the epoch (like
+     * <a href="https://reproducible-builds.org/docs/source-date-epoch/">SOURCE_DATE_EPOCH</a>).
+     *
+     * @since 3.2.0
+     */
+    @Parameter( defaultValue = "${project.build.outputTimestamp}" )
+    private String outputTimestamp;
+
+    /**
      * The archetype manager component.
      */
     @Component
@@ -86,24 +121,33 @@ public class JarMojo
     public void execute()
         throws MojoExecutionException, MojoFailureException
     {
+        File jarFile = new File( outputDirectory, finalName + ".jar" );
+        getLog().info( "Building archetype jar: " + jarFile );
+
+        MavenArchiver archiver = new MavenArchiver();
+        archiver.setCreatedBy( "Maven Archetype Plugin", "org.apache.maven.plugins", "maven-archetype-plugin" );
+
+        archiver.setOutputFile( jarFile );
+
+        archiver.setArchiver( (JarArchiver) archivers.get( "jar" ) );
+
+        // configure for Reproducible Builds based on outputTimestamp value
+        archiver.configureReproducible( outputTimestamp );
+
         try
         {
-            getLog().info( "Building archetype jar: " + new File( outputDirectory, finalName ) );
+            archiver.getArchiver().addDirectory( archetypeDirectory );
 
-            File jarFile = manager.archiveArchetype( archetypeDirectory, outputDirectory, finalName );
-
-            checkArchetypeFile( jarFile );
-
-            project.getArtifact().setFile( jarFile );
+            archiver.createArchive( session, project, archive );
         }
-        catch ( DependencyResolutionRequiredException ex )
+        catch ( Exception e )
         {
-            throw new MojoExecutionException( ex.getMessage(), ex );
+            throw new MojoExecutionException( "Error assembling archetype jar " + jarFile, e );
         }
-        catch ( IOException ex )
-        {
-            throw new MojoExecutionException( ex.getMessage(), ex );
-        }
+
+        checkArchetypeFile( jarFile );
+
+        project.getArtifact().setFile( jarFile );
     }
 
     private void checkArchetypeFile( File jarFile )

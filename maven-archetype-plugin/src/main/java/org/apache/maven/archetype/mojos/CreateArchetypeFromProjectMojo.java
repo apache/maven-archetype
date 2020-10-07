@@ -39,6 +39,7 @@ import org.codehaus.plexus.util.PropertyUtils;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -292,7 +293,7 @@ public class CreateArchetypeFromProjectMojo
         }
     }
 
-    private List<String> getFilteredExtensions( String archetypeFilteredExtentions, File propertyFile )
+    private List<String> getFilteredExtensions( String archetypeFilteredExtentions, File propertyFile ) throws IOException
     {
         List<String> filteredExtensions = new ArrayList<>();
 
@@ -326,7 +327,7 @@ public class CreateArchetypeFromProjectMojo
         return filteredExtensions;
     }
 
-    private List<String> getLanguages( String archetypeLanguages, File propertyFile )
+    private List<String> getLanguages( String archetypeLanguages, File propertyFile ) throws IOException
     {
         List<String> resultingLanguages = new ArrayList<>();
 

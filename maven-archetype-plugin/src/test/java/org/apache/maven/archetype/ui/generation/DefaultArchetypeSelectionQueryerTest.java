@@ -24,9 +24,7 @@ import org.apache.maven.archetype.ui.ArchetypeDefinition;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.components.interactivity.Prompter;
 import org.codehaus.plexus.components.interactivity.PrompterException;
-import org.easymock.AbstractMatcher;
-import org.easymock.ArgumentsMatcher;
-import org.easymock.MockControl;
+import org.easymock.EasyMock;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,14 +50,12 @@ public class DefaultArchetypeSelectionQueryerTest
     {
         Map<String, List<Archetype>> map = createDefaultArchetypeCatalog();
 
-        MockControl control = MockControl.createControl( Prompter.class );
-        Prompter prompter = (Prompter) control.getMock();
-        prompter.prompt( "", "2" );
-        control.setMatcher( createArgumentMatcher() );
-        control.setReturnValue( "1" );
+        Prompter prompter = EasyMock.createMock( Prompter.class );
+        String prompt = EasyMock.anyObject();
+        EasyMock.expect(prompter.prompt( prompt, EasyMock.eq( "2" ) )).andReturn( "1" );
         queryer.setPrompter( prompter );
-
-        control.replay();
+        
+        EasyMock.replay( prompter );
 
         ArchetypeDefinition defaultDefinition = new ArchetypeDefinition();
         defaultDefinition.setGroupId( "default-groupId" );
@@ -67,7 +63,7 @@ public class DefaultArchetypeSelectionQueryerTest
         defaultDefinition.setVersion( "default-version" );
         Archetype archetype = queryer.selectArchetype( map, defaultDefinition );
 
-        control.verify();
+        EasyMock.verify( prompter );
 
         assertEquals( "set-groupId", archetype.getGroupId() );
         assertEquals( "set-artifactId", archetype.getArtifactId() );
@@ -79,14 +75,12 @@ public class DefaultArchetypeSelectionQueryerTest
     {
         Map<String, List<Archetype>> map = createDefaultArchetypeCatalog();
 
-        MockControl control = MockControl.createControl( Prompter.class );
-        Prompter prompter = (Prompter) control.getMock();
-        prompter.prompt( "", "2" );
-        control.setMatcher( createArgumentMatcher() );
-        control.setReturnValue( "2" );
+        Prompter prompter = EasyMock.createMock( Prompter.class );
+        String prompt = EasyMock.anyObject();
+        EasyMock.expect(prompter.prompt( prompt, EasyMock.eq( "2" ) )).andReturn( "2" );
         queryer.setPrompter( prompter );
 
-        control.replay();
+        EasyMock.replay( prompter );
 
         ArchetypeDefinition defaultDefinition = new ArchetypeDefinition();
         defaultDefinition.setGroupId( "default-groupId" );
@@ -94,7 +88,7 @@ public class DefaultArchetypeSelectionQueryerTest
         defaultDefinition.setVersion( "default-version" );
         Archetype archetype = queryer.selectArchetype( map, defaultDefinition );
 
-        control.verify();
+        EasyMock.verify( prompter );
 
         assertEquals( "default-groupId", archetype.getGroupId() );
         assertEquals( "default-artifactId", archetype.getArtifactId() );
@@ -106,14 +100,12 @@ public class DefaultArchetypeSelectionQueryerTest
     {
         Map<String, List<Archetype>> map = createDefaultArchetypeCatalog();
 
-        MockControl control = MockControl.createControl( Prompter.class );
-        Prompter prompter = (Prompter) control.getMock();
-        prompter.prompt( "" );
-        control.setMatcher( createArgumentMatcher() );
-        control.setReturnValue( "1" );
+        Prompter prompter = EasyMock.createMock( Prompter.class );
+        String prompt = EasyMock.anyObject();
+        EasyMock.expect(prompter.prompt( prompt ) ).andReturn( "1" );
         queryer.setPrompter( prompter );
 
-        control.replay();
+        EasyMock.replay( prompter );
 
         ArchetypeDefinition defaultDefinition = new ArchetypeDefinition();
         defaultDefinition.setGroupId( "invalid-groupId" );
@@ -121,7 +113,7 @@ public class DefaultArchetypeSelectionQueryerTest
         defaultDefinition.setVersion( "invalid-version" );
         Archetype archetype = queryer.selectArchetype( map, defaultDefinition );
 
-        control.verify();
+        EasyMock.verify( prompter );
 
         assertEquals( "set-groupId", archetype.getGroupId() );
         assertEquals( "set-artifactId", archetype.getArtifactId() );
@@ -133,18 +125,17 @@ public class DefaultArchetypeSelectionQueryerTest
     {
         Map<String, List<Archetype>> map = createDefaultArchetypeCatalog();
 
-        MockControl control = MockControl.createControl( Prompter.class );
-        Prompter prompter = (Prompter) control.getMock();
-        prompter.prompt( "" );
-        control.setMatcher( createArgumentMatcher() );
-        control.setReturnValue( "1" );
+        Prompter prompter = EasyMock.createMock( Prompter.class );
+        String prompt = EasyMock.anyObject();
+        EasyMock.expect(prompter.prompt( prompt ) ).andReturn( "1" );
+
         queryer.setPrompter( prompter );
 
-        control.replay();
+        EasyMock.replay( prompter );
 
         Archetype archetype = queryer.selectArchetype( map );
 
-        control.verify();
+        EasyMock.verify( prompter );
 
         assertEquals( "set-groupId", archetype.getGroupId() );
         assertEquals( "set-artifactId", archetype.getArtifactId() );
@@ -156,20 +147,17 @@ public class DefaultArchetypeSelectionQueryerTest
     {
         Map<String, List<Archetype>> map = createDefaultArchetypeCatalog();
 
-        MockControl control = MockControl.createControl( Prompter.class );
-        Prompter prompter = (Prompter) control.getMock();
-        prompter.prompt( "" );
-        control.setMatcher( createArgumentMatcher() );
-        control.setReturnValue( "set-artifactId" );
-        prompter.prompt( "" );
-        control.setReturnValue( "1" );
+        Prompter prompter = EasyMock.createMock( Prompter.class );
+        String prompt = EasyMock.anyObject();
+        EasyMock.expect(prompter.prompt( prompt ) ).andReturn( "1" );
+        
         queryer.setPrompter( prompter );
 
-        control.replay();
+        EasyMock.replay( prompter );
 
         Archetype archetype = queryer.selectArchetype( map );
 
-        control.verify();
+        EasyMock.verify( prompter );
 
         assertEquals( "set-groupId", archetype.getGroupId() );
         assertEquals( "set-artifactId", archetype.getArtifactId() );
@@ -193,36 +181,4 @@ public class DefaultArchetypeSelectionQueryerTest
         return a;
     }
 
-    private static ArgumentsMatcher createArgumentMatcher()
-    {
-        return new AbstractMatcher()
-        {
-            private boolean isPromptString( Object o )
-            {
-                boolean value = false;
-                if ( o instanceof String )
-                {
-                    String s = (String) o;
-                    if ( s.startsWith( "Choose" ) )
-                    {
-                        // ignore the prompt
-                        value = true;
-                    }
-                }
-                return value;
-            }
-
-            @Override
-            protected boolean argumentMatches( Object o, Object o1 )
-            {
-                return isPromptString( o1 ) || super.argumentMatches( o, o1 );
-            }
-
-            @Override
-            protected String argumentToString( Object o )
-            {
-                return isPromptString( o ) ? "..." : super.argumentToString( o );
-            }
-        };
-    }
 }

@@ -21,6 +21,7 @@ package org.apache.maven.archetype.mojos;
 
 import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.catalog.Archetype;
+import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -56,6 +57,11 @@ public class UpdateLocalCatalogMojo
     public void execute()
         throws MojoExecutionException
     {
+        if ( !Constants.MAVEN_ARCHETYPE_PACKAGING.equalsIgnoreCase( project.getPackaging() ) )
+        {
+            getLog().debug( "Wrong packaging type " + project.getPackaging() + ", skipping archetype " + project.getName() );
+            return;
+        }
         Archetype archetype = new Archetype();
         archetype.setGroupId( project.getGroupId() );
         archetype.setArtifactId( project.getArtifactId() );

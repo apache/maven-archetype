@@ -26,7 +26,7 @@
   <parent>
     <groupId>org.apache.maven.archetype</groupId>
     <artifactId>maven-archetype</artifactId>
-    <version>3.1.1-SNAPSHOT</version>
+    <version>3.2.1-SNAPSHOT</version>
   </parent>
 
   <!--
@@ -67,6 +67,16 @@
       <groupId>org.apache.maven.archetype</groupId>
       <artifactId>archetype-common</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-archiver</artifactId>
+      <version>3.5.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-archiver</artifactId>
+      <version>4.2.2</version>
+    </dependency>
     <!-- Required for the integration tests, dependency is only to define build order -->
     <dependency>
       <groupId>org.apache.maven.archetype</groupId>
@@ -91,6 +101,10 @@
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
+      <artifactId>maven-artifact</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
       <artifactId>maven-model</artifactId>
     </dependency>
     <dependency>
@@ -103,6 +117,11 @@
       <artifactId>maven-plugin-annotations</artifactId>
       <optional>true</optional>
     </dependency>
+   <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-component-annotations</artifactId>
+    </dependency>
+    
     <dependency>
       <groupId>org.apache.maven.shared</groupId>
       <artifactId>maven-invoker</artifactId>
@@ -112,10 +131,17 @@
       <artifactId>maven-artifact-transfer</artifactId>
     </dependency>
     <dependency>
-      <groupId>easymock</groupId>
-      <artifactId>easymock</artifactId>
-      <version>1.2_Java1.3</version><!-- with 2.0 compilation failure -->
-      <scope>test</scope>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>2.6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-velocity</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.velocity</groupId>
+      <artifactId>velocity</artifactId>
     </dependency>
     <dependency>
       <groupId>commons-collections</groupId>
@@ -124,11 +150,18 @@
     <dependency>
       <groupId>org.apache.maven.shared</groupId>
       <artifactId>maven-script-interpreter</artifactId>
-      <version>1.0</version>
+      <version>1.2</version>
     </dependency>
+    
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.easymock</groupId>
+      <artifactId>easymock</artifactId>
+      <version>3.6</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -194,7 +227,7 @@
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>mrm-maven-plugin</artifactId>
-            <version>1.1.0</version>
+            <version>1.2.0</version>
             <executions>
               <execution>
                 <id>mirror</id>
@@ -233,38 +266,56 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-invoker-plugin</artifactId>
-            <configuration>
-              <projectsDirectory>src/it/projects</projectsDirectory>
-              <cloneClean>true</cloneClean>
-              <cloneProjectsTo>${project.build.directory}/it/projects</cloneProjectsTo>
-              <pomIncludes>
-                <pomInclude>*</pomInclude>
-              </pomIncludes>
-              <preBuildHookScript>setup</preBuildHookScript>
-              <postBuildHookScript>verify</postBuildHookScript>
-              <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
-              <settingsFile>src/it/mrm/settings.xml</settingsFile>
-              <filterProperties>
-                <repository.proxy.url>${mrm.repository.url}</repository.proxy.url>
-                <archetype-repo.proxy.url>${archetype-repo.proxy.url}</archetype-repo.proxy.url>
-              </filterProperties>
-              <properties>
-                <maven.compiler.source>${maven.compiler.source}</maven.compiler.source>
-                <maven.compiler.target>${maven.compiler.target}</maven.compiler.target>
-                <!-- e.g. ensure that Java7 picks up TLSv1.2 when connecting with Central -->
-                <https.protocols>${https.protocols}</https.protocols>
-              </properties>
-              <ignoreFailures>${maven.it.failure.ignore}</ignoreFailures>
-            </configuration>
+            <version>3.2.1</version>
             <executions>
               <execution>
-                <id>integration-test</id>
+                <id>invoker-install</id>
                 <goals>
                   <goal>install</goal>
-                  <goal>run</goal>
                 </goals>
               </execution>
+              <execution>
+                <id>invoker-it</id>
+                <goals>
+                  <goal>integration-test</goal>
+                </goals>
+                <configuration>
+                  <showErrors>true</showErrors>
+                  <debug>true</debug>
+                  <projectsDirectory>src/it/projects</projectsDirectory>
+                  <cloneClean>true</cloneClean>
+                  <cloneProjectsTo>${project.build.directory}/it/projects</cloneProjectsTo>
+                  <pomIncludes>
+                    <pomInclude>*</pomInclude>
+                  </pomIncludes>
+                  <preBuildHookScript>setup</preBuildHookScript>
+                  <postBuildHookScript>verify</postBuildHookScript>
+                  <settingsFile>src/it/mrm/settings.xml</settingsFile>
+                  <filterProperties>
+                    <repository.proxy.url>${mrm.repository.url}</repository.proxy.url>
+                    <archetype-repo.proxy.url>${archetype-repo.proxy.url}</archetype-repo.proxy.url>
+                  </filterProperties>
+                  <properties>
+                    <maven.compiler.source>${maven.compiler.source}</maven.compiler.source>
+                    <maven.compiler.target>${maven.compiler.target}</maven.compiler.target>
+                    <!-- e.g. ensure that Java7 picks up TLSv1.2 when connecting with Central -->
+                    <https.protocols>${https.protocols}</https.protocols>
+                  </properties>
+                </configuration>
+              </execution>
+              <execution>
+                <id>invoker-verify</id>
+                <goals>
+                  <goal>verify</goal>
+                </goals>
+                <configuration>
+                  <ignoreFailures>${maven.it.failure.ignore}</ignoreFailures>
+                </configuration>
+              </execution>
             </executions>
+            <configuration>
+              <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
+            </configuration>
           </plugin>
         </plugins>
       </build>

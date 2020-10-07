@@ -1,5 +1,8 @@
 package org.apache.maven.archetype.ui.generation;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -25,12 +28,13 @@ import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
 import org.apache.maven.archetype.metadata.ArchetypeDescriptor;
 import org.apache.maven.archetype.metadata.RequiredProperty;
+import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.project.ProjectBuildingRequest;
 import org.codehaus.plexus.PlexusTestCase;
-import org.easymock.MockControl;
+import org.easymock.EasyMock;
 
 /**
- * Tests the ability to use variables in default fields in batch mode
+ * Tests the ability to use variables in default fields in batch mode.
  */
 public class DefaultArchetypeGenerationConfigurator2Test
     extends PlexusTestCase
@@ -46,23 +50,7 @@ public class DefaultArchetypeGenerationConfigurator2Test
         configurator = (DefaultArchetypeGenerationConfigurator) lookup( ArchetypeGenerationConfigurator.ROLE );
 
         ProjectBuildingRequest buildingRequest = null;
-//        MavenRepositorySystemSession repositorySession = new MavenRepositorySystemSession();
-//        repositorySession.setLocalRepositoryManager( new SimpleLocalRepositoryManager( localRepository.getBasedir() ) );
-//        buildingRequest.setRepositorySession( repositorySession );
-//        request.setProjectBuildingRequest( buildingRequest );
         
-        MockControl control = MockControl.createControl( ArchetypeArtifactManager.class );
-        control.setDefaultMatcher( MockControl.ALWAYS_MATCHER );
-
-        ArchetypeArtifactManager manager = (ArchetypeArtifactManager) control.getMock();
-        manager.exists( "archetypeGroupId", "archetypeArtifactId", "archetypeVersion", null, null, null, buildingRequest );
-        control.setReturnValue( true );
-        manager.isFileSetArchetype( "archetypeGroupId", "archetypeArtifactId", "archetypeVersion", null, null, null, buildingRequest );
-        control.setReturnValue( true );
-        manager.isOldArchetype( "archetypeGroupId", "archetypeArtifactId", "archetypeVersion", null, null, null, buildingRequest );
-        control.setReturnValue( false );
-        manager.getFileSetArchetypeDescriptor( "archetypeGroupId", "archetypeArtifactId", "archetypeVersion", null,
-                                               null, null, buildingRequest );
         ArchetypeDescriptor descriptor = new ArchetypeDescriptor();
         RequiredProperty groupId = new RequiredProperty();
         groupId.setKey( "groupId" );
@@ -84,9 +72,23 @@ public class DefaultArchetypeGenerationConfigurator2Test
         descriptor.addRequiredProperty( thePackage );
         descriptor.addRequiredProperty( groupName );
         descriptor.addRequiredProperty( serviceName );
-        control.setReturnValue( descriptor );
-        control.replay();
+        
+        ArchetypeArtifactManager manager = EasyMock.createMock ( ArchetypeArtifactManager.class );
+        
+        List<ArtifactRepository> x = new ArrayList<>();
+        EasyMock.expect( manager.exists( "archetypeGroupId", "archetypeArtifactId", "archetypeVersion", null, null, x,
+                                         buildingRequest ) ).andReturn( true );
+        EasyMock.expect( manager.isFileSetArchetype( "archetypeGroupId", "archetypeArtifactId", "archetypeVersion",
+                                                     null, null, x, buildingRequest ) ).andReturn( true );
+        EasyMock.expect( manager.isOldArchetype( "archetypeGroupId", "archetypeArtifactId", "archetypeVersion", null,
+                                                 null, x, buildingRequest ) ).andReturn( false );
+        EasyMock.expect( manager.getFileSetArchetypeDescriptor( "archetypeGroupId", "archetypeArtifactId",
+                                                                "archetypeVersion", null, null, x,
+                                                                buildingRequest ) ).andReturn( descriptor );
+       
+        EasyMock.replay( manager );
         configurator.setArchetypeArtifactManager( manager );
+   
     }
     
     public void testJIRA_509_FileSetArchetypeDefaultsWithVariables() throws Exception

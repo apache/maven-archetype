@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.Set;
 
@@ -55,9 +56,9 @@ import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.maven.settings.Settings;
-import org.apache.maven.shared.artifact.DefaultArtifactCoordinate;
-import org.apache.maven.shared.artifact.resolve.ArtifactResolver;
-import org.apache.maven.shared.artifact.resolve.ArtifactResolverException;
+import org.apache.maven.shared.transfer.artifact.DefaultArtifactCoordinate;
+import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver;
+import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolverException;
 import org.apache.maven.shared.invoker.DefaultInvocationRequest;
 import org.apache.maven.shared.invoker.InvocationRequest;
 import org.apache.maven.shared.invoker.InvocationResult;
@@ -440,7 +441,7 @@ public class IntegrationTestMojo
             {
                 refLine = referenceFileReader.readLine();
                 actualLine = actualFileReader.readLine();
-                if ( !StringUtils.equals( refLine, actualLine ) )
+                if ( !Objects.equals( refLine, actualLine ) )
                 {
                     return false;
                 }
@@ -816,7 +817,6 @@ public class IntegrationTestMojo
                 interpolatedFile.getParentFile().mkdirs();
                 
                 writer.write( xml );
-                writer.flush();
             }
         }
         catch ( IOException e )

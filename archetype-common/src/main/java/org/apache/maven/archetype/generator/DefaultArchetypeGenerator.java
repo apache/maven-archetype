@@ -19,6 +19,7 @@ package org.apache.maven.archetype.generator;
  * under the License.
  */
 
+import org.apache.maven.archetype.exception.InvalidPackaging;
 import org.apache.maven.archetype.old.OldArchetype;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
@@ -35,11 +36,8 @@ import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-import org.dom4j.DocumentException;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,7 +62,7 @@ public class DefaultArchetypeGenerator
     private OldArchetype oldArchetype;
 
     private File getArchetypeFile( ArchetypeGenerationRequest request, ArtifactRepository localRepository )
-        throws IOException, ArchetypeException, XmlPullParserException, DocumentException
+        throws ArchetypeException
     {
         if ( !isArchetypeDefined( request ) )
         {
@@ -99,7 +97,7 @@ public class DefaultArchetypeGenerator
     }
 
     private void generateArchetype( ArchetypeGenerationRequest request, File archetypeFile )
-        throws IOException, ArchetypeException, XmlPullParserException, DocumentException
+        throws ArchetypeException
     {
         if ( archetypeArtifactManager.isFileSetArchetype( archetypeFile ) )
         {
@@ -136,7 +134,7 @@ public class DefaultArchetypeGenerator
     }
 
     private void processOldArchetype( ArchetypeGenerationRequest request, File archetypeFile )
-        throws UnknownArchetype, ArchetypeGenerationFailure
+            throws ArchetypeGenerationFailure, InvalidPackaging
     {
         oldArchetype.createArchetype( request, archetypeFile );
     }
@@ -149,21 +147,9 @@ public class DefaultArchetypeGenerator
         {
             generateArchetype( request, archetypeFile );
         }
-        catch ( IOException ex )
+        catch ( ArchetypeException e )
         {
-            result.setCause( ex );
-        }
-        catch ( ArchetypeException ex )
-        {
-            result.setCause( ex );
-        }
-        catch ( XmlPullParserException ex )
-        {
-            result.setCause( ex );
-        }
-        catch ( DocumentException ex )
-        {
-            result.setCause( ex );
+            result.setCause( e );
         }
     }
 
@@ -176,19 +162,7 @@ public class DefaultArchetypeGenerator
 
             generateArchetype( request, archetypeFile, result );
         }
-        catch ( IOException ex )
-        {
-            result.setCause( ex );
-        }
         catch ( ArchetypeException ex )
-        {
-            result.setCause( ex );
-        }
-        catch ( XmlPullParserException ex )
-        {
-            result.setCause( ex );
-        }
-        catch ( DocumentException ex )
         {
             result.setCause( ex );
         }

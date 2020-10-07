@@ -97,4 +97,7 @@ public interface Constants
     String TMP = ".tmp";
 
     String VERSION = "version";
+
+    String MAVEN_ARCHETYPE_PACKAGING = "maven-archetype";
+
 }

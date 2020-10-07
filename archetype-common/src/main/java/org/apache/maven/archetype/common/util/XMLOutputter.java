@@ -76,8 +76,8 @@ import java.io.Writer;
 import java.util.List;
 
 /**
- * <p>This class is a fork from jdom 1.0 modified to preserve CData and
- * comments parts.</p>
+ * <p>This class is a fork from JDOM 1.0 modified to preserve CData sections and
+ * comments.</p>
  * 
  * <p>Outputs a JDOM document as a stream of bytes. The outputter can manage many
  * styles of document formatting, from untouched to pretty printed. The default
@@ -104,11 +104,11 @@ import java.util.List;
  * OutputStream if possible.</p>
  * 
  * <p>XML declarations are always printed on their own line followed by a line
- * seperator (this doesn't change the semantics of the document). To omit
+ * separator (this doesn't change the semantics of the document). To omit
  * printing of the declaration use
  * <code>{@link Format#setOmitDeclaration}</code>. To omit printing of the
  * encoding in the declaration use <code>{@link Format#setOmitEncoding}</code>.
- * Unfortunatly there is currently no way to know the original encoding of the
+ * Unfortunately there is currently no way to know the original encoding of the
  * document.</p>
  * 
  * <p>Empty elements are by default printed as &lt;empty/&gt;, but this can be
@@ -364,13 +364,6 @@ public class XMLOutputter
     private static Writer makeWriter( OutputStream out, String enc )
         throws java.io.UnsupportedEncodingException
     {
-        // "UTF-8" is not recognized before JDK 1.1.6, so we'll translate
-        // into "UTF8" which works with all JDKs.
-        if ( "UTF-8".equals( enc ) )
-        {
-            enc = "UTF8";
-        }
-
         Writer writer = new BufferedWriter( ( new OutputStreamWriter( new BufferedOutputStream( out ), enc ) ) );
         return writer;
     }
@@ -437,8 +430,6 @@ public class XMLOutputter
         // Output final line separator
         // We output this no matter what the newline flags say
         out.write( currentFormat.lineSeparator );
-
-        out.flush();
     }
 
     /**
@@ -451,7 +442,6 @@ public class XMLOutputter
         throws IOException
     {
         printDocType( out, doctype );
-        out.flush();
     }
 
     /**
@@ -468,7 +458,6 @@ public class XMLOutputter
         // If this is the root element we could pre-initialize the
         // namespace stack with the namespaces
         printElement( out, element, 0, createNamespaceStack() );
-        out.flush();
     }
 
     /**
@@ -487,7 +476,6 @@ public class XMLOutputter
         List<?> content = element.getContent();
         printContentRange( out, content, 0, content.size(),
             0, createNamespaceStack() );
-        out.flush();
     }
 
     /**
@@ -503,7 +491,6 @@ public class XMLOutputter
         throws IOException
     {
         printContentRange( out, list, 0, list.size(), 0, createNamespaceStack() );
-        out.flush();
     }
 
     /**
@@ -516,7 +503,6 @@ public class XMLOutputter
         throws IOException
     {
         printCDATA( out, cdata );
-        out.flush();
     }
 
     /**
@@ -530,7 +516,6 @@ public class XMLOutputter
         throws IOException
     {
         printText( out, text );
-        out.flush();
     }
 
     /**
@@ -543,7 +528,6 @@ public class XMLOutputter
         throws IOException
     {
         printComment( out, comment );
-        out.flush();
     }
 
     /**
@@ -561,8 +545,6 @@ public class XMLOutputter
         currentFormat.setIgnoreTrAXEscapingPIs( true );
         printProcessingInstruction( out, pi );
         currentFormat.setIgnoreTrAXEscapingPIs( currentEscapingPolicy );
-
-        out.flush();
     }
 
     /**
@@ -575,7 +557,6 @@ public class XMLOutputter
         throws IOException
     {
         printEntityRef( out, entity );
-        out.flush();
     }
 
     // * * * * * * * * * * Output to a String * * * * * * * * * *

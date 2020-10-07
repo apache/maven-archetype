@@ -21,6 +21,7 @@ package org.apache.maven.archetype.generator;
 
 import org.apache.maven.archetype.exception.ArchetypeGenerationFailure;
 import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
+import org.apache.maven.archetype.exception.InvalidPackaging;
 import org.apache.maven.archetype.exception.OutputFileExists;
 import org.apache.maven.archetype.exception.PomFileExists;
 import org.apache.maven.archetype.exception.ProjectDirectoryExists;
@@ -43,6 +44,6 @@ public interface FilesetArchetypeGenerator
      * Generate a project from an archetype file.
      */
     void generateArchetype( ArchetypeGenerationRequest request, File archetypeFile )
-        throws UnknownArchetype, ArchetypeNotConfigured, ProjectDirectoryExists, PomFileExists, OutputFileExists,
-        ArchetypeGenerationFailure;
+            throws UnknownArchetype, ArchetypeNotConfigured, ProjectDirectoryExists, PomFileExists, OutputFileExists,
+            ArchetypeGenerationFailure, InvalidPackaging;
 }

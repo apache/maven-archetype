@@ -80,6 +80,8 @@ import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
+import static org.apache.commons.io.IOUtils.write;
+
 /**
  * Create a 2.x Archetype project from a project. Since 2.0-alpha-5, an integration-test named "basic" is created along
  * the archetype itself to provide immediate test when building the archetype.
@@ -327,8 +329,15 @@ public class FilesetArchetypeCreator
         File basicItDirectory = new File( generatedSourcesDirectory, basic );
         basicItDirectory.mkdirs();
 
+        File archetypePropertiesFile = new File( basicItDirectory, "archetype.properties" );
+        if ( !archetypePropertiesFile.exists() && !archetypePropertiesFile.createNewFile() )
+        {
+            getLogger().warn( "Could not create new file \"" + archetypePropertiesFile.getPath()
+                    + "\" or the file already exists." );
+        }
+
         try ( InputStream in = FilesetArchetypeCreator.class.getResourceAsStream( "archetype.properties" );
-              OutputStream out = new FileOutputStream( new File( basicItDirectory, "archetype.properties" ) ) )
+              OutputStream out = new FileOutputStream( archetypePropertiesFile ) )
         {
             Properties archetypeProperties = new Properties();
             archetypeProperties.load( in );
@@ -461,6 +470,12 @@ public class FilesetArchetypeCreator
     private void copyResource( String name, File destination )
         throws IOException
     {
+        if ( !destination.exists() && !destination.createNewFile() )
+        {
+            getLogger().warn( "Could not create new file \"" + destination.getPath()
+                    + "\" or the file already exists." );
+        }
+
         try ( InputStream in = FilesetArchetypeCreator.class.getResourceAsStream( name );
               OutputStream out = new FileOutputStream( destination ) )
         {
@@ -852,14 +867,14 @@ public class FilesetArchetypeCreator
 
             FileUtils.copyFile( initialPomFile, inputFile );
 
+            outputFile.getParentFile().mkdirs();
+
             try ( Reader in = ReaderFactory.newXmlReader( inputFile );
                   Writer out = WriterFactory.newXmlWriter( outputFile ) )
             {
                 String initialcontent = IOUtil.toString( in );
 
                 String content = getReversedContent( initialcontent, pomReversedProperties );
-
-                outputFile.getParentFile().mkdirs();
 
                 IOUtil.copy( content, out );
             }
@@ -1065,14 +1080,14 @@ public class FilesetArchetypeCreator
 
             FileUtils.copyFile( initialPomFile, inputFile );
 
+            outputFile.getParentFile().mkdirs();
+
             try ( Reader in = ReaderFactory.newXmlReader( inputFile );
                   Writer out = WriterFactory.newXmlWriter( outputFile ) )
             {
                 String initialcontent = IOUtil.toString( in );
 
                 String content = getReversedContent( initialcontent, pomReversedProperties );
-
-                outputFile.getParentFile().mkdirs();
 
                 IOUtil.copy( content, out );
             }
@@ -1290,7 +1305,16 @@ public class FilesetArchetypeCreator
             File outputFile = new File( archetypeFilesDirectory, outputFilename );
             outputFile.getParentFile().mkdirs();
 
-            org.apache.commons.io.IOUtils.write( content, new FileOutputStream( outputFile ), fileEncoding );
+            if ( !outputFile.exists() && !outputFile.createNewFile() )
+            {
+                getLogger().warn( "Could not create new file \"" + outputFile.getPath()
+                        + "\" or the file already exists." );
+            }
+
+            try ( OutputStream os = new FileOutputStream( outputFile ) )
+            {
+                write( content, os, fileEncoding );
+            }
         }
     }
 
