@@ -717,8 +717,9 @@ public class FilesetArchetypeCreator
         Xpp3Dom configuration = (Xpp3Dom) plugin.getConfiguration();
         if ( configuration != null )
         {
-            Xpp3Dom[] modules = configuration.getChild( "modules" ) != null
-                    ? configuration.getChild( "modules" ).getChildren()
+            Xpp3Dom modulesConfiguration = configuration.getChild( "modules" );
+            Xpp3Dom[] modules = modulesConfiguration != null
+                    ? modulesConfiguration.getChildren()
                     : new Xpp3Dom[0];
             for ( int i = 0; i < modules.length; i++ )
             {
