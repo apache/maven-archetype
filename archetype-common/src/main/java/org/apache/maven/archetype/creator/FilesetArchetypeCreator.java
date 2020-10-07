@@ -99,7 +99,7 @@ public class FilesetArchetypeCreator
 
     @Requirement
     private PomManager pomManager;
-
+    
     @Requirement
     private Invoker invoker;
 
@@ -246,7 +246,7 @@ public class FilesetArchetypeCreator
                         project.getFile(), pomReversedProperties, preserveCData, keepParent );
             getLogger().debug( "Created Archetype " + archetypeDescriptor.getName() + " template pom(s)" );
 
-
+            
             try ( Writer out = WriterFactory.newXmlWriter( archetypeDescriptorFile ) )
             {
                 ArchetypeDescriptorXpp3Writer writer = new ArchetypeDescriptorXpp3Writer();
@@ -283,7 +283,7 @@ public class FilesetArchetypeCreator
             {
                 internalRequest.setLocalRepositoryDirectory( new File( request.getLocalRepository().getBasedir() ) );
             }
-
+            
             String httpsProtocols = System.getProperty( "https.protocols" );
             if ( httpsProtocols != null )
             {
