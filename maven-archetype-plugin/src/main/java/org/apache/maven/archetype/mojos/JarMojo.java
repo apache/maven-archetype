@@ -37,6 +37,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.archiver.Archiver;
 import org.codehaus.plexus.archiver.jar.JarArchiver;
+import org.codehaus.plexus.archiver.util.DefaultFileSet;
 
 import java.io.File;
 import java.util.Map;
@@ -136,7 +137,10 @@ public class JarMojo
 
         try
         {
-            archiver.getArchiver().addDirectory( archetypeDirectory );
+            DefaultFileSet fs = DefaultFileSet.fileSet( archetypeDirectory ).prefixed( "" )
+                .includeExclude( null,  null ).includeEmptyDirs( true );
+            fs.setUsingDefaultExcludes( false );
+            archiver.getArchiver().addFileSet( fs );
 
             archiver.createArchive( session, project, archive );
         }
