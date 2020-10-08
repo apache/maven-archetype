@@ -198,7 +198,7 @@ public class DefaultArchetypeGenerationConfigurator
                     {
                         String value;
 
-                        if ( archetypeConfiguration.isConfigured( requiredProperty ) )
+                        if ( archetypeConfiguration.isConfigured( requiredProperty ) && !request.isAskForDefaultPropertyValues() )
                         {
                             getLogger().info(
                                 "Using property: " + requiredProperty + " = " + archetypeConfiguration.getProperty(

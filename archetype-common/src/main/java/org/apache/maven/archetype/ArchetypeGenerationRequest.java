@@ -40,6 +40,8 @@ public class ArchetypeGenerationRequest
 
     private boolean interactiveMode;
 
+    private boolean askForDefaultPropertyValues;
+
     private TransferListener transferListener;
 
     private String outputDirectory;
@@ -293,6 +295,18 @@ public class ArchetypeGenerationRequest
     public ArchetypeGenerationRequest setInteractiveMode( boolean interactiveMode )
     {
         this.interactiveMode = interactiveMode;
+
+        return this;
+    }
+
+    public boolean isAskForDefaultPropertyValues()
+    {
+        return askForDefaultPropertyValues;
+    }
+
+    public ArchetypeGenerationRequest setAskForDefaultPropertyValues( boolean askForDefaultPropertyValues )
+    {
+        this.askForDefaultPropertyValues = askForDefaultPropertyValues;
 
         return this;
     }
