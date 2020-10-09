@@ -51,6 +51,7 @@ import java.util.Map;
 public class JarMojo
     extends AbstractMojo
 {
+
     /**
      * Directory containing the classes.
      */
@@ -68,6 +69,12 @@ public class JarMojo
      */
     @Parameter( defaultValue = "${project.build.directory}", required = true )
     private File outputDirectory;
+
+    /**
+     * Exclude some files from the archetype like .gitignore.
+     * */
+    @Parameter( defaultValue = "true" )
+    private boolean useDefaultExcludes;
 
     /**
      * The Maven project.
@@ -139,7 +146,7 @@ public class JarMojo
         {
             DefaultFileSet fs = DefaultFileSet.fileSet( archetypeDirectory ).prefixed( "" )
                 .includeExclude( null,  null ).includeEmptyDirs( true );
-            fs.setUsingDefaultExcludes( false );
+            fs.setUsingDefaultExcludes( useDefaultExcludes );
             archiver.getArchiver().addFileSet( fs );
 
             archiver.createArchive( session, project, archive );
