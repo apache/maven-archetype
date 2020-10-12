@@ -72,7 +72,7 @@ public class JarMojo
 
     /**
      * Exclude some files from the archetype like .gitignore.
-     * */
+     */
     @Parameter( defaultValue = "true" )
     private boolean useDefaultExcludes;
 
