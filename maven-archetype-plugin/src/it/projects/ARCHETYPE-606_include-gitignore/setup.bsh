@@ -1,4 +1,3 @@
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,29 +17,14 @@
  * under the License.
  */
 
+// This is a workaround. The invoker-plugin does not copy the .gitignore file to the clone
+// target directory. So we create the .gitignore here in the setup task.
+
 import java.io.*;
 import org.codehaus.plexus.util.*;
 
-basedir = new File( basedir, "target/test-classes/projects/basic/project/project/basic" );
-if ( !basedir.exists() ) {
-	throw new Exception( basedir + " is missing." );
-}
+srcGitignore = new File ( basedir, "src/main/resources/archetype-resources/.gitignore" );
+targetGitignore = new File ( basedir, "src/test/resources/projects/basic/reference/.gitignore" );
 
-File main = new File( basedir, "src/main" );
-
-// check <fileset packaged="true">
-File app = new File( main, "java/build/archetype/App.java" );
-if ( !app.isFile() )
-{
-    throw new Exception( app + " file is missing or not a file." );
-}
-
-File buildLog = new File( basedir, "build.log" );
-
-String content = FileUtils.fileRead( buildLog, "UTF-8" );
-
-int idx = content.indexOf( "Yeah Baby, it rocks!" );
-if ( idx < 0 )
-{
-    throw new Exception( "build.log missing System.out.println from verify.groovy" );
-}
+FileUtils.fileWrite(srcGitignore, "UTF-8", "#Dummy");
+FileUtils.fileWrite(targetGitignore, "UTF-8", "#Dummy");
