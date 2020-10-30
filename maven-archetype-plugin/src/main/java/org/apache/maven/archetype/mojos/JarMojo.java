@@ -37,6 +37,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.archiver.Archiver;
 import org.codehaus.plexus.archiver.jar.JarArchiver;
+import org.codehaus.plexus.archiver.util.DefaultFileSet;
 
 import java.io.File;
 import java.util.Map;
@@ -50,6 +51,7 @@ import java.util.Map;
 public class JarMojo
     extends AbstractMojo
 {
+
     /**
      * Directory containing the classes.
      */
@@ -67,6 +69,12 @@ public class JarMojo
      */
     @Parameter( defaultValue = "${project.build.directory}", required = true )
     private File outputDirectory;
+
+    /**
+     * Exclude some files from the archetype like .gitignore.
+     */
+    @Parameter( defaultValue = "true" )
+    private boolean useDefaultExcludes;
 
     /**
      * The Maven project.
@@ -136,7 +144,10 @@ public class JarMojo
 
         try
         {
-            archiver.getArchiver().addDirectory( archetypeDirectory );
+            DefaultFileSet fs = DefaultFileSet.fileSet( archetypeDirectory ).prefixed( "" )
+                .includeExclude( null,  null ).includeEmptyDirs( true );
+            fs.setUsingDefaultExcludes( useDefaultExcludes );
+            archiver.getArchiver().addFileSet( fs );
 
             archiver.createArchive( session, project, archive );
         }

@@ -55,6 +55,14 @@ under the License.
       </answer>
     </faq>
 
+    <faq id="excludes">
+      <question>How do I get files like <code>.gitignore</code> included into my archetype?</question>
+      <answer>
+        <p>First make sure you set <code>addDefaultExcludes</code> to <code>false</code> in the <code>maven-resources-plugin</code>
+        so that the archetype-plugin gets to see these files.</p>
+        <p>Then set <code>useDefaultExcludes</code> to <code>false</code> in the <code>maven-archetype-plugin</code>.</p>
+      </answer>
+    </faq>
   </part>
 
 </faqs>
