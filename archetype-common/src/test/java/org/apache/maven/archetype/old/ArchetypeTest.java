@@ -49,7 +49,6 @@ import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.codehaus.plexus.velocity.VelocityComponent;
 import org.eclipse.aether.DefaultRepositorySystemSession;
-import org.sonatype.aether.impl.internal.SimpleLocalRepositoryManager;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.xmlunit.matchers.CompareMatcher.isIdenticalTo;

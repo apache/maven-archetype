@@ -26,7 +26,6 @@ import org.apache.maven.project.ProjectBuildingRequest;
 import org.codehaus.plexus.PlexusTestCase;
 import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.repository.LocalRepositoryManager;
-import org.sonatype.aether.impl.internal.SimpleLocalRepositoryManager;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -68,7 +67,7 @@ public class LocalCatalogArchetypeDataSourceTest extends PlexusTestCase
         LocalRepositoryManager localRepositoryManager = drss.getLocalRepositoryManager();
         ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
 //        MavenRepositorySystemSession repositorySession = new MavenRepositorySystemSession();
-        drss.setLocalRepositoryManager((LocalRepositoryManager) new SimpleLocalRepositoryManager( getTestFile( "target/test-classes/repositories/test-catalog" ) ));
+//        drss.setLocalRepositoryManager((LocalRepositoryManager) new SimpleLocalRepositoryManager( getTestFile( "target/test-classes/repositories/test-catalog" ) ));
         buildingRequest.setRepositorySession( drss );
         
         

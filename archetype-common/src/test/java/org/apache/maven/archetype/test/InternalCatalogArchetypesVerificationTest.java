@@ -35,7 +35,6 @@ import org.apache.maven.project.ProjectBuildingRequest;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
 import org.eclipse.aether.DefaultRepositorySystemSession;
-import org.sonatype.aether.impl.internal.SimpleLocalRepositoryManager;
 
 /**
  *

@@ -41,7 +41,6 @@ import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.eclipse.aether.DefaultRepositorySystemSession;
-import org.sonatype.aether.impl.internal.SimpleLocalRepositoryManager;
 
 public class DefaultArchetypeGeneratorTest
     extends AbstractMojoTestCase
