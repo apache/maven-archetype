@@ -23,14 +23,16 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.project.ProjectBuildingRequest;
-import org.apache.maven.shared.transfer.artifact.DefaultArtifactCoordinate;
-import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver;
-import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolverException;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
+import org.eclipse.aether.DefaultRepositorySystemSession;
+import org.eclipse.aether.artifact.Artifact;
+import org.eclipse.aether.artifact.DefaultArtifact;
+import org.eclipse.aether.impl.ArtifactResolver;
+import org.eclipse.aether.resolution.ArtifactRequest;
+import org.eclipse.aether.resolution.ArtifactResolutionException;
 
 /**
  * @author Jason van Zyl
@@ -48,16 +50,10 @@ public class DefaultDownloader
                           ProjectBuildingRequest buildingRequest )
         throws DownloadException, DownloadNotFoundException
    {
-        DefaultArtifactCoordinate jarCoordinate = new DefaultArtifactCoordinate();
-        jarCoordinate.setGroupId( groupId );
-        jarCoordinate.setArtifactId( artifactId );
-        jarCoordinate.setVersion( version );
-        
-        DefaultArtifactCoordinate pomCoordinate = new DefaultArtifactCoordinate();
-        pomCoordinate.setGroupId( groupId );
-        pomCoordinate.setArtifactId( artifactId );
-        pomCoordinate.setVersion( version );
-        pomCoordinate.setExtension( "pom" );
+       ArtifactRequest request = new ArtifactRequest();
+       Artifact defaultArtifact = new DefaultArtifact( groupId, artifactId, "pom", version );
+       request.setArtifact( defaultArtifact );
+       DefaultRepositorySystemSession drss = new DefaultRepositorySystemSession();
 
         List<ArtifactRepository> repositories = new ArrayList<>( remoteRepositories );
         if ( repositories.isEmpty() && archetypeRepository != null )
@@ -77,21 +73,21 @@ public class DefaultDownloader
         Artifact artifact;
         try
         {
-            artifact = artifactResolver.resolveArtifact( buildingRequest, jarCoordinate ).getArtifact();
+            artifact = artifactResolver.resolveArtifact( drss, request ).getArtifact();
         }
-        catch ( ArtifactResolverException e )
+        catch ( ArtifactResolutionException e )
         {
-            throw new DownloadException( "Error downloading " + jarCoordinate + ".", e );
+            throw new DownloadException( "Error downloading " + defaultArtifact + ".", e );
         }
 
         // still required???
         try
         {
-            artifactResolver.resolveArtifact( buildingRequest, pomCoordinate );
+            artifactResolver.resolveArtifact( drss, request );
         }
-        catch ( ArtifactResolverException e )
+        catch ( ArtifactResolutionException e )
         {
-            throw new DownloadException( "Error downloading POM for " + artifact.getId() + ".", e );
+            throw new DownloadException( "Error downloading POM for " + artifact.getArtifactId() + ".", e );
         }
 
         return artifact.getFile();
@@ -103,18 +99,18 @@ public class DefaultDownloader
                              ProjectBuildingRequest buildingRequest )
         throws DownloadException, DownloadNotFoundException
     {
-        DefaultArtifactCoordinate jarCoordinate = new DefaultArtifactCoordinate();
-        jarCoordinate.setGroupId( groupId );
-        jarCoordinate.setArtifactId( artifactId );
-        jarCoordinate.setVersion( version );
+        ArtifactRequest request = new ArtifactRequest();
+        Artifact defaultArtifact = new DefaultArtifact( groupId, artifactId, null, version );
+        request.setArtifact( defaultArtifact );
+        DefaultRepositorySystemSession drss = new DefaultRepositorySystemSession();
         
         try
         {
-            return artifactResolver.resolveArtifact( buildingRequest, jarCoordinate ).getArtifact().getFile();
+            return artifactResolver.resolveArtifact( drss, request ).getArtifact().getFile();
         }
-        catch ( ArtifactResolverException e )
+        catch ( ArtifactResolutionException e )
         {
-            throw new DownloadException( "Error downloading " + jarCoordinate + ".", e );
+            throw new DownloadException( "Error downloading " + request.toString() + ".", e );
         }
     }
 }

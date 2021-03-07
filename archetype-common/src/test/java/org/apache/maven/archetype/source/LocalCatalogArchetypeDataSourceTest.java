@@ -17,19 +17,20 @@ package org.apache.maven.archetype.source;
  *  under the License.
  */
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.Writer;
-
 import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Writer;
 import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.ProjectBuildingRequest;
-import org.apache.maven.repository.internal.MavenRepositorySystemSession;
 import org.codehaus.plexus.PlexusTestCase;
+import org.eclipse.aether.DefaultRepositorySystemSession;
+import org.eclipse.aether.repository.LocalRepositoryManager;
 import org.sonatype.aether.impl.internal.SimpleLocalRepositoryManager;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.Writer;
 
 public class LocalCatalogArchetypeDataSourceTest extends PlexusTestCase
 {
@@ -63,11 +64,12 @@ public class LocalCatalogArchetypeDataSourceTest extends PlexusTestCase
                     throws Exception
     {
         ArchetypeManager archetype = lookup( ArchetypeManager.class );
-
+        DefaultRepositorySystemSession drss = new DefaultRepositorySystemSession();
+        LocalRepositoryManager localRepositoryManager = drss.getLocalRepositoryManager();
         ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
-        MavenRepositorySystemSession repositorySession = new MavenRepositorySystemSession();
-        repositorySession.setLocalRepositoryManager( new SimpleLocalRepositoryManager( getTestFile( "target/test-classes/repositories/test-catalog" ) ) );
-        buildingRequest.setRepositorySession( repositorySession );
+//        MavenRepositorySystemSession repositorySession = new MavenRepositorySystemSession();
+        drss.setLocalRepositoryManager((LocalRepositoryManager) new SimpleLocalRepositoryManager( getTestFile( "target/test-classes/repositories/test-catalog" ) ));
+        buildingRequest.setRepositorySession( drss );
         
         
         ArchetypeCatalog result = archetype.getLocalCatalog( buildingRequest );

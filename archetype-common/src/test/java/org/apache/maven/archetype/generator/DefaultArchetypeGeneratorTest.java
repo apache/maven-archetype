@@ -37,10 +37,10 @@ import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.ProjectBuildingRequest;
-import org.apache.maven.repository.internal.MavenRepositorySystemSession;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.sonatype.aether.impl.internal.SimpleLocalRepositoryManager;
 
 public class DefaultArchetypeGeneratorTest
@@ -564,8 +564,8 @@ public class DefaultArchetypeGeneratorTest
         request.setProperties( ADDITIONAL_PROPERTIES );
         
         ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
-        MavenRepositorySystemSession repositorySession = new MavenRepositorySystemSession();
-        repositorySession.setLocalRepositoryManager( new SimpleLocalRepositoryManager( localRepository.getBasedir() ) );
+        DefaultRepositorySystemSession repositorySession = new DefaultRepositorySystemSession();
+        //repositorySession.setLocalRepositoryManager( new SimpleLocalRepositoryManager( localRepository.getBasedir() ) );
         buildingRequest.setRepositorySession( repositorySession );
         request.setProjectBuildingRequest( buildingRequest );
 
