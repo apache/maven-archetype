@@ -267,10 +267,10 @@ public class App
     When undefined, the <<<archetype.languages>>> and <<<archetype.filteredExtensions>>>
     properties are given sensible default values:
 
-    * <<<archetype.languages>>> have: <<<java, xml, txt, groovy, cs, mdo, aj,
+    * <<<archetype.filteredExtensions>>> have: <<<java, xml, txt, groovy, cs, mdo, aj,
        jsp, gsp, vm, html, xhtml, properties, .classpath, .project>>>. Notice
        the dotted filtered extensions that contains the complete file names.
 
-    * <<<archetype.filteredExtensions>>> have: <<<java, groovy, csharp, aspectj>>>.
+    * <<<archetype.languages>>> have: <<<java, groovy, csharp, aspectj>>>.
 
     []
