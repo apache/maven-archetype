@@ -121,6 +121,13 @@ public class CreateProjectFromArchetypeMojo
     private String archetypeCatalog;
 
     /**
+     * If set to {@code true} will ask for values also for properties having defaults in the first place.
+     * Only has an effect if {@link #interactiveMode} is used.
+     */
+    @Parameter( property = "askForDefaultPropertyValues", defaultValue = "false", required = true )
+    private Boolean askForDefaultPropertyValues;
+
+    /**
      * Local Maven repository.
      */
     @Parameter( defaultValue = "${localRepository}", readonly = true, required = true )
@@ -177,6 +184,7 @@ public class CreateProjectFromArchetypeMojo
             .setLocalRepository( localRepository )
             .setRemoteArtifactRepositories( remoteArtifactRepositories )
             .setFilter( filter )
+            .setAskForDefaultPropertyValues( askForDefaultPropertyValues )
             .setProjectBuildingRequest( session.getProjectBuildingRequest() );
 
         try

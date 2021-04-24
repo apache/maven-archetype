@@ -177,7 +177,7 @@ public class DefaultArchetypeGenerationConfigurator
                 {
                     for ( String requiredProperty : propertiesRequired )
                     {
-                        if ( !archetypeConfiguration.isConfigured( requiredProperty ) )
+                        if ( !archetypeConfiguration.isConfigured( requiredProperty ) || request.isAskForDefaultPropertyValues() )
                         {
                             if ( "package".equals( requiredProperty ) )
                             {
