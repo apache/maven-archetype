@@ -46,8 +46,6 @@ import org.codehaus.plexus.util.StringUtils;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Properties;
 
@@ -170,7 +168,9 @@ public class DefaultArchetypeGenerationConfigurator
             {
                 List<String> propertiesRequired = archetypeConfiguration.getRequiredProperties();
                 getLogger().debug( "Required properties before content sort: " + propertiesRequired );
-                Collections.sort( propertiesRequired, new RequiredPropertyComparator( archetypeConfiguration ) );
+
+                final RequiredPropertySorter reqPropertiesSorter = new RequiredPropertySorter();
+                propertiesRequired = reqPropertiesSorter.sortRequiredPropertyKeys( archetypeConfiguration );
                 getLogger().debug( "Required properties after content sort: " + propertiesRequired );
 
                 if ( !archetypeConfiguration.isConfigured() )
@@ -368,74 +368,6 @@ public class DefaultArchetypeGenerationConfigurator
         }
     }
 
-    public static class RequiredPropertyComparator
-        implements Comparator<String>
-    {
-        private final ArchetypeConfiguration archetypeConfiguration;
-
-        public RequiredPropertyComparator( ArchetypeConfiguration archetypeConfiguration )
-        {
-            this.archetypeConfiguration = archetypeConfiguration;
-        }
-
-        @Override
-        public int compare( String left, String right )
-        {
-            String leftDefault = archetypeConfiguration.getDefaultValue( left );
-
-            if ( ( leftDefault != null ) && leftDefault.indexOf( "${" + right + "}" ) >= 0 )
-            { //left contains right
-                return 1;
-            }
-
-            String rightDefault = archetypeConfiguration.getDefaultValue( right );
-
-            if ( ( rightDefault != null ) && rightDefault.indexOf( "${" + left + "}" ) >= 0 )
-            { //right contains left
-                return -1;
-            }
-
-            return comparePropertyName( left, right );
-        }
-
-        private int comparePropertyName( String left, String right )
-        {
-            if ( "groupId".equals( left ) )
-            {
-                return -1;
-            }
-            if ( "groupId".equals( right ) )
-            {
-                return 1;
-            }
-            if ( "artifactId".equals( left ) )
-            {
-                return -1;
-            }
-            if ( "artifactId".equals( right ) )
-            {
-                return 1;
-            }
-            if ( "version".equals( left ) )
-            {
-                return -1;
-            }
-            if ( "version".equals( right ) )
-            {
-                return 1;
-            }
-            if ( "package".equals( left ) )
-            {
-                return -1;
-            }
-            if ( "package".equals( right ) )
-            {
-                return 1;
-            }
-            return left.compareTo( right );
-        }
-    }
-    
     private ArtifactRepository createRepository( String url, String repositoryId )
     {
         
