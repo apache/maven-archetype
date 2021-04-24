@@ -19,6 +19,15 @@ package org.apache.maven.archetype.ui.generation;
  * under the License.
  */
 
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Properties;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
 import org.apache.maven.archetype.common.Constants;
@@ -43,20 +52,14 @@ import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Properties;
-
 // TODO: this seems to have more responsibilities than just a configurator
 @Component( role = ArchetypeGenerationConfigurator.class, hint = "default" )
 public class DefaultArchetypeGenerationConfigurator
     extends AbstractLogEnabled
     implements ArchetypeGenerationConfigurator
 {
+    public static final int MAX_TRANSITIVE_CYCLES = 10;
+
     @Requirement
     OldArchetype oldArchetype;
 
@@ -169,10 +172,129 @@ public class DefaultArchetypeGenerationConfigurator
             while ( !confirmed )
             {
                 List<String> propertiesRequired = archetypeConfiguration.getRequiredProperties();
-                getLogger().debug( "Required properties before content sort: " + propertiesRequired );
-                Collections.sort( propertiesRequired, new RequiredPropertyComparator( archetypeConfiguration ) );
-                getLogger().debug( "Required properties after content sort: " + propertiesRequired );
-
+                
+                // Preordering by GAV (only as first step)
+                Collections.sort( propertiesRequired, new Comparator<String>()
+                {
+                    @Override
+                    public int compare( String left, String right )
+                    {
+                        
+                        if ( StringUtils.isNotBlank( left ) && StringUtils.isNotBlank( right ) )
+                        {
+                            if ( "groupId".equals( left ) )
+                            {
+                                return -1;
+                            }
+                            if ( "groupId".equals( right ) )
+                            {
+                                return 1;
+                            }
+                            if ( "artifactId".equals( left ) )
+                            {
+                                return -1;
+                            }
+                            if ( "artifactId".equals( right ) )
+                            {
+                                return 1;
+                            }
+                            if ( "version".equals( left ) )
+                            {
+                                return -1;
+                            }
+                            if ( "version".equals( right ) )
+                            {
+                                return 1;
+                            }
+                            if ( "package".equals( left ) )
+                            {
+                                return -1;
+                            }
+                            if ( "package".equals( right ) )
+                            {
+                                return 1;
+                            }
+                                
+                        }
+                        return 0;
+                    }
+                    
+                } );
+                
+                LinkedList<String> orderedList = new LinkedList<String>();
+                RequiredPropertyComparator comparator = new RequiredPropertyComparator( archetypeConfiguration );
+                int transitiveDependenciesCyclesCount = 0;
+                do
+                {
+                    if ( !orderedList.isEmpty() )
+                    { 
+                        propertiesRequired.clear();
+                        propertiesRequired.addAll( orderedList );
+                        orderedList.clear();
+                    }
+                    
+                    getLogger().debug( "[X] Required properties before content sort: " + propertiesRequired );
+                    ListIterator<String> propIterator = propertiesRequired.listIterator( propertiesRequired.size() );
+                    
+                    String pivotProperty = null;
+                    while ( propIterator.hasPrevious() )
+                    {    
+                        pivotProperty = propIterator.previous();
+                        getLogger().debug( "Pivot property:" + pivotProperty );
+                             
+                        if ( orderedList.isEmpty() )
+                        {
+                            orderedList.addFirst( pivotProperty );
+                            getLogger().debug( " - > " + pivotProperty + " pushed on top" );
+                        }
+                        else
+                        {
+                            int lastTransitiveDepIndex = -1;
+                            for ( int i = 0 ; i < orderedList.size() ; i++ )
+                            {
+                                String comparedProperty = orderedList.get( i );
+                                getLogger().debug( " - Compared property:" + comparedProperty );
+                                if ( comparator.compare( pivotProperty, comparedProperty ) > 0 )
+                                {
+                                    lastTransitiveDepIndex = i;
+                                    getLogger().debug( " - > " + pivotProperty + " enqued after " + comparedProperty );
+                                }
+                            }
+                            if ( lastTransitiveDepIndex == -1 )
+                            {
+                                orderedList.push( pivotProperty );
+                                getLogger().debug( " - > " + pivotProperty + " pushed on top" );
+                            }
+                            else if ( lastTransitiveDepIndex == orderedList.size() )
+                            {
+                                orderedList.add( pivotProperty );
+                                getLogger().debug( " - > " + pivotProperty + " pushed to the tail" );
+                            }
+                            else
+                            {
+                                orderedList.add( lastTransitiveDepIndex + 1, pivotProperty );
+                                getLogger().debug( " - > " + pivotProperty + " inserted at position " + ( lastTransitiveDepIndex + 1 ) );
+                            }
+                        }
+                    }                
+                    getLogger().debug( " Required properties after content sort: " + orderedList );
+                    getLogger().debug( String.format( "[Exec: %s/%s]", transitiveDependenciesCyclesCount, MAX_TRANSITIVE_CYCLES ) );
+                }
+                while ( ++transitiveDependenciesCyclesCount < MAX_TRANSITIVE_CYCLES && !orderedList.equals( propertiesRequired ) );
+                
+                if ( transitiveDependenciesCyclesCount == MAX_TRANSITIVE_CYCLES )
+                {
+                    StringBuilder exceptionMessage = new StringBuilder();
+                    exceptionMessage.append( "Archetype " );
+                    exceptionMessage.append( request.getArchetypeGroupId() );
+                    exceptionMessage.append( ":" );
+                    exceptionMessage.append( request.getArchetypeArtifactId() );
+                    exceptionMessage.append( ":" );
+                    exceptionMessage.append( request.getArchetypeVersion() );
+                    exceptionMessage.append( " evaluated transitive dependencies :(" + MAX_TRANSITIVE_CYCLES + ") times. Did you may define loop cycles?" );
+                    throw new ArchetypeGenerationConfigurationFailure( exceptionMessage.toString() );
+                }
+                    
                 if ( !archetypeConfiguration.isConfigured() )
                 {
                     for ( String requiredProperty : propertiesRequired )
@@ -314,13 +436,14 @@ public class DefaultArchetypeGenerationConfigurator
     }
 
     private String getTransitiveDefaultValue( String defaultValue, ArchetypeConfiguration archetypeConfiguration,
-                                              String requiredProperty, Context context )
+                                              String requiredProperty, Context context ) throws ArchetypeGenerationConfigurationFailure
     {
         String result = defaultValue;
         if ( null == result )
         {
             return null;
         }
+        
         for ( String property : archetypeConfiguration.getRequiredProperties() )
         {
             if ( result.indexOf( "${" + property + "}" ) >= 0 )
@@ -330,6 +453,7 @@ public class DefaultArchetypeGenerationConfigurator
                                               archetypeConfiguration.getProperty( property ) );
             }
         }
+        
         if ( result.contains( "${" ) )
         {
             result = evaluateProperty( context, requiredProperty, defaultValue );
@@ -383,57 +507,21 @@ public class DefaultArchetypeGenerationConfigurator
         {
             String leftDefault = archetypeConfiguration.getDefaultValue( left );
 
-            if ( ( leftDefault != null ) && leftDefault.indexOf( "${" + right + "}" ) >= 0 )
+            if ( ( leftDefault != null ) && leftDefault.matches( ".*?\\$\\{" + right + "(?:\\..*?)?\\}.*?" ) )
             { //left contains right
                 return 1;
             }
 
             String rightDefault = archetypeConfiguration.getDefaultValue( right );
 
-            if ( ( rightDefault != null ) && rightDefault.indexOf( "${" + left + "}" ) >= 0 )
+            if ( ( rightDefault != null ) && rightDefault.matches( ".*?\\$\\{" + left + "(?:\\..*?)?\\}.*?" ) )
             { //right contains left
                 return -1;
             }
 
-            return comparePropertyName( left, right );
+            return -1;
         }
 
-        private int comparePropertyName( String left, String right )
-        {
-            if ( "groupId".equals( left ) )
-            {
-                return -1;
-            }
-            if ( "groupId".equals( right ) )
-            {
-                return 1;
-            }
-            if ( "artifactId".equals( left ) )
-            {
-                return -1;
-            }
-            if ( "artifactId".equals( right ) )
-            {
-                return 1;
-            }
-            if ( "version".equals( left ) )
-            {
-                return -1;
-            }
-            if ( "version".equals( right ) )
-            {
-                return 1;
-            }
-            if ( "package".equals( left ) )
-            {
-                return -1;
-            }
-            if ( "package".equals( right ) )
-            {
-                return 1;
-            }
-            return left.compareTo( right );
-        }
     }
     
     private ArtifactRepository createRepository( String url, String repositoryId )

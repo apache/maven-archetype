@@ -24,8 +24,8 @@ import junit.framework.TestCase;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
 import org.apache.maven.archetype.ui.ArchetypeConfiguration;
+
 
 public class RequiredPropertyComparatorTest
     extends TestCase
@@ -60,6 +60,18 @@ public class RequiredPropertyComparatorTest
     {
         archetypeConfiguration.addRequiredProperty( "prop1" );
         archetypeConfiguration.setDefaultProperty( "prop1", "${prop2}" );
+        archetypeConfiguration.addRequiredProperty( "prop2" );
+
+        List<String> requiredProperties = archetypeConfiguration.getRequiredProperties();
+        assertEquals( Arrays.asList( "prop1", "prop2" ), requiredProperties );
+        Collections.sort( requiredProperties, requiredPropertyComparator );
+        assertEquals( Arrays.asList( "prop2", "prop1" ), requiredProperties );
+    }
+    
+    public void testShouldOrderPropertiesWhenReferringEachOther3()
+    {
+        archetypeConfiguration.addRequiredProperty( "prop1" );
+        archetypeConfiguration.setDefaultProperty( "prop1", "${prop2.toLowerCase().toString()}" );
         archetypeConfiguration.addRequiredProperty( "prop2" );
 
         List<String> requiredProperties = archetypeConfiguration.getRequiredProperties();
