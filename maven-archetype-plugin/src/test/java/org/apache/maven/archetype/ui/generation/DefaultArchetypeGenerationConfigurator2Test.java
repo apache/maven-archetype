@@ -131,12 +131,12 @@ public class DefaultArchetypeGenerationConfigurator2Test
 
         EasyMock.expect( queryer.getPropertyValue( EasyMock.anyString(), EasyMock.anyString(),
                         EasyMock.<Pattern> anyObject())).andAnswer( new IAnswer<String>() {
-                            
+
                             @Override
                             public String answer() throws Throwable {
                                 return (String) EasyMock.getCurrentArguments()[1];
                             }}
-                                        ).anyTimes();
+                        ).anyTimes();
 
         EasyMock.expect( queryer.confirmConfiguration( EasyMock.<ArchetypeConfiguration> anyObject() ) )
                         .andReturn( Boolean.TRUE );
@@ -156,7 +156,7 @@ public class DefaultArchetypeGenerationConfigurator2Test
         custom.setKey( "serviceUpper" );
         custom.setDefaultValue( "${serviceName.toUpperCase()}" );
         descriptor.addRequiredProperty( custom );
-        
+
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
         request.setArchetypeGroupId( "archetypeGroupId" );
         request.setArchetypeArtifactId( "archetypeArtifactId" );
@@ -171,12 +171,12 @@ public class DefaultArchetypeGenerationConfigurator2Test
 
         EasyMock.expect( queryer.getPropertyValue( EasyMock.anyString(), EasyMock.anyString(),
                         EasyMock.<Pattern> anyObject())).andAnswer( new IAnswer<String>() {
-                            
+
                             @Override
                             public String answer() throws Throwable {
                                 return (String) EasyMock.getCurrentArguments()[1];
                             }}
-                                        ).anyTimes();
+                        ).anyTimes();
 
         EasyMock.expect( queryer.confirmConfiguration( EasyMock.<ArchetypeConfiguration> anyObject() ) )
                         .andReturn( Boolean.TRUE );

@@ -67,4 +67,18 @@ public class RequiredPropertyComparatorTest
         Collections.sort( requiredProperties, requiredPropertyComparator );
         assertEquals( Arrays.asList( "prop2", "prop1" ), requiredProperties );
     }
+
+    public void testTransitivePropertyReferences()
+    {
+        archetypeConfiguration.addRequiredProperty( "foo" );
+        archetypeConfiguration.setDefaultProperty( "foo", "${bar}" );
+        archetypeConfiguration.addRequiredProperty( "bar" );
+        archetypeConfiguration.setDefaultProperty( "bar", "${baz}" );
+        archetypeConfiguration.addRequiredProperty( "baz" );
+
+        List<String> requiredProperties = archetypeConfiguration.getRequiredProperties();
+        assertEquals( Arrays.asList( "foo", "bar", "baz" ), requiredProperties );
+        Collections.sort( requiredProperties, requiredPropertyComparator );
+        assertEquals( Arrays.asList( "baz", "bar", "foo" ), requiredProperties );
+    }
 }
