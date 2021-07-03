@@ -38,10 +38,11 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Reader;
 import java.io.Writer;
 
@@ -82,8 +83,9 @@ public final class PomUtils
         dbf.setXIncludeAware( false );
         dbf.setExpandEntityReferences( false );
 
+        InputStream inputStream = PomUtils.class.getClassLoader().getResourceAsStream( "maven-4.0.0.xsd" );
         Schema schema = SchemaFactory.newInstance( XMLConstants.W3C_XML_SCHEMA_NS_URI )
-                .newSchema( new File( PomUtils.class.getClassLoader().getResource( "maven-4.0.0.xsd" ).getFile() ) );
+                .newSchema( new StreamSource( inputStream ) );
         dbf.setSchema( schema );
         dbf.setIgnoringElementContentWhitespace( true );
         dbf.setNamespaceAware( true );
