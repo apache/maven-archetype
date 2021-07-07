@@ -136,7 +136,8 @@ public class DefaultFilesetArchetypeGenerator
 
             String packageName = request.getPackage();
             String artifactId = request.getArtifactId();
-            File outputDirectoryFile = new File( request.getOutputDirectory(), artifactId );
+            File outputDirectoryFile = new File( request.getOutputDirectory(),
+                    request.isCreateBaseDir() ? artifactId : "" );
             File basedirPom = new File( request.getOutputDirectory(), Constants.ARCHETYPE_POM );
             File pom = new File( outputDirectoryFile, Constants.ARCHETYPE_POM );
 
