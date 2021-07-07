@@ -38,7 +38,11 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Reader;
 import java.io.Writer;
 
@@ -79,6 +83,13 @@ public final class PomUtils
         dbf.setXIncludeAware( false );
         dbf.setExpandEntityReferences( false );
 
+        InputStream inputStream = PomUtils.class.getClassLoader().getResourceAsStream( "maven-4.0.0.xsd" );
+        Schema schema = SchemaFactory.newInstance( XMLConstants.W3C_XML_SCHEMA_NS_URI )
+                .newSchema( new StreamSource( inputStream ) );
+        dbf.setSchema( schema );
+        dbf.setIgnoringElementContentWhitespace( true );
+        dbf.setNamespaceAware( true );
+
         DocumentBuilder db = dbf.newDocumentBuilder();
         InputSource inputSource = new InputSource();
         inputSource.setCharacterStream( fileReader );
@@ -114,13 +125,7 @@ public final class PomUtils
                 project.appendChild( modules );
             }
 
-            // shift the child node by next two spaces after the parent node spaces
-            modules.appendChild( document.createTextNode( "  " ) );
-
             modules.appendChild( module );
-
-            // shift the end tag </modules>
-            modules.appendChild( document.createTextNode( "\n  " ) );
 
             TransformerFactory tf = TransformerFactory.newInstance();
             tf.setAttribute( XMLConstants.ACCESS_EXTERNAL_DTD, "" );
