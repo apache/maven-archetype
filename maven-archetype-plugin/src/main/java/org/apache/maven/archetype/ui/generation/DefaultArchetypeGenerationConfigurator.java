@@ -37,6 +37,11 @@ import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.context.Context;
+import org.apache.velocity.runtime.RuntimeSingleton;
+import org.apache.velocity.runtime.parser.ParseException;
+import org.apache.velocity.runtime.parser.node.ASTReference;
+import org.apache.velocity.runtime.parser.node.SimpleNode;
+import org.apache.velocity.runtime.visitor.BaseVisitor;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.components.interactivity.PrompterException;
@@ -44,12 +49,17 @@ import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 // TODO: this seems to have more responsibilities than just a configurator
 @Component( role = ArchetypeGenerationConfigurator.class, hint = "default" )
@@ -159,6 +169,9 @@ public class DefaultArchetypeGenerationConfigurator
             throw new ArchetypeGenerationConfigurationFailure( "The defined artifact is not an archetype" );
         }
 
+        List<String> propertiesRequired = archetypeConfiguration.getRequiredProperties();
+        Collections.sort( propertiesRequired, new RequiredPropertyComparator( archetypeConfiguration ) );
+
         Context context = new VelocityContext();
         if ( interactiveMode.booleanValue() )
         {
@@ -168,70 +181,45 @@ public class DefaultArchetypeGenerationConfigurator
             context.put( Constants.VERSION, ad.getVersion() );
             while ( !confirmed )
             {
-                List<String> propertiesRequired = archetypeConfiguration.getRequiredProperties();
-                getLogger().debug( "Required properties before content sort: " + propertiesRequired );
-                Collections.sort( propertiesRequired, new RequiredPropertyComparator( archetypeConfiguration ) );
-                getLogger().debug( "Required properties after content sort: " + propertiesRequired );
-
-                if ( !archetypeConfiguration.isConfigured() )
+                if ( archetypeConfiguration.isConfigured() )
                 {
-                    for ( String requiredProperty : propertiesRequired )
-                    {
-                        if ( !archetypeConfiguration.isConfigured( requiredProperty ) )
-                        {
-                            if ( "package".equals( requiredProperty ) )
-                            {
-                                // if the asked property is 'package', then
-                                // use its default and if not defined,
-                                // use the 'groupId' property value.
-                                String packageDefault = archetypeConfiguration.getDefaultValue( requiredProperty );
-                                packageDefault = ( null == packageDefault || "".equals( packageDefault ) )
-                                    ? archetypeConfiguration.getProperty( "groupId" )
-                                    : archetypeConfiguration.getDefaultValue( requiredProperty );
-
-                                String value =
-                                    getTransitiveDefaultValue( packageDefault, archetypeConfiguration, requiredProperty,
-                                                               context );
-
-                                value = archetypeGenerationQueryer.getPropertyValue( requiredProperty, value, null );
-
-                                archetypeConfiguration.setProperty( requiredProperty, value );
-
-                                context.put( Constants.PACKAGE, value );
-                            }
-                            else
-                            {
-                                String value = archetypeConfiguration.getDefaultValue( requiredProperty );
-
-                                value = getTransitiveDefaultValue( value, archetypeConfiguration, requiredProperty,
-                                                                   context );
-
-                                value = archetypeGenerationQueryer.getPropertyValue( requiredProperty, value,
-                                    archetypeConfiguration.getPropertyValidationRegex( requiredProperty ) );
-
-                                archetypeConfiguration.setProperty( requiredProperty, value );
-
-                                context.put( requiredProperty, value );
-                            }
-                        }
-                        else
-                        {
-                            getLogger().info(
-                                "Using property: " + requiredProperty + " = " + archetypeConfiguration.getProperty(
-                                    requiredProperty ) );
-                            archetypeConfiguration.setProperty( requiredProperty, archetypeConfiguration.getProperty(
-                                requiredProperty ) );
-                        }
-                    }
-                }
-                else
-                {
-
                     for ( String requiredProperty : propertiesRequired )
                     {
                         getLogger().info(
                             "Using property: " + requiredProperty + " = " + archetypeConfiguration.getProperty(
                                 requiredProperty ) );
+                    }
+                }
+                else
+                {
+                    for ( String requiredProperty : propertiesRequired )
+                    {
+                        String value;
+
+                        if ( archetypeConfiguration.isConfigured( requiredProperty ) )
+                        {
+                            getLogger().info(
+                                "Using property: " + requiredProperty + " = " + archetypeConfiguration.getProperty(
+                                    requiredProperty ) );
+
+                            value = archetypeConfiguration.getProperty( requiredProperty );
+                        }
+                        else
+                        {
+                            String defaultValue = archetypeConfiguration.getDefaultValue( requiredProperty );
+
+                            if ( Constants.PACKAGE.equals( requiredProperty ) && StringUtils.isEmpty( defaultValue ) )
+                            {
+                                defaultValue = archetypeConfiguration.getProperty( Constants.GROUP_ID );
+                            }
+                            value = archetypeGenerationQueryer.getPropertyValue( requiredProperty,
+                                            expandEmbeddedTemplateExpressions( defaultValue, requiredProperty, context ),
+                                            archetypeConfiguration.getPropertyValidationRegex( requiredProperty ) );
+                        }
+
+                        archetypeConfiguration.setProperty( requiredProperty, value );
+
+                        context.put( requiredProperty, value );
                     }
                 }
 
@@ -257,15 +245,22 @@ public class DefaultArchetypeGenerationConfigurator
         {
             if ( !archetypeConfiguration.isConfigured() )
             {
-                for ( String requiredProperty : archetypeConfiguration.getRequiredProperties() )
+                for ( String requiredProperty : propertiesRequired )
                 {
-                    if ( !archetypeConfiguration.isConfigured( requiredProperty ) && (
-                        archetypeConfiguration.getDefaultValue( requiredProperty ) != null ) )
+                    if ( archetypeConfiguration.isConfigured( requiredProperty ) )
                     {
-                        String value = archetypeConfiguration.getDefaultValue( requiredProperty );
-                        value = getTransitiveDefaultValue( value, archetypeConfiguration, requiredProperty, context );
-                        archetypeConfiguration.setProperty( requiredProperty, value );
-                        context.put( requiredProperty, value );
+                        context.put( requiredProperty, archetypeConfiguration.getProperty( requiredProperty ) );
+                    }
+                    else
+                    {
+                        String defaultValue = archetypeConfiguration.getDefaultValue( requiredProperty );
+
+                        if ( defaultValue != null )
+                        {
+                            String value = expandEmbeddedTemplateExpressions( defaultValue, requiredProperty, context );
+                            archetypeConfiguration.setProperty( requiredProperty, value );
+                            context.put( requiredProperty, value );
+                        }
                     }
                 }
 
@@ -313,45 +308,23 @@ public class DefaultArchetypeGenerationConfigurator
         request.setProperties( properties );
     }
 
-    private String getTransitiveDefaultValue( String defaultValue, ArchetypeConfiguration archetypeConfiguration,
-                                              String requiredProperty, Context context )
+    private static String expandEmbeddedTemplateExpressions( String originalText, String textDescription, Context context )
     {
-        String result = defaultValue;
-        if ( null == result )
+        if ( StringUtils.contains( originalText, "${" ) )
         {
-            return null;
-        }
-        for ( String property : archetypeConfiguration.getRequiredProperties() )
-        {
-            if ( result.indexOf( "${" + property + "}" ) >= 0 )
+            try ( StringWriter target = new StringWriter() )
             {
-
-                result = StringUtils.replace( result, "${" + property + "}",
-                                              archetypeConfiguration.getProperty( property ) );
+                Velocity.evaluate( context, target, textDescription, originalText );
+                return target.toString();
+            }
+            catch ( IOException ex )
+            {
+                // closing StringWriter shouldn't actually generate any exception
+                throw new RuntimeException( "Exception closing StringWriter", ex );
             }
         }
-        if ( result.contains( "${" ) )
-        {
-            result = evaluateProperty( context, requiredProperty, defaultValue );
-        }
-        return result;
+        return originalText;
     }
-
-
-    private String evaluateProperty( Context context, String property, String value )
-    {
-        
-        try ( StringWriter stringWriter = new StringWriter() )
-        {
-            Velocity.evaluate( context, stringWriter, property, value );
-            return stringWriter.toString();
-        }
-        catch ( Exception ex )
-        {
-            return value;
-        }
-    }
-
 
     private void restoreCommandLineProperties( ArchetypeConfiguration archetypeConfiguration,
                                                Properties executionProperties )
@@ -368,71 +341,118 @@ public class DefaultArchetypeGenerationConfigurator
         }
     }
 
+    void setArchetypeGenerationQueryer( ArchetypeGenerationQueryer archetypeGenerationQueryer )
+    {
+        this.archetypeGenerationQueryer = archetypeGenerationQueryer;
+    }
+
     public static class RequiredPropertyComparator
         implements Comparator<String>
     {
         private final ArchetypeConfiguration archetypeConfiguration;
 
+        private Map<String, Set<String>> propertyReferenceMap;
+
         public RequiredPropertyComparator( ArchetypeConfiguration archetypeConfiguration )
         {
             this.archetypeConfiguration = archetypeConfiguration;
+            propertyReferenceMap = computePropertyReferences();
         }
 
         @Override
         public int compare( String left, String right )
         {
-            String leftDefault = archetypeConfiguration.getDefaultValue( left );
-
-            if ( ( leftDefault != null ) && leftDefault.indexOf( "${" + right + "}" ) >= 0 )
-            { //left contains right
+            if ( references( right, left ) )
+            {
                 return 1;
             }
 
-            String rightDefault = archetypeConfiguration.getDefaultValue( right );
-
-            if ( ( rightDefault != null ) && rightDefault.indexOf( "${" + left + "}" ) >= 0 )
-            { //right contains left
+            if ( references( left, right ) )
+            {
                 return -1;
             }
 
-            return comparePropertyName( left, right );
+            return Integer.compare( propertyReferenceMap.get( left ).size(), propertyReferenceMap.get( right ).size() );
         }
 
-        private int comparePropertyName( String left, String right )
+        private Map<String, Set<String>> computePropertyReferences()
         {
-            if ( "groupId".equals( left ) )
+            Map<String, Set<String>> result = new HashMap<>();
+
+            List<String> requiredProperties = archetypeConfiguration.getRequiredProperties();
+
+            for ( String propertyName : requiredProperties )
             {
-                return -1;
+                final Set<String> referencedPropertyNames = new LinkedHashSet<>();
+
+                String defaultValue = archetypeConfiguration.getDefaultValue( propertyName );
+                if ( StringUtils.contains( defaultValue, "${" ) )
+                {
+                    try
+                    {
+                        final boolean dumpNamespace = false;
+                        SimpleNode node = RuntimeSingleton.parse(
+                                        new StringReader( defaultValue ), propertyName + ".default", dumpNamespace );
+                        node.jjtAccept( new BaseVisitor()
+                        {
+                            @SuppressWarnings( "unchecked" )
+                            @Override
+                            public Object visit( ASTReference node, Object data )
+                            {
+                                ( ( Set<String> ) data ).add( node.getFirstToken().next.image );
+                                return super.visit( node, data );
+                            }
+                        }, referencedPropertyNames );
+                    }
+                    catch ( ParseException e )
+                    {
+                        throw new IllegalStateException( "Unparsable default value for property " + propertyName, e );
+                    }
+                }
+
+                result.put( propertyName, referencedPropertyNames );
             }
-            if ( "groupId".equals( right ) )
+
+            return result;
+        }
+
+        /**
+         * Learn whether one property references another. Semantically, "references
+         * {@code targetProperty}, {@code sourceProperty} (does)."
+         *
+         * @param targetProperty {@link String} denoting property for which the state of
+         *        being-referenced-by-the-property-denoted-by {@code sourceProperty} is desired
+         * @param sourceProperty {@link String} denoting property for which the state of
+         *        references-the-property-denoted-by {@code targetProperty} is desired
+         * @return {@code boolean}
+         */
+        private boolean references( String targetProperty, String sourceProperty )
+        {
+            if ( targetProperty.equals( sourceProperty ) )
             {
-                return 1;
+                return false;
             }
-            if ( "artifactId".equals( left ) )
+            synchronized ( this )
             {
-                return -1;
+                if ( ! propertyReferenceMap.containsKey( sourceProperty ) )
+                // something has changed
+                {
+                   this.propertyReferenceMap = computePropertyReferences(); 
+                }
             }
-            if ( "artifactId".equals( right ) )
+            Set<String> referencedProperties = propertyReferenceMap.get( sourceProperty );
+            if ( referencedProperties.contains( targetProperty ) )
             {
-                return 1;
+                return true;
             }
-            if ( "version".equals( left ) )
+            for ( String referencedProperty : referencedProperties )
             {
-                return -1;
+                if ( references( targetProperty, referencedProperty ) )
+                {
+                    return true;
+                }
             }
-            if ( "version".equals( right ) )
-            {
-                return 1;
-            }
-            if ( "package".equals( left ) )
-            {
-                return -1;
-            }
-            if ( "package".equals( right ) )
-            {
-                return 1;
-            }
-            return left.compareTo( right );
+            return false;
         }
     }
     
