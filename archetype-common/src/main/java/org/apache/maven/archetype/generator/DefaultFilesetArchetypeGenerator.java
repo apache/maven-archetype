@@ -132,7 +132,7 @@ public class DefaultFilesetArchetypeGenerator
                 throw new ArchetypeNotConfigured( exceptionMessage.toString(), missingProperties );
             }
 
-            Context context = prepareVelocityContext( request );
+            Context context = prepareVelocityContext ( request, archetypeDescriptor );
 
             String packageName = request.getPackage();
             String artifactId = request.getArtifactId();
@@ -399,7 +399,8 @@ public class DefaultFilesetArchetypeGenerator
     {
         for ( RequiredProperty requiredProperty : archetypeDescriptor.getRequiredProperties() )
         {
-            if ( StringUtils.isEmpty( request.getProperties().getProperty( requiredProperty.getKey() ) ) )
+            if ( StringUtils.isEmpty( request.getProperties().getProperty( requiredProperty.getKey() ) )
+                    && StringUtils.isEmpty( requiredProperty.getDefaultValue() ) )
             {
                 return false;
             }
@@ -413,7 +414,7 @@ public class DefaultFilesetArchetypeGenerator
         context.put( Constants.PARENT_ARTIFACT_ID, artifactId );
     }
 
-    private Context prepareVelocityContext( ArchetypeGenerationRequest request )
+    private Context prepareVelocityContext( ArchetypeGenerationRequest request, ArchetypeDescriptor archetypeDescript )
     {
         Context context = new VelocityContext();
         context.put( Constants.GROUP_ID, request.getGroupId() );
@@ -445,12 +446,21 @@ public class DefaultFilesetArchetypeGenerator
 
             String value = request.getProperties().getProperty( key );
 
+            String defaultValue = getDefaultValue( key, archetypeDescript );
+
             if ( maybeVelocityExpression( value ) )
             {
                 value = evaluateExpression( context, key, value );
             }
 
-            context.put( key, value );
+            if ( StringUtils.isEmpty ( value ) )
+            {
+                context.put( key, defaultValue );
+            }
+            else
+            {
+                context.put( key, value );
+            }
 
             if ( getLogger().isInfoEnabled() )
             {
@@ -458,6 +468,18 @@ public class DefaultFilesetArchetypeGenerator
             }
         }
         return context;
+    }
+
+    private String getDefaultValue( String key, ArchetypeDescriptor archetypeDescriptor )
+    {
+        for ( RequiredProperty property : archetypeDescriptor.getRequiredProperties() )
+        {
+            if ( property.getKey().equals( key ) )
+            {
+                return property.getDefaultValue();
+            }
+        }
+        return null;
     }
 
     private boolean maybeVelocityExpression( String value )
