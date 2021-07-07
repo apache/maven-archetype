@@ -417,10 +417,13 @@ public class DefaultArchetypeGenerationConfigurator
         }
 
         /**
-         * Semantics of this method are "references {@code targetProperty}, {@code sourceProperty} (does)."
+         * Learn whether one property references another. Semantically, "references
+         * {@code targetProperty}, {@code sourceProperty} (does)."
          *
-         * @param targetProperty
-         * @param sourceProperty
+         * @param targetProperty {@link String} denoting property for which the state of
+         *        being-referenced-by-the-property-denoted-by {@code sourceProperty} is desired
+         * @param sourceProperty {@link String} denoting property for which the state of
+         *        references-the-property-denoted-by {@code targetProperty} is desired
          * @return {@code boolean}
          */
         private boolean references( String targetProperty, String sourceProperty )
