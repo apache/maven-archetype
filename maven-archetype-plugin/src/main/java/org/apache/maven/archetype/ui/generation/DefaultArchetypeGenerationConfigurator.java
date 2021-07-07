@@ -213,7 +213,7 @@ public class DefaultArchetypeGenerationConfigurator
                                 defaultValue = archetypeConfiguration.getProperty( Constants.GROUP_ID );
                             }
                             value = archetypeGenerationQueryer.getPropertyValue( requiredProperty,
-                                            getTransitiveDefaultValue( defaultValue, requiredProperty, context ),
+                                            expandEmbeddedTemplateExpressions( defaultValue, requiredProperty, context ),
                                             archetypeConfiguration.getPropertyValidationRegex( requiredProperty ) );
                         }
 
@@ -257,7 +257,7 @@ public class DefaultArchetypeGenerationConfigurator
 
                         if ( defaultValue != null )
                         {
-                            String value = getTransitiveDefaultValue( defaultValue, requiredProperty, context );
+                            String value = expandEmbeddedTemplateExpressions( defaultValue, requiredProperty, context );
                             archetypeConfiguration.setProperty( requiredProperty, value );
                             context.put( requiredProperty, value );
                         }
@@ -308,14 +308,14 @@ public class DefaultArchetypeGenerationConfigurator
         request.setProperties( properties );
     }
 
-    private String getTransitiveDefaultValue( String defaultValue, String requiredProperty, Context context )
+    private static String expandEmbeddedTemplateExpressions( String originalText, String textDescription, Context context )
     {
-        if ( StringUtils.contains( defaultValue, "${" ) )
+        if ( StringUtils.contains( originalText, "${" ) )
         {
-            try ( StringWriter stringWriter = new StringWriter() )
+            try ( StringWriter target = new StringWriter() )
             {
-                Velocity.evaluate( context, stringWriter, requiredProperty, defaultValue );
-                return stringWriter.toString();
+                Velocity.evaluate( context, target, textDescription, originalText );
+                return target.toString();
             }
             catch ( IOException ex )
             {
@@ -323,7 +323,7 @@ public class DefaultArchetypeGenerationConfigurator
                 throw new RuntimeException( "Exception closing StringWriter", ex );
             }
         }
-        return defaultValue;
+        return originalText;
     }
 
     private void restoreCommandLineProperties( ArchetypeConfiguration archetypeConfiguration,
