@@ -37,6 +37,8 @@ import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.context.Context;
+import org.apache.velocity.context.InternalContextAdapterImpl;
+import org.apache.velocity.runtime.RuntimeServices;
 import org.apache.velocity.runtime.RuntimeSingleton;
 import org.apache.velocity.runtime.parser.ParseException;
 import org.apache.velocity.runtime.parser.node.ASTReference;
@@ -381,6 +383,11 @@ public class DefaultArchetypeGenerationConfigurator
 
             List<String> requiredProperties = archetypeConfiguration.getRequiredProperties();
 
+            final InternalContextAdapterImpl velocityContextAdapter =
+                            new InternalContextAdapterImpl( new VelocityContext() );
+
+            final RuntimeServices velocityRuntime = RuntimeSingleton.getRuntimeServices();
+
             for ( String propertyName : requiredProperties )
             {
                 final Set<String> referencedPropertyNames = new LinkedHashSet<>();
@@ -393,16 +400,18 @@ public class DefaultArchetypeGenerationConfigurator
                         final boolean dumpNamespace = false;
                         SimpleNode node = RuntimeSingleton.parse(
                                         new StringReader( defaultValue ), propertyName + ".default", dumpNamespace );
+
+                        node.init( velocityContextAdapter, velocityRuntime );
+
                         node.jjtAccept( new BaseVisitor()
                         {
-                            @SuppressWarnings( "unchecked" )
                             @Override
                             public Object visit( ASTReference node, Object data )
                             {
-                                ( ( Set<String> ) data ).add( node.getFirstToken().next.image );
+                                referencedPropertyNames.add( node.getRootString() );
                                 return super.visit( node, data );
                             }
-                        }, referencedPropertyNames );
+                        }, velocityRuntime );
                     }
                     catch ( ParseException e )
                     {
@@ -410,6 +419,10 @@ public class DefaultArchetypeGenerationConfigurator
                     }
                 }
 
+                referencedPropertyNames.retainAll( archetypeConfiguration.getRequiredProperties() );
+
+                // handle the case that a property expression #set()s itself:
+                referencedPropertyNames.remove( propertyName );
                 result.put( propertyName, referencedPropertyNames );
             }
 
