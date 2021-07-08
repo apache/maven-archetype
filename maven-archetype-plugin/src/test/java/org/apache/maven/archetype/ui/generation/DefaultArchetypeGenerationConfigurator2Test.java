@@ -186,4 +186,58 @@ public class DefaultArchetypeGenerationConfigurator2Test
 
         assertEquals( "MYSERVICENAME", request.getProperties().get( "serviceUpper" ) );
     }
+
+    public void testArchetype618() throws Exception
+    {
+        RequiredProperty custom = getRequiredProperty( "serviceName" );
+        custom.setKey( "camelArtifact" );
+        custom.setDefaultValue( "${artifactId.class.forName('org.codehaus.plexus.util.StringUtils').capitaliseAllWords($artifactId.replaceAll('[^A-Za-z_\\$0-9]', ' ').replaceFirst('^(\\d)', '_$1').replaceAll('\\d', '$0 ').replaceAll('[A-Z](?=[^A-Z])', ' $0').toLowerCase()).replaceAll('\\s', '')}" );
+        descriptor.addRequiredProperty( custom );
+
+        getRequiredProperty( "artifactId" ).setDefaultValue( null );
+
+        ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
+        request.setArchetypeGroupId( "archetypeGroupId" );
+        request.setArchetypeArtifactId( "archetypeArtifactId" );
+        request.setArchetypeVersion( "archetypeVersion" );
+        Properties properties = new Properties();
+
+        EasyMock.expect( queryer.getPropertyValue( EasyMock.eq("groupName"), EasyMock.anyString(),
+                        EasyMock.<Pattern> isNull() ) ).andReturn( "myGroupName" );
+
+        EasyMock.expect( queryer.getPropertyValue( EasyMock.eq("artifactId"), EasyMock.anyString(),
+                        EasyMock.<Pattern> isNull() ) ).andReturn( "my-service-name" );
+
+        EasyMock.expect( queryer.getPropertyValue( EasyMock.anyString(), EasyMock.anyString(),
+                        EasyMock.<Pattern> anyObject())).andAnswer( new IAnswer<String>() {
+
+                            @Override
+                            public String answer() throws Throwable {
+                                return (String) EasyMock.getCurrentArguments()[1];
+                            }}
+                        ).anyTimes();
+
+        EasyMock.expect( queryer.confirmConfiguration( EasyMock.<ArchetypeConfiguration> anyObject() ) )
+                        .andReturn( Boolean.TRUE );
+
+        EasyMock.replay( queryer );
+        configurator.configureArchetype( request, Boolean.TRUE, properties );
+
+        assertEquals( "MyServiceName", request.getProperties().get( "camelArtifact" ) );
+    }
+
+    private RequiredProperty getRequiredProperty( String propertyName )
+    {
+        if ( propertyName != null )
+        {
+            for ( RequiredProperty candidate : descriptor.getRequiredProperties() )
+            {
+                if ( propertyName.equals( candidate.getKey() ) )
+                {
+                    return candidate;
+                }
+            }
+        }
+        return null;
+    }
 }
