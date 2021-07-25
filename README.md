@@ -21,8 +21,8 @@ Contributing to [Apache Maven Archetype (Plugin)](https://maven.apache.org/arche
 [![Apache License, Version 2.0, January 2004](https://img.shields.io/github/license/apache/maven.svg?label=License)][license]
 [![Maven Central](https://img.shields.io/maven-central/v/org.apache.maven.plugins/maven-archetype-plugin.svg?label=Maven%20Central)](https://search.maven.org/artifact/org.apache.maven.plugins/maven-archetype-plugin)
 [![Reproducible Builds](https://img.shields.io/badge/Reproducible_Builds-ok-green?labelColor=blue)](https://github.com/jvm-repo-rebuild/reproducible-central#org.apache.maven.archetype:archetype)
-[![Jenkins Status](https://img.shields.io/jenkins/s/https/ci-builds.apache.org/job/Maven/job/maven-box/job/maven-archetype/job/master.svg?)][build]
-[![Jenkins tests](https://img.shields.io/jenkins/t/https/ci-builds.apache.org/job/Maven/job/maven-box/job/maven-archetype/job/master.svg?)][test-results]
+[![Jenkins Status](https://img.shields.io/jenkins/s/https/ci-maven.apache.org/job/Maven/job/maven-box/job/maven-archetype/job/master.svg?)][build]
+[![Jenkins tests](https://img.shields.io/jenkins/t/https/ci-maven.apache.org/job/Maven/job/maven-box/job/maven-archetype/job/master.svg?)][test-results]
 
 
 You have found a bug or you have an idea for a cool new feature? Contributing
@@ -96,5 +96,5 @@ Additional Resources
 [code-style]: https://maven.apache.org/developers/conventions/code.html
 [cla]: https://www.apache.org/licenses/#clas
 [maven-wiki]: https://cwiki.apache.org/confluence/display/MAVEN/Index
-[test-results]: https://ci-builds.apache.org/job/Maven/job/maven-box/job/maven-archetype/job/master/lastCompletedBuild/testReport/
-[build]: https://ci-builds.apache.org/job/Maven/job/maven-box/job/maven-archetype/job/master/
+[test-results]: https://ci-maven.apache.org/job/Maven/job/maven-box/job/maven-archetype/job/master/lastCompletedBuild/testReport/
+[build]: https://ci-maven.apache.org/job/Maven/job/maven-box/job/maven-archetype/job/master/
