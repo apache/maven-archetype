@@ -38,11 +38,11 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Reader;
 import java.io.Writer;
 
@@ -83,12 +83,12 @@ public final class PomUtils
         dbf.setXIncludeAware( false );
         dbf.setExpandEntityReferences( false );
 
-        InputStream inputStream = PomUtils.class.getClassLoader().getResourceAsStream( "maven-4.0.0.xsd" );
-        Schema schema = SchemaFactory.newInstance( XMLConstants.W3C_XML_SCHEMA_NS_URI )
-                .newSchema( new StreamSource( inputStream ) );
-        dbf.setSchema( schema );
-        dbf.setIgnoringElementContentWhitespace( true );
-        dbf.setNamespaceAware( true );
+        //InputStream inputStream = PomUtils.class.getClassLoader().getResourceAsStream( "maven-4.0.0.xsd" );
+        //Schema schema = SchemaFactory.newInstance( XMLConstants.W3C_XML_SCHEMA_NS_URI )
+        //        .newSchema( new StreamSource( inputStream ) );
+        //dbf.setSchema( schema );
+        //dbf.setIgnoringElementContentWhitespace( true );
+        //dbf.setNamespaceAware( true );
 
         DocumentBuilder db = dbf.newDocumentBuilder();
         InputSource inputSource = new InputSource();
@@ -139,12 +139,39 @@ public final class PomUtils
             tr.setOutputProperty( "{http://xml.apache.org/xslt}indent-amount", "2" );
             document.getDomConfig().setParameter( "infoset", Boolean.TRUE );
             document.getDocumentElement().normalize();
+
+            removeEmptyNodes( document );
+
             tr.transform( new DOMSource( document ), new StreamResult( fileWriter ) );
             return true;
         }
         else
         {
             return false;
+        }
+    }
+
+    private static void removeEmptyNodes( Document document )
+    {
+        XPathFactory xpathFactory = XPathFactory.newInstance();
+
+        try
+        {
+            // XPath to find empty text nodes.
+            XPathExpression xpathExp = xpathFactory.newXPath().compile( "//text()[normalize-space(.) = '']" );
+            NodeList emptyTextNodes = ( NodeList ) xpathExp.evaluate( document, XPathConstants.NODESET );
+
+            // Remove each empty text node from document.
+            for ( int i = 0; i < emptyTextNodes.getLength(); i++ )
+            {
+                Node emptyTextNode = emptyTextNodes.item( i );
+                emptyTextNode.getParentNode().removeChild( emptyTextNode );
+            }
+        }
+        catch ( XPathExpressionException e )
+        {
+            // requires proper handling
+            e.printStackTrace();
         }
     }
 
