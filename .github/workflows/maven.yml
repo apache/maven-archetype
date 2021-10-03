@@ -42,4 +42,4 @@ jobs:
           java-version: ${{ matrix.java }}
 
       - name: Build with Maven
-        run: mvn install javadoc:javadoc -e -B -V
+        run: mvn install javadoc:javadoc -Prun-its -e -B -V

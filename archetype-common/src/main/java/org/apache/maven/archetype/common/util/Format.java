@@ -544,7 +544,7 @@ public class Format
      * <table>
      * <caption>TextMode details</caption>
      * <tr>
-     * <th align="left">
+     * <th>
      * Text Mode
      * </th>
      * <th>
