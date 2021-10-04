@@ -544,14 +544,14 @@ public class Format
      * <table>
      * <caption>TextMode details</caption>
      * <tr>
-     * <th align="left">
+     * <th>
      * Text Mode
      * </th>
      * <th>
      * Resulting behavior.
      * </th>
      * </tr>
-     * <tr valign="top">
+     * <tr>
      * <td>
      * <i>PRESERVE (Default)</i>
      * </td>
@@ -560,7 +560,7 @@ public class Format
      * or line separators are are added or removed.
      * </td>
      * </tr>
-     * <tr valign="top">
+     * <tr>
      * <td>
      * TRIM_FULL_WHITE
      * </td>
@@ -570,7 +570,7 @@ public class Format
      * printed verbatim, whitespace and all.
      * </td>
      * </tr>
-     * <tr valign="top">
+     * <tr>
      * <td>
      * TRIM
      * </td>
@@ -579,7 +579,7 @@ public class Format
      * trimmed.
      * </td>
      * </tr>
-     * <tr valign="top">
+     * <tr>
      * <td>
      * NORMALIZE
      * </td>

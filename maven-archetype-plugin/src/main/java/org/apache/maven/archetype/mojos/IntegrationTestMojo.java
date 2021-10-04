@@ -94,7 +94,8 @@ import org.codehaus.plexus.util.introspection.ReflectionValueExtractor;
  * to create the parent project for this IT. Parent projects can be nested.</p>
  * 
  * <p>An example structure for such an integration test looks like this</p>
- * <table summary="integration test folder structure">
+ * <table>
+ * <caption>integration test folder structure</caption>
  * <tr>
  * <th>File/Directory</th>
  * <th>Description</th>
