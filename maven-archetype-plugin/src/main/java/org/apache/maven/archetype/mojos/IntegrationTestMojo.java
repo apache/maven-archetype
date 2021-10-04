@@ -95,6 +95,7 @@ import org.codehaus.plexus.util.introspection.ReflectionValueExtractor;
  * 
  * <p>An example structure for such an integration test looks like this</p>
  * <table>
+ * <caption>integration test folder structure</caption>
  * <tr>
  * <th>File/Directory</th>
  * <th>Description</th>
