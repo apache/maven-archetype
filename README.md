@@ -20,7 +20,7 @@ Contributing to [Apache Maven Archetype (Plugin)](https://maven.apache.org/arche
 [![ASF Jira](https://img.shields.io/endpoint?url=https%3A%2F%2Fmaven.apache.org%2Fbadges%2Fasf_jira-ARCHETYPE.json)][jira]
 [![Apache License, Version 2.0, January 2004](https://img.shields.io/github/license/apache/maven.svg?label=License)][license]
 [![Maven Central](https://img.shields.io/maven-central/v/org.apache.maven.plugins/maven-archetype-plugin.svg?label=Maven%20Central)](https://search.maven.org/artifact/org.apache.maven.plugins/maven-archetype-plugin)
-[![Reproducible Builds](https://img.shields.io/badge/Reproducible_Builds-ok-green?labelColor=blue)](https://github.com/jvm-repo-rebuild/reproducible-central#org.apache.maven.archetype:archetype)
+[![Reproducible Builds](https://img.shields.io/badge/Reproducible_Builds-ok-green?labelColor=blue)](https://github.com/jvm-repo-rebuild/reproducible-central#org.apache.maven.archetype:maven-archetype)
 [![Jenkins Status](https://img.shields.io/jenkins/s/https/ci-maven.apache.org/job/Maven/job/maven-box/job/maven-archetype/job/master.svg?)][build]
 [![Jenkins tests](https://img.shields.io/jenkins/t/https/ci-maven.apache.org/job/Maven/job/maven-box/job/maven-archetype/job/master.svg?)][test-results]
 
