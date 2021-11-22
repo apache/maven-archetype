@@ -23,7 +23,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -57,7 +56,6 @@ import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.maven.settings.Settings;
-import org.apache.maven.settings.io.xpp3.SettingsXpp3Writer;
 import org.apache.maven.shared.transfer.artifact.DefaultArtifactCoordinate;
 import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver;
 import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolverException;
@@ -664,6 +662,7 @@ public class IntegrationTestMojo
                 request.setProperties( props );
             }
 
+            File interpolatedSettingsFile = null;
             if ( settingsFile != null )
             {
                 File interpolatedSettingsDirectory =
@@ -673,34 +672,12 @@ public class IntegrationTestMojo
                     FileUtils.deleteDirectory( interpolatedSettingsDirectory );
                 }
                 interpolatedSettingsDirectory.mkdir();
-                File interpolatedSettingsFile =
+                interpolatedSettingsFile =
                     new File( interpolatedSettingsDirectory, "interpolated-" + settingsFile.getName() );
 
                 buildInterpolatedFile( settingsFile, interpolatedSettingsFile );
 
                 request.setUserSettingsFile( interpolatedSettingsFile );
-            }
-            else // Use settings coming from the main Maven build
-            {
-                File mainBuildSettingsDirectory =
-                        new File( project.getBuild().getOutputDirectory(), "archetype-it" );
-                mainBuildSettingsDirectory.mkdir();
-                File mainBuildSettingsFile = new File( mainBuildSettingsDirectory, "archetype-settings.xml" );
-
-                SettingsXpp3Writer settingsWriter = new SettingsXpp3Writer();
-
-                try ( FileWriter fileWriter = new FileWriter( mainBuildSettingsFile ) )
-                {
-                    settingsWriter.write( fileWriter, settings );
-                }
-
-                if ( getLog().isDebugEnabled() )
-                {
-                    getLog().debug( "Created archetype-settings.xml with settings from the main Maven build: "
-                                            + mainBuildSettingsFile.getAbsolutePath() );
-                }
-
-                request.setUserSettingsFile( mainBuildSettingsFile );
             }
 
             try
