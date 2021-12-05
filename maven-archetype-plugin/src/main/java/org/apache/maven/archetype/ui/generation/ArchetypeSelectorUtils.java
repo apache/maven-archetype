@@ -19,7 +19,7 @@ package org.apache.maven.archetype.ui.generation;
  * under the License.
  */
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.archetype.catalog.Archetype;
 
 import java.util.ArrayList;

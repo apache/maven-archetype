@@ -19,7 +19,7 @@ package org.apache.maven.archetype.ui.generation;
  * under the License.
  */
 
-import org.apache.commons.lang.math.NumberUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.ui.ArchetypeDefinition;
 import org.apache.maven.artifact.versioning.ArtifactVersion;
