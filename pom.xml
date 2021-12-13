@@ -234,7 +234,7 @@
       <dependency>
         <groupId>org.sonatype.aether</groupId>
         <artifactId>aether-connector-file</artifactId>
-        <version>1.7</version>
+        <version>1.13.1</version>
       </dependency>
       <dependency>
         <groupId>org.sonatype.aether</groupId>
