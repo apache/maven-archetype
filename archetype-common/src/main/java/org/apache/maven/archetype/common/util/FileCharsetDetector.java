@@ -19,17 +19,16 @@ package org.apache.maven.archetype.common.util;
  * under the License.
  */
 
+import com.ibm.icu.text.CharsetDetector;
+import com.ibm.icu.text.CharsetMatch;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.mozilla.intl.chardet.nsDetector;
-import org.mozilla.intl.chardet.nsICharsetDetectionObserver;
-import org.mozilla.intl.chardet.nsPSMDetector;
 
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Locale;
 
 /**
  * @author rafale
@@ -37,124 +36,32 @@ import java.io.InputStream;
 public class FileCharsetDetector
     extends AbstractLogEnabled
 {
-    private String charset = null;
-
-    private boolean found = false;
+    private final String charset;
 
     public FileCharsetDetector( File detectedFile )
-        throws FileNotFoundException, IOException
+        throws IOException
     {
-        nsDetector det = new nsDetector( nsPSMDetector.ALL );
-
-        det.Init( new nsICharsetDetectionObserver()
-        {
-            @Override
-            @SuppressWarnings( "checkstyle:methodname" )
-            public void Notify( String charset )
-            {
-                FileCharsetDetector.this.charset = charset;
-                FileCharsetDetector.this.found = true;
-            }
-        } );
-
         try ( FileInputStream fileInputStream = new FileInputStream( detectedFile );
-              BufferedInputStream imp = new BufferedInputStream( fileInputStream ) )
+              BufferedInputStream is = new BufferedInputStream( fileInputStream ) )
         {
-            byte[] buf = new byte[1024];
-            int len;
-            boolean done = false;
-            boolean isAscii = true;
+            CharsetDetector detector = new CharsetDetector();
+            detector.setText( is );
+            CharsetMatch match = detector.detect();
 
-            while ( ( len = imp.read( buf, 0, buf.length ) ) != -1 )
-            {
-                // Check if the stream is only ascii.
-                if ( isAscii )
-                {
-                    isAscii = det.isAscii( buf, len );
-                }
-
-                // DoIt if non-ascii and not done yet.
-                if ( !isAscii && !done )
-                {
-                    done = det.DoIt( buf, len, false );
-                    found = done;
-                }
-            }
-            det.DataEnd();
-
-            if ( !isFound() )
-            {
-                String[] prob = det.getProbableCharsets();
-
-                if ( prob.length > 0 )
-                {
-                    charset = prob[0];
-                }
-            }
-
-            if ( isAscii )
-            {
-                charset = "ASCII";
-            }
+            charset = match.getName().toUpperCase( Locale.ENGLISH );
         }
     }
 
 
 
     public FileCharsetDetector( InputStream detectedStream )
-        throws FileNotFoundException, IOException
+        throws IOException
     {
-        nsDetector det = new nsDetector( nsPSMDetector.ALL );
+        CharsetDetector detector = new CharsetDetector();
+        detector.setText( detectedStream );
+        CharsetMatch match = detector.detect();
 
-        det.Init( new nsICharsetDetectionObserver()
-        {
-            @Override
-            @SuppressWarnings( "checkstyle:methodname" )
-            public void Notify( String charset )
-            {
-                FileCharsetDetector.this.charset = charset;
-                FileCharsetDetector.this.found = true;
-            }
-        } );
-
-        BufferedInputStream imp = new BufferedInputStream( detectedStream );
-
-        byte[] buf = new byte[1024];
-        int len;
-        boolean done = false;
-        boolean isAscii = true;
-
-        while ( ( len = imp.read( buf, 0, buf.length ) ) != -1 )
-        {
-            // Check if the stream is only ascii.
-            if ( isAscii )
-            {
-                isAscii = det.isAscii( buf, len );
-            }
-
-            // DoIt if non-ascii and not done yet.
-            if ( !isAscii && !done )
-            {
-                done = det.DoIt( buf, len, false );
-                found = done;
-            }
-        }
-        det.DataEnd();
-
-        if ( !isFound() )
-        {
-            String[] prob = det.getProbableCharsets();
-
-            if ( prob.length > 0 )
-            {
-                charset = prob[0];
-            }
-        }
-
-        if ( isAscii )
-        {
-            charset = "ASCII";
-        }
+        charset = match.getName().toUpperCase( Locale.ENGLISH );
     }
 
     public String getCharset()
@@ -164,6 +71,6 @@ public class FileCharsetDetector
 
     public boolean isFound()
     {
-        return found;
+        return true;
     }
 }
