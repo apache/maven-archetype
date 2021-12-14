@@ -73,11 +73,11 @@ import org.apache.maven.model.Resource;
 import org.apache.maven.model.Scm;
 import org.apache.maven.model.Site;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
-import org.jdom.Content;
-import org.jdom.DefaultJDOMFactory;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.Text;
+import org.jdom2.Content;
+import org.jdom2.DefaultJDOMFactory;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.Text;
 
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;

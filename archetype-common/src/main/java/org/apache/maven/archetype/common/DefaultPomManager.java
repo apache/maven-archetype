@@ -43,8 +43,8 @@ import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.codehaus.plexus.util.xml.Xpp3DomUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -221,7 +221,7 @@ public class DefaultPomManager
         String fileEncoding =
             StringUtils.isEmpty( model.getModelEncoding() ) ? "UTF-8" : model.getModelEncoding();
 
-        org.jdom.Document doc;
+        org.jdom2.Document doc;
         try ( InputStream inputStream = new FileInputStream( initialPomFile ) )
         {
             SAXBuilder builder = new SAXBuilder();
@@ -229,10 +229,8 @@ public class DefaultPomManager
         }
         catch ( JDOMException exc )
         {
-            IOException ioe = new IOException( "Cannot parse the POM by JDOM while reading " + initialPomFile + ": "
-                                               + exc.getMessage() );
-            ioe.initCause( exc );
-            throw ioe;
+            throw new IOException( "Cannot parse the POM by JDOM while reading " + initialPomFile + ": "
+                                               + exc.getMessage(), exc );
         }
 
 

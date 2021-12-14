@@ -52,7 +52,7 @@ package org.apache.maven.archetype.common.util;
  * on the JDOM Project, please see <http://www.jdom.org/>.
  */
 
-import org.jdom.Namespace;
+import org.jdom2.Namespace;
 
 import java.util.Stack;
 

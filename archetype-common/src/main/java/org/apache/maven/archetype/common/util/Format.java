@@ -52,7 +52,7 @@ package org.apache.maven.archetype.common.util;
  * on the JDOM Project, please see <http://www.jdom.org/>.
  */
 
-import org.jdom.output.EscapeStrategy;
+import org.jdom2.output.EscapeStrategy;
 
 import java.lang.reflect.Method;
 
@@ -616,7 +616,7 @@ public class Format
          * Mode for text normalization (left and right trim plus internal
          * whitespace is normalized to a single space.
          *
-         * @see org.jdom.Element#getTextNormalize
+         * @see org.jdom2.Element#getTextNormalize
          */
         public static final TextMode NORMALIZE = new TextMode( "NORMALIZE" );
 
