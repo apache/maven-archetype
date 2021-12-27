@@ -74,7 +74,7 @@
 
   <properties>
     <maven.archetype.scm.devConnection>scm:git:https://gitbox.apache.org/repos/asf/maven-archetype.git</maven.archetype.scm.devConnection>
-    <mavenVersion>3.0</mavenVersion>
+    <mavenVersion>3.8.4</mavenVersion>
     <wagonVersion>3.3.3</wagonVersion><!-- provided by Maven core -->
     <javaVersion>7</javaVersion>
     <netbeans.hint.useExternalMaven>true</netbeans.hint.useExternalMaven>
