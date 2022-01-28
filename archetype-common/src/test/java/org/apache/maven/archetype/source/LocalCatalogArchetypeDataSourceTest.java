@@ -27,9 +27,11 @@ import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Writer;
 import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.ProjectBuildingRequest;
-import org.apache.maven.repository.internal.MavenRepositorySystemSession;
+import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
 import org.codehaus.plexus.PlexusTestCase;
-import org.sonatype.aether.impl.internal.SimpleLocalRepositoryManager;
+import org.eclipse.aether.DefaultRepositorySystemSession;
+import org.eclipse.aether.internal.impl.SimpleLocalRepositoryManagerFactory;
+import org.eclipse.aether.repository.LocalRepository;
 
 public class LocalCatalogArchetypeDataSourceTest extends PlexusTestCase
 {
@@ -65,8 +67,10 @@ public class LocalCatalogArchetypeDataSourceTest extends PlexusTestCase
         ArchetypeManager archetype = lookup( ArchetypeManager.class );
 
         ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
-        MavenRepositorySystemSession repositorySession = new MavenRepositorySystemSession();
-        repositorySession.setLocalRepositoryManager( new SimpleLocalRepositoryManager( getTestFile( "target/test-classes/repositories/test-catalog" ) ) );
+        DefaultRepositorySystemSession repositorySession = MavenRepositorySystemUtils.newSession();
+        LocalRepository localRepo = new LocalRepository( getTestFile( "target/test-classes/repositories/test-catalog" ) );
+        repositorySession.setLocalRepositoryManager(
+                new SimpleLocalRepositoryManagerFactory().newInstance( repositorySession, localRepo ) );
         buildingRequest.setRepositorySession( repositorySession );
         
         

@@ -32,10 +32,12 @@ import org.apache.maven.artifact.repository.MavenArtifactRepository;
 import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
 import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.ProjectBuildingRequest;
-import org.apache.maven.repository.internal.MavenRepositorySystemSession;
+import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
-import org.sonatype.aether.impl.internal.SimpleLocalRepositoryManager;
+import org.eclipse.aether.DefaultRepositorySystemSession;
+import org.eclipse.aether.internal.impl.SimpleLocalRepositoryManagerFactory;
+import org.eclipse.aether.repository.LocalRepository;
 
 /**
  *
@@ -87,8 +89,10 @@ public class InternalCatalogArchetypesVerificationTest
                 .setLocalRepository( localRepository );
             
             ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
-            MavenRepositorySystemSession repositorySession = new MavenRepositorySystemSession();
-            repositorySession.setLocalRepositoryManager( new SimpleLocalRepositoryManager( localRepository.getBasedir() ) );
+            DefaultRepositorySystemSession repositorySession = MavenRepositorySystemUtils.newSession();
+            LocalRepository localRepo = new LocalRepository( request.getLocalRepository().getBasedir() );
+            repositorySession.setLocalRepositoryManager(
+                    new SimpleLocalRepositoryManagerFactory().newInstance( repositorySession, localRepo ) );
             buildingRequest.setRepositorySession( repositorySession );
             request.setProjectBuildingRequest( buildingRequest );
 

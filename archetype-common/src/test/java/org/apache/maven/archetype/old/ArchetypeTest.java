@@ -1,17 +1,5 @@
 package org.apache.maven.archetype.old;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 /*
  * Copyright 2004-2006 The Apache Software Foundation.
  *
@@ -28,6 +16,18 @@ import java.util.Map;
  * limitations under the License.
  */
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.exception.InvalidPackaging;
 import org.apache.maven.artifact.Artifact;
@@ -42,13 +42,16 @@ import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.ProjectBuildingRequest;
-import org.apache.maven.repository.internal.MavenRepositorySystemSession;
+import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.context.Context;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.codehaus.plexus.velocity.VelocityComponent;
+import org.eclipse.aether.DefaultRepositorySystemSession;
+import org.eclipse.aether.internal.impl.SimpleLocalRepositoryManagerFactory;
+import org.eclipse.aether.repository.LocalRepository;
 import org.sonatype.aether.impl.internal.SimpleLocalRepositoryManager;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -89,8 +92,10 @@ public class ArchetypeTest
         
         ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
         buildingRequest.setRemoteRepositories( remoteRepositories );
-        MavenRepositorySystemSession repositorySession = new MavenRepositorySystemSession();
-        repositorySession.setLocalRepositoryManager( new SimpleLocalRepositoryManager( localRepository.getBasedir() ) );
+        DefaultRepositorySystemSession repositorySession = MavenRepositorySystemUtils.newSession();
+        LocalRepository localRepo = new LocalRepository( localRepository.getBasedir() );
+        repositorySession.setLocalRepositoryManager(
+                new SimpleLocalRepositoryManagerFactory().newInstance( repositorySession, localRepo ) );
         buildingRequest.setRepositorySession( repositorySession );
 
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest()

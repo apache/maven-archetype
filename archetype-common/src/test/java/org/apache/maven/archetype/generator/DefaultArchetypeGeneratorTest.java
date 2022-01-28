@@ -37,11 +37,14 @@ import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.ProjectBuildingRequest;
-import org.apache.maven.repository.internal.MavenRepositorySystemSession;
+import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-import org.sonatype.aether.impl.internal.SimpleLocalRepositoryManager;
+import org.eclipse.aether.DefaultRepositorySystemSession;
+import org.eclipse.aether.internal.impl.SimpleLocalRepositoryManagerFactory;
+import org.eclipse.aether.repository.LocalRepository;
+import org.eclipse.aether.repository.NoLocalRepositoryManagerException;
 
 public class DefaultArchetypeGeneratorTest
     extends AbstractMojoTestCase
@@ -542,7 +545,7 @@ public class DefaultArchetypeGeneratorTest
     }
 
     private ArchetypeGenerationRequest createArchetypeGenerationRequest( String project, Archetype archetype )
-    {
+            throws NoLocalRepositoryManagerException {
         outputDirectory = getBasedir() + "/target/test-classes/projects/" + project;
 
         projectDirectory = new File( outputDirectory, "file-value" );
@@ -564,8 +567,10 @@ public class DefaultArchetypeGeneratorTest
         request.setProperties( ADDITIONAL_PROPERTIES );
         
         ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
-        MavenRepositorySystemSession repositorySession = new MavenRepositorySystemSession();
-        repositorySession.setLocalRepositoryManager( new SimpleLocalRepositoryManager( localRepository.getBasedir() ) );
+        DefaultRepositorySystemSession repositorySession = MavenRepositorySystemUtils.newSession();
+        LocalRepository localRepo = new LocalRepository( request.getLocalRepository().getBasedir() );
+        repositorySession.setLocalRepositoryManager(
+                new SimpleLocalRepositoryManagerFactory().newInstance( repositorySession, localRepo ) );
         buildingRequest.setRepositorySession( repositorySession );
         request.setProjectBuildingRequest( buildingRequest );
 

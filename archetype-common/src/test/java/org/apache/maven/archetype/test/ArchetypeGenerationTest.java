@@ -28,7 +28,7 @@ import org.apache.maven.artifact.repository.MavenArtifactRepository;
 import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
 import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.ProjectBuildingRequest;
-import org.apache.maven.repository.internal.MavenRepositorySystemSession;
+import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
 import org.codehaus.plexus.PlexusTestCase;
 
 import java.io.File;
@@ -37,7 +37,9 @@ import java.util.Properties;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.codehaus.plexus.util.FileUtils;
-import org.sonatype.aether.impl.internal.SimpleLocalRepositoryManager;
+import org.eclipse.aether.DefaultRepositorySystemSession;
+import org.eclipse.aether.internal.impl.SimpleLocalRepositoryManagerFactory;
+import org.eclipse.aether.repository.LocalRepository;
 
 /** @author Jason van Zyl */
 public class ArchetypeGenerationTest
@@ -56,8 +58,10 @@ public class ArchetypeGenerationTest
                 .toURI().toURL().toExternalForm(), "local-repo" );
         
         ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
-        MavenRepositorySystemSession repositorySession = new MavenRepositorySystemSession();
-        repositorySession.setLocalRepositoryManager( new SimpleLocalRepositoryManager( "target/test-classes/repositories/central" ) );
+        DefaultRepositorySystemSession repositorySession = MavenRepositorySystemUtils.newSession();
+        LocalRepository localRepo = new LocalRepository( "target/test-classes/repositories/central" );
+        repositorySession.setLocalRepositoryManager(
+                new SimpleLocalRepositoryManagerFactory().newInstance( repositorySession, localRepo ) );
         buildingRequest.setRepositorySession( repositorySession );
 
         ArchetypeCatalog catalog = archetype.getLocalCatalog( buildingRequest );
