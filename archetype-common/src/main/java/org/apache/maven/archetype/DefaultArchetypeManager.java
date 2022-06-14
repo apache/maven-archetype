@@ -198,6 +198,7 @@ public class DefaultArchetypeManager
         }
         catch ( ArchetypeDataSourceException e )
         {
+            getLogger().warn( "failed to download from remote", e );
             return new ArchetypeCatalog();
         }
     }
