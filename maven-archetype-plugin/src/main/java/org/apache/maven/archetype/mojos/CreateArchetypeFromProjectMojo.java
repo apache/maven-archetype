@@ -197,7 +197,7 @@ public class CreateArchetypeFromProjectMojo extends AbstractMojo {
     /**
      * The directory where the archetype should be created.
      */
-    @Parameter(defaultValue = "${project.build.directory}/generated-sources/archetype")
+    @Parameter(defaultValue = "${project.build.directory}/generated-sources/archetype", property = "outputDirectory")
     private File outputDirectory;
 
     @Parameter(property = "testMode")
