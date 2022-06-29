@@ -446,6 +446,10 @@ public class IntegrationTestMojo
                 actualLine = actualFileReader.readLine();
                 if ( !Objects.equals( refLine, actualLine ) )
                 {
+                    getLog().warn( "Conflict found. Reference line :" );
+                    getLog().warn( refLine );
+                    getLog().warn( "Actual line :" );
+                    getLog().warn( actualLine );
                     return false;
                 }
             }
