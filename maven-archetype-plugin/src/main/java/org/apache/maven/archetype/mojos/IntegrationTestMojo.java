@@ -667,7 +667,7 @@ public class IntegrationTestMojo
             if ( settingsFile != null )
             {
                 File interpolatedSettingsDirectory =
-                    new File( project.getBuild().getOutputDirectory(), "archetype-it" );
+                        new File( project.getBuild().getTestOutputDirectory(), "archetype-it" );
                 if ( interpolatedSettingsDirectory.exists() )
                 {
                     FileUtils.deleteDirectory( interpolatedSettingsDirectory );
@@ -683,7 +683,7 @@ public class IntegrationTestMojo
             else // Use settings coming from the main Maven build
             {
                 File mainBuildSettingsDirectory =
-                        new File( project.getBuild().getOutputDirectory(), "archetype-it" );
+                        new File( project.getBuild().getTestOutputDirectory(), "archetype-it" );
                 mainBuildSettingsDirectory.mkdir();
                 File mainBuildSettingsFile = new File( mainBuildSettingsDirectory, "archetype-settings.xml" );
 
