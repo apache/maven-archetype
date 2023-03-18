@@ -452,6 +452,22 @@ public class FilesetArchetypeCreator
 
         PluginManagement pluginManagement = new PluginManagement();
         pluginManagement.addPlugin( plugin );
+
+        String[][] plugins = new String[][] 
+        {
+            { "maven-resources-plugin", "3.3.0" },
+            { "maven-install-plugin", "3.1.0" },
+            { "maven-deploy-plugin", "3.1.0" }
+        };
+        for ( String[] arr : plugins ) 
+        {
+            Plugin plugin1 = new Plugin();
+            plugin1.setGroupId( "org.apache.maven.plugins" );
+            plugin1.setArtifactId( arr[0] );
+            plugin1.setVersion( arr[1] );
+            pluginManagement.addPlugin( plugin1 );
+        }
+
         model.getBuild().setPluginManagement( pluginManagement );
 
         getLogger().debug( "Creating archetype's pom" );
