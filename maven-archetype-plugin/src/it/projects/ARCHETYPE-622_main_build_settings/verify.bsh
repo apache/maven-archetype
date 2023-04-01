@@ -53,7 +53,7 @@ if ( idx <0 )
     throw new Exception( "test-settings.xml wasn't passed from the main Maven build!: 'local.central (file://' was NOT found in the output! The output was:\n" + content );
 }
 
-String settingsXmlPath = new File("maven-archetype-plugin/target/it/projects/ARCHETYPE-622_main_build_settings/target/classes/archetype-it", "archetype-settings.xml").toPath().toString();
+String settingsXmlPath = new File("maven-archetype-plugin/target/it/projects/ARCHETYPE-622_main_build_settings/target/test-classes/archetype-it", "archetype-settings.xml").toPath().toString();
 settingsXmlPath = settingsXmlPath.replace("\\", "\\\\"); // Windows path handling
 
 boolean usingSettingsFromMainBuild = content.matches("(?s).*\\[DEBUG\\] Reading user settings from .*" + settingsXmlPath + ".*");
