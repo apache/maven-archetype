@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+import groovy.xml.XmlSlurper
 
 def project = new XmlSlurper().parse( new File( basedir, "project/pom.xml" ) )
 assert project.description.text()  == 'Generated with org.apache.maven.archetypes.its:3rdparty-archetype:1.0'
