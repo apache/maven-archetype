@@ -248,7 +248,7 @@
       <dependency>
         <groupId>org.sonatype.aether</groupId>
         <artifactId>aether-spi</artifactId>
-        <version>1.7</version>
+        <version>1.13.1</version>
         <scope>provided</scope>
       </dependency>
       <dependency>
