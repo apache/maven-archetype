@@ -429,6 +429,35 @@ public class DefaultArchetypeGeneratorTest
                     result.getCause().getMessage().startsWith( "Archetype archetypes:basic:1.0 is not configured" )
                         && result.getCause().getMessage().endsWith( "Property property-without-default-4 is missing." ) );
     }
+    
+    public void testGenerateArchetypeWithSameDirectoryExcution()
+            throws Exception
+    {
+        System.out.println( "testGenerateArchetypeWithSameDirectoryExcution" );
+        ArchetypeGenerationRequest request = createArchetypeGenerationRequest( "generate-14", ARCHETYPE_BASIC );
+        request.setCreteBaseDir( false );
+        projectDirectory = new File( outputDirectory );
+        FileUtils.forceDelete( projectDirectory );
+        
+        generateProjectFromArchetype(request);
+        
+        assertTemplateContent( "src/main/java/file/value/package/App.java" );
+        assertTemplateContent( "src/main/java/file/value/package/inner/package/App2.java" );
+        assertTemplateContent( "src/main/c/file/value/package/App.c" );
+        assertTemplateContent( "src/test/java/file/value/package/AppTest.java" );
+        assertTemplateContent( "src/test/c/file/value/package/AppTest.c" );
+        assertTemplateContent( "src/main/resources/App.properties" );
+        assertTemplateContent( "src/main/resources/inner/dir/App2.properties" );
+        assertTemplateContent( "src/main/mdo/App.mdo" );
+        assertTemplateContent( "src/test/resources/AppTest.properties" );
+        assertTemplateContent( "src/test/mdo/AppTest.mdo" );
+    
+        Model model = readPom( new File( projectDirectory, "pom.xml" ) );
+        assertNull( model.getParent() );
+        assertEquals( "file-value", model.getGroupId() );
+        assertEquals( "file-value", model.getArtifactId() );
+        assertEquals( "file-value", model.getVersion() );
+    }
 
     public void testGenerateArchetypeWithPostScriptIncluded()
         throws Exception

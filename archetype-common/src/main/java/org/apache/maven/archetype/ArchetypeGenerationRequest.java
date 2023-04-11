@@ -66,6 +66,8 @@ public class ArchetypeGenerationRequest
     private String archetypeVersion;
 
     private String archetypeGoals = "";
+    
+    private boolean createBaseDir = true;
 
     /**
      * The URL to the archetype repository
@@ -402,6 +404,18 @@ public class ArchetypeGenerationRequest
     {
         this.filter = filter;
 
+        return this;
+    }
+    
+    public boolean isCreateBaseDir()
+    {
+        return createBaseDir;
+    }
+    
+    public ArchetypeGenerationRequest setCreateBaseDir( boolean createBaseDir )
+    {
+        this.createBaseDir = createBaseDir;
+        
         return this;
     }
 }
