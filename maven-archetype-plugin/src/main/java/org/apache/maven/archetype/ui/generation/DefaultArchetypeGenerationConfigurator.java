@@ -210,7 +210,7 @@ public class DefaultArchetypeGenerationConfigurator
                         {
                             String defaultValue = archetypeConfiguration.getDefaultValue( requiredProperty );
 
-                            if ( Constants.PACKAGE.equals( requiredProperty ) && StringUtils.isEmpty( defaultValue ) )
+                            if ( Constants.PACKAGE.equals( requiredProperty ) && (defaultValue == null || defaultValue.isEmpty()) )
                             {
                                 defaultValue = archetypeConfiguration.getProperty( Constants.GROUP_ID );
                             }

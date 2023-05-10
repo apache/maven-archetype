@@ -329,7 +329,7 @@ public class IntegrationTestMojo
             }
 
             String errors = errorWriter.toString();
-            if ( !StringUtils.isEmpty( errors ) )
+            if ( !(errors == null || errors.isEmpty()) )
             {
                 throw new MojoExecutionException( errors );
             }
@@ -499,7 +499,7 @@ public class IntegrationTestMojo
 
             String goals = FileUtils.fileRead( goalFile );
 
-            if ( StringUtils.isNotEmpty( goals ) )
+            if ( goals != null && !goals.isEmpty() )
             {
                 invokePostArchetypeGenerationGoals( goals.trim(), new File( basedir, request.getArtifactId() ),
                                                     goalFile );
@@ -560,17 +560,17 @@ public class IntegrationTestMojo
         
         Properties archetypePomProperties = loadProperties( archetypePomPropertiesFile );
         String groupId = archetypePomProperties.getProperty( Constants.GROUP_ID );
-        if ( StringUtils.isEmpty( groupId ) )
+        if ( groupId == null || groupId.isEmpty() )
         {
             throw new MojoExecutionException( "Property " + Constants.GROUP_ID + " not set in " + archetypePomPropertiesFile );
         }
         String artifactId = archetypePomProperties.getProperty( Constants.ARTIFACT_ID );
-        if ( StringUtils.isEmpty( artifactId ) )
+        if ( artifactId == null || artifactId.isEmpty() )
         {
             throw new MojoExecutionException( "Property " + Constants.ARTIFACT_ID + " not set in " + archetypePomPropertiesFile );
         }
         String version = archetypePomProperties.getProperty( Constants.VERSION );
-        if ( StringUtils.isEmpty( version ) )
+        if ( version == null || version.isEmpty() )
         {
             throw new MojoExecutionException( "Property " + Constants.VERSION + " not set in " + archetypePomPropertiesFile );
         }
@@ -979,7 +979,7 @@ public class IntegrationTestMojo
 
             Object value = properties.get( key );
 
-            return ( value != null ? value : this.mavenProject.getProperties().get( key ) );
+            return value != null ? value : this.mavenProject.getProperties().get( key );
 
         }
 

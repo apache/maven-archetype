@@ -46,7 +46,6 @@ import org.apache.maven.wagon.repository.Repository;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.util.ReaderFactory;
-import org.codehaus.plexus.util.StringUtils;
 
 /**
  * @author Jason van Zyl
@@ -415,7 +414,7 @@ public class RemoteCatalogArchetypeDataSource extends CatalogArchetypeDataSource
         boolean result = false;
 
         // simple checks first to short circuit processing below.
-        if ( StringUtils.isEmpty( mirrorLayout ) || WILDCARD.equals( mirrorLayout ) )
+        if ( (mirrorLayout == null || mirrorLayout.isEmpty()) || WILDCARD.equals( mirrorLayout ) )
         {
             result = true;
         }

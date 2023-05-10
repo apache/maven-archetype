@@ -229,12 +229,12 @@ public class CreateProjectFromArchetypeMojo
 
         String postArchetypeGenerationGoals = request.getArchetypeGoals();
 
-        if ( StringUtils.isEmpty( postArchetypeGenerationGoals ) )
+        if ( postArchetypeGenerationGoals == null || postArchetypeGenerationGoals.isEmpty() )
         {
             postArchetypeGenerationGoals = goals;
         }
 
-        if ( StringUtils.isNotEmpty( postArchetypeGenerationGoals ) )
+        if ( postArchetypeGenerationGoals != null && !postArchetypeGenerationGoals.isEmpty() )
         {
             invokePostArchetypeGenerationGoals( postArchetypeGenerationGoals, artifactId );
         }

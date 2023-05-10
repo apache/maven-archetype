@@ -144,7 +144,7 @@ public class DefaultArchetypeCreationConfigurator
                         getLogger().debug( "Asking for project's package" );
                         archetypeConfiguration.setProperty(
                                                             Constants.PACKAGE,
-                                                            archetypeCreationQueryer.getPackage( StringUtils.isEmpty( resolvedPackage ) ? archetypeConfiguration.getDefaultValue( Constants.PACKAGE )
+                                                            archetypeCreationQueryer.getPackage( (resolvedPackage == null || resolvedPackage.isEmpty()) ? archetypeConfiguration.getDefaultValue( Constants.PACKAGE )
                                                                             : resolvedPackage ) );
                     }
                 } // </editor-fold>
@@ -262,7 +262,7 @@ public class DefaultArchetypeCreationConfigurator
 
         if ( StringUtils.isEmpty( properties.getProperty( Constants.PACKAGE /*, properties.getProperty ( Constants.PACKAGE_NAME ) */ ) ) )
         {
-            if ( StringUtils.isEmpty( resolvedPackage ) )
+            if ( resolvedPackage == null || resolvedPackage.isEmpty() )
             {
                 resolvedPackage = project.getGroupId();
             }

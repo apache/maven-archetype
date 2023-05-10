@@ -25,7 +25,6 @@ import org.codehaus.plexus.components.interactivity.InputHandler;
 import org.codehaus.plexus.components.interactivity.OutputHandler;
 import org.codehaus.plexus.components.interactivity.Prompter;
 import org.codehaus.plexus.components.interactivity.PrompterException;
-import org.codehaus.plexus.util.StringUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -61,7 +60,7 @@ public class ArchetypePrompter
 
         String line = readLine();
 
-        if ( StringUtils.isEmpty( line ) )
+        if ( line == null || line.isEmpty() )
         {
             line = defaultReply;
         }
@@ -84,7 +83,7 @@ public class ArchetypePrompter
 
             line = readLine();
 
-            if ( StringUtils.isEmpty( line ) )
+            if ( line == null || line.isEmpty() )
             {
                 line = defaultReply;
             }
