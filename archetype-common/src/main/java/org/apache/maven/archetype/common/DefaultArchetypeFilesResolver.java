@@ -71,8 +71,8 @@ public class DefaultArchetypeFilesResolver
     public List<String> filterFiles( String moduleOffset, FileSet fileSet, List<String> archetypeResources )
     {
         ListScanner scanner = new ListScanner();
-        scanner.setBasedir( ( ( moduleOffset == null || moduleOffset.isEmpty() ) ? "" : ( moduleOffset + File.separatorChar ) )
-                                + fileSet.getDirectory() );
+        scanner.setBasedir( ( ( moduleOffset == null || moduleOffset.isEmpty() ) ? ""
+                : ( moduleOffset + File.separatorChar ) ) + fileSet.getDirectory() );
         scanner.setIncludes( fileSet.getIncludes() );
         scanner.setExcludes( fileSet.getExcludes() );
         scanner.setCaseSensitive( true );
