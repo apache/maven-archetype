@@ -329,7 +329,7 @@ public class IntegrationTestMojo
             }
 
             String errors = errorWriter.toString();
-            if ( !(errors == null || errors.isEmpty()) )
+            if ( !( errors == null || errors.isEmpty() ) )
             {
                 throw new MojoExecutionException( errors );
             }

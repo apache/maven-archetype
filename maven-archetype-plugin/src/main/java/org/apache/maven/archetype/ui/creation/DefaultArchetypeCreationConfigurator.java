@@ -144,7 +144,7 @@ public class DefaultArchetypeCreationConfigurator
                         getLogger().debug( "Asking for project's package" );
                         archetypeConfiguration.setProperty(
                                                             Constants.PACKAGE,
-                                                            archetypeCreationQueryer.getPackage( (resolvedPackage == null || resolvedPackage.isEmpty()) ? archetypeConfiguration.getDefaultValue( Constants.PACKAGE )
+                                                            archetypeCreationQueryer.getPackage( ( resolvedPackage == null || resolvedPackage.isEmpty() ) ? archetypeConfiguration.getDefaultValue( Constants.PACKAGE )
                                                                             : resolvedPackage ) );
                     }
                 } // </editor-fold>

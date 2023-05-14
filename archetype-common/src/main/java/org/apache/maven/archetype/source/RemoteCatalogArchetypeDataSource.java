@@ -414,7 +414,7 @@ public class RemoteCatalogArchetypeDataSource extends CatalogArchetypeDataSource
         boolean result = false;
 
         // simple checks first to short circuit processing below.
-        if ( (mirrorLayout == null || mirrorLayout.isEmpty()) || WILDCARD.equals( mirrorLayout ) )
+        if ( ( mirrorLayout == null || mirrorLayout.isEmpty() ) || WILDCARD.equals( mirrorLayout ) )
         {
             result = true;
         }
