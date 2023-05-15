@@ -297,7 +297,7 @@ public class CreateArchetypeFromProjectMojo
     {
         List<String> filteredExtensions = new ArrayList<>();
 
-        if ( StringUtils.isNotEmpty( archetypeFilteredExtentions ) )
+        if ( archetypeFilteredExtentions != null && !archetypeFilteredExtentions.isEmpty() )
         {
             filteredExtensions.addAll( Arrays.asList( StringUtils.split( archetypeFilteredExtentions, "," ) ) );
 
@@ -309,7 +309,7 @@ public class CreateArchetypeFromProjectMojo
             Properties properties = PropertyUtils.loadProperties( propertyFile );
 
             String extensions = properties.getProperty( Constants.ARCHETYPE_FILTERED_EXTENSIONS );
-            if ( StringUtils.isNotEmpty( extensions ) )
+            if ( extensions != null && !extensions.isEmpty() )
             {
                 filteredExtensions.addAll( Arrays.asList( StringUtils.split( extensions, "," ) ) );
             }
@@ -331,7 +331,7 @@ public class CreateArchetypeFromProjectMojo
     {
         List<String> resultingLanguages = new ArrayList<>();
 
-        if ( StringUtils.isNotEmpty( archetypeLanguages ) )
+        if ( archetypeLanguages != null && !archetypeLanguages.isEmpty() )
         {
             resultingLanguages.addAll( Arrays.asList( StringUtils.split( archetypeLanguages, "," ) ) );
 
@@ -343,7 +343,7 @@ public class CreateArchetypeFromProjectMojo
             Properties properties = PropertyUtils.loadProperties( propertyFile );
 
             String languages = properties.getProperty( Constants.ARCHETYPE_LANGUAGES );
-            if ( StringUtils.isNotEmpty( languages ) )
+            if ( languages != null && !languages.isEmpty() )
             {
                 resultingLanguages.addAll( Arrays.asList( StringUtils.split( languages, "," ) ) );
             }

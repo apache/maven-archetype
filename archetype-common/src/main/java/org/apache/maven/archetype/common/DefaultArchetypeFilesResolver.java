@@ -71,8 +71,8 @@ public class DefaultArchetypeFilesResolver
     public List<String> filterFiles( String moduleOffset, FileSet fileSet, List<String> archetypeResources )
     {
         ListScanner scanner = new ListScanner();
-        scanner.setBasedir( ( StringUtils.isEmpty( moduleOffset ) ? "" : ( moduleOffset + File.separatorChar ) )
-                                + fileSet.getDirectory() );
+        scanner.setBasedir( ( ( moduleOffset == null || moduleOffset.isEmpty() ) ? ""
+                : ( moduleOffset + File.separatorChar ) ) + fileSet.getDirectory() );
         scanner.setIncludes( fileSet.getIncludes() );
         scanner.setExcludes( fileSet.getExcludes() );
         scanner.setCaseSensitive( true );
@@ -282,7 +282,7 @@ public class DefaultArchetypeFilesResolver
         String common = "";
 
         String difference = StringUtils.difference( packageName, templatePackage );
-        if ( StringUtils.isNotEmpty( difference ) )
+        if ( difference != null && !difference.isEmpty() )
         {
             String temporaryCommon =
                 StringUtils.substring( templatePackage, 0, templatePackage.lastIndexOf( difference ) );

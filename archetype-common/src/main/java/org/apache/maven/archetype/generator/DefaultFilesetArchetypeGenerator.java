@@ -323,12 +323,12 @@ public class DefaultFilesetArchetypeGenerator
 
     private String getEncoding( String archetypeEncoding )
     {
-        return StringUtils.isEmpty( archetypeEncoding ) ? "UTF-8" : archetypeEncoding;
+        return ( archetypeEncoding == null || archetypeEncoding.isEmpty() ) ? "UTF-8" : archetypeEncoding;
     }
 
     private String getOffsetSeparator( String moduleOffset )
     {
-        return StringUtils.isEmpty( moduleOffset ) ? "/" : ( "/" + moduleOffset + "/" );
+        return ( moduleOffset == null || moduleOffset.isEmpty() ) ? "/" : ( "/" + moduleOffset + "/" );
     }
 
     private File getOutputFile( String template, String directory, File outputDirectoryFile, boolean packaged,
@@ -569,7 +569,7 @@ public class DefaultFilesetArchetypeGenerator
             processFilesetModule( rootArtifactId, moduleArtifactId,
                                   archetypeResources, new File( moduleOutputDirectoryFile, Constants.ARCHETYPE_POM ),
                                   archetypeZipFile,
-                                  ( StringUtils.isEmpty( moduleOffset ) ? "" : ( moduleOffset + "/" ) )
+                                  ( ( moduleOffset == null || moduleOffset.isEmpty() ) ? "" : ( moduleOffset + "/" ) )
                                       + StringUtils.replace( project.getDir(), "${rootArtifactId}", rootArtifactId ),
                                   pom, moduleOutputDirectoryFile, packageName, project, context );
         }
@@ -778,7 +778,7 @@ public class DefaultFilesetArchetypeGenerator
 
     private void restoreParentArtifactId( Context context, String parentArtifactId )
     {
-        if ( StringUtils.isEmpty( parentArtifactId ) )
+        if ( parentArtifactId == null || parentArtifactId.isEmpty() )
         {
             context.remove( Constants.PARENT_ARTIFACT_ID );
         }

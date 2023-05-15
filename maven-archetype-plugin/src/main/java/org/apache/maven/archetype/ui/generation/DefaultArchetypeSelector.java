@@ -226,7 +226,7 @@ public class DefaultArchetypeSelector
     private void updateRepository( ArchetypeDefinition definition, Archetype archetype )
     {
         String repository = archetype.getRepository();
-        if ( StringUtils.isNotEmpty( repository ) )
+        if ( repository != null && !repository.isEmpty() )
         {
             definition.setRepository( repository );
         }

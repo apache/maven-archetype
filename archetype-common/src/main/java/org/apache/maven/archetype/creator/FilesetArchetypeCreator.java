@@ -1647,7 +1647,7 @@ public class FilesetArchetypeCreator
 
     private void restoreArtifactId( Properties properties, String artifactId )
     {
-        if ( StringUtils.isEmpty( artifactId ) )
+        if ( artifactId == null || artifactId.isEmpty() )
         {
             properties.remove( Constants.ARTIFACT_ID );
         }
@@ -1659,7 +1659,7 @@ public class FilesetArchetypeCreator
 
     private void restoreParentArtifactId( Properties properties, String parentArtifactId )
     {
-        if ( StringUtils.isEmpty( parentArtifactId ) )
+        if ( parentArtifactId == null || parentArtifactId.isEmpty() )
         {
             properties.remove( Constants.PARENT_ARTIFACT_ID );
         }
@@ -1743,7 +1743,7 @@ public class FilesetArchetypeCreator
             }
             else
             {
-                if ( StringUtils.isEmpty( extension ) )
+                if ( extension == null || extension.isEmpty() )
                 {
                     includes.add( "**/*" );
                 }
