@@ -138,7 +138,8 @@ public class FilesetArchetypeCreator
         try
         {
             File archetypePomFile = createArchetypeProjectPom( project, request.getProjectBuildingRequest(),
-                                                               configurationProperties, outputDirectory );
+                                                               configurationProperties, outputDirectory,
+                                                               defaultEncoding );
 
             File archetypeResourcesDirectory = new File( outputDirectory, getTemplateOutputDirectory() );
 
@@ -391,10 +392,15 @@ public class FilesetArchetypeCreator
      * Create the archetype project pom.xml file, that will be used to build the archetype.
      */
     private File createArchetypeProjectPom( MavenProject project, ProjectBuildingRequest buildingRequest,
-                                            Properties configurationProperties, File projectDir )
+                                            Properties configurationProperties, File projectDir,
+                                            String defaultEncoding )
         throws TemplateCreationException, IOException
     {
         Model model = new Model();
+        if ( StringUtils.isNotBlank( defaultEncoding ) )
+        {
+            model.getProperties().put( "project.build.sourceEncoding", defaultEncoding );
+        }
         model.setModelVersion( "4.0.0" );
         // these values should be retrieved from the request with sensible defaults
         model.setGroupId( configurationProperties.getProperty( Constants.ARCHETYPE_GROUP_ID, project.getGroupId() ) );
