@@ -18,6 +18,10 @@
  */
 package org.apache.maven.archetype.source;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -42,23 +46,27 @@ import org.apache.maven.wagon.WagonException;
 import org.apache.maven.wagon.authentication.AuthenticationInfo;
 import org.apache.maven.wagon.proxy.ProxyInfo;
 import org.apache.maven.wagon.repository.Repository;
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.util.ReaderFactory;
 
 /**
  * @author Jason van Zyl
  */
-@Component(role = ArchetypeDataSource.class, hint = "remote-catalog")
+@Singleton
+@Named("remote-catalog")
 public class RemoteCatalogArchetypeDataSource extends CatalogArchetypeDataSource implements ArchetypeDataSource {
-    @Requirement
-    private Map<String, Wagon> wagons;
+    private final Map<String, Wagon> wagons;
 
-    @Requirement
-    private LegacySupport legacySupport;
+    private final LegacySupport legacySupport;
 
-    @Requirement
-    private SettingsDecrypter settingsDecrypter;
+    private final SettingsDecrypter settingsDecrypter;
+
+    @Inject
+    public RemoteCatalogArchetypeDataSource(
+            Map<String, Wagon> wagons, LegacySupport legacySupport, SettingsDecrypter settingsDecrypter) {
+        this.wagons = wagons;
+        this.legacySupport = legacySupport;
+        this.settingsDecrypter = settingsDecrypter;
+    }
 
     //    Should be used for mirror/proxy/authentication
     //    available since M3.2.3

@@ -27,12 +27,12 @@ import java.util.Locale;
 
 import com.ibm.icu.text.CharsetDetector;
 import com.ibm.icu.text.CharsetMatch;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.apache.maven.archetype.LoggingSupport;
 
 /**
  * @author rafale
  */
-public class FileCharsetDetector extends AbstractLogEnabled {
+public class FileCharsetDetector extends LoggingSupport {
     private final String charset;
 
     public FileCharsetDetector(File detectedFile) throws IOException {

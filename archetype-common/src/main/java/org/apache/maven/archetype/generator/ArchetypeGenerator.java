@@ -27,8 +27,6 @@ import org.apache.maven.archetype.ArchetypeGenerationResult;
  * Generate a Maven project from an archetype.
  */
 public interface ArchetypeGenerator {
-    String ROLE = ArchetypeGenerator.class.getName();
-
     void generateArchetype(ArchetypeGenerationRequest request, ArchetypeGenerationResult result);
 
     void generateArchetype(ArchetypeGenerationRequest request, File archetypeFile, ArchetypeGenerationResult result);

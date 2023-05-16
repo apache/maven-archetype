@@ -45,9 +45,7 @@ import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Writer;
 import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.ProjectBuildingRequest;
-import org.apache.maven.repository.internal.MavenRepositorySystemSession;
 import org.codehaus.plexus.PlexusTestCase;
-import org.sonatype.aether.impl.internal.SimpleLocalRepositoryManager;
 
 public class LocalCatalogArchetypeDataSourceTest extends PlexusTestCase {
 

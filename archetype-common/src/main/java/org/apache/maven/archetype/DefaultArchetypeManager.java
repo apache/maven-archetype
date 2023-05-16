@@ -18,6 +18,10 @@
  */
 package org.apache.maven.archetype;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -34,24 +38,29 @@ import org.apache.maven.archetype.source.ArchetypeDataSource;
 import org.apache.maven.archetype.source.ArchetypeDataSourceException;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.project.ProjectBuildingRequest;
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.IOUtil;
 
 /**
  * @author Jason van Zyl
  */
-@Component(role = ArchetypeManager.class)
-public class DefaultArchetypeManager extends AbstractLogEnabled implements ArchetypeManager {
-    @Requirement(hint = "fileset")
-    private ArchetypeCreator creator;
+@Singleton
+@Named
+public class DefaultArchetypeManager extends LoggingSupport implements ArchetypeManager {
+    private final ArchetypeCreator creator;
 
-    @Requirement
-    private ArchetypeGenerator generator;
+    private final ArchetypeGenerator generator;
 
-    @Requirement(role = ArchetypeDataSource.class)
-    private Map<String, ArchetypeDataSource> archetypeSources;
+    private final Map<String, ArchetypeDataSource> archetypeSources;
+
+    @Inject
+    public DefaultArchetypeManager(
+            @Named("fileset") ArchetypeCreator creator,
+            ArchetypeGenerator generator,
+            Map<String, ArchetypeDataSource> archetypeSources) {
+        this.creator = creator;
+        this.generator = generator;
+        this.archetypeSources = archetypeSources;
+    }
 
     @Override
     public ArchetypeCreationResult createArchetypeFromProject(ArchetypeCreationRequest request) {

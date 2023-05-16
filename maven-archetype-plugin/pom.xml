@@ -39,7 +39,7 @@
   <name>Maven Archetype Plugin</name>
 
   <prerequisites>
-    <maven>${mavenVersion}</maven>
+    <maven>3.2.5</maven>
   </prerequisites>
 
   <properties>
@@ -69,15 +69,8 @@
     </dependency>
 
     <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-compat</artifactId>
-      <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.codehaus.plexus</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
+      <groupId>javax.inject</groupId>
+      <artifactId>javax.inject</artifactId>
     </dependency>
 
     <dependency>
@@ -95,18 +88,10 @@
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-archiver</artifactId>
-      <version>3.5.1</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-archiver</artifactId>
-      <version>4.2.2</version>
-    </dependency>
-    <!-- Required for the integration tests, dependency is only to define build order -->
-    <dependency>
-      <groupId>org.apache.maven.archetype</groupId>
-      <artifactId>archetype-packaging</artifactId>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
@@ -120,11 +105,7 @@
     <dependency>
       <groupId>org.apache.maven.plugin-tools</groupId>
       <artifactId>maven-plugin-annotations</artifactId>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-component-annotations</artifactId>
+      <scope>provided</scope>
     </dependency>
 
     <dependency>
@@ -138,7 +119,6 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.8.1</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
@@ -146,7 +126,7 @@
     </dependency>
     <dependency>
       <groupId>org.apache.velocity</groupId>
-      <artifactId>velocity</artifactId>
+      <artifactId>velocity-engine-core</artifactId>
     </dependency>
     <dependency>
       <groupId>commons-collections</groupId>
@@ -155,7 +135,24 @@
     <dependency>
       <groupId>org.apache.maven.shared</groupId>
       <artifactId>maven-script-interpreter</artifactId>
-      <version>1.2</version>
+    </dependency>
+
+    <!-- Required for the integration tests, dependency is only to define build order -->
+    <dependency>
+      <groupId>org.apache.maven.archetype</groupId>
+      <artifactId>archetype-packaging</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-compat</artifactId>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.codehaus.plexus</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
@@ -166,7 +163,6 @@
     <dependency>
       <groupId>org.easymock</groupId>
       <artifactId>easymock</artifactId>
-      <version>3.6</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -271,7 +267,6 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-invoker-plugin</artifactId>
-            <version>3.5.1</version>
             <configuration>
               <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
             </configuration>
@@ -320,30 +315,6 @@
                 <configuration>
                   <ignoreFailures>${maven.it.failure.ignore}</ignoreFailures>
                 </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>ciProfile</id>
-      <activation>
-        <property>
-          <name>enableCiProfile</name>
-          <value>true</value>
-        </property>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-docck-plugin</artifactId>
-            <version>1.1</version>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>check</goal>
-                </goals>
               </execution>
             </executions>
           </plugin>

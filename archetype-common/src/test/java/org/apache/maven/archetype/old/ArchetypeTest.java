@@ -44,14 +44,12 @@ import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.ProjectBuildingRequest;
-import org.apache.maven.repository.internal.MavenRepositorySystemSession;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.context.Context;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.codehaus.plexus.velocity.VelocityComponent;
-import org.sonatype.aether.impl.internal.SimpleLocalRepositoryManager;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.xmlunit.matchers.CompareMatcher.isIdenticalTo;
@@ -70,8 +68,7 @@ public class ArchetypeTest extends PlexusTestCase {
         // This needs to be encapsulated in a maven test case.
         // ----------------------------------------------------------------------
 
-        ArtifactRepositoryLayout layout =
-                (ArtifactRepositoryLayout) getContainer().lookup(ArtifactRepositoryLayout.ROLE);
+        ArtifactRepositoryLayout layout = getContainer().lookup(ArtifactRepositoryLayout.class);
 
         String mavenRepoLocal =
                 getTestFile("target/local-repository").toURI().toURL().toString();
@@ -151,7 +148,10 @@ public class ArchetypeTest extends PlexusTestCase {
 
             velocity.getEngine()
                     .mergeTemplate(
-                            OldArchetype.ARCHETYPE_RESOURCES + "/" + OldArchetype.ARCHETYPE_POM, context, writer);
+                            OldArchetype.ARCHETYPE_RESOURCES + "/" + OldArchetype.ARCHETYPE_POM,
+                            "UTF-8",
+                            context,
+                            writer);
         } finally {
             Thread.currentThread().setContextClassLoader(old);
         }
@@ -413,6 +413,6 @@ public class ArchetypeTest extends PlexusTestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        archetype = (OldArchetype) lookup(OldArchetype.ROLE);
+        archetype = (OldArchetype) lookup(OldArchetype.class);
     }
 }

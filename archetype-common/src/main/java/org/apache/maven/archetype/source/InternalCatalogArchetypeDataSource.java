@@ -18,6 +18,9 @@
  */
 package org.apache.maven.archetype.source;
 
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -25,13 +28,13 @@ import java.io.Reader;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.project.ProjectBuildingRequest;
-import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.util.ReaderFactory;
 
 /**
  * @author Jason van Zyl
  */
-@Component(role = ArchetypeDataSource.class, hint = "internal-catalog")
+@Singleton
+@Named("internal-catalog")
 public class InternalCatalogArchetypeDataSource extends CatalogArchetypeDataSource {
 
     @Override

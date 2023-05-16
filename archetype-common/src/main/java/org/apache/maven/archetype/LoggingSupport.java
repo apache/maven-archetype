@@ -16,14 +16,31 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.maven.archetype.creator;
+package org.apache.maven.archetype;
 
-import org.apache.maven.archetype.ArchetypeCreationRequest;
-import org.apache.maven.archetype.ArchetypeCreationResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-/**
- * Create an archetype from a project.
- */
-public interface ArchetypeCreator {
-    void createArchetype(ArchetypeCreationRequest request, ArchetypeCreationResult result);
+import static java.util.Objects.requireNonNull;
+
+public abstract class LoggingSupport {
+    private final Logger logger = getLogger(getClass());
+
+    private static final String GUICE_ENHANCED = "$$EnhancerByGuice$$";
+
+    private static boolean isEnhancedByGuice(final Class<?> klazz) {
+        return klazz.getName().contains(GUICE_ENHANCED);
+    }
+
+    private static Logger getLogger(final Class<?> klazz) {
+        requireNonNull(klazz);
+        if (isEnhancedByGuice(klazz)) {
+            return LoggerFactory.getLogger(klazz.getSuperclass());
+        }
+        return LoggerFactory.getLogger(klazz);
+    }
+
+    protected Logger getLogger() {
+        return logger;
+    }
 }

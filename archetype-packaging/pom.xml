@@ -31,4 +31,11 @@
   <name>Maven Archetype Packaging</name>
   <description>'maven-archetype' packaging configuration for archetypes.</description>
 
+  <dependencies>
+    <dependency>
+      <groupId>javax.inject</groupId>
+      <artifactId>javax.inject</artifactId>
+    </dependency>
+  </dependencies>
+
 </project>

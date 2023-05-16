@@ -18,6 +18,10 @@
  */
 package org.apache.maven.archetype.creator;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -41,6 +45,7 @@ import java.util.Set;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.maven.archetype.ArchetypeCreationRequest;
 import org.apache.maven.archetype.ArchetypeCreationResult;
+import org.apache.maven.archetype.LoggingSupport;
 import org.apache.maven.archetype.common.ArchetypeFilesResolver;
 import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.common.PomManager;
@@ -67,9 +72,6 @@ import org.apache.maven.shared.invoker.DefaultInvocationRequest;
 import org.apache.maven.shared.invoker.InvocationRequest;
 import org.apache.maven.shared.invoker.InvocationResult;
 import org.apache.maven.shared.invoker.Invoker;
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
@@ -85,19 +87,25 @@ import static org.apache.commons.io.IOUtils.write;
  * Create a 2.x Archetype project from a project. Since 2.0-alpha-5, an integration-test named "basic" is created along
  * the archetype itself to provide immediate test when building the archetype.
  */
-@Component(role = ArchetypeCreator.class, hint = "fileset")
-public class FilesetArchetypeCreator extends AbstractLogEnabled implements ArchetypeCreator {
+@Singleton
+@Named("fileset")
+public class FilesetArchetypeCreator extends LoggingSupport implements ArchetypeCreator {
     private static final String DEFAULT_OUTPUT_DIRECTORY =
             "target" + File.separator + "generated-sources" + File.separator + "archetype";
 
-    @Requirement
-    private ArchetypeFilesResolver archetypeFilesResolver;
+    private final ArchetypeFilesResolver archetypeFilesResolver;
 
-    @Requirement
-    private PomManager pomManager;
+    private final PomManager pomManager;
 
-    @Requirement
-    private Invoker invoker;
+    private final Invoker invoker;
+
+    @Inject
+    public FilesetArchetypeCreator(
+            ArchetypeFilesResolver archetypeFilesResolver, PomManager pomManager, Invoker invoker) {
+        this.archetypeFilesResolver = archetypeFilesResolver;
+        this.pomManager = pomManager;
+        this.invoker = invoker;
+    }
 
     @Override
     public void createArchetype(ArchetypeCreationRequest request, ArchetypeCreationResult result) {

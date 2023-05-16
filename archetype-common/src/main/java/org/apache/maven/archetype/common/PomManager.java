@@ -32,8 +32,6 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.xml.sax.SAXException;
 
 public interface PomManager {
-    String ROLE = PomManager.class.getName();
-
     void addModule(File basedirPom, String artifactId)
             throws IOException, ParserConfigurationException, TransformerException, SAXException, InvalidPackaging,
                     ArchetypeTemplateProcessingException;

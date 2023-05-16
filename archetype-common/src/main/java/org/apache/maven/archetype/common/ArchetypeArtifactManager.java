@@ -31,8 +31,6 @@ import org.apache.maven.project.ProjectBuildingRequest;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 public interface ArchetypeArtifactManager {
-    String ROLE = ArchetypeArtifactManager.class.getName();
-
     Model getArchetypePom(File jar) throws XmlPullParserException, UnknownArchetype, IOException;
 
     /**

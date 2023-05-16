@@ -18,6 +18,9 @@
  */
 package org.apache.maven.archetype.generator;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
@@ -43,6 +46,7 @@ import java.util.zip.ZipFile;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
+import org.apache.maven.archetype.LoggingSupport;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
 import org.apache.maven.archetype.common.ArchetypeFilesResolver;
 import org.apache.maven.archetype.common.Constants;
@@ -62,9 +66,6 @@ import org.apache.maven.archetype.metadata.RequiredProperty;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.context.Context;
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
@@ -72,25 +73,34 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.codehaus.plexus.velocity.VelocityComponent;
 import org.xml.sax.SAXException;
 
-@Component(role = FilesetArchetypeGenerator.class)
-public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled implements FilesetArchetypeGenerator {
-    @Requirement
-    private ArchetypeArtifactManager archetypeArtifactManager;
+@Singleton
+@Named
+public class DefaultFilesetArchetypeGenerator extends LoggingSupport implements FilesetArchetypeGenerator {
+    private final ArchetypeArtifactManager archetypeArtifactManager;
 
-    @Requirement
-    private ArchetypeFilesResolver archetypeFilesResolver;
+    private final ArchetypeFilesResolver archetypeFilesResolver;
 
-    @Requirement
-    private PomManager pomManager;
+    private final PomManager pomManager;
 
-    @Requirement
-    private VelocityComponent velocity;
+    private final VelocityComponent velocity;
 
     /**
      * Pattern used to detect tokens in a string. Tokens are any text surrounded
      * by the delimiter <code>__</code>.
      */
     private static final Pattern TOKEN_PATTERN = Pattern.compile("__((?:[^_]+_)*[^_]+)__");
+
+    @Inject
+    public DefaultFilesetArchetypeGenerator(
+            ArchetypeArtifactManager archetypeArtifactManager,
+            ArchetypeFilesResolver archetypeFilesResolver,
+            PomManager pomManager,
+            VelocityComponent velocity) {
+        this.archetypeArtifactManager = archetypeArtifactManager;
+        this.archetypeFilesResolver = archetypeFilesResolver;
+        this.pomManager = pomManager;
+        this.velocity = velocity;
+    }
 
     @Override
     public void generateArchetype(ArchetypeGenerationRequest request, File archetypeFile)
@@ -690,7 +700,15 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
         pomManager.addParent(pom, basedirPom);
     }
 
-    @SuppressWarnings("deprecation")
+    private boolean templateExists(String templateName) {
+        try {
+            velocity.getEngine().getTemplate(templateName);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     private boolean processTemplate(
             File outFile, Context context, String templateFileName, String encoding, boolean failIfExists)
             throws IOException, OutputFileExists, ArchetypeGenerationFailure {
@@ -698,8 +716,8 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
 
         String localTemplateFileName = templateFileName.replace('/', File.separatorChar);
         if (!templateFileName.equals(localTemplateFileName)
-                && !velocity.getEngine().templateExists(templateFileName)
-                && velocity.getEngine().templateExists(localTemplateFileName)) {
+                && !templateExists(templateFileName)
+                && templateExists(localTemplateFileName)) {
             templateFileName = localTemplateFileName;
         }
 

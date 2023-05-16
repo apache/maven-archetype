@@ -36,11 +36,9 @@ import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.ProjectBuildingRequest;
-import org.apache.maven.repository.internal.MavenRepositorySystemSession;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-import org.sonatype.aether.impl.internal.SimpleLocalRepositoryManager;
 
 public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
     // archetypes prepared by antrun execution (see pom.xml) from src/test/archetypes
@@ -511,7 +509,7 @@ public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
 
         remoteRepository = repositories + "/central";
 
-        generator = (ArchetypeGenerator) lookup(ArchetypeGenerator.ROLE);
+        generator = (ArchetypeGenerator) lookup(ArchetypeGenerator.class);
         assertNotNull(generator);
         assertNotNull(getVariableValueFromObject(generator, "archetypeArtifactManager"));
         assertNotNull(getVariableValueFromObject(generator, "oldArchetype"));

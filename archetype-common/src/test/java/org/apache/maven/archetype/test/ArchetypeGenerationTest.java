@@ -32,15 +32,13 @@ import org.apache.maven.artifact.repository.MavenArtifactRepository;
 import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
 import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.ProjectBuildingRequest;
-import org.apache.maven.repository.internal.MavenRepositorySystemSession;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
-import org.sonatype.aether.impl.internal.SimpleLocalRepositoryManager;
 
 /** @author Jason van Zyl */
 public class ArchetypeGenerationTest extends PlexusTestCase {
     public void testProjectGenerationFromAnArchetype() throws Exception {
-        ArchetypeManager archetype = (ArchetypeManager) lookup(ArchetypeManager.ROLE);
+        ArchetypeManager archetype = (ArchetypeManager) lookup(ArchetypeManager.class);
 
         // In the embedder the localRepository will be retrieved from the embedder itself and users won't
         // have to go through this muck.

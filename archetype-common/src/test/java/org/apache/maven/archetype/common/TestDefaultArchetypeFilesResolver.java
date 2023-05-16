@@ -21,11 +21,14 @@ package org.apache.maven.archetype.common;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.TestCase;
 import org.apache.maven.archetype.metadata.FileSet;
+import org.junit.Test;
 
-public class TestDefaultArchetypeFilesResolver extends TestCase {
-    public void testResourceFiltering() throws Exception {
+import static org.junit.Assert.assertEquals;
+
+public class TestDefaultArchetypeFilesResolver {
+    @Test
+    public void testResourceFiltering() {
         FileSet fileSet = new FileSet();
 
         fileSet.addInclude("**/*.java");
