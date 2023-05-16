@@ -1130,6 +1130,24 @@ public class FilesetArchetypeCreator
                 pom.setVersion( "${" + Constants.VERSION + "}" );
             }
 
+            final String pomPackage = pomReversedProperties.getProperty( Constants.PACKAGE );
+            final String varPackage = "${" + Constants.PACKAGE + "}";
+            final Properties properties = pom.getProperties();
+            final Properties modiedProperties = new Properties();
+            for ( Map.Entry<Object, Object> entry : properties.entrySet() )
+            {
+                String keyVal = (String) entry.getValue();
+                if ( keyVal != null && keyVal.startsWith( pomPackage ) )
+                {
+                    final String newVal = StringUtils.replace( keyVal, pomPackage, varPackage );
+                    modiedProperties.put( entry.getKey(), newVal );
+                }
+            }
+            if ( !modiedProperties.isEmpty() )
+            {
+                properties.putAll( modiedProperties );
+            }
+
             pom.setName( getReversedPlainContent( pom.getName(), pomReversedProperties ) );
             pom.setDescription( getReversedPlainContent( pom.getDescription(), pomReversedProperties ) );
             pom.setUrl( getReversedPlainContent( pom.getUrl(), pomReversedProperties ) );
