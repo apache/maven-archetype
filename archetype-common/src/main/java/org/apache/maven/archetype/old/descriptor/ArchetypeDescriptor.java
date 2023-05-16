@@ -1,3 +1,21 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package org.apache.maven.archetype.old.descriptor;
 
 /*
@@ -24,8 +42,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ArchetypeDescriptor
-{
+public class ArchetypeDescriptor {
     private String id;
 
     private List<String> sources;
@@ -81,8 +98,7 @@ public class ArchetypeDescriptor
      */
     private boolean allowPartial;
 
-    public ArchetypeDescriptor()
-    {
+    public ArchetypeDescriptor() {
         sources = new ArrayList<>();
 
         resources = new ArrayList<>();
@@ -108,157 +124,128 @@ public class ArchetypeDescriptor
     //
     // ----------------------------------------------------------------------
 
-    public String getId()
-    {
+    public String getId() {
         return id;
     }
 
-    public void setId( String id )
-    {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public void addSource( String source )
-    {
-        sources.add( source );
+    public void addSource(String source) {
+        sources.add(source);
 
-        putSourceDescriptor( source, new TemplateDescriptor() );
+        putSourceDescriptor(source, new TemplateDescriptor());
     }
 
-    public List<String> getSources()
-    {
+    public List<String> getSources() {
         return sources;
     }
 
-    public void putSourceDescriptor( String source, TemplateDescriptor descriptor )
-    {
-        sourcesDescriptors.put( source, descriptor );
+    public void putSourceDescriptor(String source, TemplateDescriptor descriptor) {
+        sourcesDescriptors.put(source, descriptor);
     }
 
-    public TemplateDescriptor getSourceDescriptor( String source )
-    {
-        return sourcesDescriptors.get( source );
+    public TemplateDescriptor getSourceDescriptor(String source) {
+        return sourcesDescriptors.get(source);
     }
 
-    public Map<String, TemplateDescriptor> getSourcesDescriptors()
-    {
+    public Map<String, TemplateDescriptor> getSourcesDescriptors() {
         return sourcesDescriptors;
     }
 
-    public void addTestSource( String testSource )
-    {
-        testSources.add( testSource );
+    public void addTestSource(String testSource) {
+        testSources.add(testSource);
 
-        putTestSourceDescriptor( testSource, new TemplateDescriptor() );
+        putTestSourceDescriptor(testSource, new TemplateDescriptor());
     }
 
-    public List<String> getTestSources()
-    {
+    public List<String> getTestSources() {
         return testSources;
     }
 
-    public void putTestSourceDescriptor( String testSource, TemplateDescriptor descriptor )
-    {
-        testSourcesDescriptors.put( testSource, descriptor );
+    public void putTestSourceDescriptor(String testSource, TemplateDescriptor descriptor) {
+        testSourcesDescriptors.put(testSource, descriptor);
     }
 
-    public TemplateDescriptor getTestSourceDescriptor( String testSource )
-    {
-        return testSourcesDescriptors.get( testSource );
+    public TemplateDescriptor getTestSourceDescriptor(String testSource) {
+        return testSourcesDescriptors.get(testSource);
     }
 
-    public Map<String, TemplateDescriptor> getTestSourcesDescriptors()
-    {
+    public Map<String, TemplateDescriptor> getTestSourcesDescriptors() {
         return testSourcesDescriptors;
     }
 
-    public void addResource( String resource )
-    {
-        resources.add( resource );
+    public void addResource(String resource) {
+        resources.add(resource);
 
-        putResourceDescriptor( resource, new TemplateDescriptor() );
+        putResourceDescriptor(resource, new TemplateDescriptor());
     }
 
-    public List<String> getResources()
-    {
+    public List<String> getResources() {
         return resources;
     }
 
-    public void putResourceDescriptor( String resource, TemplateDescriptor descriptor )
-    {
-        resourcesDescriptors.put( resource, descriptor );
+    public void putResourceDescriptor(String resource, TemplateDescriptor descriptor) {
+        resourcesDescriptors.put(resource, descriptor);
     }
 
-    public TemplateDescriptor getResourceDescriptor( String resource )
-    {
-        return resourcesDescriptors.get( resource );
+    public TemplateDescriptor getResourceDescriptor(String resource) {
+        return resourcesDescriptors.get(resource);
     }
 
-    public Map<String, TemplateDescriptor> getReourcesDescriptors()
-    {
+    public Map<String, TemplateDescriptor> getReourcesDescriptors() {
         return resourcesDescriptors;
     }
 
-    public void addTestResource( String testResource )
-    {
-        testResources.add( testResource );
-        putTestResourceDescriptor( testResource, new TemplateDescriptor() );
+    public void addTestResource(String testResource) {
+        testResources.add(testResource);
+        putTestResourceDescriptor(testResource, new TemplateDescriptor());
     }
 
-    public List<String> getTestResources()
-    {
+    public List<String> getTestResources() {
         return testResources;
     }
 
-    public void putTestResourceDescriptor( String testResource, TemplateDescriptor descriptor )
-    {
-        testResourcesDescriptors.put( testResource, descriptor );
+    public void putTestResourceDescriptor(String testResource, TemplateDescriptor descriptor) {
+        testResourcesDescriptors.put(testResource, descriptor);
     }
 
-    public TemplateDescriptor getTestResourceDescriptor( String testResource )
-    {
-        return testResourcesDescriptors.get( testResource );
+    public TemplateDescriptor getTestResourceDescriptor(String testResource) {
+        return testResourcesDescriptors.get(testResource);
     }
 
-    public Map<String, TemplateDescriptor> getTestReourcesDescriptors()
-    {
+    public Map<String, TemplateDescriptor> getTestReourcesDescriptors() {
         return testResourcesDescriptors;
     }
 
-    public void addSiteResource( String siteResource )
-    {
-        siteResources.add( siteResource );
+    public void addSiteResource(String siteResource) {
+        siteResources.add(siteResource);
 
-        putSiteResourceDescriptor( siteResource, new TemplateDescriptor() );
+        putSiteResourceDescriptor(siteResource, new TemplateDescriptor());
     }
 
-    public List<String> getSiteResources()
-    {
+    public List<String> getSiteResources() {
         return siteResources;
     }
 
-    public void putSiteResourceDescriptor( String siteResource, TemplateDescriptor descriptor )
-    {
-        siteResourcesDescriptors.put( siteResource, descriptor );
+    public void putSiteResourceDescriptor(String siteResource, TemplateDescriptor descriptor) {
+        siteResourcesDescriptors.put(siteResource, descriptor);
     }
 
-    public TemplateDescriptor getSiteResourceDescriptor( String siteResource )
-    {
-        return siteResourcesDescriptors.get( siteResource );
+    public TemplateDescriptor getSiteResourceDescriptor(String siteResource) {
+        return siteResourcesDescriptors.get(siteResource);
     }
 
-    public Map<String, TemplateDescriptor> getSiteReourcesDescriptors()
-    {
+    public Map<String, TemplateDescriptor> getSiteReourcesDescriptors() {
         return siteResourcesDescriptors;
     }
 
-    public boolean isAllowPartial()
-    {
+    public boolean isAllowPartial() {
         return allowPartial;
     }
 
-    public void setAllowPartial( boolean allowPartial )
-    {
+    public void setAllowPartial(boolean allowPartial) {
         this.allowPartial = allowPartial;
     }
 }

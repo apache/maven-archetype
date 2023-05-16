@@ -1,3 +1,21 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package org.apache.maven.archetype.ui;
 
 /*
@@ -19,9 +37,6 @@ package org.apache.maven.archetype.ui;
  * under the License.
  */
 
-import org.apache.maven.archetype.common.Constants;
-import org.codehaus.plexus.util.StringUtils;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,8 +44,10 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
-public class ArchetypeConfiguration
-{
+import org.apache.maven.archetype.common.Constants;
+import org.codehaus.plexus.util.StringUtils;
+
+public class ArchetypeConfiguration {
     private String groupId;
 
     private String artifactId;
@@ -41,23 +58,19 @@ public class ArchetypeConfiguration
 
     private String goals;
 
-    public String getDescription()
-    {
+    public String getDescription() {
         return description;
     }
 
-    public void setDescription( String description )
-    {
+    public void setDescription(String description) {
         this.description = description;
     }
 
-    public String getUrl()
-    {
+    public String getUrl() {
         return url;
     }
 
-    public void setUrl( String url )
-    {
+    public void setUrl(String url) {
         this.url = url;
     }
 
@@ -67,128 +80,104 @@ public class ArchetypeConfiguration
 
     private List<String> requiredProperties;
 
-    public void addRequiredProperty( String string )
-    {
-        getRequiredProperties().add( string );
+    public void addRequiredProperty(String string) {
+        getRequiredProperties().add(string);
     }
 
-    public String getArtifactId()
-    {
+    public String getArtifactId() {
         return artifactId;
     }
 
-    public String getGoals()
-    {
+    public String getGoals() {
         return goals;
     }
 
-    public String getGroupId()
-    {
+    public String getGroupId() {
         return groupId;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public List<String> getRequiredProperties()
-    {
-        if ( requiredProperties == null )
-        {
+    public List<String> getRequiredProperties() {
+        if (requiredProperties == null) {
             requiredProperties = new ArrayList<>();
         }
 
         return requiredProperties;
     }
 
-    public String getVersion()
-    {
+    public String getVersion() {
         return version;
     }
 
-    public void removeRequiredProperty( String string )
-    {
-        getRequiredProperties().remove( string );
+    public void removeRequiredProperty(String string) {
+        getRequiredProperties().remove(string);
     }
 
-    public void setArtifactId( String artifactId )
-    {
+    public void setArtifactId(String artifactId) {
         this.artifactId = artifactId;
     }
 
-    public void setGoals( String goals )
-    {
+    public void setGoals(String goals) {
         this.goals = goals;
     }
 
-    public void setGroupId( String groupId )
-    {
+    public void setGroupId(String groupId) {
         this.groupId = groupId;
     }
 
-    public void setName( String name )
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public void setRequiredProperties( List<String> requiredProperties )
-    {
+    public void setRequiredProperties(List<String> requiredProperties) {
         this.requiredProperties = requiredProperties;
     }
 
-    public void setVersion( String version )
-    {
+    public void setVersion(String version) {
         this.version = version;
     }
 
-    public void reset()
-    {
+    public void reset() {
         properties.clear();
     }
 
     private Properties properties = new Properties();
 
-    public void setProperty( String requiredProperty, String propertyValue )
-    {
-        properties.setProperty( requiredProperty, propertyValue );
+    public void setProperty(String requiredProperty, String propertyValue) {
+        properties.setProperty(requiredProperty, propertyValue);
     }
 
-    public String getProperty( String property )
-    {
-        return properties.getProperty( property, null );
+    public String getProperty(String property) {
+        return properties.getProperty(property, null);
     }
 
-    public Properties getProperties()
-    {
+    public Properties getProperties() {
         return properties;
     }
 
-    public Properties toProperties()
-    {
+    public Properties toProperties() {
         Properties result = new Properties();
 
-        result.putAll( properties );
+        result.putAll(properties);
 
-        result.setProperty( Constants.ARCHETYPE_GROUP_ID, StringUtils.isNotEmpty( getGroupId() ) ? getGroupId() : "" );
-        result.setProperty( Constants.ARCHETYPE_ARTIFACT_ID,
-                            StringUtils.isNotEmpty( getArtifactId() ) ? getArtifactId() : "" );
-        result.setProperty( Constants.ARCHETYPE_VERSION, StringUtils.isNotEmpty( getVersion() ) ? getVersion() : "" );
+        result.setProperty(Constants.ARCHETYPE_GROUP_ID, StringUtils.isNotEmpty(getGroupId()) ? getGroupId() : "");
+        result.setProperty(
+                Constants.ARCHETYPE_ARTIFACT_ID, StringUtils.isNotEmpty(getArtifactId()) ? getArtifactId() : "");
+        result.setProperty(Constants.ARCHETYPE_VERSION, StringUtils.isNotEmpty(getVersion()) ? getVersion() : "");
 
-        if ( StringUtils.isNotEmpty( getGoals() ) )
-        {
-            result.setProperty( Constants.ARCHETYPE_POST_GENERATION_GOALS, getGoals() );
+        if (StringUtils.isNotEmpty(getGoals())) {
+            result.setProperty(Constants.ARCHETYPE_POST_GENERATION_GOALS, getGoals());
         }
 
         return result;
     }
 
-    public boolean isConfigured()
-    {
-        for ( String requiredProperty : getRequiredProperties() )
-        {
-            if ( StringUtils.isEmpty( properties.getProperty( requiredProperty ) ) )
-            {
+    public boolean isConfigured() {
+        for (String requiredProperty : getRequiredProperties()) {
+            if (StringUtils.isEmpty(properties.getProperty(requiredProperty))) {
                 return false;
             }
         }
@@ -196,48 +185,39 @@ public class ArchetypeConfiguration
         return true;
     }
 
-    public boolean isConfigured( String requiredProperties )
-    {
-        return StringUtils.isNotBlank( properties.getProperty( requiredProperties ) );
+    public boolean isConfigured(String requiredProperties) {
+        return StringUtils.isNotBlank(properties.getProperty(requiredProperties));
     }
 
     private Properties defaultProperties = new Properties();
 
-    public void setDefaultProperty( String requiredProperty, String propertyValue )
-    {
-        defaultProperties.setProperty( requiredProperty, propertyValue );
+    public void setDefaultProperty(String requiredProperty, String propertyValue) {
+        defaultProperties.setProperty(requiredProperty, propertyValue);
     }
 
-    public String getDefaultValue( String requiredProperty )
-    {
-        return defaultProperties.getProperty( requiredProperty, null );
+    public String getDefaultValue(String requiredProperty) {
+        return defaultProperties.getProperty(requiredProperty, null);
     }
 
-    public Properties getDefaultValues()
-    {
+    public Properties getDefaultValues() {
         return defaultProperties;
     }
 
     Map<String, Pattern> propertiesValidationPatterns = new HashMap<>();
 
-    public void setPropertyValidationRegex( String requiredProperty, String regex )
-    {
-        propertiesValidationPatterns.put( requiredProperty, Pattern.compile( regex ) );
+    public void setPropertyValidationRegex(String requiredProperty, String regex) {
+        propertiesValidationPatterns.put(requiredProperty, Pattern.compile(regex));
     }
 
-    public Pattern getPropertyValidationRegex( String requiredProperty )
-    {
-        return propertiesValidationPatterns.get( requiredProperty );
+    public Pattern getPropertyValidationRegex(String requiredProperty) {
+        return propertiesValidationPatterns.get(requiredProperty);
     }
 
-    public boolean validatePropertyValue( String property, String value )
-    {
-        Pattern pattern = propertiesValidationPatterns.get( property );
-        if ( pattern == null )
-        {
+    public boolean validatePropertyValue(String property, String value) {
+        Pattern pattern = propertiesValidationPatterns.get(property);
+        if (pattern == null) {
             return true;
         }
-        return pattern.matcher( value ).matches();
+        return pattern.matcher(value).matches();
     }
-
 }

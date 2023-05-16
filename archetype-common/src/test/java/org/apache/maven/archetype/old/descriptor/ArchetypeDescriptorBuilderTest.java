@@ -1,3 +1,21 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package org.apache.maven.archetype.old.descriptor;
 
 /*
@@ -19,231 +37,235 @@ package org.apache.maven.archetype.old.descriptor;
  * under the License.
  */
 
+import java.io.IOException;
+import java.io.StringReader;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
-import java.io.IOException;
-import java.io.StringReader;
-
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  * @version $Id$
  */
-public class ArchetypeDescriptorBuilderTest
-    extends TestCase
-{
-    public ArchetypeDescriptorBuilderTest( String str )
-    {
-        super( str );
+public class ArchetypeDescriptorBuilderTest extends TestCase {
+    public ArchetypeDescriptorBuilderTest(String str) {
+        super(str);
     }
 
-    public static Test suite()
-    {
+    public static Test suite() {
         TestSuite suite = new TestSuite();
-        suite.addTest( new ArchetypeDescriptorBuilderTest( "testBuilder" ) );
-        suite.addTest( new ArchetypeDescriptorBuilderTest( "testBuild" ) );
+        suite.addTest(new ArchetypeDescriptorBuilderTest("testBuilder"));
+        suite.addTest(new ArchetypeDescriptorBuilderTest("testBuild"));
         return suite;
     }
 
-    public void testBuilder()
-        throws Exception
-    {
-        String xml = "<archetype>" + "  <id>standard</id>" + "  <sources>" + "    <source>source0</source>" +
-            "    <source>source1</source>" + "  </sources>" + "  <resources>" + "    <resource>resource0</resource>" +
-            "    <resource>resource1</resource>" + "  </resources>" + "  <testSources>" +
-            "    <source>testSource0</source>" + "    <source>testSource1</source>" + "  </testSources>" +
-            "  <testResources>" + "    <resource>testResource0</resource>" + "    <resource>testResource1</resource>" +
-            "  </testResources>" + "</archetype>";
+    public void testBuilder() throws Exception {
+        String xml = "<archetype>" + "  <id>standard</id>" + "  <sources>" + "    <source>source0</source>"
+                + "    <source>source1</source>"
+                + "  </sources>" + "  <resources>" + "    <resource>resource0</resource>"
+                + "    <resource>resource1</resource>"
+                + "  </resources>" + "  <testSources>" + "    <source>testSource0</source>"
+                + "    <source>testSource1</source>" + "  </testSources>" + "  <testResources>"
+                + "    <resource>testResource0</resource>" + "    <resource>testResource1</resource>"
+                + "  </testResources>"
+                + "</archetype>";
 
         ArchetypeDescriptorBuilder builder = new ArchetypeDescriptorBuilder();
 
-        ArchetypeDescriptor descriptor = builder.build( new StringReader( xml ) );
+        ArchetypeDescriptor descriptor = builder.build(new StringReader(xml));
 
-        assertEquals( "standard", descriptor.getId() );
+        assertEquals("standard", descriptor.getId());
 
-        assertEquals( 2, descriptor.getSources().size() );
+        assertEquals(2, descriptor.getSources().size());
 
-        assertEquals( "source0", descriptor.getSources().get( 0 ) );
+        assertEquals("source0", descriptor.getSources().get(0));
 
-        assertNotNull( descriptor.getSourceDescriptor( "source0" ) );
+        assertNotNull(descriptor.getSourceDescriptor("source0"));
 
-        assertEquals( true, descriptor.getSourceDescriptor( "source0" ).isFiltered() );
+        assertEquals(true, descriptor.getSourceDescriptor("source0").isFiltered());
 
-        assertNotNull( descriptor.getSourceDescriptor( "source0" ).getEncoding() );
+        assertNotNull(descriptor.getSourceDescriptor("source0").getEncoding());
 
-        assertEquals( "source1", descriptor.getSources().get( 1 ) );
+        assertEquals("source1", descriptor.getSources().get(1));
 
-        assertNotNull( descriptor.getSourceDescriptor( "source1" ) );
+        assertNotNull(descriptor.getSourceDescriptor("source1"));
 
-        assertEquals( true, descriptor.getSourceDescriptor( "source1" ).isFiltered() );
+        assertEquals(true, descriptor.getSourceDescriptor("source1").isFiltered());
 
-        assertNotNull( descriptor.getSourceDescriptor( "source1" ).getEncoding() );
+        assertNotNull(descriptor.getSourceDescriptor("source1").getEncoding());
 
-        assertEquals( 2, descriptor.getResources().size() );
+        assertEquals(2, descriptor.getResources().size());
 
-        assertEquals( "resource0", descriptor.getResources().get( 0 ) );
+        assertEquals("resource0", descriptor.getResources().get(0));
 
-        assertNotNull( descriptor.getResourceDescriptor( "resource0" ) );
+        assertNotNull(descriptor.getResourceDescriptor("resource0"));
 
-        assertEquals( true, descriptor.getResourceDescriptor( "resource0" ).isFiltered() );
+        assertEquals(true, descriptor.getResourceDescriptor("resource0").isFiltered());
 
-        assertNotNull( descriptor.getResourceDescriptor( "resource0" ).getEncoding() );
+        assertNotNull(descriptor.getResourceDescriptor("resource0").getEncoding());
 
-        assertEquals( "resource1", descriptor.getResources().get( 1 ) );
+        assertEquals("resource1", descriptor.getResources().get(1));
 
-        assertNotNull( descriptor.getResourceDescriptor( "resource1" ) );
+        assertNotNull(descriptor.getResourceDescriptor("resource1"));
 
-        assertEquals( true, descriptor.getResourceDescriptor( "resource1" ).isFiltered() );
+        assertEquals(true, descriptor.getResourceDescriptor("resource1").isFiltered());
 
-        assertNotNull( descriptor.getResourceDescriptor( "resource1" ).getEncoding() );
+        assertNotNull(descriptor.getResourceDescriptor("resource1").getEncoding());
 
-        assertEquals( 2, descriptor.getTestSources().size() );
+        assertEquals(2, descriptor.getTestSources().size());
 
-        assertEquals( "testSource0", descriptor.getTestSources().get( 0 ) );
+        assertEquals("testSource0", descriptor.getTestSources().get(0));
 
-        assertNotNull( descriptor.getTestSourceDescriptor( "testSource0" ) );
+        assertNotNull(descriptor.getTestSourceDescriptor("testSource0"));
 
-        assertEquals( true, descriptor.getTestSourceDescriptor( "testSource0" ).isFiltered() );
+        assertEquals(true, descriptor.getTestSourceDescriptor("testSource0").isFiltered());
 
-        assertNotNull( descriptor.getTestSourceDescriptor( "testSource0" ).getEncoding() );
+        assertNotNull(descriptor.getTestSourceDescriptor("testSource0").getEncoding());
 
-        assertEquals( "testSource1", descriptor.getTestSources().get( 1 ) );
+        assertEquals("testSource1", descriptor.getTestSources().get(1));
 
-        assertNotNull( descriptor.getTestSourceDescriptor( "testSource1" ) );
+        assertNotNull(descriptor.getTestSourceDescriptor("testSource1"));
 
-        assertEquals( true, descriptor.getTestSourceDescriptor( "testSource1" ).isFiltered() );
+        assertEquals(true, descriptor.getTestSourceDescriptor("testSource1").isFiltered());
 
-        assertNotNull( descriptor.getTestSourceDescriptor( "testSource1" ).getEncoding() );
+        assertNotNull(descriptor.getTestSourceDescriptor("testSource1").getEncoding());
 
-        assertEquals( 2, descriptor.getTestResources().size() );
+        assertEquals(2, descriptor.getTestResources().size());
 
-        assertEquals( "testResource0", descriptor.getTestResources().get( 0 ) );
+        assertEquals("testResource0", descriptor.getTestResources().get(0));
 
-        assertNotNull( descriptor.getTestResourceDescriptor( "testResource0" ) );
+        assertNotNull(descriptor.getTestResourceDescriptor("testResource0"));
 
-        assertEquals( true, descriptor.getTestResourceDescriptor( "testResource0" ).isFiltered() );
+        assertEquals(true, descriptor.getTestResourceDescriptor("testResource0").isFiltered());
 
-        assertNotNull( descriptor.getTestResourceDescriptor( "testResource0" ).getEncoding() );
+        assertNotNull(descriptor.getTestResourceDescriptor("testResource0").getEncoding());
 
-        assertEquals( "testResource1", descriptor.getTestResources().get( 1 ) );
+        assertEquals("testResource1", descriptor.getTestResources().get(1));
 
-        assertNotNull( descriptor.getTestResourceDescriptor( "testResource1" ) );
+        assertNotNull(descriptor.getTestResourceDescriptor("testResource1"));
 
-        assertEquals( true, descriptor.getTestResourceDescriptor( "testResource1" ).isFiltered() );
+        assertEquals(true, descriptor.getTestResourceDescriptor("testResource1").isFiltered());
 
-        assertNotNull( descriptor.getTestResourceDescriptor( "testResource1" ).getEncoding() );
+        assertNotNull(descriptor.getTestResourceDescriptor("testResource1").getEncoding());
     }
 
-    public void testBuild()
-        throws IOException, XmlPullParserException
-    {
-        String xml = "<archetype>" + "  <id>standard</id>" + "  <sources>" +
-            "    <source encoding=\"utf-8\">source0</source>" + "    <source encoding=\"utf-8\">source1</source>" +
-            "  </sources>" + "  <resources>" + "    <resource filtered=\"false\">resource0</resource>" +
-            "    <resource encoding=\"iso-8859-1\">resource1</resource>" + "  </resources>" + "  <testSources>" +
-            "    <source encoding=\"utf-8\">testSource0</source>" +
-            "    <source encoding=\"utf-8\">testSource1</source>" + "  </testSources>" + "  <testResources>" +
-            "    <resource encoding=\"us-ascii\">testResource0</resource>" +
-            "    <resource filtered=\"false\">testResource1</resource>" + "  </testResources>" + "  <siteResources>" +
-            "    <resource filtered=\"false\">siteResource0</resource>" +
-            "    <resource encoding=\"utf-16\">siteResource1</resource>" + "  </siteResources>" + "</archetype>";
+    public void testBuild() throws IOException, XmlPullParserException {
+        String xml = "<archetype>" + "  <id>standard</id>" + "  <sources>"
+                + "    <source encoding=\"utf-8\">source0</source>"
+                + "    <source encoding=\"utf-8\">source1</source>" + "  </sources>"
+                + "  <resources>" + "    <resource filtered=\"false\">resource0</resource>"
+                + "    <resource encoding=\"iso-8859-1\">resource1</resource>"
+                + "  </resources>" + "  <testSources>" + "    <source encoding=\"utf-8\">testSource0</source>"
+                + "    <source encoding=\"utf-8\">testSource1</source>"
+                + "  </testSources>" + "  <testResources>"
+                + "    <resource encoding=\"us-ascii\">testResource0</resource>"
+                + "    <resource filtered=\"false\">testResource1</resource>"
+                + "  </testResources>" + "  <siteResources>"
+                + "    <resource filtered=\"false\">siteResource0</resource>"
+                + "    <resource encoding=\"utf-16\">siteResource1</resource>"
+                + "  </siteResources>" + "</archetype>";
 
         ArchetypeDescriptorBuilder builder = new ArchetypeDescriptorBuilder();
 
-        ArchetypeDescriptor descriptor = builder.build( new StringReader( xml ) );
+        ArchetypeDescriptor descriptor = builder.build(new StringReader(xml));
 
-        assertEquals( "standard", descriptor.getId() );
+        assertEquals("standard", descriptor.getId());
 
-        assertEquals( 2, descriptor.getSources().size() );
+        assertEquals(2, descriptor.getSources().size());
 
-        assertEquals( "source0", descriptor.getSources().get( 0 ) );
+        assertEquals("source0", descriptor.getSources().get(0));
 
-        assertNotNull( descriptor.getSourceDescriptor( "source0" ) );
+        assertNotNull(descriptor.getSourceDescriptor("source0"));
 
-        assertEquals( true, descriptor.getSourceDescriptor( "source0" ).isFiltered() );
+        assertEquals(true, descriptor.getSourceDescriptor("source0").isFiltered());
 
-        assertEquals( "utf-8", descriptor.getSourceDescriptor( "source0" ).getEncoding() );
+        assertEquals("utf-8", descriptor.getSourceDescriptor("source0").getEncoding());
 
-        assertEquals( "source1", descriptor.getSources().get( 1 ) );
+        assertEquals("source1", descriptor.getSources().get(1));
 
-        assertNotNull( descriptor.getSourceDescriptor( "source1" ) );
+        assertNotNull(descriptor.getSourceDescriptor("source1"));
 
-        assertEquals( true, descriptor.getSourceDescriptor( "source1" ).isFiltered() );
+        assertEquals(true, descriptor.getSourceDescriptor("source1").isFiltered());
 
-        assertEquals( "utf-8", descriptor.getSourceDescriptor( "source1" ).getEncoding() );
+        assertEquals("utf-8", descriptor.getSourceDescriptor("source1").getEncoding());
 
-        assertEquals( 2, descriptor.getResources().size() );
+        assertEquals(2, descriptor.getResources().size());
 
-        assertEquals( "resource0", descriptor.getResources().get( 0 ) );
+        assertEquals("resource0", descriptor.getResources().get(0));
 
-        assertNotNull( descriptor.getResourceDescriptor( "resource0" ) );
+        assertNotNull(descriptor.getResourceDescriptor("resource0"));
 
-        assertEquals( false, descriptor.getResourceDescriptor( "resource0" ).isFiltered() );
+        assertEquals(false, descriptor.getResourceDescriptor("resource0").isFiltered());
 
-        assertNotNull( descriptor.getResourceDescriptor( "resource0" ).getEncoding() );
+        assertNotNull(descriptor.getResourceDescriptor("resource0").getEncoding());
 
-        assertEquals( "resource1", descriptor.getResources().get( 1 ) );
+        assertEquals("resource1", descriptor.getResources().get(1));
 
-        assertNotNull( descriptor.getResourceDescriptor( "resource1" ) );
+        assertNotNull(descriptor.getResourceDescriptor("resource1"));
 
-        assertEquals( true, descriptor.getResourceDescriptor( "resource1" ).isFiltered() );
+        assertEquals(true, descriptor.getResourceDescriptor("resource1").isFiltered());
 
-        assertEquals( "iso-8859-1", descriptor.getResourceDescriptor( "resource1" ).getEncoding() );
+        assertEquals("iso-8859-1", descriptor.getResourceDescriptor("resource1").getEncoding());
 
-        assertEquals( 2, descriptor.getTestSources().size() );
+        assertEquals(2, descriptor.getTestSources().size());
 
-        assertEquals( "testSource0", descriptor.getTestSources().get( 0 ) );
+        assertEquals("testSource0", descriptor.getTestSources().get(0));
 
-        assertNotNull( descriptor.getTestSourceDescriptor( "testSource0" ) );
+        assertNotNull(descriptor.getTestSourceDescriptor("testSource0"));
 
-        assertEquals( true, descriptor.getTestSourceDescriptor( "testSource0" ).isFiltered() );
+        assertEquals(true, descriptor.getTestSourceDescriptor("testSource0").isFiltered());
 
-        assertEquals( "utf-8", descriptor.getTestSourceDescriptor( "testSource0" ).getEncoding() );
+        assertEquals("utf-8", descriptor.getTestSourceDescriptor("testSource0").getEncoding());
 
-        assertEquals( "testSource1", descriptor.getTestSources().get( 1 ) );
+        assertEquals("testSource1", descriptor.getTestSources().get(1));
 
-        assertNotNull( descriptor.getTestSourceDescriptor( "testSource1" ) );
+        assertNotNull(descriptor.getTestSourceDescriptor("testSource1"));
 
-        assertEquals( true, descriptor.getTestSourceDescriptor( "testSource1" ).isFiltered() );
+        assertEquals(true, descriptor.getTestSourceDescriptor("testSource1").isFiltered());
 
-        assertEquals( "utf-8", descriptor.getTestSourceDescriptor( "testSource1" ).getEncoding() );
+        assertEquals("utf-8", descriptor.getTestSourceDescriptor("testSource1").getEncoding());
 
-        assertEquals( 2, descriptor.getTestResources().size() );
+        assertEquals(2, descriptor.getTestResources().size());
 
-        assertEquals( "testResource0", descriptor.getTestResources().get( 0 ) );
+        assertEquals("testResource0", descriptor.getTestResources().get(0));
 
-        assertNotNull( descriptor.getTestResourceDescriptor( "testResource0" ) );
+        assertNotNull(descriptor.getTestResourceDescriptor("testResource0"));
 
-        assertEquals( true, descriptor.getTestResourceDescriptor( "testResource0" ).isFiltered() );
+        assertEquals(true, descriptor.getTestResourceDescriptor("testResource0").isFiltered());
 
-        assertEquals( "us-ascii", descriptor.getTestResourceDescriptor( "testResource0" ).getEncoding() );
+        assertEquals(
+                "us-ascii",
+                descriptor.getTestResourceDescriptor("testResource0").getEncoding());
 
-        assertEquals( "testResource1", descriptor.getTestResources().get( 1 ) );
+        assertEquals("testResource1", descriptor.getTestResources().get(1));
 
-        assertNotNull( descriptor.getTestResourceDescriptor( "testResource1" ) );
+        assertNotNull(descriptor.getTestResourceDescriptor("testResource1"));
 
-        assertEquals( false, descriptor.getTestResourceDescriptor( "testResource1" ).isFiltered() );
+        assertEquals(
+                false, descriptor.getTestResourceDescriptor("testResource1").isFiltered());
 
-        assertNotNull( descriptor.getTestResourceDescriptor( "testResource1" ).getEncoding() );
+        assertNotNull(descriptor.getTestResourceDescriptor("testResource1").getEncoding());
 
-        assertEquals( 2, descriptor.getSiteResources().size() );
+        assertEquals(2, descriptor.getSiteResources().size());
 
-        assertEquals( "siteResource0", descriptor.getSiteResources().get( 0 ) );
+        assertEquals("siteResource0", descriptor.getSiteResources().get(0));
 
-        assertNotNull( descriptor.getSiteResourceDescriptor( "siteResource0" ) );
+        assertNotNull(descriptor.getSiteResourceDescriptor("siteResource0"));
 
-        assertEquals( false, descriptor.getSiteResourceDescriptor( "siteResource0" ).isFiltered() );
+        assertEquals(
+                false, descriptor.getSiteResourceDescriptor("siteResource0").isFiltered());
 
-        assertNotNull( descriptor.getSiteResourceDescriptor( "siteResource0" ).getEncoding() );
+        assertNotNull(descriptor.getSiteResourceDescriptor("siteResource0").getEncoding());
 
-        assertEquals( "siteResource1", descriptor.getSiteResources().get( 1 ) );
+        assertEquals("siteResource1", descriptor.getSiteResources().get(1));
 
-        assertNotNull( descriptor.getSiteResourceDescriptor( "siteResource1" ) );
+        assertNotNull(descriptor.getSiteResourceDescriptor("siteResource1"));
 
-        assertEquals( true, descriptor.getSiteResourceDescriptor( "siteResource1" ).isFiltered() );
+        assertEquals(true, descriptor.getSiteResourceDescriptor("siteResource1").isFiltered());
 
-        assertEquals( "utf-16", descriptor.getSiteResourceDescriptor( "siteResource1" ).getEncoding() );
+        assertEquals(
+                "utf-16", descriptor.getSiteResourceDescriptor("siteResource1").getEncoding());
     }
 }

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
   Licensed to the Apache Software Foundation (ASF) under one
   or more contributor license agreements. See the NOTICE file
@@ -18,14 +17,13 @@
   specific language governing permissions and limitations
   under the License.
 -->
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <groupId>org.apache.maven</groupId>
     <artifactId>maven-parent</artifactId>
-    <version>34</version>
+    <version>39</version>
     <relativePath />
   </parent>
 
@@ -38,8 +36,7 @@
   <description>Maven Archetype is a set of tools to deal with archetypes, i.e. an abstract representation of a kind of project
    that can be instantiated into a concrete customized Maven project.
    An archetype knows which files will be part of the instantiated project and which properties to fill to properly customize
-   the project.
-  </description>
+   the project.</description>
   <url>https://maven.apache.org/archetype</url>
   <inceptionYear>2007</inceptionYear>
 
@@ -53,8 +50,8 @@
   <scm>
     <connection>${maven.archetype.scm.devConnection}</connection>
     <developerConnection>${maven.archetype.scm.devConnection}</developerConnection>
-    <url>https://github.com/apache/maven-archetype/tree/${project.scm.tag}</url>
     <tag>maven-archetype-3.2.1</tag>
+    <url>https://github.com/apache/maven-archetype/tree/${project.scm.tag}</url>
   </scm>
   <issueManagement>
     <system>jira</system>
@@ -75,7 +72,8 @@
   <properties>
     <maven.archetype.scm.devConnection>scm:git:https://gitbox.apache.org/repos/asf/maven-archetype.git</maven.archetype.scm.devConnection>
     <mavenVersion>3.0</mavenVersion>
-    <wagonVersion>3.3.3</wagonVersion><!-- provided by Maven core -->
+    <wagonVersion>3.3.3</wagonVersion>
+    <!-- provided by Maven core -->
     <javaVersion>8</javaVersion>
     <netbeans.hint.useExternalMaven>true</netbeans.hint.useExternalMaven>
     <surefire.version>2.22.2</surefire.version>
@@ -171,7 +169,7 @@
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-interactivity-api</artifactId>
         <version>1.1</version>
-         <exclusions>
+        <exclusions>
           <exclusion>
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>*</artifactId>
@@ -262,6 +260,13 @@
         <version>1.7</version>
       </dependency>
 
+      <!-- Deprecated -->
+      <dependency>
+        <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-component-annotations</artifactId>
+        <version>2.0.0</version>
+      </dependency>
+
       <dependency>
         <groupId>org.xmlunit</groupId>
         <artifactId>xmlunit-matchers</artifactId>
@@ -273,6 +278,13 @@
   <build>
     <pluginManagement>
       <plugins>
+        <!-- Deprecated -->
+        <plugin>
+          <groupId>org.codehaus.plexus</groupId>
+          <artifactId>plexus-component-metadata</artifactId>
+          <version>2.0.0</version>
+        </plugin>
+
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
@@ -288,7 +300,6 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.3.1</version>
           <configuration>
             <failOnWarnings>false</failOnWarnings>
           </configuration>
@@ -296,7 +307,6 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-project-info-reports-plugin</artifactId>
-          <version>3.1.2</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -341,38 +351,12 @@
             <exclude>**/XMLOutputter.java</exclude>
             <!-- disable test directories -->
             <exclude>src/it/**/goal.txt</exclude>
-            <exclude>.repository/**</exclude><!-- for CI -->
+            <exclude>.repository/**</exclude>
+            <!-- for CI -->
             <!-- Used by JEnv -->
             <exclude>.java-version</exclude>
           </excludes>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-enforcer-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>enforce-bytecode-version</id>
-            <goals>
-              <goal>enforce</goal>
-            </goals>
-            <configuration>
-              <rules>
-                <enforceBytecodeVersion>
-                  <maxJdkVersion>1.8</maxJdkVersion>
-                </enforceBytecodeVersion>
-              </rules>
-              <fail>true</fail>
-            </configuration>
-          </execution>
-        </executions>
-        <dependencies>
-          <dependency>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>extra-enforcer-rules</artifactId>
-            <version>1.3</version>
-          </dependency>
-        </dependencies>
       </plugin>
     </plugins>
   </build>

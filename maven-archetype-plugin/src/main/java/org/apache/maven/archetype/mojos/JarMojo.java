@@ -1,3 +1,21 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package org.apache.maven.archetype.mojos;
 
 /*
@@ -19,6 +37,9 @@ package org.apache.maven.archetype.mojos;
  * under the License.
  */
 
+import java.io.File;
+import java.util.Map;
+
 import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
 import org.apache.maven.archetype.exception.UnknownArchetype;
@@ -39,53 +60,48 @@ import org.codehaus.plexus.archiver.Archiver;
 import org.codehaus.plexus.archiver.jar.JarArchiver;
 import org.codehaus.plexus.archiver.util.DefaultFileSet;
 
-import java.io.File;
-import java.util.Map;
-
 /**
  * Build a JAR from the current Archetype project.
  *
  * @author rafale
  */
-@Mojo( name = "jar", defaultPhase = LifecyclePhase.PACKAGE, requiresProject = true )
-public class JarMojo
-    extends AbstractMojo
-{
+@Mojo(name = "jar", defaultPhase = LifecyclePhase.PACKAGE, requiresProject = true)
+public class JarMojo extends AbstractMojo {
 
     /**
      * Directory containing the classes.
      */
-    @Parameter( defaultValue = "${project.build.outputDirectory}", required = true )
+    @Parameter(defaultValue = "${project.build.outputDirectory}", required = true)
     private File archetypeDirectory;
 
     /**
      * Name of the generated JAR.
      */
-    @Parameter( defaultValue = "${project.build.finalName}", alias = "jarName", required = true )
+    @Parameter(defaultValue = "${project.build.finalName}", alias = "jarName", required = true)
     private String finalName;
 
     /**
      * Directory containing the generated JAR.
      */
-    @Parameter( defaultValue = "${project.build.directory}", required = true )
+    @Parameter(defaultValue = "${project.build.directory}", required = true)
     private File outputDirectory;
 
     /**
      * Exclude some files from the archetype like .gitignore.
      */
-    @Parameter( defaultValue = "true" )
+    @Parameter(defaultValue = "true")
     private boolean useDefaultExcludes;
 
     /**
      * The Maven project.
      */
-    @Parameter( defaultValue = "${project}", readonly = true, required = true )
+    @Parameter(defaultValue = "${project}", readonly = true, required = true)
     private MavenProject project;
 
     /**
      * The {@link MavenSession}.
      */
-    @Parameter( defaultValue = "${session}", readonly = true, required = true )
+    @Parameter(defaultValue = "${session}", readonly = true, required = true)
     private MavenSession session;
 
     /**
@@ -110,7 +126,7 @@ public class JarMojo
      *
      * @since 3.2.0
      */
-    @Parameter( defaultValue = "${project.build.outputTimestamp}" )
+    @Parameter(defaultValue = "${project.build.outputTimestamp}")
     private String outputTimestamp;
 
     /**
@@ -126,76 +142,59 @@ public class JarMojo
     private ArchetypeArtifactManager archetypeArtifactManager;
 
     @Override
-    public void execute()
-        throws MojoExecutionException, MojoFailureException
-    {
-        File jarFile = new File( outputDirectory, finalName + ".jar" );
-        getLog().info( "Building archetype jar: " + jarFile );
+    public void execute() throws MojoExecutionException, MojoFailureException {
+        File jarFile = new File(outputDirectory, finalName + ".jar");
+        getLog().info("Building archetype jar: " + jarFile);
 
         MavenArchiver archiver = new MavenArchiver();
-        archiver.setCreatedBy( "Maven Archetype Plugin", "org.apache.maven.plugins", "maven-archetype-plugin" );
+        archiver.setCreatedBy("Maven Archetype Plugin", "org.apache.maven.plugins", "maven-archetype-plugin");
 
-        archiver.setOutputFile( jarFile );
+        archiver.setOutputFile(jarFile);
 
-        archiver.setArchiver( (JarArchiver) archivers.get( "jar" ) );
+        archiver.setArchiver((JarArchiver) archivers.get("jar"));
 
         // configure for Reproducible Builds based on outputTimestamp value
-        archiver.configureReproducible( outputTimestamp );
+        archiver.configureReproducible(outputTimestamp);
 
-        try
-        {
-            DefaultFileSet fs = DefaultFileSet.fileSet( archetypeDirectory ).prefixed( "" )
-                .includeExclude( null,  null ).includeEmptyDirs( true );
-            fs.setUsingDefaultExcludes( useDefaultExcludes );
-            archiver.getArchiver().addFileSet( fs );
+        try {
+            DefaultFileSet fs = DefaultFileSet.fileSet(archetypeDirectory)
+                    .prefixed("")
+                    .includeExclude(null, null)
+                    .includeEmptyDirs(true);
+            fs.setUsingDefaultExcludes(useDefaultExcludes);
+            archiver.getArchiver().addFileSet(fs);
 
-            archiver.createArchive( session, project, archive );
+            archiver.createArchive(session, project, archive);
+        } catch (Exception e) {
+            throw new MojoExecutionException("Error assembling archetype jar " + jarFile, e);
         }
-        catch ( Exception e )
-        {
-            throw new MojoExecutionException( "Error assembling archetype jar " + jarFile, e );
-        }
 
-        checkArchetypeFile( jarFile );
+        checkArchetypeFile(jarFile);
 
-        project.getArtifact().setFile( jarFile );
+        project.getArtifact().setFile(jarFile);
     }
 
-    private void checkArchetypeFile( File jarFile )
-        throws MojoExecutionException
-    {
-        try
-        {
-            if ( archetypeArtifactManager.isFileSetArchetype( jarFile ) )
-            {
-                checkFileSetArchetypeFile( jarFile );
+    private void checkArchetypeFile(File jarFile) throws MojoExecutionException {
+        try {
+            if (archetypeArtifactManager.isFileSetArchetype(jarFile)) {
+                checkFileSetArchetypeFile(jarFile);
+            } else if (archetypeArtifactManager.isOldArchetype(jarFile)) {
+                getLog().warn("Building an Old (1.x) Archetype: consider migrating it to current 2.x Archetype.");
+            } else {
+                throw new MojoExecutionException("The current project does not build an archetype");
             }
-            else if ( archetypeArtifactManager.isOldArchetype( jarFile ) )
-            {
-                getLog().warn( "Building an Old (1.x) Archetype: consider migrating it to current 2.x Archetype." );
-            }
-            else
-            {
-                throw new MojoExecutionException( "The current project does not build an archetype" );
-            }
-        }
-        catch ( UnknownArchetype ua )
-        {
-            throw new MojoExecutionException( ua.getMessage(), ua );
+        } catch (UnknownArchetype ua) {
+            throw new MojoExecutionException(ua.getMessage(), ua);
         }
     }
 
-    private void checkFileSetArchetypeFile( File jarFile )
-        throws UnknownArchetype
-    {
-        ArchetypeDescriptor archetypeDescriptor = archetypeArtifactManager.getFileSetArchetypeDescriptor( jarFile );
+    private void checkFileSetArchetypeFile(File jarFile) throws UnknownArchetype {
+        ArchetypeDescriptor archetypeDescriptor = archetypeArtifactManager.getFileSetArchetypeDescriptor(jarFile);
 
-        for ( RequiredProperty rp : archetypeDescriptor.getRequiredProperties() )
-        {
-            if ( rp.getKey().contains( "." ) )
-            {
-                getLog().warn( "Invalid required property name '" + rp.getKey()
-                                   + "': dot character makes is unusable in Velocity template" );
+        for (RequiredProperty rp : archetypeDescriptor.getRequiredProperties()) {
+            if (rp.getKey().contains(".")) {
+                getLog().warn("Invalid required property name '" + rp.getKey()
+                        + "': dot character makes is unusable in Velocity template");
             }
         }
     }

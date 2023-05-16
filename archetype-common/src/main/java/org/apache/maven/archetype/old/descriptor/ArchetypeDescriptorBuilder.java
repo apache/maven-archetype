@@ -1,3 +1,21 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package org.apache.maven.archetype.old.descriptor;
 
 /*
@@ -19,39 +37,34 @@ package org.apache.maven.archetype.old.descriptor;
  * under the License.
  */
 
-import org.codehaus.plexus.util.xml.Xpp3Dom;
-import org.codehaus.plexus.util.xml.Xpp3DomBuilder;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.IllegalCharsetNameException;
 import java.nio.charset.UnsupportedCharsetException;
 
+import org.codehaus.plexus.util.xml.Xpp3Dom;
+import org.codehaus.plexus.util.xml.Xpp3DomBuilder;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  * @version $Id$
  */
-public class ArchetypeDescriptorBuilder
-{
-    public ArchetypeDescriptor build( Reader reader )
-        throws IOException, XmlPullParserException
-    {
+public class ArchetypeDescriptorBuilder {
+    public ArchetypeDescriptor build(Reader reader) throws IOException, XmlPullParserException {
         ArchetypeDescriptor descriptor = new ArchetypeDescriptor();
 
-        Xpp3Dom dom = Xpp3DomBuilder.build( reader );
+        Xpp3Dom dom = Xpp3DomBuilder.build(reader);
 
-        descriptor.setId( dom.getChild( "id" ).getValue() );
+        descriptor.setId(dom.getChild("id").getValue());
 
-        Xpp3Dom allowPartialDom = dom.getChild( "allowPartial" );
+        Xpp3Dom allowPartialDom = dom.getChild("allowPartial");
 
-        if ( allowPartialDom != null )
-        {
+        if (allowPartialDom != null) {
             String allowPartial = allowPartialDom.getValue();
 
-            if ( "true".equals( allowPartial ) || "1".equals( allowPartial ) || "on".equals( allowPartial ) )
-            {
-                descriptor.setAllowPartial( true );
+            if ("true".equals(allowPartial) || "1".equals(allowPartial) || "on".equals(allowPartial)) {
+                descriptor.setAllowPartial(true);
             }
         }
 
@@ -59,27 +72,23 @@ public class ArchetypeDescriptorBuilder
         // Main
         // ----------------------------------------------------------------------
 
-        Xpp3Dom sources = dom.getChild( "sources" );
+        Xpp3Dom sources = dom.getChild("sources");
 
-        if ( sources != null )
-        {
-            Xpp3Dom[] sourceList = sources.getChildren( "source" );
+        if (sources != null) {
+            Xpp3Dom[] sourceList = sources.getChildren("source");
 
-            for ( int i = 0; i < sourceList.length; i++ )
-            {
-                addSourceToDescriptor( sourceList[i], descriptor );
+            for (int i = 0; i < sourceList.length; i++) {
+                addSourceToDescriptor(sourceList[i], descriptor);
             }
         }
 
-        Xpp3Dom resources = dom.getChild( "resources" );
+        Xpp3Dom resources = dom.getChild("resources");
 
-        if ( resources != null )
-        {
-            Xpp3Dom[] resourceList = resources.getChildren( "resource" );
+        if (resources != null) {
+            Xpp3Dom[] resourceList = resources.getChildren("resource");
 
-            for ( int i = 0; i < resourceList.length; i++ )
-            {
-                addResourceToDescriptor( resourceList[i], descriptor );
+            for (int i = 0; i < resourceList.length; i++) {
+                addResourceToDescriptor(resourceList[i], descriptor);
             }
         }
 
@@ -87,27 +96,23 @@ public class ArchetypeDescriptorBuilder
         // Test
         // ----------------------------------------------------------------------
 
-        Xpp3Dom testSources = dom.getChild( "testSources" );
+        Xpp3Dom testSources = dom.getChild("testSources");
 
-        if ( testSources != null )
-        {
-            Xpp3Dom[] testSourceList = testSources.getChildren( "source" );
+        if (testSources != null) {
+            Xpp3Dom[] testSourceList = testSources.getChildren("source");
 
-            for ( int i = 0; i < testSourceList.length; i++ )
-            {
-                addTestSourceToDescriptor( testSourceList[i], descriptor );
+            for (int i = 0; i < testSourceList.length; i++) {
+                addTestSourceToDescriptor(testSourceList[i], descriptor);
             }
         }
 
-        Xpp3Dom testResources = dom.getChild( "testResources" );
+        Xpp3Dom testResources = dom.getChild("testResources");
 
-        if ( testResources != null )
-        {
-            Xpp3Dom[] testResourceList = testResources.getChildren( "resource" );
+        if (testResources != null) {
+            Xpp3Dom[] testResourceList = testResources.getChildren("resource");
 
-            for ( int i = 0; i < testResourceList.length; i++ )
-            {
-                addTestResourceToDescriptor( testResourceList[i], descriptor );
+            for (int i = 0; i < testResourceList.length; i++) {
+                addTestResourceToDescriptor(testResourceList[i], descriptor);
             }
         }
 
@@ -115,15 +120,13 @@ public class ArchetypeDescriptorBuilder
         // Site
         // ----------------------------------------------------------------------
 
-        Xpp3Dom siteResources = dom.getChild( "siteResources" );
+        Xpp3Dom siteResources = dom.getChild("siteResources");
 
-        if ( siteResources != null )
-        {
-            Xpp3Dom[] siteResourceList = siteResources.getChildren( "resource" );
+        if (siteResources != null) {
+            Xpp3Dom[] siteResourceList = siteResources.getChildren("resource");
 
-            for ( int i = 0; i < siteResourceList.length; i++ )
-            {
-                addSiteResourceToDescriptor( siteResourceList[i], descriptor );
+            for (int i = 0; i < siteResourceList.length; i++) {
+                addSiteResourceToDescriptor(siteResourceList[i], descriptor);
             }
         }
 
@@ -140,28 +143,21 @@ public class ArchetypeDescriptorBuilder
      * @param descriptor the <code>ArchetypeDescriptor</code> to add the source template to.
      * @throws XmlPullParserException if the encoding specified is not valid or supported.
      */
-    private static void addSourceToDescriptor( Xpp3Dom source, ArchetypeDescriptor descriptor )
-        throws XmlPullParserException
-    {
-        descriptor.addSource( source.getValue() );
+    private static void addSourceToDescriptor(Xpp3Dom source, ArchetypeDescriptor descriptor)
+            throws XmlPullParserException {
+        descriptor.addSource(source.getValue());
 
-        TemplateDescriptor sourceDesc = descriptor.getSourceDescriptor( source.getValue() );
+        TemplateDescriptor sourceDesc = descriptor.getSourceDescriptor(source.getValue());
 
-        sourceDesc.setFiltered( true );
+        sourceDesc.setFiltered(true);
 
-        if ( source.getAttribute( "encoding" ) != null )
-        {
-            try
-            {
-                sourceDesc.setEncoding( source.getAttribute( "encoding" ) );
-            }
-            catch ( IllegalCharsetNameException icne )
-            {
-                throw new XmlPullParserException( source.getAttribute( "encoding" ) + " is not a valid encoding." );
-            }
-            catch ( UnsupportedCharsetException uce )
-            {
-                throw new XmlPullParserException( source.getAttribute( "encoding" ) + " is not a supported encoding." );
+        if (source.getAttribute("encoding") != null) {
+            try {
+                sourceDesc.setEncoding(source.getAttribute("encoding"));
+            } catch (IllegalCharsetNameException icne) {
+                throw new XmlPullParserException(source.getAttribute("encoding") + " is not a valid encoding.");
+            } catch (UnsupportedCharsetException uce) {
+                throw new XmlPullParserException(source.getAttribute("encoding") + " is not a supported encoding.");
             }
         }
     }
@@ -182,49 +178,36 @@ public class ArchetypeDescriptorBuilder
      * @throws XmlPullParserException if the encoding specified is not valid or supported or if the
      *                                value of the attribute <code>filtered</code> is no valid.
      */
-    private static void addResourceToDescriptor( Xpp3Dom resource, ArchetypeDescriptor descriptor )
-        throws XmlPullParserException
-    {
-        descriptor.addResource( resource.getValue() );
+    private static void addResourceToDescriptor(Xpp3Dom resource, ArchetypeDescriptor descriptor)
+            throws XmlPullParserException {
+        descriptor.addResource(resource.getValue());
 
-        if ( resource.getAttribute( "filtered" ) != null )
-        {
-            TemplateDescriptor resourceDesc = descriptor.getResourceDescriptor( resource.getValue() );
+        if (resource.getAttribute("filtered") != null) {
+            TemplateDescriptor resourceDesc = descriptor.getResourceDescriptor(resource.getValue());
 
-            try
-            {
-                resourceDesc.setFiltered( getValueFilteredAttribute( resource.getAttribute( "filtered" ) ) );
-            }
-            catch ( IllegalArgumentException iae )
-            {
-                throw new XmlPullParserException( iae.getMessage() );
+            try {
+                resourceDesc.setFiltered(getValueFilteredAttribute(resource.getAttribute("filtered")));
+            } catch (IllegalArgumentException iae) {
+                throw new XmlPullParserException(iae.getMessage());
             }
         }
 
-        if ( resource.getAttribute( "encoding" ) != null )
-        {
-            TemplateDescriptor resourceDesc = descriptor.getResourceDescriptor( resource.getValue() );
+        if (resource.getAttribute("encoding") != null) {
+            TemplateDescriptor resourceDesc = descriptor.getResourceDescriptor(resource.getValue());
 
-            try
-            {
-                resourceDesc.setEncoding( resource.getAttribute( "encoding" ) );
-            }
-            catch ( IllegalCharsetNameException icne )
-            {
-                throw new XmlPullParserException( resource.getAttribute( "encoding" ) + " is not a valid encoding." );
-            }
-            catch ( UnsupportedCharsetException uce )
-            {
-                throw new XmlPullParserException(
-                    resource.getAttribute( "encoding" ) + " is not a supported encoding." );
+            try {
+                resourceDesc.setEncoding(resource.getAttribute("encoding"));
+            } catch (IllegalCharsetNameException icne) {
+                throw new XmlPullParserException(resource.getAttribute("encoding") + " is not a valid encoding.");
+            } catch (UnsupportedCharsetException uce) {
+                throw new XmlPullParserException(resource.getAttribute("encoding") + " is not a supported encoding.");
             }
         }
 
-        if ( resource.getValue().endsWith( ".properties" ) )
-        {
-            TemplateDescriptor resourceDesc = descriptor.getResourceDescriptor( resource.getValue() );
+        if (resource.getValue().endsWith(".properties")) {
+            TemplateDescriptor resourceDesc = descriptor.getResourceDescriptor(resource.getValue());
 
-            resourceDesc.setEncoding( "iso-8859-1" );
+            resourceDesc.setEncoding("iso-8859-1");
         }
     }
 
@@ -238,26 +221,18 @@ public class ArchetypeDescriptorBuilder
      * @param descriptor the <code>ArchetypeDescriptor</code> to add the test-source template to.
      * @throws XmlPullParserException if the encoding specified is not valid or supported.
      */
-    private static void addTestSourceToDescriptor( Xpp3Dom testSource, ArchetypeDescriptor descriptor )
-        throws XmlPullParserException
-    {
-        descriptor.addTestSource( testSource.getValue() );
-        TemplateDescriptor testSourceDesc = descriptor.getTestSourceDescriptor( testSource.getValue() );
-        testSourceDesc.setFiltered( true );
-        if ( testSource.getAttribute( "encoding" ) != null )
-        {
-            try
-            {
-                testSourceDesc.setEncoding( testSource.getAttribute( "encoding" ) );
-            }
-            catch ( IllegalCharsetNameException icne )
-            {
-                throw new XmlPullParserException( testSource.getAttribute( "encoding" ) + " is not a valid encoding." );
-            }
-            catch ( UnsupportedCharsetException uce )
-            {
-                throw new XmlPullParserException(
-                    testSource.getAttribute( "encoding" ) + " is not a supported encoding." );
+    private static void addTestSourceToDescriptor(Xpp3Dom testSource, ArchetypeDescriptor descriptor)
+            throws XmlPullParserException {
+        descriptor.addTestSource(testSource.getValue());
+        TemplateDescriptor testSourceDesc = descriptor.getTestSourceDescriptor(testSource.getValue());
+        testSourceDesc.setFiltered(true);
+        if (testSource.getAttribute("encoding") != null) {
+            try {
+                testSourceDesc.setEncoding(testSource.getAttribute("encoding"));
+            } catch (IllegalCharsetNameException icne) {
+                throw new XmlPullParserException(testSource.getAttribute("encoding") + " is not a valid encoding.");
+            } catch (UnsupportedCharsetException uce) {
+                throw new XmlPullParserException(testSource.getAttribute("encoding") + " is not a supported encoding.");
             }
         }
     }
@@ -278,51 +253,38 @@ public class ArchetypeDescriptorBuilder
      * @throws XmlPullParserException if the encoding specified is not valid or supported or if the
      *                                value of the attribute <code>filtered</code> is no valid.
      */
-    private static void addTestResourceToDescriptor( Xpp3Dom testResource, ArchetypeDescriptor descriptor )
-        throws XmlPullParserException
-    {
-        descriptor.addTestResource( testResource.getValue() );
+    private static void addTestResourceToDescriptor(Xpp3Dom testResource, ArchetypeDescriptor descriptor)
+            throws XmlPullParserException {
+        descriptor.addTestResource(testResource.getValue());
 
-        if ( testResource.getAttribute( "filtered" ) != null )
-        {
-            TemplateDescriptor testResourceDesc = descriptor.getTestResourceDescriptor( testResource.getValue() );
+        if (testResource.getAttribute("filtered") != null) {
+            TemplateDescriptor testResourceDesc = descriptor.getTestResourceDescriptor(testResource.getValue());
 
-            try
-            {
-                testResourceDesc.setFiltered( getValueFilteredAttribute( testResource.getAttribute( "filtered" ) ) );
-            }
-            catch ( IllegalArgumentException iae )
-            {
-                throw new XmlPullParserException( iae.getMessage() );
+            try {
+                testResourceDesc.setFiltered(getValueFilteredAttribute(testResource.getAttribute("filtered")));
+            } catch (IllegalArgumentException iae) {
+                throw new XmlPullParserException(iae.getMessage());
             }
         }
 
-        if ( testResource.getAttribute( "encoding" ) != null )
-        {
-            TemplateDescriptor testResourceDesc = descriptor.getTestResourceDescriptor( testResource.getValue() );
+        if (testResource.getAttribute("encoding") != null) {
+            TemplateDescriptor testResourceDesc = descriptor.getTestResourceDescriptor(testResource.getValue());
 
-            try
-            {
-                testResourceDesc.setEncoding( testResource.getAttribute( "encoding" ) );
+            try {
+                testResourceDesc.setEncoding(testResource.getAttribute("encoding"));
 
-            }
-            catch ( IllegalCharsetNameException icne )
-            {
+            } catch (IllegalCharsetNameException icne) {
+                throw new XmlPullParserException(testResource.getAttribute("encoding") + " is not a valid encoding.");
+            } catch (UnsupportedCharsetException uce) {
                 throw new XmlPullParserException(
-                    testResource.getAttribute( "encoding" ) + " is not a valid encoding." );
-            }
-            catch ( UnsupportedCharsetException uce )
-            {
-                throw new XmlPullParserException(
-                    testResource.getAttribute( "encoding" ) + " is not a supported encoding." );
+                        testResource.getAttribute("encoding") + " is not a supported encoding.");
             }
         }
 
-        if ( testResource.getValue().endsWith( ".properties" ) )
-        {
-            TemplateDescriptor testResourceDesc = descriptor.getTestResourceDescriptor( testResource.getValue() );
+        if (testResource.getValue().endsWith(".properties")) {
+            TemplateDescriptor testResourceDesc = descriptor.getTestResourceDescriptor(testResource.getValue());
 
-            testResourceDesc.setEncoding( "iso-8859-1" );
+            testResourceDesc.setEncoding("iso-8859-1");
         }
     }
 
@@ -342,67 +304,47 @@ public class ArchetypeDescriptorBuilder
      * @throws XmlPullParserException if the encoding specified is not valid or supported or if the
      *                                value of the attribute <code>filtered</code> is no valid.
      */
-    private static void addSiteResourceToDescriptor( Xpp3Dom siteResource, ArchetypeDescriptor descriptor )
-        throws XmlPullParserException
-    {
-        descriptor.addSiteResource( siteResource.getValue() );
+    private static void addSiteResourceToDescriptor(Xpp3Dom siteResource, ArchetypeDescriptor descriptor)
+            throws XmlPullParserException {
+        descriptor.addSiteResource(siteResource.getValue());
 
-        if ( siteResource.getAttribute( "filtered" ) != null )
-        {
-            TemplateDescriptor siteResourceDesc = descriptor.getSiteResourceDescriptor( siteResource.getValue() );
+        if (siteResource.getAttribute("filtered") != null) {
+            TemplateDescriptor siteResourceDesc = descriptor.getSiteResourceDescriptor(siteResource.getValue());
 
-            try
-            {
-                siteResourceDesc.setFiltered( getValueFilteredAttribute( siteResource.getAttribute( "filtered" ) ) );
-            }
-            catch ( IllegalArgumentException iae )
-            {
-                throw new XmlPullParserException( iae.getMessage() );
+            try {
+                siteResourceDesc.setFiltered(getValueFilteredAttribute(siteResource.getAttribute("filtered")));
+            } catch (IllegalArgumentException iae) {
+                throw new XmlPullParserException(iae.getMessage());
             }
         }
-        if ( siteResource.getAttribute( "encoding" ) != null )
-        {
-            TemplateDescriptor siteResourceDesc = descriptor.getSiteResourceDescriptor( siteResource.getValue() );
+        if (siteResource.getAttribute("encoding") != null) {
+            TemplateDescriptor siteResourceDesc = descriptor.getSiteResourceDescriptor(siteResource.getValue());
 
-            try
-            {
-                siteResourceDesc.setEncoding( siteResource.getAttribute( "encoding" ) );
-            }
-            catch ( IllegalCharsetNameException icne )
-            {
+            try {
+                siteResourceDesc.setEncoding(siteResource.getAttribute("encoding"));
+            } catch (IllegalCharsetNameException icne) {
+                throw new XmlPullParserException(siteResource.getAttribute("encoding") + " is not a valid encoding.");
+            } catch (UnsupportedCharsetException uce) {
                 throw new XmlPullParserException(
-                    siteResource.getAttribute( "encoding" ) + " is not a valid encoding." );
-            }
-            catch ( UnsupportedCharsetException uce )
-            {
-                throw new XmlPullParserException(
-                    siteResource.getAttribute( "encoding" ) + " is not a supported encoding." );
+                        siteResource.getAttribute("encoding") + " is not a supported encoding.");
             }
         }
-        if ( siteResource.getValue().endsWith( ".properties" ) )
-        {
-            TemplateDescriptor siteResourceDesc = descriptor.getSiteResourceDescriptor( siteResource.getValue() );
+        if (siteResource.getValue().endsWith(".properties")) {
+            TemplateDescriptor siteResourceDesc = descriptor.getSiteResourceDescriptor(siteResource.getValue());
 
-            siteResourceDesc.setEncoding( "iso-8859-1" );
+            siteResourceDesc.setEncoding("iso-8859-1");
         }
     }
 
-    private static boolean getValueFilteredAttribute( String str )
-        throws IllegalArgumentException
-    {
+    private static boolean getValueFilteredAttribute(String str) throws IllegalArgumentException {
         boolean ret = false;
 
-        if ( str.equals( "true" ) )
-        {
+        if (str.equals("true")) {
             ret = true;
-        }
-        else if ( str.equals( "false" ) )
-        {
+        } else if (str.equals("false")) {
             ret = false;
-        }
-        else
-        {
-            throw new IllegalArgumentException( str + " is not an accepted value for the attribute 'filtered'" );
+        } else {
+            throw new IllegalArgumentException(str + " is not an accepted value for the attribute 'filtered'");
         }
         return ret;
     }

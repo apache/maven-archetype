@@ -1,3 +1,21 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package org.apache.maven.archetype.mojos;
 
 /*
@@ -19,6 +37,13 @@ package org.apache.maven.archetype.mojos;
  * under the License.
  */
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
+
 import org.apache.maven.archetype.ArchetypeCreationRequest;
 import org.apache.maven.archetype.ArchetypeCreationResult;
 import org.apache.maven.archetype.ArchetypeManager;
@@ -37,13 +62,6 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.PropertyUtils;
 import org.codehaus.plexus.util.StringUtils;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
 
 /**
  * <p>
@@ -98,11 +116,9 @@ import java.util.Properties;
  *
  * @author rafale
  */
-@Mojo( name = "create-from-project", requiresProject = true, aggregator = true )
-@Execute( phase = LifecyclePhase.GENERATE_SOURCES )
-public class CreateArchetypeFromProjectMojo
-    extends AbstractMojo
-{
+@Mojo(name = "create-from-project", requiresProject = true, aggregator = true)
+@Execute(phase = LifecyclePhase.GENERATE_SOURCES)
+public class CreateArchetypeFromProjectMojo extends AbstractMojo {
 
     @Component
     private ArchetypeCreationConfigurator configurator;
@@ -110,7 +126,7 @@ public class CreateArchetypeFromProjectMojo
     /**
      * Enable the interactive mode to define the archetype from the project.
      */
-    @Parameter( property = "interactive", defaultValue = "false" )
+    @Parameter(property = "interactive", defaultValue = "false")
     private boolean interactive;
 
     @Component
@@ -119,48 +135,48 @@ public class CreateArchetypeFromProjectMojo
     /**
      * File extensions which are checked for project's text files (vs binary files).
      */
-    @Parameter( property = "archetype.filteredExtentions" )
+    @Parameter(property = "archetype.filteredExtentions")
     private String archetypeFilteredExtentions;
 
     /**
      * Directory names which are checked for project's sources main package.
      */
-    @Parameter( property = "archetype.languages" )
+    @Parameter(property = "archetype.languages")
     private String archetypeLanguages;
 
     /**
      * Velocity templates encoding.
      */
-    @Parameter( property = "archetype.encoding", defaultValue = "UTF-8" )
+    @Parameter(property = "archetype.encoding", defaultValue = "UTF-8")
     private String defaultEncoding;
 
     /**
      * Create a partial archetype.
      */
-    @Parameter( property = "archetype.partialArchetype" )
+    @Parameter(property = "archetype.partialArchetype")
     private boolean partialArchetype = false;
 
     /**
      * Create pom's velocity templates with CDATA preservation. This uses the <code>String.replaceAll()</code>
      * method and risks to have some overly replacement capabilities (beware of '1.0' value).
      */
-    @Parameter( property = "archetype.preserveCData" )
+    @Parameter(property = "archetype.preserveCData")
     private boolean preserveCData = false;
 
-    @Parameter( defaultValue = "${localRepository}", readonly = true )
+    @Parameter(defaultValue = "${localRepository}", readonly = true)
     private ArtifactRepository localRepository;
 
     /**
      * POMs in archetype are created with their initial parent.
      * This property is ignored when preserveCData is true.
      */
-    @Parameter( property = "archetype.keepParent" )
+    @Parameter(property = "archetype.keepParent")
     private boolean keepParent = true;
 
     /**
      * The Maven project to create an archetype from.
      */
-    @Parameter( defaultValue = "${project}", readonly = true, required = true )
+    @Parameter(defaultValue = "${project}", readonly = true, required = true)
     private MavenProject project;
 
     /**
@@ -197,80 +213,81 @@ public class CreateArchetypeFromProjectMojo
      * <code>archetype-metadata.xml</code>, with <code>2.5.1-SNAPSHOT</code> as the default value.
      * </p>
      */
-    @Parameter( defaultValue = "archetype.properties", property = "archetype.properties" )
+    @Parameter(defaultValue = "archetype.properties", property = "archetype.properties")
     private File propertyFile;
 
     /**
      * The property telling which phase to call on the generated archetype.
      * Interesting values are: <code>package</code>, <code>integration-test</code>, <code>install</code> and <code>deploy</code>.
      */
-    @Parameter( property = "archetype.postPhase", defaultValue = "package" )
+    @Parameter(property = "archetype.postPhase", defaultValue = "package")
     private String archetypePostPhase;
 
     /**
      * The directory where the archetype should be created.
      */
-    @Parameter( defaultValue = "${project.build.directory}/generated-sources/archetype" )
+    @Parameter(defaultValue = "${project.build.directory}/generated-sources/archetype")
     private File outputDirectory;
 
-    @Parameter( property = "testMode" )
+    @Parameter(property = "testMode")
     private boolean testMode;
 
     /**
      * The package name for Java source files to be incorporated in the archetype and
      * and relocated to the package that the user selects.
      */
-    @Parameter( property = "packageName" )
-    private String packageName; //Find a better way to resolve the package!!! enforce usage of the configurator
+    @Parameter(property = "packageName")
+    private String packageName; // Find a better way to resolve the package!!! enforce usage of the configurator
 
-    @Parameter( defaultValue = "${session}", readonly = true, required = true )
+    @Parameter(defaultValue = "${session}", readonly = true, required = true)
     private MavenSession session;
 
-//    @Parameter( defaultValue = "${session.settings}", readonly = true, required = true )
-//    private File settingsXml;
+    //    @Parameter( defaultValue = "${session.settings}", readonly = true, required = true )
+    //    private File settingsXml;
 
     @Override
-    public void execute()
-        throws MojoExecutionException, MojoFailureException
-    {
+    public void execute() throws MojoExecutionException, MojoFailureException {
         Properties executionProperties = session.getExecutionProperties();
-        try
-        {
-            if ( propertyFile != null )
-            {
+        try {
+            if (propertyFile != null) {
                 propertyFile.getParentFile().mkdirs();
             }
 
-            List<String> languages = getLanguages( archetypeLanguages, propertyFile );
+            List<String> languages = getLanguages(archetypeLanguages, propertyFile);
 
-            Properties properties =
-                configurator.configureArchetypeCreation( project, Boolean.valueOf( interactive ), executionProperties,
-                                                         propertyFile, languages );
+            Properties properties = configurator.configureArchetypeCreation(
+                    project, Boolean.valueOf(interactive), executionProperties, propertyFile, languages);
 
-            List<String> filtereds = getFilteredExtensions( archetypeFilteredExtentions, propertyFile );
+            List<String> filtereds = getFilteredExtensions(archetypeFilteredExtentions, propertyFile);
 
-            ArchetypeCreationRequest request =
-                new ArchetypeCreationRequest().setDefaultEncoding( defaultEncoding ).setProject( project )
-                /* Used when in interactive mode */.setProperties( properties ).setLanguages( languages )
-                /* Should be refactored to use some ant patterns */.setFiltereds( filtereds )
-                /* This should be correctly handled */.setPreserveCData( preserveCData ).setKeepParent(
-                    keepParent ).setPartialArchetype( partialArchetype )
-                .setLocalRepository( localRepository ).setProjectBuildingRequest( session.getProjectBuildingRequest() )
-                /* this should be resolved and asked for user to verify */.setPackageName( packageName ).setPostPhase(
-                    archetypePostPhase ).setOutputDirectory( outputDirectory ).setSettingsFile( session.getRequest().getUserSettingsFile() );
+            ArchetypeCreationRequest request = new ArchetypeCreationRequest()
+                    .setDefaultEncoding(defaultEncoding)
+                    .setProject(project)
+                    /* Used when in interactive mode */ .setProperties(properties)
+                    .setLanguages(languages)
+                    /* Should be refactored to use some ant patterns */ .setFiltereds(filtereds)
+                    /* This should be correctly handled */ .setPreserveCData(preserveCData)
+                    .setKeepParent(keepParent)
+                    .setPartialArchetype(partialArchetype)
+                    .setLocalRepository(localRepository)
+                    .setProjectBuildingRequest(session.getProjectBuildingRequest())
+                    /* this should be resolved and asked for user to verify */ .setPackageName(packageName)
+                    .setPostPhase(archetypePostPhase)
+                    .setOutputDirectory(outputDirectory)
+                    .setSettingsFile(session.getRequest().getUserSettingsFile());
 
-            ArchetypeCreationResult result = manager.createArchetypeFromProject( request );
+            ArchetypeCreationResult result = manager.createArchetypeFromProject(request);
 
-            if ( result.getCause() != null )
-            {
-                throw new MojoFailureException( result.getCause(), result.getCause().getMessage(),
-                                                result.getCause().getMessage() );
+            if (result.getCause() != null) {
+                throw new MojoFailureException(
+                        result.getCause(),
+                        result.getCause().getMessage(),
+                        result.getCause().getMessage());
             }
 
-            getLog().info( "Archetype project created in " + outputDirectory );
+            getLog().info("Archetype project created in " + outputDirectory);
 
-            if ( testMode )
-            {
+            if (testMode) {
                 // Now here a properties file would be useful to write so that we could automate
                 // some functional tests where we string together an:
                 //
@@ -282,80 +299,67 @@ public class CreateArchetypeFromProjectMojo
                 // This of course would be strung together from the outside.
             }
 
-        }
-        catch ( MojoFailureException ex )
-        {
+        } catch (MojoFailureException ex) {
             throw ex;
-        }
-        catch ( Exception ex )
-        {
-            throw new MojoFailureException( ex, ex.getMessage(), ex.getMessage() );
+        } catch (Exception ex) {
+            throw new MojoFailureException(ex, ex.getMessage(), ex.getMessage());
         }
     }
 
-    private List<String> getFilteredExtensions( String archetypeFilteredExtentions, File propertyFile ) throws IOException
-    {
+    private List<String> getFilteredExtensions(String archetypeFilteredExtentions, File propertyFile)
+            throws IOException {
         List<String> filteredExtensions = new ArrayList<>();
 
-        if ( archetypeFilteredExtentions != null && !archetypeFilteredExtentions.isEmpty() )
-        {
-            filteredExtensions.addAll( Arrays.asList( StringUtils.split( archetypeFilteredExtentions, "," ) ) );
+        if (archetypeFilteredExtentions != null && !archetypeFilteredExtentions.isEmpty()) {
+            filteredExtensions.addAll(Arrays.asList(StringUtils.split(archetypeFilteredExtentions, ",")));
 
-            getLog().debug( "Found in command line extensions = " + filteredExtensions );
+            getLog().debug("Found in command line extensions = " + filteredExtensions);
         }
 
-        if ( filteredExtensions.isEmpty() && propertyFile != null && propertyFile.exists() )
-        {
-            Properties properties = PropertyUtils.loadProperties( propertyFile );
+        if (filteredExtensions.isEmpty() && propertyFile != null && propertyFile.exists()) {
+            Properties properties = PropertyUtils.loadProperties(propertyFile);
 
-            String extensions = properties.getProperty( Constants.ARCHETYPE_FILTERED_EXTENSIONS );
-            if ( extensions != null && !extensions.isEmpty() )
-            {
-                filteredExtensions.addAll( Arrays.asList( StringUtils.split( extensions, "," ) ) );
+            String extensions = properties.getProperty(Constants.ARCHETYPE_FILTERED_EXTENSIONS);
+            if (extensions != null && !extensions.isEmpty()) {
+                filteredExtensions.addAll(Arrays.asList(StringUtils.split(extensions, ",")));
             }
 
-            getLog().debug( "Found in propertyFile " + propertyFile.getName() + " extensions = " + filteredExtensions );
+            getLog().debug("Found in propertyFile " + propertyFile.getName() + " extensions = " + filteredExtensions);
         }
 
-        if ( filteredExtensions.isEmpty() )
-        {
-            filteredExtensions.addAll( Constants.DEFAULT_FILTERED_EXTENSIONS );
+        if (filteredExtensions.isEmpty()) {
+            filteredExtensions.addAll(Constants.DEFAULT_FILTERED_EXTENSIONS);
 
-            getLog().debug( "Using default extensions = " + filteredExtensions );
+            getLog().debug("Using default extensions = " + filteredExtensions);
         }
 
         return filteredExtensions;
     }
 
-    private List<String> getLanguages( String archetypeLanguages, File propertyFile ) throws IOException
-    {
+    private List<String> getLanguages(String archetypeLanguages, File propertyFile) throws IOException {
         List<String> resultingLanguages = new ArrayList<>();
 
-        if ( archetypeLanguages != null && !archetypeLanguages.isEmpty() )
-        {
-            resultingLanguages.addAll( Arrays.asList( StringUtils.split( archetypeLanguages, "," ) ) );
+        if (archetypeLanguages != null && !archetypeLanguages.isEmpty()) {
+            resultingLanguages.addAll(Arrays.asList(StringUtils.split(archetypeLanguages, ",")));
 
-            getLog().debug( "Found in command line languages = " + resultingLanguages );
+            getLog().debug("Found in command line languages = " + resultingLanguages);
         }
 
-        if ( resultingLanguages.isEmpty() && propertyFile != null && propertyFile.exists() )
-        {
-            Properties properties = PropertyUtils.loadProperties( propertyFile );
+        if (resultingLanguages.isEmpty() && propertyFile != null && propertyFile.exists()) {
+            Properties properties = PropertyUtils.loadProperties(propertyFile);
 
-            String languages = properties.getProperty( Constants.ARCHETYPE_LANGUAGES );
-            if ( languages != null && !languages.isEmpty() )
-            {
-                resultingLanguages.addAll( Arrays.asList( StringUtils.split( languages, "," ) ) );
+            String languages = properties.getProperty(Constants.ARCHETYPE_LANGUAGES);
+            if (languages != null && !languages.isEmpty()) {
+                resultingLanguages.addAll(Arrays.asList(StringUtils.split(languages, ",")));
             }
 
-            getLog().debug( "Found in propertyFile " + propertyFile.getName() + " languages = " + resultingLanguages );
+            getLog().debug("Found in propertyFile " + propertyFile.getName() + " languages = " + resultingLanguages);
         }
 
-        if ( resultingLanguages.isEmpty() )
-        {
-            resultingLanguages.addAll( Constants.DEFAULT_LANGUAGES );
+        if (resultingLanguages.isEmpty()) {
+            resultingLanguages.addAll(Constants.DEFAULT_LANGUAGES);
 
-            getLog().debug( "Using default languages = " + resultingLanguages );
+            getLog().debug("Using default languages = " + resultingLanguages);
         }
 
         return resultingLanguages;

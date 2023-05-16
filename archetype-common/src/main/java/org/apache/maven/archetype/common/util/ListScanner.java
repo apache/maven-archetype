@@ -1,3 +1,21 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package org.apache.maven.archetype.common.util;
 
 /*
@@ -19,16 +37,16 @@ package org.apache.maven.archetype.common.util;
  * under the License.
  */
 
-import org.codehaus.plexus.util.SelectorUtils;
-import org.codehaus.plexus.util.StringUtils;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.plexus.util.SelectorUtils;
+import org.codehaus.plexus.util.StringUtils;
+
 /**
  * <p>Class for scanning a directory for files/directories which match certain criteria.</p>
- * 
+ *
  * <p>These criteria consist of selectors and patterns which have been specified. With the selectors
  * you can select which files you want to have included. Files which are not selected are excluded.
  * With patterns you can include or exclude files based on their filename.</p>
@@ -89,7 +107,7 @@ import java.util.List;
  * ds.setBasedir(new File("test"));
  * ds.setCaseSensitive(true);
  * ds.scan();
- * 
+ *
  * System.out.println("FILES:");
  * String[] files = ds.getIncludedFiles();
  * for (int i = 0; i &lt; files.length; i++) {
@@ -108,47 +126,57 @@ import java.util.List;
  * @author <a href="mailto:bruce@callenish.com">Bruce Atherton</a>
  * @author <a href="mailto:levylambert@tiscali-dsl.de">Antoine Levy-Lambert</a>
  */
-public class ListScanner
-{
+public class ListScanner {
     /**
      * Patterns which should be excluded by default.
      *
      * @see #addDefaultExcludes()
      */
-    public static final String[] DEFAULTEXCLUDES =
-        { // Miscellaneous typical temporary files
-            "**/*~", "**/#*#", "**/.#*", "**/%*%", "**/._*",
+    public static final String[] DEFAULTEXCLUDES = { // Miscellaneous typical temporary files
+        "**/*~",
+        "**/#*#",
+        "**/.#*",
+        "**/%*%",
+        "**/._*",
 
-            // CVS
-            "**/CVS", "**/CVS/**", "**/.cvsignore",
+        // CVS
+        "**/CVS",
+        "**/CVS/**",
+        "**/.cvsignore",
 
-            // SCCS
-            "**/SCCS", "**/SCCS/**",
+        // SCCS
+        "**/SCCS",
+        "**/SCCS/**",
 
-            // Visual SourceSafe
-            "**/vssver.scc",
+        // Visual SourceSafe
+        "**/vssver.scc",
 
-            // Subversion
-            "**/.svn", "**/.svn/**",
+        // Subversion
+        "**/.svn",
+        "**/.svn/**",
 
-            // Arch
-            "**/.arch-ids", "**/.arch-ids/**",
+        // Arch
+        "**/.arch-ids",
+        "**/.arch-ids/**",
 
-            // Bazaar
-            "**/.bzr", "**/.bzr/**",
+        // Bazaar
+        "**/.bzr",
+        "**/.bzr/**",
 
-            // GIT
-            "**/.git", "**/.git/**",
+        // GIT
+        "**/.git",
+        "**/.git/**",
 
-            // Mercurial
-            "**/.hg",  "**/.hg/**",
+        // Mercurial
+        "**/.hg",
+        "**/.hg/**",
 
-            // SurroundSCM
-            "**/.MySCMServerInfo",
+        // SurroundSCM
+        "**/.MySCMServerInfo",
 
-            // Mac
-            "**/.DS_Store"
-        };
+        // Mac
+        "**/.DS_Store"
+    };
 
     /** The base directory to be scanned. */
     protected String basedir;
@@ -166,13 +194,10 @@ public class ListScanner
     protected boolean isCaseSensitive = true;
 
     /** Sole constructor. */
-    public ListScanner()
-    {
-    }
+    public ListScanner() {}
 
-    public static String getDefaultExcludes()
-    {
-        return StringUtils.join( DEFAULTEXCLUDES, "," );
+    public static String getDefaultExcludes() {
+        return StringUtils.join(DEFAULTEXCLUDES, ",");
     }
 
     /**
@@ -187,10 +212,9 @@ public class ListScanner
      * @return <code>true</code> if the string matches against the pattern, or <code>false</code>
      *         otherwise.
      */
-    public static boolean match( String pattern, String str )
-    {
+    public static boolean match(String pattern, String str) {
         // default matches the SelectorUtils default
-        return match( pattern, str, true );
+        return match(pattern, str, true);
     }
 
     /**
@@ -206,9 +230,8 @@ public class ListScanner
      * @return <code>true</code> if the string matches against the pattern, or <code>false</code>
      *         otherwise.
      */
-    protected static boolean match( String pattern, String str, boolean isCaseSensitive )
-    {
-        return SelectorUtils.match( pattern, str, isCaseSensitive );
+    protected static boolean match(String pattern, String str, boolean isCaseSensitive) {
+        return SelectorUtils.match(pattern, str, isCaseSensitive);
     }
 
     /**
@@ -219,10 +242,9 @@ public class ListScanner
      * @return <code>true</code> if the pattern matches against the string, or <code>false</code>
      *         otherwise.
      */
-    protected static boolean matchPath( String pattern, String str )
-    {
+    protected static boolean matchPath(String pattern, String str) {
         // default matches the SelectorUtils default
-        return matchPath( pattern, str, true );
+        return matchPath(pattern, str, true);
     }
 
     /**
@@ -234,15 +256,14 @@ public class ListScanner
      * @return <code>true</code> if the pattern matches against the string, or <code>false</code>
      *         otherwise.
      */
-    protected static boolean matchPath( String pattern, String str, boolean isCaseSensitive )
-    {
-        return SelectorUtils.matchPath( PathUtils.convertPathForOS( pattern ), PathUtils.convertPathForOS( str ),
-                                        isCaseSensitive );
+    protected static boolean matchPath(String pattern, String str, boolean isCaseSensitive) {
+        return SelectorUtils.matchPath(
+                PathUtils.convertPathForOS(pattern), PathUtils.convertPathForOS(str), isCaseSensitive);
     }
 
     /**
      * <p>Tests whether or not a given path matches the start of a given pattern up to the first "**".<p>
-     * 
+     *
      * <p>This is not a general purpose test and should only be used if you can live with false
      * positives. For example, <code>pattern=**\a</code> and <code>str=b</code> will yield <code>
      * true</code>.</p>
@@ -252,15 +273,14 @@ public class ListScanner
      * @return whether or not a given path matches the start of a given pattern up to the first
      *         "**".
      */
-    protected static boolean matchPatternStart( String pattern, String str )
-    {
+    protected static boolean matchPatternStart(String pattern, String str) {
         // default matches SelectorUtils default
-        return matchPatternStart( pattern, str, true );
+        return matchPatternStart(pattern, str, true);
     }
 
     /**
      * <p>Tests whether or not a given path matches the start of a given pattern up to the first "**".</p>
-     * 
+     *
      * <p>This is not a general purpose test and should only be used if you can live with false
      * positives. For example, <code>pattern=**\a</code> and <code>str=b</code> will yield <code>
      * true</code>.</p>
@@ -271,26 +291,22 @@ public class ListScanner
      * @return whether or not a given path matches the start of a given pattern up to the first
      *         "**".
      */
-    protected static boolean matchPatternStart( String pattern, String str, boolean isCaseSensitive )
-    {
-        return SelectorUtils.matchPatternStart( PathUtils.convertPathForOS( pattern ),
-                                                PathUtils.convertPathForOS( str ), isCaseSensitive );
+    protected static boolean matchPatternStart(String pattern, String str, boolean isCaseSensitive) {
+        return SelectorUtils.matchPatternStart(
+                PathUtils.convertPathForOS(pattern), PathUtils.convertPathForOS(str), isCaseSensitive);
     }
 
     /** Adds default exclusions to the current exclusions set. */
-    public void addDefaultExcludes()
-    {
-        int excludesLength = ( excludes == null ) ? 0 : excludes.length;
+    public void addDefaultExcludes() {
+        int excludesLength = (excludes == null) ? 0 : excludes.length;
         String[] newExcludes;
         newExcludes = new String[excludesLength + DEFAULTEXCLUDES.length];
-        if ( excludesLength > 0 )
-        {
-            System.arraycopy( excludes, 0, newExcludes, 0, excludesLength );
+        if (excludesLength > 0) {
+            System.arraycopy(excludes, 0, newExcludes, 0, excludesLength);
         }
-        for ( int i = 0; i < DEFAULTEXCLUDES.length; i++ )
-        {
+        for (int i = 0; i < DEFAULTEXCLUDES.length; i++) {
             newExcludes[i + excludesLength] =
-                DEFAULTEXCLUDES[i].replace( '/', File.separatorChar ).replace( '\\', File.separatorChar );
+                    DEFAULTEXCLUDES[i].replace('/', File.separatorChar).replace('\\', File.separatorChar);
         }
         excludes = newExcludes;
     }
@@ -300,8 +316,7 @@ public class ListScanner
      *
      * @return the base directory to be scanned
      */
-    public String getBasedir()
-    {
+    public String getBasedir() {
         return basedir;
     }
 
@@ -312,8 +327,7 @@ public class ListScanner
      *
      * @param basedir The base directory for scanning. Should not be <code>null</code>.
      */
-    public void setBasedir( String basedir )
-    {
+    public void setBasedir(String basedir) {
         this.basedir = basedir;
     }
 
@@ -323,8 +337,7 @@ public class ListScanner
      * @param isCaseSensitive whether or not the file system should be regarded as a case
      *                        sensitive one
      */
-    public void setCaseSensitive( boolean isCaseSensitive )
-    {
+    public void setCaseSensitive(boolean isCaseSensitive) {
         this.isCaseSensitive = isCaseSensitive;
     }
 
@@ -332,35 +345,27 @@ public class ListScanner
      * <p>Sets the list of exclude patterns to use. All '/' and '\' characters are replaced by <code>
      * File.separatorChar</code>, so the separator used need not match <code>
      * File.separatorChar</code>.</p>
-     * 
+     *
      * <p>When a pattern ends with a '/' or '\', "**" is appended.</p>
      *
      * @param excludesList A list of exclude patterns. May be <code>null</code>, indicating that no
      *                 files should be excluded. If a non-<code>null</code> list is given, all
      *                 elements must be non-<code>null</code>.
      */
-    public void setExcludes( List<String> excludesList )
-    {
-        String[] excludes = excludesList.toArray( new String[excludesList.size()] );
-        if ( excludes == null )
-        {
+    public void setExcludes(List<String> excludesList) {
+        String[] excludes = excludesList.toArray(new String[excludesList.size()]);
+        if (excludes == null) {
             this.excludes = null;
-        }
-        else
-        {
-            setExcludes( excludes );
+        } else {
+            setExcludes(excludes);
         }
     }
 
-    public void setExcludes( String excludes )
-    {
-        if ( excludes == null )
-        {
+    public void setExcludes(String excludes) {
+        if (excludes == null) {
             this.excludes = null;
-        }
-        else
-        {
-            setExcludes( StringUtils.split( excludes, "," ) );
+        } else {
+            setExcludes(StringUtils.split(excludes, ","));
         }
     }
 
@@ -368,35 +373,27 @@ public class ListScanner
      * <p>Sets the list of include patterns to use. All '/' and '\' characters are replaced by <code>
      * File.separatorChar</code>, so the separator used need not match <code>
      * File.separatorChar</code>.</p>
-     * 
+     *
      * <p>When a pattern ends with a '/' or '\', "**" is appended.</p>
      *
      * @param includesList A list of include patterns. May be <code>null</code>, indicating that all
      *                 files should be included. If a non-<code>null</code> list is given, all
      *                 elements must be non-<code>null</code>.
      */
-    public void setIncludes( List<String> includesList )
-    {
-        String[] includes = includesList.toArray( new String[includesList.size()] );
-        if ( includes == null )
-        {
+    public void setIncludes(List<String> includesList) {
+        String[] includes = includesList.toArray(new String[includesList.size()]);
+        if (includes == null) {
             this.includes = null;
-        }
-        else
-        {
-            setIncludes( includes );
+        } else {
+            setIncludes(includes);
         }
     }
 
-    public void setIncludes( String includes )
-    {
-        if ( includes == null )
-        {
+    public void setIncludes(String includes) {
+        if (includes == null) {
             this.includes = null;
-        }
-        else
-        {
-            setIncludes( StringUtils.split( includes, "," ) );
+        } else {
+            setIncludes(StringUtils.split(includes, ","));
         }
     }
 
@@ -407,40 +404,32 @@ public class ListScanner
      * @throws IllegalStateException if the base directory was set incorrectly (i.e. if it is
      *                               <code>null</code>, doesn't exist, or isn't a directory).
      */
-    public List<String> scan( List<String> files )
-        throws
-        IllegalStateException
-    {
-//        System.err.println("Scanning \nbasedir="+basedir +
-//                " \nincludes=" + java.util.Arrays.toString(includes) +
-//                " \nexcludes=" + java.util.Arrays.toString(excludes) +
-//                " \non files="+files);
-        if ( basedir == null )
-        {
-            throw new IllegalStateException( "No basedir set" );
+    public List<String> scan(List<String> files) throws IllegalStateException {
+        //        System.err.println("Scanning \nbasedir="+basedir +
+        //                " \nincludes=" + java.util.Arrays.toString(includes) +
+        //                " \nexcludes=" + java.util.Arrays.toString(excludes) +
+        //                " \non files="+files);
+        if (basedir == null) {
+            throw new IllegalStateException("No basedir set");
         }
 
-        if ( includes == null )
-        {
+        if (includes == null) {
             // No includes supplied, so set it to 'matches all'
             includes = new String[1];
             includes[0] = "**";
         }
-        if ( excludes == null )
-        {
+        if (excludes == null) {
             excludes = new String[0];
         }
 
         List<String> result = new ArrayList<>();
 
-        for ( String fileName : files )
-        {
-            if ( isIncluded( fileName ) && !isExcluded( fileName ) )
-            {
-                result.add( fileName );
+        for (String fileName : files) {
+            if (isIncluded(fileName) && !isExcluded(fileName)) {
+                result.add(fileName);
             }
         }
-//        System.err.println("Result "+result+"\n\n\n");
+        //        System.err.println("Result "+result+"\n\n\n");
         return result;
     }
 
@@ -451,9 +440,8 @@ public class ListScanner
      * @return <code>true</code> when the name matches against at least one exclude pattern, or
      *         <code>false</code> otherwise.
      */
-    protected boolean isExcluded( String name )
-    {
-        return matchesPatterns( name, excludes );
+    protected boolean isExcluded(String name) {
+        return matchesPatterns(name, excludes);
     }
 
     /**
@@ -463,9 +451,8 @@ public class ListScanner
      * @return <code>true</code> when the name matches against at least one include pattern, or
      *         <code>false</code> otherwise.
      */
-    protected boolean isIncluded( String name )
-    {
-        return matchesPatterns( name, includes );
+    protected boolean isIncluded(String name) {
+        return matchesPatterns(name, includes);
     }
 
     /**
@@ -476,53 +463,43 @@ public class ListScanner
      * @return <code>true</code> when the name matches against at least one include pattern, or
      *         <code>false</code> otherwise.
      */
-    protected boolean matchesPatterns( String name, String[] patterns )
-    {
+    protected boolean matchesPatterns(String name, String[] patterns) {
         // avoid extra object creation in the loop
         String path = null;
 
         String baseDir = getBasedir();
-        if ( baseDir.length() > 0 )
-        {
-            baseDir = baseDir.concat( File.separator );
+        if (baseDir.length() > 0) {
+            baseDir = baseDir.concat(File.separator);
         }
 
-        for ( int i = 0; i < patterns.length; i++ )
-        {
-            path = PathUtils.convertPathForOS( baseDir + patterns[i] );
-//            System.err.println("path="+path);
-            if ( matchPath( path, name, isCaseSensitive ) )
-            {
+        for (int i = 0; i < patterns.length; i++) {
+            path = PathUtils.convertPathForOS(baseDir + patterns[i]);
+            //            System.err.println("path="+path);
+            if (matchPath(path, name, isCaseSensitive)) {
                 return true;
             }
         }
         return false;
     }
 
-    private void setExcludes( String[] excludes )
-    {
-        this.excludes = setPatterns( excludes );
+    private void setExcludes(String[] excludes) {
+        this.excludes = setPatterns(excludes);
     }
 
-    private void setIncludes( String[] includes )
-    {
-        this.includes = setPatterns( includes );
+    private void setIncludes(String[] includes) {
+        this.includes = setPatterns(includes);
     }
 
-    private String[] setPatterns( String[] patterns )
-    {
+    private String[] setPatterns(String[] patterns) {
         String[] result = null;
-        if ( ( patterns != null ) && ( patterns.length > 0 ) )
-        {
+        if ((patterns != null) && (patterns.length > 0)) {
             result = new String[patterns.length];
-            for ( int i = 0; i < patterns.length; i++ )
-            {
+            for (int i = 0; i < patterns.length; i++) {
                 String pattern = patterns[i].trim();
 
                 // don't normalize the pattern here, we internalize the normalization
                 // just normalize for comparison purposes
-                if ( PathUtils.convertPathForOS( pattern ).endsWith( File.separator ) )
-                {
+                if (PathUtils.convertPathForOS(pattern).endsWith(File.separator)) {
                     pattern += "**";
                 }
                 result[i] = pattern;
