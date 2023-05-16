@@ -61,7 +61,10 @@ import static org.xmlunit.matchers.CompareMatcher.isIdenticalTo;
 public class ArchetypeTest
     extends PlexusTestCase
 {
+
     private OldArchetype archetype;
+
+    private StringWriter out = new StringWriter();;
 
     public void testArchetype()
         throws Exception
@@ -239,92 +242,152 @@ public class ArchetypeTest
         return archetypeJarLoader;
     }
 
-    public void testAddModuleToParentPOM()
-        throws Exception
+    public void testAddModuleToParentBasic()
+            throws Exception
     {
-        String pom = "<project>\n"
-            + "  <packaging>pom</packaging>\n"
-            + "</project>";
+        String pom = ("<project " +
+                "xmlns=\"http://maven.apache.org/POM/4.0.0\" " +
+                "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
+                "xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 " +
+                "http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n")
+                + "  <packaging>pom</packaging>\n"
+                + "</project>";
 
-        StringWriter out = new StringWriter();
         assertTrue( DefaultOldArchetype.addModuleToParentPom( "myArtifactId1", new StringReader( pom ), out ) );
 
         assertThat( out.toString(), isIdenticalTo( "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
-                + "<project>\n"
+                + ("<project " +
+                "xmlns=\"http://maven.apache.org/POM/4.0.0\" " +
+                "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
+                "xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 " +
+                "http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n")
                 + "  <packaging>pom</packaging>\n"
                 + "  <modules>\n"
                 + "    <module>myArtifactId1</module>\n"
                 + "  </modules>\n"
-                + "</project>" ).normalizeWhitespace() );
+                + "</project>") );
+    }
 
-        pom = "<project>\n"
-            + "  <modelVersion>4.0.0</modelVersion>\n"
-            + "  <packaging>pom</packaging>\n"
-            + "</project>";
+    public void testAddModuleToParentWithModelVersion()
+            throws Exception
+    {
+        String pom = ("<project " +
+                "xmlns=\"http://maven.apache.org/POM/4.0.0\" " +
+                "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
+                "xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 " +
+                "http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n")
+                + "  <modelVersion>4.0.0</modelVersion>\n"
+                + "  <packaging>pom</packaging>\n"
+                + "</project>";
 
-        out = new StringWriter();
         assertTrue( DefaultOldArchetype.addModuleToParentPom( "myArtifactId2", new StringReader( pom ), out ) );
 
         assertThat( out.toString(), isIdenticalTo( "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
-                + "<project>\n"
+                + ("<project " +
+                "xmlns=\"http://maven.apache.org/POM/4.0.0\" " +
+                "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
+                "xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 " +
+                "http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n")
                 + "  <modelVersion>4.0.0</modelVersion>\n"
                 + "  <packaging>pom</packaging>\n"
                 + "  <modules>\n"
                 + "    <module>myArtifactId2</module>\n"
                 + "  </modules>\n"
-                + "</project>" ).normalizeWhitespace() );
+                + "</project>") );
+    }
 
-        pom = "<project><modelVersion>4.0.0</modelVersion>\n"
-            + "  <packaging>pom</packaging>\n"
-            + "  <modules>\n"
-            + "  </modules>\n"
-            + "</project>";
+    public void testAddModuleToParentWithEmptyModulesElement()
+            throws Exception
+    {
+        String pom = ("<project " +
+                "xmlns=\"http://maven.apache.org/POM/4.0.0\" " +
+                "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
+                "xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 " +
+                "http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n")
+                + "  <modelVersion>4.0.0</modelVersion>\n"
+                + "  <packaging>pom</packaging>\n"
+                + "  <modules>\n"
+                + "  </modules>\n"
+                + "</project>";
 
-        out = new StringWriter();
         assertTrue( DefaultOldArchetype.addModuleToParentPom( "myArtifactId3", new StringReader( pom ), out ) );
 
-        assertThat( out.toString(), isIdenticalTo("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
-                + "<project><modelVersion>4.0.0</modelVersion>\n"
+        assertThat( out.toString(), isIdenticalTo( "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
+                + ("<project " +
+                "xmlns=\"http://maven.apache.org/POM/4.0.0\" " +
+                "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
+                "xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 " +
+                "http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n")
+                + "  <modelVersion>4.0.0</modelVersion>\n"
                 + "  <packaging>pom</packaging>\n"
                 + "  <modules>\n"
                 + "    <module>myArtifactId3</module>\n"
                 + "  </modules>\n"
-                + "</project>" ).normalizeWhitespace() );
+                + "</project>") );
+    }
 
-        pom = "<project><modelVersion>4.0.0</modelVersion>\n"
-            + "  <packaging>pom</packaging>\n"
-            + "  <modules>\n"
-            + "    <module>myArtifactId3</module>\n"
-            + "  </modules>\n"
-            + "</project>";
+    public void testAddModuleToParentWithOneModulePresent()
+            throws Exception
+    {
+        String pom = ("<project " +
+                "xmlns=\"http://maven.apache.org/POM/4.0.0\" " +
+                "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
+                "xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 " +
+                "http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n")
+                + "  <modelVersion>4.0.0</modelVersion>\n"
+                + "  <packaging>pom</packaging>\n"
+                + "  <modules>\n"
+                + "    <module>myArtifactId3</module>\n"
+                + "  </modules>\n"
+                + "</project>";
 
-        out = new StringWriter();
         assertTrue( DefaultOldArchetype.addModuleToParentPom( "myArtifactId4", new StringReader( pom ), out ) );
 
-        assertThat( out.toString(), isIdenticalTo("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
-                + "<project><modelVersion>4.0.0</modelVersion>\n"
+        assertThat( out.toString(), isIdenticalTo( "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
+                + ("<project " +
+                "xmlns=\"http://maven.apache.org/POM/4.0.0\" " +
+                "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
+                "xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 " +
+                "http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n")
+                + "  <modelVersion>4.0.0</modelVersion>\n"
                 + "  <packaging>pom</packaging>\n"
                 + "  <modules>\n"
                 + "    <module>myArtifactId3</module>\n"
                 + "    <module>myArtifactId4</module>\n"
                 + "  </modules>\n"
-                + "</project>" ).normalizeWhitespace() );
+                + "</project>") );
+    }
 
-        pom = "<project><modelVersion>4.0.0</modelVersion>\n"
-            + "  <packaging>pom</packaging>\n"
-            + "  <modules>\n"
-            + "    <module>myArtifactId3</module>\n"
-            + "  </modules>\n"
-            + "</project>";
+    public void testAddModuleToParentDoesNothingWhenSameModuleAdded()
+            throws Exception
+    {
+        String pom = ("<project " +
+                "xmlns=\"http://maven.apache.org/POM/4.0.0\" " +
+                "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
+                "xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 " +
+                "http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n")
+                + "  <modelVersion>4.0.0</modelVersion>\n"
+                + "  <packaging>pom</packaging>\n"
+                + "  <modules>\n"
+                + "    <module>myArtifactId3</module>\n"
+                + "  </modules>\n"
+                + "</project>";
 
-        out = new StringWriter();
         assertFalse( DefaultOldArchetype.addModuleToParentPom( "myArtifactId3", new StringReader( pom ), out ) );
 
         // empty means unchanged
         assertEquals( "", out.toString().trim() );
+    }
 
-
-        pom = "<project><modelVersion>4.0.0</modelVersion>\n"
+    public void testAddModuleToParentWithProfiles()
+            throws Exception
+    {
+        String pom = ("<project " +
+                "xmlns=\"http://maven.apache.org/POM/4.0.0\" " +
+                "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
+                "xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 " +
+                "http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n")
+                + "  <modelVersion>4.0.0</modelVersion>\n"
                 + "  <packaging>pom</packaging>\n"
                 + "  <modules>\n"
                 + "    <module>myArtifactId1</module>\n"
@@ -344,14 +407,18 @@ public class ArchetypeTest
                 + "        <module>module2</module>\n"
                 + "      </modules>\n"
                 + "    </profile>\n"
-                + "  </profiles>\n"
-                + "</project>";
+                + "  </profiles>\n" +
+                "</project>";
 
-        out = new StringWriter();
         assertTrue( DefaultOldArchetype.addModuleToParentPom( "module1", new StringReader( pom ), out ) );
 
         assertThat( out.toString(), isIdenticalTo("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
-                + "<project><modelVersion>4.0.0</modelVersion>\n"
+                + ("<project " +
+                "xmlns=\"http://maven.apache.org/POM/4.0.0\" " +
+                "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
+                "xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 " +
+                "http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n")
+                + "  <modelVersion>4.0.0</modelVersion>\n"
                 + "  <packaging>pom</packaging>\n"
                 + "  <modules>\n"
                 + "    <module>myArtifactId1</module>\n"
@@ -373,7 +440,7 @@ public class ArchetypeTest
                 + "      </modules>\n"
                 + "    </profile>\n"
                 + "  </profiles>\n"
-                + "</project>" ).normalizeWhitespace() );
+                + "</project>") );
     }
 
     public void testAddModuleToParentPOMNoPackaging()
