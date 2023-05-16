@@ -299,6 +299,7 @@
                   <preBuildHookScript>setup</preBuildHookScript>
                   <postBuildHookScript>verify</postBuildHookScript>
                   <settingsFile>src/it/mrm/settings.xml</settingsFile>
+                  <logDirectory>target/it/logs</logDirectory>
                   <filterProperties>
                     <repository.proxy.url>${mrm.repository.url}</repository.proxy.url>
                     <archetype-repo.proxy.url>${archetype-repo.proxy.url}</archetype-repo.proxy.url>

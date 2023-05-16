@@ -17,5 +17,5 @@
  * under the License.
  */
 
-buildLog = new File( basedir, "build.log" )
+buildLog = new File( basedir, "../../logs/ARCHETYPE-517_failing-goals/build.log" )
 assert buildLog.text.contains( "Failed to invoke goals" )
