@@ -16,7 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 package org.apache.maven.archetype.common;
 
 import java.io.File;
@@ -30,24 +29,23 @@ import org.junit.Test;
 
 public class TestPomManager {
 
-  //ref: https://www.baeldung.com/java-pretty-print-xml
-  //https://bugs.openjdk.java.net/browse/JDK-8262285?attachmentViewMode=list
-  @Test
-  public void testAddModule() throws Exception {
-    PomManager pomManager = new DefaultPomManager();
+    // ref: https://www.baeldung.com/java-pretty-print-xml
+    // https://bugs.openjdk.java.net/browse/JDK-8262285?attachmentViewMode=list
+    @Test
+    public void testAddModule() throws Exception {
+        PomManager pomManager = new DefaultPomManager();
 
-    URL pom = getClass().getResource("/projects/generate-9/pom.xml.sample");
-    File pomFileSrc = new File(pom.toURI());
-    File pomFile = new File(pomFileSrc.getAbsolutePath() + "-copied.xml");
-    FileUtils.copyFile(pomFileSrc, pomFile);
-    final int moduleNumber = 4;
-    for (int i = 0; i < moduleNumber; i++ ) {
-      pomManager.addModule(pomFile, "test" + i);
+        URL pom = getClass().getResource("/projects/generate-9/pom.xml.sample");
+        File pomFileSrc = new File(pom.toURI());
+        File pomFile = new File(pomFileSrc.getAbsolutePath() + "-copied.xml");
+        FileUtils.copyFile(pomFileSrc, pomFile);
+        final int moduleNumber = 4;
+        for (int i = 0; i < moduleNumber; i++) {
+            pomManager.addModule(pomFile, "test" + i);
+        }
+        String fileText = FileUtils.readFileToString(pomFile, "UTF-8");
+        Pattern pattern = Pattern.compile("(^[ ]+[\\r\\n]+){" + moduleNumber + "}", Pattern.MULTILINE);
+        Matcher matcher = pattern.matcher(fileText);
+        Assert.assertFalse(matcher.find());
     }
-    String fileText = FileUtils.readFileToString( pomFile, "UTF-8" );
-    Pattern pattern = Pattern.compile("(^[ ]+[\\r\\n]+){"+moduleNumber + "}", Pattern.MULTILINE);
-    Matcher matcher = pattern.matcher(fileText);
-    Assert.assertFalse(matcher.find());
-  }
-
 }
