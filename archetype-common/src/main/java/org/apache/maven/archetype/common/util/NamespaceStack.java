@@ -1,3 +1,21 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package org.apache.maven.archetype.common.util;
 
 /*
@@ -12,8 +30,8 @@ package org.apache.maven.archetype.common.util;
  *    notice, this list of conditions, and the following disclaimer.
  *
  * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions, and the disclaimer that follows 
- *    these conditions in the documentation and/or other materials 
+ *    notice, this list of conditions, and the disclaimer that follows
+ *    these conditions in the documentation and/or other materials
  *    provided with the distribution.
  *
  * 3. The name "JDOM" must not be used to endorse or promote products
@@ -24,12 +42,12 @@ package org.apache.maven.archetype.common.util;
  *    may "JDOM" appear in their name, without prior written permission
  *    from the JDOM Project Management <request_AT_jdom_DOT_org>.
  *
- * In addition, we request (but do not require) that you include in the 
- * end-user documentation provided with the redistribution and/or in the 
+ * In addition, we request (but do not require) that you include in the
+ * end-user documentation provided with the redistribution and/or in the
  * software itself an acknowledgement equivalent to the following:
  *     "This product includes software developed by the
  *      JDOM Project (http://www.jdom.org/)."
- * Alternatively, the acknowledgment may be graphical using the logos 
+ * Alternatively, the acknowledgment may be graphical using the logos
  * available at http://www.jdom.org/images/logos.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -45,16 +63,16 @@ package org.apache.maven.archetype.common.util;
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * This software consists of voluntary contributions made by many 
- * individuals on behalf of the JDOM Project and was originally 
+ * This software consists of voluntary contributions made by many
+ * individuals on behalf of the JDOM Project and was originally
  * created by Jason Hunter <jhunter_AT_jdom_DOT_org> and
  * Brett McLaughlin <brett_AT_jdom_DOT_org>.  For more information
  * on the JDOM Project, please see <http://www.jdom.org/>.
  */
 
-import org.jdom2.Namespace;
-
 import java.util.Stack;
+
+import org.jdom2.Namespace;
 
 /**
  * A non-public utility class used by <code>{@link XMLOutputter}</code>
@@ -64,8 +82,7 @@ import java.util.Stack;
  * @author Fred Trimble
  * @author Brett McLaughlin
  */
-class NamespaceStack
-{
+class NamespaceStack {
     /** The prefixes available */
     private Stack<String> prefixes;
 
@@ -73,8 +90,7 @@ class NamespaceStack
     private Stack<String> uris;
 
     /** This creates the needed storage. */
-    NamespaceStack()
-    {
+    NamespaceStack() {
         prefixes = new Stack<>();
         uris = new Stack<>();
     }
@@ -85,10 +101,9 @@ class NamespaceStack
      *
      * @param ns <code>Namespace</code> to add.
      */
-    public void push( Namespace ns )
-    {
-        prefixes.push( ns.getPrefix() );
-        uris.push( ns.getURI() );
+    public void push(Namespace ns) {
+        prefixes.push(ns.getPrefix());
+        uris.push(ns.getURI());
     }
 
     /**
@@ -97,8 +112,7 @@ class NamespaceStack
      *
      * @return <code>String</code> - the popped namespace prefix.
      */
-    public String pop()
-    {
+    public String pop() {
         String prefix = prefixes.pop();
         uris.pop();
 
@@ -110,8 +124,7 @@ class NamespaceStack
      *
      * @return <code>int</code> - size of the namespace stack.
      */
-    public int size()
-    {
+    public int size() {
         return prefixes.size();
     }
 
@@ -122,14 +135,12 @@ class NamespaceStack
      * @param prefix <code>String</code> namespace prefix.
      * @return <code>String</code> - the namespace URI for that prefix.
      */
-    public String getURI( String prefix )
-    {
-        int index = prefixes.lastIndexOf( prefix );
-        if ( index == -1 )
-        {
+    public String getURI(String prefix) {
+        int index = prefixes.lastIndexOf(prefix);
+        if (index == -1) {
             return null;
         }
-        String uri = uris.elementAt( index );
+        String uri = uris.elementAt(index);
         return uri;
     }
 
@@ -139,16 +150,13 @@ class NamespaceStack
      * the "oldest," all to <code>System.out</code>.
      */
     @Override
-    public String toString()
-    {
+    public String toString() {
         StringBuilder buf = new StringBuilder();
         String sep = System.lineSeparator();
-        buf.append( "Stack: " + prefixes.size() + sep );
-        for ( int i = 0; i < prefixes.size(); i++ )
-        {
-            buf.append( prefixes.elementAt( i ) + "&" + uris.elementAt( i ) + sep );
+        buf.append("Stack: " + prefixes.size() + sep);
+        for (int i = 0; i < prefixes.size(); i++) {
+            buf.append(prefixes.elementAt(i) + "&" + uris.elementAt(i) + sep);
         }
         return buf.toString();
     }
 }
-

@@ -1,5 +1,3 @@
-package org.apache.maven.archetype.downloader;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.archetype.downloader;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.archetype.downloader;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -35,86 +34,85 @@ import org.codehaus.plexus.component.annotations.Requirement;
 /**
  * @author Jason van Zyl
  */
-@Component( role = Downloader.class )
-public class DefaultDownloader
-    implements Downloader
-{
+@Component(role = Downloader.class)
+public class DefaultDownloader implements Downloader {
     @Requirement
     private ArtifactResolver artifactResolver;
 
     @Override
-    public File download( String groupId, String artifactId, String version, ArtifactRepository archetypeRepository,
-                          ArtifactRepository localRepository, List<ArtifactRepository> remoteRepositories,
-                          ProjectBuildingRequest buildingRequest )
-        throws DownloadException, DownloadNotFoundException
-   {
+    public File download(
+            String groupId,
+            String artifactId,
+            String version,
+            ArtifactRepository archetypeRepository,
+            ArtifactRepository localRepository,
+            List<ArtifactRepository> remoteRepositories,
+            ProjectBuildingRequest buildingRequest)
+            throws DownloadException, DownloadNotFoundException {
         DefaultArtifactCoordinate jarCoordinate = new DefaultArtifactCoordinate();
-        jarCoordinate.setGroupId( groupId );
-        jarCoordinate.setArtifactId( artifactId );
-        jarCoordinate.setVersion( version );
-        
-        DefaultArtifactCoordinate pomCoordinate = new DefaultArtifactCoordinate();
-        pomCoordinate.setGroupId( groupId );
-        pomCoordinate.setArtifactId( artifactId );
-        pomCoordinate.setVersion( version );
-        pomCoordinate.setExtension( "pom" );
+        jarCoordinate.setGroupId(groupId);
+        jarCoordinate.setArtifactId(artifactId);
+        jarCoordinate.setVersion(version);
 
-        List<ArtifactRepository> repositories = new ArrayList<>( remoteRepositories );
-        if ( repositories.isEmpty() && archetypeRepository != null )
-        {
-            repositories.add( archetypeRepository );
-        }
-        else if ( repositories.isEmpty() && localRepository != null )
-        {
-            repositories.add( localRepository );
+        DefaultArtifactCoordinate pomCoordinate = new DefaultArtifactCoordinate();
+        pomCoordinate.setGroupId(groupId);
+        pomCoordinate.setArtifactId(artifactId);
+        pomCoordinate.setVersion(version);
+        pomCoordinate.setExtension("pom");
+
+        List<ArtifactRepository> repositories = new ArrayList<>(remoteRepositories);
+        if (repositories.isEmpty() && archetypeRepository != null) {
+            repositories.add(archetypeRepository);
+        } else if (repositories.isEmpty() && localRepository != null) {
+            repositories.add(localRepository);
         }
 
         ArtifactRepository localRepo = localRepository;
-        
-        buildingRequest.setLocalRepository( localRepo );
-        buildingRequest.setRemoteRepositories( repositories );
+
+        buildingRequest.setLocalRepository(localRepo);
+        buildingRequest.setRemoteRepositories(repositories);
 
         Artifact artifact;
-        try
-        {
-            artifact = artifactResolver.resolveArtifact( buildingRequest, jarCoordinate ).getArtifact();
-        }
-        catch ( ArtifactResolverException e )
-        {
-            throw new DownloadException( "Error downloading " + jarCoordinate + ".", e );
+        try {
+            artifact = artifactResolver
+                    .resolveArtifact(buildingRequest, jarCoordinate)
+                    .getArtifact();
+        } catch (ArtifactResolverException e) {
+            throw new DownloadException("Error downloading " + jarCoordinate + ".", e);
         }
 
         // still required???
-        try
-        {
-            artifactResolver.resolveArtifact( buildingRequest, pomCoordinate );
-        }
-        catch ( ArtifactResolverException e )
-        {
-            throw new DownloadException( "Error downloading POM for " + artifact.getId() + ".", e );
+        try {
+            artifactResolver.resolveArtifact(buildingRequest, pomCoordinate);
+        } catch (ArtifactResolverException e) {
+            throw new DownloadException("Error downloading POM for " + artifact.getId() + ".", e);
         }
 
         return artifact.getFile();
     }
 
     @Override
-    public File downloadOld( String groupId, String artifactId, String version, ArtifactRepository archetypeRepository,
-                             ArtifactRepository localRepository, List<ArtifactRepository> remoteRepositories,
-                             ProjectBuildingRequest buildingRequest )
-        throws DownloadException, DownloadNotFoundException
-    {
+    public File downloadOld(
+            String groupId,
+            String artifactId,
+            String version,
+            ArtifactRepository archetypeRepository,
+            ArtifactRepository localRepository,
+            List<ArtifactRepository> remoteRepositories,
+            ProjectBuildingRequest buildingRequest)
+            throws DownloadException, DownloadNotFoundException {
         DefaultArtifactCoordinate jarCoordinate = new DefaultArtifactCoordinate();
-        jarCoordinate.setGroupId( groupId );
-        jarCoordinate.setArtifactId( artifactId );
-        jarCoordinate.setVersion( version );
-        
-        try
-        {
-            return artifactResolver.resolveArtifact( buildingRequest, jarCoordinate ).getArtifact().getFile();
-        }
-        catch ( ArtifactResolverException e )
-        {
-            throw new DownloadException( "Error downloading " + jarCoordinate + ".", e );
+        jarCoordinate.setGroupId(groupId);
+        jarCoordinate.setArtifactId(artifactId);
+        jarCoordinate.setVersion(version);
+
+        try {
+            return artifactResolver
+                    .resolveArtifact(buildingRequest, jarCoordinate)
+                    .getArtifact()
+                    .getFile();
+        } catch (ArtifactResolverException e) {
+            throw new DownloadException("Error downloading " + jarCoordinate + ".", e);
         }
     }
 }

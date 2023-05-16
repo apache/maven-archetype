@@ -1,5 +1,3 @@
-package org.apache.maven.archetype.common.util;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,10 +16,7 @@ package org.apache.maven.archetype.common.util;
  * specific language governing permissions and limitations
  * under the License.
  */
-
-import com.ibm.icu.text.CharsetDetector;
-import com.ibm.icu.text.CharsetMatch;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
+package org.apache.maven.archetype.common.util;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -30,47 +25,40 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
 
+import com.ibm.icu.text.CharsetDetector;
+import com.ibm.icu.text.CharsetMatch;
+import org.codehaus.plexus.logging.AbstractLogEnabled;
+
 /**
  * @author rafale
  */
-public class FileCharsetDetector
-    extends AbstractLogEnabled
-{
+public class FileCharsetDetector extends AbstractLogEnabled {
     private final String charset;
 
-    public FileCharsetDetector( File detectedFile )
-        throws IOException
-    {
-        try ( FileInputStream fileInputStream = new FileInputStream( detectedFile );
-              BufferedInputStream is = new BufferedInputStream( fileInputStream ) )
-        {
+    public FileCharsetDetector(File detectedFile) throws IOException {
+        try (FileInputStream fileInputStream = new FileInputStream(detectedFile);
+                BufferedInputStream is = new BufferedInputStream(fileInputStream)) {
             CharsetDetector detector = new CharsetDetector();
-            detector.setText( is );
+            detector.setText(is);
             CharsetMatch match = detector.detect();
 
-            charset = match.getName().toUpperCase( Locale.ENGLISH );
+            charset = match.getName().toUpperCase(Locale.ENGLISH);
         }
     }
 
-
-
-    public FileCharsetDetector( InputStream detectedStream )
-        throws IOException
-    {
+    public FileCharsetDetector(InputStream detectedStream) throws IOException {
         CharsetDetector detector = new CharsetDetector();
-        detector.setText( detectedStream );
+        detector.setText(detectedStream);
         CharsetMatch match = detector.detect();
 
-        charset = match.getName().toUpperCase( Locale.ENGLISH );
+        charset = match.getName().toUpperCase(Locale.ENGLISH);
     }
 
-    public String getCharset()
-    {
+    public String getCharset() {
         return charset;
     }
 
-    public boolean isFound()
-    {
+    public boolean isFound() {
         return true;
     }
 }

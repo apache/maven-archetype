@@ -1,5 +1,3 @@
-package org.apache.maven.archetype.ui;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,29 +16,29 @@ package org.apache.maven.archetype.ui;
  * specific language governing permissions and limitations
  * under the License.
  */
-
-import org.apache.maven.project.MavenProject;
+package org.apache.maven.archetype.ui;
 
 import java.util.Properties;
 
-public interface ArchetypeFactory
-{
+import org.apache.maven.project.MavenProject;
+
+public interface ArchetypeFactory {
     String ROLE = ArchetypeFactory.class.getName();
 
-    ArchetypeDefinition createArchetypeDefinition( Properties properties );
+    ArchetypeDefinition createArchetypeDefinition(Properties properties);
 
-    @SuppressWarnings( "checkstyle:linelength" )
-    ArchetypeConfiguration createArchetypeConfiguration( org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor archetypeDescriptor,
-                                                         Properties properties );
+    @SuppressWarnings("checkstyle:linelength")
+    ArchetypeConfiguration createArchetypeConfiguration(
+            org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor archetypeDescriptor, Properties properties);
 
-    @SuppressWarnings( "checkstyle:linelength" )
-    ArchetypeConfiguration createArchetypeConfiguration( org.apache.maven.archetype.metadata.ArchetypeDescriptor archetypeDescriptor,
-                                                         Properties properties );
+    @SuppressWarnings("checkstyle:linelength")
+    ArchetypeConfiguration createArchetypeConfiguration(
+            org.apache.maven.archetype.metadata.ArchetypeDescriptor archetypeDescriptor, Properties properties);
 
-    @SuppressWarnings( "checkstyle:linelength" )
-    ArchetypeConfiguration createArchetypeConfiguration( MavenProject project, ArchetypeDefinition archetypeDefinition,
-                                                         Properties properties );
+    @SuppressWarnings("checkstyle:linelength")
+    ArchetypeConfiguration createArchetypeConfiguration(
+            MavenProject project, ArchetypeDefinition archetypeDefinition, Properties properties);
 
-    void updateArchetypeConfiguration( ArchetypeConfiguration archetypeConfiguration,
-                                       ArchetypeDefinition archetypeDefinition );
+    void updateArchetypeConfiguration(
+            ArchetypeConfiguration archetypeConfiguration, ArchetypeDefinition archetypeDefinition);
 }

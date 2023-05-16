@@ -1,5 +1,3 @@
-package org.apache.maven.archetype.old.descriptor;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.archetype.old.descriptor;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.archetype.old.descriptor;
 
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
@@ -28,8 +27,7 @@ import java.nio.charset.UnsupportedCharsetException;
  * Contains the attributes of an archetype's template (either a source or resource file).
  * The attributes indicate if the template should be filtered and it's encoding.
  */
-public class TemplateDescriptor
-{
+public class TemplateDescriptor {
 
     /**
      * Determines if the template should be filtered or not.
@@ -45,11 +43,10 @@ public class TemplateDescriptor
      * Creates a new instance of <code>TemplateDescriptor</code> that should be filtered
      * and has the default encoding.
      */
-    public TemplateDescriptor()
-    {
-        setFiltered( true );
+    public TemplateDescriptor() {
+        setFiltered(true);
 
-        setEncoding( getDefaultEncoding() );
+        setEncoding(getDefaultEncoding());
     }
 
     /**
@@ -58,18 +55,16 @@ public class TemplateDescriptor
      *
      * @return the name of the default character encoding.
      */
-    private static String getDefaultEncoding()
-    {
-        String name = System.getProperty( "file.encoding" );
+    private static String getDefaultEncoding() {
+        String name = System.getProperty("file.encoding");
 
-        if ( name == null )
-        {
-            OutputStreamWriter out = new OutputStreamWriter( System.out );
+        if (name == null) {
+            OutputStreamWriter out = new OutputStreamWriter(System.out);
 
             name = out.getEncoding();
         }
 
-        name = Charset.forName( name ).name();
+        name = Charset.forName(name).name();
 
         return name;
     }
@@ -81,8 +76,7 @@ public class TemplateDescriptor
      * @return <code>true</code> if the template should be filtered and
      *         <code>false</code> otherwise.
      */
-    public boolean isFiltered()
-    {
+    public boolean isFiltered() {
         return this.filtered;
     }
 
@@ -93,8 +87,7 @@ public class TemplateDescriptor
      * @param filtered <code>true</code> if it should be processed by Velocity and
      *                 <code>fales</code> otherwise.
      */
-    public void setFiltered( boolean filtered )
-    {
+    public void setFiltered(boolean filtered) {
         this.filtered = filtered;
     }
 
@@ -104,8 +97,7 @@ public class TemplateDescriptor
      *
      * @return the name of the  encoding of the template file.
      */
-    public String getEncoding()
-    {
+    public String getEncoding() {
         return this.encoding;
     }
 
@@ -117,12 +109,9 @@ public class TemplateDescriptor
      * @throws UnsupportedCharsetException if no support for the named encoding
      *                                     is available in this instance of the Java virtual machine
      */
-    public void setEncoding( String encoding )
-        throws IllegalCharsetNameException, UnsupportedCharsetException
-    {
-        Charset.forName( encoding );
+    public void setEncoding(String encoding) throws IllegalCharsetNameException, UnsupportedCharsetException {
+        Charset.forName(encoding);
 
         this.encoding = encoding;
     }
-
 }

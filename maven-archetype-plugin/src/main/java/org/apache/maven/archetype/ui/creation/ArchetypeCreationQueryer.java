@@ -1,5 +1,3 @@
-package org.apache.maven.archetype.ui.creation;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,71 +16,60 @@ package org.apache.maven.archetype.ui.creation;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.archetype.ui.creation;
 
 import org.apache.maven.archetype.ui.ArchetypeConfiguration;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 
 /**
  * <p>User interaction component to query informations necessary for an archetype creation from a project.</p>
- * 
+ *
  * TODO this interface is bound to its implementation through the prompter exception
  */
-public interface ArchetypeCreationQueryer
-{
+public interface ArchetypeCreationQueryer {
     String ROLE = ArchetypeCreationQueryer.class.getName();
 
     /**
      */
-    String getArchetypeArtifactId( String defaultValue )
-        throws PrompterException;
+    String getArchetypeArtifactId(String defaultValue) throws PrompterException;
 
     /**
      */
-    String getArchetypeGroupId( String defaultValue )
-        throws PrompterException;
+    String getArchetypeGroupId(String defaultValue) throws PrompterException;
 
     /**
      */
-    String getArchetypeVersion( String defaultValue )
-        throws PrompterException;
+    String getArchetypeVersion(String defaultValue) throws PrompterException;
 
     /**
      */
-    String getArtifactId( String defaultValue )
-        throws PrompterException;
+    String getArtifactId(String defaultValue) throws PrompterException;
 
     /**
      */
-    boolean askAddAnotherProperty()
-        throws PrompterException;
+    boolean askAddAnotherProperty() throws PrompterException;
 
     /**
      */
-    String askNewPropertyKey()
-        throws PrompterException;
+    String askNewPropertyKey() throws PrompterException;
 
     /**
      */
-    String askReplacementValue( String propertyKey, String defaultValue )
-        throws PrompterException;
+    String askReplacementValue(String propertyKey, String defaultValue) throws PrompterException;
 
     /**
      */
-    boolean confirmConfiguration( ArchetypeConfiguration archetypeConfiguration )
-        throws PrompterException;
+    boolean confirmConfiguration(ArchetypeConfiguration archetypeConfiguration) throws PrompterException;
 
     /**
      */
-    String getGroupId( String defaultValue )
-        throws PrompterException;
+    String getGroupId(String defaultValue) throws PrompterException;
 
     /**
      */
-    String getPackage( String defaultValue )
-        throws PrompterException;
+    String getPackage(String defaultValue) throws PrompterException;
 
     /**
      */
-    String getVersion( String defaultValue )
-        throws PrompterException;
+    String getVersion(String defaultValue) throws PrompterException;
 }

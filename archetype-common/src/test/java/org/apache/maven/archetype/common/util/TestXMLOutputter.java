@@ -1,5 +1,3 @@
-package org.apache.maven.archetype.common.util;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,40 +16,33 @@ package org.apache.maven.archetype.common.util;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.archetype.common.util;
+
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
 
 import junit.framework.TestCase;
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
-
 /** @author <a href="mailto:jdcasey@apache.org">John Casey</a> */
-public class TestXMLOutputter
-    extends TestCase
-{
-    public void testOutput_Document_ShouldParseAndOutputCDATASection_NoMods()
-        throws
-        JDOMException,
-        IOException
-    {
-        String content =
-            "<document>" +
-                "<element1>This is some text</element1>" +
-                "<description>And then," +
-                "<![CDATA[<more content goes here>]]>" +
-                "</description><!--somecomment-->" +
-                "</document>";
+public class TestXMLOutputter extends TestCase {
+    public void testOutput_Document_ShouldParseAndOutputCDATASection_NoMods() throws JDOMException, IOException {
+        String content = "<document>" + "<element1>This is some text</element1>"
+                + "<description>And then,"
+                + "<![CDATA[<more content goes here>]]>"
+                + "</description><!--somecomment-->"
+                + "</document>";
 
-        Document doc = new SAXBuilder().build( new StringReader( content ) );
+        Document doc = new SAXBuilder().build(new StringReader(content));
 
         StringWriter sw = new StringWriter();
-        new XMLOutputter().output( doc, sw );
+        new XMLOutputter().output(doc, sw);
 
-        System.out.println( "Resulting content is:\n\n\'" + sw.toString() + "\'\n\n" );
+        System.out.println("Resulting content is:\n\n\'" + sw.toString() + "\'\n\n");
 
-        assertTrue( sw.toString().indexOf( content ) > -1 );
+        assertTrue(sw.toString().indexOf(content) > -1);
     }
 }

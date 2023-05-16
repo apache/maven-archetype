@@ -1,5 +1,3 @@
-package org.apache.maven.archetype.downloader;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,25 +16,21 @@ package org.apache.maven.archetype.downloader;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.archetype.downloader;
 
 /**
  * @author Jason van Zyl
  */
-public class DownloadNotFoundException
-    extends Exception
-{
-    public DownloadNotFoundException( String string )
-    {
-        super( string );
+public class DownloadNotFoundException extends Exception {
+    public DownloadNotFoundException(String string) {
+        super(string);
     }
 
-    public DownloadNotFoundException( String string, Throwable throwable )
-    {
-        super( string, throwable );
+    public DownloadNotFoundException(String string, Throwable throwable) {
+        super(string, throwable);
     }
 
-    public DownloadNotFoundException( Throwable throwable )
-    {
-        super( throwable );
+    public DownloadNotFoundException(Throwable throwable) {
+        super(throwable);
     }
 }

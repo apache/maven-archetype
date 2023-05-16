@@ -1,5 +1,3 @@
-package org.apache.maven.archetype.source;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,7 +16,7 @@ package org.apache.maven.archetype.source;
  * specific language governing permissions and limitations
  * under the License.
  */
-
+package org.apache.maven.archetype.source;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,43 +33,28 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 /**
  * @author Jason van Zyl
  */
-public abstract  class CatalogArchetypeDataSource
-    extends AbstractLogEnabled
-    implements ArchetypeDataSource
-{
+public abstract class CatalogArchetypeDataSource extends AbstractLogEnabled implements ArchetypeDataSource {
     public static final String ARCHETYPE_CATALOG_PROPERTY = "file";
 
-    protected void writeLocalCatalog( ArchetypeCatalog catalog, File catalogFile )
-        throws ArchetypeDataSourceException
-    {
-        try ( Writer writer = WriterFactory.newXmlWriter( catalogFile ) )
-        {
+    protected void writeLocalCatalog(ArchetypeCatalog catalog, File catalogFile) throws ArchetypeDataSourceException {
+        try (Writer writer = WriterFactory.newXmlWriter(catalogFile)) {
             ArchetypeCatalogXpp3Writer catalogWriter = new ArchetypeCatalogXpp3Writer();
 
-            catalogWriter.write( writer, catalog );
-        }
-        catch ( IOException e )
-        {
-            throw new ArchetypeDataSourceException( "Error writing archetype catalog.", e );
+            catalogWriter.write(writer, catalog);
+        } catch (IOException e) {
+            throw new ArchetypeDataSourceException("Error writing archetype catalog.", e);
         }
     }
 
-    protected ArchetypeCatalog readCatalog( Reader reader )
-        throws ArchetypeDataSourceException
-    {
-        try ( Reader catReader = reader )
-        {
+    protected ArchetypeCatalog readCatalog(Reader reader) throws ArchetypeDataSourceException {
+        try (Reader catReader = reader) {
             ArchetypeCatalogXpp3Reader catalogReader = new ArchetypeCatalogXpp3Reader();
 
-            return catalogReader.read( catReader );
-        }
-        catch ( IOException e )
-        {
-            throw new ArchetypeDataSourceException( "Error reading archetype catalog.", e );
-        }
-        catch ( XmlPullParserException e )
-        {
-            throw new ArchetypeDataSourceException( "Error parsing archetype catalog.", e );
+            return catalogReader.read(catReader);
+        } catch (IOException e) {
+            throw new ArchetypeDataSourceException("Error reading archetype catalog.", e);
+        } catch (XmlPullParserException e) {
+            throw new ArchetypeDataSourceException("Error parsing archetype catalog.", e);
         }
     }
 }

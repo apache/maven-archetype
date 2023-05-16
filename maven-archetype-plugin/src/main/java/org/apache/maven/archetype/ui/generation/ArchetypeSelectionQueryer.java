@@ -1,5 +1,3 @@
-package org.apache.maven.archetype.ui.generation;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,28 +16,26 @@ package org.apache.maven.archetype.ui.generation;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.archetype.ui.generation;
+
+import java.util.List;
+import java.util.Map;
 
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.ui.ArchetypeDefinition;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 
-import java.util.List;
-import java.util.Map;
-
 /**
  * <p>User interaction component for archetype selection.</p>
- * 
+ *
  * TODO this interface is bound to its implementation through the prompter exception
  */
-public interface ArchetypeSelectionQueryer
-{
+public interface ArchetypeSelectionQueryer {
     String ROLE = ArchetypeSelectionQueryer.class.getName();
 
-    Archetype selectArchetype( Map<String, List<Archetype>> map )
-        throws PrompterException;
+    Archetype selectArchetype(Map<String, List<Archetype>> map) throws PrompterException;
 
-    boolean confirmSelection( ArchetypeDefinition archetypeDefinition )
-        throws PrompterException;
+    boolean confirmSelection(ArchetypeDefinition archetypeDefinition) throws PrompterException;
 
     /**
      * Select an archetype from the given map.
@@ -50,6 +46,6 @@ public interface ArchetypeSelectionQueryer
      * @throws org.codehaus.plexus.components.interactivity.PrompterException if there is a problem in making a
      *             selection
      */
-    Archetype selectArchetype( Map<String, List<Archetype>> archetypes, ArchetypeDefinition defaultDefinition )
-        throws PrompterException;
+    Archetype selectArchetype(Map<String, List<Archetype>> archetypes, ArchetypeDefinition defaultDefinition)
+            throws PrompterException;
 }

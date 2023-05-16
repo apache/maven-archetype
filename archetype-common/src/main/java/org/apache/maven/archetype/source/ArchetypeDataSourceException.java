@@ -1,5 +1,3 @@
-package org.apache.maven.archetype.source;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,23 +16,19 @@ package org.apache.maven.archetype.source;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.archetype.source;
 
 /** @author Jason van Zyl */
-public class ArchetypeDataSourceException
-    extends Exception
-{
-    public ArchetypeDataSourceException( String message )
-    {
-        super( message );
+public class ArchetypeDataSourceException extends Exception {
+    public ArchetypeDataSourceException(String message) {
+        super(message);
     }
 
-    public ArchetypeDataSourceException( String message, Throwable throwable )
-    {
-        super( message, throwable );
+    public ArchetypeDataSourceException(String message, Throwable throwable) {
+        super(message, throwable);
     }
 
-    public ArchetypeDataSourceException( Throwable throwable )
-    {
-        super( throwable );
+    public ArchetypeDataSourceException(Throwable throwable) {
+        super(throwable);
     }
 }

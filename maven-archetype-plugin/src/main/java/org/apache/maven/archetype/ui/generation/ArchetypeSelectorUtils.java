@@ -1,5 +1,3 @@
-package org.apache.maven.archetype.ui.generation;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,9 +16,7 @@ package org.apache.maven.archetype.ui.generation;
  * specific language governing permissions and limitations
  * under the License.
  */
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.maven.archetype.catalog.Archetype;
+package org.apache.maven.archetype.ui.generation;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,26 +24,25 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.maven.archetype.catalog.Archetype;
+
 /**
  * @author Olivier Lamy
  * @since 2.1
  */
-public class ArchetypeSelectorUtils
-{
-    private ArchetypeSelectorUtils()
-    {
+public class ArchetypeSelectorUtils {
+    private ArchetypeSelectorUtils() {
         // no constructor for utility class
     }
 
-    private static String extractGroupIdFromFilter( String filter )
-    {
-        return StringUtils.contains( filter, ':' ) ? StringUtils.substringBefore( filter, ":" ) : null;
+    private static String extractGroupIdFromFilter(String filter) {
+        return StringUtils.contains(filter, ':') ? StringUtils.substringBefore(filter, ":") : null;
     }
 
-    private static String extractArtifactIdFromFilter( String filter )
-    {
+    private static String extractArtifactIdFromFilter(String filter) {
         // if no : the full text is considered as artifactId content
-        return StringUtils.contains( filter, ':' ) ? StringUtils.substringAfter( filter, ":" ) : filter;
+        return StringUtils.contains(filter, ':') ? StringUtils.substringAfter(filter, ":") : filter;
     }
 
     /**
@@ -58,38 +53,30 @@ public class ArchetypeSelectorUtils
      * @return
      */
     public static Map<String, List<Archetype>> getFilteredArchetypesByCatalog(
-        Map<String, List<Archetype>> archetypesPerCatalog, String filter )
-    {
-        if ( archetypesPerCatalog == null || archetypesPerCatalog.isEmpty() )
-        {
+            Map<String, List<Archetype>> archetypesPerCatalog, String filter) {
+        if (archetypesPerCatalog == null || archetypesPerCatalog.isEmpty()) {
             return Collections.emptyMap();
         }
-        Map<String, List<Archetype>> filtered =
-            new LinkedHashMap<>( archetypesPerCatalog.size() );
+        Map<String, List<Archetype>> filtered = new LinkedHashMap<>(archetypesPerCatalog.size());
 
-        for ( Map.Entry<String, List<Archetype>> entry : archetypesPerCatalog.entrySet() )
-        {
+        for (Map.Entry<String, List<Archetype>> entry : archetypesPerCatalog.entrySet()) {
             List<Archetype> archetypes = new ArrayList<>();
 
-            for ( Archetype archetype : entry.getValue() )
-            {
-                String groupId = ArchetypeSelectorUtils.extractGroupIdFromFilter( filter );
-                String artifactId = ArchetypeSelectorUtils.extractArtifactIdFromFilter( filter );
+            for (Archetype archetype : entry.getValue()) {
+                String groupId = ArchetypeSelectorUtils.extractGroupIdFromFilter(filter);
+                String artifactId = ArchetypeSelectorUtils.extractArtifactIdFromFilter(filter);
 
-                if ( ( ( groupId == null ) || StringUtils.contains( archetype.getGroupId(), groupId ) )
-                    && StringUtils.contains( archetype.getArtifactId(), artifactId ) )
-                {
-                    archetypes.add( archetype );
+                if (((groupId == null) || StringUtils.contains(archetype.getGroupId(), groupId))
+                        && StringUtils.contains(archetype.getArtifactId(), artifactId)) {
+                    archetypes.add(archetype);
                 }
             }
 
-            if ( !archetypes.isEmpty() )
-            {
-                filtered.put( entry.getKey(), archetypes );
+            if (!archetypes.isEmpty()) {
+                filtered.put(entry.getKey(), archetypes);
             }
         }
 
         return filtered;
     }
-
 }

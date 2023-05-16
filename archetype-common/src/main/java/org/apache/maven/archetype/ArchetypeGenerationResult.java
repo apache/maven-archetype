@@ -1,5 +1,3 @@
-package org.apache.maven.archetype;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,19 +16,17 @@ package org.apache.maven.archetype;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.archetype;
 
 /** @author Jason van Zyl */
-public class ArchetypeGenerationResult
-{
+public class ArchetypeGenerationResult {
     private Exception cause;
 
-    public Exception getCause()
-    {
+    public Exception getCause() {
         return cause;
     }
 
-    public void setCause( Exception cause )
-    {
+    public void setCause(Exception cause) {
         this.cause = cause;
     }
 }

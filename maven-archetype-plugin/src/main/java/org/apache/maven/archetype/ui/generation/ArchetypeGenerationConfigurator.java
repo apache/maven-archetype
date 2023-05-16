@@ -1,5 +1,3 @@
-package org.apache.maven.archetype.ui.generation;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,10 @@ package org.apache.maven.archetype.ui.generation;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.archetype.ui.generation;
+
+import java.io.IOException;
+import java.util.Properties;
 
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.exception.ArchetypeGenerationConfigurationFailure;
@@ -26,18 +28,14 @@ import org.apache.maven.archetype.exception.ArchetypeNotDefined;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 
-import java.io.IOException;
-import java.util.Properties;
-
 /**
  * Configurator component to organize steps for project generation from an archetype.
  */
-public interface ArchetypeGenerationConfigurator
-{
+public interface ArchetypeGenerationConfigurator {
     String ROLE = ArchetypeGenerationConfigurator.class.getName();
 
-    void configureArchetype( ArchetypeGenerationRequest request, Boolean interactiveMode,
-                             Properties commandLineProperties )
-        throws ArchetypeNotDefined, UnknownArchetype, ArchetypeNotConfigured, IOException, PrompterException,
-        ArchetypeGenerationConfigurationFailure;
+    void configureArchetype(
+            ArchetypeGenerationRequest request, Boolean interactiveMode, Properties commandLineProperties)
+            throws ArchetypeNotDefined, UnknownArchetype, ArchetypeNotConfigured, IOException, PrompterException,
+                    ArchetypeGenerationConfigurationFailure;
 }

@@ -1,5 +1,3 @@
-package org.apache.maven.archetype.source;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.archetype.source;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.archetype.source;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,22 +49,21 @@ import org.codehaus.plexus.util.ReaderFactory;
 /**
  * @author Jason van Zyl
  */
-@Component( role = ArchetypeDataSource.class, hint = "remote-catalog" )
-public class RemoteCatalogArchetypeDataSource extends CatalogArchetypeDataSource implements ArchetypeDataSource
-{
+@Component(role = ArchetypeDataSource.class, hint = "remote-catalog")
+public class RemoteCatalogArchetypeDataSource extends CatalogArchetypeDataSource implements ArchetypeDataSource {
     @Requirement
     private Map<String, Wagon> wagons;
-    
+
     @Requirement
     private LegacySupport legacySupport;
 
     @Requirement
     private SettingsDecrypter settingsDecrypter;
 
-//    Should be used for mirror/proxy/authentication
-//    available since M3.2.3
-//    @Requirement
-//    private MavenRepositorySystem;
+    //    Should be used for mirror/proxy/authentication
+    //    available since M3.2.3
+    //    @Requirement
+    //    private MavenRepositorySystem;
 
     /**
      * Id of the repository used to download catalog file. Proxy or authentication info can
@@ -76,169 +74,131 @@ public class RemoteCatalogArchetypeDataSource extends CatalogArchetypeDataSource
     public static final String CENTRAL_REPOSITORY_ID = "central";
 
     @Override
-    public ArchetypeCatalog getArchetypeCatalog( ProjectBuildingRequest buildingRequest )
-        throws ArchetypeDataSourceException
-    {
+    public ArchetypeCatalog getArchetypeCatalog(ProjectBuildingRequest buildingRequest)
+            throws ArchetypeDataSourceException {
         // With M3 artifactRepositories are already injected with their mirror, including the new id
         // First look for mirrorId of both 'central' and 'archetype'
         final String archetypeRepoId;
-        Mirror archetypeMirror = getMirror( ARCHETYPE_REPOSITORY_ID );
-        if ( archetypeMirror != null )
-        {
+        Mirror archetypeMirror = getMirror(ARCHETYPE_REPOSITORY_ID);
+        if (archetypeMirror != null) {
             archetypeRepoId = archetypeMirror.getId();
-        }
-        else
-        {
+        } else {
             archetypeRepoId = ARCHETYPE_REPOSITORY_ID;
         }
-        
+
         final String centralRepoId;
-        Mirror centralMirror = getMirror( CENTRAL_REPOSITORY_ID );
-        if ( centralMirror != null )
-        {
+        Mirror centralMirror = getMirror(CENTRAL_REPOSITORY_ID);
+        if (centralMirror != null) {
             centralRepoId = centralMirror.getId();
-        }
-        else
-        {
+        } else {
             centralRepoId = CENTRAL_REPOSITORY_ID;
         }
-        
+
         ArtifactRepository centralRepository = null;
         ArtifactRepository archetypeRepository = null;
-        for ( ArtifactRepository remoteRepository : buildingRequest.getRemoteRepositories() )
-        {
-            if ( archetypeRepoId.equals( remoteRepository.getId() ) )
-            {
+        for (ArtifactRepository remoteRepository : buildingRequest.getRemoteRepositories()) {
+            if (archetypeRepoId.equals(remoteRepository.getId())) {
                 archetypeRepository = remoteRepository;
                 break;
-            }
-            else if ( centralRepoId.equals( remoteRepository.getId() ) )
-            {
+            } else if (centralRepoId.equals(remoteRepository.getId())) {
                 centralRepository = remoteRepository;
             }
         }
 
-        if ( archetypeRepository == null )
-        {
+        if (archetypeRepository == null) {
             archetypeRepository = centralRepository;
         }
 
-        try
-        {
-            return downloadCatalog( archetypeRepository );
-        }
-        catch ( IOException e )
-        {
-            throw new ArchetypeDataSourceException( e );
-        }
-        catch ( WagonException e )
-        {
-            throw new ArchetypeDataSourceException( e );
+        try {
+            return downloadCatalog(archetypeRepository);
+        } catch (IOException e) {
+            throw new ArchetypeDataSourceException(e);
+        } catch (WagonException e) {
+            throw new ArchetypeDataSourceException(e);
         }
     }
 
     @Override
-    public void updateCatalog( ProjectBuildingRequest buildingRequest, Archetype archetype )
-        throws ArchetypeDataSourceException
-    {
-        throw new ArchetypeDataSourceException( "Not supported yet." );
+    public void updateCatalog(ProjectBuildingRequest buildingRequest, Archetype archetype)
+            throws ArchetypeDataSourceException {
+        throw new ArchetypeDataSourceException("Not supported yet.");
     }
 
-    private ArchetypeCatalog downloadCatalog( ArtifactRepository repository )
-        throws WagonException, IOException, ArchetypeDataSourceException
-    {
-        getLogger().debug( "Searching for remote catalog: " + repository.getUrl() + "/" + ARCHETYPE_CATALOG_FILENAME );
+    private ArchetypeCatalog downloadCatalog(ArtifactRepository repository)
+            throws WagonException, IOException, ArchetypeDataSourceException {
+        getLogger().debug("Searching for remote catalog: " + repository.getUrl() + "/" + ARCHETYPE_CATALOG_FILENAME);
 
         // We use wagon to take advantage of a Proxy that has already been setup in a Maven environment.
-        Repository wagonRepository = new Repository( repository.getId(), repository.getUrl() );
-        
-        AuthenticationInfo authInfo = getAuthenticationInfo( wagonRepository.getId() );
-        ProxyInfo proxyInfo = getProxy( wagonRepository.getProtocol() );
+        Repository wagonRepository = new Repository(repository.getId(), repository.getUrl());
 
-        Wagon wagon = getWagon( wagonRepository );
+        AuthenticationInfo authInfo = getAuthenticationInfo(wagonRepository.getId());
+        ProxyInfo proxyInfo = getProxy(wagonRepository.getProtocol());
 
-        File catalog = File.createTempFile( "archetype-catalog", ".xml" );
-        try
-        {
-            wagon.connect( wagonRepository, authInfo, proxyInfo );
-            wagon.get( ARCHETYPE_CATALOG_FILENAME, catalog );
+        Wagon wagon = getWagon(wagonRepository);
 
-            return readCatalog( ReaderFactory.newXmlReader( catalog ) );
-        }
-        finally
-        {
-            disconnectWagon( wagon );
+        File catalog = File.createTempFile("archetype-catalog", ".xml");
+        try {
+            wagon.connect(wagonRepository, authInfo, proxyInfo);
+            wagon.get(ARCHETYPE_CATALOG_FILENAME, catalog);
+
+            return readCatalog(ReaderFactory.newXmlReader(catalog));
+        } finally {
+            disconnectWagon(wagon);
             catalog.delete();
         }
     }
 
-    private void disconnectWagon( Wagon wagon )
-    {
-        try
-        {
+    private void disconnectWagon(Wagon wagon) {
+        try {
             wagon.disconnect();
-        }
-        catch ( Exception e )
-        {
-            getLogger().warn( "Problem disconnecting from wagon - ignoring: " + e.getMessage() );
+        } catch (Exception e) {
+            getLogger().warn("Problem disconnecting from wagon - ignoring: " + e.getMessage());
         }
     }
 
-    // 
-    
-    private Wagon getWagon( Repository repository )
-        throws UnsupportedProtocolException
-    {
-        return getWagon( repository.getProtocol() );
+    //
+
+    private Wagon getWagon(Repository repository) throws UnsupportedProtocolException {
+        return getWagon(repository.getProtocol());
     }
 
-    private Wagon getWagon( String protocol )
-        throws UnsupportedProtocolException
-    {
-        if ( protocol == null )
-        {
-            throw new UnsupportedProtocolException( "Unspecified protocol" );
+    private Wagon getWagon(String protocol) throws UnsupportedProtocolException {
+        if (protocol == null) {
+            throw new UnsupportedProtocolException("Unspecified protocol");
         }
 
-        String hint = protocol.toLowerCase( java.util.Locale.ENGLISH );
+        String hint = protocol.toLowerCase(java.util.Locale.ENGLISH);
 
-        Wagon wagon = wagons.get( hint );
-        if ( wagon == null )
-        {
-            throw new UnsupportedProtocolException( "Cannot find wagon which supports the requested protocol: "
-                + protocol );
+        Wagon wagon = wagons.get(hint);
+        if (wagon == null) {
+            throw new UnsupportedProtocolException(
+                    "Cannot find wagon which supports the requested protocol: " + protocol);
         }
 
         return wagon;
     }
-    
-    private AuthenticationInfo getAuthenticationInfo( String id )
-    {
+
+    private AuthenticationInfo getAuthenticationInfo(String id) {
         MavenSession session = legacySupport.getSession();
 
-        if ( session != null && id != null )
-        {
+        if (session != null && id != null) {
             MavenExecutionRequest request = session.getRequest();
 
-            if ( request != null )
-            {
+            if (request != null) {
                 List<Server> servers = request.getServers();
 
-                if ( servers != null )
-                {
-                    for ( Server server : servers )
-                    {
-                        if ( id.equalsIgnoreCase( server.getId() ) )
-                        {
+                if (servers != null) {
+                    for (Server server : servers) {
+                        if (id.equalsIgnoreCase(server.getId())) {
                             SettingsDecryptionResult result =
-                                settingsDecrypter.decrypt( new DefaultSettingsDecryptionRequest( server ) );
+                                    settingsDecrypter.decrypt(new DefaultSettingsDecryptionRequest(server));
                             server = result.getServer();
 
                             AuthenticationInfo authInfo = new AuthenticationInfo();
-                            authInfo.setUserName( server.getUsername() );
-                            authInfo.setPassword( server.getPassword() );
-                            authInfo.setPrivateKey( server.getPrivateKey() );
-                            authInfo.setPassphrase( server.getPassphrase() );
+                            authInfo.setUserName(server.getUsername());
+                            authInfo.setPassword(server.getPassword());
+                            authInfo.setPrivateKey(server.getPrivateKey());
+                            authInfo.setPassphrase(server.getPassphrase());
 
                             return authInfo;
                         }
@@ -248,38 +208,32 @@ public class RemoteCatalogArchetypeDataSource extends CatalogArchetypeDataSource
         }
 
         // empty one to prevent NPE
-       return new AuthenticationInfo();
+        return new AuthenticationInfo();
     }
 
-    private ProxyInfo getProxy( String protocol )
-    {
+    private ProxyInfo getProxy(String protocol) {
         MavenSession session = legacySupport.getSession();
 
-        if ( session != null && protocol != null )
-        {
+        if (session != null && protocol != null) {
             MavenExecutionRequest request = session.getRequest();
 
-            if ( request != null )
-            {
+            if (request != null) {
                 List<Proxy> proxies = request.getProxies();
 
-                if ( proxies != null )
-                {
-                    for ( Proxy proxy : proxies )
-                    {
-                        if ( proxy.isActive() && protocol.equalsIgnoreCase( proxy.getProtocol() ) )
-                        {
+                if (proxies != null) {
+                    for (Proxy proxy : proxies) {
+                        if (proxy.isActive() && protocol.equalsIgnoreCase(proxy.getProtocol())) {
                             SettingsDecryptionResult result =
-                                settingsDecrypter.decrypt( new DefaultSettingsDecryptionRequest( proxy ) );
+                                    settingsDecrypter.decrypt(new DefaultSettingsDecryptionRequest(proxy));
                             proxy = result.getProxy();
 
                             ProxyInfo proxyInfo = new ProxyInfo();
-                            proxyInfo.setHost( proxy.getHost() );
-                            proxyInfo.setType( proxy.getProtocol() );
-                            proxyInfo.setPort( proxy.getPort() );
-                            proxyInfo.setNonProxyHosts( proxy.getNonProxyHosts() );
-                            proxyInfo.setUserName( proxy.getUsername() );
-                            proxyInfo.setPassword( proxy.getPassword() );
+                            proxyInfo.setHost(proxy.getHost());
+                            proxyInfo.setType(proxy.getProtocol());
+                            proxyInfo.setPort(proxy.getPort());
+                            proxyInfo.setNonProxyHosts(proxy.getNonProxyHosts());
+                            proxyInfo.setUserName(proxy.getUsername());
+                            proxyInfo.setPassword(proxy.getPassword());
 
                             return proxyInfo;
                         }
@@ -290,46 +244,37 @@ public class RemoteCatalogArchetypeDataSource extends CatalogArchetypeDataSource
 
         return null;
     }
-    
-    private Mirror getMirror( String repoId )
-    {
+
+    private Mirror getMirror(String repoId) {
         MavenSession session = legacySupport.getSession();
 
         MavenExecutionRequest request = null;
 
-        if ( session != null )
-        {
+        if (session != null) {
             request = session.getRequest();
         }
 
-        if ( request != null )
-        {
-            return getMirror( repoId, request.getMirrors() );
+        if (request != null) {
+            return getMirror(repoId, request.getMirrors());
         }
 
         return null;
     }
-    
+
     private static final String WILDCARD = "*";
 
     private static final String EXTERNAL_WILDCARD = "external:*";
 
-    private Mirror getMirror( String repoId, List<Mirror> mirrors )
-    {
-        if ( repoId != null && mirrors != null )
-        {
-            for ( Mirror mirror : mirrors )
-            {
-                if ( repoId.equals( mirror.getMirrorOf() ) )
-                {
+    private Mirror getMirror(String repoId, List<Mirror> mirrors) {
+        if (repoId != null && mirrors != null) {
+            for (Mirror mirror : mirrors) {
+                if (repoId.equals(mirror.getMirrorOf())) {
                     return mirror;
                 }
             }
 
-            for ( Mirror mirror : mirrors )
-            {
-                if ( matchPattern( repoId, mirror.getMirrorOf() ) )
-                {
+            for (Mirror mirror : mirrors) {
+                if (matchPattern(repoId, mirror.getMirrorOf())) {
                     return mirror;
                 }
             }
@@ -347,45 +292,34 @@ public class RemoteCatalogArchetypeDataSource extends CatalogArchetypeDataSource
      * @param pattern used for match. Currently only '*' is supported.
      * @return true if the repository is a match to this pattern.
      */
-    static boolean matchPattern( String originalId, String pattern )
-    {
+    static boolean matchPattern(String originalId, String pattern) {
         boolean result = false;
 
         // simple checks first to short circuit processing below.
-        if ( WILDCARD.equals( pattern ) || pattern.equals( originalId ) )
-        {
+        if (WILDCARD.equals(pattern) || pattern.equals(originalId)) {
             result = true;
-        }
-        else
-        {
+        } else {
             // process the list
-            String[] repos = pattern.split( "," );
-            for ( String repo : repos )
-            {
+            String[] repos = pattern.split(",");
+            for (String repo : repos) {
                 // see if this is a negative match
-                if ( repo.length() > 1 && repo.startsWith( "!" ) )
-                {
-                    if ( repo.substring( 1 ).equals( originalId ) )
-                    {
+                if (repo.length() > 1 && repo.startsWith("!")) {
+                    if (repo.substring(1).equals(originalId)) {
                         // explicitly exclude. Set result and stop processing.
                         result = false;
                         break;
                     }
                 }
                 // check for exact match
-                else if ( repo.equals( originalId ) )
-                {
+                else if (repo.equals(originalId)) {
                     result = true;
                     break;
                 }
                 // check for external:*
-                else if ( EXTERNAL_WILDCARD.equals( repo ) )
-                {
+                else if (EXTERNAL_WILDCARD.equals(repo)) {
                     result = true;
                     // don't stop processing in case a future segment explicitly excludes this repo
-                }
-                else if ( WILDCARD.equals( repo ) )
-                {
+                } else if (WILDCARD.equals(repo)) {
                     result = true;
                     // don't stop processing in case a future segment explicitly excludes this repo
                 }
@@ -394,11 +328,8 @@ public class RemoteCatalogArchetypeDataSource extends CatalogArchetypeDataSource
         return result;
     }
 
-
-
-    static boolean matchesLayout( ArtifactRepository repository, Mirror mirror )
-    {
-        return matchesLayout( repository.getLayout().getId(), mirror.getMirrorOfLayouts() );
+    static boolean matchesLayout(ArtifactRepository repository, Mirror mirror) {
+        return matchesLayout(repository.getLayout().getId(), mirror.getMirrorOfLayouts());
     }
 
     /**
@@ -409,43 +340,31 @@ public class RemoteCatalogArchetypeDataSource extends CatalogArchetypeDataSource
      * @return {@code true} if the layouts associated with the mirror match the layout of the original repository,
      *         {@code false} otherwise.
      */
-    static boolean matchesLayout( String repoLayout, String mirrorLayout )
-    {
+    static boolean matchesLayout(String repoLayout, String mirrorLayout) {
         boolean result = false;
 
         // simple checks first to short circuit processing below.
-        if ( ( mirrorLayout == null || mirrorLayout.isEmpty() ) || WILDCARD.equals( mirrorLayout ) )
-        {
+        if ((mirrorLayout == null || mirrorLayout.isEmpty()) || WILDCARD.equals(mirrorLayout)) {
             result = true;
-        }
-        else if ( mirrorLayout.equals( repoLayout ) )
-        {
+        } else if (mirrorLayout.equals(repoLayout)) {
             result = true;
-        }
-        else
-        {
+        } else {
             // process the list
-            String[] layouts = mirrorLayout.split( "," );
-            for ( String layout : layouts )
-            {
+            String[] layouts = mirrorLayout.split(",");
+            for (String layout : layouts) {
                 // see if this is a negative match
-                if ( layout.length() > 1 && layout.startsWith( "!" ) )
-                {
-                    if ( layout.substring( 1 ).equals( repoLayout ) )
-                    {
+                if (layout.length() > 1 && layout.startsWith("!")) {
+                    if (layout.substring(1).equals(repoLayout)) {
                         // explicitly exclude. Set result and stop processing.
                         result = false;
                         break;
                     }
                 }
                 // check for exact match
-                else if ( layout.equals( repoLayout ) )
-                {
+                else if (layout.equals(repoLayout)) {
                     result = true;
                     break;
-                }
-                else if ( WILDCARD.equals( layout ) )
-                {
+                } else if (WILDCARD.equals(layout)) {
                     result = true;
                     // don't stop processing in case a future segment explicitly excludes this repo
                 }

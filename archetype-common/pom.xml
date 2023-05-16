@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
   Licensed to the Apache Software Foundation (ASF) under one
   or more contributor license agreements. See the NOTICE file
@@ -18,7 +17,6 @@
   specific language governing permissions and limitations
   under the License.
 -->
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
@@ -184,8 +182,8 @@
   <build>
     <testResources>
       <testResource>
-        <directory>src/test/resources</directory>
         <filtering>true</filtering>
+        <directory>src/test/resources</directory>
       </testResource>
     </testResources>
     <plugins>
@@ -221,17 +219,17 @@
           </execution>
           <execution>
             <id>site-docs</id>
-            <phase>pre-site</phase>
             <goals>
               <goal>xdoc</goal>
             </goals>
+            <phase>pre-site</phase>
           </execution>
           <execution>
             <id>site-xsd</id>
-            <phase>pre-site</phase>
             <goals>
               <goal>xsd</goal>
             </goals>
+            <phase>pre-site</phase>
             <configuration>
               <outputDirectory>${basedir}/target/generated-site/resources/xsd</outputDirectory>
             </configuration>
@@ -254,6 +252,9 @@
         <executions>
           <execution>
             <id>archetype-test</id>
+            <goals>
+              <goal>run</goal>
+            </goals>
             <phase>process-test-resources</phase>
             <configuration>
               <target>
@@ -267,18 +268,18 @@
 
                 <mkdir dir="${test.target.directory}" />
 
-                <jar destfile="${test.target.directory}/${test.archetype.name-version}.jar" basedir="${test.source.directory}/" />
+                <jar basedir="${test.source.directory}/" destfile="${test.target.directory}/${test.archetype.name-version}.jar" />
 
-                <copy tofile="${test.target.directory}/${test.archetype.name-version}.pom" file="${test.source.directory}/META-INF/maven/archetypes/${test.archetype.name}/pom.xml" />
+                <copy file="${test.source.directory}/META-INF/maven/archetypes/${test.archetype.name}/pom.xml" tofile="${test.target.directory}/${test.archetype.name-version}.pom" />
               </target>
             </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
           </execution>
 
           <execution>
             <id>archetype-test-partial</id>
+            <goals>
+              <goal>run</goal>
+            </goals>
             <phase>process-test-resources</phase>
             <configuration>
               <target>
@@ -292,18 +293,18 @@
 
                 <mkdir dir="${test.target.directory}" />
 
-                <jar destfile="${test.target.directory}/${test.archetype.name-version}.jar" basedir="${test.source.directory}/" />
+                <jar basedir="${test.source.directory}/" destfile="${test.target.directory}/${test.archetype.name-version}.jar" />
 
-                <copy tofile="${test.target.directory}/${test.archetype.name-version}.pom" file="${test.source.directory}/META-INF/maven/archetypes/${test.archetype.name}/pom.xml" />
+                <copy file="${test.source.directory}/META-INF/maven/archetypes/${test.archetype.name}/pom.xml" tofile="${test.target.directory}/${test.archetype.name-version}.pom" />
               </target>
             </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
           </execution>
 
           <execution>
             <id>archetype-test-site</id>
+            <goals>
+              <goal>run</goal>
+            </goals>
             <phase>process-test-resources</phase>
             <configuration>
               <target>
@@ -317,18 +318,18 @@
 
                 <mkdir dir="${test.target.directory}" />
 
-                <jar destfile="${test.target.directory}/${test.archetype.name-version}.jar" basedir="${test.source.directory}/" />
+                <jar basedir="${test.source.directory}/" destfile="${test.target.directory}/${test.archetype.name-version}.jar" />
 
-                <copy tofile="${test.target.directory}/${test.archetype.name-version}.pom" file="${test.source.directory}/META-INF/maven/archetypes/${test.archetype.name}/pom.xml" />
+                <copy file="${test.source.directory}/META-INF/maven/archetypes/${test.archetype.name}/pom.xml" tofile="${test.target.directory}/${test.archetype.name-version}.pom" />
               </target>
             </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
           </execution>
 
           <execution>
             <id>archetype-test-old</id>
+            <goals>
+              <goal>run</goal>
+            </goals>
             <phase>process-test-resources</phase>
             <configuration>
               <target>
@@ -342,18 +343,18 @@
 
                 <mkdir dir="${test.target.directory}" />
 
-                <jar destfile="${test.target.directory}/${test.archetype.name-version}.jar" basedir="${test.source.directory}/" />
+                <jar basedir="${test.source.directory}/" destfile="${test.target.directory}/${test.archetype.name-version}.jar" />
 
-                <copy tofile="${test.target.directory}/${test.archetype.name-version}.pom" file="${test.source.directory}/META-INF/maven/archetypes/${test.archetype.name}/pom.xml" />
+                <copy file="${test.source.directory}/META-INF/maven/archetypes/${test.archetype.name}/pom.xml" tofile="${test.target.directory}/${test.archetype.name-version}.pom" />
               </target>
             </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
           </execution>
 
           <execution>
             <id>archetype-test-fileset</id>
+            <goals>
+              <goal>run</goal>
+            </goals>
             <phase>process-test-resources</phase>
             <configuration>
               <target>
@@ -367,17 +368,17 @@
 
                 <mkdir dir="${test.target.directory}" />
 
-                <jar destfile="${test.target.directory}/${test.archetype.name-version}.jar" basedir="${test.source.directory}/" />
+                <jar basedir="${test.source.directory}/" destfile="${test.target.directory}/${test.archetype.name-version}.jar" />
 
-                <copy tofile="${test.target.directory}/${test.archetype.name-version}.pom" file="${test.source.directory}/META-INF/maven/archetypes/${test.archetype.name}/pom.xml" />
+                <copy file="${test.source.directory}/META-INF/maven/archetypes/${test.archetype.name}/pom.xml" tofile="${test.target.directory}/${test.archetype.name-version}.pom" />
               </target>
             </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
           </execution>
           <execution>
             <id>archetype-test-fileset-with-postscript</id>
+            <goals>
+              <goal>run</goal>
+            </goals>
             <phase>process-test-resources</phase>
             <configuration>
               <target>
@@ -391,17 +392,17 @@
 
                 <mkdir dir="${test.target.directory}" />
 
-                <jar destfile="${test.target.directory}/${test.archetype.name-version}.jar" basedir="${test.source.directory}/" />
+                <jar basedir="${test.source.directory}/" destfile="${test.target.directory}/${test.archetype.name-version}.jar" />
 
-                <copy tofile="${test.target.directory}/${test.archetype.name-version}.pom" file="${test.source.directory}/META-INF/maven/archetypes/${test.archetype.name}/pom.xml" />
+                <copy file="${test.source.directory}/META-INF/maven/archetypes/${test.archetype.name}/pom.xml" tofile="${test.target.directory}/${test.archetype.name-version}.pom" />
               </target>
             </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
           </execution>
           <execution>
             <id>repository-metadata</id>
+            <goals>
+              <goal>run</goal>
+            </goals>
             <phase>process-test-resources</phase>
             <configuration>
               <target>
@@ -412,9 +413,6 @@
                 <mkdir dir="${project.build.directory}/test-classes/${test.projects.repository}/${test.projects.target.directory}" />
               </target>
             </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
           </execution>
         </executions>
       </plugin>

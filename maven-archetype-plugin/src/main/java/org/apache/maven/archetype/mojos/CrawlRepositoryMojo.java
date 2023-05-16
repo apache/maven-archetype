@@ -1,5 +1,3 @@
-package org.apache.maven.archetype.mojos;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,9 @@ package org.apache.maven.archetype.mojos;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.archetype.mojos;
+
+import java.io.File;
 
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.repositorycrawler.RepositoryCrawler;
@@ -28,21 +29,17 @@ import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
-import java.io.File;
-
 /**
  * Crawl a Maven repository (filesystem, not HTTP) and creates a catalog file.
  *
  * @author rafale
  */
-@Mojo( name = "crawl", requiresProject = false )
-public class CrawlRepositoryMojo
-    extends AbstractMojo
-{
+@Mojo(name = "crawl", requiresProject = false)
+public class CrawlRepositoryMojo extends AbstractMojo {
     /**
      * The archetype's catalog to update.
      */
-    @Parameter( property = "catalog" )
+    @Parameter(property = "catalog")
     private File catalogFile;
 
     @Component
@@ -51,27 +48,23 @@ public class CrawlRepositoryMojo
     /**
      * The repository to crawl.
      */
-    @Parameter( property = "repository", defaultValue = "${settings.localRepository}" )
+    @Parameter(property = "repository", defaultValue = "${settings.localRepository}")
     private File repository;
 
     @Override
-    public void execute()
-        throws MojoExecutionException, MojoFailureException
-    {
-        getLog().debug( "repository " + repository + ", catalogFile " + catalogFile );
+    public void execute() throws MojoExecutionException, MojoFailureException {
+        getLog().debug("repository " + repository + ", catalogFile " + catalogFile);
 
-        if ( repository == null )
-        {
-            throw new MojoFailureException( "The repository is not defined. Use -Drepository=/path/to/repository" );
+        if (repository == null) {
+            throw new MojoFailureException("The repository is not defined. Use -Drepository=/path/to/repository");
         }
 
-        ArchetypeCatalog catalog = crawler.crawl( repository );
+        ArchetypeCatalog catalog = crawler.crawl(repository);
 
-        if ( catalogFile == null )
-        {
-            catalogFile = new File( repository, "archetype-catalog.xml" );
+        if (catalogFile == null) {
+            catalogFile = new File(repository, "archetype-catalog.xml");
         }
 
-        crawler.writeCatalog( catalog, catalogFile );
+        crawler.writeCatalog(catalog, catalogFile);
     }
 }

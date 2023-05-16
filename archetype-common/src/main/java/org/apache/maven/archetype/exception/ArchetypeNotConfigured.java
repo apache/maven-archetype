@@ -1,5 +1,3 @@
-package org.apache.maven.archetype.exception;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,39 +16,33 @@ package org.apache.maven.archetype.exception;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.archetype.exception;
 
 import java.util.List;
 
-public class ArchetypeNotConfigured
-    extends ArchetypeException
-{
+public class ArchetypeNotConfigured extends ArchetypeException {
     private List<String> missingProperties;
 
-    public List<String> getMissingProperties()
-    {
+    public List<String> getMissingProperties() {
         return missingProperties;
     }
 
-    public ArchetypeNotConfigured( List<String> missingProperties )
-    {
+    public ArchetypeNotConfigured(List<String> missingProperties) {
         this.missingProperties = missingProperties;
     }
 
-    public ArchetypeNotConfigured( String msg, List<String> missingProperties )
-    {
-        super( msg );
+    public ArchetypeNotConfigured(String msg, List<String> missingProperties) {
+        super(msg);
         this.missingProperties = missingProperties;
     }
 
-    public ArchetypeNotConfigured( Throwable cause, List<String> missingProperties )
-    {
-        super( cause );
+    public ArchetypeNotConfigured(Throwable cause, List<String> missingProperties) {
+        super(cause);
         this.missingProperties = missingProperties;
     }
 
-    public ArchetypeNotConfigured( String msg, Throwable cause, List<String> missingProperties )
-    {
-        super( msg, cause );
+    public ArchetypeNotConfigured(String msg, Throwable cause, List<String> missingProperties) {
+        super(msg, cause);
         this.missingProperties = missingProperties;
     }
 }

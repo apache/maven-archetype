@@ -1,5 +1,3 @@
-package org.apache.maven.archetype.exception;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,26 +16,20 @@ package org.apache.maven.archetype.exception;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.archetype.exception;
 
-public class InvalidPackaging
-    extends ArchetypeException
-{
-    public InvalidPackaging()
-    {
+public class InvalidPackaging extends ArchetypeException {
+    public InvalidPackaging() {}
+
+    public InvalidPackaging(String msg) {
+        super(msg);
     }
 
-    public InvalidPackaging( String msg )
-    {
-        super( msg );
+    public InvalidPackaging(Throwable cause) {
+        super(cause);
     }
 
-    public InvalidPackaging( Throwable cause )
-    {
-        super( cause );
-    }
-
-    public InvalidPackaging( String msg, Throwable cause )
-    {
-        super( msg, cause );
+    public InvalidPackaging(String msg, Throwable cause) {
+        super(msg, cause);
     }
 }

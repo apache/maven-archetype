@@ -1,5 +1,3 @@
-package org.apache.maven.archetype.ui;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,12 +16,12 @@ package org.apache.maven.archetype.ui;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.archetype.ui;
 
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.codehaus.plexus.util.StringUtils;
 
-public class ArchetypeDefinition
-{
+public class ArchetypeDefinition {
     private String groupId;
 
     private String artifactId;
@@ -40,144 +38,117 @@ public class ArchetypeDefinition
 
     private String description;
 
-    public ArchetypeDefinition()
-    {
+    public ArchetypeDefinition() {}
+
+    public ArchetypeDefinition(ArchetypeGenerationRequest request) {
+        setGroupId(request.getArchetypeGroupId());
+        setArtifactId(request.getArchetypeArtifactId());
+        setVersion(request.getArchetypeVersion());
     }
 
-    public ArchetypeDefinition( ArchetypeGenerationRequest request )
-    {
-        setGroupId( request.getArchetypeGroupId() );
-        setArtifactId( request.getArchetypeArtifactId() );
-        setVersion( request.getArchetypeVersion() );
-    }
-
-    public String getArtifactId()
-    {
+    public String getArtifactId() {
         return this.artifactId;
     }
 
-    public String getGoals()
-    {
+    public String getGoals() {
         return this.goals;
     }
 
-    public String getGroupId()
-    {
+    public String getGroupId() {
         return this.groupId;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return this.name;
     }
 
-    public String getRepository()
-    {
+    public String getRepository() {
         return this.repository;
     }
 
-    public String getVersion()
-    {
+    public String getVersion() {
         return this.version;
     }
 
-    public String getUrl()
-    {
+    public String getUrl() {
         return this.url;
     }
 
-    public String getDescription()
-    {
+    public String getDescription() {
         return this.description;
     }
 
-    public void setArtifactId( String artifactId )
-    {
+    public void setArtifactId(String artifactId) {
         this.artifactId = artifactId;
     }
 
-    public void setGoals( String goals )
-    {
+    public void setGoals(String goals) {
         this.goals = goals;
     }
 
-    public void setGroupId( String groupId )
-    {
+    public void setGroupId(String groupId) {
         this.groupId = groupId;
     }
 
-    public void setName( String name )
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public void setRepository( String repository )
-    {
+    public void setRepository(String repository) {
         this.repository = repository;
     }
 
-    public void setVersion( String version )
-    {
+    public void setVersion(String version) {
         this.version = version;
     }
 
-    public void setUrl( String url )
-    {
+    public void setUrl(String url) {
         this.url = url;
     }
 
-    public void setDescription( String description )
-    {
+    public void setDescription(String description) {
         this.description = description;
     }
 
-    public void reset()
-    {
-        setGroupId( null );
-        setArtifactId( null );
-        setVersion( null );
+    public void reset() {
+        setGroupId(null);
+        setArtifactId(null);
+        setVersion(null);
     }
 
-    public boolean isArtifactDefined()
-    {
-        return StringUtils.isNotEmpty( getArtifactId() );
+    public boolean isArtifactDefined() {
+        return StringUtils.isNotEmpty(getArtifactId());
     }
 
-    public boolean isDefined()
-    {
+    public boolean isDefined() {
         return isPartiallyDefined() && isVersionDefined();
     }
 
-    public boolean isGroupDefined()
-    {
-        return StringUtils.isNotEmpty( getGroupId() );
+    public boolean isGroupDefined() {
+        return StringUtils.isNotEmpty(getGroupId());
     }
 
-    public boolean isPartiallyDefined()
-    {
+    public boolean isPartiallyDefined() {
         return isGroupDefined() && isArtifactDefined();
     }
 
-    public boolean isVersionDefined()
-    {
-        return StringUtils.isNotEmpty( getVersion() );
+    public boolean isVersionDefined() {
+        return StringUtils.isNotEmpty(getVersion());
     }
 
-    public void updateRequest( ArchetypeGenerationRequest request )
-    {
-        request.setArchetypeGroupId( getGroupId() );
+    public void updateRequest(ArchetypeGenerationRequest request) {
+        request.setArchetypeGroupId(getGroupId());
 
-        request.setArchetypeArtifactId( getArtifactId() );
+        request.setArchetypeArtifactId(getArtifactId());
 
-        request.setArchetypeVersion( getVersion() );
+        request.setArchetypeVersion(getVersion());
 
-        request.setArchetypeGoals( getGoals() );
+        request.setArchetypeGoals(getGoals());
 
-        request.setArchetypeName( getName() );
+        request.setArchetypeName(getName());
 
-        if ( StringUtils.isNotEmpty( getRepository() ) )
-        {
-            request.setArchetypeRepository( getRepository() );
+        if (StringUtils.isNotEmpty(getRepository())) {
+            request.setArchetypeRepository(getRepository());
         }
     }
 }

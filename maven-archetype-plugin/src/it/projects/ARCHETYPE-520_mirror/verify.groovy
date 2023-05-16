@@ -17,5 +17,5 @@
  * under the License.
  */
 
-buildLog = new File( basedir, "build.log" )
+buildLog = new File( basedir, "../../logs/ARCHETYPE-520_mirror/build.log" )
 assert !buildLog.text.contains( "://repo.maven.apache.org/maven2/" )

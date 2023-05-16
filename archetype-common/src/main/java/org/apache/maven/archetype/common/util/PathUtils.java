@@ -1,5 +1,3 @@
-package org.apache.maven.archetype.common.util;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,40 +16,37 @@ package org.apache.maven.archetype.common.util;
  * specific language governing permissions and limitations
  * under the License.
  */
-
-import org.codehaus.plexus.util.StringUtils;
+package org.apache.maven.archetype.common.util;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.plexus.util.StringUtils;
+
 /** @author rafale */
-public class PathUtils
-{
+public class PathUtils {
     /**
      * This method converts all \ or / chars to File.separatorChar.
      *
      * @param path
      * @return converted path
      */
-    public static String convertPathForOS( String path )
-    {
-        path = StringUtils.replace( path, "/", File.separator );
-        return StringUtils.replace( path, "\\", File.separator );
+    public static String convertPathForOS(String path) {
+        path = StringUtils.replace(path, "/", File.separator);
+        return StringUtils.replace(path, "\\", File.separator);
     }
 
-    public static String getDirectory( String file, int level )
-    {
-        file = convertPathForOS( file );
+    public static String getDirectory(String file, int level) {
+        file = convertPathForOS(file);
 
-        String[] fileAsArray = StringUtils.split( file, File.separator );
+        String[] fileAsArray = StringUtils.split(file, File.separator);
         List<String> directoryAsArray = new ArrayList<>();
 
-        for ( int i = 0; ( i < level ) && ( i < ( fileAsArray.length - 1 ) ); i++ )
-        {
-            directoryAsArray.add( fileAsArray[i] );
+        for (int i = 0; (i < level) && (i < (fileAsArray.length - 1)); i++) {
+            directoryAsArray.add(fileAsArray[i]);
         }
 
-        return StringUtils.join( directoryAsArray.iterator(), File.separator );
+        return StringUtils.join(directoryAsArray.iterator(), File.separator);
     }
 }

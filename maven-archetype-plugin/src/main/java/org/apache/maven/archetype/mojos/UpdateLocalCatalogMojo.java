@@ -1,5 +1,3 @@
-package org.apache.maven.archetype.mojos;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.archetype.mojos;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.archetype.mojos;
 
 import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.catalog.Archetype;
@@ -37,45 +36,38 @@ import org.codehaus.plexus.util.StringUtils;
  *
  * @author rafale
  */
-@Mojo( name = "update-local-catalog", defaultPhase = LifecyclePhase.INSTALL )
-public class UpdateLocalCatalogMojo
-    extends AbstractMojo
-{
-    @Parameter( defaultValue = "${session}", readonly = true, required = true )
+@Mojo(name = "update-local-catalog", defaultPhase = LifecyclePhase.INSTALL)
+public class UpdateLocalCatalogMojo extends AbstractMojo {
+    @Parameter(defaultValue = "${session}", readonly = true, required = true)
     private MavenSession session;
-    
+
     @Component
     private ArchetypeManager manager;
 
     /**
      * The archetype project to add/update to the local catalog.
      */
-    @Parameter( defaultValue = "${project}", readonly = true, required = true )
+    @Parameter(defaultValue = "${project}", readonly = true, required = true)
     private MavenProject project;
 
     @Override
-    public void execute()
-        throws MojoExecutionException
-    {
-        if ( !Constants.MAVEN_ARCHETYPE_PACKAGING.equalsIgnoreCase( project.getPackaging() ) )
-        {
-            getLog().debug( "Wrong packaging type " + project.getPackaging() + ", skipping archetype " + project.getName() );
+    public void execute() throws MojoExecutionException {
+        if (!Constants.MAVEN_ARCHETYPE_PACKAGING.equalsIgnoreCase(project.getPackaging())) {
+            getLog().debug("Wrong packaging type " + project.getPackaging() + ", skipping archetype "
+                    + project.getName());
             return;
         }
         Archetype archetype = new Archetype();
-        archetype.setGroupId( project.getGroupId() );
-        archetype.setArtifactId( project.getArtifactId() );
-        archetype.setVersion( project.getVersion() );
+        archetype.setGroupId(project.getGroupId());
+        archetype.setArtifactId(project.getArtifactId());
+        archetype.setVersion(project.getVersion());
 
-        if ( StringUtils.isNotEmpty( project.getDescription() ) )
-        {
-            archetype.setDescription( project.getDescription() );
-        }
-        else
-        {
-            archetype.setDescription( project.getName() );
+        if (StringUtils.isNotEmpty(project.getDescription())) {
+            archetype.setDescription(project.getDescription());
+        } else {
+            archetype.setDescription(project.getName());
         }
 
-        manager.updateLocalCatalog( session.getProjectBuildingRequest(), archetype );
+        manager.updateLocalCatalog(session.getProjectBuildingRequest(), archetype);
     }
 }

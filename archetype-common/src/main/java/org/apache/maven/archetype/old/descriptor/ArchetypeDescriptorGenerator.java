@@ -1,5 +1,3 @@
-package org.apache.maven.archetype.old.descriptor;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.archetype.old.descriptor;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.archetype.old.descriptor;
 
 /**
  * Pass over the directory containing the sources of the archetype and create
@@ -26,6 +25,4 @@ package org.apache.maven.archetype.old.descriptor;
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  * @version $Id$
  */
-public class ArchetypeDescriptorGenerator
-{
-}
+public class ArchetypeDescriptorGenerator {}

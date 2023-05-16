@@ -1,5 +1,3 @@
-package org.apache.maven.archetype;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,18 +16,18 @@ package org.apache.maven.archetype;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.archetype;
+
+import java.io.File;
+import java.io.IOException;
 
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.project.ProjectBuildingRequest;
 
-import java.io.File;
-import java.io.IOException;
-
 /** @author Jason van Zyl */
-public interface ArchetypeManager
-{
+public interface ArchetypeManager {
     String ROLE = ArchetypeManager.class.getName();
 
     /**
@@ -39,7 +37,7 @@ public interface ArchetypeManager
      * @return The result of creating the archetype from the existing project. It contains any errors that might have
      *         occurred.
      */
-    ArchetypeCreationResult createArchetypeFromProject( ArchetypeCreationRequest request );
+    ArchetypeCreationResult createArchetypeFromProject(ArchetypeCreationRequest request);
 
     /**
      * A command to generate a Maven project from an archetype given the supplied generation request.
@@ -48,11 +46,11 @@ public interface ArchetypeManager
      * @return The result of creating the project from the existing archetype. It contains any errors that might have
      *         occurred.
      */
-    ArchetypeGenerationResult generateProjectFromArchetype( ArchetypeGenerationRequest request );
+    ArchetypeGenerationResult generateProjectFromArchetype(ArchetypeGenerationRequest request);
 
     /**
      * Gives the catalog of archetypes internal to the plugin.
-     * 
+     *
      * @return the catalog.
      */
     ArchetypeCatalog getInternalCatalog();
@@ -61,20 +59,20 @@ public interface ArchetypeManager
      * Gives the catalog of archetypes located in the given path.
      * if path is a file, it used as is.
      * if path is a directory, archetype-catalog.xml is appended to it.
-     * 
+     *
      * @param buildingRequest the catalog file path or directory containing the catalog file.
      * @return the catalog.
      */
-    ArchetypeCatalog getLocalCatalog( ProjectBuildingRequest buildingRequest );
+    ArchetypeCatalog getLocalCatalog(ProjectBuildingRequest buildingRequest);
 
     /**
      * Gives the catalog of archetypes located at
      * <code>https://repo.maven.apache.org/maven2/archetype-catalog.xml</code>.
      * @param buildingRequest TODO
-     * 
+     *
      * @return the catalog.
      */
-    ArchetypeCatalog getRemoteCatalog( ProjectBuildingRequest buildingRequest );
+    ArchetypeCatalog getRemoteCatalog(ProjectBuildingRequest buildingRequest);
 
     /**
      * Creates a jar file for an archetype.
@@ -88,8 +86,8 @@ public interface ArchetypeManager
      * @deprecated replaced by archetype plugin's JarMojo using maven-archiver component for Reproducible Builds
      */
     @Deprecated
-    File archiveArchetype( File archetypeDirectory, File outputDirectory, String finalName )
-        throws DependencyResolutionRequiredException, IOException;
+    File archiveArchetype(File archetypeDirectory, File outputDirectory, String finalName)
+            throws DependencyResolutionRequiredException, IOException;
 
-    void updateLocalCatalog( ProjectBuildingRequest buildingRequest, Archetype archetype );
+    void updateLocalCatalog(ProjectBuildingRequest buildingRequest, Archetype archetype);
 }

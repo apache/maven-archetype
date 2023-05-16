@@ -1,5 +1,3 @@
-package org.apache.maven.archetype.old;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,14 +16,14 @@ package org.apache.maven.archetype.old;
  * specific language governing permissions and limitations
  * under the License.
  */
-
-import org.apache.maven.archetype.exception.InvalidPackaging;
-import org.apache.maven.artifact.repository.ArtifactRepository;
+package org.apache.maven.archetype.old;
 
 import java.io.File;
 
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
+import org.apache.maven.archetype.exception.InvalidPackaging;
 import org.apache.maven.archetype.exception.UnknownArchetype;
+import org.apache.maven.artifact.repository.ArtifactRepository;
 
 /**
  * Create a Maven project from an old archetype.
@@ -33,8 +31,7 @@ import org.apache.maven.archetype.exception.UnknownArchetype;
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  * @version $Id$
  */
-public interface OldArchetype
-{
+public interface OldArchetype {
     String ROLE = OldArchetype.class.getName();
 
     String ARCHETYPE_DESCRIPTOR = "META-INF/maven/archetype.xml";
@@ -49,13 +46,13 @@ public interface OldArchetype
     /**
      * Download an archetype then create a project from it.
      */
-    void createArchetype( ArchetypeGenerationRequest request, ArtifactRepository archetypeRepository )
+    void createArchetype(ArchetypeGenerationRequest request, ArtifactRepository archetypeRepository)
             throws UnknownArchetype, ArchetypeNotFoundException, ArchetypeDescriptorException,
-            ArchetypeTemplateProcessingException, InvalidPackaging;
+                    ArchetypeTemplateProcessingException, InvalidPackaging;
 
     /**
      * Create a project from an archetype file.
      */
-    void createArchetype( ArchetypeGenerationRequest request, File archetypeFile )
+    void createArchetype(ArchetypeGenerationRequest request, File archetypeFile)
             throws ArchetypeDescriptorException, ArchetypeTemplateProcessingException, InvalidPackaging;
 }

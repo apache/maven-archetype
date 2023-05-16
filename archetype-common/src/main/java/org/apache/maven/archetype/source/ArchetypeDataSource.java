@@ -1,5 +1,3 @@
-package org.apache.maven.archetype.source;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.archetype.source;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.archetype.source;
 
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
@@ -32,13 +31,10 @@ import org.apache.maven.project.ProjectBuildingRequest;
  *
  * @author Jason van Zyl
  */
-public interface ArchetypeDataSource
-{
+public interface ArchetypeDataSource {
     String ARCHETYPE_CATALOG_FILENAME = "archetype-catalog.xml";
 
-    ArchetypeCatalog getArchetypeCatalog( ProjectBuildingRequest buildingRequest )
-        throws ArchetypeDataSourceException;
+    ArchetypeCatalog getArchetypeCatalog(ProjectBuildingRequest buildingRequest) throws ArchetypeDataSourceException;
 
-    void updateCatalog( ProjectBuildingRequest buildingRequest, Archetype archetype )
-        throws ArchetypeDataSourceException;
+    void updateCatalog(ProjectBuildingRequest buildingRequest, Archetype archetype) throws ArchetypeDataSourceException;
 }

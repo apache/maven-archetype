@@ -1,5 +1,3 @@
-package org.apache.maven.archetype.exception;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,26 +16,20 @@ package org.apache.maven.archetype.exception;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.archetype.exception;
 
-public class TemplateCreationException
-    extends ArchetypeException
-{
-    public TemplateCreationException()
-    {
+public class TemplateCreationException extends ArchetypeException {
+    public TemplateCreationException() {}
+
+    public TemplateCreationException(String msg) {
+        super(msg);
     }
 
-    public TemplateCreationException( String msg )
-    {
-        super( msg );
+    public TemplateCreationException(Throwable cause) {
+        super(cause);
     }
 
-    public TemplateCreationException( Throwable cause )
-    {
-        super( cause );
-    }
-
-    public TemplateCreationException( String msg, Throwable cause )
-    {
-        super( msg, cause );
+    public TemplateCreationException(String msg, Throwable cause) {
+        super(msg, cause);
     }
 }

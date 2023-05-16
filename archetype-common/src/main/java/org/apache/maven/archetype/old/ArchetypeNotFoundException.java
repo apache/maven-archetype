@@ -1,5 +1,3 @@
-package org.apache.maven.archetype.old;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.archetype.old;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.archetype.old;
 
 import org.apache.maven.archetype.exception.ArchetypeGenerationFailure;
 
@@ -25,21 +24,16 @@ import org.apache.maven.archetype.exception.ArchetypeGenerationFailure;
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  * @version $Id$
  */
-public class ArchetypeNotFoundException
-    extends ArchetypeGenerationFailure
-{
-    public ArchetypeNotFoundException( String message )
-    {
-        super( message );
+public class ArchetypeNotFoundException extends ArchetypeGenerationFailure {
+    public ArchetypeNotFoundException(String message) {
+        super(message);
     }
 
-    public ArchetypeNotFoundException( Throwable cause )
-    {
-        super( cause );
+    public ArchetypeNotFoundException(Throwable cause) {
+        super(cause);
     }
 
-    public ArchetypeNotFoundException( String message, Throwable cause )
-    {
-        super( message, cause );
+    public ArchetypeNotFoundException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

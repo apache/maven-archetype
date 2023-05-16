@@ -1,5 +1,3 @@
-package org.apache.maven.archetype.common;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,54 +16,49 @@ package org.apache.maven.archetype.common;
  * specific language governing permissions and limitations
  * under the License.
  */
-
-import junit.framework.TestCase;
+package org.apache.maven.archetype.common;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import junit.framework.TestCase;
 import org.apache.maven.archetype.metadata.FileSet;
 
-public class TestDefaultArchetypeFilesResolver
-    extends TestCase
-{
-    public void testResourceFiltering()
-        throws Exception
-    {
+public class TestDefaultArchetypeFilesResolver extends TestCase {
+    public void testResourceFiltering() throws Exception {
         FileSet fileSet = new FileSet();
 
-        fileSet.addInclude( "**/*.java" );
+        fileSet.addInclude("**/*.java");
 
-        fileSet.setDirectory( "src/main/java" );
-        fileSet.setEncoding( "UTF-8" );
-        fileSet.setPackaged( true );
-        fileSet.setFiltered( true );
+        fileSet.setDirectory("src/main/java");
+        fileSet.setEncoding("UTF-8");
+        fileSet.setPackaged(true);
+        fileSet.setFiltered(true);
 
         List<String> archetypeResources = new ArrayList<>();
 
-        archetypeResources.add( "pom.xml" );
-        archetypeResources.add( "App.java" );
-        archetypeResources.add( "src/main/c/App.c" );
-        archetypeResources.add( "src/main/java/App.java" );
-        archetypeResources.add( "src/main/java/inner/package/App2.java" );
-        archetypeResources.add( "src/main/mdo/App.mdo" );
-        archetypeResources.add( "src/main/resources/App.properties" );
-        archetypeResources.add( "src/main/resources/inner/dir/App2.properties" );
-        archetypeResources.add( "src/test/c/AppTest.c" );
-        archetypeResources.add( "src/test/java/AppTest.java" );
-        archetypeResources.add( "src/test/mdo/AppTest.mdo" );
-        archetypeResources.add( "src/test/resources/AppTest.properties" );
+        archetypeResources.add("pom.xml");
+        archetypeResources.add("App.java");
+        archetypeResources.add("src/main/c/App.c");
+        archetypeResources.add("src/main/java/App.java");
+        archetypeResources.add("src/main/java/inner/package/App2.java");
+        archetypeResources.add("src/main/mdo/App.mdo");
+        archetypeResources.add("src/main/resources/App.properties");
+        archetypeResources.add("src/main/resources/inner/dir/App2.properties");
+        archetypeResources.add("src/test/c/AppTest.c");
+        archetypeResources.add("src/test/java/AppTest.java");
+        archetypeResources.add("src/test/mdo/AppTest.mdo");
+        archetypeResources.add("src/test/resources/AppTest.properties");
 
-        System.out.println( "FileSet:" + fileSet );
-        System.out.println( "Resources:" + archetypeResources );
+        System.out.println("FileSet:" + fileSet);
+        System.out.println("Resources:" + archetypeResources);
 
         ArchetypeFilesResolver resolver = new DefaultArchetypeFilesResolver();
 
-        List<String> fileSetResources = resolver.filterFiles( "", fileSet, archetypeResources );
+        List<String> fileSetResources = resolver.filterFiles("", fileSet, archetypeResources);
 
-        System.out.println( "Result:" + fileSetResources );
+        System.out.println("Result:" + fileSetResources);
 
-        assertEquals( 2, fileSetResources.size() );
+        assertEquals(2, fileSetResources.size());
     }
-
 }

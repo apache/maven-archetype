@@ -1,3 +1,21 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package org.apache.maven.archetype.common.util;
 
 /*
@@ -12,8 +30,8 @@ package org.apache.maven.archetype.common.util;
  *    notice, this list of conditions, and the following disclaimer.
  *
  * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions, and the disclaimer that follows 
- *    these conditions in the documentation and/or other materials 
+ *    notice, this list of conditions, and the disclaimer that follows
+ *    these conditions in the documentation and/or other materials
  *    provided with the distribution.
  *
  * 3. The name "JDOM" must not be used to endorse or promote products
@@ -24,12 +42,12 @@ package org.apache.maven.archetype.common.util;
  *    may "JDOM" appear in their name, without prior written permission
  *    from the JDOM Project Management <request_AT_jdom_DOT_org>.
  *
- * In addition, we request (but do not require) that you include in the 
- * end-user documentation provided with the redistribution and/or in the 
+ * In addition, we request (but do not require) that you include in the
+ * end-user documentation provided with the redistribution and/or in the
  * software itself an acknowledgement equivalent to the following:
  *     "This product includes software developed by the
  *      JDOM Project (http://www.jdom.org/)."
- * Alternatively, the acknowledgment may be graphical using the logos 
+ * Alternatively, the acknowledgment may be graphical using the logos
  * available at http://www.jdom.org/images/logos.
  *
  * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
@@ -45,16 +63,16 @@ package org.apache.maven.archetype.common.util;
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * This software consists of voluntary contributions made by many 
- * individuals on behalf of the JDOM Project and was originally 
+ * This software consists of voluntary contributions made by many
+ * individuals on behalf of the JDOM Project and was originally
  * created by Jason Hunter <jhunter_AT_jdom_DOT_org> and
  * Brett McLaughlin <brett_AT_jdom_DOT_org>.  For more information
  * on the JDOM Project, please see <http://www.jdom.org/>.
  */
 
-import org.jdom2.output.EscapeStrategy;
-
 import java.lang.reflect.Method;
+
+import org.jdom2.output.EscapeStrategy;
 
 /**
  * <p>Class to encapsulate XMLOutputter format options.
@@ -62,15 +80,13 @@ import java.lang.reflect.Method;
  * {@link #getRawFormat} (no whitespace changes),
  * {@link #getPrettyFormat} (whitespace beautification), and
  * {@link #getCompactFormat} (whitespace normalization).</p>
- * 
+ *
  * <p>Several modes are available to effect the way textual content is printed.
  * See the documentation for {@link TextMode} for details.</p>
  *
  * @author Jason Hunter
  */
-public class Format
-    implements Cloneable
-{
+public class Format implements Cloneable {
 
     /**
      * Returns a new Format object that performs no whitespace changes, uses
@@ -81,8 +97,7 @@ public class Format
      *
      * @return a Format with no whitespace changes
      */
-    public static Format getRawFormat()
-    {
+    public static Format getRawFormat() {
         return new Format();
     }
 
@@ -96,11 +111,10 @@ public class Format
      *
      * @return a Format with whitespace beautification
      */
-    public static Format getPrettyFormat()
-    {
+    public static Format getPrettyFormat() {
         Format f = new Format();
-        f.setIndent( STANDARD_INDENT );
-        f.setTextMode( TextMode.TRIM );
+        f.setIndent(STANDARD_INDENT);
+        f.setTextMode(TextMode.TRIM);
         return f;
     }
 
@@ -113,10 +127,9 @@ public class Format
      *
      * @return a Format with whitespace normalization
      */
-    public static Format getCompactFormat()
-    {
+    public static Format getCompactFormat() {
         Format f = new Format();
-        f.setTextMode( TextMode.NORMALIZE );
+        f.setTextMode(TextMode.NORMALIZE);
         return f;
     }
 
@@ -128,7 +141,6 @@ public class Format
 
     /** standard encoding */
     private static final String STANDARD_ENCODING = "UTF-8";
-
 
     /** The default indent is no spaces (as original document) */
     String indent = null;
@@ -167,12 +179,10 @@ public class Format
     TextMode mode = TextMode.PRESERVE;
 
     /** entity escape logic */
-    EscapeStrategy escapeStrategy = new DefaultEscapeStrategy( encoding );
+    EscapeStrategy escapeStrategy = new DefaultEscapeStrategy(encoding);
 
     /** Creates a new Format instance with default (raw) behavior. */
-    private Format()
-    {
-    }
+    private Format() {}
 
     /**
      * Sets the {@link EscapeStrategy} to use for character escaping.
@@ -180,8 +190,7 @@ public class Format
      * @param strategy the EscapeStrategy to use
      * @return a pointer to this Format for chaining
      */
-    public Format setEscapeStrategy( EscapeStrategy strategy )
-    {
+    public Format setEscapeStrategy(EscapeStrategy strategy) {
         escapeStrategy = strategy;
         return this;
     }
@@ -191,8 +200,7 @@ public class Format
      *
      * @return the current escape strategy
      */
-    public EscapeStrategy getEscapeStrategy()
-    {
+    public EscapeStrategy getEscapeStrategy() {
         return escapeStrategy;
     }
 
@@ -202,12 +210,12 @@ public class Format
      * property is false, this value is irrelevant.  To make it output
      * the system default line ending string, call
      * <code>setLineSeparator(System.getProperty("line.separator"))</code></p>
-     * 
+     *
      * <p>To output "UNIX-style" documents, call
      * <code>setLineSeparator("\n")</code>.  To output "Mac-style"
      * documents, call <code>setLineSeparator("\r")</code>.  DOS-style
      * documents use CR-LF ("\r\n"), which is the default.</p>
-     * 
+     *
      * <p>Note that this only applies to newlines generated by the
      * outputter.  If you parse an XML document that contains newlines
      * embedded inside a text node, and you do not set TextMode.NORMALIZE,
@@ -219,8 +227,7 @@ public class Format
      * @return a pointer to this Format for chaining
      * @see #setTextMode
      */
-    public Format setLineSeparator( String separator )
-    {
+    public Format setLineSeparator(String separator) {
         this.lineSeparator = separator;
         return this;
     }
@@ -230,8 +237,7 @@ public class Format
      *
      * @return the current line separator
      */
-    public String getLineSeparator()
-    {
+    public String getLineSeparator() {
         return lineSeparator;
     }
 
@@ -246,8 +252,7 @@ public class Format
      *                     the XML declaration should indicate the document encoding.
      * @return a pointer to this Format for chaining
      */
-    public Format setOmitEncoding( boolean omitEncoding )
-    {
+    public Format setOmitEncoding(boolean omitEncoding) {
         this.omitEncoding = omitEncoding;
         return this;
     }
@@ -257,8 +262,7 @@ public class Format
      *
      * @return whether the XML declaration encoding will be omitted
      */
-    public boolean getOmitEncoding()
-    {
+    public boolean getOmitEncoding() {
         return omitEncoding;
     }
 
@@ -272,8 +276,7 @@ public class Format
      *                        the XML declaration should be omitted.
      * @return a pointer to this Format for chaining
      */
-    public Format setOmitDeclaration( boolean omitDeclaration )
-    {
+    public Format setOmitDeclaration(boolean omitDeclaration) {
         this.omitDeclaration = omitDeclaration;
         return this;
     }
@@ -283,8 +286,7 @@ public class Format
      *
      * @return whether the XML declaration will be omitted
      */
-    public boolean getOmitDeclaration()
-    {
+    public boolean getOmitDeclaration() {
         return omitDeclaration;
     }
 
@@ -297,8 +299,7 @@ public class Format
      *                            empty elements should be expanded.
      * @return a pointer to this Format for chaining
      */
-    public Format setExpandEmptyElements( boolean expandEmptyElements )
-    {
+    public Format setExpandEmptyElements(boolean expandEmptyElements) {
         this.expandEmptyElements = expandEmptyElements;
         return this;
     }
@@ -308,8 +309,7 @@ public class Format
      *
      * @return whether empty elements are expanded
      */
-    public boolean getExpandEmptyElements()
-    {
+    public boolean getExpandEmptyElements() {
         return expandEmptyElements;
     }
 
@@ -318,7 +318,7 @@ public class Format
      * disabling/enabling output escaping are ignored.  Disabling
      * output escaping allows using XML text as element content and
      * outputing it verbatim, i&#46;e&#46; as element children would be.</p>
-     * 
+     *
      * <p>When processed, these processing instructions are removed from
      * the generated XML text and control whether the element text
      * content is output verbatim or with escaping of the pre-defined
@@ -327,11 +327,11 @@ public class Format
      * <code>&lt;?javax.xml.transform.disable-output-escaping ?&gt;</code>
      * and <code>&lt;?javax.xml.transform.enable-output-escaping ?&gt;</code>
      * PIs.</p>
-     * 
+     *
      * <p>When ignored, the processing instructions are present in the
      * generated XML text and the pre-defined entities in XML 1.0 are
      * escaped.</p>
-     * 
+     *
      * Default: <code>false</code>.
      *
      * @param ignoreTrAXEscapingPIs <code>boolean</code> indicating
@@ -339,8 +339,7 @@ public class Format
      * @see javax.xml.transform.Result#PI_ENABLE_OUTPUT_ESCAPING
      * @see javax.xml.transform.Result#PI_DISABLE_OUTPUT_ESCAPING
      */
-    public void setIgnoreTrAXEscapingPIs( boolean ignoreTrAXEscapingPIs )
-    {
+    public void setIgnoreTrAXEscapingPIs(boolean ignoreTrAXEscapingPIs) {
         this.ignoreTrAXEscapingPIs = ignoreTrAXEscapingPIs;
     }
 
@@ -350,8 +349,7 @@ public class Format
      *
      * @return whether or not TrAX ouput escaping PIs are ignored.
      */
-    public boolean getIgnoreTrAXEscapingPIs()
-    {
+    public boolean getIgnoreTrAXEscapingPIs() {
         return ignoreTrAXEscapingPIs;
     }
 
@@ -361,8 +359,7 @@ public class Format
      *
      * @return a pointer to this Format for chaining
      */
-    public Format setTextMode( Format.TextMode mode )
-    {
+    public Format setTextMode(Format.TextMode mode) {
         this.mode = mode;
         return this;
     }
@@ -372,8 +369,7 @@ public class Format
      *
      * @return the current text output style
      */
-    public Format.TextMode getTextMode()
-    {
+    public Format.TextMode getTextMode() {
         return mode;
     }
 
@@ -386,13 +382,11 @@ public class Format
      * @param indent <code>String</code> to use for indentation.
      * @return a pointer to this Format for chaining
      */
-    public Format setIndent( String indent )
-    {
+    public Format setIndent(String indent) {
         // if passed the empty string, change it to null, for marginal
         // performance gains later (can compare to null first instead
         // of calling equals())
-        if ( "".equals( indent ) )
-        {
+        if ("".equals(indent)) {
             indent = null;
         }
         this.indent = indent;
@@ -404,8 +398,7 @@ public class Format
      *
      * @return the indent string in use
      */
-    public String getIndent()
-    {
+    public String getIndent() {
         return indent;
     }
 
@@ -417,10 +410,9 @@ public class Format
      *                 "UTF-8" or "ISO-8859-1" or "US-ASCII"
      * @return a pointer to this Format for chaining
      */
-    public Format setEncoding( String encoding )
-    {
+    public Format setEncoding(String encoding) {
         this.encoding = encoding;
-        escapeStrategy = new DefaultEscapeStrategy( encoding );
+        escapeStrategy = new DefaultEscapeStrategy(encoding);
         return this;
     }
 
@@ -429,103 +421,71 @@ public class Format
      *
      * @return the output encoding
      */
-    public String getEncoding()
-    {
+    public String getEncoding() {
         return encoding;
     }
 
     @Override
-    protected Object clone()
-    {
+    protected Object clone() {
         Format format = null;
 
-        try
-        {
+        try {
             format = (Format) super.clone();
-        }
-        catch ( CloneNotSupportedException ce )
-        {
+        } catch (CloneNotSupportedException ce) {
         }
 
         return format;
     }
-
 
     /**
      * Handle common charsets quickly and easily.  Use reflection
      * to query the JDK 1.4 CharsetEncoder class for unknown charsets.
      * If JDK 1.4 isn't around, default to no special encoding.
      */
-    class DefaultEscapeStrategy
-        implements EscapeStrategy
-    {
+    class DefaultEscapeStrategy implements EscapeStrategy {
         private int bits;
         Object encoder;
         Method canEncode;
 
-        public DefaultEscapeStrategy( String encoding )
-        {
-            if ( "UTF-8".equalsIgnoreCase( encoding )
-                || "UTF-16".equalsIgnoreCase( encoding ) )
-            {
+        public DefaultEscapeStrategy(String encoding) {
+            if ("UTF-8".equalsIgnoreCase(encoding) || "UTF-16".equalsIgnoreCase(encoding)) {
                 bits = 16;
-            }
-            else if ( "ISO-8859-1".equalsIgnoreCase( encoding )
-                || "Latin1".equalsIgnoreCase( encoding ) )
-            {
+            } else if ("ISO-8859-1".equalsIgnoreCase(encoding) || "Latin1".equalsIgnoreCase(encoding)) {
                 bits = 8;
-            }
-            else if ( "US-ASCII".equalsIgnoreCase( encoding )
-                || "ASCII".equalsIgnoreCase( encoding ) )
-            {
+            } else if ("US-ASCII".equalsIgnoreCase(encoding) || "ASCII".equalsIgnoreCase(encoding)) {
                 bits = 7;
-            }
-            else
-            {
+            } else {
                 bits = 0;
-                //encoder = Charset.forName(encoding).newEncoder();
-                try
-                {
-                    Class<?> charsetClass = Class.forName( "java.nio.charset.Charset" );
-                    Class<?> encoderClass = Class.forName( "java.nio.charset.CharsetEncoder" );
-                    Method forName = charsetClass.getMethod( "forName", new Class[] { String.class } );
-                    Object charsetObj = forName.invoke( null, new Object[] { encoding } );
-                    Method newEncoder = charsetClass.getMethod( "newEncoder" );
-                    encoder = newEncoder.invoke( charsetObj );
-                    canEncode = encoderClass.getMethod( "canEncode", new Class[] { char.class } );
-                }
-                catch ( Exception ignored )
-                {
+                // encoder = Charset.forName(encoding).newEncoder();
+                try {
+                    Class<?> charsetClass = Class.forName("java.nio.charset.Charset");
+                    Class<?> encoderClass = Class.forName("java.nio.charset.CharsetEncoder");
+                    Method forName = charsetClass.getMethod("forName", new Class[] {String.class});
+                    Object charsetObj = forName.invoke(null, new Object[] {encoding});
+                    Method newEncoder = charsetClass.getMethod("newEncoder");
+                    encoder = newEncoder.invoke(charsetObj);
+                    canEncode = encoderClass.getMethod("canEncode", new Class[] {char.class});
+                } catch (Exception ignored) {
                 }
             }
         }
 
         @Override
-        public boolean shouldEscape( char ch )
-        {
-            if ( bits == 16 )
-            {
+        public boolean shouldEscape(char ch) {
+            if (bits == 16) {
                 return false;
             }
-            if ( bits == 8 )
-            {
-                return ( ch > 255 );
+            if (bits == 8) {
+                return (ch > 255);
             }
-            if ( bits == 7 )
-            {
-                return ( ch > 127 );
-            }
-            else
-            {
-                if ( canEncode != null && encoder != null )
-                {
-                    try
-                    {
-                        Boolean val = (Boolean) canEncode.invoke( encoder, new Object[] { Character.valueOf( ch ) } );
+            if (bits == 7) {
+                return (ch > 127);
+            } else {
+                if (canEncode != null && encoder != null) {
+                    try {
+                        Boolean val = (Boolean) canEncode.invoke(encoder, new Object[] {Character.valueOf(ch)});
                         return !val.booleanValue();
-                    }
-                    catch ( Exception ignored )
-                    {
+                    } catch (Exception ignored) {
                     }
                 }
                 // Return false if we don't know.  This risks not escaping
@@ -535,7 +495,6 @@ public class Format
             }
         }
     }
-
 
     /**
      * <p>
@@ -589,14 +548,14 @@ public class Format
      * </td>
      * </tr>
      * </table>
-     * 
+     *
      * <p>In most cases textual content is aligned with the surrounding tags
      * (after the appropriate text mode is applied). In the case where the only
      * content between the start and end tags is textual, the start tag, text,
      * and end tag are all printed on the same line. If the document being
      * output already has whitespace, it's wise to turn on TRIM mode so the
      * pre-existing whitespace can be trimmed before adding new whitespace.</p>
-     * 
+     *
      * <p>When a element has a xml:space attribute with the value of "preserve",
      * all formating is turned off and reverts back to the default until the
      * element and its contents have been printed. If a nested element contains
@@ -604,13 +563,12 @@ public class Format
      * for the child element and then off for the remainder of the parent
      * element.</p>
      */
-    public static class TextMode
-    {
+    public static class TextMode {
         /** Mode for literal text preservation. */
-        public static final TextMode PRESERVE = new TextMode( "PRESERVE" );
+        public static final TextMode PRESERVE = new TextMode("PRESERVE");
 
         /** Mode for text trimming (left and right trim). */
-        public static final TextMode TRIM = new TextMode( "TRIM" );
+        public static final TextMode TRIM = new TextMode("TRIM");
 
         /**
          * Mode for text normalization (left and right trim plus internal
@@ -618,27 +576,23 @@ public class Format
          *
          * @see org.jdom2.Element#getTextNormalize
          */
-        public static final TextMode NORMALIZE = new TextMode( "NORMALIZE" );
+        public static final TextMode NORMALIZE = new TextMode("NORMALIZE");
 
         /**
          * Mode for text trimming of content consisting of nothing but
          * whitespace but otherwise not changing output.
          */
-        public static final TextMode TRIM_FULL_WHITE =
-            new TextMode( "TRIM_FULL_WHITE" );
+        public static final TextMode TRIM_FULL_WHITE = new TextMode("TRIM_FULL_WHITE");
 
         private final String name;
 
-        private TextMode( String name )
-        {
+        private TextMode(String name) {
             this.name = name;
         }
 
         @Override
-        public String toString()
-        {
+        public String toString() {
             return name;
         }
     }
 }
-

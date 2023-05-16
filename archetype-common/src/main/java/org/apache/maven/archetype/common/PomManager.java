@@ -1,5 +1,3 @@
-package org.apache.maven.archetype.common;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,14 @@ package org.apache.maven.archetype.common;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.archetype.common;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 import org.apache.maven.archetype.exception.InvalidPackaging;
 import org.apache.maven.archetype.old.ArchetypeTemplateProcessingException;
@@ -25,32 +31,20 @@ import org.apache.maven.model.Model;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-
-public interface PomManager
-{
+public interface PomManager {
     String ROLE = PomManager.class.getName();
 
-    void addModule( File basedirPom, String artifactId )
+    void addModule(File basedirPom, String artifactId)
             throws IOException, ParserConfigurationException, TransformerException, SAXException, InvalidPackaging,
-            ArchetypeTemplateProcessingException;
+                    ArchetypeTemplateProcessingException;
 
-    void addParent( File pom, File basedirPom )
-        throws IOException, XmlPullParserException;
+    void addParent(File pom, File basedirPom) throws IOException, XmlPullParserException;
 
-    void mergePoms( File pom, File temporaryPom )
-        throws IOException, XmlPullParserException;
+    void mergePoms(File pom, File temporaryPom) throws IOException, XmlPullParserException;
 
-    Model readPom( File pomFile )
-        throws IOException, XmlPullParserException;
+    Model readPom(File pomFile) throws IOException, XmlPullParserException;
 
-    Model readPom( InputStream pomStream )
-        throws IOException, XmlPullParserException;
+    Model readPom(InputStream pomStream) throws IOException, XmlPullParserException;
 
-    void writePom( Model model, File pomFile, File initialPomFile )
-        throws IOException;
+    void writePom(Model model, File pomFile, File initialPomFile) throws IOException;
 }

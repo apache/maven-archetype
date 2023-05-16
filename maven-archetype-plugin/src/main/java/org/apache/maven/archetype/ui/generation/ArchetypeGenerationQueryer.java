@@ -1,5 +1,3 @@
-package org.apache.maven.archetype.ui.generation;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,22 +16,21 @@ package org.apache.maven.archetype.ui.generation;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.archetype.ui.generation;
+
+import java.util.regex.Pattern;
 
 import org.apache.maven.archetype.ui.ArchetypeConfiguration;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 
-import java.util.regex.Pattern;
-
 /**
  * <p>User interaction component to query informations necessary for a project generation from an archetype.</p>
- * 
+ *
  * TODO this interface is bound to its implementation through the prompter exception
  */
-public interface ArchetypeGenerationQueryer
-{
-    boolean confirmConfiguration( ArchetypeConfiguration archetypeConfiguration )
-        throws PrompterException;
+public interface ArchetypeGenerationQueryer {
+    boolean confirmConfiguration(ArchetypeConfiguration archetypeConfiguration) throws PrompterException;
 
-    String getPropertyValue( String requiredProperty, String defaultValue, Pattern validationRegex )
-        throws PrompterException;
+    String getPropertyValue(String requiredProperty, String defaultValue, Pattern validationRegex)
+            throws PrompterException;
 }
