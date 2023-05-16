@@ -47,7 +47,8 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
+import javax.xml.transform.stream.StreamSource;
+import java.io.InputStream;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
@@ -137,15 +138,18 @@ public final class PomUtils {
             tf.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
             tf.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
 
-            tf.setAttribute("indent-number", 2);
-            Transformer tr = tf.newTransformer();
-            tr.setOutputProperty(OutputKeys.INDENT, "yes");
-            tr.setOutputProperty(OutputKeys.METHOD, "xml");
-            tr.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-            tr.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-            document.getDomConfig().setParameter("infoset", Boolean.TRUE);
-            document.getDocumentElement().normalize();
-            tr.transform(new DOMSource(document), new StreamResult(fileWriter));
+            tf.setAttribute( "indent-number", 2 );
+            try ( InputStream xsl = PomUtils.class.getResourceAsStream( "/prettyprint.xsl" ) ) 
+            {
+                final Transformer tr = tf.newTransformer( new StreamSource( xsl ) );
+                tr.setOutputProperty( OutputKeys.INDENT, "yes" );
+                tr.setOutputProperty( OutputKeys.METHOD, "xml" );
+                tr.setOutputProperty( OutputKeys.ENCODING, "UTF-8" );
+                tr.setOutputProperty( "{http://xml.apache.org/xslt}indent-amount", "2" );
+                document.getDomConfig().setParameter( "infoset", Boolean.TRUE );
+                document.getDocumentElement().normalize();
+                tr.transform( new DOMSource( document ), new StreamResult( fileWriter ) );
+            }
             return true;
         } else {
             return false;
