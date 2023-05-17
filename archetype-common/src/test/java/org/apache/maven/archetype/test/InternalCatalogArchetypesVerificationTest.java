@@ -31,8 +31,13 @@ import org.apache.maven.artifact.repository.MavenArtifactRepository;
 import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
 import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.ProjectBuildingRequest;
+import org.codehaus.plexus.ContainerConfiguration;
+import org.codehaus.plexus.PlexusConstants;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
+import org.eclipse.aether.DefaultRepositorySystemSession;
+import org.eclipse.aether.internal.impl.SimpleLocalRepositoryManagerFactory;
+import org.eclipse.aether.repository.LocalRepository;
 
 /**
  *
@@ -40,6 +45,11 @@ import org.codehaus.plexus.util.FileUtils;
  */
 public class InternalCatalogArchetypesVerificationTest extends PlexusTestCase {
     private static final String CENTRAL = "https://repo.maven.apache.org/maven2";
+
+    @Override
+    protected void customizeContainerConfiguration(final ContainerConfiguration configuration) {
+        configuration.setAutoWiring(true).setClassPathScanning( PlexusConstants.SCANNING_INDEX);
+    }
 
     public void testInternalCatalog() throws Exception {
         ArtifactRepository localRepository = createRepository(
@@ -80,8 +90,9 @@ public class InternalCatalogArchetypesVerificationTest extends PlexusTestCase {
                     .setLocalRepository(localRepository);
 
             ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
-            MavenRepositorySystemSession repositorySession = new MavenRepositorySystemSession();
-            repositorySession.setLocalRepositoryManager(new SimpleLocalRepositoryManager(localRepository.getBasedir()));
+            DefaultRepositorySystemSession repositorySession = new DefaultRepositorySystemSession();
+            repositorySession.setLocalRepositoryManager(new SimpleLocalRepositoryManagerFactory()
+                    .newInstance(repositorySession, new LocalRepository(localRepository.getBasedir())));
             buildingRequest.setRepositorySession(repositorySession);
             request.setProjectBuildingRequest(buildingRequest);
 

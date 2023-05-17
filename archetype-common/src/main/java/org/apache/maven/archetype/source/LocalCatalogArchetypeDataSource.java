@@ -18,7 +18,6 @@
  */
 package org.apache.maven.archetype.source;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
@@ -30,23 +29,15 @@ import java.util.Iterator;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.project.ProjectBuildingRequest;
-import org.apache.maven.shared.transfer.repository.RepositoryManager;
 import org.codehaus.plexus.util.ReaderFactory;
 
 @Singleton
 @Named("catalog")
 public class LocalCatalogArchetypeDataSource extends CatalogArchetypeDataSource {
-    private final RepositoryManager repositoryManager;
-
-    @Inject
-    public LocalCatalogArchetypeDataSource(RepositoryManager repositoryManager) {
-        this.repositoryManager = repositoryManager;
-    }
-
     @Override
     public void updateCatalog(ProjectBuildingRequest buildingRequest, Archetype archetype)
             throws ArchetypeDataSourceException {
-        File localRepo = repositoryManager.getLocalRepositoryBasedir(buildingRequest);
+        File localRepo = buildingRequest.getRepositorySession().getLocalRepository().getBasedir();
 
         File catalogFile = new File(localRepo, ARCHETYPE_CATALOG_FILENAME);
 
@@ -95,7 +86,7 @@ public class LocalCatalogArchetypeDataSource extends CatalogArchetypeDataSource 
     @Override
     public ArchetypeCatalog getArchetypeCatalog(ProjectBuildingRequest buildingRequest)
             throws ArchetypeDataSourceException {
-        File localRepo = repositoryManager.getLocalRepositoryBasedir(buildingRequest);
+        File localRepo = buildingRequest.getRepositorySession().getLocalRepository().getBasedir();
 
         File catalogFile = new File(localRepo, ARCHETYPE_CATALOG_FILENAME);
 

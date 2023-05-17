@@ -46,10 +46,15 @@ import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.context.Context;
+import org.codehaus.plexus.ContainerConfiguration;
+import org.codehaus.plexus.PlexusConstants;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.codehaus.plexus.velocity.VelocityComponent;
+import org.eclipse.aether.DefaultRepositorySystemSession;
+import org.eclipse.aether.internal.impl.SimpleLocalRepositoryManagerFactory;
+import org.eclipse.aether.repository.LocalRepository;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.xmlunit.matchers.CompareMatcher.isIdenticalTo;
@@ -60,6 +65,11 @@ import static org.xmlunit.matchers.CompareMatcher.isIdenticalTo;
  */
 public class ArchetypeTest extends PlexusTestCase {
     private OldArchetype archetype;
+
+    @Override
+    protected void customizeContainerConfiguration(final ContainerConfiguration configuration) {
+        configuration.setAutoWiring(true).setClassPathScanning( PlexusConstants.SCANNING_INDEX);
+    }
 
     public void testArchetype() throws Exception {
         FileUtils.deleteDirectory(getTestFile("target/quickstart"));
@@ -86,8 +96,9 @@ public class ArchetypeTest extends PlexusTestCase {
 
         ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
         buildingRequest.setRemoteRepositories(remoteRepositories);
-        MavenRepositorySystemSession repositorySession = new MavenRepositorySystemSession();
-        repositorySession.setLocalRepositoryManager(new SimpleLocalRepositoryManager(localRepository.getBasedir()));
+        DefaultRepositorySystemSession repositorySession = new DefaultRepositorySystemSession();
+        repositorySession.setLocalRepositoryManager(new SimpleLocalRepositoryManagerFactory()
+                .newInstance(repositorySession, new LocalRepository(localRepository.getBasedir())));
         buildingRequest.setRepositorySession(repositorySession);
 
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest()

@@ -39,6 +39,9 @@ import org.apache.maven.project.ProjectBuildingRequest;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+import org.eclipse.aether.DefaultRepositorySystemSession;
+import org.eclipse.aether.internal.impl.SimpleLocalRepositoryManagerFactory;
+import org.eclipse.aether.repository.LocalRepository;
 
 public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
     // archetypes prepared by antrun execution (see pom.xml) from src/test/archetypes
@@ -516,7 +519,8 @@ public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
         assertNotNull(getVariableValueFromObject(generator, "filesetGenerator"));
     }
 
-    private ArchetypeGenerationRequest createArchetypeGenerationRequest(String project, Archetype archetype) {
+    private ArchetypeGenerationRequest createArchetypeGenerationRequest(String project, Archetype archetype)
+            throws Exception {
         outputDirectory = getBasedir() + "/target/test-classes/projects/" + project;
 
         projectDirectory = new File(outputDirectory, "file-value");
@@ -538,8 +542,10 @@ public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
         request.setProperties(ADDITIONAL_PROPERTIES);
 
         ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
-        MavenRepositorySystemSession repositorySession = new MavenRepositorySystemSession();
-        repositorySession.setLocalRepositoryManager(new SimpleLocalRepositoryManager(localRepository.getBasedir()));
+
+        DefaultRepositorySystemSession repositorySession = new DefaultRepositorySystemSession();
+        repositorySession.setLocalRepositoryManager(new SimpleLocalRepositoryManagerFactory()
+                .newInstance(repositorySession, new LocalRepository(localRepository.getBasedir())));
         buildingRequest.setRepositorySession(repositorySession);
         request.setProjectBuildingRequest(buildingRequest);
 
