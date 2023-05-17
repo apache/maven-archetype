@@ -28,13 +28,9 @@ public abstract class LoggingSupport {
 
     private static final String GUICE_ENHANCED = "$$EnhancerByGuice$$";
 
-    private static boolean isEnhancedByGuice(final Class<?> klazz) {
-        return klazz.getName().contains(GUICE_ENHANCED);
-    }
-
     private static Logger getLogger(final Class<?> klazz) {
         requireNonNull(klazz);
-        if (isEnhancedByGuice(klazz)) {
+        if (klazz.getName().contains(GUICE_ENHANCED)) {
             return LoggerFactory.getLogger(klazz.getSuperclass());
         }
         return LoggerFactory.getLogger(klazz);
