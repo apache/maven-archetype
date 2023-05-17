@@ -19,8 +19,8 @@
   -->
 
 <!-- START SNIPPET: modello-model --><!-- for https://maven.apache.org/guides/mini/guide-using-modello.html -->
-<model xmlns="https://codehaus-plexus.github.io/MODELLO/1.8.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="https://codehaus-plexus.github.io/MODELLO/1.8.0 https://codehaus-plexus.github.io/modello/xsd/modello-1.8.0.xsd"
+<model xmlns="https://codehaus-plexus.github.io/MODELLO/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="https://codehaus-plexus.github.io/MODELLO/2.0.0 https://codehaus-plexus.github.io/modello/xsd/modello-2.0.0.xsd"
   xml.namespace="https://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/${version}"
   xml.schemaLocation="http://maven.apache.org/xsd/archetype-descriptor-${version}.xsd">
   <id>archetype-descriptor</id>
