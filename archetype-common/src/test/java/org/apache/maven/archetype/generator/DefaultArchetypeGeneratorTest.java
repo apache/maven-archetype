@@ -61,14 +61,14 @@ public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
     private static final Properties ADDITIONAL_PROPERTIES = new Properties();
 
     static {
-        ADDITIONAL_PROPERTIES.setProperty("property-without-default-1", "file-value");
-        ADDITIONAL_PROPERTIES.setProperty("property-without-default-2", "file-value");
-        ADDITIONAL_PROPERTIES.setProperty("property-without-default-3", "file-value");
-        ADDITIONAL_PROPERTIES.setProperty("property-without-default-4", "file-value");
-        ADDITIONAL_PROPERTIES.setProperty("property-with-default-1", "file-value");
-        ADDITIONAL_PROPERTIES.setProperty("property-with-default-2", "file-value");
-        ADDITIONAL_PROPERTIES.setProperty("property-with-default-3", "file-value");
-        ADDITIONAL_PROPERTIES.setProperty("property-with-default-4", "file-value");
+        ADDITIONAL_PROPERTIES.setProperty("propertyWithoutDefault1", "file-value");
+        ADDITIONAL_PROPERTIES.setProperty("propertyWithoutDefault2", "file-value");
+        ADDITIONAL_PROPERTIES.setProperty("propertyWithoutDefault3", "file-value");
+        ADDITIONAL_PROPERTIES.setProperty("propertyWithoutDefault4", "file-value");
+        ADDITIONAL_PROPERTIES.setProperty("propertyWithDefault1", "file-value");
+        ADDITIONAL_PROPERTIES.setProperty("propertyWithDefault2", "file-value");
+        ADDITIONAL_PROPERTIES.setProperty("propertyWithDefault3", "file-value");
+        ADDITIONAL_PROPERTIES.setProperty("propertyWithDefault4", "file-value");
         ADDITIONAL_PROPERTIES.setProperty("property_underscored_1", "prop1");
         ADDITIONAL_PROPERTIES.setProperty("property_underscored-2", "prop2");
     }

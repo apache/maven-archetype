@@ -65,12 +65,13 @@ import org.apache.maven.archetype.metadata.ModuleDescriptor;
 import org.apache.maven.archetype.metadata.RequiredProperty;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
+import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.context.Context;
+import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-import org.codehaus.plexus.velocity.VelocityComponent;
 import org.xml.sax.SAXException;
 
 @Singleton
@@ -82,7 +83,7 @@ public class DefaultFilesetArchetypeGenerator extends LoggingSupport implements 
 
     private final PomManager pomManager;
 
-    private final VelocityComponent velocity;
+    private final VelocityEngine velocityEngine;
 
     /**
      * Pattern used to detect tokens in a string. Tokens are any text surrounded
@@ -94,12 +95,19 @@ public class DefaultFilesetArchetypeGenerator extends LoggingSupport implements 
     public DefaultFilesetArchetypeGenerator(
             ArchetypeArtifactManager archetypeArtifactManager,
             ArchetypeFilesResolver archetypeFilesResolver,
-            PomManager pomManager,
-            VelocityComponent velocity) {
+            PomManager pomManager) {
         this.archetypeArtifactManager = archetypeArtifactManager;
         this.archetypeFilesResolver = archetypeFilesResolver;
         this.pomManager = pomManager;
-        this.velocity = velocity;
+        this.velocityEngine = createVelocity();
+    }
+
+    private VelocityEngine createVelocity() {
+        VelocityEngine velocity = new VelocityEngine();
+        velocity.setProperty("resource.loaders", "classpath");
+        velocity.setProperty("resource.loader.classpath.class", ClasspathResourceLoader.class.getName());
+        velocity.init();
+        return velocity;
     }
 
     @Override
@@ -702,7 +710,7 @@ public class DefaultFilesetArchetypeGenerator extends LoggingSupport implements 
 
     private boolean templateExists(String templateName) {
         try {
-            velocity.getEngine().getTemplate(templateName);
+            velocityEngine.getTemplate(templateName);
             return true;
         } catch (Exception e) {
             return false;
@@ -754,7 +762,7 @@ public class DefaultFilesetArchetypeGenerator extends LoggingSupport implements 
         try (Writer writer = new OutputStreamWriter(new FileOutputStream(outFile), encoding)) {
             StringWriter stringWriter = new StringWriter();
 
-            velocity.getEngine().mergeTemplate(templateFileName, encoding, context, stringWriter);
+            velocityEngine.mergeTemplate(templateFileName, encoding, context, stringWriter);
 
             writer.write(StringUtils.unifyLineSeparators(stringWriter.toString()));
         } catch (Exception e) {

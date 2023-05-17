@@ -56,7 +56,7 @@ public class LocalCatalogArchetypeDataSourceTest extends PlexusTestCase {
 
     @Override
     protected void customizeContainerConfiguration(final ContainerConfiguration configuration) {
-        configuration.setAutoWiring(true).setClassPathScanning( PlexusConstants.SCANNING_INDEX);
+        configuration.setAutoWiring(true).setClassPathScanning(PlexusConstants.SCANNING_INDEX);
     }
 
     @Override

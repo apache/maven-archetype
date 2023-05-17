@@ -37,7 +37,8 @@ public class LocalCatalogArchetypeDataSource extends CatalogArchetypeDataSource 
     @Override
     public void updateCatalog(ProjectBuildingRequest buildingRequest, Archetype archetype)
             throws ArchetypeDataSourceException {
-        File localRepo = buildingRequest.getRepositorySession().getLocalRepository().getBasedir();
+        File localRepo =
+                buildingRequest.getRepositorySession().getLocalRepository().getBasedir();
 
         File catalogFile = new File(localRepo, ARCHETYPE_CATALOG_FILENAME);
 
@@ -86,7 +87,8 @@ public class LocalCatalogArchetypeDataSource extends CatalogArchetypeDataSource 
     @Override
     public ArchetypeCatalog getArchetypeCatalog(ProjectBuildingRequest buildingRequest)
             throws ArchetypeDataSourceException {
-        File localRepo = buildingRequest.getRepositorySession().getLocalRepository().getBasedir();
+        File localRepo =
+                buildingRequest.getRepositorySession().getLocalRepository().getBasedir();
 
         File catalogFile = new File(localRepo, ARCHETYPE_CATALOG_FILENAME);
 

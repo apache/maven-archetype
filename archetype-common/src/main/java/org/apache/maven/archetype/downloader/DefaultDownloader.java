@@ -57,8 +57,7 @@ public class DefaultDownloader implements Downloader {
             List<ArtifactRepository> remoteRepositories,
             ProjectBuildingRequest buildingRequest)
             throws DownloadException, DownloadNotFoundException {
-        DefaultArtifact artifact =
-                new DefaultArtifact(groupId, artifactId, "", "jar", version);
+        DefaultArtifact artifact = new DefaultArtifact(groupId, artifactId, "", "jar", version);
         try {
             ArtifactRequest request =
                     new ArtifactRequest(artifact, RepositoryUtils.toRepos(remoteRepositories), "archetype");
@@ -67,7 +66,6 @@ public class DefaultDownloader implements Downloader {
         } catch (ArtifactResolutionException e) {
             throw new DownloadException("Error downloading " + artifact + ".", e);
         }
-
     }
 
     @Override
@@ -81,8 +79,7 @@ public class DefaultDownloader implements Downloader {
             ProjectBuildingRequest buildingRequest)
             throws DownloadException, DownloadNotFoundException {
 
-        DefaultArtifact artifact =
-                new DefaultArtifact(groupId, artifactId, "", "jar", version);
+        DefaultArtifact artifact = new DefaultArtifact(groupId, artifactId, "", "jar", version);
         try {
             ArtifactRequest request =
                     new ArtifactRequest(artifact, RepositoryUtils.toRepos(remoteRepositories), "archetype");

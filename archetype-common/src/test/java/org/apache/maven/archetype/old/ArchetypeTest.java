@@ -45,13 +45,14 @@ import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.context.Context;
+import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.codehaus.plexus.ContainerConfiguration;
 import org.codehaus.plexus.PlexusConstants;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-import org.codehaus.plexus.velocity.VelocityComponent;
 import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.internal.impl.SimpleLocalRepositoryManagerFactory;
 import org.eclipse.aether.repository.LocalRepository;
@@ -68,7 +69,7 @@ public class ArchetypeTest extends PlexusTestCase {
 
     @Override
     protected void customizeContainerConfiguration(final ContainerConfiguration configuration) {
-        configuration.setAutoWiring(true).setClassPathScanning( PlexusConstants.SCANNING_INDEX);
+        configuration.setAutoWiring(true).setClassPathScanning(PlexusConstants.SCANNING_INDEX);
     }
 
     public void testArchetype() throws Exception {
@@ -155,14 +156,13 @@ public class ArchetypeTest extends PlexusTestCase {
                 .setContextClassLoader(getContextClassloader(archetypeArtifact, localRepository, remoteRepositories));
 
         try {
-            VelocityComponent velocity = (VelocityComponent) lookup(VelocityComponent.class.getName());
+            VelocityEngine velocity = new VelocityEngine();
+            velocity.setProperty("resource.loaders", "classpath");
+            velocity.setProperty("resource.loader.classpath.class", ClasspathResourceLoader.class.getName());
+            velocity.init();
 
-            velocity.getEngine()
-                    .mergeTemplate(
-                            OldArchetype.ARCHETYPE_RESOURCES + "/" + OldArchetype.ARCHETYPE_POM,
-                            "UTF-8",
-                            context,
-                            writer);
+            velocity.mergeTemplate(
+                    OldArchetype.ARCHETYPE_RESOURCES + "/" + OldArchetype.ARCHETYPE_POM, "UTF-8", context, writer);
         } finally {
             Thread.currentThread().setContextClassLoader(old);
         }

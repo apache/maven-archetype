@@ -20,22 +20,22 @@
 <archetype-descriptor name="fileset" partial="false">
 
   <requiredProperties>
-    <requiredProperty key="property-with-default-1">
+    <requiredProperty key="propertyWithDefault1">
       <defaultValue>default-value</defaultValue>
     </requiredProperty>
-    <requiredProperty key="property-with-default-2">
+    <requiredProperty key="propertyWithDefault2">
       <defaultValue>default-value</defaultValue>
     </requiredProperty>
-    <requiredProperty key="property-with-default-3">
+    <requiredProperty key="propertyWithDefault3">
       <defaultValue>default-value</defaultValue>
     </requiredProperty>
-    <requiredProperty key="property-with-default-4">
+    <requiredProperty key="propertyWithDefault4">
       <defaultValue>default-value</defaultValue>
     </requiredProperty>
-    <requiredProperty key="property-without-default-1"/>
-    <requiredProperty key="property-without-default-2"/>
-    <requiredProperty key="property-without-default-3"/>
-    <requiredProperty key="property-without-default-4"/>
+    <requiredProperty key="propertyWithoutDefault1"/>
+    <requiredProperty key="propertyWithoutDefault2"/>
+    <requiredProperty key="propertyWithoutDefault3"/>
+    <requiredProperty key="propertyWithoutDefault4"/>
     <requiredProperty key="property_underscored_1"/>
     <requiredProperty key="property_underscored-2"/>
   </requiredProperties>

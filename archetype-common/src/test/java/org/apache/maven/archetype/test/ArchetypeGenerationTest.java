@@ -101,14 +101,14 @@ public class ArchetypeGenerationTest extends PlexusTestCase {
                 .setPackage(packageName);
 
         Properties archetypeRequiredProperties = new Properties();
-        archetypeRequiredProperties.setProperty("property-with-default-1", "value-1");
-        archetypeRequiredProperties.setProperty("property-with-default-2", "value-2");
-        archetypeRequiredProperties.setProperty("property-with-default-3", "value-3");
-        archetypeRequiredProperties.setProperty("property-with-default-4", "value-4");
-        archetypeRequiredProperties.setProperty("property-without-default-1", "some-value-1");
-        archetypeRequiredProperties.setProperty("property-without-default-2", "some-value-2");
-        archetypeRequiredProperties.setProperty("property-without-default-3", "some-value-3");
-        archetypeRequiredProperties.setProperty("property-without-default-4", "some-value-4");
+        archetypeRequiredProperties.setProperty("propertyWithDefault1", "value-1");
+        archetypeRequiredProperties.setProperty("propertyWithDefault2", "value-2");
+        archetypeRequiredProperties.setProperty("propertyWithDefault3", "value-3");
+        archetypeRequiredProperties.setProperty("propertyWithDefault4", "value-4");
+        archetypeRequiredProperties.setProperty("propertyWithoutDefault1", "some-value-1");
+        archetypeRequiredProperties.setProperty("propertyWithoutDefault2", "some-value-2");
+        archetypeRequiredProperties.setProperty("propertyWithoutDefault3", "some-value-3");
+        archetypeRequiredProperties.setProperty("propertyWithoutDefault4", "some-value-4");
         archetypeRequiredProperties.setProperty("property_underscored_1", "prop1");
         archetypeRequiredProperties.setProperty("property_underscored-2", "prop2");
         agr.setProperties(archetypeRequiredProperties);

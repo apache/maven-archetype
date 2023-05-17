@@ -59,14 +59,15 @@ import org.apache.maven.model.Resource;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
 import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.context.Context;
+import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-import org.codehaus.plexus.velocity.VelocityComponent;
 import org.xml.sax.SAXException;
 
 /**
@@ -88,14 +89,22 @@ public class DefaultOldArchetype extends LoggingSupport implements OldArchetype 
     // Components
     // ----------------------------------------------------------------------
 
-    private final VelocityComponent velocity;
-
     private final ArchetypeArtifactManager archetypeArtifactManager;
 
+    private final VelocityEngine velocityEngine;
+
     @Inject
-    public DefaultOldArchetype(VelocityComponent velocity, ArchetypeArtifactManager archetypeArtifactManager) {
-        this.velocity = velocity;
+    public DefaultOldArchetype(ArchetypeArtifactManager archetypeArtifactManager) {
         this.archetypeArtifactManager = archetypeArtifactManager;
+        this.velocityEngine = createVelocity();
+    }
+
+    private VelocityEngine createVelocity() {
+        VelocityEngine velocity = new VelocityEngine();
+        velocity.setProperty("resource.loaders", "classpath");
+        velocity.setProperty("resource.loader.classpath.class", ClasspathResourceLoader.class.getName());
+        velocity.init();
+        return velocity;
     }
 
     // ----------------------------------------------------------------------
@@ -705,7 +714,7 @@ public class DefaultOldArchetype extends LoggingSupport implements OldArchetype 
 
                 template = ARCHETYPE_RESOURCES + "/" + template;
 
-                velocity.getEngine().mergeTemplate(template, descriptor.getEncoding(), context, stringWriter);
+                velocityEngine.mergeTemplate(template, descriptor.getEncoding(), context, stringWriter);
 
                 writer.write(StringUtils.unifyLineSeparators(stringWriter.toString()));
             } catch (Exception e) {
