@@ -44,7 +44,6 @@ import org.apache.maven.archetype.ArchetypeGenerationResult;
 import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
 import org.apache.maven.archetype.generator.ArchetypeGenerator;
-import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -52,9 +51,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.maven.settings.Settings;
 import org.apache.maven.settings.io.xpp3.SettingsXpp3Writer;
 import org.apache.maven.shared.invoker.DefaultInvocationRequest;
@@ -62,11 +59,8 @@ import org.apache.maven.shared.invoker.InvocationRequest;
 import org.apache.maven.shared.invoker.InvocationResult;
 import org.apache.maven.shared.invoker.Invoker;
 import org.apache.maven.shared.invoker.MavenInvocationException;
-import org.apache.maven.shared.scriptinterpreter.RunFailureException;
+import org.apache.maven.shared.scriptinterpreter.ScriptException;
 import org.apache.maven.shared.scriptinterpreter.ScriptRunner;
-import org.apache.maven.shared.transfer.artifact.DefaultArtifactCoordinate;
-import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver;
-import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolverException;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.InterpolationFilterReader;
@@ -74,6 +68,11 @@ import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.util.introspection.ReflectionValueExtractor;
+import org.eclipse.aether.RepositorySystem;
+import org.eclipse.aether.artifact.DefaultArtifact;
+import org.eclipse.aether.resolution.ArtifactRequest;
+import org.eclipse.aether.resolution.ArtifactResolutionException;
+import org.eclipse.aether.resolution.ArtifactResult;
 
 /**
  * <p>Execute the archetype integration tests, consisting in generating projects from the current archetype and optionally
@@ -142,13 +141,7 @@ public class IntegrationTestMojo extends AbstractMojo {
     private Invoker invoker;
 
     @Component
-    private ArtifactResolver artifactResolver;
-
-    @Parameter(defaultValue = "${project.remoteArtifactRepositories}", readonly = true, required = true)
-    protected List<ArtifactRepository> remoteRepositories;
-
-    @Parameter(defaultValue = "${localRepository}", readonly = true, required = true)
-    protected ArtifactRepository localRepository;
+    private RepositorySystem repositorySystem;
 
     /**
      * The archetype project to execute the integration tests on.
@@ -546,7 +539,7 @@ public class IntegrationTestMojo extends AbstractMojo {
         File archetypeFile;
         try {
             archetypeFile = getArchetypeFile(groupId, artifactId, version);
-        } catch (ArtifactResolverException e) {
+        } catch (ArtifactResolutionException e) {
             throw new MojoExecutionException("Could not resolve archetype artifact ", e);
         }
         Properties archetypeProperties = getProperties(archetypePomPropertiesFile);
@@ -556,24 +549,13 @@ public class IntegrationTestMojo extends AbstractMojo {
         return new File(buildFolder, request.getArtifactId());
     }
 
-    private File getArchetypeFile(String groupId, String artifactId, String version) throws ArtifactResolverException {
-        ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest(session.getProjectBuildingRequest());
-        if (localRepository != null) {
-            buildingRequest = buildingRequest.setLocalRepository(localRepository);
-        }
-        if (remoteRepositories != null && !remoteRepositories.isEmpty()) {
-            buildingRequest = buildingRequest.setRemoteRepositories(remoteRepositories);
-        }
-
-        DefaultArtifactCoordinate coordinate = new DefaultArtifactCoordinate();
-        coordinate.setGroupId(groupId);
-        coordinate.setArtifactId(artifactId);
-        coordinate.setVersion(version);
-
-        return artifactResolver
-                .resolveArtifact(buildingRequest, coordinate)
-                .getArtifact()
-                .getFile();
+    private File getArchetypeFile(String groupId, String artifactId, String version)
+            throws ArtifactResolutionException {
+        DefaultArtifact artifact = new DefaultArtifact(groupId, artifactId, "", "jar", version);
+        ArtifactRequest request =
+                new ArtifactRequest(artifact, project.getRemotePluginRepositories(), "archetype-mojo");
+        ArtifactResult result = repositorySystem.resolveArtifact(session.getRepositorySession(), request);
+        return result.getArtifact().getFile();
     }
 
     private Properties getProperties(File goalFile) throws IOException {
@@ -671,22 +653,15 @@ public class IntegrationTestMojo extends AbstractMojo {
             getLog().info("No post-archetype-generation goals to invoke.");
         }
         // verify result
-        ScriptRunner scriptRunner = new ScriptRunner(getLog());
+        ScriptRunner scriptRunner = new ScriptRunner();
         scriptRunner.setScriptEncoding(encoding);
 
         Map<String, Object> context = new LinkedHashMap<>();
         context.put("projectDir", basedir);
 
         try {
-            scriptRunner.run(
-                    "post-build script",
-                    goalFile.getParentFile(),
-                    postBuildHookScript,
-                    context,
-                    logger,
-                    "failure post script",
-                    true);
-        } catch (RunFailureException e) {
+            scriptRunner.run("post-build script", goalFile.getParentFile(), postBuildHookScript, context, logger);
+        } catch (ScriptException e) {
             throw new IntegrationTestFailure("post build script failure failure: " + e.getMessage(), e);
         }
     }

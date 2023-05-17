@@ -290,9 +290,10 @@ public class FilesetArchetypeCreator extends LoggingSupport implements Archetype
             internalRequest.setPomFile(archetypePomFile);
             internalRequest.setUserSettingsFile(request.getSettingsFile());
             internalRequest.setGoals(Collections.singletonList(request.getPostPhase()));
-            if (request.getLocalRepository() != null) {
-                internalRequest.setLocalRepositoryDirectory(
-                        new File(request.getLocalRepository().getBasedir()));
+            if (request.getRepositorySystemSession() != null) {
+                internalRequest.setLocalRepositoryDirectory(request.getRepositorySystemSession()
+                        .getLocalRepository()
+                        .getBasedir());
             }
 
             String httpsProtocols = System.getProperty("https.protocols");

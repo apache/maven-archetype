@@ -29,10 +29,16 @@ import org.apache.maven.settings.Mirror;
 import org.apache.maven.settings.Proxy;
 import org.apache.maven.settings.Server;
 import org.apache.maven.wagon.events.TransferListener;
+import org.eclipse.aether.RepositorySystemSession;
+import org.eclipse.aether.repository.RemoteRepository;
 
 /** @author Jason van Zyl */
 public class ArchetypeGenerationRequest {
     private ProjectBuildingRequest projectBuildingRequest;
+
+    private RepositorySystemSession repositorySystemSession;
+
+    private List<RemoteRepository> remoteRepositories;
 
     private boolean offline;
 
@@ -43,10 +49,6 @@ public class ArchetypeGenerationRequest {
     private TransferListener transferListener;
 
     private String outputDirectory;
-
-    private ArtifactRepository localRepository;
-
-    private List<ArtifactRepository> remoteArtifactRepositories;
 
     private Proxy activeProxy;
 
@@ -109,6 +111,36 @@ public class ArchetypeGenerationRequest {
 
     public ArchetypeGenerationRequest setProjectBuildingRequest(ProjectBuildingRequest projectBuildingRequest) {
         this.projectBuildingRequest = projectBuildingRequest;
+        return this;
+    }
+
+    /**
+     * @since TBD
+     */
+    public RepositorySystemSession getRepositorySystemSession() {
+        return repositorySystemSession;
+    }
+
+    /**
+     * @since TBD
+     */
+    public ArchetypeGenerationRequest setRepositorySystemSession(RepositorySystemSession repositorySystemSession) {
+        this.repositorySystemSession = repositorySystemSession;
+        return this;
+    }
+
+    /**
+     * @since TBD
+     */
+    public List<RemoteRepository> getRemoteRepositories() {
+        return remoteRepositories;
+    }
+
+    /**
+     * @since TBD
+     */
+    public ArchetypeGenerationRequest setRemoteRepositories(List<RemoteRepository> remoteRepositories) {
+        this.remoteRepositories = remoteRepositories;
         return this;
     }
 
@@ -235,13 +267,13 @@ public class ArchetypeGenerationRequest {
         return this;
     }
 
+    @Deprecated
     public ArtifactRepository getLocalRepository() {
-        return localRepository;
+        return null;
     }
 
+    @Deprecated
     public ArchetypeGenerationRequest setLocalRepository(ArtifactRepository localRepository) {
-        this.localRepository = localRepository;
-
         return this;
     }
 
@@ -333,15 +365,14 @@ public class ArchetypeGenerationRequest {
         return servers;
     }
 
+    @Deprecated
     public List<ArtifactRepository> getRemoteArtifactRepositories() {
-        return remoteArtifactRepositories;
+        return null;
     }
 
-    @SuppressWarnings("checkstyle:linelength")
+    @Deprecated
     public ArchetypeGenerationRequest setRemoteArtifactRepositories(
             List<ArtifactRepository> remoteArtifactRepositories) {
-        this.remoteArtifactRepositories = remoteArtifactRepositories;
-
         return this;
     }
 

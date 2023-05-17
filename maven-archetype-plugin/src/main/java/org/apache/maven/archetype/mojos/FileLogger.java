@@ -68,6 +68,6 @@ class FileLogger extends org.apache.maven.shared.scriptinterpreter.FileLogger
      * @throws java.io.IOException If the output file could not be created.
      */
     FileLogger(File outputFile, Log log) throws IOException {
-        super(outputFile, log);
+        super(outputFile, log::info);
     }
 }

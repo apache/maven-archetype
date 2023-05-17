@@ -26,12 +26,13 @@ import java.util.Properties;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.ProjectBuildingRequest;
+import org.eclipse.aether.RepositorySystemSession;
 
 /** @author Jason van Zyl */
 public class ArchetypeCreationRequest {
     private ProjectBuildingRequest projectBuildingRequest;
 
-    private ArtifactRepository localRepository;
+    private RepositorySystemSession repositorySystemSession;
 
     private MavenProject project;
 
@@ -69,13 +70,28 @@ public class ArchetypeCreationRequest {
         return this;
     }
 
-    public ArtifactRepository getLocalRepository() {
-        return localRepository;
+    /**
+     * @since TBD
+     */
+    public RepositorySystemSession getRepositorySystemSession() {
+        return repositorySystemSession;
     }
 
-    public ArchetypeCreationRequest setLocalRepository(ArtifactRepository localRepository) {
-        this.localRepository = localRepository;
+    /**
+     * @since TBD
+     */
+    public ArchetypeCreationRequest setRepositorySystemSession(RepositorySystemSession repositorySystemSession) {
+        this.repositorySystemSession = repositorySystemSession;
+        return this;
+    }
 
+    @Deprecated
+    public ArtifactRepository getLocalRepository() {
+        return null;
+    }
+
+    @Deprecated
+    public ArchetypeCreationRequest setLocalRepository(ArtifactRepository localRepository) {
         return this;
     }
 

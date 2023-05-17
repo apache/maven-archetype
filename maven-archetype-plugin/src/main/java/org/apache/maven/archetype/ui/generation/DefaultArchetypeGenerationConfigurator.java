@@ -18,6 +18,10 @@
  */
 package org.apache.maven.archetype.ui.generation;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -32,13 +36,13 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
+import org.apache.maven.archetype.LoggingSupport;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
 import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.exception.ArchetypeGenerationConfigurationFailure;
 import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
 import org.apache.maven.archetype.exception.ArchetypeNotDefined;
 import org.apache.maven.archetype.exception.UnknownArchetype;
-import org.apache.maven.archetype.old.OldArchetype;
 import org.apache.maven.archetype.ui.ArchetypeConfiguration;
 import org.apache.maven.archetype.ui.ArchetypeDefinition;
 import org.apache.maven.archetype.ui.ArchetypeFactory;
@@ -56,36 +60,34 @@ import org.apache.velocity.runtime.parser.ParseException;
 import org.apache.velocity.runtime.parser.node.ASTReference;
 import org.apache.velocity.runtime.parser.node.SimpleNode;
 import org.apache.velocity.runtime.visitor.BaseVisitor;
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.components.interactivity.PrompterException;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
 
 // TODO: this seems to have more responsibilities than just a configurator
-@Component(role = ArchetypeGenerationConfigurator.class, hint = "default")
-public class DefaultArchetypeGenerationConfigurator extends AbstractLogEnabled
-        implements ArchetypeGenerationConfigurator {
-    @Requirement
-    OldArchetype oldArchetype;
+@Singleton
+@Named
+public class DefaultArchetypeGenerationConfigurator extends LoggingSupport implements ArchetypeGenerationConfigurator {
+    private final ArchetypeArtifactManager archetypeArtifactManager;
 
-    @Requirement
-    private ArchetypeArtifactManager archetypeArtifactManager;
+    private final ArchetypeFactory archetypeFactory;
 
-    @Requirement
-    private ArchetypeFactory archetypeFactory;
-
-    @Requirement
-    private ArchetypeGenerationQueryer archetypeGenerationQueryer;
+    private final ArchetypeGenerationQueryer archetypeGenerationQueryer;
 
     /**
      * Determines whether the layout is legacy or not.
      */
-    @Requirement
-    private ArtifactRepositoryLayout defaultArtifactRepositoryLayout;
+    private final ArtifactRepositoryLayout defaultArtifactRepositoryLayout;
 
-    public void setArchetypeArtifactManager(ArchetypeArtifactManager archetypeArtifactManager) {
+    @Inject
+    public DefaultArchetypeGenerationConfigurator(
+            ArchetypeArtifactManager archetypeArtifactManager,
+            ArchetypeFactory archetypeFactory,
+            ArchetypeGenerationQueryer archetypeGenerationQueryer,
+            ArtifactRepositoryLayout defaultArtifactRepositoryLayout) {
         this.archetypeArtifactManager = archetypeArtifactManager;
+        this.archetypeFactory = archetypeFactory;
+        this.archetypeGenerationQueryer = archetypeGenerationQueryer;
+        this.defaultArtifactRepositoryLayout = defaultArtifactRepositoryLayout;
     }
 
     @Override
@@ -318,10 +320,6 @@ public class DefaultArchetypeGenerationConfigurator extends AbstractLogEnabled
         }
     }
 
-    void setArchetypeGenerationQueryer(ArchetypeGenerationQueryer archetypeGenerationQueryer) {
-        this.archetypeGenerationQueryer = archetypeGenerationQueryer;
-    }
-
     public static class RequiredPropertyComparator implements Comparator<String> {
         private final ArchetypeConfiguration archetypeConfiguration;
 
@@ -363,9 +361,8 @@ public class DefaultArchetypeGenerationConfigurator extends AbstractLogEnabled
                 String defaultValue = archetypeConfiguration.getDefaultValue(propertyName);
                 if (StringUtils.contains(defaultValue, "${")) {
                     try {
-                        final boolean dumpNamespace = false;
                         SimpleNode node = RuntimeSingleton.parse(
-                                new StringReader(defaultValue), propertyName + ".default", dumpNamespace);
+                                new StringReader(defaultValue), velocityRuntime.getTemplate(propertyName + ".default"));
 
                         node.init(velocityContextAdapter, velocityRuntime);
 

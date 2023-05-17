@@ -34,8 +34,6 @@ import org.codehaus.plexus.components.interactivity.PrompterException;
  * Configurator component to organize steps for archetype creation from a project.
  */
 public interface ArchetypeCreationConfigurator {
-    String ROLE = ArchetypeCreationConfigurator.class.getName();
-
     Properties configureArchetypeCreation(
             MavenProject project,
             Boolean interactiveMode,

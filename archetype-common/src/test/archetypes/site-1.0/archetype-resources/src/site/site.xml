@@ -2,7 +2,6 @@ groupId=${groupId}
 artifactId=${artifactId}
 version=${version}
 package=${package}
-packageInPathFormat=${packageInPathFormat}
 propertyWithoutDefault1=${propertyWithoutDefault1}
 propertyWithoutDefault2=${propertyWithoutDefault2}
 propertyWithoutDefault3=${propertyWithoutDefault3}

@@ -59,8 +59,8 @@ public class DefaultDownloader implements Downloader {
             throws DownloadException, DownloadNotFoundException {
         DefaultArtifact artifact = new DefaultArtifact(groupId, artifactId, "", "jar", version);
         try {
-            ArtifactRequest request =
-                    new ArtifactRequest(artifact, RepositoryUtils.toRepos(remoteRepositories), "archetype");
+            ArtifactRequest request = new ArtifactRequest(
+                    artifact, RepositoryUtils.toRepos(buildingRequest.getRemoteRepositories()), "archetype");
             ArtifactResult result = repositorySystem.resolveArtifact(buildingRequest.getRepositorySession(), request);
             return result.getArtifact().getFile();
         } catch (ArtifactResolutionException e) {

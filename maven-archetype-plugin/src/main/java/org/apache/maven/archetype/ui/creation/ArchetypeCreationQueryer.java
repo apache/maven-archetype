@@ -27,8 +27,6 @@ import org.codehaus.plexus.components.interactivity.PrompterException;
  * TODO this interface is bound to its implementation through the prompter exception
  */
 public interface ArchetypeCreationQueryer {
-    String ROLE = ArchetypeCreationQueryer.class.getName();
-
     /**
      */
     String getArchetypeArtifactId(String defaultValue) throws PrompterException;
