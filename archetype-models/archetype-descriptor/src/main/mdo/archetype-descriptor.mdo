@@ -142,7 +142,7 @@
           <required>false</required>
           <description><![CDATA[
             Filesets can be filtered, which means the selected files will be used as
-            <a href="http://velocity.apache.org/engine/releases/velocity-1.5/user-guide.html">Velocity templates</a>.
+            <a href="https://velocity.apache.org/engine/1.5/user-guide.html">Velocity templates</a>.
             They can be non-filtered, which means the selected files will be copied without modification.
           ]]></description>
         </field>
