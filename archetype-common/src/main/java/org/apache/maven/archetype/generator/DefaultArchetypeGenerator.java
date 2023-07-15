@@ -18,12 +18,17 @@
  */
 package org.apache.maven.archetype.generator;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
+import org.apache.maven.archetype.LoggingSupport;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
 import org.apache.maven.archetype.exception.ArchetypeException;
 import org.apache.maven.archetype.exception.ArchetypeGenerationFailure;
@@ -35,27 +40,33 @@ import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.ArtifactRepositoryPolicy;
 import org.apache.maven.artifact.repository.MavenArtifactRepository;
 import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
 
-@Component(role = ArchetypeGenerator.class)
-public class DefaultArchetypeGenerator extends AbstractLogEnabled implements ArchetypeGenerator {
+@Singleton
+@Named
+public class DefaultArchetypeGenerator extends LoggingSupport implements ArchetypeGenerator {
     /**
      * Determines whether the layout is legacy or not.
      */
-    @Requirement
-    private ArtifactRepositoryLayout defaultArtifactRepositoryLayout;
+    private final ArtifactRepositoryLayout defaultArtifactRepositoryLayout;
 
-    @Requirement
-    private ArchetypeArtifactManager archetypeArtifactManager;
+    private final ArchetypeArtifactManager archetypeArtifactManager;
 
-    @Requirement
-    private FilesetArchetypeGenerator filesetGenerator;
+    private final FilesetArchetypeGenerator filesetGenerator;
 
-    @Requirement
-    private OldArchetype oldArchetype;
+    private final OldArchetype oldArchetype;
+
+    @Inject
+    public DefaultArchetypeGenerator(
+            ArtifactRepositoryLayout defaultArtifactRepositoryLayout,
+            ArchetypeArtifactManager archetypeArtifactManager,
+            FilesetArchetypeGenerator filesetGenerator,
+            OldArchetype oldArchetype) {
+        this.defaultArtifactRepositoryLayout = defaultArtifactRepositoryLayout;
+        this.archetypeArtifactManager = archetypeArtifactManager;
+        this.filesetGenerator = filesetGenerator;
+        this.oldArchetype = oldArchetype;
+    }
 
     private File getArchetypeFile(ArchetypeGenerationRequest request, ArtifactRepository localRepository)
             throws ArchetypeException {

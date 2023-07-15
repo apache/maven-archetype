@@ -31,8 +31,6 @@ import org.codehaus.plexus.components.interactivity.PrompterException;
  * TODO this interface is bound to its implementation through the prompter exception
  */
 public interface ArchetypeSelectionQueryer {
-    String ROLE = ArchetypeSelectionQueryer.class.getName();
-
     Archetype selectArchetype(Map<String, List<Archetype>> map) throws PrompterException;
 
     boolean confirmSelection(ArchetypeDefinition archetypeDefinition) throws PrompterException;

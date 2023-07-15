@@ -36,8 +36,6 @@ import org.apache.maven.archetype.exception.UnknownArchetype;
  * @version $Id: OldArchetype.java 953452 2010-06-10 20:56:32Z hboutemy $
  */
 public interface FilesetArchetypeGenerator {
-    String ROLE = FilesetArchetypeGenerator.class.getName();
-
     /**
      * Generate a project from an archetype file.
      */

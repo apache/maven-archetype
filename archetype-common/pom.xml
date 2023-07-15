@@ -48,32 +48,23 @@
       <groupId>org.apache.maven.archetype</groupId>
       <artifactId>archetype-descriptor</artifactId>
     </dependency>
+
     <dependency>
-      <groupId>org.codehaus.groovy</groupId>
+      <groupId>javax.inject</groupId>
+      <artifactId>javax.inject</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.groovy</groupId>
       <artifactId>groovy-all</artifactId>
-      <version>2.4.16</version>
-      <scope>compile</scope>
+      <type>pom</type>
     </dependency>
-    <dependency>
-      <groupId>org.apache.ivy</groupId>
-      <artifactId>ivy</artifactId>
-      <version>2.5.0</version>
-      <scope>runtime</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-component-annotations</artifactId>
-    </dependency>
+
     <dependency>
       <groupId>org.jdom</groupId>
       <artifactId>jdom2</artifactId>
     </dependency>
+
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-model</artifactId>
@@ -95,18 +86,13 @@
       <artifactId>maven-settings-builder</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-resolver-provider</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>org.apache.maven.shared</groupId>
       <artifactId>maven-invoker</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-aether-provider</artifactId>
-      <version>3.0</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.shared</groupId>
-      <artifactId>maven-artifact-transfer</artifactId>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
@@ -120,23 +106,30 @@
       <groupId>commons-collections</groupId>
       <artifactId>commons-collections</artifactId>
     </dependency>
+
+    <!-- CharsetDetector -->
     <dependency>
-      <groupId>org.sonatype.aether</groupId>
-      <artifactId>aether-impl</artifactId>
-      <version>1.7</version>
+      <groupId>com.ibm.icu</groupId>
+      <artifactId>icu4j</artifactId>
     </dependency>
+
     <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-velocity</artifactId>
+      <groupId>org.apache.maven.resolver</groupId>
+      <artifactId>maven-resolver-impl</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.velocity</groupId>
-      <artifactId>velocity</artifactId>
+      <artifactId>velocity-engine-core</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.wagon</groupId>
       <artifactId>wagon-provider-api</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-http</artifactId>
+    </dependency>
+
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -153,18 +146,18 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.sonatype.aether</groupId>
-      <artifactId>aether-connector-file</artifactId>
+      <groupId>org.apache.maven.resolver</groupId>
+      <artifactId>maven-resolver-connector-basic</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.sonatype.aether</groupId>
-      <artifactId>aether-connector-wagon</artifactId>
+      <groupId>org.apache.maven.resolver</groupId>
+      <artifactId>maven-resolver-transport-file</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.maven.wagon</groupId>
-      <artifactId>wagon-http</artifactId>
+      <groupId>org.apache.maven.resolver</groupId>
+      <artifactId>maven-resolver-transport-wagon</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -173,9 +166,14 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.ibm.icu</groupId>
-      <artifactId>icu4j</artifactId>
-      <version>70.1</version>
+      <groupId>org.eclipse.sisu</groupId>
+      <artifactId>org.eclipse.sisu.plexus</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 

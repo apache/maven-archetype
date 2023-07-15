@@ -32,8 +32,6 @@ import org.codehaus.plexus.components.interactivity.PrompterException;
  * Configurator component to organize steps for project generation from an archetype.
  */
 public interface ArchetypeGenerationConfigurator {
-    String ROLE = ArchetypeGenerationConfigurator.class.getName();
-
     void configureArchetype(
             ArchetypeGenerationRequest request, Boolean interactiveMode, Properties commandLineProperties)
             throws ArchetypeNotDefined, UnknownArchetype, ArchetypeNotConfigured, IOException, PrompterException,

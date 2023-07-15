@@ -19,22 +19,25 @@
 package org.apache.maven.archetype.test;
 
 import java.io.File;
+import java.util.Collections;
 
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
 import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
-import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.repository.ArtifactRepositoryPolicy;
 import org.apache.maven.artifact.repository.MavenArtifactRepository;
 import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
 import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.ProjectBuildingRequest;
-import org.apache.maven.repository.internal.MavenRepositorySystemSession;
+import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
+import org.codehaus.plexus.ContainerConfiguration;
+import org.codehaus.plexus.PlexusConstants;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
-import org.sonatype.aether.impl.internal.SimpleLocalRepositoryManager;
+import org.eclipse.aether.DefaultRepositorySystemSession;
+import org.eclipse.aether.internal.impl.SimpleLocalRepositoryManagerFactory;
+import org.eclipse.aether.repository.LocalRepository;
 
 /**
  *
@@ -43,13 +46,17 @@ import org.sonatype.aether.impl.internal.SimpleLocalRepositoryManager;
 public class InternalCatalogArchetypesVerificationTest extends PlexusTestCase {
     private static final String CENTRAL = "https://repo.maven.apache.org/maven2";
 
+    @Override
+    protected void customizeContainerConfiguration(final ContainerConfiguration configuration) {
+        configuration.setAutoWiring(true).setClassPathScanning(PlexusConstants.SCANNING_INDEX);
+    }
+
     public void testInternalCatalog() throws Exception {
-        ArtifactRepository localRepository = createRepository(
-                new File(getBasedir(), "target/test-classes/repositories/local")
-                        .toURI()
-                        .toURL()
-                        .toExternalForm(),
-                "local-repo");
+        DefaultRepositorySystemSession session = MavenRepositorySystemUtils.newSession();
+        session.setLocalRepositoryManager(new SimpleLocalRepositoryManagerFactory()
+                .newInstance(
+                        session,
+                        new LocalRepository(new File(getBasedir(), "target/test-classes/repositories/local"))));
 
         File outputDirectory = new File(getBasedir(), "target/internal-archetypes-projects");
         outputDirectory.mkdirs();
@@ -74,17 +81,21 @@ public class InternalCatalogArchetypesVerificationTest extends PlexusTestCase {
             }
 
             ArchetypeGenerationRequest request = new ArchetypeGenerationRequest(ar)
+                    .setRepositorySystemSession(session)
                     .setGroupId("org.apache.maven.archetype.test")
                     .setArtifactId("archetype" + count)
                     .setVersion("1.0-SNAPSHOT")
                     .setPackage("com.acme")
-                    .setOutputDirectory(outputDirectory.getPath())
-                    .setLocalRepository(localRepository);
+                    .setOutputDirectory(outputDirectory.getPath());
 
             ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
-            MavenRepositorySystemSession repositorySession = new MavenRepositorySystemSession();
-            repositorySession.setLocalRepositoryManager(new SimpleLocalRepositoryManager(localRepository.getBasedir()));
-            buildingRequest.setRepositorySession(repositorySession);
+            buildingRequest.setRepositorySession(session);
+
+            MavenArtifactRepository central = new MavenArtifactRepository();
+            central.setId("central");
+            central.setUrl(CENTRAL);
+            central.setLayout(new DefaultRepositoryLayout());
+            buildingRequest.setRemoteRepositories(Collections.singletonList(central));
             request.setProjectBuildingRequest(buildingRequest);
 
             ArchetypeGenerationResult generationResult = archetype.generateProjectFromArchetype(request);
@@ -93,20 +104,5 @@ public class InternalCatalogArchetypesVerificationTest extends PlexusTestCase {
 
             count++;
         }
-    }
-
-    private ArtifactRepository createRepository(String url, String repositoryId) {
-        String updatePolicyFlag = ArtifactRepositoryPolicy.UPDATE_POLICY_ALWAYS;
-
-        String checksumPolicyFlag = ArtifactRepositoryPolicy.CHECKSUM_POLICY_WARN;
-
-        ArtifactRepositoryPolicy snapshotsPolicy =
-                new ArtifactRepositoryPolicy(true, updatePolicyFlag, checksumPolicyFlag);
-
-        ArtifactRepositoryPolicy releasesPolicy =
-                new ArtifactRepositoryPolicy(true, updatePolicyFlag, checksumPolicyFlag);
-
-        return new MavenArtifactRepository(
-                repositoryId, url, new DefaultRepositoryLayout(), snapshotsPolicy, releasesPolicy);
     }
 }

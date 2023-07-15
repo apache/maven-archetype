@@ -21,6 +21,7 @@ package org.apache.maven.archetype.old;
 import java.io.File;
 
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
+import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.exception.InvalidPackaging;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.artifact.repository.ArtifactRepository;
@@ -32,11 +33,9 @@ import org.apache.maven.artifact.repository.ArtifactRepository;
  * @version $Id$
  */
 public interface OldArchetype {
-    String ROLE = OldArchetype.class.getName();
+    String ARCHETYPE_DESCRIPTOR = Constants.OLD_ARCHETYPE_DESCRIPTOR;
 
-    String ARCHETYPE_DESCRIPTOR = "META-INF/maven/archetype.xml";
-
-    String ARCHETYPE_OLD_DESCRIPTOR = "META-INF/archetype.xml";
+    String ARCHETYPE_OLD_DESCRIPTOR = Constants.OLDER_ARCHETYPE_DESCRIPTOR;
 
     String ARCHETYPE_RESOURCES = "archetype-resources";
 

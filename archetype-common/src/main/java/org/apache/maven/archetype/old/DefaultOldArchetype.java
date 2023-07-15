@@ -18,6 +18,9 @@
  */
 package org.apache.maven.archetype.old;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
@@ -39,6 +42,7 @@ import java.util.Map;
 
 import org.apache.commons.io.input.XmlStreamReader;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
+import org.apache.maven.archetype.LoggingSupport;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
 import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.common.util.PomUtils;
@@ -55,25 +59,24 @@ import org.apache.maven.model.Resource;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
 import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.context.Context;
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-import org.codehaus.plexus.velocity.VelocityComponent;
 import org.xml.sax.SAXException;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  * @version $Id$
  */
-@Component(role = OldArchetype.class)
-public class DefaultOldArchetype extends AbstractLogEnabled implements OldArchetype {
+@Singleton
+@Named
+public class DefaultOldArchetype extends LoggingSupport implements OldArchetype {
     private static final String DEFAULT_TEST_RESOURCE_DIR = "/src/test/resources";
 
     private static final String DEFAULT_TEST_SOURCE_DIR = "/src/test/java";
@@ -86,11 +89,23 @@ public class DefaultOldArchetype extends AbstractLogEnabled implements OldArchet
     // Components
     // ----------------------------------------------------------------------
 
-    @Requirement
-    private VelocityComponent velocity;
+    private final ArchetypeArtifactManager archetypeArtifactManager;
 
-    @Requirement
-    private ArchetypeArtifactManager archetypeArtifactManager;
+    private final VelocityEngine velocityEngine;
+
+    @Inject
+    public DefaultOldArchetype(ArchetypeArtifactManager archetypeArtifactManager) {
+        this.archetypeArtifactManager = archetypeArtifactManager;
+        this.velocityEngine = createVelocity();
+    }
+
+    private VelocityEngine createVelocity() {
+        VelocityEngine velocity = new VelocityEngine();
+        velocity.setProperty("resource.loaders", "classpath");
+        velocity.setProperty("resource.loader.classpath.class", ClasspathResourceLoader.class.getName());
+        velocity.init();
+        return velocity;
+    }
 
     // ----------------------------------------------------------------------
     // Implementation
@@ -699,7 +714,7 @@ public class DefaultOldArchetype extends AbstractLogEnabled implements OldArchet
 
                 template = ARCHETYPE_RESOURCES + "/" + template;
 
-                velocity.getEngine().mergeTemplate(template, descriptor.getEncoding(), context, stringWriter);
+                velocityEngine.mergeTemplate(template, descriptor.getEncoding(), context, stringWriter);
 
                 writer.write(StringUtils.unifyLineSeparators(stringWriter.toString()));
             } catch (Exception e) {

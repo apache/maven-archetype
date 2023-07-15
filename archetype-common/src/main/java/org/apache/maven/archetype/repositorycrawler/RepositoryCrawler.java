@@ -26,8 +26,6 @@ import org.apache.maven.archetype.catalog.ArchetypeCatalog;
  * @author  rafale
  */
 public interface RepositoryCrawler {
-    String ROLE = RepositoryCrawler.class.getName();
-
     ArchetypeCatalog crawl(File repository);
 
     boolean writeCatalog(ArchetypeCatalog archetypeCatalog, File archetypeCatalogFile);

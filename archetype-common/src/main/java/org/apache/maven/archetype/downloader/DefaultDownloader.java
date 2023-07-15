@@ -18,26 +18,34 @@
  */
 package org.apache.maven.archetype.downloader;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.maven.artifact.Artifact;
+import org.apache.maven.RepositoryUtils;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.project.ProjectBuildingRequest;
-import org.apache.maven.shared.transfer.artifact.DefaultArtifactCoordinate;
-import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver;
-import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolverException;
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
+import org.eclipse.aether.RepositorySystem;
+import org.eclipse.aether.artifact.DefaultArtifact;
+import org.eclipse.aether.resolution.ArtifactRequest;
+import org.eclipse.aether.resolution.ArtifactResolutionException;
+import org.eclipse.aether.resolution.ArtifactResult;
 
 /**
  * @author Jason van Zyl
  */
-@Component(role = Downloader.class)
+@Singleton
+@Named
 public class DefaultDownloader implements Downloader {
-    @Requirement
-    private ArtifactResolver artifactResolver;
+    private final RepositorySystem repositorySystem;
+
+    @Inject
+    public DefaultDownloader(RepositorySystem repositorySystem) {
+        this.repositorySystem = repositorySystem;
+    }
 
     @Override
     public File download(
@@ -49,46 +57,15 @@ public class DefaultDownloader implements Downloader {
             List<ArtifactRepository> remoteRepositories,
             ProjectBuildingRequest buildingRequest)
             throws DownloadException, DownloadNotFoundException {
-        DefaultArtifactCoordinate jarCoordinate = new DefaultArtifactCoordinate();
-        jarCoordinate.setGroupId(groupId);
-        jarCoordinate.setArtifactId(artifactId);
-        jarCoordinate.setVersion(version);
-
-        DefaultArtifactCoordinate pomCoordinate = new DefaultArtifactCoordinate();
-        pomCoordinate.setGroupId(groupId);
-        pomCoordinate.setArtifactId(artifactId);
-        pomCoordinate.setVersion(version);
-        pomCoordinate.setExtension("pom");
-
-        List<ArtifactRepository> repositories = new ArrayList<>(remoteRepositories);
-        if (repositories.isEmpty() && archetypeRepository != null) {
-            repositories.add(archetypeRepository);
-        } else if (repositories.isEmpty() && localRepository != null) {
-            repositories.add(localRepository);
-        }
-
-        ArtifactRepository localRepo = localRepository;
-
-        buildingRequest.setLocalRepository(localRepo);
-        buildingRequest.setRemoteRepositories(repositories);
-
-        Artifact artifact;
+        DefaultArtifact artifact = new DefaultArtifact(groupId, artifactId, "", "jar", version);
         try {
-            artifact = artifactResolver
-                    .resolveArtifact(buildingRequest, jarCoordinate)
-                    .getArtifact();
-        } catch (ArtifactResolverException e) {
-            throw new DownloadException("Error downloading " + jarCoordinate + ".", e);
+            ArtifactRequest request = new ArtifactRequest(
+                    artifact, RepositoryUtils.toRepos(buildingRequest.getRemoteRepositories()), "archetype");
+            ArtifactResult result = repositorySystem.resolveArtifact(buildingRequest.getRepositorySession(), request);
+            return result.getArtifact().getFile();
+        } catch (ArtifactResolutionException e) {
+            throw new DownloadException("Error downloading " + artifact + ".", e);
         }
-
-        // still required???
-        try {
-            artifactResolver.resolveArtifact(buildingRequest, pomCoordinate);
-        } catch (ArtifactResolverException e) {
-            throw new DownloadException("Error downloading POM for " + artifact.getId() + ".", e);
-        }
-
-        return artifact.getFile();
     }
 
     @Override
@@ -101,18 +78,15 @@ public class DefaultDownloader implements Downloader {
             List<ArtifactRepository> remoteRepositories,
             ProjectBuildingRequest buildingRequest)
             throws DownloadException, DownloadNotFoundException {
-        DefaultArtifactCoordinate jarCoordinate = new DefaultArtifactCoordinate();
-        jarCoordinate.setGroupId(groupId);
-        jarCoordinate.setArtifactId(artifactId);
-        jarCoordinate.setVersion(version);
 
+        DefaultArtifact artifact = new DefaultArtifact(groupId, artifactId, "", "jar", version);
         try {
-            return artifactResolver
-                    .resolveArtifact(buildingRequest, jarCoordinate)
-                    .getArtifact()
-                    .getFile();
-        } catch (ArtifactResolverException e) {
-            throw new DownloadException("Error downloading " + jarCoordinate + ".", e);
+            ArtifactRequest request =
+                    new ArtifactRequest(artifact, RepositoryUtils.toRepos(remoteRepositories), "archetype");
+            ArtifactResult result = repositorySystem.resolveArtifact(buildingRequest.getRepositorySession(), request);
+            return result.getArtifact().getFile();
+        } catch (ArtifactResolutionException e) {
+            throw new DownloadException("Error downloading " + artifact + ".", e);
         }
     }
 }

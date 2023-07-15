@@ -32,15 +32,23 @@ import org.apache.maven.artifact.repository.MavenArtifactRepository;
 import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
 import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.ProjectBuildingRequest;
-import org.apache.maven.repository.internal.MavenRepositorySystemSession;
+import org.codehaus.plexus.ContainerConfiguration;
+import org.codehaus.plexus.PlexusConstants;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
-import org.sonatype.aether.impl.internal.SimpleLocalRepositoryManager;
+import org.eclipse.aether.DefaultRepositorySystemSession;
+import org.eclipse.aether.internal.impl.SimpleLocalRepositoryManagerFactory;
+import org.eclipse.aether.repository.LocalRepository;
 
 /** @author Jason van Zyl */
 public class ArchetypeGenerationTest extends PlexusTestCase {
+    @Override
+    protected void customizeContainerConfiguration(final ContainerConfiguration configuration) {
+        configuration.setAutoWiring(true).setClassPathScanning(PlexusConstants.SCANNING_INDEX);
+    }
+
     public void testProjectGenerationFromAnArchetype() throws Exception {
-        ArchetypeManager archetype = (ArchetypeManager) lookup(ArchetypeManager.ROLE);
+        ArchetypeManager archetype = (ArchetypeManager) lookup(ArchetypeManager.class);
 
         // In the embedder the localRepository will be retrieved from the embedder itself and users won't
         // have to go through this muck.
@@ -53,9 +61,11 @@ public class ArchetypeGenerationTest extends PlexusTestCase {
                 "local-repo");
 
         ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
-        MavenRepositorySystemSession repositorySession = new MavenRepositorySystemSession();
-        repositorySession.setLocalRepositoryManager(
-                new SimpleLocalRepositoryManager("target/test-classes/repositories/central"));
+        DefaultRepositorySystemSession repositorySession = new DefaultRepositorySystemSession();
+        repositorySession.setLocalRepositoryManager(new SimpleLocalRepositoryManagerFactory()
+                .newInstance(
+                        repositorySession,
+                        new LocalRepository(getTestFile("target/test-classes/repositories/central"))));
         buildingRequest.setRepositorySession(repositorySession);
 
         ArchetypeCatalog catalog = archetype.getLocalCatalog(buildingRequest);
@@ -91,14 +101,14 @@ public class ArchetypeGenerationTest extends PlexusTestCase {
                 .setPackage(packageName);
 
         Properties archetypeRequiredProperties = new Properties();
-        archetypeRequiredProperties.setProperty("property-with-default-1", "value-1");
-        archetypeRequiredProperties.setProperty("property-with-default-2", "value-2");
-        archetypeRequiredProperties.setProperty("property-with-default-3", "value-3");
-        archetypeRequiredProperties.setProperty("property-with-default-4", "value-4");
-        archetypeRequiredProperties.setProperty("property-without-default-1", "some-value-1");
-        archetypeRequiredProperties.setProperty("property-without-default-2", "some-value-2");
-        archetypeRequiredProperties.setProperty("property-without-default-3", "some-value-3");
-        archetypeRequiredProperties.setProperty("property-without-default-4", "some-value-4");
+        archetypeRequiredProperties.setProperty("propertyWithDefault1", "value-1");
+        archetypeRequiredProperties.setProperty("propertyWithDefault2", "value-2");
+        archetypeRequiredProperties.setProperty("propertyWithDefault3", "value-3");
+        archetypeRequiredProperties.setProperty("propertyWithDefault4", "value-4");
+        archetypeRequiredProperties.setProperty("propertyWithoutDefault1", "some-value-1");
+        archetypeRequiredProperties.setProperty("propertyWithoutDefault2", "some-value-2");
+        archetypeRequiredProperties.setProperty("propertyWithoutDefault3", "some-value-3");
+        archetypeRequiredProperties.setProperty("propertyWithoutDefault4", "some-value-4");
         archetypeRequiredProperties.setProperty("property_underscored_1", "prop1");
         archetypeRequiredProperties.setProperty("property_underscored-2", "prop2");
         agr.setProperties(archetypeRequiredProperties);

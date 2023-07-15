@@ -28,8 +28,6 @@ import org.apache.maven.project.ProjectBuildingRequest;
 
 /** @author Jason van Zyl */
 public interface ArchetypeManager {
-    String ROLE = ArchetypeManager.class.getName();
-
     /**
      * A command to create an archetype from an existing Maven project given the supplied creation request.
      *

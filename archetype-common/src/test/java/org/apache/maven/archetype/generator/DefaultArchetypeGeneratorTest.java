@@ -24,6 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.util.Collections;
 import java.util.Properties;
 
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
@@ -36,11 +37,13 @@ import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.ProjectBuildingRequest;
-import org.apache.maven.repository.internal.MavenRepositorySystemSession;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-import org.sonatype.aether.impl.internal.SimpleLocalRepositoryManager;
+import org.eclipse.aether.DefaultRepositorySystemSession;
+import org.eclipse.aether.internal.impl.SimpleLocalRepositoryManagerFactory;
+import org.eclipse.aether.repository.LocalRepository;
+import org.eclipse.aether.repository.RemoteRepository;
 
 public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
     // archetypes prepared by antrun execution (see pom.xml) from src/test/archetypes
@@ -60,14 +63,14 @@ public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
     private static final Properties ADDITIONAL_PROPERTIES = new Properties();
 
     static {
-        ADDITIONAL_PROPERTIES.setProperty("property-without-default-1", "file-value");
-        ADDITIONAL_PROPERTIES.setProperty("property-without-default-2", "file-value");
-        ADDITIONAL_PROPERTIES.setProperty("property-without-default-3", "file-value");
-        ADDITIONAL_PROPERTIES.setProperty("property-without-default-4", "file-value");
-        ADDITIONAL_PROPERTIES.setProperty("property-with-default-1", "file-value");
-        ADDITIONAL_PROPERTIES.setProperty("property-with-default-2", "file-value");
-        ADDITIONAL_PROPERTIES.setProperty("property-with-default-3", "file-value");
-        ADDITIONAL_PROPERTIES.setProperty("property-with-default-4", "file-value");
+        ADDITIONAL_PROPERTIES.setProperty("propertyWithoutDefault1", "file-value");
+        ADDITIONAL_PROPERTIES.setProperty("propertyWithoutDefault2", "file-value");
+        ADDITIONAL_PROPERTIES.setProperty("propertyWithoutDefault3", "file-value");
+        ADDITIONAL_PROPERTIES.setProperty("propertyWithoutDefault4", "file-value");
+        ADDITIONAL_PROPERTIES.setProperty("propertyWithDefault1", "file-value");
+        ADDITIONAL_PROPERTIES.setProperty("propertyWithDefault2", "file-value");
+        ADDITIONAL_PROPERTIES.setProperty("propertyWithDefault3", "file-value");
+        ADDITIONAL_PROPERTIES.setProperty("propertyWithDefault4", "file-value");
         ADDITIONAL_PROPERTIES.setProperty("property_underscored_1", "prop1");
         ADDITIONAL_PROPERTIES.setProperty("property_underscored-2", "prop2");
     }
@@ -406,7 +409,7 @@ public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
         assertTrue(
                 "Exception not correct",
                 result.getCause().getMessage().startsWith("Archetype archetypes:basic:1.0 is not configured")
-                        && result.getCause().getMessage().endsWith("Property property-without-default-4 is missing."));
+                        && result.getCause().getMessage().endsWith("Property propertyWithoutDefault4 is missing."));
     }
 
     public void testGenerateArchetypeWithPostScriptIncluded() throws Exception {
@@ -511,19 +514,22 @@ public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
 
         remoteRepository = repositories + "/central";
 
-        generator = (ArchetypeGenerator) lookup(ArchetypeGenerator.ROLE);
+        generator = (ArchetypeGenerator) lookup(ArchetypeGenerator.class);
         assertNotNull(generator);
         assertNotNull(getVariableValueFromObject(generator, "archetypeArtifactManager"));
         assertNotNull(getVariableValueFromObject(generator, "oldArchetype"));
         assertNotNull(getVariableValueFromObject(generator, "filesetGenerator"));
     }
 
-    private ArchetypeGenerationRequest createArchetypeGenerationRequest(String project, Archetype archetype) {
+    private ArchetypeGenerationRequest createArchetypeGenerationRequest(String project, Archetype archetype)
+            throws Exception {
         outputDirectory = getBasedir() + "/target/test-classes/projects/" + project;
 
         projectDirectory = new File(outputDirectory, "file-value");
 
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
+        request.setRemoteRepositories(Collections.singletonList(new RemoteRepository.Builder("central", "default", "\"https://repo.maven.apache.org/maven2\"").build()));
+
         request.setLocalRepository(localRepository);
         request.setArchetypeRepository(remoteRepository);
         request.setOutputDirectory(outputDirectory);
@@ -540,8 +546,10 @@ public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
         request.setProperties(ADDITIONAL_PROPERTIES);
 
         ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
-        MavenRepositorySystemSession repositorySession = new MavenRepositorySystemSession();
-        repositorySession.setLocalRepositoryManager(new SimpleLocalRepositoryManager(localRepository.getBasedir()));
+
+        DefaultRepositorySystemSession repositorySession = new DefaultRepositorySystemSession();
+        repositorySession.setLocalRepositoryManager(new SimpleLocalRepositoryManagerFactory()
+                .newInstance(repositorySession, new LocalRepository(localRepository.getBasedir())));
         buildingRequest.setRepositorySession(repositorySession);
         request.setProjectBuildingRequest(buildingRequest);
 
@@ -554,14 +562,14 @@ public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
         assertEquals("file-value", properties.getProperty("artifactId"));
         assertEquals("file-value", properties.getProperty("version"));
         assertEquals("file.value.package", properties.getProperty("package"));
-        assertEquals("file-value", properties.getProperty("property-with-default-1"));
-        assertEquals("file-value", properties.getProperty("property-with-default-2"));
-        assertEquals("file-value", properties.getProperty("property-with-default-3"));
-        assertEquals("file-value", properties.getProperty("property-with-default-4"));
-        assertEquals("file-value", properties.getProperty("property-without-default-1"));
-        assertEquals("file-value", properties.getProperty("property-without-default-2"));
-        assertEquals("file-value", properties.getProperty("property-without-default-3"));
-        assertEquals("file-value", properties.getProperty("property-without-default-4"));
+        assertEquals("file-value", properties.getProperty("propertyWithDefault1"));
+        assertEquals("file-value", properties.getProperty("propertyWithDefault2"));
+        assertEquals("file-value", properties.getProperty("propertyWithDefault3"));
+        assertEquals("file-value", properties.getProperty("propertyWithDefault4"));
+        assertEquals("file-value", properties.getProperty("propertyWithoutDefault1"));
+        assertEquals("file-value", properties.getProperty("propertyWithoutDefault2"));
+        assertEquals("file-value", properties.getProperty("propertyWithoutDefault3"));
+        assertEquals("file-value", properties.getProperty("propertyWithoutDefault4"));
     }
 
     private void assertTemplateContentGeneratedWithFileSetArchetype(String template, String artifactId)

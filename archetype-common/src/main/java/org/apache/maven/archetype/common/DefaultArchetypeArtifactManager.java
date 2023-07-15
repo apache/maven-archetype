@@ -18,6 +18,10 @@
  */
 package org.apache.maven.archetype.common;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,6 +38,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.maven.archetype.LoggingSupport;
 import org.apache.maven.archetype.downloader.DownloadException;
 import org.apache.maven.archetype.downloader.DownloadNotFoundException;
 import org.apache.maven.archetype.downloader.Downloader;
@@ -44,21 +49,24 @@ import org.apache.maven.archetype.old.descriptor.ArchetypeDescriptorBuilder;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.model.Model;
 import org.apache.maven.project.ProjectBuildingRequest;
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
-@Component(role = ArchetypeArtifactManager.class)
-public class DefaultArchetypeArtifactManager extends AbstractLogEnabled implements ArchetypeArtifactManager {
-    @Requirement
-    private Downloader downloader;
+@Singleton
+@Named
+public class DefaultArchetypeArtifactManager extends LoggingSupport implements ArchetypeArtifactManager {
+    private final Downloader downloader;
 
-    @Requirement
-    private PomManager pomManager;
+    private final PomManager pomManager;
 
-    private Map<String, File> archetypeCache = new TreeMap<>();
+    private final Map<String, File> archetypeCache;
+
+    @Inject
+    public DefaultArchetypeArtifactManager(Downloader downloader, PomManager pomManager) {
+        this.downloader = downloader;
+        this.pomManager = pomManager;
+        this.archetypeCache = new TreeMap<>();
+    }
 
     @Override
     public File getArchetypeFile(
