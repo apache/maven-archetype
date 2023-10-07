@@ -18,6 +18,7 @@
  */
 package org.apache.maven.archetype.ui.generation;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -74,19 +75,17 @@ public class DefaultArchetypeGenerationConfigurator2Test extends PlexusTestCase 
 
         ArchetypeArtifactManager manager = EasyMock.createMock(ArchetypeArtifactManager.class);
 
+        File archetype = new File("archetype.jar");
         List<ArtifactRepository> x = new ArrayList<>();
         EasyMock.expect(manager.exists(
                         "archetypeGroupId", "archetypeArtifactId", "archetypeVersion", null, null, x, buildingRequest))
                 .andReturn(true);
-        EasyMock.expect(manager.isFileSetArchetype(
+        EasyMock.expect(manager.getArchetypeFile(
                         "archetypeGroupId", "archetypeArtifactId", "archetypeVersion", null, null, x, buildingRequest))
-                .andReturn(true);
-        EasyMock.expect(manager.isOldArchetype(
-                        "archetypeGroupId", "archetypeArtifactId", "archetypeVersion", null, null, x, buildingRequest))
-                .andReturn(false);
-        EasyMock.expect(manager.getFileSetArchetypeDescriptor(
-                        "archetypeGroupId", "archetypeArtifactId", "archetypeVersion", null, null, x, buildingRequest))
-                .andReturn(descriptor);
+                .andReturn(archetype);
+        EasyMock.expect(manager.isFileSetArchetype(archetype)).andReturn(true);
+        EasyMock.expect(manager.isOldArchetype(archetype)).andReturn(false);
+        EasyMock.expect(manager.getFileSetArchetypeDescriptor(archetype)).andReturn(descriptor);
 
         EasyMock.replay(manager);
         configurator.setArchetypeArtifactManager(manager);

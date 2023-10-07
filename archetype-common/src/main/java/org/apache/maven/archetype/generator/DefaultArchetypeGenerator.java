@@ -101,7 +101,7 @@ public class DefaultArchetypeGenerator extends AbstractLogEnabled implements Arc
         } else if (archetypeArtifactManager.isOldArchetype(archetypeFile)) {
             processOldArchetype(request, archetypeFile);
         } else {
-            throw new ArchetypeGenerationFailure("The defined artifact is not an archetype");
+            throw new ArchetypeGenerationFailure("The defined artifact is not an archetype: " + archetypeFile);
         }
     }
 

@@ -18,6 +18,7 @@
  */
 package org.apache.maven.archetype.ui.generation;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -134,46 +135,27 @@ public class DefaultArchetypeGenerationConfigurator extends AbstractLogEnabled
 
         ArchetypeConfiguration archetypeConfiguration;
 
-        if (archetypeArtifactManager.isFileSetArchetype(
+        File archetypeFile = archetypeArtifactManager.getArchetypeFile(
                 ad.getGroupId(),
                 ad.getArtifactId(),
                 ad.getVersion(),
                 archetypeRepository,
                 localRepository,
                 repositories,
-                request.getProjectBuildingRequest())) {
+                request.getProjectBuildingRequest());
+        if (archetypeArtifactManager.isFileSetArchetype(archetypeFile)) {
             org.apache.maven.archetype.metadata.ArchetypeDescriptor archetypeDescriptor =
-                    archetypeArtifactManager.getFileSetArchetypeDescriptor(
-                            ad.getGroupId(),
-                            ad.getArtifactId(),
-                            ad.getVersion(),
-                            archetypeRepository,
-                            localRepository,
-                            repositories,
-                            request.getProjectBuildingRequest());
+                    archetypeArtifactManager.getFileSetArchetypeDescriptor(archetypeFile);
 
             archetypeConfiguration = archetypeFactory.createArchetypeConfiguration(archetypeDescriptor, properties);
-        } else if (archetypeArtifactManager.isOldArchetype(
-                ad.getGroupId(),
-                ad.getArtifactId(),
-                ad.getVersion(),
-                archetypeRepository,
-                localRepository,
-                repositories,
-                request.getProjectBuildingRequest())) {
+        } else if (archetypeArtifactManager.isOldArchetype(archetypeFile)) {
             org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor archetypeDescriptor =
-                    archetypeArtifactManager.getOldArchetypeDescriptor(
-                            ad.getGroupId(),
-                            ad.getArtifactId(),
-                            ad.getVersion(),
-                            archetypeRepository,
-                            localRepository,
-                            repositories,
-                            request.getProjectBuildingRequest());
+                    archetypeArtifactManager.getOldArchetypeDescriptor(archetypeFile);
 
             archetypeConfiguration = archetypeFactory.createArchetypeConfiguration(archetypeDescriptor, properties);
         } else {
-            throw new ArchetypeGenerationConfigurationFailure("The defined artifact is not an archetype");
+            throw new ArchetypeGenerationConfigurationFailure(
+                    "The defined artifact is not an archetype: " + archetypeFile);
         }
 
         List<String> propertiesRequired = archetypeConfiguration.getRequiredProperties();
