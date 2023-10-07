@@ -29,7 +29,7 @@
 
   <groupId>org.apache.maven.archetype</groupId>
   <artifactId>maven-archetype</artifactId>
-  <version>3.2.2-SNAPSHOT</version>
+  <version>3.3.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Maven Archetype</name>
@@ -78,7 +78,7 @@
     <netbeans.hint.useExternalMaven>true</netbeans.hint.useExternalMaven>
     <surefire.version>2.22.2</surefire.version>
     <maven.site.path>archetype-archives/archetype-LATEST</maven.site.path>
-    <project.build.outputTimestamp>2021-12-27T19:49:41Z</project.build.outputTimestamp>
+    <project.build.outputTimestamp>2023-10-07T20:08:46Z</project.build.outputTimestamp>
     <maven.javadoc.failOnWarnings>false</maven.javadoc.failOnWarnings>
   </properties>
 
