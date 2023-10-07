@@ -18,6 +18,7 @@
  */
 package org.apache.maven.archetype.source;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -48,7 +49,7 @@ public class InternalCatalogArchetypeDataSource extends CatalogArchetypeDataSour
     }
 
     @Override
-    public void updateCatalog(ProjectBuildingRequest buildingRequest, Archetype archetype)
+    public File updateCatalog(ProjectBuildingRequest buildingRequest, Archetype archetype)
             throws ArchetypeDataSourceException {
         throw new ArchetypeDataSourceException("Not supported yet.");
     }

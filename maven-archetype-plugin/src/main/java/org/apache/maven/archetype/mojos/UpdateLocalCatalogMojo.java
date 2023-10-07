@@ -18,6 +18,8 @@
  */
 package org.apache.maven.archetype.mojos;
 
+import java.io.File;
+
 import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.common.Constants;
@@ -68,6 +70,9 @@ public class UpdateLocalCatalogMojo extends AbstractMojo {
             archetype.setDescription(project.getName());
         }
 
-        manager.updateLocalCatalog(session.getProjectBuildingRequest(), archetype);
+        File catalog = manager.updateLocalCatalog(session.getProjectBuildingRequest(), archetype);
+        if (catalog != null) {
+            getLog().info("Updated local archetypes catalog " + catalog);
+        }
     }
 }

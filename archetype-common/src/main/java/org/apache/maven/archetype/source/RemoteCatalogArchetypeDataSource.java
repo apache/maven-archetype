@@ -119,7 +119,7 @@ public class RemoteCatalogArchetypeDataSource extends CatalogArchetypeDataSource
     }
 
     @Override
-    public void updateCatalog(ProjectBuildingRequest buildingRequest, Archetype archetype)
+    public File updateCatalog(ProjectBuildingRequest buildingRequest, Archetype archetype)
             throws ArchetypeDataSourceException {
         throw new ArchetypeDataSourceException("Not supported yet.");
     }

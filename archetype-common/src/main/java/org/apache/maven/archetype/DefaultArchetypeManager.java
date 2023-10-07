@@ -169,12 +169,14 @@ public class DefaultArchetypeManager extends AbstractLogEnabled implements Arche
     }
 
     @Override
-    public void updateLocalCatalog(ProjectBuildingRequest buildingRequest, Archetype archetype) {
+    public File updateLocalCatalog(ProjectBuildingRequest buildingRequest, Archetype archetype) {
         try {
             ArchetypeDataSource source = archetypeSources.get("catalog");
 
-            source.updateCatalog(buildingRequest, archetype);
+            return source.updateCatalog(buildingRequest, archetype);
         } catch (ArchetypeDataSourceException e) {
+            getLogger().warn("failed to update catalog", e);
         }
+        return null;
     }
 }
