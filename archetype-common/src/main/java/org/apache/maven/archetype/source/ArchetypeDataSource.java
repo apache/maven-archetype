@@ -18,6 +18,8 @@
  */
 package org.apache.maven.archetype.source;
 
+import java.io.File;
+
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.project.ProjectBuildingRequest;
@@ -36,5 +38,5 @@ public interface ArchetypeDataSource {
 
     ArchetypeCatalog getArchetypeCatalog(ProjectBuildingRequest buildingRequest) throws ArchetypeDataSourceException;
 
-    void updateCatalog(ProjectBuildingRequest buildingRequest, Archetype archetype) throws ArchetypeDataSourceException;
+    File updateCatalog(ProjectBuildingRequest buildingRequest, Archetype archetype) throws ArchetypeDataSourceException;
 }

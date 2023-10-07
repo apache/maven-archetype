@@ -89,5 +89,5 @@ public interface ArchetypeManager {
     File archiveArchetype(File archetypeDirectory, File outputDirectory, String finalName)
             throws DependencyResolutionRequiredException, IOException;
 
-    void updateLocalCatalog(ProjectBuildingRequest buildingRequest, Archetype archetype);
+    File updateLocalCatalog(ProjectBuildingRequest buildingRequest, Archetype archetype);
 }
