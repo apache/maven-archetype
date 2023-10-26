@@ -172,6 +172,154 @@
   </dependencies>
 
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-plugin-report-plugin</artifactId>
+          <configuration>
+
+            <requirementsHistories>
+
+              <requirementsHistory>
+                <version>1.0-alpha-4</version>
+                <!--<maven> ? </maven>-->
+                <!--<javaVersion> ? </javaVersion>-->
+              </requirementsHistory>
+
+              <requirementsHistory>
+                <version>1.0-alpha-5</version>
+                <!--<maven>?</maven>-->
+                <!--<javaVersion> ? </javaVersion>-->
+              </requirementsHistory>
+
+              <requirementsHistory>
+                <version>1.0-alpha-6</version>
+                <!--<maven> ? </maven>-->
+                <!--<javaVersion> ? </javaVersion>-->
+              </requirementsHistory>
+
+              <requirementsHistory>
+                <version>1.0-alpha-7</version>
+                <!--<maven> ? </maven>-->
+                <!--<javaVersion> ? </javaVersion>-->
+              </requirementsHistory>
+
+              <requirementsHistory>
+                <version>2.0-alpha-1</version>
+                <maven>2.0.8</maven>
+                <!--<javaVersion> ? </javaVersion>-->
+              </requirementsHistory>
+
+              <requirementsHistory>
+                <version>2.0-alpha-2</version>
+                <maven>2.0.8</maven>
+                <!--<javaVersion> ? </javaVersion>-->
+              </requirementsHistory>
+
+              <requirementsHistory>
+                <version>2.0-alpha-3</version>
+                <maven>2.0.8</maven>
+                <!--<javaVersion> ? </javaVersion>-->
+              </requirementsHistory>
+
+              <requirementsHistory>
+                <version>2.0-alpha-4</version>
+                <maven>2.0.8</maven>
+                <!--<javaVersion> ? </javaVersion>-->
+              </requirementsHistory>
+
+              <requirementsHistory>
+                <version>2.0-alpha-5</version>
+                <maven>2.0.8</maven>
+                <!--<javaVersion> ? </javaVersion>-->
+              </requirementsHistory>
+
+              <requirementsHistory>
+                <version>2.0</version>
+                <maven>2.0.8</maven>
+                <!--<javaVersion> ? </javaVersion>-->
+              </requirementsHistory>
+
+              <requirementsHistory>
+                <version>2.1</version>
+                <maven>2.0.8</maven>
+                <!--<javaVersion> ? </javaVersion>-->
+              </requirementsHistory>
+
+              <requirementsHistory>
+                <version>2.2</version>
+                <maven>2.0.8</maven>
+                <!--<javaVersion> ? </javaVersion>-->
+              </requirementsHistory>
+
+              <requirementsHistory>
+                <version>2.3</version>
+                <maven>2.2.1</maven>
+                <!--<javaVersion> ? </javaVersion>-->
+              </requirementsHistory>
+
+              <requirementsHistory>
+                <version>2.4</version>
+                <maven>2.2.1</maven>
+                <javaVersion>5</javaVersion>
+              </requirementsHistory>
+
+              <requirementsHistory>
+                <version>3.0.0</version>
+                <maven>3.0</maven>
+                <!--<javaVersion> ? </javaVersion>-->
+              </requirementsHistory>
+
+              <requirementsHistory>
+                <version>3.0.1</version>
+                <maven>3.0</maven>
+                <!--<javaVersion> ? </javaVersion>-->
+              </requirementsHistory>
+
+              <requirementsHistory>
+                <version>3.1.0</version>
+                <maven>3.0</maven>
+                <javaVersion>7</javaVersion>
+              </requirementsHistory>
+
+              <requirementsHistory>
+                <version>3.1.1_vote-1</version>
+                <maven>3.0</maven>
+                <javaVersion>7</javaVersion>
+              </requirementsHistory>
+
+              <requirementsHistory>
+                <version>3.1.1</version>
+                <maven>3.0</maven>
+                <javaVersion>7</javaVersion>
+              </requirementsHistory>
+
+              <requirementsHistory>
+                <version>3.1.2</version>
+                <maven>3.0</maven>
+                <javaVersion>7</javaVersion>
+              </requirementsHistory>
+
+              <requirementsHistory>
+                <version>3.2.0</version>
+                <maven>3.0</maven>
+                <javaVersion>7</javaVersion>
+              </requirementsHistory>
+
+              <requirementsHistory>
+                <version>3.2.1</version>
+                <maven>3.0</maven>
+                <javaVersion>7</javaVersion>
+              </requirementsHistory>
+
+            </requirementsHistories>
+
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
     <plugins>
       <plugin>
         <groupId>org.apache.rat</groupId>
