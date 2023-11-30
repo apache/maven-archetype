@@ -133,6 +133,10 @@ public class JarMojo extends AbstractMojo {
         archiver.setOutputFile(jarFile);
 
         archiver.setArchiver((JarArchiver) archivers.get("jar"));
+        // Workaround for ARCHETYPE-649: after archetype plugin 3.1.2, the jar file contains entries for each directory,
+        // that conflict with the filesets in "archetype-metadata.xml". So force the archiver not to create jar entries
+        // for empty dirs. The same is done later on "DefaultFileSet".
+        archiver.getArchiver().setIncludeEmptyDirs(false);
 
         // configure for Reproducible Builds based on outputTimestamp value
         archiver.configureReproducible(outputTimestamp);
@@ -141,7 +145,7 @@ public class JarMojo extends AbstractMojo {
             DefaultFileSet fs = DefaultFileSet.fileSet(archetypeDirectory)
                     .prefixed("")
                     .includeExclude(null, null)
-                    .includeEmptyDirs(true);
+                    .includeEmptyDirs(false);
             fs.setUsingDefaultExcludes(useDefaultExcludes);
             archiver.getArchiver().addFileSet(fs);
 
