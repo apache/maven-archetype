@@ -57,7 +57,6 @@
           <artifactId>modello-maven-plugin</artifactId>
           <configuration>
             <version>1.0.0</version>
-            <useJava5>true</useJava5>
           </configuration>
           <executions>
             <execution>
