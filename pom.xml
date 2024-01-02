@@ -23,7 +23,7 @@
   <parent>
     <groupId>org.apache.maven</groupId>
     <artifactId>maven-parent</artifactId>
-    <version>39</version>
+    <version>41</version>
     <relativePath />
   </parent>
 
@@ -76,7 +76,6 @@
     <!-- provided by Maven core -->
     <javaVersion>8</javaVersion>
     <netbeans.hint.useExternalMaven>true</netbeans.hint.useExternalMaven>
-    <surefire.version>2.22.2</surefire.version>
     <maven.site.path>archetype-archives/archetype-LATEST</maven.site.path>
     <project.build.outputTimestamp>2023-10-07T20:08:46Z</project.build.outputTimestamp>
     <maven.javadoc.failOnWarnings>false</maven.javadoc.failOnWarnings>
@@ -154,17 +153,6 @@
         <groupId>org.apache.maven.shared</groupId>
         <artifactId>maven-artifact-transfer</artifactId>
         <version>0.13.1</version>
-      </dependency>
-      <dependency>
-        <groupId>org.codehaus.plexus</groupId>
-        <artifactId>plexus-utils</artifactId>
-        <version>4.0.0</version>
-      </dependency>
-      <dependency>
-        <groupId>org.codehaus.plexus</groupId>
-        <artifactId>plexus-xml</artifactId>
-        <!-- DO NOT UPGRADE TO 4 -->
-        <version>3.0.0</version>
       </dependency>
       <dependency>
         <groupId>commons-io</groupId>
