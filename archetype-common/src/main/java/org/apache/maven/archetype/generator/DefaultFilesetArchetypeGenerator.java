@@ -62,6 +62,8 @@ import org.apache.maven.archetype.metadata.RequiredProperty;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.context.Context;
+import org.apache.velocity.exception.ParseErrorException;
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
@@ -698,8 +700,8 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
 
         String localTemplateFileName = templateFileName.replace('/', File.separatorChar);
         if (!templateFileName.equals(localTemplateFileName)
-                && !velocity.getEngine().templateExists(templateFileName)
-                && velocity.getEngine().templateExists(localTemplateFileName)) {
+                && !templateExists(templateFileName)
+                && templateExists(localTemplateFileName)) {
             templateFileName = localTemplateFileName;
         }
 
@@ -744,6 +746,15 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
         }
 
         return true;
+    }
+
+    private boolean templateExists(String templateName) {
+        try {
+            velocity.getEngine().getTemplate(templateName);
+            return true;
+        } catch (ResourceNotFoundException | ParseErrorException e) {
+            return false;
+        }
     }
 
     private void processTemplates(

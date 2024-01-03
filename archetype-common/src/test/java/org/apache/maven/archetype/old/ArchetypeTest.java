@@ -151,7 +151,10 @@ public class ArchetypeTest extends PlexusTestCase {
 
             velocity.getEngine()
                     .mergeTemplate(
-                            OldArchetype.ARCHETYPE_RESOURCES + "/" + OldArchetype.ARCHETYPE_POM, context, writer);
+                            OldArchetype.ARCHETYPE_RESOURCES + "/" + OldArchetype.ARCHETYPE_POM,
+                            "UTF-8",
+                            context,
+                            writer);
         } finally {
             Thread.currentThread().setContextClassLoader(old);
         }
