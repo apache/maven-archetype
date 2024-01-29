@@ -91,13 +91,16 @@ public class CreateProjectFromArchetypeMojo extends AbstractMojo implements Cont
      * It is a comma separated list of catalogs.
      * Catalogs use the following schemes:
      * <ul>
-     * <li>'<code>local</code>' which is the shortcut to the local repository</li>
-     * <li>'<code>remote</code>' which is the shortcut for Maven Central repository or its mirror</li>
-     * <li>'<code>internal</code>' which is an internal catalog</li>
+     * <li><code>local</code> which is the shortcut to the local repository</li>
+     * <li><code>remote</code> which is the shortcut for a repository with id {@code archetype},
+     * the Maven Central repository (with id {@code central}) or the first matching mirror for either
+     * of the repository ids {@code archetype} or {@code central}</li>
+     * <li><code>internal</code> which is an <a href="https://maven.apache.org/archetype/archetype-common/internal.html">internal catalog</a></li>
      * </ul>
      * <p/>
-     * If you want the catalogs to come from a different repository, please add the following to your
-     * {@code settings.xml}
+     * If you want the catalogs to come from a different repository, please add
+     * a dedicated repository with id {@code archetype} and optionally a server section with the same id to
+     * your {@code settings.xml}
      * <pre>
      *   &lt;repository&gt;
      *     &lt;id&gt;archetype&lt;/id&gt;
@@ -111,7 +114,10 @@ public class CreateProjectFromArchetypeMojo extends AbstractMojo implements Cont
      *     &lt;password&gt;s3cr3t&lt;/password&gt;
      *   &lt;/server&gt;
      * </pre>
-     * If Maven Central repository catalog file is empty, <code>internal</code> catalog is used instead.
+     *
+     * In case of mirrors for either repository {@code archetype} or {@code central} the <a href="https://maven.apache.org/guides/mini/guide-mirror-settings.html">matching mirror's id</a> is considered
+     * for server settings (like authentication).
+     * If the Maven Central repository catalog file is empty, <code>internal</code> catalog is used instead.
      */
     @Parameter(property = "archetypeCatalog", defaultValue = "remote,local")
     private String archetypeCatalog;

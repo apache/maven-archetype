@@ -35,11 +35,13 @@ under the License.
     </faq>
 
     <faq id="authentication">
-      <question>How to generate a project from an archetype in an authenticated repository?</question>
+      <question>How to generate a project from an archetype in a custom (potentially authenticated) repository?</question>
       <answer>
-        <p>The server id used to download the artifact is <code><i>[archetypeArtifactId]</i>-repo</code>: you have to
-        <a href="/settings.html#Servers">define corresponding server configuration in
-        <code>settings.xml</code></a> with this id.</p>
+        <p>The server/repository id used to download the artifact is <code>archetype</code>: You have to
+        <a href="/settings.html#Servers">define corresponding server configuration and repository in
+        <code>settings.xml</code></a> with this id. 
+        In case of <a href="/guides/mini/guide-mirror-settings.html">mirroring</a> the mirror id of that mirror which
+        matches repository id <code>archetype</code> or <code>central</code> is used for authentication.</p>
       </answer>
     </faq>
 
