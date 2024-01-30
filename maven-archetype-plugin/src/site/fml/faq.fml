@@ -37,11 +37,14 @@ under the License.
     <faq id="authentication">
       <question>How to generate a project from an archetype in a custom (potentially authenticated) repository?</question>
       <answer>
-        <p>The server/repository id used to download the artifact is <code>archetype</code>: You have to
+        <p>The server/repository id used to download the <strong>catalog</strong> is <code>archetype</code>: You have to
         <a href="/settings.html#Servers">define corresponding server configuration and repository in
-        <code>settings.xml</code></a> with this id. 
+        <code>settings.xml</code></a> with this id to generate a project based on the catalog
         In case of <a href="/guides/mini/guide-mirror-settings.html">mirroring</a> the mirror id of that mirror which
-        matches repository id <code>archetype</code> or <code>central</code> is used for authentication.</p>
+        matches repository id <code>archetype</code> or <code>central</code> is used for authentication.
+        For resolving the <strong>actual archetype</strong> an artificial repository with id <code>&lt;archetype-artifactId&gt;-repo</code> is used in case
+        the underlying <a href="/archetype/archetype-models/archetype-catalog/archetype-catalog.html">Archetype Catalog Item</a> contained a repository (leveraging its URL).
+        As fallback all regular remote repositories (as defined in the <code>settings.xml</code>) are tried.</p>
       </answer>
     </faq>
 
