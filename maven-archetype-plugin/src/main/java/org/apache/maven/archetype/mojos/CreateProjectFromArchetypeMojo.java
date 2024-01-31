@@ -114,8 +114,8 @@ public class CreateProjectFromArchetypeMojo extends AbstractMojo implements Cont
      *   &lt;/server&gt;
      * </pre>
      * In order to use that repository <em>only</em> for resolving the catalog (and not for downloading regular Maven dependencies from it) it is recommended to
-     * <a href="https://maven.apache.org/settings.html#profiles">conditionally include the repository in a profile activated through a property</a>.
-     *
+     * include the repository in a <a href="https://maven.apache.org/settings.html#active-profiles">profile which is not active by default.</a> and explicitly select it via {@code -P<profile-id>}
+     * when this goal is called on the command-line.
      * In case of mirrors for either repository {@code archetype} or {@code central} the <a href="https://maven.apache.org/guides/mini/guide-mirror-settings.html">matching mirror's id</a> is considered
      * for server settings (like authentication).
      * If the repository's catalog file is empty or cannot be retrieved, <code>internal</code> catalog is transparently used as fallback.
