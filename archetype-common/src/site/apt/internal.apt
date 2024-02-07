@@ -29,18 +29,5 @@
 
 Maven Archetype Internal Catalog
 
- The Archetype Plugin comes bundled with an internal catalog.
-
-* Updating the Internal Catalog
-
- The source for internal catalog is hosted in the {{{http://docs.codehaus.org/display/MAVENUSER/Archetypes+List}Archetype List}}
- page of the Maven User Wiki.
-
- This page is transformed to a catalog XML file using following command in <<<archetype-common>>> module directory:
-
-----
-mvn -P internal-catalog test
-----
-
- Then merge <<<target/archetype-catalog.xml>>> with
- {{{http://svn.apache.org/viewvc/maven/archetype/trunk/archetype-common/src/main/resources/archetype-catalog.xml?view=markup}<<<src/main/resources/archetype-catalog.xml>>>}}.
+ The Archetype Plugin comes bundled with an internal catalog containing archetypes maintained by Apache Maven itself.
+ Its XML source is at {{{https://github.com/apache/maven-archetype/blob/master/archetype-common/src/main/resources/archetype-catalog.xml}<<<src/main/resources/archetype-catalog.xml>>>}}.
