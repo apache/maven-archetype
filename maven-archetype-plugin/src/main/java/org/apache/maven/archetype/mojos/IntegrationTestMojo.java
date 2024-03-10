@@ -343,7 +343,7 @@ public class IntegrationTestMojo extends AbstractMojo {
         getLog().debug("reference content: " + referenceFiles);
 
         List<String> actualFiles = FileUtils.getFileAndDirectoryNames(actual, "**", null, false, true, true, true);
-        getLog().debug("actual content: " + referenceFiles);
+        getLog().debug("actual content: " + actualFiles);
 
         boolean fileNamesEquals = CollectionUtils.isEqualCollection(referenceFiles, actualFiles);
 
