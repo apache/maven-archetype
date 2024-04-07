@@ -39,6 +39,6 @@ assert content.contains("Archetype tests executed!") :
 assert content.contains("local.central (file://") :
  "test-settings.xml wasn't passed from the main Maven build!: 'local.central (file://' was NOT found in the output! The output was:\n${content}"
 
-def settingsXmlPath = new File("maven-archetype-plugin/target/it/projects/ARCHETYPE-622_main_build_settings/target/classes/archetype-it", "archetype-settings.xml").toPath().toString().replace("\\", "\\\\")
+def settingsXmlPath = new File("maven-archetype-plugin/target/it/projects/ARCHETYPE-622_main_build_settings/target/archetype-it", "archetype-settings.xml").toPath().toString().replace("\\", "\\\\")
 assert content.matches("(?s).*\\[DEBUG\\] Reading user settings from .*" + settingsXmlPath + ".*") : "test-settings.xml wasn't passed from the main Maven build!: 'Reading user settings from ... archetype-settings.xml' was NOT found in the output! The output was:\n${content}"
 

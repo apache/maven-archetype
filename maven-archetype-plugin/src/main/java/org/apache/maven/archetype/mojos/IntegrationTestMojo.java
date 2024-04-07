@@ -623,37 +623,27 @@ public class IntegrationTestMojo extends AbstractMojo {
                 request.setProperties(props);
             }
 
+            File archetypeItDirectory = new File(project.getBuild().getDirectory(), "archetype-it");
+            if (archetypeItDirectory.exists()) {
+                FileUtils.deleteDirectory(archetypeItDirectory);
+            }
+            archetypeItDirectory.mkdir();
+            File userSettings;
             if (settingsFile != null) {
-                File interpolatedSettingsDirectory = new File(project.getBuild().getOutputDirectory(), "archetype-it");
-                if (interpolatedSettingsDirectory.exists()) {
-                    FileUtils.deleteDirectory(interpolatedSettingsDirectory);
-                }
-                interpolatedSettingsDirectory.mkdir();
-                File interpolatedSettingsFile =
-                        new File(interpolatedSettingsDirectory, "interpolated-" + settingsFile.getName());
+                userSettings = new File(archetypeItDirectory, "interpolated-" + settingsFile.getName());
 
-                buildInterpolatedFile(settingsFile, interpolatedSettingsFile);
-
-                request.setUserSettingsFile(interpolatedSettingsFile);
-            } else // Use settings coming from the main Maven build
-            {
-                File mainBuildSettingsDirectory = new File(project.getBuild().getOutputDirectory(), "archetype-it");
-                mainBuildSettingsDirectory.mkdir();
-                File mainBuildSettingsFile = new File(mainBuildSettingsDirectory, "archetype-settings.xml");
+                buildInterpolatedFile(settingsFile, userSettings);
+            } else {
+                // Use settings coming from the main Maven build
+                userSettings = new File(archetypeItDirectory, "archetype-settings.xml");
 
                 SettingsXpp3Writer settingsWriter = new SettingsXpp3Writer();
 
-                try (FileWriter fileWriter = new FileWriter(mainBuildSettingsFile)) {
+                try (FileWriter fileWriter = new FileWriter(userSettings)) {
                     settingsWriter.write(fileWriter, settings);
                 }
-
-                if (getLog().isDebugEnabled()) {
-                    getLog().debug("Created archetype-settings.xml with settings from the main Maven build: "
-                            + mainBuildSettingsFile.getAbsolutePath());
-                }
-
-                request.setUserSettingsFile(mainBuildSettingsFile);
             }
+            request.setUserSettingsFile(userSettings);
 
             try {
                 InvocationResult result = invoker.execute(request);
