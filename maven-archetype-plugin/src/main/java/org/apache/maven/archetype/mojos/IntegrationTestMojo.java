@@ -62,7 +62,7 @@ import org.apache.maven.shared.invoker.InvocationRequest;
 import org.apache.maven.shared.invoker.InvocationResult;
 import org.apache.maven.shared.invoker.Invoker;
 import org.apache.maven.shared.invoker.MavenInvocationException;
-import org.apache.maven.shared.scriptinterpreter.RunFailureException;
+import org.apache.maven.shared.scriptinterpreter.ScriptException;
 import org.apache.maven.shared.scriptinterpreter.ScriptRunner;
 import org.apache.maven.shared.transfer.artifact.DefaultArtifactCoordinate;
 import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver;
@@ -74,6 +74,7 @@ import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.util.introspection.ReflectionValueExtractor;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>Execute the archetype integration tests, consisting in generating projects from the current archetype and optionally
@@ -661,22 +662,14 @@ public class IntegrationTestMojo extends AbstractMojo {
             getLog().info("No post-archetype-generation goals to invoke.");
         }
         // verify result
-        ScriptRunner scriptRunner = new ScriptRunner(getLog());
-        scriptRunner.setScriptEncoding(encoding);
+        try (ScriptRunner scriptRunner = new ScriptRunner()) {
+            scriptRunner.setScriptEncoding(encoding);
 
-        Map<String, Object> context = new LinkedHashMap<>();
-        context.put("projectDir", basedir);
+            Map<String, Object> context = new LinkedHashMap<>();
+            context.put("projectDir", basedir);
 
-        try {
-            scriptRunner.run(
-                    "post-build script",
-                    goalFile.getParentFile(),
-                    postBuildHookScript,
-                    context,
-                    logger,
-                    "failure post script",
-                    true);
-        } catch (RunFailureException e) {
+            scriptRunner.run("post-build script", goalFile.getParentFile(), postBuildHookScript, context, logger);
+        } catch (ScriptException e) {
             throw new IntegrationTestFailure("post build script failure failure: " + e.getMessage(), e);
         }
     }
@@ -688,7 +681,7 @@ public class IntegrationTestMojo extends AbstractMojo {
             File outputLog = new File(basedir, "build.log");
 
             if (streamLogs) {
-                logger = new FileLogger(outputLog, getLog());
+                logger = new FileLogger(outputLog, LoggerFactory.getLogger(getClass()));
             } else {
                 logger = new FileLogger(outputLog);
             }
