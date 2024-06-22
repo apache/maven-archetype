@@ -23,7 +23,7 @@ under the License.
     <mirror>
       <id>mrm-maven-plugin</id>
       <name>Mock Repository Manager</name>
-      <url>@repository.proxy.url@</url>
+      <url>@mrm.repository.url@</url>
       <mirrorOf>*,!archetype</mirrorOf>
     </mirror>
   </mirrors>
@@ -36,32 +36,28 @@ under the License.
       <repositories>
         <repository>
           <id>snapshots</id>
-          <url>@repository.proxy.url@</url>
+          <url>@mrm.repository.url@</url>
           <releases>
             <enabled>true</enabled>
             <checksumPolicy>ignore</checksumPolicy>
-            <updatePolicy>never</updatePolicy>
           </releases>
           <snapshots>
             <enabled>true</enabled>
             <checksumPolicy>ignore</checksumPolicy>
-            <updatePolicy>always</updatePolicy>
           </snapshots>
         </repository>
       </repositories>
       <pluginRepositories>
         <pluginRepository>
           <id>snapshots</id>
-          <url>@repository.proxy.url@</url>
+          <url>@mrm.repository.url@</url>
           <releases>
             <enabled>true</enabled>
             <checksumPolicy>ignore</checksumPolicy>
-            <updatePolicy>never</updatePolicy>
           </releases>
           <snapshots>
             <enabled>true</enabled>
             <checksumPolicy>ignore</checksumPolicy>
-            <updatePolicy>always</updatePolicy>
           </snapshots>
         </pluginRepository>
       </pluginRepositories>
@@ -76,12 +72,10 @@ under the License.
           <releases>
             <enabled>true</enabled>
             <checksumPolicy>ignore</checksumPolicy>
-            <updatePolicy>never</updatePolicy>
           </releases>
           <snapshots>
             <enabled>true</enabled>
             <checksumPolicy>ignore</checksumPolicy>
-            <updatePolicy>always</updatePolicy>
           </snapshots>
         </repository>
       </repositories>

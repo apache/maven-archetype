@@ -172,64 +172,6 @@
   </dependencies>
 
   <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-plugin-report-plugin</artifactId>
-          <configuration>
-            <requirementsHistories>
-              <requirementsHistory>
-                <version>3.3.0</version>
-                <maven>3.0</maven>
-                <jdk>8</jdk>
-              </requirementsHistory>
-              <requirementsHistory>
-                <version>3.2.1</version>
-                <maven>3.0</maven>
-                <jdk>7</jdk>
-              </requirementsHistory>
-              <requirementsHistory>
-                <version>3.2.0</version>
-                <maven>3.0</maven>
-                <jdk>7</jdk>
-              </requirementsHistory>
-              <requirementsHistory>
-                <version>3.1.2</version>
-                <maven>3.0</maven>
-                <jdk>7</jdk>
-              </requirementsHistory>
-              <requirementsHistory>
-                <version>3.1.1</version>
-                <maven>3.0</maven>
-                <jdk>7</jdk>
-              </requirementsHistory>
-              <requirementsHistory>
-                <version>3.1.1_vote-1</version>
-                <maven>3.0</maven>
-                <jdk>7</jdk>
-              </requirementsHistory>
-              <requirementsHistory>
-                <version>3.1.0</version>
-                <maven>3.0</maven>
-                <jdk>7</jdk>
-              </requirementsHistory>
-              <requirementsHistory>
-                <version>3.0.1</version>
-                <maven>3.0</maven>
-                <jdk>1.6</jdk>
-              </requirementsHistory>
-              <requirementsHistory>
-                <version>3.0.0</version>
-                <maven>3.0</maven>
-                <jdk>1.6</jdk>
-              </requirementsHistory>
-            </requirementsHistories>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-
     <plugins>
       <plugin>
         <groupId>org.apache.rat</groupId>
@@ -248,10 +190,6 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
         <executions>
-          <execution>
-            <id>default-descriptor</id>
-            <phase>process-classes</phase>
-          </execution>
           <execution>
             <id>generate-helpmojo</id>
             <goals>
@@ -322,7 +260,6 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-invoker-plugin</artifactId>
-            <version>3.6.0</version>
             <configuration>
               <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
             </configuration>
@@ -351,15 +288,9 @@
                   <postBuildHookScript>verify</postBuildHookScript>
                   <settingsFile>src/it/mrm/settings.xml</settingsFile>
                   <logDirectory>target/it/logs</logDirectory>
-                  <filterProperties>
-                    <repository.proxy.url>${mrm.repository.url}</repository.proxy.url>
-                    <archetype-repo.proxy.url>${archetype-repo.proxy.url}</archetype-repo.proxy.url>
-                  </filterProperties>
                   <properties>
                     <maven.compiler.source>${maven.compiler.source}</maven.compiler.source>
                     <maven.compiler.target>${maven.compiler.target}</maven.compiler.target>
-                    <!-- e.g. ensure that Java7 picks up TLSv1.2 when connecting with Central -->
-                    <https.protocols>${https.protocols}</https.protocols>
                   </properties>
                 </configuration>
               </execution>
@@ -367,33 +298,6 @@
                 <id>invoker-verify</id>
                 <goals>
                   <goal>verify</goal>
-                </goals>
-                <configuration>
-                  <ignoreFailures>${maven.it.failure.ignore}</ignoreFailures>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>ciProfile</id>
-      <activation>
-        <property>
-          <name>enableCiProfile</name>
-          <value>true</value>
-        </property>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-docck-plugin</artifactId>
-            <version>1.2</version>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>check</goal>
                 </goals>
               </execution>
             </executions>
