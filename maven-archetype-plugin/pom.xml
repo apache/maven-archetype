@@ -100,7 +100,7 @@
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-archiver</artifactId>
-      <version>4.9.1</version>
+      <version>4.10.0</version>
     </dependency>
     <!-- Required for the integration tests, dependency is only to define build order -->
     <dependency>
