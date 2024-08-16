@@ -18,6 +18,9 @@
  */
 package org.apache.maven.archetype.generator;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
@@ -62,8 +65,6 @@ import org.apache.maven.archetype.metadata.RequiredProperty;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.context.Context;
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
@@ -72,18 +73,19 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.codehaus.plexus.velocity.VelocityComponent;
 import org.xml.sax.SAXException;
 
-@Component(role = FilesetArchetypeGenerator.class)
+@Named
+@Singleton
 public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled implements FilesetArchetypeGenerator {
-    @Requirement
+    @Inject
     private ArchetypeArtifactManager archetypeArtifactManager;
 
-    @Requirement
+    @Inject
     private ArchetypeFilesResolver archetypeFilesResolver;
 
-    @Requirement
+    @Inject
     private PomManager pomManager;
 
-    @Requirement
+    @Inject
     private VelocityComponent velocity;
 
     /**

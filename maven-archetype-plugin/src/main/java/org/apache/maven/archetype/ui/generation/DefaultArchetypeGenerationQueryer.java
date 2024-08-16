@@ -18,18 +18,21 @@
  */
 package org.apache.maven.archetype.ui.generation;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import java.util.regex.Pattern;
 
 import org.apache.maven.archetype.ui.ArchetypeConfiguration;
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.components.interactivity.Prompter;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
-@Component(role = ArchetypeGenerationQueryer.class, hint = "default")
+@Named("default")
+@Singleton
 public class DefaultArchetypeGenerationQueryer extends AbstractLogEnabled implements ArchetypeGenerationQueryer {
-    @Requirement
+    @Inject
     private Prompter prompter;
 
     @Override

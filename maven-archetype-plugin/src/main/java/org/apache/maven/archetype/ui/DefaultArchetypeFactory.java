@@ -18,16 +18,19 @@
  */
 package org.apache.maven.archetype.ui;
 
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import java.util.Iterator;
 import java.util.Properties;
 
 import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.metadata.RequiredProperty;
 import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
-@Component(role = ArchetypeFactory.class, hint = "default")
+@Named("default")
+@Singleton
 public class DefaultArchetypeFactory extends AbstractLogEnabled implements ArchetypeFactory {
     @Override
     public ArchetypeDefinition createArchetypeDefinition(Properties properties) {

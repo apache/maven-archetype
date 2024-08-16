@@ -18,6 +18,10 @@
  */
 package org.apache.maven.archetype.downloader;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,15 +32,14 @@ import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.maven.shared.transfer.artifact.DefaultArtifactCoordinate;
 import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver;
 import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolverException;
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
 
 /**
  * @author Jason van Zyl
  */
-@Component(role = Downloader.class)
+@Named
+@Singleton
 public class DefaultDownloader implements Downloader {
-    @Requirement
+    @Inject
     private ArtifactResolver artifactResolver;
 
     @Override

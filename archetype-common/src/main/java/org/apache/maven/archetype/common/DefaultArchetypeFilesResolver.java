@@ -18,6 +18,9 @@
  */
 package org.apache.maven.archetype.common;
 
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,12 +32,12 @@ import java.util.Set;
 import org.apache.maven.archetype.common.util.ListScanner;
 import org.apache.maven.archetype.common.util.PathUtils;
 import org.apache.maven.archetype.metadata.FileSet;
-import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
 
-@Component(role = ArchetypeFilesResolver.class)
+@Named
+@Singleton
 public class DefaultArchetypeFilesResolver extends AbstractLogEnabled implements ArchetypeFilesResolver {
     @Override
     public List<String> getFilesWithExtension(List<String> files, String extension) {

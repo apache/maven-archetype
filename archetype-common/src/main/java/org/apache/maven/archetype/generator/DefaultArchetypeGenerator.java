@@ -18,6 +18,10 @@
  */
 package org.apache.maven.archetype.generator;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,26 +39,25 @@ import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.ArtifactRepositoryPolicy;
 import org.apache.maven.artifact.repository.MavenArtifactRepository;
 import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
 
-@Component(role = ArchetypeGenerator.class)
+@Named
+@Singleton
 public class DefaultArchetypeGenerator extends AbstractLogEnabled implements ArchetypeGenerator {
     /**
      * Determines whether the layout is legacy or not.
      */
-    @Requirement
+    @Inject
     private ArtifactRepositoryLayout defaultArtifactRepositoryLayout;
 
-    @Requirement
+    @Inject
     private ArchetypeArtifactManager archetypeArtifactManager;
 
-    @Requirement
+    @Inject
     private FilesetArchetypeGenerator filesetGenerator;
 
-    @Requirement
+    @Inject
     private OldArchetype oldArchetype;
 
     private File getArchetypeFile(ArchetypeGenerationRequest request, ArtifactRepository localRepository)

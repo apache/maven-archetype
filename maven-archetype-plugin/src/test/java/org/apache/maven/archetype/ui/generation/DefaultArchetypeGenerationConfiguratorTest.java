@@ -35,6 +35,7 @@ import org.apache.maven.archetype.exception.UnknownGroup;
 import org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.project.ProjectBuildingRequest;
+import org.codehaus.plexus.ContainerConfiguration;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.easymock.EasyMock;
@@ -44,6 +45,11 @@ import org.easymock.EasyMock;
  */
 public class DefaultArchetypeGenerationConfiguratorTest extends PlexusTestCase {
     private DefaultArchetypeGenerationConfigurator configurator;
+
+    @Override
+    protected void customizeContainerConfiguration(ContainerConfiguration configuration) {
+        configuration.setClassPathScanning("index");
+    }
 
     @Override
     public void setUp() throws Exception {

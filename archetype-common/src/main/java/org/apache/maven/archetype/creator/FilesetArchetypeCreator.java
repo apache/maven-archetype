@@ -18,6 +18,10 @@
  */
 package org.apache.maven.archetype.creator;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -67,8 +71,6 @@ import org.apache.maven.shared.invoker.DefaultInvocationRequest;
 import org.apache.maven.shared.invoker.InvocationRequest;
 import org.apache.maven.shared.invoker.InvocationResult;
 import org.apache.maven.shared.invoker.Invoker;
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.FileUtils;
@@ -85,18 +87,19 @@ import static org.apache.commons.io.IOUtils.write;
  * Create a 2.x Archetype project from a project. Since 2.0-alpha-5, an integration-test named "basic" is created along
  * the archetype itself to provide immediate test when building the archetype.
  */
-@Component(role = ArchetypeCreator.class, hint = "fileset")
+@Named("fileset")
+@Singleton
 public class FilesetArchetypeCreator extends AbstractLogEnabled implements ArchetypeCreator {
     private static final String DEFAULT_OUTPUT_DIRECTORY =
             "target" + File.separator + "generated-sources" + File.separator + "archetype";
 
-    @Requirement
+    @Inject
     private ArchetypeFilesResolver archetypeFilesResolver;
 
-    @Requirement
+    @Inject
     private PomManager pomManager;
 
-    @Requirement
+    @Inject
     private Invoker invoker;
 
     @Override

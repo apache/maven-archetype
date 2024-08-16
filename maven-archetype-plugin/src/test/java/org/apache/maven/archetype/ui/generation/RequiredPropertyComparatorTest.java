@@ -19,24 +19,27 @@
 package org.apache.maven.archetype.ui.generation;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-import junit.framework.TestCase;
 import org.apache.maven.archetype.ui.ArchetypeConfiguration;
+import org.junit.Before;
+import org.junit.Test;
 
-public class RequiredPropertyComparatorTest extends TestCase {
+import static org.junit.Assert.assertEquals;
+
+public class RequiredPropertyComparatorTest {
     private DefaultArchetypeGenerationConfigurator.RequiredPropertyComparator requiredPropertyComparator;
 
     private ArchetypeConfiguration archetypeConfiguration;
 
-    @Override
+    @Before
     public void setUp() throws Exception {
         archetypeConfiguration = new ArchetypeConfiguration();
         requiredPropertyComparator =
                 new DefaultArchetypeGenerationConfigurator.RequiredPropertyComparator(archetypeConfiguration);
     }
 
+    @Test
     public void testShouldOrderPropertiesWhenReferringEachOther() {
         archetypeConfiguration.addRequiredProperty("prop1");
         archetypeConfiguration.setDefaultProperty("prop1", "${prop2}");
@@ -45,10 +48,11 @@ public class RequiredPropertyComparatorTest extends TestCase {
 
         List<String> requiredProperties = archetypeConfiguration.getRequiredProperties();
         assertEquals(Arrays.asList("prop1", "prop2"), requiredProperties);
-        Collections.sort(requiredProperties, requiredPropertyComparator);
+        requiredProperties.sort(requiredPropertyComparator);
         assertEquals(Arrays.asList("prop2", "prop1"), requiredProperties);
     }
 
+    @Test
     public void testShouldOrderPropertiesWhenReferringEachOther2() {
         archetypeConfiguration.addRequiredProperty("prop1");
         archetypeConfiguration.setDefaultProperty("prop1", "${prop2}");
@@ -56,10 +60,11 @@ public class RequiredPropertyComparatorTest extends TestCase {
 
         List<String> requiredProperties = archetypeConfiguration.getRequiredProperties();
         assertEquals(Arrays.asList("prop1", "prop2"), requiredProperties);
-        Collections.sort(requiredProperties, requiredPropertyComparator);
+        requiredProperties.sort(requiredPropertyComparator);
         assertEquals(Arrays.asList("prop2", "prop1"), requiredProperties);
     }
 
+    @Test
     public void testTransitivePropertyReferences() {
         archetypeConfiguration.addRequiredProperty("foo");
         archetypeConfiguration.setDefaultProperty("foo", "${bar}");
@@ -69,7 +74,7 @@ public class RequiredPropertyComparatorTest extends TestCase {
 
         List<String> requiredProperties = archetypeConfiguration.getRequiredProperties();
         assertEquals(Arrays.asList("foo", "bar", "baz"), requiredProperties);
-        Collections.sort(requiredProperties, requiredPropertyComparator);
+        requiredProperties.sort(requiredPropertyComparator);
         assertEquals(Arrays.asList("baz", "bar", "foo"), requiredProperties);
     }
 }

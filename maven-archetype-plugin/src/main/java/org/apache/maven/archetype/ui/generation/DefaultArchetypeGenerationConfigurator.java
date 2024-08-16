@@ -18,6 +18,10 @@
  */
 package org.apache.maven.archetype.ui.generation;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
@@ -57,32 +61,31 @@ import org.apache.velocity.runtime.parser.ParseException;
 import org.apache.velocity.runtime.parser.node.ASTReference;
 import org.apache.velocity.runtime.parser.node.SimpleNode;
 import org.apache.velocity.runtime.visitor.BaseVisitor;
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
 
 // TODO: this seems to have more responsibilities than just a configurator
-@Component(role = ArchetypeGenerationConfigurator.class, hint = "default")
+@Named("default")
+@Singleton
 public class DefaultArchetypeGenerationConfigurator extends AbstractLogEnabled
         implements ArchetypeGenerationConfigurator {
-    @Requirement
+    @Inject
     OldArchetype oldArchetype;
 
-    @Requirement
+    @Inject
     private ArchetypeArtifactManager archetypeArtifactManager;
 
-    @Requirement
+    @Inject
     private ArchetypeFactory archetypeFactory;
 
-    @Requirement
+    @Inject
     private ArchetypeGenerationQueryer archetypeGenerationQueryer;
 
     /**
      * Determines whether the layout is legacy or not.
      */
-    @Requirement
+    @Inject
     private ArtifactRepositoryLayout defaultArtifactRepositoryLayout;
 
     public void setArchetypeArtifactManager(ArchetypeArtifactManager archetypeArtifactManager) {

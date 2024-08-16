@@ -20,6 +20,7 @@ package org.apache.maven.archetype.ui.generation;
 
 import java.util.regex.Pattern;
 
+import org.codehaus.plexus.ContainerConfiguration;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.components.interactivity.Prompter;
 import org.codehaus.plexus.components.interactivity.PrompterException;
@@ -28,6 +29,11 @@ import org.easymock.EasyMock;
 public class DefaultArchetypeGenerationQueryerTest extends PlexusTestCase {
 
     private DefaultArchetypeGenerationQueryer queryer;
+
+    @Override
+    protected void customizeContainerConfiguration(ContainerConfiguration configuration) {
+        configuration.setClassPathScanning("index");
+    }
 
     @Override
     public void setUp() throws Exception {
