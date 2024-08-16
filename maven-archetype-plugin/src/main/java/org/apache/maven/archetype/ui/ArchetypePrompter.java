@@ -18,11 +18,13 @@
  */
 package org.apache.maven.archetype.ui;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import java.io.IOException;
 import java.util.List;
 
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.components.interactivity.InputHandler;
 import org.codehaus.plexus.components.interactivity.OutputHandler;
 import org.codehaus.plexus.components.interactivity.Prompter;
@@ -31,13 +33,14 @@ import org.codehaus.plexus.components.interactivity.PrompterException;
 /**
  * @author raphaelpieroni
  */
-@Component(role = Prompter.class, hint = "archetype")
+@Named("archetype")
+@Singleton
 public class ArchetypePrompter implements Prompter {
 
-    @Requirement
+    @Inject
     private OutputHandler outputHandler;
 
-    @Requirement
+    @Inject
     private InputHandler inputHandler;
 
     @Override

@@ -18,6 +18,10 @@
  */
 package org.apache.maven.archetype.source;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -27,13 +31,12 @@ import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.maven.shared.transfer.repository.RepositoryManager;
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.util.ReaderFactory;
 
-@Component(role = ArchetypeDataSource.class, hint = "catalog")
+@Named("catalog")
+@Singleton
 public class LocalCatalogArchetypeDataSource extends CatalogArchetypeDataSource {
-    @Requirement
+    @Inject
     private RepositoryManager repositoryManager;
 
     @Override

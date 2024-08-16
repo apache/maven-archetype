@@ -18,6 +18,10 @@
  */
 package org.apache.maven.archetype;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -34,23 +38,24 @@ import org.apache.maven.archetype.source.ArchetypeDataSource;
 import org.apache.maven.archetype.source.ArchetypeDataSourceException;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.project.ProjectBuildingRequest;
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.IOUtil;
 
 /**
  * @author Jason van Zyl
  */
-@Component(role = ArchetypeManager.class)
+@Named
+@Singleton
 public class DefaultArchetypeManager extends AbstractLogEnabled implements ArchetypeManager {
-    @Requirement(hint = "fileset")
+
+    @Inject
+    @Named("fileset")
     private ArchetypeCreator creator;
 
-    @Requirement
+    @Inject
     private ArchetypeGenerator generator;
 
-    @Requirement(role = ArchetypeDataSource.class)
+    @Inject
     private Map<String, ArchetypeDataSource> archetypeSources;
 
     @Override

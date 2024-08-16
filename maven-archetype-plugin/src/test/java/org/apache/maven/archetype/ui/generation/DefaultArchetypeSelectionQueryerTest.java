@@ -25,6 +25,7 @@ import java.util.Map;
 
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.ui.ArchetypeDefinition;
+import org.codehaus.plexus.ContainerConfiguration;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.components.interactivity.Prompter;
 import org.codehaus.plexus.components.interactivity.PrompterException;
@@ -32,6 +33,11 @@ import org.easymock.EasyMock;
 
 public class DefaultArchetypeSelectionQueryerTest extends PlexusTestCase {
     private DefaultArchetypeSelectionQueryer queryer;
+
+    @Override
+    protected void customizeContainerConfiguration(ContainerConfiguration configuration) {
+        configuration.setClassPathScanning("index");
+    }
 
     @Override
     public void setUp() throws Exception {

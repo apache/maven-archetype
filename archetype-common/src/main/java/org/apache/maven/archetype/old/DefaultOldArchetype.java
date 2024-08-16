@@ -18,6 +18,9 @@
  */
 package org.apache.maven.archetype.old;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
@@ -56,8 +59,6 @@ import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.context.Context;
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
@@ -72,7 +73,8 @@ import org.xml.sax.SAXException;
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  * @version $Id$
  */
-@Component(role = OldArchetype.class)
+@Named
+@Singleton
 public class DefaultOldArchetype extends AbstractLogEnabled implements OldArchetype {
     private static final String DEFAULT_TEST_RESOURCE_DIR = "/src/test/resources";
 
@@ -86,10 +88,10 @@ public class DefaultOldArchetype extends AbstractLogEnabled implements OldArchet
     // Components
     // ----------------------------------------------------------------------
 
-    @Requirement
+    @Inject
     private VelocityComponent velocity;
 
-    @Requirement
+    @Inject
     private ArchetypeArtifactManager archetypeArtifactManager;
 
     // ----------------------------------------------------------------------

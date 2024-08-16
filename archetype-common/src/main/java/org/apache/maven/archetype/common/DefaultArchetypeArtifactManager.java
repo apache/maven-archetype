@@ -18,6 +18,10 @@
  */
 package org.apache.maven.archetype.common;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,18 +48,17 @@ import org.apache.maven.archetype.old.descriptor.ArchetypeDescriptorBuilder;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.model.Model;
 import org.apache.maven.project.ProjectBuildingRequest;
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
-@Component(role = ArchetypeArtifactManager.class)
+@Named
+@Singleton
 public class DefaultArchetypeArtifactManager extends AbstractLogEnabled implements ArchetypeArtifactManager {
-    @Requirement
+    @Inject
     private Downloader downloader;
 
-    @Requirement
+    @Inject
     private PomManager pomManager;
 
     private Map<String, File> archetypeCache = new TreeMap<>();

@@ -18,6 +18,10 @@
  */
 package org.apache.maven.archetype.ui.generation;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -34,12 +38,11 @@ import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.archetype.exception.UnknownGroup;
 import org.apache.maven.archetype.ui.ArchetypeDefinition;
 import org.apache.maven.project.ProjectBuildingRequest;
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
-@Component(role = ArchetypeSelector.class, hint = "default")
+@Named("default")
+@Singleton
 public class DefaultArchetypeSelector extends AbstractLogEnabled implements ArchetypeSelector {
     static final String DEFAULT_ARCHETYPE_GROUPID = "org.apache.maven.archetypes";
 
@@ -47,10 +50,10 @@ public class DefaultArchetypeSelector extends AbstractLogEnabled implements Arch
 
     static final String DEFAULT_ARCHETYPE_ARTIFACTID = "maven-archetype-quickstart";
 
-    @Requirement
+    @Inject
     private ArchetypeSelectionQueryer archetypeSelectionQueryer;
 
-    @Requirement
+    @Inject
     private ArchetypeManager archetypeManager;
 
     @Override

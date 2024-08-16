@@ -31,6 +31,7 @@ import org.apache.maven.archetype.metadata.RequiredProperty;
 import org.apache.maven.archetype.ui.ArchetypeConfiguration;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.project.ProjectBuildingRequest;
+import org.codehaus.plexus.ContainerConfiguration;
 import org.codehaus.plexus.PlexusTestCase;
 import org.easymock.EasyMock;
 import org.easymock.IAnswer;
@@ -42,6 +43,11 @@ public class DefaultArchetypeGenerationConfigurator2Test extends PlexusTestCase 
     private DefaultArchetypeGenerationConfigurator configurator;
     private ArchetypeGenerationQueryer queryer;
     private ArchetypeDescriptor descriptor;
+
+    @Override
+    protected void customizeContainerConfiguration(ContainerConfiguration configuration) {
+        configuration.setClassPathScanning("index");
+    }
 
     @Override
     public void setUp() throws Exception {

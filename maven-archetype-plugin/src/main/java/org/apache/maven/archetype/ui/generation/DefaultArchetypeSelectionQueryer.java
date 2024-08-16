@@ -18,6 +18,10 @@
  */
 package org.apache.maven.archetype.ui.generation;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -33,15 +37,16 @@ import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.ui.ArchetypeDefinition;
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.components.interactivity.Prompter;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
-@Component(role = ArchetypeSelectionQueryer.class, hint = "default")
+@Named("default")
+@Singleton
 public class DefaultArchetypeSelectionQueryer extends AbstractLogEnabled implements ArchetypeSelectionQueryer {
-    @Requirement(hint = "archetype")
+
+    @Inject
+    @Named("archetype")
     private Prompter prompter;
 
     @Override

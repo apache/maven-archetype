@@ -18,6 +18,10 @@
  */
 package org.apache.maven.archetype.repositorycrawler;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
@@ -30,8 +34,6 @@ import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Writer;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.model.Model;
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.WriterFactory;
@@ -40,9 +42,10 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 /**
  * @author            rafale
  */
-@Component(role = RepositoryCrawler.class)
+@Named
+@Singleton
 public class DefaultRepositoryCrawler extends AbstractLogEnabled implements RepositoryCrawler {
-    @Requirement
+    @Inject
     private ArchetypeArtifactManager archetypeArtifactManager;
 
     @Override

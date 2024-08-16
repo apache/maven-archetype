@@ -18,6 +18,10 @@
  */
 package org.apache.maven.archetype.ui.creation;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -38,21 +42,20 @@ import org.apache.maven.archetype.ui.ArchetypeConfiguration;
 import org.apache.maven.archetype.ui.ArchetypeDefinition;
 import org.apache.maven.archetype.ui.ArchetypeFactory;
 import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
 
-@Component(role = ArchetypeCreationConfigurator.class, hint = "default")
+@Named("default")
+@Singleton
 public class DefaultArchetypeCreationConfigurator extends AbstractLogEnabled implements ArchetypeCreationConfigurator {
-    @Requirement
+    @Inject
     private ArchetypeCreationQueryer archetypeCreationQueryer;
 
-    @Requirement
+    @Inject
     private ArchetypeFactory archetypeFactory;
 
-    @Requirement
+    @Inject
     private ArchetypeFilesResolver archetypeFilesResolver;
 
     @Override
