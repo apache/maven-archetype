@@ -70,7 +70,8 @@ package org.apache.maven.archetype.common.util;
  * on the JDOM Project, please see <http://www.jdom.org/>.
  */
 
-import java.lang.reflect.Method;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
 
 import org.jdom2.output.EscapeStrategy;
 
@@ -438,16 +439,14 @@ public class Format implements Cloneable {
     }
 
     /**
-     * Handle common charsets quickly and easily.  Use reflection
-     * to query the JDK 1.4 CharsetEncoder class for unknown charsets.
+     * Handle common charsets quickly and easily.
      * If JDK 1.4 isn't around, default to no special encoding.
      */
-    class DefaultEscapeStrategy implements EscapeStrategy {
+    static class DefaultEscapeStrategy implements EscapeStrategy {
         private int bits;
-        Object encoder;
-        Method canEncode;
+        CharsetEncoder encoder;
 
-        public DefaultEscapeStrategy(String encoding) {
+        DefaultEscapeStrategy(String encoding) {
             if ("UTF-8".equalsIgnoreCase(encoding) || "UTF-16".equalsIgnoreCase(encoding)) {
                 bits = 16;
             } else if ("ISO-8859-1".equalsIgnoreCase(encoding) || "Latin1".equalsIgnoreCase(encoding)) {
@@ -456,17 +455,7 @@ public class Format implements Cloneable {
                 bits = 7;
             } else {
                 bits = 0;
-                // encoder = Charset.forName(encoding).newEncoder();
-                try {
-                    Class<?> charsetClass = Class.forName("java.nio.charset.Charset");
-                    Class<?> encoderClass = Class.forName("java.nio.charset.CharsetEncoder");
-                    Method forName = charsetClass.getMethod("forName", new Class[] {String.class});
-                    Object charsetObj = forName.invoke(null, new Object[] {encoding});
-                    Method newEncoder = charsetClass.getMethod("newEncoder");
-                    encoder = newEncoder.invoke(charsetObj);
-                    canEncode = encoderClass.getMethod("canEncode", new Class[] {char.class});
-                } catch (Exception ignored) {
-                }
+                encoder = Charset.forName(encoding).newEncoder();
             }
         }
 
@@ -481,12 +470,8 @@ public class Format implements Cloneable {
             if (bits == 7) {
                 return (ch > 127);
             } else {
-                if (canEncode != null && encoder != null) {
-                    try {
-                        Boolean val = (Boolean) canEncode.invoke(encoder, new Object[] {Character.valueOf(ch)});
-                        return !val.booleanValue();
-                    } catch (Exception ignored) {
-                    }
+                if (encoder != null) {
+                    return !encoder.canEncode(ch);
                 }
                 // Return false if we don't know.  This risks not escaping
                 // things which should be escaped, but also means people won't

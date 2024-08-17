@@ -93,6 +93,7 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
     private static final Pattern TOKEN_PATTERN = Pattern.compile("__((?:[^_]+_)*[^_]+)__");
 
     @Override
+    @SuppressWarnings("checkstyle:MethodLength")
     public void generateArchetype(ArchetypeGenerationRequest request, File archetypeFile)
             throws UnknownArchetype, ArchetypeNotConfigured, ProjectDirectoryExists, PomFileExists, OutputFileExists,
                     ArchetypeGenerationFailure, InvalidPackaging {
@@ -288,6 +289,7 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
         return true;
     }
 
+    @SuppressWarnings("checkstyle:ParameterNumber")
     private int copyFiles(
             String directory,
             List<String> fileSetResources,
@@ -492,6 +494,7 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
                 true);
     }
 
+    @SuppressWarnings("checkstyle:ParameterNumber")
     private int processFileSet(
             String directory,
             List<String> fileSetResources,
@@ -522,6 +525,7 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
         return count;
     }
 
+    @SuppressWarnings("checkstyle:ParameterNumber")
     private void processFilesetModule(
             final String rootArtifactId,
             final String artifactId,
@@ -600,6 +604,7 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
         getLogger().debug("Processed " + artifactId);
     }
 
+    @SuppressWarnings("checkstyle:ParameterNumber")
     private void processFilesetProject(
             final AbstractArchetypeDescriptor archetypeDescriptor,
             final String moduleId,
@@ -746,6 +751,7 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
         return true;
     }
 
+    @SuppressWarnings("checkstyle:ParameterNumber")
     private void processTemplates(
             String packageName,
             File outputDirectoryFile,

@@ -21,6 +21,7 @@ package org.apache.maven.archetype.common;
 import java.util.Arrays;
 import java.util.List;
 
+@SuppressWarnings("checkstyle:InterfaceIsType")
 public interface Constants {
     String ARCHETYPE_ARTIFACT_ID = "archetype.artifactId";
 

@@ -121,6 +121,7 @@ public class DefaultOldArchetype extends AbstractLogEnabled implements OldArchet
     }
 
     @Override
+    @SuppressWarnings("checkstyle:MethodLength")
     public void createArchetype(ArchetypeGenerationRequest request, File archetypeFile)
             throws ArchetypeDescriptorException, ArchetypeTemplateProcessingException, InvalidPackaging {
         Map<String, String> parameters = new HashMap<>();
@@ -349,6 +350,7 @@ public class DefaultOldArchetype extends AbstractLogEnabled implements OldArchet
         return PomUtils.addNewModule(artifactId, fileReader, fileWriter);
     }
 
+    @SuppressWarnings("checkstyle:MethodLength")
     private void processTemplates(
             File pomFile,
             String outputDirectory,

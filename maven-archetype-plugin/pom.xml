@@ -42,10 +42,6 @@
     <maven>${mavenVersion}</maven>
   </prerequisites>
 
-  <properties>
-    <checkstyle.violation.ignore>RedundantThrows,NewlineAtEndOfFile,ParameterNumber,MethodLength,FileLength,javadoc,LineLength</checkstyle.violation.ignore>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>org.apache.maven</groupId>
