@@ -149,7 +149,7 @@ public class XMLOutputter implements Cloneable {
     private Format userFormat = Format.getRawFormat();
 
     // For xml:space="preserve"
-    protected static final Format preserveFormat = Format.getRawFormat();
+    protected static final Format PRESERVE_FORMAT = Format.getRawFormat();
 
     // What's currently in use
     protected Format currentFormat = userFormat;
@@ -749,7 +749,7 @@ public class XMLOutputter implements Cloneable {
         String target = pi.getTarget();
         boolean piProcessed = false;
 
-        if (currentFormat.ignoreTrAXEscapingPIs == false) {
+        if (!currentFormat.ignoreTrAXEscapingPIs) {
             if (target.equals(Result.PI_DISABLE_OUTPUT_ESCAPING)) {
                 escapeOutput = false;
                 piProcessed = true;
@@ -758,7 +758,7 @@ public class XMLOutputter implements Cloneable {
                 piProcessed = true;
             }
         }
-        if (piProcessed == false) {
+        if (!piProcessed) {
             String rawData = pi.getData();
 
             // Write <?target data?> or if no data then just <?target?>
@@ -860,7 +860,7 @@ public class XMLOutputter implements Cloneable {
         if ("default".equals(space)) {
             currentFormat = userFormat;
         } else if ("preserve".equals(space)) {
-            currentFormat = preserveFormat;
+            currentFormat = PRESERVE_FORMAT;
         }
 
         // Print the beginning of the tag plus attributes and any
@@ -950,7 +950,7 @@ public class XMLOutputter implements Cloneable {
 
         index = start;
         while (index < end) {
-            firstNode = (index == start) ? true : false;
+            firstNode = index == start;
             next = content.get(index);
 
             //
@@ -1257,8 +1257,6 @@ public class XMLOutputter implements Cloneable {
             str = (String) obj;
         } else if (obj instanceof Text) {
             str = ((Text) obj).getText();
-        } else if (obj instanceof EntityRef) {
-            return false;
         } else {
             return false;
         }
@@ -1376,7 +1374,7 @@ public class XMLOutputter implements Cloneable {
      * @return <code>String</code> with escaped content.
      */
     public String escapeElementEntities(String str) {
-        if (escapeOutput == false) {
+        if (!escapeOutput) {
             return str;
         }
 

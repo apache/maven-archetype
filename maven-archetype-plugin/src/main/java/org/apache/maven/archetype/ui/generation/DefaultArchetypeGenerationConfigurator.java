@@ -90,6 +90,7 @@ public class DefaultArchetypeGenerationConfigurator extends AbstractLogEnabled
     }
 
     @Override
+    @SuppressWarnings("checkstyle:MethodLength")
     public void configureArchetype(
             ArchetypeGenerationRequest request, Boolean interactiveMode, Properties executionProperties)
             throws ArchetypeNotDefined, UnknownArchetype, ArchetypeNotConfigured, IOException, PrompterException,

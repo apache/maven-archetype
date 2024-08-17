@@ -100,6 +100,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
     private Invoker invoker;
 
     @Override
+    @SuppressWarnings("checkstyle:MethodLength")
     public void createArchetype(ArchetypeCreationRequest request, ArchetypeCreationResult result) {
         MavenProject project = request.getProject();
         List<String> languages = request.getLanguages();
@@ -533,6 +534,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
         restoreArtifactId(pomReversedProperties, artifactId);
     }
 
+    @SuppressWarnings("checkstyle:ParameterNumber")
     private void createPoms(
             Model pom,
             String rootArtifactId,
@@ -964,6 +966,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
         return fileSets;
     }
 
+    @SuppressWarnings("checkstyle:ParameterNumber")
     private ModuleDescriptor createModule(
             Properties reverseProperties,
             String rootArtifactId,
@@ -1242,6 +1245,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
         properties.setProperty(Constants.PARENT_ARTIFACT_ID, parentArtifactId);
     }
 
+    @SuppressWarnings("checkstyle:ParameterNumber")
     private void processFileSet(
             File basedir,
             File archetypeFilesDirectory,
@@ -1347,6 +1351,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
         return fileNames;
     }
 
+    @SuppressWarnings("checkstyle:MethodLength")
     private List<FileSet> resolveFileSets(
             String packageName,
             List<String> fileNames,

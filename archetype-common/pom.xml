@@ -35,8 +35,7 @@
 
   <properties>
     <cargoVersion>1.0-alpha-6</cargoVersion>
-    <checkstyle.violation.ignore>RedundantThrows,NewlineAtEndOfFile,ParameterNumber,MethodLength,FileLength,javadoc,EmptyBlock,InterfaceIsType</checkstyle.violation.ignore>
-    <checkstyle.excludes>**/MavenJDOMWriter.java,**/XMLOutputter.java,**/Format.java,**/NamespaceStack.java</checkstyle.excludes>
+    <checkstyle.excludes>**/MavenJDOMWriter.java</checkstyle.excludes>
   </properties>
 
   <dependencies>
@@ -238,14 +237,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-antrun-plugin</artifactId>
-        <version>3.1.0</version>
-        <dependencies>
-          <dependency>
-            <groupId>ant</groupId>
-            <artifactId>ant-antlr</artifactId>
-            <version>1.6.5</version>
-          </dependency>
-        </dependencies>
 
         <executions>
           <execution>
