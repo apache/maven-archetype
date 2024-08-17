@@ -45,11 +45,19 @@ import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Writer;
 import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.ProjectBuildingRequest;
-import org.apache.maven.repository.internal.MavenRepositorySystemSession;
+import org.codehaus.plexus.ContainerConfiguration;
 import org.codehaus.plexus.PlexusTestCase;
-import org.sonatype.aether.impl.internal.SimpleLocalRepositoryManager;
+import org.eclipse.aether.DefaultRepositorySystemSession;
+import org.eclipse.aether.RepositorySystem;
+import org.eclipse.aether.repository.LocalRepository;
+import org.eclipse.aether.repository.LocalRepositoryManager;
 
 public class LocalCatalogArchetypeDataSourceTest extends PlexusTestCase {
+
+    @Override
+    protected void customizeContainerConfiguration(ContainerConfiguration configuration) {
+        configuration.setClassPathScanning("index");
+    }
 
     @Override
     protected void setUp() throws Exception {
@@ -75,11 +83,13 @@ public class LocalCatalogArchetypeDataSourceTest extends PlexusTestCase {
 
     public void testLocalCatalog() throws Exception {
         ArchetypeManager archetype = lookup(ArchetypeManager.class);
+        RepositorySystem repositorySystem = lookup(RepositorySystem.class);
 
         ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
-        MavenRepositorySystemSession repositorySession = new MavenRepositorySystemSession();
-        repositorySession.setLocalRepositoryManager(
-                new SimpleLocalRepositoryManager(getTestFile("target/test-classes/repositories/test-catalog")));
+        DefaultRepositorySystemSession repositorySession = new DefaultRepositorySystemSession();
+        LocalRepositoryManager localRepositoryManager = repositorySystem.newLocalRepositoryManager(
+                repositorySession, new LocalRepository(getTestFile("target/test-classes/repositories/test-catalog")));
+        repositorySession.setLocalRepositoryManager(localRepositoryManager);
         buildingRequest.setRepositorySession(repositorySession);
 
         ArchetypeCatalog result = archetype.getLocalCatalog(buildingRequest);

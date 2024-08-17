@@ -141,10 +141,6 @@
       <version>3.14.0</version>
     </dependency>
     <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-velocity</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.apache.velocity</groupId>
       <artifactId>velocity</artifactId>
     </dependency>
