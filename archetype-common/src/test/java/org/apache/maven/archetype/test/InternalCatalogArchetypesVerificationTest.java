@@ -31,10 +31,13 @@ import org.apache.maven.artifact.repository.MavenArtifactRepository;
 import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
 import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.ProjectBuildingRequest;
-import org.apache.maven.repository.internal.MavenRepositorySystemSession;
+import org.codehaus.plexus.ContainerConfiguration;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
-import org.sonatype.aether.impl.internal.SimpleLocalRepositoryManager;
+import org.eclipse.aether.DefaultRepositorySystemSession;
+import org.eclipse.aether.RepositorySystem;
+import org.eclipse.aether.repository.LocalRepository;
+import org.eclipse.aether.repository.LocalRepositoryManager;
 
 /**
  *
@@ -42,6 +45,11 @@ import org.sonatype.aether.impl.internal.SimpleLocalRepositoryManager;
  */
 public class InternalCatalogArchetypesVerificationTest extends PlexusTestCase {
     private static final String CENTRAL = "https://repo.maven.apache.org/maven2";
+
+    @Override
+    protected void customizeContainerConfiguration(ContainerConfiguration configuration) {
+        configuration.setClassPathScanning("index");
+    }
 
     public void testInternalCatalog() throws Exception {
         ArtifactRepository localRepository = createRepository(
@@ -82,14 +90,17 @@ public class InternalCatalogArchetypesVerificationTest extends PlexusTestCase {
                     .setLocalRepository(localRepository);
 
             ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
-            MavenRepositorySystemSession repositorySession = new MavenRepositorySystemSession();
-            repositorySession.setLocalRepositoryManager(new SimpleLocalRepositoryManager(localRepository.getBasedir()));
+            DefaultRepositorySystemSession repositorySession = new DefaultRepositorySystemSession();
+            RepositorySystem repositorySystem = lookup(RepositorySystem.class);
+            LocalRepositoryManager localRepositoryManager = repositorySystem.newLocalRepositoryManager(
+                    repositorySession, new LocalRepository(localRepository.getBasedir()));
+            repositorySession.setLocalRepositoryManager(localRepositoryManager);
             buildingRequest.setRepositorySession(repositorySession);
             request.setProjectBuildingRequest(buildingRequest);
 
             ArchetypeGenerationResult generationResult = archetype.generateProjectFromArchetype(request);
 
-            assertTrue("Archetype wasn't generated successfully", generationResult.getCause() == null);
+            assertNull("Archetype wasn't generated successfully", generationResult.getCause());
 
             count++;
         }
