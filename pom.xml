@@ -72,7 +72,7 @@
   <properties>
     <maven.archetype.scm.devConnection>scm:git:https://gitbox.apache.org/repos/asf/maven-archetype.git</maven.archetype.scm.devConnection>
     <mavenVersion>3.6.3</mavenVersion>
-    <resolverVersion>1.4.1</resolverVersion>
+    <resolverVersion>1.9.22</resolverVersion>
     <wagonVersion>3.3.3</wagonVersion>
     <!-- provided by Maven core -->
     <javaVersion>8</javaVersion>
