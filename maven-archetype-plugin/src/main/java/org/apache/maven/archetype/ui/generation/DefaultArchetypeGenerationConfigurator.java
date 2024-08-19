@@ -51,8 +51,8 @@ import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.ArtifactRepositoryPolicy;
 import org.apache.maven.artifact.repository.MavenArtifactRepository;
 import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
+import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.Velocity;
 import org.apache.velocity.context.Context;
 import org.apache.velocity.context.InternalContextAdapterImpl;
 import org.apache.velocity.runtime.RuntimeServices;
@@ -64,6 +64,7 @@ import org.apache.velocity.runtime.visitor.BaseVisitor;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.velocity.VelocityComponent;
 
 // TODO: this seems to have more responsibilities than just a configurator
 @Named("default")
@@ -81,6 +82,9 @@ public class DefaultArchetypeGenerationConfigurator extends AbstractLogEnabled
 
     @Inject
     private ArchetypeGenerationQueryer archetypeGenerationQueryer;
+
+    @Inject
+    private VelocityComponent velocity;
 
     /**
      * Determines whether the layout is legacy or not.
@@ -278,11 +282,10 @@ public class DefaultArchetypeGenerationConfigurator extends AbstractLogEnabled
         request.setProperties(properties);
     }
 
-    private static String expandEmbeddedTemplateExpressions(
-            String originalText, String textDescription, Context context) {
+    private String expandEmbeddedTemplateExpressions(String originalText, String textDescription, Context context) {
         if (StringUtils.contains(originalText, "${")) {
             try (StringWriter target = new StringWriter()) {
-                Velocity.evaluate(context, target, textDescription, originalText);
+                velocity.getEngine().evaluate(context, target, textDescription, originalText);
                 return target.toString();
             } catch (IOException ex) {
                 // closing StringWriter shouldn't actually generate any exception
@@ -349,9 +352,9 @@ public class DefaultArchetypeGenerationConfigurator extends AbstractLogEnabled
                 String defaultValue = archetypeConfiguration.getDefaultValue(propertyName);
                 if (StringUtils.contains(defaultValue, "${")) {
                     try {
-                        final boolean dumpNamespace = false;
-                        SimpleNode node = RuntimeSingleton.parse(
-                                new StringReader(defaultValue), propertyName + ".default", dumpNamespace);
+                        Template template = new Template();
+                        template.setName(propertyName + ".default");
+                        SimpleNode node = RuntimeSingleton.parse(new StringReader(defaultValue), template);
 
                         node.init(velocityContextAdapter, velocityRuntime);
 
