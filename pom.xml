@@ -174,21 +174,7 @@
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-velocity</artifactId>
-        <version>1.2</version>
-        <exclusions>
-          <exclusion>
-            <groupId>velocity</groupId>
-            <artifactId>velocity</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>velocity</groupId>
-            <artifactId>velocity-api</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>org.codehaus.plexus</groupId>
-            <artifactId>plexus-container-default</artifactId>
-          </exclusion>
-        </exclusions>
+        <version>2.1.0</version>
       </dependency>
       <dependency>
         <groupId>org.jdom</groupId>
@@ -197,8 +183,8 @@
       </dependency>
       <dependency>
         <groupId>org.apache.velocity</groupId>
-        <artifactId>velocity</artifactId>
-        <version>1.7</version>
+        <artifactId>velocity-engine-core</artifactId>
+        <version>2.3</version>
       </dependency>
       <dependency>
         <groupId>commons-collections</groupId>

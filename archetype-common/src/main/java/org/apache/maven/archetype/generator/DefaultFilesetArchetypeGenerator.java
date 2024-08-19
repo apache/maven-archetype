@@ -63,7 +63,6 @@ import org.apache.maven.archetype.metadata.FileSet;
 import org.apache.maven.archetype.metadata.ModuleDescriptor;
 import org.apache.maven.archetype.metadata.RequiredProperty;
 import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.Velocity;
 import org.apache.velocity.context.Context;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.FileUtils;
@@ -449,7 +448,7 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
 
     private String evaluateExpression(Context context, String key, String value) {
         try (StringWriter stringWriter = new StringWriter()) {
-            Velocity.evaluate(context, stringWriter, key, value);
+            velocity.getEngine().evaluate(context, stringWriter, key, value);
             return stringWriter.toString();
         } catch (Exception ex) {
             return value;
@@ -705,8 +704,8 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
 
         String localTemplateFileName = templateFileName.replace('/', File.separatorChar);
         if (!templateFileName.equals(localTemplateFileName)
-                && !velocity.getEngine().templateExists(templateFileName)
-                && velocity.getEngine().templateExists(localTemplateFileName)) {
+                && !velocity.getEngine().resourceExists(templateFileName)
+                && velocity.getEngine().resourceExists(localTemplateFileName)) {
             templateFileName = localTemplateFileName;
         }
 
