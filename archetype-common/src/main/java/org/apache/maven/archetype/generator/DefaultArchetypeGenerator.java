@@ -24,6 +24,7 @@ import javax.inject.Singleton;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
@@ -35,12 +36,13 @@ import org.apache.maven.archetype.exception.ArchetypeNotDefined;
 import org.apache.maven.archetype.exception.InvalidPackaging;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.archetype.old.OldArchetype;
-import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.repository.ArtifactRepositoryPolicy;
-import org.apache.maven.artifact.repository.MavenArtifactRepository;
 import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
+import org.eclipse.aether.RepositorySystem;
+import org.eclipse.aether.RepositorySystemSession;
+import org.eclipse.aether.repository.RemoteRepository;
+import org.eclipse.aether.repository.RepositoryPolicy;
 
 @Named
 @Singleton
@@ -60,17 +62,22 @@ public class DefaultArchetypeGenerator extends AbstractLogEnabled implements Arc
     @Inject
     private OldArchetype oldArchetype;
 
-    private File getArchetypeFile(ArchetypeGenerationRequest request, ArtifactRepository localRepository)
-            throws ArchetypeException {
+    @Inject
+    private RepositorySystem repositorySystem;
+
+    private File getArchetypeFile(ArchetypeGenerationRequest request) throws ArchetypeException {
         if (!isArchetypeDefined(request)) {
             throw new ArchetypeNotDefined("The archetype is not defined");
         }
 
-        List<ArtifactRepository> repos = new ArrayList<>();
+        List<RemoteRepository> repos = new ArrayList<>(request.getRemoteArtifactRepositories());
 
-        ArtifactRepository remoteRepo = null;
+        RemoteRepository remoteRepo = null;
         if (request != null && request.getArchetypeRepository() != null) {
-            remoteRepo = createRepository(request.getArchetypeRepository(), request.getArchetypeArtifactId() + "-repo");
+            RepositorySystemSession repositorySession =
+                    request.getProjectBuildingRequest().getRepositorySession();
+            remoteRepo = createRepository(
+                    repositorySession, request.getArchetypeRepository(), request.getArchetypeArtifactId() + "-repo");
 
             repos.add(remoteRepo);
         }
@@ -79,10 +86,8 @@ public class DefaultArchetypeGenerator extends AbstractLogEnabled implements Arc
                 request.getArchetypeGroupId(),
                 request.getArchetypeArtifactId(),
                 request.getArchetypeVersion(),
-                remoteRepo,
-                localRepository,
                 repos,
-                request.getProjectBuildingRequest())) {
+                request.getProjectBuildingRequest().getRepositorySession())) {
             throw new UnknownArchetype("The desired archetype does not exist (" + request.getArchetypeGroupId() + ":"
                     + request.getArchetypeArtifactId() + ":" + request.getArchetypeVersion() + ")");
         }
@@ -91,10 +96,8 @@ public class DefaultArchetypeGenerator extends AbstractLogEnabled implements Arc
                 request.getArchetypeGroupId(),
                 request.getArchetypeArtifactId(),
                 request.getArchetypeVersion(),
-                remoteRepo,
-                localRepository,
                 repos,
-                request.getProjectBuildingRequest());
+                request.getProjectBuildingRequest().getRepositorySession());
         return archetypeFile;
     }
 
@@ -143,7 +146,7 @@ public class DefaultArchetypeGenerator extends AbstractLogEnabled implements Arc
     @Override
     public void generateArchetype(ArchetypeGenerationRequest request, ArchetypeGenerationResult result) {
         try {
-            File archetypeFile = getArchetypeFile(request, request.getLocalRepository());
+            File archetypeFile = getArchetypeFile(request);
 
             generateArchetype(request, archetypeFile, result);
         } catch (ArchetypeException ex) {
@@ -151,24 +154,24 @@ public class DefaultArchetypeGenerator extends AbstractLogEnabled implements Arc
         }
     }
 
-    private ArtifactRepository createRepository(String url, String repositoryId) {
+    private RemoteRepository createRepository(
+            RepositorySystemSession repositorySession, String url, String repositoryId) {
 
         // snapshots vs releases
         // offline = to turning the update policy off
 
         // TODO: we'll need to allow finer grained creation of repositories but this will do for now
 
-        String updatePolicyFlag = ArtifactRepositoryPolicy.UPDATE_POLICY_ALWAYS;
+        RepositoryPolicy repositoryPolicy = new RepositoryPolicy(
+                true, RepositoryPolicy.UPDATE_POLICY_ALWAYS, RepositoryPolicy.CHECKSUM_POLICY_WARN);
 
-        String checksumPolicyFlag = ArtifactRepositoryPolicy.CHECKSUM_POLICY_WARN;
+        RemoteRepository remoteRepository = new RemoteRepository.Builder(repositoryId, "default", url)
+                .setSnapshotPolicy(repositoryPolicy)
+                .setReleasePolicy(repositoryPolicy)
+                .build();
 
-        ArtifactRepositoryPolicy snapshotsPolicy =
-                new ArtifactRepositoryPolicy(true, updatePolicyFlag, checksumPolicyFlag);
-
-        ArtifactRepositoryPolicy releasesPolicy =
-                new ArtifactRepositoryPolicy(true, updatePolicyFlag, checksumPolicyFlag);
-
-        return new MavenArtifactRepository(
-                repositoryId, url, defaultArtifactRepositoryLayout, snapshotsPolicy, releasesPolicy);
+        return repositorySystem
+                .newResolutionRepositories(repositorySession, Collections.singletonList(remoteRepository))
+                .get(0);
     }
 }

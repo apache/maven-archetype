@@ -86,8 +86,8 @@ public class InternalCatalogArchetypesVerificationTest extends PlexusTestCase {
                     .setArtifactId("archetype" + count)
                     .setVersion("1.0-SNAPSHOT")
                     .setPackage("com.acme")
-                    .setOutputDirectory(outputDirectory.getPath())
-                    .setLocalRepository(localRepository);
+                    .setOutputDirectory(outputDirectory.getPath());
+            //                    .setLocalRepository(localRepository);
 
             ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
             DefaultRepositorySystemSession repositorySession = new DefaultRepositorySystemSession();

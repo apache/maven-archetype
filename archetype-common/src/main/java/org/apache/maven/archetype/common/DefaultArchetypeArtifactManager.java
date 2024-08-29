@@ -45,12 +45,12 @@ import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.archetype.metadata.ArchetypeDescriptor;
 import org.apache.maven.archetype.metadata.io.xpp3.ArchetypeDescriptorXpp3Reader;
 import org.apache.maven.archetype.old.descriptor.ArchetypeDescriptorBuilder;
-import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.model.Model;
-import org.apache.maven.project.ProjectBuildingRequest;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+import org.eclipse.aether.RepositorySystemSession;
+import org.eclipse.aether.repository.RemoteRepository;
 
 @Named
 @Singleton
@@ -68,30 +68,19 @@ public class DefaultArchetypeArtifactManager extends AbstractLogEnabled implemen
             final String groupId,
             final String artifactId,
             final String version,
-            ArtifactRepository archetypeRepository,
-            final ArtifactRepository localRepository,
-            final List<ArtifactRepository> repositories,
-            ProjectBuildingRequest buildingRequest)
+            final List<RemoteRepository> repositories,
+            RepositorySystemSession repositorySystemSession)
             throws UnknownArchetype {
         try {
             File archetype = getArchetype(groupId, artifactId, version);
 
             if (archetype == null) {
-                archetype = downloader.download(
-                        groupId,
-                        artifactId,
-                        version,
-                        archetypeRepository,
-                        localRepository,
-                        repositories,
-                        buildingRequest);
+                archetype = downloader.download(groupId, artifactId, version, repositories, repositorySystemSession);
 
                 setArchetype(groupId, artifactId, version, archetype);
             }
             return archetype;
-        } catch (DownloadNotFoundException ex) {
-            throw new UnknownArchetype(ex);
-        } catch (DownloadException ex) {
+        } catch (DownloadNotFoundException | DownloadException ex) {
             throw new UnknownArchetype(ex);
         }
     }
@@ -160,26 +149,6 @@ public class DefaultArchetypeArtifactManager extends AbstractLogEnabled implemen
     }
 
     @Override
-    public boolean isFileSetArchetype(
-            String groupId,
-            String artifactId,
-            String version,
-            ArtifactRepository archetypeRepository,
-            ArtifactRepository localRepository,
-            List<ArtifactRepository> repositories,
-            ProjectBuildingRequest buildingRequest) {
-        try {
-            File archetypeFile = getArchetypeFile(
-                    groupId, artifactId, version, archetypeRepository, localRepository, repositories, buildingRequest);
-
-            return isFileSetArchetype(archetypeFile);
-        } catch (UnknownArchetype e) {
-            getLogger().debug(e.toString());
-            return false;
-        }
-    }
-
-    @Override
     public boolean isOldArchetype(File archetypeFile) {
         getLogger().debug("checking old archetype status on " + archetypeFile);
 
@@ -192,34 +161,12 @@ public class DefaultArchetypeArtifactManager extends AbstractLogEnabled implemen
     }
 
     @Override
-    public boolean isOldArchetype(
-            String groupId,
-            String artifactId,
-            String version,
-            ArtifactRepository archetypeRepository,
-            ArtifactRepository localRepository,
-            List<ArtifactRepository> repositories,
-            ProjectBuildingRequest buildingRequest) {
-        try {
-            File archetypeFile = getArchetypeFile(
-                    groupId, artifactId, version, archetypeRepository, localRepository, repositories, buildingRequest);
-
-            return isOldArchetype(archetypeFile);
-        } catch (UnknownArchetype e) {
-            getLogger().debug(e.toString());
-            return false;
-        }
-    }
-
-    @Override
     public boolean exists(
             String archetypeGroupId,
             String archetypeArtifactId,
             String archetypeVersion,
-            ArtifactRepository archetypeRepository,
-            ArtifactRepository localRepository,
-            List<ArtifactRepository> remoteRepositories,
-            ProjectBuildingRequest buildingRequest) {
+            List<RemoteRepository> remoteRepositories,
+            RepositorySystemSession repositorySystemSession) {
         try {
             File archetype = getArchetype(archetypeGroupId, archetypeArtifactId, archetypeVersion);
             if (archetype == null) {
@@ -227,22 +174,13 @@ public class DefaultArchetypeArtifactManager extends AbstractLogEnabled implemen
                         archetypeGroupId,
                         archetypeArtifactId,
                         archetypeVersion,
-                        archetypeRepository,
-                        localRepository,
                         remoteRepositories,
-                        buildingRequest);
+                        repositorySystemSession);
                 setArchetype(archetypeGroupId, archetypeArtifactId, archetypeVersion, archetype);
             }
 
             return archetype.exists();
-        } catch (DownloadException e) {
-            getLogger()
-                    .debug(
-                            "Archetype " + archetypeGroupId + ":" + archetypeArtifactId + ":" + archetypeVersion
-                                    + " doesn't exist",
-                            e);
-            return false;
-        } catch (DownloadNotFoundException e) {
+        } catch (DownloadException | DownloadNotFoundException e) {
             getLogger()
                     .debug(
                             "Archetype " + archetypeGroupId + ":" + archetypeArtifactId + ":" + archetypeVersion
@@ -269,22 +207,6 @@ public class DefaultArchetypeArtifactManager extends AbstractLogEnabled implemen
         } catch (XmlPullParserException | IOException e) {
             throw new UnknownArchetype(e);
         }
-    }
-
-    @Override
-    public org.apache.maven.archetype.metadata.ArchetypeDescriptor getFileSetArchetypeDescriptor(
-            String groupId,
-            String artifactId,
-            String version,
-            ArtifactRepository archetypeRepository,
-            ArtifactRepository localRepository,
-            List<ArtifactRepository> repositories,
-            ProjectBuildingRequest buildingRequest)
-            throws UnknownArchetype {
-        File archetypeFile = getArchetypeFile(
-                groupId, artifactId, version, archetypeRepository, localRepository, repositories, buildingRequest);
-
-        return getFileSetArchetypeDescriptor(archetypeFile);
     }
 
     @Override
@@ -321,22 +243,6 @@ public class DefaultArchetypeArtifactManager extends AbstractLogEnabled implemen
         } catch (XmlPullParserException | IOException e) {
             throw new UnknownArchetype(e);
         }
-    }
-
-    @Override
-    public org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor getOldArchetypeDescriptor(
-            String groupId,
-            String artifactId,
-            String version,
-            ArtifactRepository archetypeRepository,
-            ArtifactRepository localRepository,
-            List<ArtifactRepository> repositories,
-            ProjectBuildingRequest buildingRequest)
-            throws UnknownArchetype {
-        File archetypeFile = getArchetypeFile(
-                groupId, artifactId, version, archetypeRepository, localRepository, repositories, buildingRequest);
-
-        return getOldArchetypeDescriptor(archetypeFile);
     }
 
     private File getArchetype(String archetypeGroupId, String archetypeArtifactId, String archetypeVersion) {

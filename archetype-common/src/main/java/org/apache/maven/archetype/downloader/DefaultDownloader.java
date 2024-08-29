@@ -23,15 +23,15 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.project.ProjectBuildingRequest;
-import org.apache.maven.shared.transfer.artifact.DefaultArtifactCoordinate;
-import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver;
-import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolverException;
+import org.eclipse.aether.RepositorySystem;
+import org.eclipse.aether.RepositorySystemSession;
+import org.eclipse.aether.artifact.DefaultArtifact;
+import org.eclipse.aether.repository.RemoteRepository;
+import org.eclipse.aether.resolution.ArtifactRequest;
+import org.eclipse.aether.resolution.ArtifactResolutionException;
+import org.eclipse.aether.resolution.ArtifactResult;
 
 /**
  * @author Jason van Zyl
@@ -39,83 +39,27 @@ import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolverExcepti
 @Named
 @Singleton
 public class DefaultDownloader implements Downloader {
+
     @Inject
-    private ArtifactResolver artifactResolver;
+    private RepositorySystem repositorySystem;
 
     @Override
     public File download(
             String groupId,
             String artifactId,
             String version,
-            ArtifactRepository archetypeRepository,
-            ArtifactRepository localRepository,
-            List<ArtifactRepository> remoteRepositories,
-            ProjectBuildingRequest buildingRequest)
+            List<RemoteRepository> remoteRepositories,
+            RepositorySystemSession repositorySystemSession)
             throws DownloadException, DownloadNotFoundException {
-        DefaultArtifactCoordinate jarCoordinate = new DefaultArtifactCoordinate();
-        jarCoordinate.setGroupId(groupId);
-        jarCoordinate.setArtifactId(artifactId);
-        jarCoordinate.setVersion(version);
 
-        DefaultArtifactCoordinate pomCoordinate = new DefaultArtifactCoordinate();
-        pomCoordinate.setGroupId(groupId);
-        pomCoordinate.setArtifactId(artifactId);
-        pomCoordinate.setVersion(version);
-        pomCoordinate.setExtension("pom");
+        DefaultArtifact artifact = new DefaultArtifact(groupId, artifactId, "", "jar", version);
 
-        List<ArtifactRepository> repositories = new ArrayList<>(remoteRepositories);
-        if (repositories.isEmpty() && archetypeRepository != null) {
-            repositories.add(archetypeRepository);
-        } else if (repositories.isEmpty() && localRepository != null) {
-            repositories.add(localRepository);
-        }
-
-        ArtifactRepository localRepo = localRepository;
-
-        buildingRequest.setLocalRepository(localRepo);
-        buildingRequest.setRemoteRepositories(repositories);
-
-        Artifact artifact;
+        ArtifactRequest request = new ArtifactRequest(artifact, remoteRepositories, "archetype");
         try {
-            artifact = artifactResolver
-                    .resolveArtifact(buildingRequest, jarCoordinate)
-                    .getArtifact();
-        } catch (ArtifactResolverException e) {
-            throw new DownloadException("Error downloading " + jarCoordinate + ".", e);
-        }
-
-        // still required???
-        try {
-            artifactResolver.resolveArtifact(buildingRequest, pomCoordinate);
-        } catch (ArtifactResolverException e) {
-            throw new DownloadException("Error downloading POM for " + artifact.getId() + ".", e);
-        }
-
-        return artifact.getFile();
-    }
-
-    @Override
-    public File downloadOld(
-            String groupId,
-            String artifactId,
-            String version,
-            ArtifactRepository archetypeRepository,
-            ArtifactRepository localRepository,
-            List<ArtifactRepository> remoteRepositories,
-            ProjectBuildingRequest buildingRequest)
-            throws DownloadException, DownloadNotFoundException {
-        DefaultArtifactCoordinate jarCoordinate = new DefaultArtifactCoordinate();
-        jarCoordinate.setGroupId(groupId);
-        jarCoordinate.setArtifactId(artifactId);
-        jarCoordinate.setVersion(version);
-
-        try {
-            return artifactResolver
-                    .resolveArtifact(buildingRequest, jarCoordinate)
-                    .getArtifact()
-                    .getFile();
-        } catch (ArtifactResolverException e) {
-            throw new DownloadException("Error downloading " + jarCoordinate + ".", e);
+            ArtifactResult result = repositorySystem.resolveArtifact(repositorySystemSession, request);
+            return result.getArtifact().getFile();
+        } catch (ArtifactResolutionException e) {
+            throw new DownloadException("Could not resolve artifact " + artifactId, e);
         }
     }
 }

@@ -50,7 +50,6 @@ import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor;
 import org.apache.maven.archetype.old.descriptor.ArchetypeDescriptorBuilder;
 import org.apache.maven.archetype.old.descriptor.TemplateDescriptor;
-import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Parent;
@@ -103,7 +102,7 @@ public class DefaultOldArchetype extends AbstractLogEnabled implements OldArchet
     // version = latest
 
     @Override
-    public void createArchetype(ArchetypeGenerationRequest request, ArtifactRepository archetypeRepository)
+    public void createArchetype(ArchetypeGenerationRequest request)
             throws UnknownArchetype, ArchetypeDescriptorException, ArchetypeTemplateProcessingException,
                     InvalidPackaging {
         // ----------------------------------------------------------------------
@@ -114,10 +113,8 @@ public class DefaultOldArchetype extends AbstractLogEnabled implements OldArchet
                 request.getArchetypeGroupId(),
                 request.getArchetypeArtifactId(),
                 request.getArchetypeVersion(),
-                archetypeRepository,
-                request.getLocalRepository(),
                 request.getRemoteArtifactRepositories(),
-                request.getProjectBuildingRequest());
+                request.getProjectBuildingRequest().getRepositorySession());
 
         createArchetype(request, archetypeFile);
     }

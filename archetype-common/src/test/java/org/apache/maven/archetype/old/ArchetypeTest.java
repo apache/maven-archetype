@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.maven.RepositoryUtils;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.exception.InvalidPackaging;
 import org.apache.maven.artifact.Artifact;
@@ -113,12 +114,11 @@ public class ArchetypeTest extends PlexusTestCase {
                 .setArchetypeGroupId("org.apache.maven.archetypes")
                 .setArchetypeArtifactId("maven-archetype-quickstart")
                 .setArchetypeVersion("1.0-alpha-1-SNAPSHOT")
-                .setLocalRepository(localRepository)
-                .setRemoteArtifactRepositories(remoteRepositories)
+                .setRemoteArtifactRepositories(RepositoryUtils.toRepos(remoteRepositories))
                 .setOutputDirectory(getTestFile("target").getAbsolutePath());
         // parameters.put( "name", "jason" );
 
-        archetype.createArchetype(request, remoteRepository);
+        archetype.createArchetype(request);
 
         // ----------------------------------------------------------------------
         // Set up the Velocity context

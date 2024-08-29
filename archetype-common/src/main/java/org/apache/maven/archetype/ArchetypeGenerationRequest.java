@@ -18,41 +18,25 @@
  */
 package org.apache.maven.archetype;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
 import org.apache.maven.archetype.catalog.Archetype;
-import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.project.ProjectBuildingRequest;
-import org.apache.maven.settings.Mirror;
-import org.apache.maven.settings.Proxy;
-import org.apache.maven.settings.Server;
-import org.apache.maven.wagon.events.TransferListener;
+import org.eclipse.aether.repository.RemoteRepository;
 
 /** @author Jason van Zyl */
 public class ArchetypeGenerationRequest {
     private ProjectBuildingRequest projectBuildingRequest;
 
-    private boolean offline;
-
     private boolean interactiveMode;
 
     private boolean askForDefaultPropertyValues;
 
-    private TransferListener transferListener;
-
     private String outputDirectory;
 
-    private ArtifactRepository localRepository;
-
-    private List<ArtifactRepository> remoteArtifactRepositories;
-
-    private Proxy activeProxy;
-
-    private List<Server> servers = new ArrayList<>();
-
-    private List<Mirror> mirrors = new ArrayList<>();
+    private List<RemoteRepository> remoteArtifactRepositories = Collections.emptyList();
 
     // Archetype definition
     private String archetypeName;
@@ -235,16 +219,6 @@ public class ArchetypeGenerationRequest {
         return this;
     }
 
-    public ArtifactRepository getLocalRepository() {
-        return localRepository;
-    }
-
-    public ArchetypeGenerationRequest setLocalRepository(ArtifactRepository localRepository) {
-        this.localRepository = localRepository;
-
-        return this;
-    }
-
     public String getOutputDirectory() {
         return outputDirectory;
     }
@@ -275,71 +249,11 @@ public class ArchetypeGenerationRequest {
         return this;
     }
 
-    public boolean isOffline() {
-        return offline;
-    }
-
-    public ArchetypeGenerationRequest setOffline(boolean offline) {
-        this.offline = offline;
-
-        return this;
-    }
-
-    public TransferListener getTransferListener() {
-        return transferListener;
-    }
-
-    public ArchetypeGenerationRequest setTransferListener(TransferListener transferListener) {
-        this.transferListener = transferListener;
-
-        return this;
-    }
-
-    public Proxy getActiveProxy() {
-        return activeProxy;
-    }
-
-    public ArchetypeGenerationRequest setActiveProxy(Proxy activeProxy) {
-        this.activeProxy = activeProxy;
-
-        return this;
-    }
-
-    public ArchetypeGenerationRequest addMirror(Mirror mirror) {
-        mirrors.add(mirror);
-
-        return this;
-    }
-
-    public List<Mirror> getMirrors() {
-        return mirrors;
-    }
-
-    /**
-     * @deprecated Use {@link #addServer(Server)} instead
-     */
-    @Deprecated
-    public ArchetypeGenerationRequest addMirror(Server server) {
-        return addServer(server);
-    }
-
-    public ArchetypeGenerationRequest addServer(Server server) {
-        servers.add(server);
-
-        return this;
-    }
-
-    public List<Server> getServers() {
-        return servers;
-    }
-
-    public List<ArtifactRepository> getRemoteArtifactRepositories() {
+    public List<RemoteRepository> getRemoteArtifactRepositories() {
         return remoteArtifactRepositories;
     }
 
-    @SuppressWarnings("checkstyle:linelength")
-    public ArchetypeGenerationRequest setRemoteArtifactRepositories(
-            List<ArtifactRepository> remoteArtifactRepositories) {
+    public ArchetypeGenerationRequest setRemoteArtifactRepositories(List<RemoteRepository> remoteArtifactRepositories) {
         this.remoteArtifactRepositories = remoteArtifactRepositories;
 
         return this;

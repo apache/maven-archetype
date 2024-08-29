@@ -21,8 +21,8 @@ package org.apache.maven.archetype.downloader;
 import java.io.File;
 import java.util.List;
 
-import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.project.ProjectBuildingRequest;
+import org.eclipse.aether.RepositorySystemSession;
+import org.eclipse.aether.repository.RemoteRepository;
 
 /**
  * @author Jason van Zyl
@@ -32,19 +32,7 @@ public interface Downloader {
             String groupId,
             String artifactId,
             String version,
-            ArtifactRepository archetypeRepository,
-            ArtifactRepository localRepository,
-            List<ArtifactRepository> remoteRepositories,
-            ProjectBuildingRequest buildingRequest)
-            throws DownloadException, DownloadNotFoundException;
-
-    File downloadOld(
-            String groupId,
-            String artifactId,
-            String version,
-            ArtifactRepository archetypeRepository,
-            ArtifactRepository localRepository,
-            List<ArtifactRepository> remoteRepositories,
-            ProjectBuildingRequest buildingRequest)
+            List<RemoteRepository> remoteRepositories,
+            RepositorySystemSession repositorySystemSession)
             throws DownloadException, DownloadNotFoundException;
 }

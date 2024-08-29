@@ -19,22 +19,22 @@
 package org.apache.maven.archetype.ui.generation;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
-import java.util.regex.Pattern;
 
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
 import org.apache.maven.archetype.metadata.ArchetypeDescriptor;
 import org.apache.maven.archetype.metadata.RequiredProperty;
-import org.apache.maven.archetype.ui.ArchetypeConfiguration;
-import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.project.ProjectBuildingRequest;
+import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.codehaus.plexus.ContainerConfiguration;
 import org.codehaus.plexus.PlexusTestCase;
 import org.easymock.EasyMock;
 import org.easymock.IAnswer;
+
+import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.anyString;
+import static org.easymock.EasyMock.eq;
+import static org.easymock.EasyMock.isNull;
 
 /**
  * Tests the ability to use variables in default fields in batch mode.
@@ -54,8 +54,6 @@ public class DefaultArchetypeGenerationConfigurator2Test extends PlexusTestCase 
         super.setUp();
 
         configurator = (DefaultArchetypeGenerationConfigurator) lookup(ArchetypeGenerationConfigurator.ROLE);
-
-        ProjectBuildingRequest buildingRequest = null;
 
         descriptor = new ArchetypeDescriptor();
         RequiredProperty groupId = new RequiredProperty();
@@ -82,12 +80,20 @@ public class DefaultArchetypeGenerationConfigurator2Test extends PlexusTestCase 
         ArchetypeArtifactManager manager = EasyMock.createMock(ArchetypeArtifactManager.class);
 
         File archetype = new File("archetype.jar");
-        List<ArtifactRepository> x = new ArrayList<>();
+
         EasyMock.expect(manager.exists(
-                        "archetypeGroupId", "archetypeArtifactId", "archetypeVersion", null, null, x, buildingRequest))
+                        eq("archetypeGroupId"),
+                        eq("archetypeArtifactId"),
+                        eq("archetypeVersion"),
+                        anyObject(),
+                        anyObject()))
                 .andReturn(true);
         EasyMock.expect(manager.getArchetypeFile(
-                        "archetypeGroupId", "archetypeArtifactId", "archetypeVersion", null, null, x, buildingRequest))
+                        eq("archetypeGroupId"),
+                        eq("archetypeArtifactId"),
+                        eq("archetypeVersion"),
+                        anyObject(),
+                        anyObject()))
                 .andReturn(archetype);
         EasyMock.expect(manager.isFileSetArchetype(archetype)).andReturn(true);
         EasyMock.expect(manager.isOldArchetype(archetype)).andReturn(false);
@@ -105,6 +111,7 @@ public class DefaultArchetypeGenerationConfigurator2Test extends PlexusTestCase 
         request.setArchetypeGroupId("archetypeGroupId");
         request.setArchetypeArtifactId("archetypeArtifactId");
         request.setArchetypeVersion("archetypeVersion");
+        request.setProjectBuildingRequest(new DefaultProjectBuildingRequest());
         Properties properties = new Properties();
         properties.setProperty("groupName", "myGroupName");
         properties.setProperty("serviceName", "myServiceName");
@@ -122,18 +129,16 @@ public class DefaultArchetypeGenerationConfigurator2Test extends PlexusTestCase 
         request.setArchetypeGroupId("archetypeGroupId");
         request.setArchetypeArtifactId("archetypeArtifactId");
         request.setArchetypeVersion("archetypeVersion");
+        request.setProjectBuildingRequest(new DefaultProjectBuildingRequest());
         Properties properties = new Properties();
 
-        EasyMock.expect(queryer.getPropertyValue(
-                        EasyMock.eq("groupName"), EasyMock.anyString(), EasyMock.<Pattern>isNull()))
+        EasyMock.expect(queryer.getPropertyValue(eq("groupName"), anyString(), isNull()))
                 .andReturn("myGroupName");
 
-        EasyMock.expect(queryer.getPropertyValue(
-                        EasyMock.eq("serviceName"), EasyMock.anyString(), EasyMock.<Pattern>isNull()))
+        EasyMock.expect(queryer.getPropertyValue(eq("serviceName"), anyString(), isNull()))
                 .andReturn("myServiceName");
 
-        EasyMock.expect(queryer.getPropertyValue(
-                        EasyMock.anyString(), EasyMock.anyString(), EasyMock.<Pattern>anyObject()))
+        EasyMock.expect(queryer.getPropertyValue(anyString(), anyString(), anyObject()))
                 .andAnswer(new IAnswer<String>() {
 
                     @Override
@@ -143,8 +148,7 @@ public class DefaultArchetypeGenerationConfigurator2Test extends PlexusTestCase 
                 })
                 .anyTimes();
 
-        EasyMock.expect(queryer.confirmConfiguration(EasyMock.<ArchetypeConfiguration>anyObject()))
-                .andReturn(Boolean.TRUE);
+        EasyMock.expect(queryer.confirmConfiguration(anyObject())).andReturn(Boolean.TRUE);
 
         EasyMock.replay(queryer);
         configurator.configureArchetype(request, Boolean.TRUE, properties);
@@ -165,18 +169,16 @@ public class DefaultArchetypeGenerationConfigurator2Test extends PlexusTestCase 
         request.setArchetypeGroupId("archetypeGroupId");
         request.setArchetypeArtifactId("archetypeArtifactId");
         request.setArchetypeVersion("archetypeVersion");
+        request.setProjectBuildingRequest(new DefaultProjectBuildingRequest());
         Properties properties = new Properties();
 
-        EasyMock.expect(queryer.getPropertyValue(
-                        EasyMock.eq("groupName"), EasyMock.anyString(), EasyMock.<Pattern>isNull()))
+        EasyMock.expect(queryer.getPropertyValue(eq("groupName"), anyString(), isNull()))
                 .andReturn("myGroupName");
 
-        EasyMock.expect(queryer.getPropertyValue(
-                        EasyMock.eq("serviceName"), EasyMock.anyString(), EasyMock.<Pattern>isNull()))
+        EasyMock.expect(queryer.getPropertyValue(eq("serviceName"), anyString(), isNull()))
                 .andReturn("myServiceName");
 
-        EasyMock.expect(queryer.getPropertyValue(
-                        EasyMock.anyString(), EasyMock.anyString(), EasyMock.<Pattern>anyObject()))
+        EasyMock.expect(queryer.getPropertyValue(anyString(), anyString(), anyObject()))
                 .andAnswer(new IAnswer<String>() {
 
                     @Override
@@ -186,8 +188,7 @@ public class DefaultArchetypeGenerationConfigurator2Test extends PlexusTestCase 
                 })
                 .anyTimes();
 
-        EasyMock.expect(queryer.confirmConfiguration(EasyMock.<ArchetypeConfiguration>anyObject()))
-                .andReturn(Boolean.TRUE);
+        EasyMock.expect(queryer.confirmConfiguration(anyObject())).andReturn(Boolean.TRUE);
 
         EasyMock.replay(queryer);
         configurator.configureArchetype(request, Boolean.TRUE, properties);
@@ -208,18 +209,16 @@ public class DefaultArchetypeGenerationConfigurator2Test extends PlexusTestCase 
         request.setArchetypeGroupId("archetypeGroupId");
         request.setArchetypeArtifactId("archetypeArtifactId");
         request.setArchetypeVersion("archetypeVersion");
+        request.setProjectBuildingRequest(new DefaultProjectBuildingRequest());
         Properties properties = new Properties();
 
-        EasyMock.expect(queryer.getPropertyValue(
-                        EasyMock.eq("groupName"), EasyMock.anyString(), EasyMock.<Pattern>isNull()))
+        EasyMock.expect(queryer.getPropertyValue(eq("groupName"), anyString(), isNull()))
                 .andReturn("myGroupName");
 
-        EasyMock.expect(queryer.getPropertyValue(
-                        EasyMock.eq("artifactId"), EasyMock.anyString(), EasyMock.<Pattern>isNull()))
+        EasyMock.expect(queryer.getPropertyValue(eq("artifactId"), anyString(), isNull()))
                 .andReturn("my-service-name");
 
-        EasyMock.expect(queryer.getPropertyValue(
-                        EasyMock.anyString(), EasyMock.anyString(), EasyMock.<Pattern>anyObject()))
+        EasyMock.expect(queryer.getPropertyValue(anyString(), anyString(), anyObject()))
                 .andAnswer(new IAnswer<String>() {
 
                     @Override
@@ -229,8 +228,7 @@ public class DefaultArchetypeGenerationConfigurator2Test extends PlexusTestCase 
                 })
                 .anyTimes();
 
-        EasyMock.expect(queryer.confirmConfiguration(EasyMock.<ArchetypeConfiguration>anyObject()))
-                .andReturn(Boolean.TRUE);
+        EasyMock.expect(queryer.confirmConfiguration(anyObject())).andReturn(Boolean.TRUE);
 
         EasyMock.replay(queryer);
         configurator.configureArchetype(request, Boolean.TRUE, properties);

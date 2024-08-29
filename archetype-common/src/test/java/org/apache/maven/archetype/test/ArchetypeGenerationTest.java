@@ -96,7 +96,7 @@ public class ArchetypeGenerationTest extends PlexusTestCase {
 
         ArchetypeGenerationRequest agr = new ArchetypeGenerationRequest(selection)
                 .setOutputDirectory(outputDirectory.getAbsolutePath())
-                .setLocalRepository(localRepository)
+                //                .setLocalRepository(localRepository)
                 .setGroupId(groupId)
                 .setArtifactId(artifactId)
                 .setVersion(version)
