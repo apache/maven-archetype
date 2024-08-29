@@ -23,7 +23,6 @@ import java.io.File;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.exception.InvalidPackaging;
 import org.apache.maven.archetype.exception.UnknownArchetype;
-import org.apache.maven.artifact.repository.ArtifactRepository;
 
 /**
  * Create a Maven project from an old archetype.
@@ -46,7 +45,7 @@ public interface OldArchetype {
     /**
      * Download an archetype then create a project from it.
      */
-    void createArchetype(ArchetypeGenerationRequest request, ArtifactRepository archetypeRepository)
+    void createArchetype(ArchetypeGenerationRequest request)
             throws UnknownArchetype, ArchetypeNotFoundException, ArchetypeDescriptorException,
                     ArchetypeTemplateProcessingException, InvalidPackaging;
 

@@ -95,8 +95,7 @@ public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
         }
     }
 
-    private ArchetypeGenerationResult generateProjectFromArchetypeWithFailure(ArchetypeGenerationRequest request)
-            throws Exception {
+    private ArchetypeGenerationResult generateProjectFromArchetypeWithFailure(ArchetypeGenerationRequest request) {
         ArchetypeGenerationResult result = new ArchetypeGenerationResult();
 
         generator.generateArchetype(request, result);
@@ -512,7 +511,7 @@ public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
         localRepository =
                 new DefaultArtifactRepository("local", repositories + "/local", new DefaultRepositoryLayout());
 
-        remoteRepository = repositories + "/central";
+        remoteRepository = repositories + "central";
 
         generator = (ArchetypeGenerator) lookup(ArchetypeGenerator.ROLE);
         assertNotNull(generator);
@@ -528,7 +527,6 @@ public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
         projectDirectory = new File(outputDirectory, "file-value");
 
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
-        request.setLocalRepository(localRepository);
         request.setArchetypeRepository(remoteRepository);
         request.setOutputDirectory(outputDirectory);
 

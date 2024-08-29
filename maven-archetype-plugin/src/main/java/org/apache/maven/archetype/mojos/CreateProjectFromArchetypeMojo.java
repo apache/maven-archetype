@@ -20,7 +20,6 @@ package org.apache.maven.archetype.mojos;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
@@ -29,7 +28,6 @@ import org.apache.maven.archetype.ArchetypeGenerationResult;
 import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.ui.generation.ArchetypeGenerationConfigurator;
 import org.apache.maven.archetype.ui.generation.ArchetypeSelector;
-import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.ContextEnabled;
@@ -40,6 +38,7 @@ import org.apache.maven.plugins.annotations.Execute;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.invoker.DefaultInvocationRequest;
 import org.apache.maven.shared.invoker.InvocationRequest;
 import org.apache.maven.shared.invoker.InvocationResult;
@@ -131,18 +130,6 @@ public class CreateProjectFromArchetypeMojo extends AbstractMojo implements Cont
     private Boolean askForDefaultPropertyValues;
 
     /**
-     * Local Maven repository.
-     */
-    @Parameter(defaultValue = "${localRepository}", readonly = true, required = true)
-    private ArtifactRepository localRepository;
-
-    /**
-     * List of remote repositories used by the resolver.
-     */
-    @Parameter(defaultValue = "${project.remoteArtifactRepositories}", readonly = true, required = true)
-    private List<ArtifactRepository> remoteArtifactRepositories;
-
-    /**
      * User settings used to check the interactiveMode.
      */
     @Parameter(property = "interactiveMode", defaultValue = "${settings.interactiveMode}", required = true)
@@ -151,8 +138,11 @@ public class CreateProjectFromArchetypeMojo extends AbstractMojo implements Cont
     @Parameter(defaultValue = "${basedir}", property = "outputDirectory")
     private File outputDirectory;
 
-    @Parameter(defaultValue = "${session}", readonly = true)
+    @Parameter(defaultValue = "${session}", readonly = true, required = true)
     private MavenSession session;
+
+    @Parameter(defaultValue = "${project}", readonly = true, required = true)
+    private MavenProject project;
 
     /**
      * Goals to immediately run on the project created from the archetype.
@@ -182,8 +172,7 @@ public class CreateProjectFromArchetypeMojo extends AbstractMojo implements Cont
                 .setArchetypeArtifactId(archetypeArtifactId)
                 .setArchetypeVersion(archetypeVersion)
                 .setOutputDirectory(outputDirectory.getAbsolutePath())
-                .setLocalRepository(localRepository)
-                .setRemoteArtifactRepositories(remoteArtifactRepositories)
+                .setRemoteArtifactRepositories(project.getRemoteProjectRepositories())
                 .setFilter(filter)
                 .setAskForDefaultPropertyValues(askForDefaultPropertyValues)
                 .setProjectBuildingRequest(session.getProjectBuildingRequest());

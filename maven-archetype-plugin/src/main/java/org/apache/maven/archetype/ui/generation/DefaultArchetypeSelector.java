@@ -172,7 +172,7 @@ public class DefaultArchetypeSelector extends AbstractLogEnabled implements Arch
                 List<Archetype> archetypesFromRemote =
                         archetypeManager.getRemoteCatalog(buildingRequest).getArchetypes();
 
-                if (archetypesFromRemote.size() > 0) {
+                if (!archetypesFromRemote.isEmpty()) {
                     archetypes.put("remote", archetypesFromRemote);
                 } else {
                     getLogger().warn("No archetype found in remote catalog. Defaulting to internal catalog");
@@ -185,7 +185,7 @@ public class DefaultArchetypeSelector extends AbstractLogEnabled implements Arch
             }
         }
 
-        if (archetypes.size() == 0) {
+        if (archetypes.isEmpty()) {
             getLogger().info("No catalog defined. Using internal catalog");
 
             archetypes.put("internal", archetypeManager.getInternalCatalog().getArchetypes());

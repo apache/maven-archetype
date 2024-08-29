@@ -47,9 +47,6 @@ import org.apache.maven.archetype.old.OldArchetype;
 import org.apache.maven.archetype.ui.ArchetypeConfiguration;
 import org.apache.maven.archetype.ui.ArchetypeDefinition;
 import org.apache.maven.archetype.ui.ArchetypeFactory;
-import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.repository.ArtifactRepositoryPolicy;
-import org.apache.maven.artifact.repository.MavenArtifactRepository;
 import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -65,6 +62,10 @@ import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.velocity.VelocityComponent;
+import org.eclipse.aether.RepositorySystem;
+import org.eclipse.aether.RepositorySystemSession;
+import org.eclipse.aether.repository.RemoteRepository;
+import org.eclipse.aether.repository.RepositoryPolicy;
 
 // TODO: this seems to have more responsibilities than just a configurator
 @Named("default")
@@ -92,6 +93,9 @@ public class DefaultArchetypeGenerationConfigurator extends AbstractLogEnabled
     @Inject
     private ArtifactRepositoryLayout defaultArtifactRepositoryLayout;
 
+    @Inject
+    private RepositorySystem repositorySystem;
+
     public void setArchetypeArtifactManager(ArchetypeArtifactManager archetypeArtifactManager) {
         this.archetypeArtifactManager = archetypeArtifactManager;
     }
@@ -100,27 +104,27 @@ public class DefaultArchetypeGenerationConfigurator extends AbstractLogEnabled
     @SuppressWarnings("checkstyle:MethodLength")
     public void configureArchetype(
             ArchetypeGenerationRequest request, Boolean interactiveMode, Properties executionProperties)
-            throws ArchetypeNotDefined, UnknownArchetype, ArchetypeNotConfigured, IOException, PrompterException,
+            throws ArchetypeNotDefined, UnknownArchetype, ArchetypeNotConfigured, PrompterException,
                     ArchetypeGenerationConfigurationFailure {
-        ArtifactRepository localRepository = request.getLocalRepository();
 
-        ArtifactRepository archetypeRepository = null;
-
-        List<ArtifactRepository> repositories = new ArrayList<>();
+        List<RemoteRepository> repositories = new ArrayList<>();
 
         Properties properties = new Properties(executionProperties);
 
         ArchetypeDefinition ad = new ArchetypeDefinition(request);
 
         if (!ad.isDefined()) {
-            if (!interactiveMode.booleanValue()) {
+            if (!interactiveMode) {
                 throw new ArchetypeNotDefined("No archetype was chosen");
             } else {
                 throw new ArchetypeNotDefined("The archetype is not defined");
             }
         }
         if (request.getArchetypeRepository() != null) {
-            archetypeRepository = createRepository(request.getArchetypeRepository(), ad.getArtifactId() + "-repo");
+            RepositorySystemSession repositorySession =
+                    request.getProjectBuildingRequest().getRepositorySession();
+            RemoteRepository archetypeRepository =
+                    createRepository(repositorySession, request.getArchetypeRepository(), ad.getArtifactId() + "-repo");
             repositories.add(archetypeRepository);
         }
         if (request.getRemoteArtifactRepositories() != null) {
@@ -131,10 +135,8 @@ public class DefaultArchetypeGenerationConfigurator extends AbstractLogEnabled
                 ad.getGroupId(),
                 ad.getArtifactId(),
                 ad.getVersion(),
-                archetypeRepository,
-                localRepository,
                 repositories,
-                request.getProjectBuildingRequest())) {
+                request.getProjectBuildingRequest().getRepositorySession())) {
             throw new UnknownArchetype("The desired archetype does not exist (" + ad.getGroupId() + ":"
                     + ad.getArtifactId() + ":" + ad.getVersion() + ")");
         }
@@ -147,10 +149,8 @@ public class DefaultArchetypeGenerationConfigurator extends AbstractLogEnabled
                 ad.getGroupId(),
                 ad.getArtifactId(),
                 ad.getVersion(),
-                archetypeRepository,
-                localRepository,
                 repositories,
-                request.getProjectBuildingRequest());
+                request.getProjectBuildingRequest().getRepositorySession());
         if (archetypeArtifactManager.isFileSetArchetype(archetypeFile)) {
             org.apache.maven.archetype.metadata.ArchetypeDescriptor archetypeDescriptor =
                     archetypeArtifactManager.getFileSetArchetypeDescriptor(archetypeFile);
@@ -416,24 +416,24 @@ public class DefaultArchetypeGenerationConfigurator extends AbstractLogEnabled
         }
     }
 
-    private ArtifactRepository createRepository(String url, String repositoryId) {
+    private RemoteRepository createRepository(
+            RepositorySystemSession repositorySession, String url, String repositoryId) {
 
         // snapshots vs releases
         // offline = to turning the update policy off
 
         // TODO: we'll need to allow finer grained creation of repositories but this will do for now
 
-        String updatePolicyFlag = ArtifactRepositoryPolicy.UPDATE_POLICY_ALWAYS;
+        RepositoryPolicy repositoryPolicy = new RepositoryPolicy(
+                true, RepositoryPolicy.UPDATE_POLICY_ALWAYS, RepositoryPolicy.CHECKSUM_POLICY_WARN);
 
-        String checksumPolicyFlag = ArtifactRepositoryPolicy.CHECKSUM_POLICY_WARN;
+        RemoteRepository remoteRepository = new RemoteRepository.Builder(repositoryId, "default", url)
+                .setSnapshotPolicy(repositoryPolicy)
+                .setReleasePolicy(repositoryPolicy)
+                .build();
 
-        ArtifactRepositoryPolicy snapshotsPolicy =
-                new ArtifactRepositoryPolicy(true, updatePolicyFlag, checksumPolicyFlag);
-
-        ArtifactRepositoryPolicy releasesPolicy =
-                new ArtifactRepositoryPolicy(true, updatePolicyFlag, checksumPolicyFlag);
-
-        return new MavenArtifactRepository(
-                repositoryId, url, defaultArtifactRepositoryLayout, snapshotsPolicy, releasesPolicy);
+        return repositorySystem
+                .newResolutionRepositories(repositorySession, Collections.singletonList(remoteRepository))
+                .get(0);
     }
 }

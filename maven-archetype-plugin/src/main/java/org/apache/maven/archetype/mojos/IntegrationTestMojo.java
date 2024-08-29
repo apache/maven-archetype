@@ -42,9 +42,11 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
 import org.apache.maven.archetype.common.Constants;
+import org.apache.maven.archetype.downloader.DownloadException;
+import org.apache.maven.archetype.downloader.DownloadNotFoundException;
+import org.apache.maven.archetype.downloader.Downloader;
 import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
 import org.apache.maven.archetype.generator.ArchetypeGenerator;
-import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -52,9 +54,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.maven.settings.Settings;
 import org.apache.maven.settings.io.xpp3.SettingsXpp3Writer;
 import org.apache.maven.shared.invoker.DefaultInvocationRequest;
@@ -64,9 +64,6 @@ import org.apache.maven.shared.invoker.Invoker;
 import org.apache.maven.shared.invoker.MavenInvocationException;
 import org.apache.maven.shared.scriptinterpreter.ScriptException;
 import org.apache.maven.shared.scriptinterpreter.ScriptRunner;
-import org.apache.maven.shared.transfer.artifact.DefaultArtifactCoordinate;
-import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver;
-import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolverException;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.InterpolationFilterReader;
@@ -140,16 +137,10 @@ public class IntegrationTestMojo extends AbstractMojo {
     private ArchetypeGenerator archetypeGenerator;
 
     @Component
-    private Invoker invoker;
+    private Downloader downloader;
 
     @Component
-    private ArtifactResolver artifactResolver;
-
-    @Parameter(defaultValue = "${project.remoteArtifactRepositories}", readonly = true, required = true)
-    protected List<ArtifactRepository> remoteRepositories;
-
-    @Parameter(defaultValue = "${localRepository}", readonly = true, required = true)
-    protected ArtifactRepository localRepository;
+    private Invoker invoker;
 
     /**
      * The archetype project to execute the integration tests on.
@@ -547,7 +538,7 @@ public class IntegrationTestMojo extends AbstractMojo {
         File archetypeFile;
         try {
             archetypeFile = getArchetypeFile(groupId, artifactId, version);
-        } catch (ArtifactResolverException e) {
+        } catch (DownloadNotFoundException | DownloadException e) {
             throw new MojoExecutionException("Could not resolve archetype artifact ", e);
         }
         Properties archetypeProperties = getProperties(archetypePomPropertiesFile);
@@ -557,24 +548,10 @@ public class IntegrationTestMojo extends AbstractMojo {
         return new File(buildFolder, request.getArtifactId());
     }
 
-    private File getArchetypeFile(String groupId, String artifactId, String version) throws ArtifactResolverException {
-        ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest(session.getProjectBuildingRequest());
-        if (localRepository != null) {
-            buildingRequest = buildingRequest.setLocalRepository(localRepository);
-        }
-        if (remoteRepositories != null && !remoteRepositories.isEmpty()) {
-            buildingRequest = buildingRequest.setRemoteRepositories(remoteRepositories);
-        }
-
-        DefaultArtifactCoordinate coordinate = new DefaultArtifactCoordinate();
-        coordinate.setGroupId(groupId);
-        coordinate.setArtifactId(artifactId);
-        coordinate.setVersion(version);
-
-        return artifactResolver
-                .resolveArtifact(buildingRequest, coordinate)
-                .getArtifact()
-                .getFile();
+    private File getArchetypeFile(String groupId, String artifactId, String version)
+            throws DownloadNotFoundException, DownloadException {
+        return downloader.download(
+                groupId, artifactId, version, project.getRemoteProjectRepositories(), session.getRepositorySession());
     }
 
     private Properties getProperties(File goalFile) throws IOException {

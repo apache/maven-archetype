@@ -19,9 +19,6 @@
 package org.apache.maven.archetype.ui.generation;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
@@ -29,16 +26,16 @@ import org.apache.maven.archetype.common.ArchetypeArtifactManager;
 import org.apache.maven.archetype.exception.ArchetypeGenerationConfigurationFailure;
 import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
 import org.apache.maven.archetype.exception.ArchetypeNotDefined;
-import org.apache.maven.archetype.exception.ArchetypeSelectionFailure;
 import org.apache.maven.archetype.exception.UnknownArchetype;
-import org.apache.maven.archetype.exception.UnknownGroup;
 import org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor;
-import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.project.ProjectBuildingRequest;
+import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.codehaus.plexus.ContainerConfiguration;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.easymock.EasyMock;
+
+import static org.easymock.EasyMock.anyObject;
+import static org.easymock.EasyMock.eq;
 
 /**
  * TODO probably testing a little deep, could just test ArchetypeConfiguration
@@ -57,17 +54,22 @@ public class DefaultArchetypeGenerationConfiguratorTest extends PlexusTestCase {
 
         configurator = (DefaultArchetypeGenerationConfigurator) lookup(ArchetypeGenerationConfigurator.ROLE);
 
-        ProjectBuildingRequest buildingRequest = null;
-
         ArchetypeArtifactManager manager = EasyMock.createMock(ArchetypeArtifactManager.class);
 
         File archetype = new File("archetype.jar");
-        List<ArtifactRepository> x = new ArrayList<>();
         EasyMock.expect(manager.exists(
-                        "archetypeGroupId", "archetypeArtifactId", "archetypeVersion", null, null, x, buildingRequest))
+                        eq("archetypeGroupId"),
+                        eq("archetypeArtifactId"),
+                        eq("archetypeVersion"),
+                        anyObject(),
+                        anyObject()))
                 .andReturn(true);
         EasyMock.expect(manager.getArchetypeFile(
-                        "archetypeGroupId", "archetypeArtifactId", "archetypeVersion", null, null, x, buildingRequest))
+                        eq("archetypeGroupId"),
+                        eq("archetypeArtifactId"),
+                        eq("archetypeVersion"),
+                        anyObject(),
+                        anyObject()))
                 .andReturn(archetype);
         EasyMock.expect(manager.isFileSetArchetype(archetype)).andReturn(false);
         EasyMock.expect(manager.isOldArchetype(archetype)).andReturn(true);
@@ -79,12 +81,13 @@ public class DefaultArchetypeGenerationConfiguratorTest extends PlexusTestCase {
     }
 
     public void testOldArchetypeGeneratedFieldsInRequestBatchMode()
-            throws PrompterException, ArchetypeGenerationConfigurationFailure, IOException, ArchetypeNotConfigured,
-                    UnknownArchetype, ArchetypeNotDefined {
+            throws PrompterException, ArchetypeGenerationConfigurationFailure, ArchetypeNotConfigured, UnknownArchetype,
+                    ArchetypeNotDefined {
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
         request.setArchetypeGroupId("archetypeGroupId");
         request.setArchetypeArtifactId("archetypeArtifactId");
         request.setArchetypeVersion("archetypeVersion");
+        request.setProjectBuildingRequest(new DefaultProjectBuildingRequest());
         Properties properties = new Properties();
         properties.setProperty("groupId", "preset-groupId");
         properties.setProperty("artifactId", "preset-artifactId");
@@ -100,12 +103,13 @@ public class DefaultArchetypeGenerationConfiguratorTest extends PlexusTestCase {
     }
 
     public void testOldArchetypeGeneratedFieldsDefaultsBatchMode()
-            throws PrompterException, IOException, UnknownGroup, ArchetypeSelectionFailure, UnknownArchetype,
-                    ArchetypeNotDefined, ArchetypeGenerationConfigurationFailure, ArchetypeNotConfigured {
+            throws PrompterException, UnknownArchetype, ArchetypeNotDefined, ArchetypeGenerationConfigurationFailure,
+                    ArchetypeNotConfigured {
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
         request.setArchetypeGroupId("archetypeGroupId");
         request.setArchetypeArtifactId("archetypeArtifactId");
         request.setArchetypeVersion("archetypeVersion");
+        request.setProjectBuildingRequest(new DefaultProjectBuildingRequest());
         Properties properties = new Properties();
         properties.setProperty("groupId", "preset-groupId");
         properties.setProperty("artifactId", "preset-artifactId");
@@ -120,12 +124,12 @@ public class DefaultArchetypeGenerationConfiguratorTest extends PlexusTestCase {
 
     // TODO: should test this in interactive mode to check for prompting
     public void testOldArchetypeGeneratedFieldsDefaultsMissingGroupId()
-            throws PrompterException, IOException, UnknownGroup, ArchetypeSelectionFailure, UnknownArchetype,
-                    ArchetypeNotDefined, ArchetypeGenerationConfigurationFailure, ArchetypeNotConfigured {
+            throws PrompterException, UnknownArchetype, ArchetypeNotDefined, ArchetypeGenerationConfigurationFailure {
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
         request.setArchetypeGroupId("archetypeGroupId");
         request.setArchetypeArtifactId("archetypeArtifactId");
         request.setArchetypeVersion("archetypeVersion");
+        request.setProjectBuildingRequest(new DefaultProjectBuildingRequest());
         Properties properties = new Properties();
         properties.setProperty("artifactId", "preset-artifactId");
 
