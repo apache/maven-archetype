@@ -25,11 +25,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.util.List;
 
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
-import org.apache.maven.project.ProjectBuildingRequest;
-import org.codehaus.plexus.util.ReaderFactory;
+import org.codehaus.plexus.util.xml.XmlStreamReader;
+import org.eclipse.aether.RepositorySystemSession;
+import org.eclipse.aether.repository.RemoteRepository;
 
 /**
  * @author Jason van Zyl
@@ -39,12 +41,11 @@ import org.codehaus.plexus.util.ReaderFactory;
 public class InternalCatalogArchetypeDataSource extends CatalogArchetypeDataSource {
 
     @Override
-    public ArchetypeCatalog getArchetypeCatalog(ProjectBuildingRequest buildingRequest)
+    public ArchetypeCatalog getArchetypeCatalog(
+            RepositorySystemSession repositorySession, List<RemoteRepository> remoteRepositories)
             throws ArchetypeDataSourceException {
-        try {
-            InputStream in = getClass().getClassLoader().getResourceAsStream(ARCHETYPE_CATALOG_FILENAME);
-            Reader reader = ReaderFactory.newXmlReader(in);
-
+        try (InputStream in = getClass().getClassLoader().getResourceAsStream(ARCHETYPE_CATALOG_FILENAME);
+                Reader reader = new XmlStreamReader(in)) {
             return readCatalog(reader);
         } catch (IOException e) {
             throw new ArchetypeDataSourceException("Error reading archetype catalog.", e);
@@ -52,7 +53,7 @@ public class InternalCatalogArchetypeDataSource extends CatalogArchetypeDataSour
     }
 
     @Override
-    public File updateCatalog(ProjectBuildingRequest buildingRequest, Archetype archetype)
+    public File updateCatalog(RepositorySystemSession repositorySession, Archetype archetype)
             throws ArchetypeDataSourceException {
         throw new ArchetypeDataSourceException("Not supported yet.");
     }

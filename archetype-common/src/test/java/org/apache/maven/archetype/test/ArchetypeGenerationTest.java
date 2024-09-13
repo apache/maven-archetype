@@ -26,12 +26,6 @@ import org.apache.maven.archetype.ArchetypeGenerationResult;
 import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
-import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.repository.ArtifactRepositoryPolicy;
-import org.apache.maven.artifact.repository.MavenArtifactRepository;
-import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
-import org.apache.maven.project.DefaultProjectBuildingRequest;
-import org.apache.maven.project.ProjectBuildingRequest;
 import org.codehaus.plexus.ContainerConfiguration;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
@@ -51,26 +45,13 @@ public class ArchetypeGenerationTest extends PlexusTestCase {
     public void testProjectGenerationFromAnArchetype() throws Exception {
         ArchetypeManager archetype = (ArchetypeManager) lookup(ArchetypeManager.ROLE);
 
-        // In the embedder the localRepository will be retrieved from the embedder itself and users won't
-        // have to go through this muck.
-
-        ArtifactRepository localRepository = createRepository(
-                new File(getBasedir(), "target/test-classes/repositories/local")
-                        .toURI()
-                        .toURL()
-                        .toExternalForm(),
-                "local-repo");
-
-        ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
         DefaultRepositorySystemSession repositorySession = new DefaultRepositorySystemSession();
         RepositorySystem repositorySystem = lookup(RepositorySystem.class);
         LocalRepositoryManager localRepositoryManager = repositorySystem.newLocalRepositoryManager(
                 repositorySession, new LocalRepository("target/test-classes/repositories/central"));
         repositorySession.setLocalRepositoryManager(localRepositoryManager);
 
-        buildingRequest.setRepositorySession(repositorySession);
-
-        ArchetypeCatalog catalog = archetype.getLocalCatalog(buildingRequest);
+        ArchetypeCatalog catalog = archetype.getLocalCatalog(repositorySession);
 
         System.err.println("archetypes => " + catalog.getArchetypes());
         // Here I am just grabbing a OldArchetype but in a UI you would take the OldArchetype objects and present
@@ -96,11 +77,11 @@ public class ArchetypeGenerationTest extends PlexusTestCase {
 
         ArchetypeGenerationRequest agr = new ArchetypeGenerationRequest(selection)
                 .setOutputDirectory(outputDirectory.getAbsolutePath())
-                //                .setLocalRepository(localRepository)
                 .setGroupId(groupId)
                 .setArtifactId(artifactId)
                 .setVersion(version)
-                .setPackage(packageName);
+                .setPackage(packageName)
+                .setRepositorySession(repositorySession);
 
         Properties archetypeRequiredProperties = new Properties();
         archetypeRequiredProperties.setProperty("property-with-default-1", "value-1");
@@ -114,7 +95,6 @@ public class ArchetypeGenerationTest extends PlexusTestCase {
         archetypeRequiredProperties.setProperty("property_underscored_1", "prop1");
         archetypeRequiredProperties.setProperty("property_underscored-2", "prop2");
         agr.setProperties(archetypeRequiredProperties);
-        agr.setProjectBuildingRequest(buildingRequest);
 
         // Then generate away!
 
@@ -124,20 +104,5 @@ public class ArchetypeGenerationTest extends PlexusTestCase {
             result.getCause().printStackTrace(System.err);
             fail(result.getCause().getMessage());
         }
-    }
-
-    private ArtifactRepository createRepository(String url, String repositoryId) {
-        String updatePolicyFlag = ArtifactRepositoryPolicy.UPDATE_POLICY_ALWAYS;
-
-        String checksumPolicyFlag = ArtifactRepositoryPolicy.CHECKSUM_POLICY_WARN;
-
-        ArtifactRepositoryPolicy snapshotsPolicy =
-                new ArtifactRepositoryPolicy(true, updatePolicyFlag, checksumPolicyFlag);
-
-        ArtifactRepositoryPolicy releasesPolicy =
-                new ArtifactRepositoryPolicy(true, updatePolicyFlag, checksumPolicyFlag);
-
-        return new MavenArtifactRepository(
-                repositoryId, url, new DefaultRepositoryLayout(), snapshotsPolicy, releasesPolicy);
     }
 }

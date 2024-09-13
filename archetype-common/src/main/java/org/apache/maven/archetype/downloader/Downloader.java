@@ -34,5 +34,5 @@ public interface Downloader {
             String version,
             List<RemoteRepository> remoteRepositories,
             RepositorySystemSession repositorySystemSession)
-            throws DownloadException, DownloadNotFoundException;
+            throws DownloadException;
 }

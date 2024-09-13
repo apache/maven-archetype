@@ -23,19 +23,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.project.ProjectBuildingRequest;
 
 /** @author Jason van Zyl */
 public class ArchetypeCreationRequest {
-    private ProjectBuildingRequest projectBuildingRequest;
 
-    private ArtifactRepository localRepository;
+    private File localRepositoryBasedir;
 
     private MavenProject project;
-
-    //    private File propertyFile;
 
     private List<String> languages = new ArrayList<>();
 
@@ -65,27 +60,15 @@ public class ArchetypeCreationRequest {
 
     public ArchetypeCreationRequest setPostPhase(String postPhase) {
         this.postPhase = postPhase;
-
         return this;
     }
 
-    public ArtifactRepository getLocalRepository() {
-        return localRepository;
+    public File getLocalRepositoryBasedir() {
+        return localRepositoryBasedir;
     }
 
-    public ArchetypeCreationRequest setLocalRepository(ArtifactRepository localRepository) {
-        this.localRepository = localRepository;
-
-        return this;
-    }
-
-    public ProjectBuildingRequest getProjectBuildingRequest() {
-        return projectBuildingRequest;
-    }
-
-    public ArchetypeCreationRequest setProjectBuildingRequest(ProjectBuildingRequest projectBuildingRequest) {
-        this.projectBuildingRequest = projectBuildingRequest;
-
+    public ArchetypeCreationRequest setLocalRepositoryBasedir(File localRepository) {
+        this.localRepositoryBasedir = localRepository;
         return this;
     }
 
@@ -95,21 +78,8 @@ public class ArchetypeCreationRequest {
 
     public ArchetypeCreationRequest setProject(MavenProject project) {
         this.project = project;
-
         return this;
     }
-
-    //    public File getPropertyFile()
-    //    {
-    //        return propertyFile;
-    //    }
-    //
-    //    public ArchetypeCreationRequest setPropertyFile( File propertyFile )
-    //    {
-    //        this.propertyFile = propertyFile;
-    //
-    //        return this;
-    //    }
 
     public List<String> getLanguages() {
         return languages;
@@ -117,7 +87,6 @@ public class ArchetypeCreationRequest {
 
     public ArchetypeCreationRequest setLanguages(List<String> languages) {
         this.languages = languages;
-
         return this;
     }
 
@@ -127,7 +96,6 @@ public class ArchetypeCreationRequest {
 
     public ArchetypeCreationRequest setFiltereds(List<String> filtereds) {
         this.filtereds = filtereds;
-
         return this;
     }
 
@@ -137,7 +105,6 @@ public class ArchetypeCreationRequest {
 
     public ArchetypeCreationRequest setDefaultEncoding(String defaultEncoding) {
         this.defaultEncoding = defaultEncoding;
-
         return this;
     }
 
@@ -147,7 +114,6 @@ public class ArchetypeCreationRequest {
 
     public ArchetypeCreationRequest setPreserveCData(boolean preserveCData) {
         this.preserveCData = preserveCData;
-
         return this;
     }
 
@@ -157,7 +123,6 @@ public class ArchetypeCreationRequest {
 
     public ArchetypeCreationRequest setKeepParent(boolean keepParent) {
         this.keepParent = keepParent;
-
         return this;
     }
 
@@ -167,7 +132,6 @@ public class ArchetypeCreationRequest {
 
     public ArchetypeCreationRequest setPartialArchetype(boolean partialArchetype) {
         this.partialArchetype = partialArchetype;
-
         return this;
     }
 
@@ -177,7 +141,6 @@ public class ArchetypeCreationRequest {
 
     public ArchetypeCreationRequest setProperties(Properties properties) {
         this.properties = properties;
-
         return this;
     }
 
@@ -187,7 +150,6 @@ public class ArchetypeCreationRequest {
 
     public ArchetypeCreationRequest setPackageName(String packageName) {
         this.packageName = packageName;
-
         return this;
     }
 
@@ -197,7 +159,6 @@ public class ArchetypeCreationRequest {
 
     public ArchetypeCreationRequest setOutputDirectory(File outputDirectory) {
         this.outputDirectory = outputDirectory;
-
         return this;
     }
 
@@ -207,7 +168,6 @@ public class ArchetypeCreationRequest {
 
     public ArchetypeCreationRequest setSettingsFile(File settingsFile) {
         this.settingsFile = settingsFile;
-
         return this;
     }
 }

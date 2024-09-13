@@ -114,7 +114,7 @@ public class DefaultOldArchetype extends AbstractLogEnabled implements OldArchet
                 request.getArchetypeArtifactId(),
                 request.getArchetypeVersion(),
                 request.getRemoteArtifactRepositories(),
-                request.getProjectBuildingRequest().getRepositorySession());
+                request.getRepositorySession());
 
         createArchetype(request, archetypeFile);
     }

@@ -39,7 +39,6 @@ import java.util.zip.ZipFile;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.archetype.downloader.DownloadException;
-import org.apache.maven.archetype.downloader.DownloadNotFoundException;
 import org.apache.maven.archetype.downloader.Downloader;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.archetype.metadata.ArchetypeDescriptor;
@@ -80,7 +79,7 @@ public class DefaultArchetypeArtifactManager extends AbstractLogEnabled implemen
                 setArchetype(groupId, artifactId, version, archetype);
             }
             return archetype;
-        } catch (DownloadNotFoundException | DownloadException ex) {
+        } catch (DownloadException ex) {
             throw new UnknownArchetype(ex);
         }
     }
@@ -180,7 +179,7 @@ public class DefaultArchetypeArtifactManager extends AbstractLogEnabled implemen
             }
 
             return archetype.exists();
-        } catch (DownloadException | DownloadNotFoundException e) {
+        } catch (DownloadException e) {
             getLogger()
                     .debug(
                             "Archetype " + archetypeGroupId + ":" + archetypeArtifactId + ":" + archetypeVersion
@@ -301,8 +300,6 @@ public class DefaultArchetypeArtifactManager extends AbstractLogEnabled implemen
 
             ArchetypeDescriptorBuilder builder = new ArchetypeDescriptorBuilder();
             return builder.build(reader);
-        } catch (IOException | XmlPullParserException ex) {
-            throw ex;
         }
     }
 

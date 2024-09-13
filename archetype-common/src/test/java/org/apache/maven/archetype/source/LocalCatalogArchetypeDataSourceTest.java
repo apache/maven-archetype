@@ -43,8 +43,6 @@ import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Writer;
-import org.apache.maven.project.DefaultProjectBuildingRequest;
-import org.apache.maven.project.ProjectBuildingRequest;
 import org.codehaus.plexus.ContainerConfiguration;
 import org.codehaus.plexus.PlexusTestCase;
 import org.eclipse.aether.DefaultRepositorySystemSession;
@@ -85,14 +83,12 @@ public class LocalCatalogArchetypeDataSourceTest extends PlexusTestCase {
         ArchetypeManager archetype = lookup(ArchetypeManager.class);
         RepositorySystem repositorySystem = lookup(RepositorySystem.class);
 
-        ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
         DefaultRepositorySystemSession repositorySession = new DefaultRepositorySystemSession();
         LocalRepositoryManager localRepositoryManager = repositorySystem.newLocalRepositoryManager(
                 repositorySession, new LocalRepository(getTestFile("target/test-classes/repositories/test-catalog")));
         repositorySession.setLocalRepositoryManager(localRepositoryManager);
-        buildingRequest.setRepositorySession(repositorySession);
 
-        ArchetypeCatalog result = archetype.getLocalCatalog(buildingRequest);
+        ArchetypeCatalog result = archetype.getLocalCatalog(repositorySession);
 
         assertEquals(1, result.getArchetypes().size());
         assertEquals("groupId", result.getArchetypes().get(0).getGroupId());

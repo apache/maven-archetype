@@ -24,22 +24,24 @@ import javax.inject.Singleton;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Reader;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
-import org.apache.maven.project.ProjectBuildingRequest;
-import org.codehaus.plexus.util.ReaderFactory;
+import org.codehaus.plexus.util.xml.XmlStreamReader;
+import org.eclipse.aether.RepositorySystemSession;
+import org.eclipse.aether.repository.RemoteRepository;
 
 @Named("catalog")
 @Singleton
 public class LocalCatalogArchetypeDataSource extends CatalogArchetypeDataSource {
 
     @Override
-    public File updateCatalog(ProjectBuildingRequest buildingRequest, Archetype archetype)
+    public File updateCatalog(RepositorySystemSession repositorySession, Archetype archetype)
             throws ArchetypeDataSourceException {
-        File localRepo =
-                buildingRequest.getRepositorySession().getLocalRepository().getBasedir();
+        File localRepo = repositorySession.getLocalRepository().getBasedir();
 
         File catalogFile = new File(localRepo, ARCHETYPE_CATALOG_FILENAME);
 
@@ -47,9 +49,9 @@ public class LocalCatalogArchetypeDataSource extends CatalogArchetypeDataSource 
 
         ArchetypeCatalog catalog;
         if (catalogFile.exists()) {
-            try {
+            try (Reader reader = new XmlStreamReader(catalogFile)) {
                 getLogger().debug("Reading catalog to be updated: " + catalogFile);
-                catalog = readCatalog(ReaderFactory.newXmlReader(catalogFile));
+                catalog = readCatalog(reader);
             } catch (FileNotFoundException ex) {
                 getLogger().debug("Catalog file don't exist");
                 catalog = new ArchetypeCatalog();
@@ -87,10 +89,11 @@ public class LocalCatalogArchetypeDataSource extends CatalogArchetypeDataSource 
     }
 
     @Override
-    public ArchetypeCatalog getArchetypeCatalog(ProjectBuildingRequest buildingRequest)
+    public ArchetypeCatalog getArchetypeCatalog(
+            RepositorySystemSession repositorySession, List<RemoteRepository> remoteRepositories)
             throws ArchetypeDataSourceException {
-        File localRepo =
-                buildingRequest.getRepositorySession().getLocalRepository().getBasedir();
+
+        File localRepo = repositorySession.getLocalRepository().getBasedir();
 
         File catalogFile = new File(localRepo, ARCHETYPE_CATALOG_FILENAME);
 
@@ -101,7 +104,7 @@ public class LocalCatalogArchetypeDataSource extends CatalogArchetypeDataSource 
 
         if (catalogFile.exists()) {
             try {
-                return readCatalog(ReaderFactory.newXmlReader(catalogFile));
+                return readCatalog(new XmlStreamReader(catalogFile));
             } catch (FileNotFoundException e) {
                 throw new ArchetypeDataSourceException("The specific archetype catalog does not exist.", e);
             } catch (IOException e) {

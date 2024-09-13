@@ -50,7 +50,7 @@ public class DefaultDownloader implements Downloader {
             String version,
             List<RemoteRepository> remoteRepositories,
             RepositorySystemSession repositorySystemSession)
-            throws DownloadException, DownloadNotFoundException {
+            throws DownloadException {
 
         DefaultArtifact artifact = new DefaultArtifact(groupId, artifactId, "", "jar", version);
 

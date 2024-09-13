@@ -173,9 +173,9 @@ public class CreateProjectFromArchetypeMojo extends AbstractMojo implements Cont
                 .setArchetypeVersion(archetypeVersion)
                 .setOutputDirectory(outputDirectory.getAbsolutePath())
                 .setRemoteArtifactRepositories(project.getRemoteProjectRepositories())
+                .setRepositorySession(session.getRepositorySession())
                 .setFilter(filter)
-                .setAskForDefaultPropertyValues(askForDefaultPropertyValues)
-                .setProjectBuildingRequest(session.getProjectBuildingRequest());
+                .setAskForDefaultPropertyValues(askForDefaultPropertyValues);
 
         try {
             if (interactiveMode.booleanValue()) {

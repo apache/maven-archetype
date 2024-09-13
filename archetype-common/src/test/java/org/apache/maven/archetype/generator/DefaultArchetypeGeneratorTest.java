@@ -28,14 +28,9 @@ import java.util.Properties;
 
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
-import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.repository.DefaultArtifactRepository;
-import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
-import org.apache.maven.project.DefaultProjectBuildingRequest;
-import org.apache.maven.project.ProjectBuildingRequest;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.ReaderFactory;
@@ -75,7 +70,7 @@ public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
         ADDITIONAL_PROPERTIES.setProperty("property_underscored-2", "prop2");
     }
 
-    ArtifactRepository localRepository;
+    String localRepository;
 
     String remoteRepository;
 
@@ -504,14 +499,11 @@ public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
     protected void setUp() throws Exception {
         super.setUp();
 
-        String repositories = new File(getBasedir(), "target/test-classes/repositories")
-                .toURI()
-                .toString();
+        File repositories = new File(getBasedir(), "target/test-classes/repositories");
 
-        localRepository =
-                new DefaultArtifactRepository("local", repositories + "/local", new DefaultRepositoryLayout());
+        localRepository = new File(repositories, "local").toString();
 
-        remoteRepository = repositories + "central";
+        remoteRepository = new File(repositories, "central").toURI().toString();
 
         generator = (ArchetypeGenerator) lookup(ArchetypeGenerator.ROLE);
         assertNotNull(generator);
@@ -541,15 +533,13 @@ public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
 
         request.setProperties(ADDITIONAL_PROPERTIES);
 
-        ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
         DefaultRepositorySystemSession repositorySession = new DefaultRepositorySystemSession();
         RepositorySystem repositorySystem = lookup(RepositorySystem.class);
-        LocalRepositoryManager localRepositoryManager = repositorySystem.newLocalRepositoryManager(
-                repositorySession, new LocalRepository(localRepository.getBasedir()));
+        LocalRepositoryManager localRepositoryManager =
+                repositorySystem.newLocalRepositoryManager(repositorySession, new LocalRepository(localRepository));
         repositorySession.setLocalRepositoryManager(localRepositoryManager);
-        buildingRequest.setRepositorySession(repositorySession);
-        request.setProjectBuildingRequest(buildingRequest);
 
+        request.setRepositorySession(repositorySession);
         return request;
     }
 

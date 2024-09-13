@@ -23,12 +23,13 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.maven.archetype.catalog.Archetype;
-import org.apache.maven.project.ProjectBuildingRequest;
+import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.repository.RemoteRepository;
 
 /** @author Jason van Zyl */
 public class ArchetypeGenerationRequest {
-    private ProjectBuildingRequest projectBuildingRequest;
+
+    private RepositorySystemSession repositorySession;
 
     private boolean interactiveMode;
 
@@ -87,12 +88,12 @@ public class ArchetypeGenerationRequest {
         this.archetypeRepository = archetype.getRepository();
     }
 
-    public ProjectBuildingRequest getProjectBuildingRequest() {
-        return projectBuildingRequest;
+    public RepositorySystemSession getRepositorySession() {
+        return repositorySession;
     }
 
-    public ArchetypeGenerationRequest setProjectBuildingRequest(ProjectBuildingRequest projectBuildingRequest) {
-        this.projectBuildingRequest = projectBuildingRequest;
+    public ArchetypeGenerationRequest setRepositorySession(RepositorySystemSession repoSession) {
+        this.repositorySession = repoSession;
         return this;
     }
 
@@ -102,7 +103,6 @@ public class ArchetypeGenerationRequest {
 
     public ArchetypeGenerationRequest setArchetypeGroupId(String archetypeGroupId) {
         this.archetypeGroupId = archetypeGroupId;
-
         return this;
     }
 
@@ -112,7 +112,6 @@ public class ArchetypeGenerationRequest {
 
     public ArchetypeGenerationRequest setArchetypeArtifactId(String archetypeArtifactId) {
         this.archetypeArtifactId = archetypeArtifactId;
-
         return this;
     }
 
@@ -122,7 +121,6 @@ public class ArchetypeGenerationRequest {
 
     public ArchetypeGenerationRequest setArchetypeVersion(String archetypeVersion) {
         this.archetypeVersion = archetypeVersion;
-
         return this;
     }
 
@@ -132,7 +130,6 @@ public class ArchetypeGenerationRequest {
 
     public ArchetypeGenerationRequest setArchetypeGoals(String archetypeGoals) {
         this.archetypeGoals = archetypeGoals;
-
         return this;
     }
 
@@ -142,7 +139,6 @@ public class ArchetypeGenerationRequest {
 
     public ArchetypeGenerationRequest setArchetypeName(String archetypeName) {
         this.archetypeName = archetypeName;
-
         return this;
     }
 
@@ -175,7 +171,6 @@ public class ArchetypeGenerationRequest {
 
     public ArchetypeGenerationRequest setArtifactId(String artifactId) {
         this.artifactId = artifactId;
-
         return this;
     }
 
@@ -185,7 +180,6 @@ public class ArchetypeGenerationRequest {
 
     public ArchetypeGenerationRequest setGroupId(String groupId) {
         this.groupId = groupId;
-
         return this;
     }
 
@@ -195,7 +189,6 @@ public class ArchetypeGenerationRequest {
 
     public ArchetypeGenerationRequest setVersion(String version) {
         this.version = version;
-
         return this;
     }
 
@@ -205,7 +198,6 @@ public class ArchetypeGenerationRequest {
 
     public ArchetypeGenerationRequest setPackage(String packageName) {
         this.packageName = packageName;
-
         return this;
     }
 
@@ -225,7 +217,6 @@ public class ArchetypeGenerationRequest {
 
     public ArchetypeGenerationRequest setOutputDirectory(String outputDirectory) {
         this.outputDirectory = outputDirectory;
-
         return this;
     }
 
@@ -235,7 +226,6 @@ public class ArchetypeGenerationRequest {
 
     public ArchetypeGenerationRequest setInteractiveMode(boolean interactiveMode) {
         this.interactiveMode = interactiveMode;
-
         return this;
     }
 
@@ -245,7 +235,6 @@ public class ArchetypeGenerationRequest {
 
     public ArchetypeGenerationRequest setAskForDefaultPropertyValues(boolean askForDefaultPropertyValues) {
         this.askForDefaultPropertyValues = askForDefaultPropertyValues;
-
         return this;
     }
 
@@ -255,7 +244,6 @@ public class ArchetypeGenerationRequest {
 
     public ArchetypeGenerationRequest setRemoteArtifactRepositories(List<RemoteRepository> remoteArtifactRepositories) {
         this.remoteArtifactRepositories = remoteArtifactRepositories;
-
         return this;
     }
 
@@ -265,7 +253,6 @@ public class ArchetypeGenerationRequest {
 
     public ArchetypeGenerationRequest setFilter(String filter) {
         this.filter = filter;
-
         return this;
     }
 }
