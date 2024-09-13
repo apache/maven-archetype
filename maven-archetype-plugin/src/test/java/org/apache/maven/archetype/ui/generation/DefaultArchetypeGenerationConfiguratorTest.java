@@ -28,7 +28,6 @@ import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
 import org.apache.maven.archetype.exception.ArchetypeNotDefined;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor;
-import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.codehaus.plexus.ContainerConfiguration;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.components.interactivity.PrompterException;
@@ -87,7 +86,6 @@ public class DefaultArchetypeGenerationConfiguratorTest extends PlexusTestCase {
         request.setArchetypeGroupId("archetypeGroupId");
         request.setArchetypeArtifactId("archetypeArtifactId");
         request.setArchetypeVersion("archetypeVersion");
-        request.setProjectBuildingRequest(new DefaultProjectBuildingRequest());
         Properties properties = new Properties();
         properties.setProperty("groupId", "preset-groupId");
         properties.setProperty("artifactId", "preset-artifactId");
@@ -109,7 +107,6 @@ public class DefaultArchetypeGenerationConfiguratorTest extends PlexusTestCase {
         request.setArchetypeGroupId("archetypeGroupId");
         request.setArchetypeArtifactId("archetypeArtifactId");
         request.setArchetypeVersion("archetypeVersion");
-        request.setProjectBuildingRequest(new DefaultProjectBuildingRequest());
         Properties properties = new Properties();
         properties.setProperty("groupId", "preset-groupId");
         properties.setProperty("artifactId", "preset-artifactId");
@@ -129,7 +126,6 @@ public class DefaultArchetypeGenerationConfiguratorTest extends PlexusTestCase {
         request.setArchetypeGroupId("archetypeGroupId");
         request.setArchetypeArtifactId("archetypeArtifactId");
         request.setArchetypeVersion("archetypeVersion");
-        request.setProjectBuildingRequest(new DefaultProjectBuildingRequest());
         Properties properties = new Properties();
         properties.setProperty("artifactId", "preset-artifactId");
 

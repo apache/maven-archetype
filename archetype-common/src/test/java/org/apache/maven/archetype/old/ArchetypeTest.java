@@ -30,21 +30,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.maven.RepositoryUtils;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.exception.InvalidPackaging;
-import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.factory.ArtifactFactory;
-import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.repository.DefaultArtifactRepository;
-import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
-import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
-import org.apache.maven.artifact.resolver.ArtifactResolutionException;
-import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
-import org.apache.maven.project.DefaultProjectBuildingRequest;
-import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.context.Context;
 import org.codehaus.plexus.ContainerConfiguration;
@@ -54,8 +43,15 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.codehaus.plexus.velocity.VelocityComponent;
 import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.RepositorySystem;
+import org.eclipse.aether.RepositorySystemSession;
+import org.eclipse.aether.artifact.Artifact;
+import org.eclipse.aether.artifact.DefaultArtifact;
 import org.eclipse.aether.repository.LocalRepository;
 import org.eclipse.aether.repository.LocalRepositoryManager;
+import org.eclipse.aether.repository.RemoteRepository;
+import org.eclipse.aether.repository.RepositoryPolicy;
+import org.eclipse.aether.resolution.ArtifactRequest;
+import org.eclipse.aether.resolution.ArtifactResult;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.xmlunit.matchers.CompareMatcher.isIdenticalTo;
@@ -79,34 +75,27 @@ public class ArchetypeTest extends PlexusTestCase {
         // This needs to be encapsulated in a maven test case.
         // ----------------------------------------------------------------------
 
-        ArtifactRepositoryLayout layout =
-                (ArtifactRepositoryLayout) getContainer().lookup(ArtifactRepositoryLayout.ROLE);
-
         String mavenRepoLocal =
-                getTestFile("target/local-repository").toURI().toURL().toString();
-
-        ArtifactRepository localRepository = new DefaultArtifactRepository("local", mavenRepoLocal, layout);
-
-        List<ArtifactRepository> remoteRepositories = new ArrayList<>();
+                getTestFile("target/local-repository").toURI().toURL().getFile();
 
         String mavenRepoRemote =
                 getTestFile("src/test/repository").toURI().toURL().toString();
 
-        ArtifactRepository remoteRepository = new DefaultArtifactRepository("remote", mavenRepoRemote, layout);
+        RemoteRepository remoteRepository = new RemoteRepository.Builder("remote", "default", mavenRepoRemote)
+                .setReleasePolicy(new RepositoryPolicy())
+                .setSnapshotPolicy(new RepositoryPolicy())
+                .build();
 
+        List<RemoteRepository> remoteRepositories = new ArrayList<>();
         remoteRepositories.add(remoteRepository);
 
-        ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
-        buildingRequest.setRemoteRepositories(remoteRepositories);
         DefaultRepositorySystemSession repositorySession = new DefaultRepositorySystemSession();
         RepositorySystem repositorySystem = lookup(RepositorySystem.class);
-        LocalRepositoryManager localRepositoryManager = repositorySystem.newLocalRepositoryManager(
-                repositorySession, new LocalRepository(localRepository.getBasedir()));
+        LocalRepositoryManager localRepositoryManager =
+                repositorySystem.newLocalRepositoryManager(repositorySession, new LocalRepository(mavenRepoLocal));
         repositorySession.setLocalRepositoryManager(localRepositoryManager);
-        buildingRequest.setRepositorySession(repositorySession);
 
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest()
-                .setProjectBuildingRequest(buildingRequest)
                 .setPackage("org.apache.maven.quickstart")
                 .setGroupId("maven")
                 .setArtifactId("quickstart")
@@ -114,9 +103,9 @@ public class ArchetypeTest extends PlexusTestCase {
                 .setArchetypeGroupId("org.apache.maven.archetypes")
                 .setArchetypeArtifactId("maven-archetype-quickstart")
                 .setArchetypeVersion("1.0-alpha-1-SNAPSHOT")
-                .setRemoteArtifactRepositories(RepositoryUtils.toRepos(remoteRepositories))
+                .setRemoteArtifactRepositories(remoteRepositories)
+                .setRepositorySession(repositorySession)
                 .setOutputDirectory(getTestFile("target").getAbsolutePath());
-        // parameters.put( "name", "jason" );
 
         archetype.createArchetype(request);
 
@@ -142,20 +131,15 @@ public class ArchetypeTest extends PlexusTestCase {
         // Validate POM generation
         // ----------------------------------------------------------------------
 
-        ArtifactFactory artifactFactory = (ArtifactFactory) lookup(ArtifactFactory.class.getName());
-        Artifact archetypeArtifact = artifactFactory.createArtifact(
-                request.getArchetypeGroupId(),
-                request.getArchetypeArtifactId(),
-                request.getArchetypeVersion(),
-                Artifact.SCOPE_RUNTIME,
-                "jar");
+        Artifact archetypeArtifact = new DefaultArtifact(
+                request.getArchetypeGroupId(), request.getArchetypeArtifactId(), "jar", request.getArchetypeVersion());
 
         StringWriter writer = new StringWriter();
 
         ClassLoader old = Thread.currentThread().getContextClassLoader();
 
         Thread.currentThread()
-                .setContextClassLoader(getContextClassloader(archetypeArtifact, localRepository, remoteRepositories));
+                .setContextClassLoader(getContextClassloader(archetypeArtifact, repositorySession, remoteRepositories));
 
         try {
             VelocityComponent velocity = (VelocityComponent) lookup(VelocityComponent.class.getName());
@@ -188,9 +172,7 @@ public class ArchetypeTest extends PlexusTestCase {
             MavenXpp3Reader reader = new MavenXpp3Reader();
 
             generatedModel = reader.read(pomReader);
-        } catch (IOException e) {
-            throw new ArchetypeTemplateProcessingException("Error reading generated POM", e);
-        } catch (XmlPullParserException e) {
+        } catch (IOException | XmlPullParserException e) {
             throw new ArchetypeTemplateProcessingException("Error reading generated POM", e);
         }
         assertEquals(
@@ -225,30 +207,15 @@ public class ArchetypeTest extends PlexusTestCase {
 
     // Gets the classloader for this artifact's file.
     private ClassLoader getContextClassloader(
-            Artifact archetypeArtifact, ArtifactRepository localRepository, List<ArtifactRepository> remoteRepositories)
+            Artifact archetypeArtifact,
+            RepositorySystemSession repositorySystemSession,
+            List<RemoteRepository> remoteRepositories)
             throws Exception {
-        ArtifactResolver artifactResolver = (ArtifactResolver) lookup(ArtifactResolver.class.getName());
-        try {
-            artifactResolver.resolve(archetypeArtifact, remoteRepositories, localRepository);
-        } catch (ArtifactResolutionException e) {
-            throw new ArchetypeDescriptorException("Error attempting to download archetype: " + e.getMessage(), e);
-        } catch (ArtifactNotFoundException e) {
-            throw new ArchetypeNotFoundException("OldArchetype does not exist: " + e.getMessage(), e);
-        }
-
-        URLClassLoader archetypeJarLoader;
-        try {
-            URL[] urls = new URL[1];
-
-            urls[0] = archetypeArtifact.getFile().toURI().toURL();
-
-            archetypeJarLoader = new URLClassLoader(urls);
-        } catch (IOException e) {
-            throw new ArchetypeDescriptorException(
-                    "Error reading the " + OldArchetype.ARCHETYPE_DESCRIPTOR + " descriptor.", e);
-        }
-
-        return archetypeJarLoader;
+        RepositorySystem repositorySystem = lookup(RepositorySystem.class);
+        ArtifactRequest request = new ArtifactRequest(archetypeArtifact, remoteRepositories, null);
+        ArtifactResult artifactResult = repositorySystem.resolveArtifact(repositorySystemSession, request);
+        URL[] urls = new URL[] {artifactResult.getArtifact().getFile().toURI().toURL()};
+        return new URLClassLoader(urls);
     }
 
     public void testAddModuleToParentPOM() throws Exception {

@@ -30,7 +30,6 @@ import org.apache.maven.archetype.ArchetypeCreationResult;
 import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.ui.creation.ArchetypeCreationConfigurator;
-import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -144,9 +143,6 @@ public class CreateArchetypeFromProjectMojo extends AbstractMojo {
     @Parameter(property = "archetype.preserveCData")
     private boolean preserveCData = false;
 
-    @Parameter(defaultValue = "${localRepository}", readonly = true)
-    private ArtifactRepository localRepository;
-
     /**
      * POMs in archetype are created with their initial parent.
      * This property is ignored when preserveCData is true.
@@ -223,9 +219,6 @@ public class CreateArchetypeFromProjectMojo extends AbstractMojo {
     @Parameter(defaultValue = "${session}", readonly = true, required = true)
     private MavenSession session;
 
-    //    @Parameter( defaultValue = "${session.settings}", readonly = true, required = true )
-    //    private File settingsXml;
-
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         Properties executionProperties = session.getExecutionProperties();
@@ -237,7 +230,7 @@ public class CreateArchetypeFromProjectMojo extends AbstractMojo {
             List<String> languages = getLanguages(archetypeLanguages, propertyFile);
 
             Properties properties = configurator.configureArchetypeCreation(
-                    project, Boolean.valueOf(interactive), executionProperties, propertyFile, languages);
+                    project, interactive, executionProperties, propertyFile, languages);
 
             List<String> filtereds = getFilteredExtensions(archetypeFilteredExtentions, propertyFile);
 
@@ -250,8 +243,8 @@ public class CreateArchetypeFromProjectMojo extends AbstractMojo {
                     /* This should be correctly handled */ .setPreserveCData(preserveCData)
                     .setKeepParent(keepParent)
                     .setPartialArchetype(partialArchetype)
-                    .setLocalRepository(localRepository)
-                    .setProjectBuildingRequest(session.getProjectBuildingRequest())
+                    .setLocalRepositoryBasedir(
+                            session.getRepositorySession().getLocalRepository().getBasedir())
                     /* this should be resolved and asked for user to verify */ .setPackageName(packageName)
                     .setPostPhase(archetypePostPhase)
                     .setOutputDirectory(outputDirectory)

@@ -43,7 +43,6 @@ import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
 import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.downloader.DownloadException;
-import org.apache.maven.archetype.downloader.DownloadNotFoundException;
 import org.apache.maven.archetype.downloader.Downloader;
 import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
 import org.apache.maven.archetype.generator.ArchetypeGenerator;
@@ -542,7 +541,7 @@ public class IntegrationTestMojo extends AbstractMojo {
         File archetypeFile;
         try {
             archetypeFile = getArchetypeFile(groupId, artifactId, version);
-        } catch (DownloadNotFoundException | DownloadException e) {
+        } catch (DownloadException e) {
             throw new MojoExecutionException("Could not resolve archetype artifact ", e);
         }
         Properties archetypeProperties = getProperties(archetypePomPropertiesFile);
@@ -552,8 +551,7 @@ public class IntegrationTestMojo extends AbstractMojo {
         return new File(buildFolder, request.getArtifactId());
     }
 
-    private File getArchetypeFile(String groupId, String artifactId, String version)
-            throws DownloadNotFoundException, DownloadException {
+    private File getArchetypeFile(String groupId, String artifactId, String version) throws DownloadException {
         return downloader.download(
                 groupId, artifactId, version, project.getRemoteProjectRepositories(), session.getRepositorySession());
     }

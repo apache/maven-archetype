@@ -20,11 +20,13 @@ package org.apache.maven.archetype;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
-import org.apache.maven.project.ProjectBuildingRequest;
+import org.eclipse.aether.RepositorySystemSession;
+import org.eclipse.aether.repository.RemoteRepository;
 
 /** @author Jason van Zyl */
 public interface ArchetypeManager {
@@ -60,19 +62,21 @@ public interface ArchetypeManager {
      * if path is a file, it used as is.
      * if path is a directory, archetype-catalog.xml is appended to it.
      *
-     * @param buildingRequest the catalog file path or directory containing the catalog file.
+     * @param repositorySession
      * @return the catalog.
      */
-    ArchetypeCatalog getLocalCatalog(ProjectBuildingRequest buildingRequest);
+    ArchetypeCatalog getLocalCatalog(RepositorySystemSession repositorySession);
 
     /**
      * Gives the catalog of archetypes located at
      * <code>https://repo.maven.apache.org/maven2/archetype-catalog.xml</code>.
-     * @param buildingRequest TODO
      *
+     * @param repositorySession
+     * @param remoteRepositories
      * @return the catalog.
      */
-    ArchetypeCatalog getRemoteCatalog(ProjectBuildingRequest buildingRequest);
+    ArchetypeCatalog getRemoteCatalog(
+            RepositorySystemSession repositorySession, List<RemoteRepository> remoteRepositories);
 
     /**
      * Creates a jar file for an archetype.
@@ -89,5 +93,5 @@ public interface ArchetypeManager {
     File archiveArchetype(File archetypeDirectory, File outputDirectory, String finalName)
             throws DependencyResolutionRequiredException, IOException;
 
-    File updateLocalCatalog(ProjectBuildingRequest buildingRequest, Archetype archetype);
+    File updateLocalCatalog(RepositorySystemSession repositorySystemSession, Archetype archetype);
 }

@@ -36,7 +36,6 @@ import org.apache.maven.archetype.exception.ArchetypeNotDefined;
 import org.apache.maven.archetype.exception.InvalidPackaging;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.archetype.old.OldArchetype;
-import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
 import org.eclipse.aether.RepositorySystem;
@@ -47,11 +46,6 @@ import org.eclipse.aether.repository.RepositoryPolicy;
 @Named
 @Singleton
 public class DefaultArchetypeGenerator extends AbstractLogEnabled implements ArchetypeGenerator {
-    /**
-     * Determines whether the layout is legacy or not.
-     */
-    @Inject
-    private ArtifactRepositoryLayout defaultArtifactRepositoryLayout;
 
     @Inject
     private ArchetypeArtifactManager archetypeArtifactManager;
@@ -74,8 +68,7 @@ public class DefaultArchetypeGenerator extends AbstractLogEnabled implements Arc
 
         RemoteRepository remoteRepo = null;
         if (request != null && request.getArchetypeRepository() != null) {
-            RepositorySystemSession repositorySession =
-                    request.getProjectBuildingRequest().getRepositorySession();
+            RepositorySystemSession repositorySession = request.getRepositorySession();
             remoteRepo = createRepository(
                     repositorySession, request.getArchetypeRepository(), request.getArchetypeArtifactId() + "-repo");
 
@@ -87,18 +80,17 @@ public class DefaultArchetypeGenerator extends AbstractLogEnabled implements Arc
                 request.getArchetypeArtifactId(),
                 request.getArchetypeVersion(),
                 repos,
-                request.getProjectBuildingRequest().getRepositorySession())) {
+                request.getRepositorySession())) {
             throw new UnknownArchetype("The desired archetype does not exist (" + request.getArchetypeGroupId() + ":"
                     + request.getArchetypeArtifactId() + ":" + request.getArchetypeVersion() + ")");
         }
 
-        File archetypeFile = archetypeArtifactManager.getArchetypeFile(
+        return archetypeArtifactManager.getArchetypeFile(
                 request.getArchetypeGroupId(),
                 request.getArchetypeArtifactId(),
                 request.getArchetypeVersion(),
                 repos,
-                request.getProjectBuildingRequest().getRepositorySession());
-        return archetypeFile;
+                request.getRepositorySession());
     }
 
     private void generateArchetype(ArchetypeGenerationRequest request, File archetypeFile) throws ArchetypeException {

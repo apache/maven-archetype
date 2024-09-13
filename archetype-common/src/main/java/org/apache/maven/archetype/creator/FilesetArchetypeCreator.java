@@ -51,7 +51,6 @@ import org.apache.maven.archetype.common.PomManager;
 import org.apache.maven.archetype.common.util.FileCharsetDetector;
 import org.apache.maven.archetype.common.util.ListScanner;
 import org.apache.maven.archetype.common.util.PathUtils;
-import org.apache.maven.archetype.exception.TemplateCreationException;
 import org.apache.maven.archetype.metadata.ArchetypeDescriptor;
 import org.apache.maven.archetype.metadata.FileSet;
 import org.apache.maven.archetype.metadata.ModuleDescriptor;
@@ -66,7 +65,6 @@ import org.apache.maven.model.PluginManagement;
 import org.apache.maven.model.Profile;
 import org.apache.maven.model.Resource;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.maven.shared.invoker.DefaultInvocationRequest;
 import org.apache.maven.shared.invoker.InvocationRequest;
 import org.apache.maven.shared.invoker.InvocationResult;
@@ -133,8 +131,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
         getLogger().debug("Creating archetype in " + outputDirectory);
 
         try {
-            File archetypePomFile = createArchetypeProjectPom(
-                    project, request.getProjectBuildingRequest(), configurationProperties, outputDirectory);
+            File archetypePomFile = createArchetypeProjectPom(project, configurationProperties, outputDirectory);
 
             File archetypeResourcesDirectory = new File(outputDirectory, getTemplateOutputDirectory());
 
@@ -285,11 +282,8 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
             InvocationRequest internalRequest = new DefaultInvocationRequest();
             internalRequest.setPomFile(archetypePomFile);
             internalRequest.setUserSettingsFile(request.getSettingsFile());
-            internalRequest.setGoals(Collections.singletonList(request.getPostPhase()));
-            if (request.getLocalRepository() != null) {
-                internalRequest.setLocalRepositoryDirectory(
-                        new File(request.getLocalRepository().getBasedir()));
-            }
+            internalRequest.addArg(request.getPostPhase());
+            internalRequest.setLocalRepositoryDirectory(request.getLocalRepositoryBasedir());
 
             String httpsProtocols = System.getProperty("https.protocols");
             if (httpsProtocols != null) {
@@ -379,12 +373,8 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
     /**
      * Create the archetype project pom.xml file, that will be used to build the archetype.
      */
-    private File createArchetypeProjectPom(
-            MavenProject project,
-            ProjectBuildingRequest buildingRequest,
-            Properties configurationProperties,
-            File projectDir)
-            throws TemplateCreationException, IOException {
+    private File createArchetypeProjectPom(MavenProject project, Properties configurationProperties, File projectDir)
+            throws IOException {
         Model model = new Model();
         model.setModelVersion("4.0.0");
         // these values should be retrieved from the request with sensible defaults

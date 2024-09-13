@@ -43,11 +43,9 @@ import org.apache.maven.archetype.exception.ArchetypeGenerationConfigurationFail
 import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
 import org.apache.maven.archetype.exception.ArchetypeNotDefined;
 import org.apache.maven.archetype.exception.UnknownArchetype;
-import org.apache.maven.archetype.old.OldArchetype;
 import org.apache.maven.archetype.ui.ArchetypeConfiguration;
 import org.apache.maven.archetype.ui.ArchetypeDefinition;
 import org.apache.maven.archetype.ui.ArchetypeFactory;
-import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.context.Context;
@@ -72,8 +70,6 @@ import org.eclipse.aether.repository.RepositoryPolicy;
 @Singleton
 public class DefaultArchetypeGenerationConfigurator extends AbstractLogEnabled
         implements ArchetypeGenerationConfigurator {
-    @Inject
-    OldArchetype oldArchetype;
 
     @Inject
     private ArchetypeArtifactManager archetypeArtifactManager;
@@ -86,12 +82,6 @@ public class DefaultArchetypeGenerationConfigurator extends AbstractLogEnabled
 
     @Inject
     private VelocityComponent velocity;
-
-    /**
-     * Determines whether the layout is legacy or not.
-     */
-    @Inject
-    private ArtifactRepositoryLayout defaultArtifactRepositoryLayout;
 
     @Inject
     private RepositorySystem repositorySystem;
@@ -121,8 +111,7 @@ public class DefaultArchetypeGenerationConfigurator extends AbstractLogEnabled
             }
         }
         if (request.getArchetypeRepository() != null) {
-            RepositorySystemSession repositorySession =
-                    request.getProjectBuildingRequest().getRepositorySession();
+            RepositorySystemSession repositorySession = request.getRepositorySession();
             RemoteRepository archetypeRepository =
                     createRepository(repositorySession, request.getArchetypeRepository(), ad.getArtifactId() + "-repo");
             repositories.add(archetypeRepository);
@@ -132,11 +121,7 @@ public class DefaultArchetypeGenerationConfigurator extends AbstractLogEnabled
         }
 
         if (!archetypeArtifactManager.exists(
-                ad.getGroupId(),
-                ad.getArtifactId(),
-                ad.getVersion(),
-                repositories,
-                request.getProjectBuildingRequest().getRepositorySession())) {
+                ad.getGroupId(), ad.getArtifactId(), ad.getVersion(), repositories, request.getRepositorySession())) {
             throw new UnknownArchetype("The desired archetype does not exist (" + ad.getGroupId() + ":"
                     + ad.getArtifactId() + ":" + ad.getVersion() + ")");
         }
@@ -146,11 +131,7 @@ public class DefaultArchetypeGenerationConfigurator extends AbstractLogEnabled
         ArchetypeConfiguration archetypeConfiguration;
 
         File archetypeFile = archetypeArtifactManager.getArchetypeFile(
-                ad.getGroupId(),
-                ad.getArtifactId(),
-                ad.getVersion(),
-                repositories,
-                request.getProjectBuildingRequest().getRepositorySession());
+                ad.getGroupId(), ad.getArtifactId(), ad.getVersion(), repositories, request.getRepositorySession());
         if (archetypeArtifactManager.isFileSetArchetype(archetypeFile)) {
             org.apache.maven.archetype.metadata.ArchetypeDescriptor archetypeDescriptor =
                     archetypeArtifactManager.getFileSetArchetypeDescriptor(archetypeFile);

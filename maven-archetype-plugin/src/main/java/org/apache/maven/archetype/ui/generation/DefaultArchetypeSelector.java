@@ -22,7 +22,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -32,14 +31,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.catalog.Archetype;
-import org.apache.maven.archetype.exception.ArchetypeNotDefined;
 import org.apache.maven.archetype.exception.ArchetypeSelectionFailure;
-import org.apache.maven.archetype.exception.UnknownArchetype;
-import org.apache.maven.archetype.exception.UnknownGroup;
 import org.apache.maven.archetype.ui.ArchetypeDefinition;
-import org.apache.maven.project.ProjectBuildingRequest;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.eclipse.aether.RepositorySystemSession;
+import org.eclipse.aether.repository.RemoteRepository;
 
 @Named("default")
 @Singleton
@@ -58,8 +55,7 @@ public class DefaultArchetypeSelector extends AbstractLogEnabled implements Arch
 
     @Override
     public void selectArchetype(ArchetypeGenerationRequest request, Boolean interactiveMode, String catalogs)
-            throws ArchetypeNotDefined, UnknownArchetype, UnknownGroup, IOException, PrompterException,
-                    ArchetypeSelectionFailure {
+            throws PrompterException, ArchetypeSelectionFailure {
         ArchetypeDefinition definition = new ArchetypeDefinition(request);
 
         if (definition.isDefined() && StringUtils.isNotEmpty(request.getArchetypeRepository())) {
@@ -67,7 +63,8 @@ public class DefaultArchetypeSelector extends AbstractLogEnabled implements Arch
             return;
         }
 
-        Map<String, List<Archetype>> archetypes = getArchetypesByCatalog(request.getProjectBuildingRequest(), catalogs);
+        Map<String, List<Archetype>> archetypes = getArchetypesByCatalog(
+                request.getRepositorySession(), request.getRemoteArtifactRepositories(), catalogs);
 
         if (StringUtils.isNotBlank(request.getFilter())) {
             // applying some filtering depending on filter parameter
@@ -154,7 +151,7 @@ public class DefaultArchetypeSelector extends AbstractLogEnabled implements Arch
     }
 
     private Map<String, List<Archetype>> getArchetypesByCatalog(
-            ProjectBuildingRequest buildingRequest, String catalogs) {
+            RepositorySystemSession repositorySession, List<RemoteRepository> remoteRepositories, String catalogs) {
         if (catalogs == null) {
             throw new NullPointerException("Catalogs cannot be null");
         }
@@ -167,10 +164,11 @@ public class DefaultArchetypeSelector extends AbstractLogEnabled implements Arch
             } else if ("local".equalsIgnoreCase(catalog)) {
                 archetypes.put(
                         "local",
-                        archetypeManager.getLocalCatalog(buildingRequest).getArchetypes());
+                        archetypeManager.getLocalCatalog(repositorySession).getArchetypes());
             } else if ("remote".equalsIgnoreCase(catalog)) {
-                List<Archetype> archetypesFromRemote =
-                        archetypeManager.getRemoteCatalog(buildingRequest).getArchetypes();
+                List<Archetype> archetypesFromRemote = archetypeManager
+                        .getRemoteCatalog(repositorySession, remoteRepositories)
+                        .getArchetypes();
 
                 if (!archetypesFromRemote.isEmpty()) {
                     archetypes.put("remote", archetypesFromRemote);

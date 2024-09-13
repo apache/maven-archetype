@@ -25,7 +25,6 @@ import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
 import org.apache.maven.archetype.metadata.ArchetypeDescriptor;
 import org.apache.maven.archetype.metadata.RequiredProperty;
-import org.apache.maven.project.DefaultProjectBuildingRequest;
 import org.codehaus.plexus.ContainerConfiguration;
 import org.codehaus.plexus.PlexusTestCase;
 import org.easymock.EasyMock;
@@ -111,7 +110,6 @@ public class DefaultArchetypeGenerationConfigurator2Test extends PlexusTestCase 
         request.setArchetypeGroupId("archetypeGroupId");
         request.setArchetypeArtifactId("archetypeArtifactId");
         request.setArchetypeVersion("archetypeVersion");
-        request.setProjectBuildingRequest(new DefaultProjectBuildingRequest());
         Properties properties = new Properties();
         properties.setProperty("groupName", "myGroupName");
         properties.setProperty("serviceName", "myServiceName");
@@ -129,7 +127,6 @@ public class DefaultArchetypeGenerationConfigurator2Test extends PlexusTestCase 
         request.setArchetypeGroupId("archetypeGroupId");
         request.setArchetypeArtifactId("archetypeArtifactId");
         request.setArchetypeVersion("archetypeVersion");
-        request.setProjectBuildingRequest(new DefaultProjectBuildingRequest());
         Properties properties = new Properties();
 
         EasyMock.expect(queryer.getPropertyValue(eq("groupName"), anyString(), isNull()))
@@ -169,7 +166,6 @@ public class DefaultArchetypeGenerationConfigurator2Test extends PlexusTestCase 
         request.setArchetypeGroupId("archetypeGroupId");
         request.setArchetypeArtifactId("archetypeArtifactId");
         request.setArchetypeVersion("archetypeVersion");
-        request.setProjectBuildingRequest(new DefaultProjectBuildingRequest());
         Properties properties = new Properties();
 
         EasyMock.expect(queryer.getPropertyValue(eq("groupName"), anyString(), isNull()))
@@ -209,7 +205,6 @@ public class DefaultArchetypeGenerationConfigurator2Test extends PlexusTestCase 
         request.setArchetypeGroupId("archetypeGroupId");
         request.setArchetypeArtifactId("archetypeArtifactId");
         request.setArchetypeVersion("archetypeVersion");
-        request.setProjectBuildingRequest(new DefaultProjectBuildingRequest());
         Properties properties = new Properties();
 
         EasyMock.expect(queryer.getPropertyValue(eq("groupName"), anyString(), isNull()))

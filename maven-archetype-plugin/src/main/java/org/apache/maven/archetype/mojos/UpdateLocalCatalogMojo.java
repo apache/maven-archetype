@@ -70,7 +70,7 @@ public class UpdateLocalCatalogMojo extends AbstractMojo {
             archetype.setDescription(project.getName());
         }
 
-        File catalog = manager.updateLocalCatalog(session.getProjectBuildingRequest(), archetype);
+        File catalog = manager.updateLocalCatalog(session.getRepositorySession(), archetype);
         if (catalog != null) {
             getLog().info("Updated local archetypes catalog " + catalog);
         }

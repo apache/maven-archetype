@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -36,10 +37,10 @@ import org.apache.maven.archetype.creator.ArchetypeCreator;
 import org.apache.maven.archetype.generator.ArchetypeGenerator;
 import org.apache.maven.archetype.source.ArchetypeDataSource;
 import org.apache.maven.archetype.source.ArchetypeDataSourceException;
-import org.apache.maven.artifact.DependencyResolutionRequiredException;
-import org.apache.maven.project.ProjectBuildingRequest;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.IOUtil;
+import org.eclipse.aether.RepositorySystemSession;
+import org.eclipse.aether.repository.RemoteRepository;
 
 /**
  * @author Jason van Zyl
@@ -77,8 +78,7 @@ public class DefaultArchetypeManager extends AbstractLogEnabled implements Arche
     }
 
     @Override
-    public File archiveArchetype(File archetypeDirectory, File outputDirectory, String finalName)
-            throws DependencyResolutionRequiredException, IOException {
+    public File archiveArchetype(File archetypeDirectory, File outputDirectory, String finalName) throws IOException {
         File jarFile = new File(outputDirectory, finalName + ".jar");
 
         zip(archetypeDirectory, jarFile);
@@ -144,29 +144,30 @@ public class DefaultArchetypeManager extends AbstractLogEnabled implements Arche
         try {
             ArchetypeDataSource source = archetypeSources.get("internal-catalog");
 
-            return source.getArchetypeCatalog(null);
+            return source.getArchetypeCatalog(null, null);
         } catch (ArchetypeDataSourceException e) {
             return new ArchetypeCatalog();
         }
     }
 
     @Override
-    public ArchetypeCatalog getLocalCatalog(ProjectBuildingRequest buildingRequest) {
+    public ArchetypeCatalog getLocalCatalog(RepositorySystemSession repositorySession) {
         try {
             ArchetypeDataSource source = archetypeSources.get("catalog");
 
-            return source.getArchetypeCatalog(buildingRequest);
+            return source.getArchetypeCatalog(repositorySession, null);
         } catch (ArchetypeDataSourceException e) {
             return new ArchetypeCatalog();
         }
     }
 
     @Override
-    public ArchetypeCatalog getRemoteCatalog(ProjectBuildingRequest buildingRequest) {
+    public ArchetypeCatalog getRemoteCatalog(
+            RepositorySystemSession repositorySession, List<RemoteRepository> remoteRepositories) {
         try {
             ArchetypeDataSource source = archetypeSources.get("remote-catalog");
 
-            return source.getArchetypeCatalog(buildingRequest);
+            return source.getArchetypeCatalog(repositorySession, remoteRepositories);
         } catch (ArchetypeDataSourceException e) {
             getLogger().warn("failed to download from remote", e);
             return new ArchetypeCatalog();
@@ -174,11 +175,11 @@ public class DefaultArchetypeManager extends AbstractLogEnabled implements Arche
     }
 
     @Override
-    public File updateLocalCatalog(ProjectBuildingRequest buildingRequest, Archetype archetype) {
+    public File updateLocalCatalog(RepositorySystemSession repositorySystemSession, Archetype archetype) {
         try {
             ArchetypeDataSource source = archetypeSources.get("catalog");
 
-            return source.updateCatalog(buildingRequest, archetype);
+            return source.updateCatalog(repositorySystemSession, archetype);
         } catch (ArchetypeDataSourceException e) {
             getLogger().warn("failed to update catalog", e);
         }
