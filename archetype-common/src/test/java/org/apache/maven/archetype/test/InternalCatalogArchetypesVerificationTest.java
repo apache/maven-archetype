@@ -19,6 +19,7 @@
 package org.apache.maven.archetype.test;
 
 import java.io.File;
+import java.util.Properties;
 
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
@@ -63,31 +64,27 @@ public class InternalCatalogArchetypesVerificationTest extends PlexusTestCase {
         outputDirectory.mkdirs();
         FileUtils.cleanDirectory(outputDirectory);
 
-        ArchetypeManager archetype = (ArchetypeManager) lookup(ArchetypeManager.class.getName());
+        ArchetypeManager archetypeManager = (ArchetypeManager) lookup(ArchetypeManager.class.getName());
+        ArchetypeCatalog catalog = archetypeManager.getInternalCatalog();
 
-        ArchetypeCatalog catalog = archetype.getInternalCatalog();
+        // quickstart has a parameters with defaults ... so it should not be needed
+        // can be connected with ARCHETYPE-574
+        Properties props = new Properties();
+        props.put("javaCompilerVersion", "11");
+        props.put("junitVersion", "5.11.0");
 
         int count = 1;
-        for (Archetype a : catalog.getArchetypes()) {
-            Archetype ar = new Archetype();
-            ar.setGroupId(a.getGroupId());
-            ar.setArtifactId(a.getArtifactId());
-            ar.setVersion(a.getVersion());
-            ar.setDescription(a.getDescription());
-            ar.setGoals(a.getGoals());
-            ar.setProperties(a.getProperties());
-            ar.setRepository(a.getRepository());
-            if (ar.getRepository() == null) {
-                ar.setRepository(CENTRAL);
-            }
+        for (Archetype archetype : catalog.getArchetypes()) {
+            // this should be also default ...
+            archetype.setRepository(CENTRAL);
 
-            ArchetypeGenerationRequest request = new ArchetypeGenerationRequest(ar)
-                    .setGroupId("org.apache.maven.archetype.test")
-                    .setArtifactId("archetype" + count)
+            ArchetypeGenerationRequest request = new ArchetypeGenerationRequest(archetype)
+                    .setGroupId("org.apache.maven.archetypeManager.test")
+                    .setArtifactId("archetypeManager" + count)
                     .setVersion("1.0-SNAPSHOT")
                     .setPackage("com.acme")
+                    .setProperties(props)
                     .setOutputDirectory(outputDirectory.getPath());
-            //                    .setLocalRepository(localRepository);
 
             ProjectBuildingRequest buildingRequest = new DefaultProjectBuildingRequest();
             DefaultRepositorySystemSession repositorySession = new DefaultRepositorySystemSession();
@@ -98,9 +95,11 @@ public class InternalCatalogArchetypesVerificationTest extends PlexusTestCase {
             buildingRequest.setRepositorySession(repositorySession);
             request.setProjectBuildingRequest(buildingRequest);
 
-            ArchetypeGenerationResult generationResult = archetype.generateProjectFromArchetype(request);
+            ArchetypeGenerationResult generationResult = archetypeManager.generateProjectFromArchetype(request);
 
-            assertNull("Archetype wasn't generated successfully", generationResult.getCause());
+            assertNull(
+                    "Archetype wasn't generated successfully: " + generationResult.getCause(),
+                    generationResult.getCause());
 
             count++;
         }
