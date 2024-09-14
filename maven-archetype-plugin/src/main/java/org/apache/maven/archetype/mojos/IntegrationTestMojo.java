@@ -404,12 +404,11 @@ public class IntegrationTestMojo extends AbstractMojo {
             do {
                 refLine = referenceFileReader.readLine();
                 actualLine = actualFileReader.readLine();
-                if ( !Objects.equals( refLine, actualLine ) )
-                {
-                    getLog().warn( "Conflict found. Reference line :" );
-                    getLog().warn( refLine );
-                    getLog().warn( "Actual line :" );
-                    getLog().warn( actualLine );
+                if (!Objects.equals(refLine, actualLine)) {
+                    getLog().warn("Conflict found. Reference line :");
+                    getLog().warn(refLine);
+                    getLog().warn("Actual line :");
+                    getLog().warn(actualLine);
                     return false;
                 }
             } while (refLine != null || actualLine != null);
