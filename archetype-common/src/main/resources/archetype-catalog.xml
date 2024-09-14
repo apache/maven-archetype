@@ -27,32 +27,32 @@ under the License.
     <archetype>
       <groupId>org.apache.maven.archetypes</groupId>
       <artifactId>maven-archetype-archetype</artifactId>
-      <version>1.0</version>
+      <version>1.5</version>
       <description>An archetype which contains a sample archetype.</description>
     </archetype>
     <archetype>
       <groupId>org.apache.maven.archetypes</groupId>
       <artifactId>maven-archetype-j2ee-simple</artifactId>
-      <version>1.0</version>
+      <version>1.5</version>
       <description>An archetype which contains a simplifed sample J2EE application.</description>
     </archetype>
     <archetype>
       <groupId>org.apache.maven.archetypes</groupId>
       <artifactId>maven-archetype-plugin</artifactId>
-      <version>1.2</version>
+      <version>1.5</version>
       <description>An archetype which contains a sample Maven plugin.</description>
     </archetype>
     <archetype>
       <groupId>org.apache.maven.archetypes</groupId>
       <artifactId>maven-archetype-plugin-site</artifactId>
-      <version>1.1</version>
+      <version>1.5</version>
       <description>An archetype which contains a sample Maven plugin site.
       This archetype can be layered upon an existing Maven plugin project.</description>
     </archetype>
     <archetype>
       <groupId>org.apache.maven.archetypes</groupId>
       <artifactId>maven-archetype-portlet</artifactId>
-      <version>1.0.1</version>
+      <version>1.5</version>
       <description>An archetype which contains a sample JSR-268 Portlet.</description>
     </archetype>
     <archetype>
@@ -64,13 +64,13 @@ under the License.
     <archetype>
       <groupId>org.apache.maven.archetypes</groupId>
       <artifactId>maven-archetype-quickstart</artifactId>
-      <version>1.1</version>
+      <version>1.5</version>
       <description>An archetype which contains a sample Maven project.</description>
     </archetype>
     <archetype>
       <groupId>org.apache.maven.archetypes</groupId>
       <artifactId>maven-archetype-site</artifactId>
-      <version>1.1</version>
+      <version>1.5</version>
       <description>An archetype which contains a sample Maven site which demonstrates
       some of the supported document types like APT, XDoc, and FML and demonstrates how
       to i18n your site. This archetype can be layered upon an existing Maven project.</description>
@@ -78,13 +78,13 @@ under the License.
     <archetype>
       <groupId>org.apache.maven.archetypes</groupId>
       <artifactId>maven-archetype-site-simple</artifactId>
-      <version>1.1</version>
+      <version>1.5</version>
       <description>An archetype which contains a sample Maven site.</description>
     </archetype>
     <archetype>
       <groupId>org.apache.maven.archetypes</groupId>
       <artifactId>maven-archetype-webapp</artifactId>
-      <version>1.0</version>
+      <version>1.5</version>
       <description>An archetype which contains a sample Maven Webapp project.</description>
     </archetype>
   </archetypes>
