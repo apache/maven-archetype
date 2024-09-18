@@ -46,7 +46,6 @@ import org.codehaus.plexus.logging.AbstractLogEnabled;
 public class DefaultArchetypeSelectionQueryer extends AbstractLogEnabled implements ArchetypeSelectionQueryer {
 
     @Inject
-    @Named("archetype")
     private Prompter prompter;
 
     @Override
