@@ -55,25 +55,24 @@ public interface Constants {
 
     String EXCLUDE_PATTERNS = "excludePatterns";
 
-    List<String> DEFAULT_FILTERED_EXTENSIONS = Arrays.asList(new String[] {
-        "java",
-        "xml",
-        "txt",
-        "groovy",
-        "cs",
-        "mdo",
-        "aj",
-        "jsp",
-        "gsp",
-        "vm",
-        "html",
-        "xhtml",
-        "properties",
-        ".classpath",
-        ".project"
-    });
+    List<String> DEFAULT_FILTERED_EXTENSIONS = Arrays.asList(
+            "java",
+            "xml",
+            "txt",
+            "groovy",
+            "cs",
+            "mdo",
+            "aj",
+            "jsp",
+            "gsp",
+            "vm",
+            "html",
+            "xhtml",
+            "properties",
+            ".classpath",
+            ".project");
 
-    List<String> DEFAULT_LANGUAGES = Arrays.asList(new String[] {"java", "groovy", "csharp", "aspectj"});
+    List<String> DEFAULT_LANGUAGES = Arrays.asList("java", "groovy", "csharp", "aspectj");
 
     String GROUP_ID = "groupId";
 
@@ -91,11 +90,7 @@ public interface Constants {
 
     String PARENT_ARTIFACT_ID = "parentArtifactId";
 
-    String POM_PATH = Constants.ARCHETYPE_RESOURCES + "/" + Constants.ARCHETYPE_POM;
-
     String RESOURCES = "resources";
-
-    String SITE = "site";
 
     String SRC = "src";
 

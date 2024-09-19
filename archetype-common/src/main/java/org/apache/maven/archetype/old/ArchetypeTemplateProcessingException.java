@@ -29,10 +29,6 @@ public class ArchetypeTemplateProcessingException extends ArchetypeGenerationFai
         super(message);
     }
 
-    public ArchetypeTemplateProcessingException(Throwable cause) {
-        super(cause);
-    }
-
     public ArchetypeTemplateProcessingException(String message, Throwable cause) {
         super(message, cause);
     }

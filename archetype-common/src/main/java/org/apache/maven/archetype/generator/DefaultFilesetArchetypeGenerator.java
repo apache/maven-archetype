@@ -25,14 +25,13 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -184,7 +183,7 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
                     }
                 }
 
-                if (archetypeDescriptor.getModules().size() > 0) {
+                if (!archetypeDescriptor.getModules().isEmpty()) {
                     getLogger().info("Modules ignored in partial mode");
                 }
             } else {
@@ -282,7 +281,7 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
             }
 
             try (InputStream inputStream = archetypeZipFile.getInputStream(input);
-                    OutputStream out = new FileOutputStream(outFile)) {
+                    OutputStream out = Files.newOutputStream(outFile.toPath())) {
                 IOUtil.copy(inputStream, out);
             }
         }
@@ -301,7 +300,7 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
             String moduleOffset,
             boolean failIfExists,
             Context context)
-            throws OutputFileExists, FileNotFoundException, IOException {
+            throws OutputFileExists, IOException {
         int count = 0;
 
         for (String template : fileSetResources) {
@@ -358,7 +357,7 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
         while (matcher.find()) {
             String propertyToken = matcher.group(1);
             String contextPropertyValue = (String) context.get(propertyToken);
-            if (contextPropertyValue != null && contextPropertyValue.trim().length() > 0) {
+            if (contextPropertyValue != null && !contextPropertyValue.trim().isEmpty()) {
                 if (getLogger().isDebugEnabled()) {
                     getLogger()
                             .debug("Replacing property '" + propertyToken + "' in file path '" + filePath
@@ -463,7 +462,7 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
             Context context,
             String packageName,
             File outputDirectoryFile)
-            throws OutputFileExists, ArchetypeGenerationFailure, FileNotFoundException, IOException {
+            throws OutputFileExists, ArchetypeGenerationFailure, IOException {
         processTemplates(
                 packageName,
                 outputDirectoryFile,
@@ -483,7 +482,7 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
             Context context,
             String packageName,
             File outputDirectoryFile)
-            throws OutputFileExists, ArchetypeGenerationFailure, FileNotFoundException, IOException {
+            throws OutputFileExists, ArchetypeGenerationFailure, IOException {
         processTemplates(
                 packageName,
                 outputDirectoryFile,
@@ -739,7 +738,7 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
 
         getLogger().debug("Merging into " + outFile);
 
-        try (Writer writer = new OutputStreamWriter(new FileOutputStream(outFile), encoding)) {
+        try (Writer writer = new OutputStreamWriter(Files.newOutputStream(outFile.toPath()), encoding)) {
             StringWriter stringWriter = new StringWriter();
 
             velocity.getEngine().mergeTemplate(templateFileName, encoding, context, stringWriter);

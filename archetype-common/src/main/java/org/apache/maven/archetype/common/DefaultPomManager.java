@@ -24,7 +24,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -33,6 +32,7 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -56,8 +56,8 @@ import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.FileUtils;
-import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.util.xml.XmlStreamReader;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.codehaus.plexus.util.xml.Xpp3DomUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
@@ -73,7 +73,7 @@ public class DefaultPomManager extends AbstractLogEnabled implements PomManager 
             throws IOException, ParserConfigurationException, TransformerException, SAXException, InvalidPackaging,
                     ArchetypeTemplateProcessingException {
         StringWriter out = new StringWriter();
-        boolean found = PomUtils.addNewModule(artifactId, ReaderFactory.newXmlReader(pom), out);
+        boolean found = PomUtils.addNewModule(artifactId, new XmlStreamReader(pom), out);
         if (found) {
             FileUtils.fileWrite(pom.getAbsolutePath(), out.toString());
         }
@@ -182,7 +182,7 @@ public class DefaultPomManager extends AbstractLogEnabled implements PomManager 
 
     @Override
     public Model readPom(final File pomFile) throws IOException, XmlPullParserException {
-        try (Reader pomReader = ReaderFactory.newXmlReader(pomFile)) {
+        try (Reader pomReader = new XmlStreamReader(pomFile)) {
             MavenXpp3Reader reader = new MavenXpp3Reader();
 
             return reader.read(pomReader);
@@ -191,7 +191,7 @@ public class DefaultPomManager extends AbstractLogEnabled implements PomManager 
 
     @Override
     public Model readPom(InputStream pomStream) throws IOException, XmlPullParserException {
-        try (Reader pomReader = ReaderFactory.newXmlReader(pomStream)) {
+        try (Reader pomReader = new XmlStreamReader(pomStream)) {
             MavenXpp3Reader reader = new MavenXpp3Reader();
 
             return reader.read(pomReader);
@@ -203,7 +203,7 @@ public class DefaultPomManager extends AbstractLogEnabled implements PomManager 
         String fileEncoding = StringUtils.isEmpty(model.getModelEncoding()) ? "UTF-8" : model.getModelEncoding();
 
         org.jdom2.Document doc;
-        try (InputStream inputStream = new FileInputStream(initialPomFile)) {
+        try (InputStream inputStream = Files.newInputStream(initialPomFile.toPath())) {
             SAXBuilder builder = new SAXBuilder();
             doc = builder.build(inputStream);
         } catch (JDOMException exc) {
@@ -225,7 +225,7 @@ public class DefaultPomManager extends AbstractLogEnabled implements PomManager 
         } catch (FileNotFoundException e) {
             getLogger().debug("Creating pom file " + pomFile);
 
-            try (Writer pomWriter = new OutputStreamWriter(new FileOutputStream(pomFile), fileEncoding)) {
+            try (Writer pomWriter = new OutputStreamWriter(Files.newOutputStream(pomFile.toPath()), fileEncoding)) {
                 MavenXpp3Writer writer = new MavenXpp3Writer();
                 writer.write(pomWriter, model);
             }
@@ -253,13 +253,13 @@ public class DefaultPomManager extends AbstractLogEnabled implements PomManager 
 
     private void mergeProfiles(Model model, Model generatedModel) {
         List<Profile> generatedProfiles = generatedModel.getProfiles();
-        if (generatedProfiles != null && generatedProfiles.size() > 0) {
+        if (generatedProfiles != null && !generatedProfiles.isEmpty()) {
             List<Profile> modelProfiles = model.getProfiles();
             Map<String, Profile> modelProfileIdMap = new HashMap<>();
             if (modelProfiles == null) {
                 modelProfiles = new ArrayList<>();
                 model.setProfiles(modelProfiles);
-            } else if (modelProfiles.size() > 0) {
+            } else if (!modelProfiles.isEmpty()) {
                 // add profile ids from the model for later lookups to the modelProfileIds set
                 for (Profile modelProfile : modelProfiles) {
                     modelProfileIdMap.put(modelProfile.getId(), modelProfile);

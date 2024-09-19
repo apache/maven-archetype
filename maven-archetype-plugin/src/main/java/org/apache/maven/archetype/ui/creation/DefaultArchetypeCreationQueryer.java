@@ -69,9 +69,7 @@ public class DefaultArchetypeCreationQueryer extends AbstractLogEnabled implemen
     public String askNewPropertyKey() throws PrompterException {
         String query = "Define property key";
 
-        String answer = prompter.prompt(query);
-
-        return answer;
+        return prompter.prompt(query);
     }
 
     @Override

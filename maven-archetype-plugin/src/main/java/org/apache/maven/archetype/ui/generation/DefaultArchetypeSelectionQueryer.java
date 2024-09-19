@@ -23,7 +23,6 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -48,16 +47,6 @@ public class DefaultArchetypeSelectionQueryer extends AbstractLogEnabled impleme
     @Inject
     @Named("archetype")
     private Prompter prompter;
-
-    @Override
-    public boolean confirmSelection(ArchetypeDefinition archetypeDefinition) throws PrompterException {
-        String query = "Confirm archetype selection: \n" + archetypeDefinition.getGroupId() + "/"
-                + archetypeDefinition.getName() + "\n";
-
-        String answer = prompter.prompt(query, Arrays.asList(new String[] {"Y", "N"}), "Y");
-
-        return "Y".equalsIgnoreCase(answer);
-    }
 
     @Override
     public Archetype selectArchetype(Map<String, List<Archetype>> catalogs) throws PrompterException {
@@ -128,7 +117,7 @@ public class DefaultArchetypeSelectionQueryer extends AbstractLogEnabled impleme
                 answer = prompter.prompt(query.toString(), Integer.toString(defaultSelection));
             }
 
-            if (NumberUtils.isNumber(answer)) {
+            if (NumberUtils.isCreatable(answer)) {
                 selection = archetypeAnswerMap.get(answer);
             } else {
                 // not a number so apply filter and ask again

@@ -46,8 +46,8 @@ public interface OldArchetype {
      * Download an archetype then create a project from it.
      */
     void createArchetype(ArchetypeGenerationRequest request)
-            throws UnknownArchetype, ArchetypeNotFoundException, ArchetypeDescriptorException,
-                    ArchetypeTemplateProcessingException, InvalidPackaging;
+            throws UnknownArchetype, ArchetypeDescriptorException, ArchetypeTemplateProcessingException,
+                    InvalidPackaging;
 
     /**
      * Create a project from an archetype file.

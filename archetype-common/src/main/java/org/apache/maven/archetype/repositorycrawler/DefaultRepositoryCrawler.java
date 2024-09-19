@@ -36,7 +36,7 @@ import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.model.Model;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
-import org.codehaus.plexus.util.WriterFactory;
+import org.codehaus.plexus.util.xml.XmlStreamWriter;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 /**
@@ -131,7 +131,7 @@ public class DefaultRepositoryCrawler extends AbstractLogEnabled implements Repo
     public boolean writeCatalog(ArchetypeCatalog archetypeCatalog, File archetypeCatalogFile) {
         ArchetypeCatalogXpp3Writer catalogWriter = new ArchetypeCatalogXpp3Writer();
 
-        try (Writer fileWriter = WriterFactory.newXmlWriter(archetypeCatalogFile)) {
+        try (Writer fileWriter = new XmlStreamWriter(archetypeCatalogFile)) {
             catalogWriter.write(fileWriter, archetypeCatalog);
             return true;
         } catch (IOException ex) {

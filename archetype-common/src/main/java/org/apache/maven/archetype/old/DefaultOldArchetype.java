@@ -25,7 +25,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -36,11 +35,11 @@ import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.commons.io.input.XmlStreamReader;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
 import org.apache.maven.archetype.common.Constants;
@@ -61,9 +60,9 @@ import org.apache.velocity.context.Context;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
-import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.StringUtils;
-import org.codehaus.plexus.util.WriterFactory;
+import org.codehaus.plexus.util.xml.XmlStreamReader;
+import org.codehaus.plexus.util.xml.XmlStreamWriter;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.codehaus.plexus.velocity.VelocityComponent;
 import org.xml.sax.SAXException;
@@ -259,7 +258,7 @@ public class DefaultOldArchetype extends AbstractLogEnabled implements OldArchet
         Model parentModel = null;
         if (creating) {
             if (parentPomFile.exists()) {
-                try (Reader fileReader = ReaderFactory.newXmlReader(parentPomFile)) {
+                try (Reader fileReader = new XmlStreamReader(parentPomFile)) {
                     MavenXpp3Reader reader = new MavenXpp3Reader();
                     parentModel = reader.read(fileReader);
                     if (!"pom".equals(parentModel.getPackaging())) {
@@ -306,14 +305,14 @@ public class DefaultOldArchetype extends AbstractLogEnabled implements OldArchet
 
             boolean added;
             StringWriter w = new StringWriter();
-            try (Reader fileReader = ReaderFactory.newXmlReader(parentPomFile)) {
+            try (Reader fileReader = new XmlStreamReader(parentPomFile)) {
                 added = addModuleToParentPom(artifactId, fileReader, w);
             } catch (IOException | SAXException | ParserConfigurationException | TransformerException e) {
                 throw new ArchetypeTemplateProcessingException("Unable to rewrite parent POM", e);
             }
 
             if (added) {
-                try (Writer out = WriterFactory.newXmlWriter(parentPomFile)) {
+                try (Writer out = new XmlStreamWriter(parentPomFile)) {
                     IOUtil.copy(w.toString(), out);
                 } catch (IOException e) {
                     throw new ArchetypeTemplateProcessingException("Unable to rewrite parent POM", e);
@@ -368,7 +367,7 @@ public class DefaultOldArchetype extends AbstractLogEnabled implements OldArchet
 
         Model generatedModel;
 
-        try (Reader pomReader = ReaderFactory.newXmlReader(pomFile)) {
+        try (Reader pomReader = new XmlStreamReader(pomFile)) {
             MavenXpp3Reader reader = new MavenXpp3Reader();
 
             generatedModel = reader.read(pomReader);
@@ -389,7 +388,7 @@ public class DefaultOldArchetype extends AbstractLogEnabled implements OldArchet
             }
             generatedModel.setParent(parent);
 
-            try (Writer pomWriter = WriterFactory.newXmlWriter(pomFile)) {
+            try (Writer pomWriter = new XmlStreamWriter(pomFile)) {
                 MavenXpp3Writer writer = new MavenXpp3Writer();
                 writer.write(pomWriter, generatedModel);
             } catch (IOException e) {
@@ -444,7 +443,7 @@ public class DefaultOldArchetype extends AbstractLogEnabled implements OldArchet
         }
 
         // create resource director(y/ies) if specified in POM
-        if (foundBuildElement && build.getResources().size() > 0) {
+        if (foundBuildElement && !build.getResources().isEmpty()) {
             getLogger().debug("Overriding default resource directory ");
 
             overrideResourceDir = true;
@@ -475,7 +474,7 @@ public class DefaultOldArchetype extends AbstractLogEnabled implements OldArchet
         }
 
         // create test resource directory if specified in POM
-        if (foundBuildElement && build.getTestResources().size() > 0) {
+        if (foundBuildElement && !build.getTestResources().isEmpty()) {
             getLogger().debug("Overriding default test resource directory ");
 
             overrideTestResourceDir = true;
@@ -501,7 +500,7 @@ public class DefaultOldArchetype extends AbstractLogEnabled implements OldArchet
         // Main
         // ----------------------------------------------------------------------
 
-        if (descriptor.getSources().size() > 0) {
+        if (!descriptor.getSources().isEmpty()) {
             if (!overrideSrcDir) {
                 FileUtils.mkdir(outputDirectory + DEFAULT_SOURCE_DIR);
                 processSources(outputDirectory, context, descriptor, packageName, DEFAULT_SOURCE_DIR);
@@ -510,7 +509,7 @@ public class DefaultOldArchetype extends AbstractLogEnabled implements OldArchet
             }
         }
 
-        if (descriptor.getResources().size() > 0) {
+        if (!descriptor.getResources().isEmpty()) {
             if (!overrideResourceDir) {
                 FileUtils.mkdir(outputDirectory + DEFAULT_RESOURCE_DIR);
             }
@@ -521,7 +520,7 @@ public class DefaultOldArchetype extends AbstractLogEnabled implements OldArchet
         // Test
         // ----------------------------------------------------------------------
 
-        if (descriptor.getTestSources().size() > 0) {
+        if (!descriptor.getTestSources().isEmpty()) {
             if (!overrideTestSrcDir) {
                 FileUtils.mkdir(outputDirectory + DEFAULT_TEST_SOURCE_DIR);
                 processTestSources(outputDirectory, context, descriptor, packageName, DEFAULT_TEST_SOURCE_DIR);
@@ -530,7 +529,7 @@ public class DefaultOldArchetype extends AbstractLogEnabled implements OldArchet
             }
         }
 
-        if (descriptor.getTestResources().size() > 0) {
+        if (!descriptor.getTestResources().isEmpty()) {
             if (!overrideTestResourceDir) {
                 FileUtils.mkdir(outputDirectory + DEFAULT_TEST_RESOURCE_DIR);
             }
@@ -541,7 +540,7 @@ public class DefaultOldArchetype extends AbstractLogEnabled implements OldArchet
         // Site
         // ----------------------------------------------------------------------
 
-        if (descriptor.getSiteResources().size() > 0) {
+        if (!descriptor.getSiteResources().isEmpty()) {
             processSiteResources(outputDirectory, context, descriptor, packageName);
         }
     }
@@ -677,7 +676,7 @@ public class DefaultOldArchetype extends AbstractLogEnabled implements OldArchet
             if (extraPackages.startsWith("/")) {
                 extraPackages = extraPackages.substring(1);
             }
-            if (extraPackages.length() > 0) {
+            if (!extraPackages.isEmpty()) {
                 path += "/" + extraPackages;
             }
 
@@ -695,7 +694,7 @@ public class DefaultOldArchetype extends AbstractLogEnabled implements OldArchet
         }
 
         if (descriptor.isFiltered()) {
-            try (Writer writer = new OutputStreamWriter(new FileOutputStream(f), descriptor.getEncoding())) {
+            try (Writer writer = new OutputStreamWriter(Files.newOutputStream(f.toPath()), descriptor.getEncoding())) {
                 StringWriter stringWriter = new StringWriter();
 
                 template = ARCHETYPE_RESOURCES + "/" + template;
@@ -708,7 +707,7 @@ public class DefaultOldArchetype extends AbstractLogEnabled implements OldArchet
             }
         } else {
             try (InputStream is = getStream(ARCHETYPE_RESOURCES + "/" + template, null);
-                    OutputStream fos = new FileOutputStream(f)) {
+                    OutputStream fos = Files.newOutputStream(f.toPath())) {
                 IOUtil.copy(is, fos);
             } catch (Exception e) {
                 throw new ArchetypeTemplateProcessingException("Error copying file", e);

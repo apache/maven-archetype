@@ -20,7 +20,6 @@ package org.apache.maven.archetype.mojos;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -28,6 +27,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -49,7 +49,6 @@ import org.apache.maven.archetype.generator.ArchetypeGenerator;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -66,10 +65,10 @@ import org.apache.maven.shared.scriptinterpreter.ScriptRunner;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.InterpolationFilterReader;
-import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.StringUtils;
-import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.util.introspection.ReflectionValueExtractor;
+import org.codehaus.plexus.util.xml.XmlStreamReader;
+import org.codehaus.plexus.util.xml.XmlStreamWriter;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -273,7 +272,7 @@ public class IntegrationTestMojo extends AbstractMojo {
     private Map<String, String> properties = new HashMap<>();
 
     @Override
-    public void execute() throws MojoExecutionException, MojoFailureException {
+    public void execute() throws MojoExecutionException {
         if (skip) {
             return;
         }
@@ -287,7 +286,7 @@ public class IntegrationTestMojo extends AbstractMojo {
         File archetypeFile = project.getArtifact().getFile();
 
         if (archetypeFile == null) {
-            throw new MojoFailureException("Unable to get the archetypes' artifact which should have just been built:"
+            throw new MojoExecutionException("Unable to get the archetypes' artifact which should have just been built:"
                     + " you probably launched 'mvn archetype:integration-test' instead of"
                     + " 'mvn integration-test'.");
         }
@@ -295,7 +294,7 @@ public class IntegrationTestMojo extends AbstractMojo {
         try {
             List<File> projectsGoalFiles = FileUtils.getFiles(testProjectsDirectory, "**/goal.txt", "");
 
-            if (projectsGoalFiles.size() == 0) {
+            if (projectsGoalFiles.isEmpty()) {
                 getLog().warn("No Archetype IT projects: no directory with goal.txt found.");
 
                 return;
@@ -317,7 +316,7 @@ public class IntegrationTestMojo extends AbstractMojo {
                 throw new MojoExecutionException(errors);
             }
         } catch (IOException ex) {
-            throw new MojoFailureException(ex, ex.getMessage(), ex.getMessage());
+            throw new MojoExecutionException(ex.getMessage(), ex);
         }
     }
 
@@ -419,7 +418,7 @@ public class IntegrationTestMojo extends AbstractMojo {
     private Properties loadProperties(final File propertiesFile) throws IOException {
         Properties properties = new Properties();
 
-        try (InputStream in = new FileInputStream(propertiesFile)) {
+        try (InputStream in = Files.newInputStream(propertiesFile.toPath())) {
             properties.load(in);
         }
 
@@ -671,7 +670,7 @@ public class IntegrationTestMojo extends AbstractMojo {
         return logger;
     }
 
-    class IntegrationTestFailure extends Exception {
+    static class IntegrationTestFailure extends Exception {
         IntegrationTestFailure() {
             super();
         }
@@ -720,12 +719,12 @@ public class IntegrationTestMojo extends AbstractMojo {
             // interpolation with token @...@
             Map<String, Object> composite = getInterpolationValueSource();
 
-            try (Reader xmlStreamReader = ReaderFactory.newXmlReader(originalFile);
+            try (Reader xmlStreamReader = new XmlStreamReader(originalFile);
                     Reader reader = new InterpolationFilterReader(xmlStreamReader, composite, "@", "@")) {
                 xml = IOUtil.toString(reader);
             }
 
-            try (Writer writer = WriterFactory.newXmlWriter(interpolatedFile)) {
+            try (Writer writer = new XmlStreamWriter(interpolatedFile)) {
                 interpolatedFile.getParentFile().mkdirs();
 
                 writer.write(xml);
@@ -760,7 +759,7 @@ public class IntegrationTestMojo extends AbstractMojo {
                 throw new IllegalArgumentException("no project specified");
             }
             this.mavenProject = mavenProject;
-            this.properties = properties == null ? (Map) new Properties() : properties;
+            this.properties = properties == null ? new HashMap<>() : properties;
         }
 
         /**

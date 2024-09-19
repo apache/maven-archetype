@@ -32,7 +32,6 @@ import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.ContextEnabled;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Execute;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -164,7 +163,7 @@ public class CreateProjectFromArchetypeMojo extends AbstractMojo implements Cont
     private String filter;
 
     @Override
-    public void execute() throws MojoExecutionException, MojoFailureException {
+    public void execute() throws MojoExecutionException {
         Properties executionProperties = session.getUserProperties();
 
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest()
@@ -196,15 +195,10 @@ public class CreateProjectFromArchetypeMojo extends AbstractMojo implements Cont
             ArchetypeGenerationResult generationResult = manager.generateProjectFromArchetype(request);
 
             if (generationResult.getCause() != null) {
-                throw new MojoFailureException(
-                        generationResult.getCause(),
-                        generationResult.getCause().getMessage(),
-                        generationResult.getCause().getMessage());
+                throw new MojoExecutionException(generationResult.getCause().getMessage(), generationResult.getCause());
             }
-        } catch (MojoFailureException ex) {
-            throw ex;
         } catch (Exception ex) {
-            throw (MojoFailureException) new MojoFailureException(ex.getMessage()).initCause(ex);
+            throw new MojoExecutionException(ex.getMessage(), ex);
         }
 
         String artifactId = request.getArtifactId();
@@ -220,8 +214,7 @@ public class CreateProjectFromArchetypeMojo extends AbstractMojo implements Cont
         }
     }
 
-    private void invokePostArchetypeGenerationGoals(String goals, String artifactId)
-            throws MojoExecutionException, MojoFailureException {
+    private void invokePostArchetypeGenerationGoals(String goals, String artifactId) throws MojoExecutionException {
         getLog().info("Invoking post-archetype-generation goals: " + goals);
 
         File projectBasedir = new File(outputDirectory, artifactId);

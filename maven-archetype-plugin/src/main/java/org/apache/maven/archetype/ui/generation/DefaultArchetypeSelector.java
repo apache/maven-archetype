@@ -133,7 +133,7 @@ public class DefaultArchetypeSelector extends AbstractLogEnabled implements Arch
                 definition.setArtifactId(DEFAULT_ARCHETYPE_ARTIFACTID);
             }
 
-            if (interactiveMode.booleanValue() && (archetypes.size() > 0)) {
+            if (interactiveMode.booleanValue() && (!archetypes.isEmpty())) {
                 Archetype selectedArchetype = archetypeSelectionQueryer.selectArchetype(archetypes, definition);
 
                 updateDefinition(definition, selectedArchetype);

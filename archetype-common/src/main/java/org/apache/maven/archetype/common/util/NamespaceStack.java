@@ -140,8 +140,7 @@ class NamespaceStack {
         if (index == -1) {
             return null;
         }
-        String uri = uris.elementAt(index);
-        return uri;
+        return uris.elementAt(index);
     }
 
     /**

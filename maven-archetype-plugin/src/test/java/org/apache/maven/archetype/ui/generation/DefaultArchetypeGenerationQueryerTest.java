@@ -45,8 +45,8 @@ public class DefaultArchetypeGenerationQueryerTest extends PlexusTestCase {
     public void testPropertyRegexValidationRetry() throws PrompterException {
         Prompter prompter = EasyMock.createMock(Prompter.class);
 
-        EasyMock.expect(prompter.prompt(EasyMock.<String>anyObject())).andReturn("invalid-answer");
-        EasyMock.expect(prompter.prompt(EasyMock.<String>anyObject())).andReturn("valid-answer");
+        EasyMock.expect(prompter.prompt(EasyMock.anyObject())).andReturn("invalid-answer");
+        EasyMock.expect(prompter.prompt(EasyMock.anyObject())).andReturn("valid-answer");
 
         EasyMock.replay(prompter);
         queryer.setPrompter(prompter);

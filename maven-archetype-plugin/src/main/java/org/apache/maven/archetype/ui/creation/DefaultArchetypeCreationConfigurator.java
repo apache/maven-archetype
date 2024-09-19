@@ -23,13 +23,10 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Iterator;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.util.List;
 import java.util.Properties;
 
@@ -37,7 +34,6 @@ import org.apache.maven.archetype.common.ArchetypeFilesResolver;
 import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
 import org.apache.maven.archetype.exception.ArchetypeNotDefined;
-import org.apache.maven.archetype.exception.TemplateCreationException;
 import org.apache.maven.archetype.ui.ArchetypeConfiguration;
 import org.apache.maven.archetype.ui.ArchetypeDefinition;
 import org.apache.maven.archetype.ui.ArchetypeFactory;
@@ -65,8 +61,7 @@ public class DefaultArchetypeCreationConfigurator extends AbstractLogEnabled imp
             Properties commandLineProperties,
             File propertyFile,
             List<String> languages)
-            throws IOException, ArchetypeNotDefined, ArchetypeNotConfigured, PrompterException,
-                    TemplateCreationException {
+            throws IOException, ArchetypeNotDefined, ArchetypeNotConfigured, PrompterException {
         Properties properties = initialiseArchetypeProperties(commandLineProperties, propertyFile);
 
         ArchetypeDefinition archetypeDefinition = archetypeFactory.createArchetypeDefinition(properties);
@@ -250,43 +245,13 @@ public class DefaultArchetypeCreationConfigurator extends AbstractLogEnabled imp
         return archetypeFactory.createArchetypeConfiguration(project, archetypeDefinition, properties);
     }
 
-    public void readProperties(Properties properties, File propertyFile) throws IOException {
+    private void readProperties(Properties properties, File propertyFile) throws IOException {
         getLogger().debug("Reading property file " + propertyFile);
 
-        try (InputStream is = new FileInputStream(propertyFile)) {
+        try (InputStream is = Files.newInputStream(propertyFile.toPath())) {
             properties.load(is);
 
             getLogger().debug("Read " + properties.size() + " properties");
-        }
-    }
-
-    public void writeProperties(Properties properties, File propertyFile) throws IOException {
-        Properties storedProperties = new Properties();
-        try {
-            readProperties(storedProperties, propertyFile);
-        } catch (FileNotFoundException ex) {
-            getLogger().debug("Property file not found. Creating a new one");
-        }
-
-        getLogger().debug("Adding " + properties.size() + " properties");
-
-        Iterator<?> propertiesIterator = properties.keySet().iterator();
-        while (propertiesIterator.hasNext()) {
-            String propertyKey = (String) propertiesIterator.next();
-            storedProperties.setProperty(propertyKey, properties.getProperty(propertyKey));
-        }
-
-        propertyFile.getParentFile().mkdirs();
-
-        if (!propertyFile.exists() && !propertyFile.createNewFile()) {
-            getLogger()
-                    .warn("Could not create new file \"" + propertyFile.getPath() + "\" or the file already exists.");
-        }
-
-        try (OutputStream os = new FileOutputStream(propertyFile)) {
-            storedProperties.store(os, "");
-
-            getLogger().debug("Stored " + storedProperties.size() + " properties");
         }
     }
 
@@ -297,7 +262,7 @@ public class DefaultArchetypeCreationConfigurator extends AbstractLogEnabled imp
         if (propertyFile != null) {
             try {
                 readProperties(properties, propertyFile);
-            } catch (FileNotFoundException ex) {
+            } catch (NoSuchFileException ex) {
                 getLogger().debug(propertyFile.getName() + "  does not exist");
             }
         }

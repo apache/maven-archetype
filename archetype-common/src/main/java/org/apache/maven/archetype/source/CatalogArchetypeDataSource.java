@@ -27,17 +27,16 @@ import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Reader;
 import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Writer;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.util.WriterFactory;
+import org.codehaus.plexus.util.xml.XmlStreamWriter;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 /**
  * @author Jason van Zyl
  */
 public abstract class CatalogArchetypeDataSource extends AbstractLogEnabled implements ArchetypeDataSource {
-    public static final String ARCHETYPE_CATALOG_PROPERTY = "file";
 
     protected void writeLocalCatalog(ArchetypeCatalog catalog, File catalogFile) throws ArchetypeDataSourceException {
-        try (Writer writer = WriterFactory.newXmlWriter(catalogFile)) {
+        try (Writer writer = new XmlStreamWriter(catalogFile)) {
             ArchetypeCatalogXpp3Writer catalogWriter = new ArchetypeCatalogXpp3Writer();
 
             catalogWriter.write(writer, catalog);

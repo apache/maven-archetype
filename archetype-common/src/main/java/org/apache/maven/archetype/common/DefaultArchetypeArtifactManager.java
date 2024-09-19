@@ -25,10 +25,12 @@ import javax.inject.Singleton;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -46,7 +48,6 @@ import org.apache.maven.archetype.metadata.io.xpp3.ArchetypeDescriptorXpp3Reader
 import org.apache.maven.archetype.old.descriptor.ArchetypeDescriptorBuilder;
 import org.apache.maven.model.Model;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
-import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.repository.RemoteRepository;
@@ -265,7 +266,7 @@ public class DefaultArchetypeArtifactManager extends AbstractLogEnabled implemen
     }
 
     private boolean isFileSetArchetype(ZipFile zipFile) throws IOException {
-        try (Reader reader = getArchetypeDescriptorReader(zipFile); ) {
+        try (Reader reader = getArchetypeDescriptorReader(zipFile)) {
             return (reader != null);
         }
     }
@@ -330,7 +331,7 @@ public class DefaultArchetypeArtifactManager extends AbstractLogEnabled implemen
             throw new IOException("The " + descriptor + " descriptor cannot be read in " + zipFile.getName() + ".");
         }
 
-        return ReaderFactory.newReader(is, ReaderFactory.UTF_8);
+        return new InputStreamReader(is, StandardCharsets.UTF_8);
     }
 
     private ZipEntry searchEntry(ZipFile zipFile, String searchString) {
