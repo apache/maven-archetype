@@ -33,7 +33,6 @@ import org.apache.maven.archetype.ui.creation.ArchetypeCreationConfigurator;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Execute;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -220,8 +219,11 @@ public class CreateArchetypeFromProjectMojo extends AbstractMojo {
     private MavenSession session;
 
     @Override
-    public void execute() throws MojoExecutionException, MojoFailureException {
-        Properties executionProperties = session.getExecutionProperties();
+    public void execute() throws MojoExecutionException {
+
+        Properties executionProperties = new Properties(session.getSystemProperties());
+        executionProperties.putAll(session.getUserProperties());
+
         try {
             if (propertyFile != null) {
                 propertyFile.getParentFile().mkdirs();
@@ -253,10 +255,7 @@ public class CreateArchetypeFromProjectMojo extends AbstractMojo {
             ArchetypeCreationResult result = manager.createArchetypeFromProject(request);
 
             if (result.getCause() != null) {
-                throw new MojoFailureException(
-                        result.getCause(),
-                        result.getCause().getMessage(),
-                        result.getCause().getMessage());
+                throw new MojoExecutionException(result.getCause().getMessage(), result.getCause());
             }
 
             getLog().info("Archetype project created in " + outputDirectory);
@@ -273,10 +272,8 @@ public class CreateArchetypeFromProjectMojo extends AbstractMojo {
                 // This of course would be strung together from the outside.
             }
 
-        } catch (MojoFailureException ex) {
-            throw ex;
         } catch (Exception ex) {
-            throw new MojoFailureException(ex, ex.getMessage(), ex.getMessage());
+            throw new MojoExecutionException(ex.getMessage(), ex);
         }
     }
 

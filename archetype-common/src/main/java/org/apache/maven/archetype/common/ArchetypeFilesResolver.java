@@ -26,7 +26,6 @@ import org.apache.maven.archetype.metadata.FileSet;
 
 /** @author rafale */
 public interface ArchetypeFilesResolver {
-    String ROLE = ArchetypeFilesResolver.class.getName();
 
     List<String> getFilesWithExtension(List<String> files, String extension);
 

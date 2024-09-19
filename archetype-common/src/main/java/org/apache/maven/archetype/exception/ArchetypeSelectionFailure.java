@@ -19,17 +19,8 @@
 package org.apache.maven.archetype.exception;
 
 public class ArchetypeSelectionFailure extends ArchetypeException {
-    public ArchetypeSelectionFailure() {}
 
     public ArchetypeSelectionFailure(String msg) {
         super(msg);
-    }
-
-    public ArchetypeSelectionFailure(Throwable cause) {
-        super(cause);
-    }
-
-    public ArchetypeSelectionFailure(String msg, Throwable cause) {
-        super(msg, cause);
     }
 }

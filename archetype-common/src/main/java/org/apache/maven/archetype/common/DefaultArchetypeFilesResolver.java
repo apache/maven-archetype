@@ -24,7 +24,6 @@ import javax.inject.Singleton;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -271,14 +270,14 @@ public class DefaultArchetypeFilesResolver extends AbstractLogEnabled implements
     }
 
     private List<String> resolveFiles(File basedir, List<String> languages) throws IOException {
-        String[] languagesArray = languages.toArray(new String[languages.size()]);
+        String[] languagesArray = languages.toArray(new String[0]);
         String[] languagesPathesArray = new String[languagesArray.length];
         for (int i = 0; i < languagesArray.length; i++) {
             languagesPathesArray[i] = "**/src/**/" + languagesArray[i] + "/**";
         }
 
         String excludes = "target";
-        for (String defaultExclude : Arrays.asList(ListScanner.DEFAULTEXCLUDES)) {
+        for (String defaultExclude : ListScanner.DEFAULTEXCLUDES) {
             excludes += "," + defaultExclude + "/**";
         }
 

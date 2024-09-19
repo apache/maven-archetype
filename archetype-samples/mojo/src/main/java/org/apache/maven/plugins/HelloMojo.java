@@ -2,7 +2,6 @@ package org.apache.maven.plugins;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 
 /**
  * Says Hello to someone.
@@ -16,7 +15,7 @@ public class HelloMojo extends AbstractMojo {
      */
     String toWhom;
 
-    public void execute() throws MojoExecutionException, MojoFailureException {
+    public void execute() throws MojoExecutionException {
         getLog().info("Hello " + toWhom + "!");
     }
 }

@@ -24,7 +24,6 @@ import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.repositorycrawler.RepositoryCrawler;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -52,11 +51,11 @@ public class CrawlRepositoryMojo extends AbstractMojo {
     private File repository;
 
     @Override
-    public void execute() throws MojoExecutionException, MojoFailureException {
+    public void execute() throws MojoExecutionException {
         getLog().debug("repository " + repository + ", catalogFile " + catalogFile);
 
         if (repository == null) {
-            throw new MojoFailureException("The repository is not defined. Use -Drepository=/path/to/repository");
+            throw new MojoExecutionException("The repository is not defined. Use -Drepository=/path/to/repository");
         }
 
         ArchetypeCatalog catalog = crawler.crawl(repository);

@@ -23,14 +23,12 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -73,9 +71,9 @@ import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
-import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.StringUtils;
-import org.codehaus.plexus.util.WriterFactory;
+import org.codehaus.plexus.util.xml.XmlStreamReader;
+import org.codehaus.plexus.util.xml.XmlStreamWriter;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
@@ -180,7 +178,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
             List<String> excludePatterns = configurationProperties.getProperty(Constants.EXCLUDE_PATTERNS) != null
                     ? Arrays.asList(
                             StringUtils.split(configurationProperties.getProperty(Constants.EXCLUDE_PATTERNS), ","))
-                    : Collections.<String>emptyList();
+                    : Collections.emptyList();
 
             List<String> fileNames = resolveFileNames(pom, basedir, excludePatterns);
             if (getLogger().isDebugEnabled()) {
@@ -252,7 +250,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
                     keepParent);
             getLogger().debug("Created Archetype " + archetypeDescriptor.getName() + " template pom(s)");
 
-            try (Writer out = WriterFactory.newXmlWriter(archetypeDescriptorFile)) {
+            try (Writer out = new XmlStreamWriter(archetypeDescriptorFile)) {
                 ArchetypeDescriptorXpp3Writer writer = new ArchetypeDescriptorXpp3Writer();
 
                 writer.write(out, archetypeDescriptor);
@@ -329,7 +327,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
         }
 
         try (InputStream in = FilesetArchetypeCreator.class.getResourceAsStream("archetype.properties");
-                OutputStream out = new FileOutputStream(archetypePropertiesFile)) {
+                OutputStream out = Files.newOutputStream(archetypePropertiesFile.toPath())) {
             Properties archetypeProperties = new Properties();
             archetypeProperties.load(in);
 
@@ -449,7 +447,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
         }
 
         try (InputStream in = FilesetArchetypeCreator.class.getResourceAsStream(name);
-                OutputStream out = new FileOutputStream(destination)) {
+                OutputStream out = Files.newOutputStream(destination.toPath())) {
             IOUtil.copy(in, out);
         }
     }
@@ -489,7 +487,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
             File archetypeFilesDirectory,
             boolean preserveCData,
             boolean keepParent)
-            throws FileNotFoundException, IOException, XmlPullParserException {
+            throws IOException, XmlPullParserException {
         Model pom = pomManager.readPom(FileUtils.resolveFile(basedir, Constants.ARCHETYPE_POM));
 
         String parentArtifactId = pomReversedProperties.getProperty(Constants.PARENT_ARTIFACT_ID);
@@ -538,7 +536,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
             Properties pomReversedProperties,
             boolean preserveCData,
             boolean keepParent)
-            throws IOException, FileNotFoundException, XmlPullParserException {
+            throws IOException, XmlPullParserException {
         setArtifactId(pomReversedProperties, pom.getArtifactId());
 
         for (String moduleId : pom.getModules()) {
@@ -735,7 +733,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
         List<String> result = new ArrayList<>(toConcatenate.size());
 
         for (String concatenate : toConcatenate) {
-            result.add(((with.length() > 0) ? (with + "/" + concatenate) : concatenate));
+            result.add(((!with.isEmpty()) ? (with + "/" + concatenate) : concatenate));
         }
 
         return result;
@@ -850,8 +848,8 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
 
             outputFile.getParentFile().mkdirs();
 
-            try (Reader in = ReaderFactory.newXmlReader(inputFile);
-                    Writer out = WriterFactory.newXmlWriter(outputFile)) {
+            try (Reader in = new XmlStreamReader(inputFile);
+                    Writer out = new XmlStreamWriter(outputFile)) {
                 String initialcontent = IOUtil.toString(in);
 
                 String content = getReversedContent(initialcontent, pomReversedProperties);
@@ -881,7 +879,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
             pomManager.writePom(pom, outputFile, initialPomFile);
         }
 
-        try (Reader in = ReaderFactory.newXmlReader(initialPomFile)) {
+        try (Reader in = new XmlStreamReader(initialPomFile)) {
             String initialcontent = IOUtil.toString(in);
 
             Iterator<?> properties = pomReversedProperties.keySet().iterator();
@@ -1000,7 +998,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
 
         List<String> excludePatterns = reverseProperties.getProperty(Constants.EXCLUDE_PATTERNS) != null
                 ? Arrays.asList(StringUtils.split(reverseProperties.getProperty(Constants.EXCLUDE_PATTERNS), ","))
-                : Collections.<String>emptyList();
+                : Collections.emptyList();
 
         List<String> fileNames = resolveFileNames(pom, basedir, excludePatterns);
 
@@ -1075,8 +1073,8 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
 
             outputFile.getParentFile().mkdirs();
 
-            try (Reader in = ReaderFactory.newXmlReader(inputFile);
-                    Writer out = WriterFactory.newXmlWriter(outputFile)) {
+            try (Reader in = new XmlStreamReader(inputFile);
+                    Writer out = new XmlStreamWriter(outputFile)) {
                 String initialcontent = IOUtil.toString(in);
 
                 String content = getReversedContent(initialcontent, pomReversedProperties);
@@ -1126,7 +1124,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
             pomManager.writePom(pom, outputFile, initialPomFile);
         }
 
-        try (Reader in = ReaderFactory.newXmlReader(initialPomFile)) {
+        try (Reader in = new XmlStreamReader(initialPomFile)) {
             String initialcontent = IOUtil.toString(in);
 
             for (Iterator<?> properties = pomReversedProperties.keySet().iterator(); properties.hasNext(); ) {
@@ -1160,7 +1158,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
             directory = StringUtils.replace(directory, File.separator, "/");
 
             if (!groups.containsKey(directory)) {
-                groups.put(directory, new ArrayList<String>());
+                groups.put(directory, new ArrayList<>());
             }
 
             List<String> group = groups.get(directory);
@@ -1266,7 +1264,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
 
             String fileEncoding = detector.isFound() ? detector.getCharset() : defaultEncoding;
 
-            String initialcontent = IOUtil.toString(new FileInputStream(inputFile), fileEncoding);
+            String initialcontent = IOUtil.toString(Files.newInputStream(inputFile.toPath()), fileEncoding);
 
             for (Iterator<?> properties = reverseProperties.keySet().iterator(); properties.hasNext(); ) {
                 String property = (String) properties.next();
@@ -1291,7 +1289,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
                         .warn("Could not create new file \"" + outputFile.getPath() + "\" or the file already exists.");
             }
 
-            try (OutputStream os = new FileOutputStream(outputFile)) {
+            try (OutputStream os = Files.newOutputStream(outputFile.toPath())) {
                 write(content, os, fileEncoding);
             }
         }

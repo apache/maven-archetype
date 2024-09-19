@@ -25,7 +25,6 @@ import org.apache.maven.archetype.ArchetypeCreationResult;
  * Create an archetype from a project.
  */
 public interface ArchetypeCreator {
-    String ROLE = ArchetypeCreator.class.getName();
 
     void createArchetype(ArchetypeCreationRequest request, ArchetypeCreationResult result);
 }

@@ -43,7 +43,7 @@ public class DefaultArchetypeSelectionQueryerTest extends PlexusTestCase {
     public void setUp() throws Exception {
         super.setUp();
 
-        queryer = (DefaultArchetypeSelectionQueryer) lookup(ArchetypeSelectionQueryer.ROLE);
+        queryer = (DefaultArchetypeSelectionQueryer) lookup(ArchetypeSelectionQueryer.class);
     }
 
     public void testDefaultArchetypeInMapOtherSelection() throws PrompterException {

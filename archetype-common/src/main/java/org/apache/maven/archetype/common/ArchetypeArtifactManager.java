@@ -31,7 +31,6 @@ import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.repository.RemoteRepository;
 
 public interface ArchetypeArtifactManager {
-    String ROLE = ArchetypeArtifactManager.class.getName();
 
     Model getArchetypePom(File jar) throws XmlPullParserException, UnknownArchetype, IOException;
 

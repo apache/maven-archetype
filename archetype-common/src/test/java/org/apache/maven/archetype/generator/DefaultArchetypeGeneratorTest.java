@@ -19,11 +19,10 @@
 package org.apache.maven.archetype.generator;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.nio.file.Files;
 import java.util.Properties;
 
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
@@ -33,7 +32,7 @@ import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.codehaus.plexus.util.FileUtils;
-import org.codehaus.plexus.util.ReaderFactory;
+import org.codehaus.plexus.util.xml.XmlStreamReader;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.RepositorySystem;
@@ -586,7 +585,7 @@ public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
         assertEquals("${packageInPathFormat}", properties.getProperty("packageInPathFormat"));
     }
 
-    private void copy(final File in, final File out) throws IOException, FileNotFoundException {
+    private void copy(final File in, final File out) throws IOException {
         assertTrue(!out.exists() || out.delete());
         assertFalse(out.exists());
 
@@ -596,9 +595,9 @@ public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
         assertTrue(in.exists());
     }
 
-    private Properties loadProperties(File propertyFile) throws IOException, FileNotFoundException {
+    private Properties loadProperties(File propertyFile) throws IOException {
         Properties properties = new Properties();
-        try (InputStream in = new FileInputStream(propertyFile)) {
+        try (InputStream in = Files.newInputStream(propertyFile.toPath())) {
             properties.load(in);
             return properties;
         }
@@ -610,8 +609,7 @@ public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
             fail("Missing File: " + templateFile);
         }
 
-        Properties properties = loadProperties(templateFile);
-        return properties;
+        return loadProperties(templateFile);
     }
 
     private File getProjectFile() {
@@ -623,7 +621,7 @@ public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
     }
 
     private Model readPom(final File pomFile) throws IOException, XmlPullParserException {
-        try (Reader pomReader = ReaderFactory.newXmlReader(pomFile)) {
+        try (Reader pomReader = new XmlStreamReader(pomFile)) {
             MavenXpp3Reader reader = new MavenXpp3Reader();
 
             return reader.read(pomReader);

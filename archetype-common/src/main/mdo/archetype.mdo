@@ -19,10 +19,10 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-<model xmlns="https://codehaus-plexus.github.io/MODELLO/1.8.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="https://codehaus-plexus.github.io/MODELLO/1.8.0 https://codehaus-plexus.github.io/modello/xsd/modello-1.8.0.xsd"
-  xml.namespace="https://maven.apache.org/plugins/maven-archetype-plugin/archetype/${version}"
-  xml.schemaLocation="https://maven.apache.org/xsd/archetype-${version}.xsd">
+<model xmlns="http://codehaus-plexus.github.io/MODELLO/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://codehaus-plexus.github.io/MODELLO/2.0.0 https://codehaus-plexus.github.io/modello/xsd/modello-2.0.0.xsd"
+       xml.namespace="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-catalog/${version}"
+       xml.schemaLocation="http://maven.apache.org/xsd/archetype-catalog-${version}.xsd">
   <id>archetype</id>
   <name>Archetype</name>
   <description>

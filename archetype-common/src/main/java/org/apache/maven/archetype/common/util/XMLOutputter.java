@@ -350,8 +350,7 @@ public class XMLOutputter implements Cloneable {
 
     /** Get an OutputStreamWriter, use specified encoding. */
     private static Writer makeWriter(OutputStream out, String enc) throws java.io.UnsupportedEncodingException {
-        Writer writer = new BufferedWriter((new OutputStreamWriter(new BufferedOutputStream(out), enc)));
-        return writer;
+        return new BufferedWriter((new OutputStreamWriter(new BufferedOutputStream(out), enc)));
     }
 
     // * * * * * * * * * * Output to a Writer * * * * * * * * * *
@@ -1271,12 +1270,12 @@ public class XMLOutputter implements Cloneable {
 
     // Determine if a string starts with a XML whitespace.
     private boolean startsWithWhite(String str) {
-        return ((str != null) && (str.length() > 0) && isWhitespace(str.charAt(0)));
+        return ((str != null) && (!str.isEmpty()) && isWhitespace(str.charAt(0)));
     }
 
     // Determine if a string ends with a XML whitespace.
     private boolean endsWithWhite(String str) {
-        return ((str != null) && (str.length() > 0) && isWhitespace(str.charAt(str.length() - 1)));
+        return ((str != null) && (!str.isEmpty()) && isWhitespace(str.charAt(str.length() - 1)));
     }
 
     // Determine if a character is a XML whitespace.
@@ -1486,7 +1485,7 @@ public class XMLOutputter implements Cloneable {
                 + "omitEncoding = " + userFormat.omitEncoding + ", "
                 + "indent = '" + userFormat.indent + "'" + ", "
                 + "expandEmptyElements = " + userFormat.expandEmptyElements + ", "
-                + "lineSeparator = '" + buffer.toString() + "', "
+                + "lineSeparator = '" + buffer + "', "
                 + "textMode = " + userFormat.mode + "]");
     }
 
@@ -1508,12 +1507,12 @@ public class XMLOutputter implements Cloneable {
      * declare a NamespaceStack parameter, but we don't want to
      * declare the parent NamespaceStack class as public.
      */
-    protected class NamespaceStack extends org.apache.maven.archetype.common.util.NamespaceStack {}
+    protected static class NamespaceStack extends org.apache.maven.archetype.common.util.NamespaceStack {}
 
     // Support method to print a name without using elt.getQualifiedName()
     // and thus avoiding a StringBuilder creation and memory churn
     private void printQualifiedName(Writer out, Element e) throws IOException {
-        if (e.getNamespace().getPrefix().length() == 0) {
+        if (e.getNamespace().getPrefix().isEmpty()) {
             out.write(e.getName());
         } else {
             out.write(e.getNamespace().getPrefix());

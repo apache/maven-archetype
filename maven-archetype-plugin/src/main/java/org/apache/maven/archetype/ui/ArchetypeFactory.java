@@ -23,7 +23,6 @@ import java.util.Properties;
 import org.apache.maven.project.MavenProject;
 
 public interface ArchetypeFactory {
-    String ROLE = ArchetypeFactory.class.getName();
 
     ArchetypeDefinition createArchetypeDefinition(Properties properties);
 

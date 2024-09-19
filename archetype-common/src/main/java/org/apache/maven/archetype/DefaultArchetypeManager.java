@@ -24,8 +24,8 @@ import javax.inject.Singleton;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
@@ -95,7 +95,7 @@ public class DefaultArchetypeManager extends AbstractLogEnabled implements Arche
             getLogger().warn("Could not create new file \"" + archive.getPath() + "\" or the file already exists.");
         }
 
-        try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(archive))) {
+        try (ZipOutputStream zos = new ZipOutputStream(Files.newOutputStream(archive.toPath()))) {
             zos.setLevel(9);
 
             zipper(zos, sourceDirectory.getAbsolutePath().length(), sourceDirectory);

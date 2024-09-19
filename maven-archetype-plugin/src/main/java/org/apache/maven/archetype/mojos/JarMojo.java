@@ -31,7 +31,6 @@ import org.apache.maven.archiver.MavenArchiver;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -123,7 +122,7 @@ public class JarMojo extends AbstractMojo {
     private ArchetypeArtifactManager archetypeArtifactManager;
 
     @Override
-    public void execute() throws MojoExecutionException, MojoFailureException {
+    public void execute() throws MojoExecutionException {
         File jarFile = new File(outputDirectory, finalName + ".jar");
         getLog().info("Building archetype jar: " + jarFile);
 
@@ -135,7 +134,7 @@ public class JarMojo extends AbstractMojo {
         archiver.setArchiver((JarArchiver) archivers.get("jar"));
 
         // configure for Reproducible Builds based on outputTimestamp value
-        archiver.configureReproducible(outputTimestamp);
+        archiver.configureReproducibleBuild(outputTimestamp);
 
         try {
             DefaultFileSet fs = DefaultFileSet.fileSet(archetypeDirectory)

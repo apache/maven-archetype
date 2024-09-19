@@ -334,7 +334,7 @@ public class ListScanner {
      *                 elements must be non-<code>null</code>.
      */
     public void setExcludes(List<String> excludesList) {
-        String[] excludes = excludesList.toArray(new String[excludesList.size()]);
+        String[] excludes = excludesList.toArray(new String[0]);
         if (excludes == null) {
             this.excludes = null;
         } else {
@@ -362,7 +362,7 @@ public class ListScanner {
      *                 elements must be non-<code>null</code>.
      */
     public void setIncludes(List<String> includesList) {
-        String[] includes = includesList.toArray(new String[includesList.size()]);
+        String[] includes = includesList.toArray(new String[0]);
         if (includes == null) {
             this.includes = null;
         } else {
@@ -449,7 +449,7 @@ public class ListScanner {
         String path = null;
 
         String baseDir = getBasedir();
-        if (baseDir.length() > 0) {
+        if (!baseDir.isEmpty()) {
             baseDir = baseDir.concat(File.separator);
         }
 
