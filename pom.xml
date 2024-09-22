@@ -29,7 +29,7 @@
 
   <groupId>org.apache.maven.archetype</groupId>
   <artifactId>maven-archetype</artifactId>
-  <version>3.3.0</version>
+  <version>3.3.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Maven Archetype</name>
@@ -50,7 +50,7 @@
   <scm>
     <connection>${maven.archetype.scm.devConnection}</connection>
     <developerConnection>${maven.archetype.scm.devConnection}</developerConnection>
-    <tag>maven-archetype-3.3.0</tag>
+    <tag>HEAD</tag>
     <url>https://github.com/apache/maven-archetype/tree/${project.scm.tag}</url>
   </scm>
   <issueManagement>
@@ -77,7 +77,7 @@
     <javaVersion>8</javaVersion>
     <netbeans.hint.useExternalMaven>true</netbeans.hint.useExternalMaven>
     <maven.site.path>archetype-archives/archetype-LATEST</maven.site.path>
-    <project.build.outputTimestamp>2024-09-22T21:34:22Z</project.build.outputTimestamp>
+    <project.build.outputTimestamp>2024-09-22T21:34:43Z</project.build.outputTimestamp>
     <maven.javadoc.failOnWarnings>false</maven.javadoc.failOnWarnings>
   </properties>
 
