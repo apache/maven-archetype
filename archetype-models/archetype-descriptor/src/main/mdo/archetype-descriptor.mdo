@@ -166,7 +166,8 @@
           <name>directory</name>
           <version>1.0.0+</version>
           <type>String</type>
-          <required>true</required>
+          <required>false</required>
+          <defaultValue/>
           <description>The directory where the files will be searched for, which is also the directory where the
            project's files will be generated.</description>
         </field>
