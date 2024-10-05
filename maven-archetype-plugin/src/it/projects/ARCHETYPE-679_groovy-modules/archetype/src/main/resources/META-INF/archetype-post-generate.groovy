@@ -18,7 +18,13 @@
  */
 import java.nio.file.Files
 import java.nio.file.Paths
-import groovy.json.JsonException // Should error on this line if test fails.
+
+// imports for groovy additional modules should not fail test
+
+import groovy.json.JsonSlurper
+import groovy.text.SimpleTemplateEngine
+import groovy.xml.XmlSlurper
+import groovy.yaml.YamlSlurper
 
 
 def p = Paths.get(request.getOutputDirectory(), request.getArtifactId(), 'test.txt')
