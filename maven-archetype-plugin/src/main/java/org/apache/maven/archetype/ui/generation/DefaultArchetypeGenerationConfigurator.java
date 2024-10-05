@@ -53,6 +53,7 @@ import org.apache.velocity.context.InternalContextAdapterImpl;
 import org.apache.velocity.runtime.RuntimeServices;
 import org.apache.velocity.runtime.RuntimeSingleton;
 import org.apache.velocity.runtime.parser.ParseException;
+import org.apache.velocity.runtime.parser.node.ASTNegateNode;
 import org.apache.velocity.runtime.parser.node.ASTReference;
 import org.apache.velocity.runtime.parser.node.SimpleNode;
 import org.apache.velocity.runtime.visitor.BaseVisitor;
@@ -345,6 +346,11 @@ public class DefaultArchetypeGenerationConfigurator extends AbstractLogEnabled
                                     public Object visit(ASTReference node, Object data) {
                                         referencedPropertyNames.add(node.getRootString());
                                         return super.visit(node, data);
+                                    }
+
+                                    @Override
+                                    public Object visit(ASTNegateNode astNegateNode, Object data) {
+                                        return astNegateNode.childrenAccept(this, data);
                                     }
                                 },
                                 velocityRuntime);
