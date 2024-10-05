@@ -18,6 +18,8 @@
  */
 import java.nio.file.Files
 import java.nio.file.Paths
+import groovy.json.JsonException // Should error on this line if test fails.
+
 
 def p = Paths.get(request.getOutputDirectory(), request.getArtifactId(), 'test.txt')
 Files.createFile(p)

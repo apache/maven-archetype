@@ -84,6 +84,13 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
+        <groupId>org.apache.groovy</groupId>
+        <artifactId>groovy-bom</artifactId>
+        <version>4.0.23</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-compat</artifactId>
         <version>${mavenVersion}</version>
