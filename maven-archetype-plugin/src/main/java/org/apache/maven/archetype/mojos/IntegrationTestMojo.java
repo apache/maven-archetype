@@ -354,6 +354,10 @@ public class IntegrationTestMojo extends AbstractMojo {
                     + ", unexpected: " + actualFiles.size() + ")");
         }
 
+        if (!ignoreEOLStyle) {
+            getLog().warn("Property ignoreEOLStyle was not set - files will be compared considering their EOL style!");
+        }
+
         boolean contentEquals = true;
 
         for (String file : referenceFiles) {
@@ -362,16 +366,16 @@ public class IntegrationTestMojo extends AbstractMojo {
 
             if (referenceFile.isDirectory()) {
                 if (actualFile.isFile()) {
-                    getLog().warn("File " + file + " is a directory in the reference but a file in actual");
+                    getLog().error("File " + file + " is a directory in the reference but a file in actual");
                     contentEquals = false;
                 }
             } else if (actualFile.isDirectory()) {
                 if (referenceFile.isFile()) {
-                    getLog().warn("File " + file + " is a file in the reference but a directory in actual");
+                    getLog().error("File " + file + " is a file in the reference but a directory in actual");
                     contentEquals = false;
                 }
             } else if (!contentEquals(referenceFile, actualFile)) {
-                getLog().warn("Contents of file " + file + " are not equal");
+                getLog().error("Contents of file " + file + " are not equal");
                 contentEquals = false;
             }
         }
@@ -387,7 +391,6 @@ public class IntegrationTestMojo extends AbstractMojo {
     private boolean contentEquals(File referenceFile, File actualFile) throws IOException {
         // Original behaviour
         if (!ignoreEOLStyle) {
-            getLog().warn("Property ignoreEOLStyle was not set - files will be compared considering their EOL style!");
             return FileUtils.contentEquals(referenceFile, actualFile);
         }
 
@@ -402,10 +405,10 @@ public class IntegrationTestMojo extends AbstractMojo {
                 refLine = referenceFileReader.readLine();
                 actualLine = actualFileReader.readLine();
                 if (!Objects.equals(refLine, actualLine)) {
-                    getLog().warn("Conflict found. Reference line :");
-                    getLog().warn(refLine);
-                    getLog().warn("Actual line :");
-                    getLog().warn(actualLine);
+                    getLog().error("Conflict found. Reference line :");
+                    getLog().error(refLine);
+                    getLog().error("Actual line :");
+                    getLog().error(actualLine);
                     return false;
                 }
             } while (refLine != null || actualLine != null);
