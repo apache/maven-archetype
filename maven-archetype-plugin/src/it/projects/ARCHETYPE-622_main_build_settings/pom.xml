@@ -56,8 +56,8 @@ under the License.
             <properties>
               <maven.compiler.source>${maven.compiler.source}</maven.compiler.source>
               <maven.compiler.target>${maven.compiler.target}</maven.compiler.target>
-
             </properties>
+            <streamLogs>false</streamLogs>
           </configuration>
         </plugin>
         <plugin>

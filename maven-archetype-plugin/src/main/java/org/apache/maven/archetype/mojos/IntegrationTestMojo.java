@@ -69,7 +69,6 @@ import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.introspection.ReflectionValueExtractor;
 import org.codehaus.plexus.util.xml.XmlStreamReader;
 import org.codehaus.plexus.util.xml.XmlStreamWriter;
-import org.slf4j.LoggerFactory;
 
 /**
  * <p>Execute the archetype integration tests, consisting in generating projects from the current archetype and optionally
@@ -588,7 +587,6 @@ public class IntegrationTestMojo extends AbstractMojo {
 
             if (logger != null) {
                 request.setErrorHandler(logger);
-
                 request.setOutputHandler(logger);
             }
 
@@ -659,7 +657,7 @@ public class IntegrationTestMojo extends AbstractMojo {
             File outputLog = new File(basedir, "build.log");
 
             if (streamLogs) {
-                logger = new FileLogger(outputLog, LoggerFactory.getLogger(getClass()));
+                logger = new FileLogger(outputLog, getLog());
             } else {
                 logger = new FileLogger(outputLog);
             }
