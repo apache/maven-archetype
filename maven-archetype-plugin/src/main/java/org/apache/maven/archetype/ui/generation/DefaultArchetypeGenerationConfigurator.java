@@ -50,8 +50,7 @@ import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.context.Context;
 import org.apache.velocity.context.InternalContextAdapterImpl;
-import org.apache.velocity.runtime.RuntimeServices;
-import org.apache.velocity.runtime.RuntimeSingleton;
+import org.apache.velocity.runtime.RuntimeInstance;
 import org.apache.velocity.runtime.parser.ParseException;
 import org.apache.velocity.runtime.parser.node.ASTNegateNode;
 import org.apache.velocity.runtime.parser.node.ASTReference;
@@ -326,7 +325,10 @@ public class DefaultArchetypeGenerationConfigurator extends AbstractLogEnabled
             final InternalContextAdapterImpl velocityContextAdapter =
                     new InternalContextAdapterImpl(new VelocityContext());
 
-            final RuntimeServices velocityRuntime = RuntimeSingleton.getRuntimeServices();
+            final RuntimeInstance velocityRuntime = new RuntimeInstance();
+            Properties properties = new Properties();
+            properties.put("parser.allow_hyphen_in_identifiers", true);
+            velocityRuntime.setProperties(properties);
 
             for (String propertyName : requiredProperties) {
                 final Set<String> referencedPropertyNames = new LinkedHashSet<>();
@@ -336,7 +338,7 @@ public class DefaultArchetypeGenerationConfigurator extends AbstractLogEnabled
                     try {
                         Template template = new Template();
                         template.setName(propertyName + ".default");
-                        SimpleNode node = RuntimeSingleton.parse(new StringReader(defaultValue), template);
+                        SimpleNode node = velocityRuntime.parse(new StringReader(defaultValue), template);
 
                         node.init(velocityContextAdapter, velocityRuntime);
 
