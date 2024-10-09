@@ -117,8 +117,8 @@ public class DefaultArchetypeGenerationConfigurator extends AbstractLogEnabled
                     createRepository(repositorySession, request.getArchetypeRepository(), ad.getArtifactId() + "-repo");
             repositories.add(archetypeRepository);
         }
-        if (request.getRemoteArtifactRepositories() != null) {
-            repositories.addAll(request.getRemoteArtifactRepositories());
+        if (request.getRemoteRepositories() != null) {
+            repositories.addAll(request.getRemoteRepositories());
         }
 
         if (!archetypeArtifactManager.exists(

@@ -63,8 +63,8 @@ public class DefaultArchetypeSelector extends AbstractLogEnabled implements Arch
             return;
         }
 
-        Map<String, List<Archetype>> archetypes = getArchetypesByCatalog(
-                request.getRepositorySession(), request.getRemoteArtifactRepositories(), catalogs);
+        Map<String, List<Archetype>> archetypes =
+                getArchetypesByCatalog(request.getRepositorySession(), request.getRemoteRepositories(), catalogs);
 
         if (StringUtils.isNotBlank(request.getFilter())) {
             // applying some filtering depending on filter parameter
