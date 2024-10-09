@@ -43,6 +43,7 @@ import org.apache.maven.shared.invoker.InvocationRequest;
 import org.apache.maven.shared.invoker.InvocationResult;
 import org.apache.maven.shared.invoker.Invoker;
 import org.apache.maven.shared.invoker.MavenInvocationException;
+import org.eclipse.aether.RepositorySystem;
 
 /**
  * Generates a new project from an archetype, or updates the actual project if using a partial archetype.
@@ -65,6 +66,9 @@ public class CreateProjectFromArchetypeMojo extends AbstractMojo implements Cont
 
     @Component
     private Invoker invoker;
+
+    @Component
+    private RepositorySystem repositorySystem;
 
     /**
      * The archetype's artifactId.
@@ -171,8 +175,14 @@ public class CreateProjectFromArchetypeMojo extends AbstractMojo implements Cont
                 .setArchetypeArtifactId(archetypeArtifactId)
                 .setArchetypeVersion(archetypeVersion)
                 .setOutputDirectory(outputDirectory.getAbsolutePath())
-                .setRemoteArtifactRepositories(project.getRemoteProjectRepositories())
+                .setRemoteRepositories(project.getRemoteProjectRepositories())
+                .setRemoteArtifactRepositories(project.getRemoteArtifactRepositories())
+                .setMavenSession(session)
                 .setRepositorySession(session.getRepositorySession())
+                .setRepositorySystem(repositorySystem)
+                .setProjectBuildingRequest(session.getProjectBuildingRequest())
+                .setLocalRepository(session.getLocalRepository())
+                .setOffline(session.isOffline())
                 .setFilter(filter)
                 .setAskForDefaultPropertyValues(askForDefaultPropertyValues);
 

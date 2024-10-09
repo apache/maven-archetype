@@ -103,7 +103,7 @@ public class ArchetypeTest extends PlexusTestCase {
                 .setArchetypeGroupId("org.apache.maven.archetypes")
                 .setArchetypeArtifactId("maven-archetype-quickstart")
                 .setArchetypeVersion("1.0-alpha-1-SNAPSHOT")
-                .setRemoteArtifactRepositories(remoteRepositories)
+                .setRemoteRepositories(remoteRepositories)
                 .setRepositorySession(repositorySession)
                 .setOutputDirectory(getTestFile("target").getAbsolutePath());
 
