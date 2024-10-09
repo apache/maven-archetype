@@ -77,4 +77,17 @@ public class RequiredPropertyComparatorTest {
         requiredProperties.sort(requiredPropertyComparator);
         assertEquals(Arrays.asList("baz", "bar", "foo"), requiredProperties);
     }
+
+    @Test
+    public void testPropertiesWithHyphen() {
+        archetypeConfiguration.addRequiredProperty("description");
+        archetypeConfiguration.setDefaultProperty("description", "${acronym-app} project-arch: ${component-name}");
+        archetypeConfiguration.addRequiredProperty("component-name");
+        archetypeConfiguration.addRequiredProperty("acronym-app");
+
+        List<String> requiredProperties = archetypeConfiguration.getRequiredProperties();
+        assertEquals(Arrays.asList("description", "component-name", "acronym-app"), requiredProperties);
+        requiredProperties.sort(requiredPropertyComparator);
+        assertEquals(Arrays.asList("component-name", "acronym-app", "description"), requiredProperties);
+    }
 }
