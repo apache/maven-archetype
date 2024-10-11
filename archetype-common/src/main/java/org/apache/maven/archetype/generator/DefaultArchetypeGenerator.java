@@ -64,7 +64,7 @@ public class DefaultArchetypeGenerator extends AbstractLogEnabled implements Arc
             throw new ArchetypeNotDefined("The archetype is not defined");
         }
 
-        List<RemoteRepository> repos = new ArrayList<>(request.getRemoteArtifactRepositories());
+        List<RemoteRepository> repos = new ArrayList<>(request.getRemoteRepositories());
 
         RemoteRepository remoteRepo = null;
         if (request != null && request.getArchetypeRepository() != null) {
