@@ -146,6 +146,7 @@ public class DefaultArchetypeManager extends AbstractLogEnabled implements Arche
 
             return source.getArchetypeCatalog(null, null);
         } catch (ArchetypeDataSourceException e) {
+            getLogger().warn("failed to read catalog", e);
             return new ArchetypeCatalog();
         }
     }
@@ -157,6 +158,7 @@ public class DefaultArchetypeManager extends AbstractLogEnabled implements Arche
 
             return source.getArchetypeCatalog(repositorySession, null);
         } catch (ArchetypeDataSourceException e) {
+            getLogger().warn("failed to read catalog", e);
             return new ArchetypeCatalog();
         }
     }
