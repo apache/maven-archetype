@@ -46,6 +46,7 @@ import org.apache.maven.archetype.downloader.DownloadException;
 import org.apache.maven.archetype.downloader.Downloader;
 import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
 import org.apache.maven.archetype.generator.ArchetypeGenerator;
+import org.apache.maven.archetype.ui.generation.ArchetypeGenerationConfigurator;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -138,6 +139,9 @@ public class IntegrationTestMojo extends AbstractMojo {
 
     @Component
     private Invoker invoker;
+
+    @Component
+    private ArchetypeGenerationConfigurator archetypeGenerationConfigurator;
 
     /**
      * The archetype project to execute the integration tests on.
@@ -477,7 +481,7 @@ public class IntegrationTestMojo extends AbstractMojo {
             File archetypeFile,
             Properties properties,
             String basedir)
-            throws IntegrationTestFailure {
+            throws IntegrationTestFailure, MojoExecutionException {
         // @formatter:off
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest()
                 .setArchetypeGroupId(archetypeGroupId)
@@ -487,12 +491,17 @@ public class IntegrationTestMojo extends AbstractMojo {
                 .setArtifactId(properties.getProperty(Constants.ARTIFACT_ID))
                 .setVersion(properties.getProperty(Constants.VERSION))
                 .setPackage(properties.getProperty(Constants.PACKAGE))
+                .setRepositorySession(session.getRepositorySession())
                 .setOutputDirectory(basedir)
                 .setProperties(properties);
         // @formatter:on
 
         ArchetypeGenerationResult result = new ArchetypeGenerationResult();
-
+        try {
+            archetypeGenerationConfigurator.configureArchetype(request, false, properties);
+        } catch (Exception e) {
+            throw new MojoExecutionException("Cannot configure archetype", e);
+        }
         archetypeGenerator.generateArchetype(request, archetypeFile, result);
 
         if (result.getCause() != null) {
