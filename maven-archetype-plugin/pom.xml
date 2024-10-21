@@ -263,6 +263,11 @@
                 <goals>
                   <goal>install</goal>
                 </goals>
+                <configuration>
+                  <extraArtifacts>
+                    <extraArtifact>org.apache.maven.archetype:archetype-packaging:${project.version}</extraArtifact>
+                  </extraArtifacts>
+                </configuration>
               </execution>
               <execution>
                 <id>invoker-it</id>
