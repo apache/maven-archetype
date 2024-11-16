@@ -54,7 +54,6 @@ import org.apache.maven.model.ReportPlugin;
 import org.apache.maven.model.Reporting;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.XmlStreamReader;
@@ -63,11 +62,15 @@ import org.codehaus.plexus.util.xml.Xpp3DomUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 @Named
 @Singleton
-public class DefaultPomManager extends AbstractLogEnabled implements PomManager {
+public class DefaultPomManager implements PomManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultPomManager.class);
+
     @Override
     public void addModule(File pom, String artifactId)
             throws IOException, ParserConfigurationException, TransformerException, SAXException, InvalidPackaging,
@@ -83,7 +86,7 @@ public class DefaultPomManager extends AbstractLogEnabled implements PomManager 
     public void addParent(File pom, File parentPom) throws IOException, XmlPullParserException {
         Model generatedModel = readPom(pom);
         if (null != generatedModel.getParent()) {
-            getLogger().info("Parent element not overwritten in " + pom);
+            LOGGER.info("Parent element not overwritten in " + pom);
             return;
         }
 
@@ -212,7 +215,7 @@ public class DefaultPomManager extends AbstractLogEnabled implements PomManager 
         }
 
         if (!pomFile.exists() && !pomFile.createNewFile()) {
-            getLogger().warn("Could not create new file \"" + pomFile.getPath() + "\" or the file already exists.");
+            LOGGER.warn("Could not create new file \"" + pomFile.getPath() + "\" or the file already exists.");
         }
 
         try (Writer outputStreamWriter = new OutputStreamWriter(new FileOutputStream(pomFile), fileEncoding)) {
@@ -223,7 +226,7 @@ public class DefaultPomManager extends AbstractLogEnabled implements PomManager 
             Format form = Format.getRawFormat().setEncoding(fileEncoding).setLineSeparator(ls);
             writer.write(model, doc, outputStreamWriter, form);
         } catch (FileNotFoundException e) {
-            getLogger().debug("Creating pom file " + pomFile);
+            LOGGER.debug("Creating pom file " + pomFile);
 
             try (Writer pomWriter = new OutputStreamWriter(Files.newOutputStream(pomFile.toPath()), fileEncoding)) {
                 MavenXpp3Writer writer = new MavenXpp3Writer();
@@ -271,7 +274,7 @@ public class DefaultPomManager extends AbstractLogEnabled implements PomManager 
                 if (!modelProfileIdMap.containsKey(generatedProfileId)) {
                     model.addProfile(generatedProfile);
                 } else {
-                    getLogger().warn("Try to merge profiles with id " + generatedProfileId);
+                    LOGGER.warn("Try to merge profiles with id " + generatedProfileId);
                     mergeModelBase(modelProfileIdMap.get(generatedProfileId), generatedProfile);
                     mergeProfileBuild(modelProfileIdMap.get(generatedProfileId), generatedProfile);
                 }
@@ -299,7 +302,7 @@ public class DefaultPomManager extends AbstractLogEnabled implements PomManager 
             if (!dependenciesByIds.containsKey(generatedDependencyId)) {
                 model.addDependency(generatedDependenciesByIds.get(generatedDependencyId));
             } else {
-                getLogger().warn("Can not override property: " + generatedDependencyId);
+                LOGGER.warn("Can not override property: " + generatedDependencyId);
             }
 
             // TODO: maybe warn, if a property key gets overridden?
@@ -324,7 +327,7 @@ public class DefaultPomManager extends AbstractLogEnabled implements PomManager 
                 if (!reportPluginsByIds.containsKey(generatedReportPluginsId)) {
                     model.getReporting().addPlugin(generatedReportPluginsByIds.get(generatedReportPluginsId));
                 } else {
-                    getLogger().warn("Can not override report: " + generatedReportPluginsId);
+                    LOGGER.warn("Can not override report: " + generatedReportPluginsId);
                 }
             }
         }
@@ -341,7 +344,7 @@ public class DefaultPomManager extends AbstractLogEnabled implements PomManager 
             if (!pluginsByIds.containsKey(generatedPluginsId)) {
                 modelBuild.addPlugin(generatedPlugin);
             } else {
-                getLogger().info("Try to merge plugin configuration of plugins with id: " + generatedPluginsId);
+                LOGGER.info("Try to merge plugin configuration of plugins with id: " + generatedPluginsId);
                 Plugin modelPlugin = pluginsByIds.get(generatedPluginsId);
 
                 modelPlugin.setConfiguration(Xpp3DomUtils.mergeXpp3Dom(

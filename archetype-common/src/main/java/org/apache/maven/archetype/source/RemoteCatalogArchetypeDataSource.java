@@ -37,6 +37,8 @@ import org.eclipse.aether.metadata.Metadata;
 import org.eclipse.aether.repository.RemoteRepository;
 import org.eclipse.aether.resolution.MetadataRequest;
 import org.eclipse.aether.resolution.MetadataResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Jason van Zyl
@@ -44,6 +46,7 @@ import org.eclipse.aether.resolution.MetadataResult;
 @Named("remote-catalog")
 @Singleton
 public class RemoteCatalogArchetypeDataSource extends CatalogArchetypeDataSource implements ArchetypeDataSource {
+    private static final Logger LOGGER = LoggerFactory.getLogger(RemoteCatalogArchetypeDataSource.class);
 
     @Inject
     private RepositorySystem repositorySystem;

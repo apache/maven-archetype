@@ -28,11 +28,13 @@ import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.ui.ArchetypeConfiguration;
 import org.codehaus.plexus.components.interactivity.Prompter;
 import org.codehaus.plexus.components.interactivity.PrompterException;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Named("default")
 @Singleton
-public class DefaultArchetypeCreationQueryer extends AbstractLogEnabled implements ArchetypeCreationQueryer {
+public class DefaultArchetypeCreationQueryer implements ArchetypeCreationQueryer {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultArchetypeCreationQueryer.class);
     @Inject
     private Prompter prompter;
 

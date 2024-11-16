@@ -67,7 +67,6 @@ import org.apache.maven.shared.invoker.DefaultInvocationRequest;
 import org.apache.maven.shared.invoker.InvocationRequest;
 import org.apache.maven.shared.invoker.InvocationResult;
 import org.apache.maven.shared.invoker.Invoker;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
@@ -76,6 +75,8 @@ import org.codehaus.plexus.util.xml.XmlStreamReader;
 import org.codehaus.plexus.util.xml.XmlStreamWriter;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.apache.commons.io.IOUtils.write;
 
@@ -85,7 +86,8 @@ import static org.apache.commons.io.IOUtils.write;
  */
 @Named("fileset")
 @Singleton
-public class FilesetArchetypeCreator extends AbstractLogEnabled implements ArchetypeCreator {
+public class FilesetArchetypeCreator implements ArchetypeCreator {
+    private static final Logger LOGGER = LoggerFactory.getLogger(FilesetArchetypeCreator.class);
     private static final String DEFAULT_OUTPUT_DIRECTORY =
             "target" + File.separator + "generated-sources" + File.separator + "archetype";
 
@@ -121,12 +123,12 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
         extractPropertiesFromProject(project, properties, configurationProperties, request.getPackageName());
 
         if (outputDirectory == null) {
-            getLogger().debug("No output directory defined, using default: " + DEFAULT_OUTPUT_DIRECTORY);
+            LOGGER.debug("No output directory defined, using default: " + DEFAULT_OUTPUT_DIRECTORY);
             outputDirectory = FileUtils.resolveFile(basedir, DEFAULT_OUTPUT_DIRECTORY);
         }
         outputDirectory.mkdirs();
 
-        getLogger().debug("Creating archetype in " + outputDirectory);
+        LOGGER.debug("Creating archetype in " + outputDirectory);
 
         try {
             File archetypePomFile = createArchetypeProjectPom(project, configurationProperties, outputDirectory);
@@ -134,7 +136,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
             File archetypeResourcesDirectory = new File(outputDirectory, getTemplateOutputDirectory());
 
             File archetypeFilesDirectory = new File(archetypeResourcesDirectory, Constants.ARCHETYPE_RESOURCES);
-            getLogger().debug("Archetype's files output directory " + archetypeFilesDirectory);
+            LOGGER.debug("Archetype's files output directory " + archetypeFilesDirectory);
 
             File archetypeDescriptorFile = new File(archetypeResourcesDirectory, Constants.ARCHETYPE_DESCRIPTOR);
             archetypeDescriptorFile.getParentFile().mkdirs();
@@ -155,7 +157,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
                 }
             }
 
-            getLogger().debug("Starting archetype's descriptor " + project.getArtifactId());
+            LOGGER.debug("Starting archetype's descriptor " + project.getArtifactId());
             ArchetypeDescriptor archetypeDescriptor = new ArchetypeDescriptor();
 
             archetypeDescriptor.setName(project.getArtifactId());
@@ -181,16 +183,16 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
                     : Collections.emptyList();
 
             List<String> fileNames = resolveFileNames(pom, basedir, excludePatterns);
-            if (getLogger().isDebugEnabled()) {
-                getLogger().debug("Scanned for files " + fileNames.size());
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Scanned for files " + fileNames.size());
 
                 for (String name : fileNames) {
-                    getLogger().debug("- " + name);
+                    LOGGER.debug("- " + name);
                 }
             }
 
             List<FileSet> filesets = resolveFileSets(packageName, fileNames, languages, filtereds, defaultEncoding);
-            getLogger().debug("Resolved filesets for " + archetypeDescriptor.getName());
+            LOGGER.debug("Resolved filesets for " + archetypeDescriptor.getName());
 
             archetypeDescriptor.setFileSets(filesets);
 
@@ -202,7 +204,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
                     archetypeFilesDirectory,
                     defaultEncoding,
                     excludePatterns);
-            getLogger().debug("Created files for " + archetypeDescriptor.getName());
+            LOGGER.debug("Created files for " + archetypeDescriptor.getName());
 
             setParentArtifactId(reverseProperties, configurationProperties.getProperty(Constants.ARTIFACT_ID));
 
@@ -214,7 +216,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
                     moduleIdDirectory = StringUtils.replace(moduleId, rootArtifactId, "__rootArtifactId__");
                 }
 
-                getLogger().debug("Creating module " + moduleId);
+                LOGGER.debug("Creating module " + moduleId);
 
                 ModuleDescriptor moduleDescriptor = createModule(
                         reverseProperties,
@@ -231,8 +233,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
 
                 archetypeDescriptor.addModule(moduleDescriptor);
 
-                getLogger()
-                        .debug("Added module " + moduleDescriptor.getName() + " in " + archetypeDescriptor.getName());
+                LOGGER.debug("Added module " + moduleDescriptor.getName() + " in " + archetypeDescriptor.getName());
             }
 
             restoreParentArtifactId(reverseProperties, null);
@@ -248,14 +249,14 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
                     pomReversedProperties,
                     preserveCData,
                     keepParent);
-            getLogger().debug("Created Archetype " + archetypeDescriptor.getName() + " template pom(s)");
+            LOGGER.debug("Created Archetype " + archetypeDescriptor.getName() + " template pom(s)");
 
             try (Writer out = new XmlStreamWriter(archetypeDescriptorFile)) {
                 ArchetypeDescriptorXpp3Writer writer = new ArchetypeDescriptorXpp3Writer();
 
                 writer.write(out, archetypeDescriptor);
 
-                getLogger().debug("Archetype " + archetypeDescriptor.getName() + " descriptor written");
+                LOGGER.debug("Archetype " + archetypeDescriptor.getName() + " descriptor written");
             }
 
             createArchetypeBasicIt(archetypeDescriptor, outputDirectory);
@@ -270,8 +271,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
                             + File.separator + "projects");
 
             if (archetypeIntegrationTestInputFolder.exists()) {
-                getLogger()
-                        .info("Copying: " + archetypeIntegrationTestInputFolder.getAbsolutePath() + " into "
+                LOGGER.info("Copying: " + archetypeIntegrationTestInputFolder.getAbsolutePath() + " into "
                                 + archetypeIntegrationTestOutputFolder.getAbsolutePath());
 
                 FileUtils.copyDirectoryStructure(
@@ -321,8 +321,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
 
         File archetypePropertiesFile = new File(basicItDirectory, "archetype.properties");
         if (!archetypePropertiesFile.exists() && !archetypePropertiesFile.createNewFile()) {
-            getLogger()
-                    .warn("Could not create new file \"" + archetypePropertiesFile.getPath()
+            LOGGER.warn("Could not create new file \"" + archetypePropertiesFile.getPath()
                             + "\" or the file already exists.");
         }
 
@@ -340,7 +339,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
 
         copyResource("goal.txt", new File(basicItDirectory, "goal.txt"));
 
-        getLogger().debug("Added basic integration test");
+        LOGGER.debug("Added basic integration test");
     }
 
     private void extractPropertiesFromProject(
@@ -428,7 +427,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
         pluginManagement.addPlugin(plugin);
         model.getBuild().setPluginManagement(pluginManagement);
 
-        getLogger().debug("Creating archetype's pom");
+        LOGGER.debug("Creating archetype's pom");
 
         File archetypePomFile = new File(projectDir, Constants.ARCHETYPE_POM);
 
@@ -443,7 +442,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
 
     private void copyResource(String name, File destination) throws IOException {
         if (!destination.exists() && !destination.createNewFile()) {
-            getLogger().warn("Could not create new file \"" + destination.getPath() + "\" or the file already exists.");
+            LOGGER.warn("Could not create new file \"" + destination.getPath() + "\" or the file already exists.");
         }
 
         try (InputStream in = FilesetArchetypeCreator.class.getResourceAsStream(name);
@@ -473,8 +472,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
 
             archetypeDescriptor.addRequiredProperty(requiredProperty);
 
-            getLogger()
-                    .debug("Adding requiredProperty " + propertyKey + "=" + requiredProperties.getProperty(propertyKey)
+            LOGGER.debug("Adding requiredProperty " + propertyKey + "=" + requiredProperties.getProperty(propertyKey)
                             + " to archetype's descriptor");
         }
     }
@@ -757,14 +755,14 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
             throws IOException {
         String packageAsDirectory = StringUtils.replace(packageName, ".", File.separator);
 
-        getLogger().debug("Package as Directory: Package:" + packageName + "->" + packageAsDirectory);
+        LOGGER.debug("Package as Directory: Package:" + packageName + "->" + packageAsDirectory);
 
         for (String inputFileName : fileSetResources) {
             String outputFileName = packaged
                     ? StringUtils.replace(inputFileName, packageAsDirectory + File.separator, "")
                     : inputFileName;
-            getLogger().debug("InputFileName:" + inputFileName);
-            getLogger().debug("OutputFileName:" + outputFileName);
+            LOGGER.debug("InputFileName:" + inputFileName);
+            LOGGER.debug("OutputFileName:" + outputFileName);
 
             reverseProperties.remove("archetype.languages");
 
@@ -789,7 +787,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
             String defaultEncoding,
             List<String> excludePatterns)
             throws IOException {
-        getLogger().debug("Creating Archetype/Module files from " + basedir + " to " + archetypeFilesDirectory);
+        LOGGER.debug("Creating Archetype/Module files from " + basedir + " to " + archetypeFilesDirectory);
 
         for (FileSet fileSet : fileSets) {
             DirectoryScanner scanner = new DirectoryScanner();
@@ -799,11 +797,11 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
             scanner.setExcludes(addLists(fileSet.getExcludes(), excludePatterns)
                     .toArray(new String[fileSet.getExcludes().size()]));
             scanner.addDefaultExcludes();
-            getLogger().debug("Using fileset " + fileSet);
+            LOGGER.debug("Using fileset " + fileSet);
             scanner.scan();
 
             List<String> fileSetResources = Arrays.asList(scanner.getIncludedFiles());
-            getLogger().debug("Scanned " + fileSetResources.size() + " resources");
+            LOGGER.debug("Scanned " + fileSetResources.size() + " resources");
 
             if (fileSet.isFiltered()) {
                 processFileSet(
@@ -815,7 +813,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
                         packageName,
                         reverseProperties,
                         defaultEncoding);
-                getLogger().debug("Processed " + fileSet.getDirectory() + " files");
+                LOGGER.debug("Processed " + fileSet.getDirectory() + " files");
             } else {
                 copyFiles(
                         basedir,
@@ -825,7 +823,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
                         fileSet.isPackaged(),
                         packageName,
                         reverseProperties);
-                getLogger().debug("Copied " + fileSet.getDirectory() + " files");
+                LOGGER.debug("Copied " + fileSet.getDirectory() + " files");
             }
         }
     }
@@ -841,7 +839,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
         File outputFile = FileUtils.resolveFile(archetypeFilesDirectory, Constants.ARCHETYPE_POM);
 
         if (preserveCData) {
-            getLogger().debug("Preserving CDATA parts of pom");
+            LOGGER.debug("Preserving CDATA parts of pom");
             File inputFile = FileUtils.resolveFile(archetypeFilesDirectory, Constants.ARCHETYPE_POM + ".tmp");
 
             FileUtils.copyFile(initialPomFile, inputFile);
@@ -887,8 +885,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
                 String property = (String) properties.next();
 
                 if (initialcontent.indexOf("${" + property + "}") > 0) {
-                    getLogger()
-                            .warn("Archetype uses ${" + property + "} for internal processing, but file "
+                    LOGGER.warn("Archetype uses ${" + property + "} for internal processing, but file "
                                     + initialPomFile + " contains this property already");
                 }
             }
@@ -911,7 +908,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
         fileSet.setExcludes(excludes);
         fileSet.setEncoding(defaultEncoding);
 
-        getLogger().debug("Created Fileset " + fileSet);
+        LOGGER.debug("Created Fileset " + fileSet);
 
         return fileSet;
     }
@@ -926,8 +923,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
         List<FileSet> fileSets = new ArrayList<>();
 
         if (!files.isEmpty()) {
-            getLogger()
-                    .debug("Creating filesets" + (packaged ? (" packaged (" + packageName + ")") : "")
+            LOGGER.debug("Creating filesets" + (packaged ? (" packaged (" + packageName + ")") : "")
                             + (filtered ? " filtered" : "") + " at level " + level);
             if (level == 0) {
                 List<String> includes = new ArrayList<>(files);
@@ -940,7 +936,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
                 Map<String, List<String>> groups = getGroupsMap(files, level);
 
                 for (String group : groups.keySet()) {
-                    getLogger().debug("Creating filesets for group " + group);
+                    LOGGER.debug("Creating filesets for group " + group);
 
                     if (!packaged) {
                         fileSets.add(getUnpackagedFileSet(filtered, group, groups.get(group), defaultEncoding));
@@ -951,7 +947,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
                 }
             } // end if
 
-            getLogger().debug("Resolved fileSets " + fileSets);
+            LOGGER.debug("Resolved fileSets " + fileSets);
         } // end if
 
         return fileSets;
@@ -972,10 +968,10 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
             boolean keepParent)
             throws IOException, XmlPullParserException {
         ModuleDescriptor archetypeDescriptor = new ModuleDescriptor();
-        getLogger().debug("Starting module's descriptor " + moduleId);
+        LOGGER.debug("Starting module's descriptor " + moduleId);
 
         archetypeFilesDirectory.mkdirs();
-        getLogger().debug("Module's files output directory " + archetypeFilesDirectory);
+        LOGGER.debug("Module's files output directory " + archetypeFilesDirectory);
 
         Model pom = pomManager.readPom(FileUtils.resolveFile(basedir, Constants.ARCHETYPE_POM));
         String replacementId = pom.getArtifactId();
@@ -1003,7 +999,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
         List<String> fileNames = resolveFileNames(pom, basedir, excludePatterns);
 
         List<FileSet> filesets = resolveFileSets(packageName, fileNames, languages, filtereds, defaultEncoding);
-        getLogger().debug("Resolved filesets for module " + archetypeDescriptor.getName());
+        LOGGER.debug("Resolved filesets for module " + archetypeDescriptor.getName());
 
         archetypeDescriptor.setFileSets(filesets);
 
@@ -1015,7 +1011,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
                 archetypeFilesDirectory,
                 defaultEncoding,
                 excludePatterns);
-        getLogger().debug("Created files for module " + archetypeDescriptor.getName());
+        LOGGER.debug("Created files for module " + archetypeDescriptor.getName());
 
         String parentArtifactId = reverseProperties.getProperty(Constants.PARENT_ARTIFACT_ID);
         setParentArtifactId(reverseProperties, pom.getArtifactId());
@@ -1026,7 +1022,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
                 subModuleIdDirectory = StringUtils.replace(subModuleId, rootArtifactId, "__rootArtifactId__");
             }
 
-            getLogger().debug("Creating module " + subModuleId);
+            LOGGER.debug("Creating module " + subModuleId);
 
             ModuleDescriptor moduleDescriptor = createModule(
                     reverseProperties,
@@ -1043,13 +1039,13 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
 
             archetypeDescriptor.addModule(moduleDescriptor);
 
-            getLogger().debug("Added module " + moduleDescriptor.getName() + " in " + archetypeDescriptor.getName());
+            LOGGER.debug("Added module " + moduleDescriptor.getName() + " in " + archetypeDescriptor.getName());
         }
 
         restoreParentArtifactId(reverseProperties, parentArtifactId);
         restoreArtifactId(reverseProperties, pom.getArtifactId());
 
-        getLogger().debug("Created Module " + archetypeDescriptor.getName() + " pom");
+        LOGGER.debug("Created Module " + archetypeDescriptor.getName() + " pom");
 
         return archetypeDescriptor;
     }
@@ -1066,7 +1062,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
         File outputFile = FileUtils.resolveFile(archetypeFilesDirectory, Constants.ARCHETYPE_POM);
 
         if (preserveCData) {
-            getLogger().debug("Preserving CDATA parts of pom");
+            LOGGER.debug("Preserving CDATA parts of pom");
             File inputFile = FileUtils.resolveFile(archetypeFilesDirectory, Constants.ARCHETYPE_POM + ".tmp");
 
             FileUtils.copyFile(initialPomFile, inputFile);
@@ -1131,8 +1127,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
                 String property = (String) properties.next();
 
                 if (initialcontent.indexOf("${" + property + "}") > 0) {
-                    getLogger()
-                            .warn("OldArchetype uses ${" + property + "} for internal processing, but file "
+                    LOGGER.warn("OldArchetype uses ${" + property + "} for internal processing, but file "
                                     + initialPomFile + " contains this property already");
                 }
             }
@@ -1170,8 +1165,8 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
             group.add(innerPath);
         }
 
-        getLogger().debug("Sorted " + groups.size() + " groups in " + files.size() + " files");
-        getLogger().debug("Sorted Files: " + files);
+        LOGGER.debug("Sorted " + groups.size() + " groups in " + files.size() + " files");
+        LOGGER.debug("Sorted Files: " + files);
 
         return groups;
     }
@@ -1207,13 +1202,13 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
 
         List<FileSet> packagedFileSets = new ArrayList<>();
         List<String> packagedFiles = archetypeFilesResolver.getPackagedFiles(groupFiles, packageAsDir);
-        getLogger().debug("Found packaged Files:" + packagedFiles);
+        LOGGER.debug("Found packaged Files:" + packagedFiles);
 
         List<String> unpackagedFiles = archetypeFilesResolver.getUnpackagedFiles(groupFiles, packageAsDir);
-        getLogger().debug("Found unpackaged Files:" + unpackagedFiles);
+        LOGGER.debug("Found unpackaged Files:" + unpackagedFiles);
 
         Set<String> packagedExtensions = getExtensions(packagedFiles);
-        getLogger().debug("Found packaged extensions " + packagedExtensions);
+        LOGGER.debug("Found packaged extensions " + packagedExtensions);
 
         Set<String> unpackagedExtensions = getExtensions(unpackagedFiles);
 
@@ -1223,7 +1218,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
         }
 
         if (!unpackagedExtensions.isEmpty()) {
-            getLogger().debug("Found unpackaged extensions " + unpackagedExtensions);
+            LOGGER.debug("Found unpackaged extensions " + unpackagedExtensions);
 
             packagedFileSets.add(getUnpackagedFileSet(
                     filtered, unpackagedExtensions, unpackagedFiles, group, packagedExtensions, defaultEncoding));
@@ -1249,14 +1244,14 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
             throws IOException {
         String packageAsDirectory = StringUtils.replace(packageName, ".", File.separator);
 
-        getLogger().debug("Package as Directory: Package:" + packageName + "->" + packageAsDirectory);
+        LOGGER.debug("Package as Directory: Package:" + packageName + "->" + packageAsDirectory);
 
         for (String inputFileName : fileSetResources) {
             String initialFilename = packaged
                     ? StringUtils.replace(inputFileName, packageAsDirectory + File.separator, "")
                     : inputFileName;
 
-            getLogger().debug("InputFileName:" + inputFileName);
+            LOGGER.debug("InputFileName:" + inputFileName);
 
             File inputFile = new File(basedir, inputFileName);
 
@@ -1270,8 +1265,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
                 String property = (String) properties.next();
 
                 if (initialcontent.indexOf("${" + property + "}") > 0) {
-                    getLogger()
-                            .warn("Archetype uses ${" + property + "} for internal processing, but file " + inputFile
+                    LOGGER.warn("Archetype uses ${" + property + "} for internal processing, but file " + inputFile
                                     + " contains this property already");
                 }
             }
@@ -1279,14 +1273,13 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
             String content = getReversedContent(initialcontent, reverseProperties);
             String outputFilename = getReversedFilename(initialFilename, reverseProperties);
 
-            getLogger().debug("OutputFileName:" + outputFilename);
+            LOGGER.debug("OutputFileName:" + outputFilename);
 
             File outputFile = new File(archetypeFilesDirectory, outputFilename);
             outputFile.getParentFile().mkdirs();
 
             if (!outputFile.exists() && !outputFile.createNewFile()) {
-                getLogger()
-                        .warn("Could not create new file \"" + outputFile.getPath() + "\" or the file already exists.");
+                LOGGER.warn("Could not create new file \"" + outputFile.getPath() + "\" or the file already exists.");
             }
 
             try (OutputStream os = Files.newOutputStream(outputFile.toPath())) {
@@ -1317,7 +1310,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
 
     private List<String> resolveFileNames(final Model pom, final File basedir, List<String> excludePatterns)
             throws IOException {
-        getLogger().debug("Resolving files for " + pom.getId() + " in " + basedir);
+        LOGGER.debug("Resolving files for " + pom.getId() + " in " + basedir);
 
         StringBuilder buff = new StringBuilder("pom.xml*,archetype.properties*,target/**,");
         for (String module : pom.getModules()) {
@@ -1336,8 +1329,8 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
 
         List<String> fileNames = FileUtils.getFileNames(basedir, "**,.*,**/.*", excludes, false);
 
-        getLogger().debug("Resolved " + fileNames.size() + " files");
-        getLogger().debug("Resolved Files:" + fileNames);
+        LOGGER.debug("Resolved " + fileNames.size() + " files");
+        LOGGER.debug("Resolved Files:" + fileNames);
 
         return fileNames;
     }
@@ -1350,8 +1343,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
             List<String> filtereds,
             String defaultEncoding) {
         List<FileSet> resolvedFileSets = new ArrayList<>();
-        getLogger()
-                .debug("Resolving filesets with package=" + packageName + ", languages=" + languages
+        LOGGER.debug("Resolving filesets with package=" + packageName + ", languages=" + languages
                         + " and extentions=" + filtereds);
 
         List<String> files = new ArrayList<>(fileNames);
@@ -1362,7 +1354,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
             languageIncludes.append(((languageIncludes.length() == 0) ? "" : ",") + language + "/**");
         }
 
-        getLogger().debug("Using languages includes " + languageIncludes);
+        LOGGER.debug("Using languages includes " + languageIncludes);
 
         StringBuilder filteredIncludes = new StringBuilder();
         for (String filtered : filtereds) {
@@ -1370,7 +1362,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
                     + (filtered.startsWith(".") ? "" : "*.") + filtered);
         }
 
-        getLogger().debug("Using filtered includes " + filteredIncludes);
+        LOGGER.debug("Using filtered includes " + filteredIncludes);
 
         /* sourcesMainFiles */
         List<String> sourcesMainFiles = archetypeFilesResolver.findSourcesMainFiles(files, languageIncludes.toString());
@@ -1562,7 +1554,7 @@ public class FilesetArchetypeCreator extends AbstractLogEnabled implements Arche
 
         /**/
         if (!files.isEmpty()) {
-            getLogger().info("Ignored files: " + files);
+            LOGGER.info("Ignored files: " + files);
         }
 
         return resolvedFileSets;

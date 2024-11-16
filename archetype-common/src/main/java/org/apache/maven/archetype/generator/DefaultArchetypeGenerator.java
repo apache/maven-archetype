@@ -36,16 +36,18 @@ import org.apache.maven.archetype.exception.ArchetypeNotDefined;
 import org.apache.maven.archetype.exception.InvalidPackaging;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.archetype.old.OldArchetype;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
 import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.repository.RemoteRepository;
 import org.eclipse.aether.repository.RepositoryPolicy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Named
 @Singleton
-public class DefaultArchetypeGenerator extends AbstractLogEnabled implements ArchetypeGenerator {
+public class DefaultArchetypeGenerator implements ArchetypeGenerator {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultArchetypeGenerator.class);
 
     @Inject
     private ArchetypeArtifactManager archetypeArtifactManager;

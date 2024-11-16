@@ -47,14 +47,16 @@ import org.apache.maven.archetype.metadata.ArchetypeDescriptor;
 import org.apache.maven.archetype.metadata.io.xpp3.ArchetypeDescriptorXpp3Reader;
 import org.apache.maven.archetype.old.descriptor.ArchetypeDescriptorBuilder;
 import org.apache.maven.model.Model;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.repository.RemoteRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Named
 @Singleton
-public class DefaultArchetypeArtifactManager extends AbstractLogEnabled implements ArchetypeArtifactManager {
+public class DefaultArchetypeArtifactManager implements ArchetypeArtifactManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultArchetypeArtifactManager.class);
     @Inject
     private Downloader downloader;
 
@@ -138,24 +140,24 @@ public class DefaultArchetypeArtifactManager extends AbstractLogEnabled implemen
 
     @Override
     public boolean isFileSetArchetype(File archetypeFile) {
-        getLogger().debug("checking fileset archetype status on " + archetypeFile);
+        LOGGER.debug("checking fileset archetype status on " + archetypeFile);
 
         try (ZipFile zipFile = getArchetypeZipFile(archetypeFile)) {
             return isFileSetArchetype(zipFile);
         } catch (IOException | UnknownArchetype e) {
-            getLogger().debug(e.toString());
+            LOGGER.debug(e.toString());
             return false;
         }
     }
 
     @Override
     public boolean isOldArchetype(File archetypeFile) {
-        getLogger().debug("checking old archetype status on " + archetypeFile);
+        LOGGER.debug("checking old archetype status on " + archetypeFile);
 
         try (ZipFile zipFile = getArchetypeZipFile(archetypeFile)) {
             return isOldArchetype(zipFile);
         } catch (IOException | UnknownArchetype e) {
-            getLogger().debug(e.toString());
+            LOGGER.debug(e.toString());
             return false;
         }
     }
@@ -181,8 +183,7 @@ public class DefaultArchetypeArtifactManager extends AbstractLogEnabled implemen
 
             return archetype.exists();
         } catch (DownloadException e) {
-            getLogger()
-                    .debug(
+            LOGGER.debug(
                             "Archetype " + archetypeGroupId + ":" + archetypeArtifactId + ":" + archetypeVersion
                                     + " doesn't exist",
                             e);
@@ -211,7 +212,7 @@ public class DefaultArchetypeArtifactManager extends AbstractLogEnabled implemen
 
     @Override
     public List<String> getFilesetArchetypeResources(File archetypeFile) throws UnknownArchetype {
-        getLogger().debug("getFilesetArchetypeResources( \"" + archetypeFile.getAbsolutePath() + "\" )");
+        LOGGER.debug("getFilesetArchetypeResources( \"" + archetypeFile.getAbsolutePath() + "\" )");
         List<String> archetypeResources = new ArrayList<>();
 
         try (ZipFile zipFile = getArchetypeZipFile(archetypeFile)) {
@@ -222,11 +223,11 @@ public class DefaultArchetypeArtifactManager extends AbstractLogEnabled implemen
                 if (entry.getName().startsWith(Constants.ARCHETYPE_RESOURCES)) {
                     // not supposed to be file.separator
                     String resource = entry.getName().substring(Constants.ARCHETYPE_RESOURCES.length() + 1);
-                    getLogger().debug("  - found resource (" + Constants.ARCHETYPE_RESOURCES + "/)" + resource);
+                    LOGGER.debug("  - found resource (" + Constants.ARCHETYPE_RESOURCES + "/)" + resource);
                     // TODO:FIXME
                     archetypeResources.add(resource);
                 } else {
-                    getLogger().debug("  - ignored resource " + entry.getName());
+                    LOGGER.debug("  - ignored resource " + entry.getName());
                 }
             }
             return archetypeResources;
@@ -249,12 +250,12 @@ public class DefaultArchetypeArtifactManager extends AbstractLogEnabled implemen
         String key = archetypeGroupId + ":" + archetypeArtifactId + ":" + archetypeVersion;
 
         if (archetypeCache.containsKey(key)) {
-            getLogger().debug("Found archetype " + key + " in cache: " + archetypeCache.get(key));
+            LOGGER.debug("Found archetype " + key + " in cache: " + archetypeCache.get(key));
 
             return archetypeCache.get(key);
         }
 
-        getLogger().debug("Not found archetype " + key + " in cache");
+        LOGGER.debug("Not found archetype " + key + " in cache");
         return null;
     }
 
@@ -335,15 +336,15 @@ public class DefaultArchetypeArtifactManager extends AbstractLogEnabled implemen
     }
 
     private ZipEntry searchEntry(ZipFile zipFile, String searchString) {
-        getLogger().debug("Searching for " + searchString + " inside " + zipFile.getName());
+        LOGGER.debug("Searching for " + searchString + " inside " + zipFile.getName());
 
         Enumeration<? extends ZipEntry> enu = zipFile.entries();
         while (enu.hasMoreElements()) {
             ZipEntry entryfound = enu.nextElement();
-            getLogger().debug("  - " + entryfound.getName());
+            LOGGER.debug("  - " + entryfound.getName());
 
             if (searchString.equals(entryfound.getName())) {
-                getLogger().debug("Entry found");
+                LOGGER.debug("Entry found");
                 return entryfound;
             }
         }

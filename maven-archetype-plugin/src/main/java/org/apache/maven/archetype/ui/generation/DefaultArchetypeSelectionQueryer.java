@@ -38,11 +38,13 @@ import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.codehaus.plexus.components.interactivity.Prompter;
 import org.codehaus.plexus.components.interactivity.PrompterException;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Named("default")
 @Singleton
-public class DefaultArchetypeSelectionQueryer extends AbstractLogEnabled implements ArchetypeSelectionQueryer {
+public class DefaultArchetypeSelectionQueryer implements ArchetypeSelectionQueryer {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultArchetypeSelectionQueryer.class);
 
     @Inject
     @Named("archetype")

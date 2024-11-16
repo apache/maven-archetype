@@ -57,19 +57,21 @@ import org.apache.velocity.runtime.parser.node.ASTReference;
 import org.apache.velocity.runtime.parser.node.SimpleNode;
 import org.apache.velocity.runtime.visitor.BaseVisitor;
 import org.codehaus.plexus.components.interactivity.PrompterException;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.velocity.VelocityComponent;
 import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.repository.RemoteRepository;
 import org.eclipse.aether.repository.RepositoryPolicy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 // TODO: this seems to have more responsibilities than just a configurator
 @Named("default")
 @Singleton
-public class DefaultArchetypeGenerationConfigurator extends AbstractLogEnabled
+public class DefaultArchetypeGenerationConfigurator
         implements ArchetypeGenerationConfigurator {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultArchetypeGenerationConfigurator.class);
 
     @Inject
     private ArchetypeArtifactManager archetypeArtifactManager;
@@ -159,8 +161,7 @@ public class DefaultArchetypeGenerationConfigurator extends AbstractLogEnabled
             while (!confirmed) {
                 if (archetypeConfiguration.isConfigured()) {
                     for (String requiredProperty : propertiesRequired) {
-                        getLogger()
-                                .info("Using property: " + requiredProperty + " = "
+                        LOGGER.info("Using property: " + requiredProperty + " = "
                                         + archetypeConfiguration.getProperty(requiredProperty));
                     }
                 } else {
@@ -169,8 +170,7 @@ public class DefaultArchetypeGenerationConfigurator extends AbstractLogEnabled
 
                         if (archetypeConfiguration.isConfigured(requiredProperty)
                                 && !request.isAskForDefaultPropertyValues()) {
-                            getLogger()
-                                    .info("Using property: " + requiredProperty + " = "
+                            LOGGER.info("Using property: " + requiredProperty + " = "
                                             + archetypeConfiguration.getProperty(requiredProperty));
 
                             value = archetypeConfiguration.getProperty(requiredProperty);
@@ -194,13 +194,13 @@ public class DefaultArchetypeGenerationConfigurator extends AbstractLogEnabled
                 }
 
                 if (!archetypeConfiguration.isConfigured()) {
-                    getLogger().warn("Archetype is not fully configured");
+                    LOGGER.warn("Archetype is not fully configured");
                 } else if (!archetypeGenerationQueryer.confirmConfiguration(archetypeConfiguration)) {
-                    getLogger().debug("Archetype generation configuration not confirmed");
+                    LOGGER.debug("Archetype generation configuration not confirmed");
                     archetypeConfiguration.reset();
                     restoreCommandLineProperties(archetypeConfiguration, executionProperties);
                 } else {
-                    getLogger().debug("Archetype generation configuration confirmed");
+                    LOGGER.debug("Archetype generation configuration confirmed");
 
                     confirmed = true;
                 }
@@ -239,8 +239,7 @@ public class DefaultArchetypeGenerationConfigurator extends AbstractLogEnabled
                             exceptionMessage.append(requiredProperty);
                             missingProperties.add(requiredProperty);
                             exceptionMessage.append(" is missing.");
-                            getLogger()
-                                    .warn("Property " + requiredProperty + " is missing. Add -D" + requiredProperty
+                            LOGGER.warn("Property " + requiredProperty + " is missing. Add -D" + requiredProperty
                                             + "=someValue");
                         }
                     }
@@ -278,12 +277,12 @@ public class DefaultArchetypeGenerationConfigurator extends AbstractLogEnabled
 
     private void restoreCommandLineProperties(
             ArchetypeConfiguration archetypeConfiguration, Properties executionProperties) {
-        getLogger().debug("Restoring command line properties");
+        LOGGER.debug("Restoring command line properties");
 
         for (String property : archetypeConfiguration.getRequiredProperties()) {
             if (executionProperties.containsKey(property)) {
                 archetypeConfiguration.setProperty(property, executionProperties.getProperty(property));
-                getLogger().debug("Restored " + property + "=" + archetypeConfiguration.getProperty(property));
+                LOGGER.debug("Restored " + property + "=" + archetypeConfiguration.getProperty(property));
             }
         }
     }

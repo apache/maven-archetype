@@ -63,17 +63,19 @@ import org.apache.maven.archetype.metadata.ModuleDescriptor;
 import org.apache.maven.archetype.metadata.RequiredProperty;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.context.Context;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.codehaus.plexus.velocity.VelocityComponent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 @Named
 @Singleton
-public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled implements FilesetArchetypeGenerator {
+public class DefaultFilesetArchetypeGenerator implements FilesetArchetypeGenerator {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultFilesetArchetypeGenerator.class);
     @Inject
     private ArchetypeArtifactManager archetypeArtifactManager;
 
@@ -141,7 +143,7 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
             Thread.currentThread().setContextClassLoader(archetypeJarLoader);
 
             if (archetypeDescriptor.isPartial()) {
-                getLogger().debug("Processing partial archetype " + archetypeDescriptor.getName());
+                LOGGER.debug("Processing partial archetype " + archetypeDescriptor.getName());
                 if (outputDirectoryFile.exists()) {
                     if (!pom.exists()) {
                         throw new PomFileExists("This is a partial archetype and the pom.xml file doesn't exist.");
@@ -184,17 +186,17 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
                 }
 
                 if (!archetypeDescriptor.getModules().isEmpty()) {
-                    getLogger().info("Modules ignored in partial mode");
+                    LOGGER.info("Modules ignored in partial mode");
                 }
             } else {
-                getLogger().debug("Processing complete archetype " + archetypeDescriptor.getName());
+                LOGGER.debug("Processing complete archetype " + archetypeDescriptor.getName());
                 if (outputDirectoryFile.exists() && pom.exists()) {
                     throw new ProjectDirectoryExists(
                             "A Maven project already exists in the directory " + outputDirectoryFile.getPath());
                 }
 
                 if (outputDirectoryFile.exists()) {
-                    getLogger().warn("The directory " + outputDirectoryFile.getPath() + " already exists.");
+                    LOGGER.warn("The directory " + outputDirectoryFile.getPath() + " already exists.");
                 }
 
                 context.put("rootArtifactId", artifactId);
@@ -215,7 +217,7 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
 
             String postGenerationScript = archetypeArtifactManager.getPostGenerationScript(archetypeFile);
             if (postGenerationScript != null) {
-                getLogger().info("Executing " + Constants.ARCHETYPE_POST_GENERATION_SCRIPT + " post-generation script");
+                LOGGER.info("Executing " + Constants.ARCHETYPE_POST_GENERATION_SCRIPT + " post-generation script");
 
                 Binding binding = new Binding();
 
@@ -239,8 +241,8 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
             // ----------------------------------------------------------------------
             // Log message on OldArchetype creation
             // ----------------------------------------------------------------------
-            if (getLogger().isInfoEnabled()) {
-                getLogger().info("Project created from Archetype in dir: " + outputDirectoryFile.getAbsolutePath());
+            if (LOGGER.isInfoEnabled()) {
+                LOGGER.info("Project created from Archetype in dir: " + outputDirectoryFile.getAbsolutePath());
             }
         } catch (IOException
                 | XmlPullParserException
@@ -260,12 +262,12 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
     private boolean copyFile(
             final File outFile, final String template, final boolean failIfExists, final ZipFile archetypeZipFile)
             throws OutputFileExists, IOException {
-        getLogger().debug("Copying file " + template);
+        LOGGER.debug("Copying file " + template);
 
         if (failIfExists && outFile.exists()) {
             throw new OutputFileExists("Don't rewrite file " + outFile.getName());
         } else if (outFile.exists()) {
-            getLogger().warn("CP Don't override file " + outFile);
+            LOGGER.warn("CP Don't override file " + outFile);
 
             return false;
         }
@@ -277,7 +279,7 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
         } else {
             outFile.getParentFile().mkdirs();
             if (!outFile.exists() && !outFile.createNewFile()) {
-                getLogger().warn("Could not create new file \"" + outFile.getPath() + "\" or the file already exists.");
+                LOGGER.warn("Could not create new file \"" + outFile.getPath() + "\" or the file already exists.");
             }
 
             try (InputStream inputStream = archetypeZipFile.getInputStream(input);
@@ -358,24 +360,22 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
             String propertyToken = matcher.group(1);
             String contextPropertyValue = (String) context.get(propertyToken);
             if (contextPropertyValue != null && !contextPropertyValue.trim().isEmpty()) {
-                if (getLogger().isDebugEnabled()) {
-                    getLogger()
-                            .debug("Replacing property '" + propertyToken + "' in file path '" + filePath
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("Replacing property '" + propertyToken + "' in file path '" + filePath
                                     + "' with value '" + contextPropertyValue + "'.");
                 }
                 matcher.appendReplacement(interpolatedResult, contextPropertyValue);
             } else {
                 // Need to skip the undefined property
-                getLogger()
-                        .warn("Property '" + propertyToken + "' was not specified, so the token in '" + filePath
+                LOGGER.warn("Property '" + propertyToken + "' was not specified, so the token in '" + filePath
                                 + "' is not being replaced.");
             }
         }
 
         matcher.appendTail(interpolatedResult);
 
-        if (getLogger().isDebugEnabled()) {
-            getLogger().debug("Final interpolated file path: '" + interpolatedResult + "'");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Final interpolated file path: '" + interpolatedResult + "'");
         }
 
         return interpolatedResult.toString();
@@ -408,19 +408,18 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
         final String packageInPathFormat = getPackageInPathFormat(request.getPackage());
         context.put(Constants.PACKAGE_IN_PATH_FORMAT, packageInPathFormat);
 
-        if (getLogger().isInfoEnabled()) {
-            getLogger().info("----------------------------------------------------------------------------");
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("----------------------------------------------------------------------------");
 
-            getLogger()
-                    .info("Using following parameters for creating project from Archetype: "
+            LOGGER.info("Using following parameters for creating project from Archetype: "
                             + request.getArchetypeArtifactId() + ":" + request.getArchetypeVersion());
 
-            getLogger().info("----------------------------------------------------------------------------");
-            getLogger().info("Parameter: " + Constants.GROUP_ID + ", Value: " + request.getGroupId());
-            getLogger().info("Parameter: " + Constants.ARTIFACT_ID + ", Value: " + request.getArtifactId());
-            getLogger().info("Parameter: " + Constants.VERSION + ", Value: " + request.getVersion());
-            getLogger().info("Parameter: " + Constants.PACKAGE + ", Value: " + request.getPackage());
-            getLogger().info("Parameter: " + Constants.PACKAGE_IN_PATH_FORMAT + ", Value: " + packageInPathFormat);
+            LOGGER.info("----------------------------------------------------------------------------");
+            LOGGER.info("Parameter: " + Constants.GROUP_ID + ", Value: " + request.getGroupId());
+            LOGGER.info("Parameter: " + Constants.ARTIFACT_ID + ", Value: " + request.getArtifactId());
+            LOGGER.info("Parameter: " + Constants.VERSION + ", Value: " + request.getVersion());
+            LOGGER.info("Parameter: " + Constants.PACKAGE + ", Value: " + request.getPackage());
+            LOGGER.info("Parameter: " + Constants.PACKAGE_IN_PATH_FORMAT + ", Value: " + packageInPathFormat);
         }
 
         for (Iterator<?> iterator = request.getProperties().keySet().iterator(); iterator.hasNext(); ) {
@@ -434,8 +433,8 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
 
             context.put(key, value);
 
-            if (getLogger().isInfoEnabled()) {
-                getLogger().info("Parameter: " + key + ", Value: " + value);
+            if (LOGGER.isInfoEnabled()) {
+                LOGGER.info("Parameter: " + key + ", Value: " + value);
             }
         }
         return context;
@@ -541,11 +540,11 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
             throws XmlPullParserException, IOException, ParserConfigurationException, SAXException,
                     TransformerException, OutputFileExists, ArchetypeGenerationFailure, InvalidPackaging {
         outputDirectoryFile.mkdirs();
-        getLogger().debug("Processing module " + artifactId);
-        getLogger().debug("Processing module rootArtifactId " + rootArtifactId);
-        getLogger().debug("Processing module pom " + pom);
-        getLogger().debug("Processing module moduleOffset " + moduleOffset);
-        getLogger().debug("Processing module outputDirectoryFile " + outputDirectoryFile);
+        LOGGER.debug("Processing module " + artifactId);
+        LOGGER.debug("Processing module rootArtifactId " + rootArtifactId);
+        LOGGER.debug("Processing module pom " + pom);
+        LOGGER.debug("Processing module moduleOffset " + moduleOffset);
+        LOGGER.debug("Processing module outputDirectoryFile " + outputDirectoryFile);
 
         processFilesetProject(
                 archetypeDescriptor,
@@ -565,7 +564,7 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
                 archetypeDescriptor.getModules().iterator();
 
         if (subprojects.hasNext()) {
-            getLogger().debug(artifactId + " has modules (" + archetypeDescriptor.getModules() + ")");
+            LOGGER.debug(artifactId + " has modules (" + archetypeDescriptor.getModules() + ")");
 
             setParentArtifactId(context, StringUtils.replace(artifactId, "${rootArtifactId}", rootArtifactId));
         }
@@ -601,7 +600,7 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
 
         restoreParentArtifactId(context, parentArtifactId);
 
-        getLogger().debug("Processed " + artifactId);
+        LOGGER.debug("Processed " + artifactId);
     }
 
     @SuppressWarnings("checkstyle:ParameterNumber")
@@ -618,11 +617,11 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
             final File basedirPom)
             throws XmlPullParserException, IOException, ParserConfigurationException, SAXException,
                     TransformerException, OutputFileExists, ArchetypeGenerationFailure, InvalidPackaging {
-        getLogger().debug("Processing fileset project moduleId " + moduleId);
-        getLogger().debug("Processing fileset project pom " + pom);
-        getLogger().debug("Processing fileset project moduleOffset " + moduleOffset);
-        getLogger().debug("Processing fileset project outputDirectoryFile " + outputDirectoryFile);
-        getLogger().debug("Processing fileset project basedirPom " + basedirPom);
+        LOGGER.debug("Processing fileset project moduleId " + moduleId);
+        LOGGER.debug("Processing fileset project pom " + pom);
+        LOGGER.debug("Processing fileset project moduleOffset " + moduleOffset);
+        LOGGER.debug("Processing fileset project outputDirectoryFile " + outputDirectoryFile);
+        LOGGER.debug("Processing fileset project basedirPom " + basedirPom);
 
         if (basedirPom.exists()) {
             processPomWithParent(context, pom, moduleOffset, basedirPom, moduleId);
@@ -642,7 +641,7 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
 
     private void processPom(Context context, File pom, String moduleOffset)
             throws IOException, OutputFileExists, ArchetypeGenerationFailure {
-        getLogger().debug("Processing pom " + pom);
+        LOGGER.debug("Processing pom " + pom);
 
         processTemplate(
                 pom,
@@ -654,7 +653,7 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
 
     private void processPomWithMerge(Context context, File pom, String moduleOffset)
             throws OutputFileExists, IOException, XmlPullParserException, ArchetypeGenerationFailure {
-        getLogger().debug("Processing pom " + pom + " with merge");
+        LOGGER.debug("Processing pom " + pom + " with merge");
 
         File temporaryPom = getTemporaryFile(pom);
 
@@ -679,7 +678,7 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
     private void processPomWithParent(Context context, File pom, String moduleOffset, File basedirPom, String moduleId)
             throws XmlPullParserException, IOException, ParserConfigurationException, SAXException,
                     TransformerException, OutputFileExists, ArchetypeGenerationFailure, InvalidPackaging {
-        getLogger().debug("Processing pom " + pom + " with parent " + basedirPom);
+        LOGGER.debug("Processing pom " + pom + " with parent " + basedirPom);
 
         processTemplate(
                 pom,
@@ -688,7 +687,7 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
                 getEncoding(null),
                 true);
 
-        getLogger().debug("Adding module " + moduleId);
+        LOGGER.debug("Adding module " + moduleId);
 
         pomManager.addModule(basedirPom, moduleId);
 
@@ -708,20 +707,20 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
             templateFileName = localTemplateFileName;
         }
 
-        getLogger().debug("Processing template " + templateFileName);
+        LOGGER.debug("Processing template " + templateFileName);
 
         if (outFile.exists()) {
             if (failIfExists) {
                 throw new OutputFileExists("Don't override file " + outFile.getAbsolutePath());
             }
 
-            getLogger().warn("Don't override file " + outFile);
+            LOGGER.warn("Don't override file " + outFile);
 
             return false;
         }
 
         if (templateFileName.endsWith("/")) {
-            getLogger().debug("Creating directory " + outFile);
+            LOGGER.debug("Creating directory " + outFile);
 
             outFile.mkdirs();
 
@@ -733,10 +732,10 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
         }
 
         if (!outFile.exists() && !outFile.createNewFile()) {
-            getLogger().warn("Could not create new file \"" + outFile.getPath() + "\" or the file already exists.");
+            LOGGER.warn("Could not create new file \"" + outFile.getPath() + "\" or the file already exists.");
         }
 
-        getLogger().debug("Merging into " + outFile);
+        LOGGER.debug("Merging into " + outFile);
 
         try (Writer writer = new OutputStreamWriter(Files.newOutputStream(outFile.toPath()), encoding)) {
             StringWriter stringWriter = new StringWriter();
@@ -764,7 +763,7 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
             throws OutputFileExists, ArchetypeGenerationFailure, IOException {
         Iterator<FileSet> iterator = archetypeDescriptor.getFileSets().iterator();
         if (iterator.hasNext()) {
-            getLogger().debug("Processing filesets" + "\n  " + archetypeResources);
+            LOGGER.debug("Processing filesets" + "\n  " + archetypeResources);
         }
 
         int count = 0;
@@ -788,8 +787,7 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
                     .mkdirs();
 
             if (fileSet.isFiltered()) {
-                getLogger()
-                        .debug("    Processing fileset " + fileSet + " -> " + fileSetResources.size() + ":\n      "
+                LOGGER.debug("    Processing fileset " + fileSet + " -> " + fileSetResources.size() + ":\n      "
                                 + fileSetResources);
 
                 int processed = processFileSet(
@@ -803,10 +801,9 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
                         getEncoding(fileSet.getEncoding()),
                         failIfExists);
 
-                getLogger().debug("    Processed " + processed + " files.");
+                LOGGER.debug("    Processed " + processed + " files.");
             } else {
-                getLogger()
-                        .debug("    Copying fileset " + fileSet + " -> " + fileSetResources.size() + ":\n      "
+                LOGGER.debug("    Copying fileset " + fileSet + " -> " + fileSetResources.size() + ":\n      "
                                 + fileSetResources);
 
                 int copied = copyFiles(
@@ -820,11 +817,11 @@ public class DefaultFilesetArchetypeGenerator extends AbstractLogEnabled impleme
                         failIfExists,
                         context);
 
-                getLogger().debug("    Copied " + copied + " files.");
+                LOGGER.debug("    Copied " + copied + " files.");
             }
         }
 
-        getLogger().debug("Processed " + count + " filesets");
+        LOGGER.debug("Processed " + count + " filesets");
     }
 
     private void restoreParentArtifactId(Context context, String parentArtifactId) {

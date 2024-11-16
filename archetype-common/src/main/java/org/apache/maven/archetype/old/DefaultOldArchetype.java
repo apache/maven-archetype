@@ -57,7 +57,6 @@ import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.context.Context;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
@@ -65,6 +64,8 @@ import org.codehaus.plexus.util.xml.XmlStreamReader;
 import org.codehaus.plexus.util.xml.XmlStreamWriter;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.codehaus.plexus.velocity.VelocityComponent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 /**
@@ -73,7 +74,8 @@ import org.xml.sax.SAXException;
  */
 @Named
 @Singleton
-public class DefaultOldArchetype extends AbstractLogEnabled implements OldArchetype {
+public class DefaultOldArchetype implements OldArchetype {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultOldArchetype.class);
     private static final String DEFAULT_TEST_RESOURCE_DIR = "/src/test/resources";
 
     private static final String DEFAULT_TEST_SOURCE_DIR = "/src/test/java";
@@ -139,21 +141,20 @@ public class DefaultOldArchetype extends AbstractLogEnabled implements OldArchet
         // ---------------------------------------------------------------------
         // Get Logger and display all parameters used
         // ---------------------------------------------------------------------
-        if (getLogger().isInfoEnabled()) {
-            getLogger().info("----------------------------------------------------------------------------");
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("----------------------------------------------------------------------------");
 
-            getLogger()
-                    .info("Using following parameters for creating project from Old (1.x) Archetype: "
+            LOGGER.info("Using following parameters for creating project from Old (1.x) Archetype: "
                             + request.getArchetypeArtifactId() + ":" + request.getArchetypeVersion());
 
-            getLogger().info("----------------------------------------------------------------------------");
+            LOGGER.info("----------------------------------------------------------------------------");
 
             for (Map.Entry<String, String> entry : parameters.entrySet()) {
                 String parameterName = entry.getKey();
 
                 String parameterValue = entry.getValue();
 
-                getLogger().info("Parameter: " + parameterName + ", Value: " + parameterValue);
+                LOGGER.info("Parameter: " + parameterName + ", Value: " + parameterValue);
             }
         }
 
@@ -323,8 +324,8 @@ public class DefaultOldArchetype extends AbstractLogEnabled implements OldArchet
         // ----------------------------------------------------------------------
         // Log message on OldArchetype creation
         // ----------------------------------------------------------------------
-        if (getLogger().isInfoEnabled()) {
-            getLogger().info("project created from Old (1.x) Archetype in dir: " + outputDirectory);
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("project created from Old (1.x) Archetype in dir: " + outputDirectory);
         }
     }
 
@@ -411,16 +412,15 @@ public class DefaultOldArchetype extends AbstractLogEnabled implements OldArchet
 
         boolean foundBuildElement = build != null;
 
-        if (getLogger().isDebugEnabled()) {
-            getLogger()
-                    .debug(
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug(
                             "********************* Debug info for resources created from generated Model ***********************");
-            getLogger().debug("Was build element found in generated POM?: " + foundBuildElement);
+            LOGGER.debug("Was build element found in generated POM?: " + foundBuildElement);
         }
 
         // create source directory if specified in POM
         if (foundBuildElement && null != build.getSourceDirectory()) {
-            getLogger().debug("Overriding default source directory ");
+            LOGGER.debug("Overriding default source directory ");
 
             overrideSrcDir = true;
 
@@ -433,7 +433,7 @@ public class DefaultOldArchetype extends AbstractLogEnabled implements OldArchet
 
         // create script source directory if specified in POM
         if (foundBuildElement && null != build.getScriptSourceDirectory()) {
-            getLogger().debug("Overriding default script source directory ");
+            LOGGER.debug("Overriding default script source directory ");
 
             String scriptSourceDirectory = build.getScriptSourceDirectory();
 
@@ -444,7 +444,7 @@ public class DefaultOldArchetype extends AbstractLogEnabled implements OldArchet
 
         // create resource director(y/ies) if specified in POM
         if (foundBuildElement && !build.getResources().isEmpty()) {
-            getLogger().debug("Overriding default resource directory ");
+            LOGGER.debug("Overriding default resource directory ");
 
             overrideResourceDir = true;
 
@@ -462,7 +462,7 @@ public class DefaultOldArchetype extends AbstractLogEnabled implements OldArchet
         }
         // create test source directory if specified in POM
         if (foundBuildElement && null != build.getTestSourceDirectory()) {
-            getLogger().debug("Overriding default test directory ");
+            LOGGER.debug("Overriding default test directory ");
 
             overrideTestSrcDir = true;
 
@@ -475,7 +475,7 @@ public class DefaultOldArchetype extends AbstractLogEnabled implements OldArchet
 
         // create test resource directory if specified in POM
         if (foundBuildElement && !build.getTestResources().isEmpty()) {
-            getLogger().debug("Overriding default test resource directory ");
+            LOGGER.debug("Overriding default test resource directory ");
 
             overrideTestResourceDir = true;
 
@@ -492,8 +492,7 @@ public class DefaultOldArchetype extends AbstractLogEnabled implements OldArchet
             }
         }
 
-        getLogger()
-                .debug(
+        LOGGER.debug(
                         "********************* End of debug info from resources from generated POM ***********************");
 
         // ----------------------------------------------------------------------
@@ -690,7 +689,7 @@ public class DefaultOldArchetype extends AbstractLogEnabled implements OldArchet
         }
 
         if (!f.exists() && !f.createNewFile()) {
-            getLogger().warn("Could not create new file \"" + f.getPath() + "\" or the file already exists.");
+            LOGGER.warn("Could not create new file \"" + f.getPath() + "\" or the file already exists.");
         }
 
         if (descriptor.isFiltered()) {

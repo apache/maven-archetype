@@ -34,24 +34,26 @@ import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Writer;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.model.Model;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.XmlStreamWriter;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author            rafale
  */
 @Named
 @Singleton
-public class DefaultRepositoryCrawler extends AbstractLogEnabled implements RepositoryCrawler {
+public class DefaultRepositoryCrawler implements RepositoryCrawler {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultRepositoryCrawler.class);
     @Inject
     private ArchetypeArtifactManager archetypeArtifactManager;
 
     @Override
     public ArchetypeCatalog crawl(File repository) {
         if (!repository.isDirectory()) {
-            getLogger().warn("File is not a directory");
+            LOGGER.warn("File is not a directory");
             return null;
         }
 
@@ -62,7 +64,7 @@ public class DefaultRepositoryCrawler extends AbstractLogEnabled implements Repo
 
         while (jars.hasNext()) {
             File jar = jars.next();
-            getLogger().info("Scanning " + jar);
+            LOGGER.info("Scanning " + jar);
             if (archetypeArtifactManager.isFileSetArchetype(jar) || archetypeArtifactManager.isOldArchetype(jar)) {
                 try {
                     Archetype archetype = new Archetype();
@@ -90,7 +92,7 @@ public class DefaultRepositoryCrawler extends AbstractLogEnabled implements Repo
                         } else {
                             archetype.setVersion(pom.getParent().getVersion());
                         }
-                        getLogger().info("\tArchetype " + archetype + " found in pom");
+                        LOGGER.info("\tArchetype " + archetype + " found in pom");
                     } else {
                         String version = jar.getParentFile().getName();
 
@@ -111,7 +113,7 @@ public class DefaultRepositoryCrawler extends AbstractLogEnabled implements Repo
                         archetype.setArtifactId(artifactId);
                         archetype.setVersion(version);
 
-                        getLogger().info("\tArchetype " + archetype + " defined by repository path");
+                        LOGGER.info("\tArchetype " + archetype + " defined by repository path");
                     } // end if-else
 
                     catalog.addArchetype(archetype);
@@ -135,7 +137,7 @@ public class DefaultRepositoryCrawler extends AbstractLogEnabled implements Repo
             catalogWriter.write(fileWriter, archetypeCatalog);
             return true;
         } catch (IOException ex) {
-            getLogger().warn("Catalog can not be writen to " + archetypeCatalogFile, ex);
+            LOGGER.warn("Catalog can not be writen to " + archetypeCatalogFile, ex);
             return false;
         }
     }
