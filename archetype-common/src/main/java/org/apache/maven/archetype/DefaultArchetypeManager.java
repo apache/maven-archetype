@@ -148,9 +148,7 @@ public class DefaultArchetypeManager implements ArchetypeManager {
 
             return source.getArchetypeCatalog(null, null);
         } catch (ArchetypeDataSourceException e) {
-            LOGGER.warn(
-                            "failed to read catalog: " + e.getMessage(),
-                            LOGGER.isDebugEnabled() ? e : null);
+            LOGGER.warn("failed to read catalog: " + e.getMessage(), LOGGER.isDebugEnabled() ? e : null);
             return new ArchetypeCatalog();
         }
     }
@@ -162,9 +160,7 @@ public class DefaultArchetypeManager implements ArchetypeManager {
 
             return source.getArchetypeCatalog(repositorySession, null);
         } catch (ArchetypeDataSourceException e) {
-            LOGGER.warn(
-                            "failed to read catalog: " + e.getMessage(),
-                            LOGGER.isDebugEnabled() ? e : null);
+            LOGGER.warn("failed to read catalog: " + e.getMessage(), LOGGER.isDebugEnabled() ? e : null);
             return new ArchetypeCatalog();
         }
     }
@@ -177,9 +173,7 @@ public class DefaultArchetypeManager implements ArchetypeManager {
 
             return source.getArchetypeCatalog(repositorySession, remoteRepositories);
         } catch (ArchetypeDataSourceException e) {
-            LOGGER.warn(
-                            "failed to download from remote" + e.getMessage(),
-                            LOGGER.isDebugEnabled() ? e : null);
+            LOGGER.warn("failed to download from remote" + e.getMessage(), LOGGER.isDebugEnabled() ? e : null);
             return new ArchetypeCatalog();
         }
     }

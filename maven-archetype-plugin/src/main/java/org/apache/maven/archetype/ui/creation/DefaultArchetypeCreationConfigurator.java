@@ -47,6 +47,7 @@ import org.slf4j.LoggerFactory;
 @Singleton
 public class DefaultArchetypeCreationConfigurator implements ArchetypeCreationConfigurator {
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultArchetypeCreationConfigurator.class);
+
     @Inject
     private ArchetypeCreationQueryer archetypeCreationQueryer;
 

@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 @Singleton
 public class DefaultArchetypeGenerationQueryer implements ArchetypeGenerationQueryer {
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultArchetypeGenerationQueryer.class);
+
     @Inject
     private Prompter prompter;
 

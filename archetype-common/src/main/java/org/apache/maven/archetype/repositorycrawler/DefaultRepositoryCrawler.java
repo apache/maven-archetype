@@ -47,6 +47,7 @@ import org.slf4j.LoggerFactory;
 @Singleton
 public class DefaultRepositoryCrawler implements RepositoryCrawler {
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultRepositoryCrawler.class);
+
     @Inject
     private ArchetypeArtifactManager archetypeArtifactManager;
 

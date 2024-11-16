@@ -145,7 +145,7 @@ public class DefaultOldArchetype implements OldArchetype {
             LOGGER.info("----------------------------------------------------------------------------");
 
             LOGGER.info("Using following parameters for creating project from Old (1.x) Archetype: "
-                            + request.getArchetypeArtifactId() + ":" + request.getArchetypeVersion());
+                    + request.getArchetypeArtifactId() + ":" + request.getArchetypeVersion());
 
             LOGGER.info("----------------------------------------------------------------------------");
 
@@ -414,7 +414,7 @@ public class DefaultOldArchetype implements OldArchetype {
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug(
-                            "********************* Debug info for resources created from generated Model ***********************");
+                    "********************* Debug info for resources created from generated Model ***********************");
             LOGGER.debug("Was build element found in generated POM?: " + foundBuildElement);
         }
 
@@ -493,7 +493,7 @@ public class DefaultOldArchetype implements OldArchetype {
         }
 
         LOGGER.debug(
-                        "********************* End of debug info from resources from generated POM ***********************");
+                "********************* End of debug info from resources from generated POM ***********************");
 
         // ----------------------------------------------------------------------
         // Main

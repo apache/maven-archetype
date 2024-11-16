@@ -76,6 +76,7 @@ import org.xml.sax.SAXException;
 @Singleton
 public class DefaultFilesetArchetypeGenerator implements FilesetArchetypeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultFilesetArchetypeGenerator.class);
+
     @Inject
     private ArchetypeArtifactManager archetypeArtifactManager;
 
@@ -362,13 +363,13 @@ public class DefaultFilesetArchetypeGenerator implements FilesetArchetypeGenerat
             if (contextPropertyValue != null && !contextPropertyValue.trim().isEmpty()) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("Replacing property '" + propertyToken + "' in file path '" + filePath
-                                    + "' with value '" + contextPropertyValue + "'.");
+                            + "' with value '" + contextPropertyValue + "'.");
                 }
                 matcher.appendReplacement(interpolatedResult, contextPropertyValue);
             } else {
                 // Need to skip the undefined property
                 LOGGER.warn("Property '" + propertyToken + "' was not specified, so the token in '" + filePath
-                                + "' is not being replaced.");
+                        + "' is not being replaced.");
             }
         }
 
@@ -412,7 +413,7 @@ public class DefaultFilesetArchetypeGenerator implements FilesetArchetypeGenerat
             LOGGER.info("----------------------------------------------------------------------------");
 
             LOGGER.info("Using following parameters for creating project from Archetype: "
-                            + request.getArchetypeArtifactId() + ":" + request.getArchetypeVersion());
+                    + request.getArchetypeArtifactId() + ":" + request.getArchetypeVersion());
 
             LOGGER.info("----------------------------------------------------------------------------");
             LOGGER.info("Parameter: " + Constants.GROUP_ID + ", Value: " + request.getGroupId());
@@ -788,7 +789,7 @@ public class DefaultFilesetArchetypeGenerator implements FilesetArchetypeGenerat
 
             if (fileSet.isFiltered()) {
                 LOGGER.debug("    Processing fileset " + fileSet + " -> " + fileSetResources.size() + ":\n      "
-                                + fileSetResources);
+                        + fileSetResources);
 
                 int processed = processFileSet(
                         fileSet.getDirectory(),
@@ -804,7 +805,7 @@ public class DefaultFilesetArchetypeGenerator implements FilesetArchetypeGenerat
                 LOGGER.debug("    Processed " + processed + " files.");
             } else {
                 LOGGER.debug("    Copying fileset " + fileSet + " -> " + fileSetResources.size() + ":\n      "
-                                + fileSetResources);
+                        + fileSetResources);
 
                 int copied = copyFiles(
                         fileSet.getDirectory(),

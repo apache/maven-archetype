@@ -57,6 +57,7 @@ import org.slf4j.LoggerFactory;
 @Singleton
 public class DefaultArchetypeArtifactManager implements ArchetypeArtifactManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultArchetypeArtifactManager.class);
+
     @Inject
     private Downloader downloader;
 
@@ -184,9 +185,9 @@ public class DefaultArchetypeArtifactManager implements ArchetypeArtifactManager
             return archetype.exists();
         } catch (DownloadException e) {
             LOGGER.debug(
-                            "Archetype " + archetypeGroupId + ":" + archetypeArtifactId + ":" + archetypeVersion
-                                    + " doesn't exist",
-                            e);
+                    "Archetype " + archetypeGroupId + ":" + archetypeArtifactId + ":" + archetypeVersion
+                            + " doesn't exist",
+                    e);
             return false;
         }
     }

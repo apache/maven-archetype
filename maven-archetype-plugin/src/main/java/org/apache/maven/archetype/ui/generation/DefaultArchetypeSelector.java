@@ -88,11 +88,11 @@ public class DefaultArchetypeSelector implements ArchetypeSelector {
                 updateRepository(definition, archetype);
 
                 LOGGER.info("Archetype repository not defined. Using the one from " + archetype + " found in catalog "
-                                + catalogKey);
+                        + catalogKey);
             } else {
                 LOGGER.warn("Archetype not found in any catalog. Falling back to central repository.");
                 LOGGER.warn(
-                                "Add a repository with id 'archetype' in your settings.xml if archetype's repository is elsewhere.");
+                        "Add a repository with id 'archetype' in your settings.xml if archetype's repository is elsewhere.");
             }
         } else if (definition.isPartiallyDefined()) {
             Map.Entry<String, Archetype> found =
@@ -127,8 +127,8 @@ public class DefaultArchetypeSelector implements ArchetypeSelector {
             // if artifact ID is set to its default, we still prompt to confirm
             if (definition.getArtifactId() == null) {
                 LOGGER.info("No archetype defined. Using " + DEFAULT_ARCHETYPE_ARTIFACTID + " ("
-                                + definition.getGroupId() + ":" + DEFAULT_ARCHETYPE_ARTIFACTID + ":"
-                                + definition.getVersion() + ")");
+                        + definition.getGroupId() + ":" + DEFAULT_ARCHETYPE_ARTIFACTID + ":"
+                        + definition.getVersion() + ")");
                 definition.setArtifactId(DEFAULT_ARCHETYPE_ARTIFACTID);
             }
 

@@ -69,8 +69,7 @@ import org.slf4j.LoggerFactory;
 // TODO: this seems to have more responsibilities than just a configurator
 @Named("default")
 @Singleton
-public class DefaultArchetypeGenerationConfigurator
-        implements ArchetypeGenerationConfigurator {
+public class DefaultArchetypeGenerationConfigurator implements ArchetypeGenerationConfigurator {
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultArchetypeGenerationConfigurator.class);
 
     @Inject
@@ -162,7 +161,7 @@ public class DefaultArchetypeGenerationConfigurator
                 if (archetypeConfiguration.isConfigured()) {
                     for (String requiredProperty : propertiesRequired) {
                         LOGGER.info("Using property: " + requiredProperty + " = "
-                                        + archetypeConfiguration.getProperty(requiredProperty));
+                                + archetypeConfiguration.getProperty(requiredProperty));
                     }
                 } else {
                     for (String requiredProperty : propertiesRequired) {
@@ -171,7 +170,7 @@ public class DefaultArchetypeGenerationConfigurator
                         if (archetypeConfiguration.isConfigured(requiredProperty)
                                 && !request.isAskForDefaultPropertyValues()) {
                             LOGGER.info("Using property: " + requiredProperty + " = "
-                                            + archetypeConfiguration.getProperty(requiredProperty));
+                                    + archetypeConfiguration.getProperty(requiredProperty));
 
                             value = archetypeConfiguration.getProperty(requiredProperty);
                         } else {
@@ -240,7 +239,7 @@ public class DefaultArchetypeGenerationConfigurator
                             missingProperties.add(requiredProperty);
                             exceptionMessage.append(" is missing.");
                             LOGGER.warn("Property " + requiredProperty + " is missing. Add -D" + requiredProperty
-                                            + "=someValue");
+                                    + "=someValue");
                         }
                     }
 

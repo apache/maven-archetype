@@ -272,7 +272,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
 
             if (archetypeIntegrationTestInputFolder.exists()) {
                 LOGGER.info("Copying: " + archetypeIntegrationTestInputFolder.getAbsolutePath() + " into "
-                                + archetypeIntegrationTestOutputFolder.getAbsolutePath());
+                        + archetypeIntegrationTestOutputFolder.getAbsolutePath());
 
                 FileUtils.copyDirectoryStructure(
                         archetypeIntegrationTestInputFolder, archetypeIntegrationTestOutputFolder);
@@ -322,7 +322,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
         File archetypePropertiesFile = new File(basicItDirectory, "archetype.properties");
         if (!archetypePropertiesFile.exists() && !archetypePropertiesFile.createNewFile()) {
             LOGGER.warn("Could not create new file \"" + archetypePropertiesFile.getPath()
-                            + "\" or the file already exists.");
+                    + "\" or the file already exists.");
         }
 
         try (InputStream in = FilesetArchetypeCreator.class.getResourceAsStream("archetype.properties");
@@ -473,7 +473,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
             archetypeDescriptor.addRequiredProperty(requiredProperty);
 
             LOGGER.debug("Adding requiredProperty " + propertyKey + "=" + requiredProperties.getProperty(propertyKey)
-                            + " to archetype's descriptor");
+                    + " to archetype's descriptor");
         }
     }
 
@@ -885,8 +885,8 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
                 String property = (String) properties.next();
 
                 if (initialcontent.indexOf("${" + property + "}") > 0) {
-                    LOGGER.warn("Archetype uses ${" + property + "} for internal processing, but file "
-                                    + initialPomFile + " contains this property already");
+                    LOGGER.warn("Archetype uses ${" + property + "} for internal processing, but file " + initialPomFile
+                            + " contains this property already");
                 }
             }
         }
@@ -924,7 +924,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
 
         if (!files.isEmpty()) {
             LOGGER.debug("Creating filesets" + (packaged ? (" packaged (" + packageName + ")") : "")
-                            + (filtered ? " filtered" : "") + " at level " + level);
+                    + (filtered ? " filtered" : "") + " at level " + level);
             if (level == 0) {
                 List<String> includes = new ArrayList<>(files);
                 List<String> excludes = new ArrayList<>();
@@ -1128,7 +1128,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
 
                 if (initialcontent.indexOf("${" + property + "}") > 0) {
                     LOGGER.warn("OldArchetype uses ${" + property + "} for internal processing, but file "
-                                    + initialPomFile + " contains this property already");
+                            + initialPomFile + " contains this property already");
                 }
             }
         }
@@ -1266,7 +1266,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
 
                 if (initialcontent.indexOf("${" + property + "}") > 0) {
                     LOGGER.warn("Archetype uses ${" + property + "} for internal processing, but file " + inputFile
-                                    + " contains this property already");
+                            + " contains this property already");
                 }
             }
 
@@ -1343,8 +1343,8 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
             List<String> filtereds,
             String defaultEncoding) {
         List<FileSet> resolvedFileSets = new ArrayList<>();
-        LOGGER.debug("Resolving filesets with package=" + packageName + ", languages=" + languages
-                        + " and extentions=" + filtereds);
+        LOGGER.debug("Resolving filesets with package=" + packageName + ", languages=" + languages + " and extentions="
+                + filtereds);
 
         List<String> files = new ArrayList<>(fileNames);
 

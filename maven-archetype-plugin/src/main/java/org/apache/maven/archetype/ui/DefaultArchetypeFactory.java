@@ -210,8 +210,8 @@ public class DefaultArchetypeFactory implements ArchetypeFactory {
                 configuration.addRequiredProperty(requiredProperty);
 
                 configuration.setProperty(requiredProperty, properties.getProperty(requiredProperty));
-                LOGGER.debug("Setting property " + requiredProperty + "="
-                                + configuration.getProperty(requiredProperty));
+                LOGGER.debug(
+                        "Setting property " + requiredProperty + "=" + configuration.getProperty(requiredProperty));
             }
         }
 
