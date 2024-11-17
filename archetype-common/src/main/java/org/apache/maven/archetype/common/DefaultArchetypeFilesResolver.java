@@ -31,13 +31,16 @@ import java.util.Set;
 import org.apache.maven.archetype.common.util.ListScanner;
 import org.apache.maven.archetype.common.util.PathUtils;
 import org.apache.maven.archetype.metadata.FileSet;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Named
 @Singleton
-public class DefaultArchetypeFilesResolver extends AbstractLogEnabled implements ArchetypeFilesResolver {
+public class DefaultArchetypeFilesResolver implements ArchetypeFilesResolver {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultArchetypeFilesResolver.class);
+
     @Override
     public List<String> getFilesWithExtension(List<String> files, String extension) {
         ListScanner scanner = new ListScanner();
@@ -58,7 +61,7 @@ public class DefaultArchetypeFilesResolver extends AbstractLogEnabled implements
         scanner.setExcludes("");
 
         List<String> result = scanner.scan(files);
-        getLogger().debug("Scanned " + result.size() + " filtered files in " + files.size() + " files");
+        LOGGER.debug("Scanned " + result.size() + " filtered files in " + files.size() + " files");
 
         return result;
     }
@@ -91,8 +94,7 @@ public class DefaultArchetypeFilesResolver extends AbstractLogEnabled implements
         scanner.setExcludes(languages);
 
         List<String> result = scanner.scan(files);
-        getLogger()
-                .debug("Scanned " + result.size() + " other resources in " + files.size() + " files at level " + level);
+        LOGGER.debug("Scanned " + result.size() + " other resources in " + files.size() + " files at level " + level);
 
         return result;
     }
@@ -119,8 +121,7 @@ public class DefaultArchetypeFilesResolver extends AbstractLogEnabled implements
         scanner.setExcludes(languages);
 
         List<String> result = scanner.scan(files);
-        getLogger()
-                .debug("Scanned " + result.size() + " other resources in " + files.size() + " files at level " + level);
+        LOGGER.debug("Scanned " + result.size() + " other resources in " + files.size() + " files at level " + level);
 
         return result;
     }
@@ -144,8 +145,7 @@ public class DefaultArchetypeFilesResolver extends AbstractLogEnabled implements
         scanner.setIncludes(includes.toString());
 
         List<String> result = scanner.scan(files);
-        getLogger()
-                .debug("Scanned " + result.size() + " other sources in " + files.size() + " files at level " + level);
+        LOGGER.debug("Scanned " + result.size() + " other sources in " + files.size() + " files at level " + level);
 
         return result;
     }
@@ -159,7 +159,7 @@ public class DefaultArchetypeFilesResolver extends AbstractLogEnabled implements
         scanner.setExcludes(languages);
 
         List<String> result = scanner.scan(files);
-        getLogger().debug("Scanned " + result.size() + " resources in " + files.size() + " files");
+        LOGGER.debug("Scanned " + result.size() + " resources in " + files.size() + " files");
 
         return result;
     }
@@ -173,7 +173,7 @@ public class DefaultArchetypeFilesResolver extends AbstractLogEnabled implements
         scanner.setExcludes(languages);
 
         List<String> result = scanner.scan(files);
-        getLogger().debug("Scanned " + result.size() + " test resources in " + files.size() + " files");
+        LOGGER.debug("Scanned " + result.size() + " test resources in " + files.size() + " files");
 
         return result;
     }
@@ -187,7 +187,7 @@ public class DefaultArchetypeFilesResolver extends AbstractLogEnabled implements
         scanner.setExcludes(languages);
 
         List<String> result = scanner.scan(files);
-        getLogger().debug("Scanned " + result.size() + " site resources in " + files.size() + " files");
+        LOGGER.debug("Scanned " + result.size() + " site resources in " + files.size() + " files");
 
         return result;
     }
@@ -200,7 +200,7 @@ public class DefaultArchetypeFilesResolver extends AbstractLogEnabled implements
         scanner.setIncludes(languages);
 
         List<String> result = scanner.scan(files);
-        getLogger().debug("Scanned " + result.size() + " sources in " + files.size() + " files");
+        LOGGER.debug("Scanned " + result.size() + " sources in " + files.size() + " files");
 
         return result;
     }
@@ -213,7 +213,7 @@ public class DefaultArchetypeFilesResolver extends AbstractLogEnabled implements
         scanner.setIncludes(languages);
 
         List<String> result = scanner.scan(files);
-        getLogger().debug("Scanned " + result.size() + " test sources in " + files.size() + " files");
+        LOGGER.debug("Scanned " + result.size() + " test sources in " + files.size() + " files");
 
         return result;
     }
@@ -226,13 +226,13 @@ public class DefaultArchetypeFilesResolver extends AbstractLogEnabled implements
                 packagedFiles.add(file.substring(packageName.length() + 1));
             }
         }
-        getLogger().debug("Scanned " + packagedFiles.size() + " packaged files in " + files.size() + " files");
+        LOGGER.debug("Scanned " + packagedFiles.size() + " packaged files in " + files.size() + " files");
         return packagedFiles;
     }
 
     @Override
     public String resolvePackage(File basedir, List<String> languages) throws IOException {
-        getLogger().debug("Resolving package in " + basedir + " using languages " + languages);
+        LOGGER.debug("Resolving package in " + basedir + " using languages " + languages);
 
         List<String> files = resolveFiles(basedir, languages);
 
@@ -247,7 +247,7 @@ public class DefaultArchetypeFilesResolver extends AbstractLogEnabled implements
                 unpackagedFiles.add(file);
             }
         }
-        getLogger().debug("Scanned " + unpackagedFiles.size() + " unpackaged files in " + files.size() + " files");
+        LOGGER.debug("Scanned " + unpackagedFiles.size() + " unpackaged files in " + files.size() + " files");
         return unpackagedFiles;
     }
 
@@ -283,7 +283,7 @@ public class DefaultArchetypeFilesResolver extends AbstractLogEnabled implements
 
         List<File> absoluteFiles = FileUtils.getFiles(basedir, StringUtils.join(languagesPathesArray, ","), excludes);
 
-        getLogger().debug("Found " + absoluteFiles.size() + " potential archetype files");
+        LOGGER.debug("Found " + absoluteFiles.size() + " potential archetype files");
 
         List<String> files = new ArrayList<>(absoluteFiles.size());
 
@@ -303,7 +303,7 @@ public class DefaultArchetypeFilesResolver extends AbstractLogEnabled implements
             }
         }
 
-        getLogger().debug("Found " + files.size() + " archetype files for package resolution ");
+        LOGGER.debug("Found " + files.size() + " archetype files for package resolution ");
 
         return files;
     }
@@ -325,7 +325,7 @@ public class DefaultArchetypeFilesResolver extends AbstractLogEnabled implements
             }
         }
 
-        getLogger().debug("Package resolved to " + packageName);
+        LOGGER.debug("Package resolved to " + packageName);
 
         return packageName;
     }

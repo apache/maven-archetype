@@ -32,6 +32,8 @@ import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.codehaus.plexus.util.xml.XmlStreamReader;
 import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.repository.RemoteRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Jason van Zyl
@@ -39,6 +41,7 @@ import org.eclipse.aether.repository.RemoteRepository;
 @Named("internal-catalog")
 @Singleton
 public class InternalCatalogArchetypeDataSource extends CatalogArchetypeDataSource {
+    private static final Logger LOGGER = LoggerFactory.getLogger(InternalCatalogArchetypeDataSource.class);
 
     @Override
     public ArchetypeCatalog getArchetypeCatalog(

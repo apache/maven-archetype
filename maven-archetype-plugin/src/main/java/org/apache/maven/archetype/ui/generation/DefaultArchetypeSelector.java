@@ -34,13 +34,15 @@ import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.exception.ArchetypeSelectionFailure;
 import org.apache.maven.archetype.ui.ArchetypeDefinition;
 import org.codehaus.plexus.components.interactivity.PrompterException;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.repository.RemoteRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Named("default")
 @Singleton
-public class DefaultArchetypeSelector extends AbstractLogEnabled implements ArchetypeSelector {
+public class DefaultArchetypeSelector implements ArchetypeSelector {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultArchetypeSelector.class);
     static final String DEFAULT_ARCHETYPE_GROUPID = "org.apache.maven.archetypes";
 
     static final String DEFAULT_ARCHETYPE_VERSION = "1.0";
@@ -59,7 +61,7 @@ public class DefaultArchetypeSelector extends AbstractLogEnabled implements Arch
         ArchetypeDefinition definition = new ArchetypeDefinition(request);
 
         if (definition.isDefined() && StringUtils.isNotEmpty(request.getArchetypeRepository())) {
-            getLogger().info("Archetype defined by properties");
+            LOGGER.info("Archetype defined by properties");
             return;
         }
 
@@ -70,7 +72,7 @@ public class DefaultArchetypeSelector extends AbstractLogEnabled implements Arch
             // applying some filtering depending on filter parameter
             archetypes = ArchetypeSelectorUtils.getFilteredArchetypesByCatalog(archetypes, request.getFilter());
             if (archetypes.isEmpty()) {
-                getLogger().info("Your filter doesn't match any archetype, so try again with another value.");
+                LOGGER.info("Your filter doesn't match any archetype, so try again with another value.");
                 return;
             }
         }
@@ -85,14 +87,12 @@ public class DefaultArchetypeSelector extends AbstractLogEnabled implements Arch
 
                 updateRepository(definition, archetype);
 
-                getLogger()
-                        .info("Archetype repository not defined. Using the one from " + archetype + " found in catalog "
-                                + catalogKey);
+                LOGGER.info("Archetype repository not defined. Using the one from " + archetype + " found in catalog "
+                        + catalogKey);
             } else {
-                getLogger().warn("Archetype not found in any catalog. Falling back to central repository.");
-                getLogger()
-                        .warn(
-                                "Add a repository with id 'archetype' in your settings.xml if archetype's repository is elsewhere.");
+                LOGGER.warn("Archetype not found in any catalog. Falling back to central repository.");
+                LOGGER.warn(
+                        "Add a repository with id 'archetype' in your settings.xml if archetype's repository is elsewhere.");
             }
         } else if (definition.isPartiallyDefined()) {
             Map.Entry<String, Archetype> found =
@@ -104,9 +104,9 @@ public class DefaultArchetypeSelector extends AbstractLogEnabled implements Arch
 
                 updateDefinition(definition, archetype);
 
-                getLogger().info("Archetype " + archetype + " found in catalog " + catalogKey);
+                LOGGER.info("Archetype " + archetype + " found in catalog " + catalogKey);
             } else {
-                getLogger().warn("Specified archetype not found.");
+                LOGGER.warn("Specified archetype not found.");
                 if (interactiveMode.booleanValue()) {
                     definition.setVersion(null);
                     definition.setGroupId(null);
@@ -126,10 +126,9 @@ public class DefaultArchetypeSelector extends AbstractLogEnabled implements Arch
         if (!definition.isPartiallyDefined()) {
             // if artifact ID is set to its default, we still prompt to confirm
             if (definition.getArtifactId() == null) {
-                getLogger()
-                        .info("No archetype defined. Using " + DEFAULT_ARCHETYPE_ARTIFACTID + " ("
-                                + definition.getGroupId() + ":" + DEFAULT_ARCHETYPE_ARTIFACTID + ":"
-                                + definition.getVersion() + ")");
+                LOGGER.info("No archetype defined. Using " + DEFAULT_ARCHETYPE_ARTIFACTID + " ("
+                        + definition.getGroupId() + ":" + DEFAULT_ARCHETYPE_ARTIFACTID + ":"
+                        + definition.getVersion() + ")");
                 definition.setArtifactId(DEFAULT_ARCHETYPE_ARTIFACTID);
             }
 
@@ -173,7 +172,7 @@ public class DefaultArchetypeSelector extends AbstractLogEnabled implements Arch
                 if (!archetypesFromRemote.isEmpty()) {
                     archetypes.put("remote", archetypesFromRemote);
                 } else {
-                    getLogger().warn("No archetype found in remote catalog. Defaulting to internal catalog");
+                    LOGGER.warn("No archetype found in remote catalog. Defaulting to internal catalog");
                     archetypes.put(
                             "internal", archetypeManager.getInternalCatalog().getArchetypes());
                 }
@@ -184,7 +183,7 @@ public class DefaultArchetypeSelector extends AbstractLogEnabled implements Arch
         }
 
         if (archetypes.isEmpty()) {
-            getLogger().info("No catalog defined. Using internal catalog");
+            LOGGER.info("No catalog defined. Using internal catalog");
 
             archetypes.put("internal", archetypeManager.getInternalCatalog().getArchetypes());
         }

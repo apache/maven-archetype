@@ -37,17 +37,19 @@ import org.apache.maven.archetype.creator.ArchetypeCreator;
 import org.apache.maven.archetype.generator.ArchetypeGenerator;
 import org.apache.maven.archetype.source.ArchetypeDataSource;
 import org.apache.maven.archetype.source.ArchetypeDataSourceException;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.IOUtil;
 import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.repository.RemoteRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Jason van Zyl
  */
 @Named
 @Singleton
-public class DefaultArchetypeManager extends AbstractLogEnabled implements ArchetypeManager {
+public class DefaultArchetypeManager implements ArchetypeManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultArchetypeManager.class);
 
     @Inject
     @Named("fileset")
@@ -92,7 +94,7 @@ public class DefaultArchetypeManager extends AbstractLogEnabled implements Arche
         }
 
         if (!archive.exists() && !archive.createNewFile()) {
-            getLogger().warn("Could not create new file \"" + archive.getPath() + "\" or the file already exists.");
+            LOGGER.warn("Could not create new file \"" + archive.getPath() + "\" or the file already exists.");
         }
 
         try (ZipOutputStream zos = new ZipOutputStream(Files.newOutputStream(archive.toPath()))) {
@@ -146,10 +148,7 @@ public class DefaultArchetypeManager extends AbstractLogEnabled implements Arche
 
             return source.getArchetypeCatalog(null, null);
         } catch (ArchetypeDataSourceException e) {
-            getLogger()
-                    .warn(
-                            "failed to read catalog: " + e.getMessage(),
-                            getLogger().isDebugEnabled() ? e : null);
+            LOGGER.warn("failed to read catalog: " + e.getMessage(), LOGGER.isDebugEnabled() ? e : null);
             return new ArchetypeCatalog();
         }
     }
@@ -161,10 +160,7 @@ public class DefaultArchetypeManager extends AbstractLogEnabled implements Arche
 
             return source.getArchetypeCatalog(repositorySession, null);
         } catch (ArchetypeDataSourceException e) {
-            getLogger()
-                    .warn(
-                            "failed to read catalog: " + e.getMessage(),
-                            getLogger().isDebugEnabled() ? e : null);
+            LOGGER.warn("failed to read catalog: " + e.getMessage(), LOGGER.isDebugEnabled() ? e : null);
             return new ArchetypeCatalog();
         }
     }
@@ -177,10 +173,7 @@ public class DefaultArchetypeManager extends AbstractLogEnabled implements Arche
 
             return source.getArchetypeCatalog(repositorySession, remoteRepositories);
         } catch (ArchetypeDataSourceException e) {
-            getLogger()
-                    .warn(
-                            "failed to download from remote" + e.getMessage(),
-                            getLogger().isDebugEnabled() ? e : null);
+            LOGGER.warn("failed to download from remote" + e.getMessage(), LOGGER.isDebugEnabled() ? e : null);
             return new ArchetypeCatalog();
         }
     }
@@ -192,7 +185,7 @@ public class DefaultArchetypeManager extends AbstractLogEnabled implements Arche
 
             return source.updateCatalog(repositorySystemSession, archetype);
         } catch (ArchetypeDataSourceException e) {
-            getLogger().warn("failed to update catalog", e);
+            LOGGER.warn("failed to update catalog", e);
         }
         return null;
     }

@@ -26,14 +26,16 @@ import java.io.Writer;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Reader;
 import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Writer;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.xml.XmlStreamWriter;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Jason van Zyl
  */
-public abstract class CatalogArchetypeDataSource extends AbstractLogEnabled implements ArchetypeDataSource {
+public abstract class CatalogArchetypeDataSource implements ArchetypeDataSource {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CatalogArchetypeDataSource.class);
 
     protected void writeLocalCatalog(ArchetypeCatalog catalog, File catalogFile) throws ArchetypeDataSourceException {
         try (Writer writer = new XmlStreamWriter(catalogFile)) {

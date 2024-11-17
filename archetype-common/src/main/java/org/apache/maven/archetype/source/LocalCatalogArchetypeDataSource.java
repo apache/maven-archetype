@@ -33,10 +33,13 @@ import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.codehaus.plexus.util.xml.XmlStreamReader;
 import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.repository.RemoteRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Named("catalog")
 @Singleton
 public class LocalCatalogArchetypeDataSource extends CatalogArchetypeDataSource {
+    private static final Logger LOGGER = LoggerFactory.getLogger(LocalCatalogArchetypeDataSource.class);
 
     @Override
     public File updateCatalog(RepositorySystemSession repositorySession, Archetype archetype)
@@ -45,21 +48,21 @@ public class LocalCatalogArchetypeDataSource extends CatalogArchetypeDataSource 
 
         File catalogFile = new File(localRepo, ARCHETYPE_CATALOG_FILENAME);
 
-        getLogger().debug("Catalog to be used for update: " + catalogFile.getAbsolutePath());
+        LOGGER.debug("Catalog to be used for update: " + catalogFile.getAbsolutePath());
 
         ArchetypeCatalog catalog;
         if (catalogFile.exists()) {
             try (Reader reader = new XmlStreamReader(catalogFile)) {
-                getLogger().debug("Reading catalog to be updated: " + catalogFile);
+                LOGGER.debug("Reading catalog to be updated: " + catalogFile);
                 catalog = readCatalog(reader);
             } catch (FileNotFoundException ex) {
-                getLogger().debug("Catalog file don't exist");
+                LOGGER.debug("Catalog file don't exist");
                 catalog = new ArchetypeCatalog();
             } catch (IOException e) {
                 throw new ArchetypeDataSourceException("Error reading archetype catalog.", e);
             }
         } else {
-            getLogger().debug("Catalog file don't exist");
+            LOGGER.debug("Catalog file don't exist");
             catalog = new ArchetypeCatalog();
         }
 
@@ -100,7 +103,7 @@ public class LocalCatalogArchetypeDataSource extends CatalogArchetypeDataSource 
         if (catalogFile.exists() && catalogFile.isDirectory()) {
             catalogFile = new File(catalogFile, ARCHETYPE_CATALOG_FILENAME);
         }
-        getLogger().debug("Getting archetypes from catalog: " + catalogFile);
+        LOGGER.debug("Getting archetypes from catalog: " + catalogFile);
 
         if (catalogFile.exists()) {
             try {

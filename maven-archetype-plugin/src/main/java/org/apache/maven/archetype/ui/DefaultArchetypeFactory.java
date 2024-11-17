@@ -27,11 +27,14 @@ import java.util.Properties;
 import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.metadata.RequiredProperty;
 import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Named("default")
 @Singleton
-public class DefaultArchetypeFactory extends AbstractLogEnabled implements ArchetypeFactory {
+public class DefaultArchetypeFactory implements ArchetypeFactory {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultArchetypeFactory.class);
+
     @Override
     public ArchetypeDefinition createArchetypeDefinition(Properties properties) {
         ArchetypeDefinition definition = new ArchetypeDefinition();
@@ -57,7 +60,7 @@ public class DefaultArchetypeFactory extends AbstractLogEnabled implements Arche
             String key,
             String defaultValue,
             boolean initPropertyWithDefault) {
-        getLogger().debug("Adding requiredProperty " + key);
+        LOGGER.debug("Adding requiredProperty " + key);
 
         configuration.addRequiredProperty(key);
 
@@ -73,14 +76,14 @@ public class DefaultArchetypeFactory extends AbstractLogEnabled implements Arche
             configuration.setDefaultProperty(key, defaultValue);
         }
 
-        getLogger().debug("Setting property " + key + "=" + configuration.getProperty(key));
+        LOGGER.debug("Setting property " + key + "=" + configuration.getProperty(key));
     }
 
     @Override
     @SuppressWarnings("checkstyle:linelength")
     public ArchetypeConfiguration createArchetypeConfiguration(
             org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor archetypeDescriptor, Properties properties) {
-        getLogger().debug("Creating ArchetypeConfiguration from legacy descriptor and Properties");
+        LOGGER.debug("Creating ArchetypeConfiguration from legacy descriptor and Properties");
 
         ArchetypeConfiguration configuration = createArchetypeConfiguration(properties);
 
@@ -113,7 +116,7 @@ public class DefaultArchetypeFactory extends AbstractLogEnabled implements Arche
     @SuppressWarnings("checkstyle:linelength")
     public ArchetypeConfiguration createArchetypeConfiguration(
             org.apache.maven.archetype.metadata.ArchetypeDescriptor archetypeDescriptor, Properties properties) {
-        getLogger().debug("Creating ArchetypeConfiguration from fileset descriptor and Properties");
+        LOGGER.debug("Creating ArchetypeConfiguration from fileset descriptor and Properties");
 
         ArchetypeConfiguration configuration = createArchetypeConfiguration(properties);
 
@@ -121,7 +124,7 @@ public class DefaultArchetypeFactory extends AbstractLogEnabled implements Arche
 
         for (RequiredProperty requiredProperty : archetypeDescriptor.getRequiredProperties()) {
             String key = requiredProperty.getKey();
-            getLogger().debug("Adding requiredProperty " + key);
+            LOGGER.debug("Adding requiredProperty " + key);
 
             configuration.addRequiredProperty(key);
 
@@ -132,21 +135,21 @@ public class DefaultArchetypeFactory extends AbstractLogEnabled implements Arche
                 // using value defined in properties, which overrides any default
                 String value = properties.getProperty(key);
                 configuration.setProperty(key, value);
-                getLogger().debug("Setting property " + key + "=" + value);
+                LOGGER.debug("Setting property " + key + "=" + value);
             } else if ((defaultValue != null) && !containsInnerProperty(defaultValue)) {
                 // using default value
                 configuration.setProperty(key, defaultValue);
-                getLogger().debug("Setting property " + key + "=" + defaultValue);
+                LOGGER.debug("Setting property " + key + "=" + defaultValue);
             }
 
             if (defaultValue != null) {
                 configuration.setDefaultProperty(key, defaultValue);
-                getLogger().debug("Setting defaultProperty " + key + "=" + defaultValue);
+                LOGGER.debug("Setting defaultProperty " + key + "=" + defaultValue);
             }
 
             if (validationRegex != null) {
                 configuration.setPropertyValidationRegex(key, validationRegex);
-                getLogger().debug("Setting validation regular expression " + key + "=" + defaultValue);
+                LOGGER.debug("Setting validation regular expression " + key + "=" + defaultValue);
             }
         }
 
@@ -169,7 +172,7 @@ public class DefaultArchetypeFactory extends AbstractLogEnabled implements Arche
 
     private void addRequiredProperty(
             ArchetypeConfiguration configuration, Properties properties, String key, String defaultValue) {
-        getLogger().debug("Adding requiredProperty " + key);
+        LOGGER.debug("Adding requiredProperty " + key);
 
         configuration.addRequiredProperty(key);
 
@@ -180,7 +183,7 @@ public class DefaultArchetypeFactory extends AbstractLogEnabled implements Arche
         if (properties.getProperty(key) != null) {
             configuration.setProperty(key, properties.getProperty(key));
 
-            getLogger().debug("Setting property " + key + "=" + configuration.getProperty(Constants.GROUP_ID));
+            LOGGER.debug("Setting property " + key + "=" + configuration.getProperty(Constants.GROUP_ID));
         }
     }
 
@@ -195,7 +198,7 @@ public class DefaultArchetypeFactory extends AbstractLogEnabled implements Arche
     @Override
     public ArchetypeConfiguration createArchetypeConfiguration(
             MavenProject project, ArchetypeDefinition archetypeDefinition, Properties properties) {
-        getLogger().debug("Creating ArchetypeConfiguration from ArchetypeDefinition, MavenProject and Properties");
+        LOGGER.debug("Creating ArchetypeConfiguration from ArchetypeDefinition, MavenProject and Properties");
 
         ArchetypeConfiguration configuration = createArchetypeConfiguration(properties);
 
@@ -203,13 +206,12 @@ public class DefaultArchetypeFactory extends AbstractLogEnabled implements Arche
             String requiredProperty = (String) requiredProperties.next();
 
             if (!requiredProperty.contains(".")) {
-                getLogger().debug("Adding requiredProperty " + requiredProperty);
+                LOGGER.debug("Adding requiredProperty " + requiredProperty);
                 configuration.addRequiredProperty(requiredProperty);
 
                 configuration.setProperty(requiredProperty, properties.getProperty(requiredProperty));
-                getLogger()
-                        .debug("Setting property " + requiredProperty + "="
-                                + configuration.getProperty(requiredProperty));
+                LOGGER.debug(
+                        "Setting property " + requiredProperty + "=" + configuration.getProperty(requiredProperty));
             }
         }
 
