@@ -72,20 +72,29 @@ import org.slf4j.LoggerFactory;
 public class DefaultArchetypeGenerationConfigurator implements ArchetypeGenerationConfigurator {
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultArchetypeGenerationConfigurator.class);
 
-    @Inject
     private ArchetypeArtifactManager archetypeArtifactManager;
 
-    @Inject
     private ArchetypeFactory archetypeFactory;
 
-    @Inject
     private ArchetypeGenerationQueryer archetypeGenerationQueryer;
 
-    @Inject
     private VelocityComponent velocity;
 
-    @Inject
     private RepositorySystem repositorySystem;
+
+    @Inject
+    public DefaultArchetypeGenerationConfigurator(
+            ArchetypeArtifactManager archetypeArtifactManager,
+            ArchetypeFactory archetypeFactory,
+            ArchetypeGenerationQueryer archetypeGenerationQueryer,
+            VelocityComponent velocity,
+            RepositorySystem repositorySystem) {
+        this.archetypeArtifactManager = archetypeArtifactManager;
+        this.archetypeFactory = archetypeFactory;
+        this.archetypeGenerationQueryer = archetypeGenerationQueryer;
+        this.velocity = velocity;
+        this.repositorySystem = repositorySystem;
+    }
 
     public void setArchetypeArtifactManager(ArchetypeArtifactManager archetypeArtifactManager) {
         this.archetypeArtifactManager = archetypeArtifactManager;
