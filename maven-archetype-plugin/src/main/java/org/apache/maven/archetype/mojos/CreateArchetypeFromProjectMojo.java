@@ -18,6 +18,8 @@
  */
 package org.apache.maven.archetype.mojos;
 
+import javax.inject.Inject;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,7 +35,6 @@ import org.apache.maven.archetype.ui.creation.ArchetypeCreationConfigurator;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Execute;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -99,17 +100,11 @@ import org.codehaus.plexus.util.StringUtils;
 @Execute(phase = LifecyclePhase.GENERATE_SOURCES)
 public class CreateArchetypeFromProjectMojo extends AbstractMojo {
 
-    @Component
-    private ArchetypeCreationConfigurator configurator;
-
     /**
      * Enable the interactive mode to define the archetype from the project.
      */
     @Parameter(property = "interactive", defaultValue = "false")
     private boolean interactive;
-
-    @Component
-    private ArchetypeManager manager;
 
     /**
      * File extensions which are checked for project's text files (vs binary files).
@@ -217,6 +212,13 @@ public class CreateArchetypeFromProjectMojo extends AbstractMojo {
 
     @Parameter(defaultValue = "${session}", readonly = true, required = true)
     private MavenSession session;
+
+    private ArchetypeCreationConfigurator configurator;
+
+    private ArchetypeManager manager;
+
+    @Inject
+    public CreateArchetypeFromProjectMojo(ArchetypeCreationConfigurator configurator, ArchetypeManager manager) {}
 
     @Override
     public void execute() throws MojoExecutionException {

@@ -18,13 +18,14 @@
  */
 package org.apache.maven.archetype.mojos;
 
+import javax.inject.Inject;
+
 import java.io.File;
 
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.repositorycrawler.RepositoryCrawler;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
@@ -41,8 +42,12 @@ public class CrawlRepositoryMojo extends AbstractMojo {
     @Parameter(property = "catalog")
     private File catalogFile;
 
-    @Component
     private RepositoryCrawler crawler;
+
+    @Inject
+    public CrawlRepositoryMojo(RepositoryCrawler crawler) {
+        this.crawler = crawler;
+    }
 
     /**
      * The repository to crawl.
