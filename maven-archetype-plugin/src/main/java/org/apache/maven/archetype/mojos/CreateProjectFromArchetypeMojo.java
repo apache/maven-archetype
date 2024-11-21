@@ -75,6 +75,7 @@ public class CreateProjectFromArchetypeMojo extends AbstractMojo implements Cont
             RepositorySystem repositorySystem) {
         this.manager = manager;
         this.selector = selector;
+        this.configurator = configurator;
         this.invoker = invoker;
         this.repositorySystem = repositorySystem;
     }
