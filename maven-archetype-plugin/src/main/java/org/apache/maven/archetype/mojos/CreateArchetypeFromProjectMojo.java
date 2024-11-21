@@ -218,7 +218,10 @@ public class CreateArchetypeFromProjectMojo extends AbstractMojo {
     private ArchetypeManager manager;
 
     @Inject
-    public CreateArchetypeFromProjectMojo(ArchetypeCreationConfigurator configurator, ArchetypeManager manager) {}
+    public CreateArchetypeFromProjectMojo(ArchetypeCreationConfigurator configurator, ArchetypeManager manager) {
+        this.configurator = configurator;
+        this.manager = manager;
+    }
 
     @Override
     public void execute() throws MojoExecutionException {
