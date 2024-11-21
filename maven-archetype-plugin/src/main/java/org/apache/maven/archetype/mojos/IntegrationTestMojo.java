@@ -18,6 +18,8 @@
  */
 package org.apache.maven.archetype.mojos;
 
+import javax.inject.Inject;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -50,7 +52,6 @@ import org.apache.maven.archetype.ui.generation.ArchetypeGenerationConfigurator;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
@@ -131,17 +132,25 @@ import org.codehaus.plexus.util.xml.XmlStreamWriter;
 @Mojo(name = "integration-test", requiresProject = true)
 public class IntegrationTestMojo extends AbstractMojo {
 
-    @Component
     private ArchetypeGenerator archetypeGenerator;
 
-    @Component
     private Downloader downloader;
 
-    @Component
     private Invoker invoker;
 
-    @Component
     private ArchetypeGenerationConfigurator archetypeGenerationConfigurator;
+
+    @Inject
+    public IntegrationTestMojo(
+            ArchetypeGenerator archetypeGenerator,
+            Downloader downloader,
+            Invoker invoker,
+            ArchetypeGenerationConfigurator archetypeGenerationConfigurator) {
+        this.archetypeGenerationConfigurator = archetypeGenerationConfigurator;
+        this.downloader = downloader;
+        this.invoker = invoker;
+        this.archetypeGenerationConfigurator = archetypeGenerationConfigurator;
+    }
 
     /**
      * The archetype project to execute the integration tests on.
