@@ -91,14 +91,19 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
     private static final String DEFAULT_OUTPUT_DIRECTORY =
             "target" + File.separator + "generated-sources" + File.separator + "archetype";
 
-    @Inject
     private ArchetypeFilesResolver archetypeFilesResolver;
 
-    @Inject
     private PomManager pomManager;
 
-    @Inject
     private Invoker invoker;
+
+    @Inject
+    public FilesetArchetypeCreator(
+            ArchetypeFilesResolver archetypeFilesResolver, PomManager pomManager, Invoker invoker) {
+        this.archetypeFilesResolver = archetypeFilesResolver;
+        this.pomManager = pomManager;
+        this.invoker = invoker;
+    }
 
     @Override
     @SuppressWarnings("checkstyle:MethodLength")
