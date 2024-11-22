@@ -146,7 +146,7 @@ public class IntegrationTestMojo extends AbstractMojo {
             Downloader downloader,
             Invoker invoker,
             ArchetypeGenerationConfigurator archetypeGenerationConfigurator) {
-        this.archetypeGenerationConfigurator = archetypeGenerationConfigurator;
+        this.archetypeGenerator = archetypeGenerator;
         this.downloader = downloader;
         this.invoker = invoker;
         this.archetypeGenerationConfigurator = archetypeGenerationConfigurator;
