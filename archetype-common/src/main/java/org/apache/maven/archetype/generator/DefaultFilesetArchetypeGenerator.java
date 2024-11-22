@@ -776,7 +776,9 @@ public class DefaultFilesetArchetypeGenerator implements FilesetArchetypeGenerat
             if (includeCondition != null && !includeCondition.isEmpty()) {
                 final String evaluatedCondition = evaluateExpression(context, "includeCondition", includeCondition);
                 if (!Boolean.parseBoolean(evaluatedCondition)) {
-                    LOGGER.debug(String.format("Skipping fileset %s due to includeCondition: %s being: %s", fileSet, includeCondition, evaluatedCondition));
+                    LOGGER.debug(String.format(
+                            "Skipping fileset %s due to includeCondition: %s being: %s",
+                            fileSet, includeCondition, evaluatedCondition));
                     continue;
                 }
             }
