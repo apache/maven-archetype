@@ -772,6 +772,16 @@ public class DefaultFilesetArchetypeGenerator implements FilesetArchetypeGenerat
             FileSet fileSet = iterator.next();
             count++;
 
+            // Evaluate the includeCondition attribute
+            String includeCondition = fileSet.getIncludeCondition();
+            if (includeCondition != null && !includeCondition.isEmpty()) {
+                String evaluatedCondition = evaluateExpression(context, "includeCondition", includeCondition);
+                if (!Boolean.parseBoolean(evaluatedCondition)) {
+                    LOGGER.debug("Skipping fileset " + fileSet + " due to includeCondition: " + includeCondition);
+                    continue;
+                }
+            }
+
             List<String> fileSetResources =
                     archetypeFilesResolver.filterFiles(moduleOffset, fileSet, archetypeResources);
 

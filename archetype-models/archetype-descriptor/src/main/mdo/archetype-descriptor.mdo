@@ -162,6 +162,13 @@
           <required>false</required>
           <description>Encoding to use when filtering content.</description>
         </field>
+        <field xml.attribute="true">
+          <name>includeCondition</name>
+          <version>1.0.0+</version>
+          <type>String</type>
+          <required>false</required>
+          <description>Condition to include the fileset based on a property value.</description>
+        </field>
         <field>
           <name>directory</name>
           <version>1.0.0+</version>
