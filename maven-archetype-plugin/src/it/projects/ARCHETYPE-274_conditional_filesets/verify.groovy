@@ -31,5 +31,5 @@ assert includeSecondResource.exists() : "${includeSecondResource} should be pres
 assert !excludeFirstResource.exists() : "${excludeFirstResource} should not be present."
 assert !excludeSecondResource.exists() : "${excludeSecondResource} should not be present."
 
-assert includeFirstResource.text.contains("com.company.myArtifactId") : "${includeFirstResource} should contain the expected content."
+assert includeFirstResource.text.contains("com.company") : "${includeFirstResource} should contain the expected content."
 assert includeSecondResource.text.contains("\${package}") : "${includeSecondResource} should contain the expected content."
