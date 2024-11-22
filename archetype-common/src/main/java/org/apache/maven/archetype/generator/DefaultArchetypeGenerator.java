@@ -49,17 +49,25 @@ import org.slf4j.LoggerFactory;
 public class DefaultArchetypeGenerator implements ArchetypeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultArchetypeGenerator.class);
 
-    @Inject
     private ArchetypeArtifactManager archetypeArtifactManager;
 
-    @Inject
     private FilesetArchetypeGenerator filesetGenerator;
 
-    @Inject
     private OldArchetype oldArchetype;
 
-    @Inject
     private RepositorySystem repositorySystem;
+
+    @Inject
+    public DefaultArchetypeGenerator(
+            ArchetypeArtifactManager archetypeArtifactManager,
+            FilesetArchetypeGenerator filesetGenerator,
+            OldArchetype oldArchetype,
+            RepositorySystem repositorySystem) {
+        this.archetypeArtifactManager = archetypeArtifactManager;
+        this.filesetGenerator = filesetGenerator;
+        this.oldArchetype = oldArchetype;
+        this.repositorySystem = repositorySystem;
+    }
 
     private File getArchetypeFile(ArchetypeGenerationRequest request) throws ArchetypeException {
         if (!isArchetypeDefined(request)) {
