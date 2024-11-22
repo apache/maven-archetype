@@ -41,13 +41,10 @@ import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.repository.RemoteRepository;
 import org.eclipse.aether.repository.RepositoryPolicy;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Named
 @Singleton
 public class DefaultArchetypeGenerator implements ArchetypeGenerator {
-    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultArchetypeGenerator.class);
 
     private ArchetypeArtifactManager archetypeArtifactManager;
 
@@ -76,10 +73,9 @@ public class DefaultArchetypeGenerator implements ArchetypeGenerator {
 
         List<RemoteRepository> repos = new ArrayList<>(request.getRemoteRepositories());
 
-        RemoteRepository remoteRepo = null;
         if (request != null && request.getArchetypeRepository() != null) {
             RepositorySystemSession repositorySession = request.getRepositorySession();
-            remoteRepo = createRepository(
+            RemoteRepository remoteRepo = createRepository(
                     repositorySession, request.getArchetypeRepository(), request.getArchetypeArtifactId() + "-repo");
 
             repos.add(remoteRepo);
