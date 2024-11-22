@@ -87,12 +87,6 @@
         <include>**/*.mdo</include>
       </includes>
     </fileSet>
-    <fileSet filtered="true" packaged="false" includeCondition="${extraSupport == 'y'}">
-      <directory>src/main/extra</directory>
-      <includes>
-        <include>**/*</include>
-      </includes>
-    </fileSet>
   </fileSets>
 
 </archetype-descriptor>
