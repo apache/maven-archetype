@@ -178,8 +178,9 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
             Model pom = pomManager.readPom(project.getFile());
 
             List<String> excludePatterns = configurationProperties.getProperty(Constants.EXCLUDE_PATTERNS) != null
-                    ? Arrays.asList(
-                            StringUtils.split(configurationProperties.getProperty(Constants.EXCLUDE_PATTERNS), ","))
+                    ? Arrays.asList(configurationProperties
+                            .getProperty(Constants.EXCLUDE_PATTERNS)
+                            .split(","))
                     : Collections.emptyList();
 
             List<String> fileNames = resolveFileNames(pom, basedir, excludePatterns);

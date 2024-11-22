@@ -773,11 +773,12 @@ public class DefaultFilesetArchetypeGenerator implements FilesetArchetypeGenerat
             count++;
 
             // Evaluate the includeCondition attribute
-            String includeCondition = fileSet.getIncludeCondition();
+            final String includeCondition = fileSet.getIncludeCondition();
             if (includeCondition != null && !includeCondition.isEmpty()) {
                 String evaluatedCondition = evaluateExpression(context, "includeCondition", includeCondition);
                 if (!Boolean.parseBoolean(evaluatedCondition)) {
-                    LOGGER.debug("Skipping fileset " + fileSet + " due to includeCondition: " + includeCondition);
+                    LOGGER.debug("Skipping fileset " + fileSet + " due to includeCondition: " + includeCondition
+                            + " being: " + evaluatedCondition);
                     continue;
                 }
             }
