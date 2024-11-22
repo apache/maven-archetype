@@ -261,7 +261,7 @@ public class DefaultArchetypeFactory implements ArchetypeFactory {
     }
 
     /**
-     * Check if the given value references a property, ie contains <code>${...}</code>.
+     * Check if the given value references a property; that is, it contains <code>${...}</code>.
      *
      * @param defaultValue the value to check
      * @return <code>true</code> if the value contains <code>${</code> followed by <code>}</code>
