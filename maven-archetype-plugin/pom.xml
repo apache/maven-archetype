@@ -172,6 +172,7 @@
       <groupId>javax.inject</groupId>
       <artifactId>javax.inject</artifactId>
       <version>1</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.eclipse.sisu</groupId>
@@ -210,15 +211,6 @@
       <plugin>
         <groupId>org.eclipse.sisu</groupId>
         <artifactId>sisu-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>index-project</id>
-            <goals>
-              <goal>main-index</goal>
-              <goal>test-index</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>
