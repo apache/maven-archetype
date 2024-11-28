@@ -41,8 +41,6 @@ public class TestXMLOutputter extends TestCase {
         StringWriter sw = new StringWriter();
         new XMLOutputter().output(doc, sw);
 
-        System.out.println("Resulting content is:\n\n\'" + sw + "\'\n\n");
-
         assertTrue(sw.toString().indexOf(content) > -1);
     }
 }

@@ -50,14 +50,9 @@ public class TestDefaultArchetypeFilesResolver extends TestCase {
         archetypeResources.add("src/test/mdo/AppTest.mdo");
         archetypeResources.add("src/test/resources/AppTest.properties");
 
-        System.out.println("FileSet:" + fileSet);
-        System.out.println("Resources:" + archetypeResources);
-
         ArchetypeFilesResolver resolver = new DefaultArchetypeFilesResolver();
 
         List<String> fileSetResources = resolver.filterFiles("", fileSet, archetypeResources);
-
-        System.out.println("Result:" + fileSetResources);
 
         assertEquals(2, fileSetResources.size());
     }
