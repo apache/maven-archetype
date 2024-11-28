@@ -53,19 +53,19 @@ public final class PomUtils {
     }
 
     /**
-     * Adds module {@code artifactId} unless the module already presents in {@code fileReader}.
+     * Adds module {@code artifactId} unless the module is already present in {@code fileReader}.
      *
      * @param artifactId artifactId of module to add
      * @param fileReader source POM XML
      * @param fileWriter target XML
-     * @return {@code true} if modules section in POM is empty or does not exist or {@code artifactId} does not appear
-     * a module in {@code fileReader} XML.
+     * @return {@code true} if modules section in POM is empty or does not exist or {@code artifactId} is not
+     *    a module in {@code fileReader} XML
      * @throws IOException if I/O error
-     * @throws InvalidPackaging if packaging is not "pom" or not exist in POM
+     * @throws InvalidPackaging if packaging is not "pom" or does not exist in POM
      * @throws ArchetypeTemplateProcessingException if "project" does not exist or "modules" element is duplicated
      * @throws ParserConfigurationException if parser error
      * @throws SAXException if parser error
-     * @throws TransformerException if an error writing to {@code fileWriter}
+     * @throws TransformerException error writing to {@code fileWriter}
      */
     public static boolean addNewModule(String artifactId, Reader fileReader, Writer fileWriter)
             throws ArchetypeTemplateProcessingException, InvalidPackaging, IOException, ParserConfigurationException,
@@ -140,7 +140,7 @@ public final class PomUtils {
     private static Node getModulesNode(Element project) {
         Node modules = null;
         NodeList nodes = project.getChildNodes();
-        for (int len = nodes.getLength(), i = 0; i < len; i++) {
+        for (int i = 0; i < nodes.getLength(); i++) {
             Node node = nodes.item(i);
             if (node.getNodeType() == Node.ELEMENT_NODE && "modules".equals(node.getNodeName())) {
                 modules = node;
