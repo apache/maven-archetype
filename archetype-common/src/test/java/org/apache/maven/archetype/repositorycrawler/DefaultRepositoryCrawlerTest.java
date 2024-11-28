@@ -43,5 +43,4 @@ public class DefaultRepositoryCrawlerTest extends AbstractMojoTestCase {
         // TODO: should write to another directory
         //        instance.writeCatalog(result, new File(repository, "archetype-catalog.xml"));
     }
-
 }
