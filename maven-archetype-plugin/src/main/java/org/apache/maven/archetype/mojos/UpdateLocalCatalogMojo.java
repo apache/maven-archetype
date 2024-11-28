@@ -18,6 +18,8 @@
  */
 package org.apache.maven.archetype.mojos;
 
+import javax.inject.Inject;
+
 import java.io.File;
 
 import org.apache.maven.archetype.ArchetypeManager;
@@ -26,7 +28,6 @@ import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -43,14 +44,18 @@ public class UpdateLocalCatalogMojo extends AbstractMojo {
     @Parameter(defaultValue = "${session}", readonly = true, required = true)
     private MavenSession session;
 
-    @Component
-    private ArchetypeManager manager;
-
     /**
      * The archetype project to add/update to the local catalog.
      */
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
     private MavenProject project;
+
+    private ArchetypeManager manager;
+
+    @Inject
+    public UpdateLocalCatalogMojo(ArchetypeManager manager) {
+        this.manager = manager;
+    }
 
     @Override
     public void execute() throws MojoExecutionException {

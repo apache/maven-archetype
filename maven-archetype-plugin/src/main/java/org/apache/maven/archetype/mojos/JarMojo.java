@@ -18,10 +18,11 @@
  */
 package org.apache.maven.archetype.mojos;
 
+import javax.inject.Inject;
+
 import java.io.File;
 import java.util.Map;
 
-import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.archetype.metadata.ArchetypeDescriptor;
@@ -31,7 +32,6 @@ import org.apache.maven.archiver.MavenArchiver;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -85,12 +85,6 @@ public class JarMojo extends AbstractMojo {
     private MavenSession session;
 
     /**
-     * The Jar archiver.
-     */
-    @Component
-    private Map<String, Archiver> archivers;
-
-    /**
      * The archive configuration to use. See <a href="https://maven.apache.org/shared/maven-archiver/index.html">Maven
      * Archiver Reference</a>.
      *
@@ -110,16 +104,17 @@ public class JarMojo extends AbstractMojo {
     private String outputTimestamp;
 
     /**
-     * The archetype manager component.
+     * The Jar archiver.
      */
-    @Component
-    private ArchetypeManager manager;
+    private Map<String, Archiver> archivers;
 
-    /**
-     * The archetype artifact manager component.
-     */
-    @Component
     private ArchetypeArtifactManager archetypeArtifactManager;
+
+    @Inject
+    public JarMojo(Map<String, Archiver> archivers, ArchetypeArtifactManager archetypeArtifactManager) {
+        this.archivers = archivers;
+        this.archetypeArtifactManager = archetypeArtifactManager;
+    }
 
     @Override
     public void execute() throws MojoExecutionException {

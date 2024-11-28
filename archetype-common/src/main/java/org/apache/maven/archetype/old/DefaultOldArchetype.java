@@ -88,11 +88,15 @@ public class DefaultOldArchetype implements OldArchetype {
     // Components
     // ----------------------------------------------------------------------
 
-    @Inject
     private VelocityComponent velocity;
 
-    @Inject
     private ArchetypeArtifactManager archetypeArtifactManager;
+
+    @Inject
+    public DefaultOldArchetype(VelocityComponent velocity, ArchetypeArtifactManager archetypeArtifactManager) {
+        this.archetypeArtifactManager = archetypeArtifactManager;
+        this.velocity = velocity;
+    }
 
     // ----------------------------------------------------------------------
     // Implementation

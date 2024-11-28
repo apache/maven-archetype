@@ -18,6 +18,8 @@
  */
 package org.apache.maven.archetype.mojos;
 
+import javax.inject.Inject;
+
 import java.io.File;
 import java.util.Arrays;
 import java.util.Properties;
@@ -32,7 +34,6 @@ import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.ContextEnabled;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Execute;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -55,20 +56,29 @@ import org.eclipse.aether.RepositorySystem;
 @Mojo(name = "generate", requiresProject = false)
 @Execute(phase = LifecyclePhase.GENERATE_SOURCES)
 public class CreateProjectFromArchetypeMojo extends AbstractMojo implements ContextEnabled {
-    @Component
     private ArchetypeManager manager;
 
-    @Component
     private ArchetypeSelector selector;
 
-    @Component
     private ArchetypeGenerationConfigurator configurator;
 
-    @Component
     private Invoker invoker;
 
-    @Component
     private RepositorySystem repositorySystem;
+
+    @Inject
+    public CreateProjectFromArchetypeMojo(
+            ArchetypeManager manager,
+            ArchetypeSelector selector,
+            ArchetypeGenerationConfigurator configurator,
+            Invoker invoker,
+            RepositorySystem repositorySystem) {
+        this.manager = manager;
+        this.selector = selector;
+        this.configurator = configurator;
+        this.invoker = invoker;
+        this.repositorySystem = repositorySystem;
+    }
 
     /**
      * The archetype's artifactId.

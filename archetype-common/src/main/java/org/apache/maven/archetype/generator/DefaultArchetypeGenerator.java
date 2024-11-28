@@ -41,25 +41,30 @@ import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.repository.RemoteRepository;
 import org.eclipse.aether.repository.RepositoryPolicy;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Named
 @Singleton
 public class DefaultArchetypeGenerator implements ArchetypeGenerator {
-    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultArchetypeGenerator.class);
 
-    @Inject
     private ArchetypeArtifactManager archetypeArtifactManager;
 
-    @Inject
     private FilesetArchetypeGenerator filesetGenerator;
 
-    @Inject
     private OldArchetype oldArchetype;
 
-    @Inject
     private RepositorySystem repositorySystem;
+
+    @Inject
+    public DefaultArchetypeGenerator(
+            ArchetypeArtifactManager archetypeArtifactManager,
+            FilesetArchetypeGenerator filesetGenerator,
+            OldArchetype oldArchetype,
+            RepositorySystem repositorySystem) {
+        this.archetypeArtifactManager = archetypeArtifactManager;
+        this.filesetGenerator = filesetGenerator;
+        this.oldArchetype = oldArchetype;
+        this.repositorySystem = repositorySystem;
+    }
 
     private File getArchetypeFile(ArchetypeGenerationRequest request) throws ArchetypeException {
         if (!isArchetypeDefined(request)) {
@@ -68,10 +73,9 @@ public class DefaultArchetypeGenerator implements ArchetypeGenerator {
 
         List<RemoteRepository> repos = new ArrayList<>(request.getRemoteRepositories());
 
-        RemoteRepository remoteRepo = null;
         if (request != null && request.getArchetypeRepository() != null) {
             RepositorySystemSession repositorySession = request.getRepositorySession();
-            remoteRepo = createRepository(
+            RemoteRepository remoteRepo = createRepository(
                     repositorySession, request.getArchetypeRepository(), request.getArchetypeArtifactId() + "-repo");
 
             repos.add(remoteRepo);

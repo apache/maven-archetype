@@ -77,17 +77,25 @@ import org.xml.sax.SAXException;
 public class DefaultFilesetArchetypeGenerator implements FilesetArchetypeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultFilesetArchetypeGenerator.class);
 
-    @Inject
     private ArchetypeArtifactManager archetypeArtifactManager;
 
-    @Inject
     private ArchetypeFilesResolver archetypeFilesResolver;
 
-    @Inject
     private PomManager pomManager;
 
-    @Inject
     private VelocityComponent velocity;
+
+    @Inject
+    public DefaultFilesetArchetypeGenerator(
+            ArchetypeArtifactManager archetypeArtifactManager,
+            ArchetypeFilesResolver archetypeFilesResolver,
+            PomManager pomManager,
+            VelocityComponent velocity) {
+        this.archetypeArtifactManager = archetypeArtifactManager;
+        this.archetypeFilesResolver = archetypeFilesResolver;
+        this.pomManager = pomManager;
+        this.velocity = velocity;
+    }
 
     /**
      * Pattern used to detect tokens in a string. Tokens are any text surrounded

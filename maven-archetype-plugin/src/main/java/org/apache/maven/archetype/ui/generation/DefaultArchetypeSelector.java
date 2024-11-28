@@ -49,11 +49,16 @@ public class DefaultArchetypeSelector implements ArchetypeSelector {
 
     static final String DEFAULT_ARCHETYPE_ARTIFACTID = "maven-archetype-quickstart";
 
-    @Inject
     private ArchetypeSelectionQueryer archetypeSelectionQueryer;
 
-    @Inject
     private ArchetypeManager archetypeManager;
+
+    @Inject
+    public DefaultArchetypeSelector(
+            ArchetypeSelectionQueryer archetypeSelectionQueryer, ArchetypeManager archetypeManager) {
+        this.archetypeManager = archetypeManager;
+        this.archetypeSelectionQueryer = archetypeSelectionQueryer;
+    }
 
     @Override
     public void selectArchetype(ArchetypeGenerationRequest request, Boolean interactiveMode, String catalogs)
