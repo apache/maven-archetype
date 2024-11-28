@@ -102,8 +102,6 @@ public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
     }
 
     public void testArchetypeNotDefined() throws Exception {
-        System.out.println("testArchetypeNotDefined");
-
         Archetype archetype = new Archetype("archetypes", null, "1.0");
 
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest("generate-2", archetype);
@@ -117,8 +115,6 @@ public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
     }
 
     public void testGenerateArchetypeCompleteWithoutParent() throws Exception {
-        System.out.println("testGenerateArchetypeCompleteWithoutParent");
-
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest("generate-4", ARCHETYPE_BASIC);
 
         FileUtils.forceDelete(projectDirectory);
@@ -144,8 +140,6 @@ public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
     }
 
     public void testGenerateArchetypeCompleteWithParent() throws Exception {
-        System.out.println("testGenerateArchetypeCompleteWithParent");
-
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest("generate-5", ARCHETYPE_BASIC);
 
         File projectFile = getProjectFile();
@@ -169,8 +163,6 @@ public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
     }
 
     public void testGenerateArchetypePartialOnChild() throws Exception {
-        System.out.println("testGenerateArchetypePartialOnChild");
-
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest("generate-8", ARCHETYPE_PARTIAL);
 
         File parentProjectFile = getProjectFile();
@@ -197,8 +189,6 @@ public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
     }
 
     public void testGenerateArchetypePartialOnChildDontOverride() throws Exception {
-        System.out.println("testGenerateArchetypePartialOnChildDontOverride");
-
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest("generate-9", ARCHETYPE_PARTIAL);
 
         File projectFile = new File(projectDirectory, "pom.xml");
@@ -224,8 +214,6 @@ public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
     }
 
     public void testGenerateArchetypePartialOnParent() throws Exception {
-        System.out.println("testGenerateArchetypePartialOnParent");
-
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest("generate-7", ARCHETYPE_PARTIAL);
 
         File projectFile = new File(outputDirectory, "pom.xml");
@@ -246,8 +234,6 @@ public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
     }
 
     public void testGenerateArchetypePartialWithoutPoms() throws Exception {
-        System.out.println("testGenerateArchetypePartialWithoutPoms");
-
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest("generate-6", ARCHETYPE_PARTIAL);
 
         File projectFile = new File(projectDirectory, "pom.xml");
@@ -264,8 +250,6 @@ public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
     }
 
     public void testGenerateArchetypeSite() throws Exception {
-        System.out.println("testGenerateArchetypeSite");
-
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest("generate-10", ARCHETYPE_SITE);
 
         File projectFile = new File(projectDirectory, "pom.xml");
@@ -285,8 +269,6 @@ public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
     }
 
     public void testGenerateFileSetArchetype() throws Exception {
-        System.out.println("testGenerateFileSetArchetype");
-
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest("generate-12", ARCHETYPE_FILESET);
 
         File projectFile = new File(projectDirectory, "pom.xml");
@@ -369,8 +351,6 @@ public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
     }
 
     public void testGenerateOldArchetype() throws Exception {
-        System.out.println("testGenerateOldArchetype");
-
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest("generate-11", ARCHETYPE_OLD);
 
         File projectFile = new File(projectDirectory, "pom.xml");
@@ -391,8 +371,6 @@ public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
     }
 
     public void testPropertiesNotDefined() throws Exception {
-        System.out.println("testPropertiesNotDefined");
-
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest("generate-3", ARCHETYPE_BASIC);
 
         request.setProperties(new Properties());
@@ -406,8 +384,6 @@ public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
     }
 
     public void testGenerateArchetypeWithPostScriptIncluded() throws Exception {
-        System.out.println("testGenerateArchetypeWithPostScriptIncluded");
-
         ArchetypeGenerationRequest request =
                 createArchetypeGenerationRequest("generate-13", ARCHETYPE_FILESET_WITH_POSTCREATE_SCRIPT);
 

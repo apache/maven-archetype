@@ -386,10 +386,6 @@ public class ListScanner {
      *                               <code>null</code>, doesn't exist, or isn't a directory).
      */
     public List<String> scan(List<String> files) throws IllegalStateException {
-        //        System.err.println("Scanning \nbasedir="+basedir +
-        //                " \nincludes=" + java.util.Arrays.toString(includes) +
-        //                " \nexcludes=" + java.util.Arrays.toString(excludes) +
-        //                " \non files="+files);
         if (basedir == null) {
             throw new IllegalStateException("No basedir set");
         }
@@ -410,16 +406,15 @@ public class ListScanner {
                 result.add(fileName);
             }
         }
-        //        System.err.println("Result "+result+"\n\n\n");
         return result;
     }
 
     /**
-     * Tests whether or not a name matches against at least one exclude pattern.
+     * Tests whether a name matches at least one exclude pattern.
      *
-     * @param name The name to match. Must not be <code>null</code>.
+     * @param name The name to match. Must not be <code>null</code>
      * @return <code>true</code> when the name matches against at least one exclude pattern, or
-     *         <code>false</code> otherwise.
+     *         <code>false</code> otherwise
      */
     protected boolean isExcluded(String name) {
         return matchesPatterns(name, excludes);
@@ -455,7 +450,6 @@ public class ListScanner {
 
         for (int i = 0; i < patterns.length; i++) {
             path = PathUtils.convertPathForOS(baseDir + patterns[i]);
-            //            System.err.println("path="+path);
             if (matchPath(path, name, isCaseSensitive)) {
                 return true;
             }
