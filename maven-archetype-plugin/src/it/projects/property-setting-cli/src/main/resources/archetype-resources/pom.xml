@@ -31,4 +31,3 @@ under the License.
     <foo>${foo}</foo><!-- foo is an archetypes' required property -->
   </properties>
 </project>
-

@@ -21,4 +21,3 @@
 
 mvn package site site:stage -Preporting $@
 mvn scm-publish:publish-scm $@
-
