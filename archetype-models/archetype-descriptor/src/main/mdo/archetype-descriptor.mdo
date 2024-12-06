@@ -164,10 +164,13 @@
         </field>
         <field xml.attribute="true">
           <name>includeCondition</name>
-          <version>1.0.0+</version>
+          <version>1.1.0+</version>
           <type>String</type>
           <required>false</required>
-          <description>Condition to include the fileset based on a property value.</description>
+          <description>A string value that should resolve to a boolean value to conditionally include filesets.
+          This condition should be either a boolean as String or a velocity template language statement that resolves
+          to a boolean value. If the descriptor contains includeCondition="${shouldInclude}" and the archetype has
+          a (required) property like shouldInclude=true the fileset is included.</description>
         </field>
         <field>
           <name>directory</name>
