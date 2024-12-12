@@ -22,6 +22,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,17 +37,19 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import com.ibm.icu.text.CharsetDetector;
+import com.ibm.icu.text.CharsetMatch;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.maven.archetype.ArchetypeCreationRequest;
 import org.apache.maven.archetype.ArchetypeCreationResult;
 import org.apache.maven.archetype.common.ArchetypeFilesResolver;
 import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.common.PomManager;
-import org.apache.maven.archetype.common.util.FileCharsetDetector;
 import org.apache.maven.archetype.common.util.ListScanner;
 import org.apache.maven.archetype.common.util.PathUtils;
 import org.apache.maven.archetype.metadata.ArchetypeDescriptor;
@@ -1261,9 +1264,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
 
             File inputFile = new File(basedir, inputFileName);
 
-            FileCharsetDetector detector = new FileCharsetDetector(inputFile);
-
-            String fileEncoding = detector.isFound() ? detector.getCharset() : defaultEncoding;
+            String fileEncoding = getFileCharsetEncoding(inputFile, defaultEncoding);
 
             String initialcontent = IOUtil.toString(Files.newInputStream(inputFile.toPath()), fileEncoding);
 
@@ -1631,6 +1632,17 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
         }
 
         return createFileSet(excludes, false, filtered, group, includes, defaultEncoding);
+    }
+
+    private String getFileCharsetEncoding(File detectedFile, String defaultEncoding) {
+        try (InputStream in = new BufferedInputStream(Files.newInputStream(detectedFile.toPath()))) {
+            CharsetDetector detector = new CharsetDetector();
+            detector.setText(in);
+            CharsetMatch match = detector.detect();
+            return match.getName().toUpperCase(Locale.ENGLISH);
+        } catch (IOException e) {
+            return defaultEncoding;
+        }
     }
 
     private FileSet getUnpackagedFileSet(
