@@ -54,8 +54,8 @@
     <url>https://github.com/apache/maven-archetype/tree/${project.scm.tag}</url>
   </scm>
   <issueManagement>
-    <system>jira</system>
-    <url>https://issues.apache.org/jira/browse/ARCHETYPE</url>
+    <system>GitHub</system>
+    <url>https://github.com/apache/maven-archetype/issues</url>
   </issueManagement>
   <ciManagement>
     <system>Jenkins</system>
