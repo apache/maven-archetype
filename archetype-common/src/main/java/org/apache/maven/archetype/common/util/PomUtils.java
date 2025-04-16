@@ -48,6 +48,7 @@ import org.xml.sax.SAXException;
  * POM helper class.
  */
 public final class PomUtils {
+
     private PomUtils() {
         throw new IllegalStateException("no instantiable constructor");
     }
@@ -89,16 +90,16 @@ public final class PomUtils {
         }
 
         String packaging = null;
-        NodeList packagingElement = project.getElementsByTagName("packaging");
-        if (packagingElement != null && packagingElement.getLength() == 1) {
-            packaging = packagingElement.item(0).getTextContent();
+        Node packagingNode = getChildNode(project, "packaging");
+        if (packagingNode != null) {
+            packaging = packagingNode.getTextContent();
         }
         if (!"pom".equals(packaging)) {
             throw new InvalidPackaging(
                     "Unable to add module to the current project as it is not of packaging type 'pom'");
         }
 
-        Node modules = getModulesNode(project);
+        Node modules = getChildNode(project, "modules");
 
         if (!hasArtifactIdInModules(artifactId, modules)) {
             Element module = document.createElement("module");
@@ -137,17 +138,17 @@ public final class PomUtils {
         }
     }
 
-    private static Node getModulesNode(Element project) {
-        Node modules = null;
-        NodeList nodes = project.getChildNodes();
+    private static Node getChildNode(Element parent, String name) {
+        Node namedNode = null;
+        NodeList nodes = parent.getChildNodes();
         for (int len = nodes.getLength(), i = 0; i < len; i++) {
             Node node = nodes.item(i);
-            if (node.getNodeType() == Node.ELEMENT_NODE && "modules".equals(node.getNodeName())) {
-                modules = node;
+            if (node.getNodeType() == Node.ELEMENT_NODE && name.equals(node.getNodeName())) {
+                namedNode = node;
                 break;
             }
         }
-        return modules;
+        return namedNode;
     }
 
     private static boolean hasArtifactIdInModules(String artifactId, Node modules) {
