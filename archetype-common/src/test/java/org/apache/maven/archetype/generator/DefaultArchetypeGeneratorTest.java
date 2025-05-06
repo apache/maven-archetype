@@ -605,11 +605,11 @@ public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
     }
 
     private static class Archetype {
-        public final String groupId;
-        public final String artifactId;
-        public final String version;
+        final String groupId;
+        final String artifactId;
+        final String version;
 
-        public Archetype(String groupId, String artifactId, String version) {
+        Archetype(String groupId, String artifactId, String version) {
             this.groupId = groupId;
             this.artifactId = artifactId;
             this.version = version;
