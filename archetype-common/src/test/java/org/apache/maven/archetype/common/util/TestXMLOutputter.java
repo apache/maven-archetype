@@ -29,7 +29,7 @@ import org.jdom2.input.SAXBuilder;
 
 /** @author <a href="mailto:jdcasey@apache.org">John Casey</a> */
 public class TestXMLOutputter extends TestCase {
-    public void testOutput_Document_ShouldParseAndOutputCDATASection_NoMods() throws JDOMException, IOException {
+    public void testOutputDocumentShouldParseAndOutputCDATASectionNoMods() throws JDOMException, IOException {
         String content = "<document>" + "<element1>This is some text</element1>"
                 + "<description>And then,"
                 + "<![CDATA[<more content goes here>]]>"

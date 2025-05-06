@@ -105,7 +105,7 @@ public class DefaultArchetypeGenerationConfigurator2Test extends PlexusTestCase 
         configurator.setArchetypeGenerationQueryer(queryer);
     }
 
-    public void testJIRA_509_FileSetArchetypeDefaultsWithVariables() throws Exception {
+    public void testJIRA509FileSetArchetypeDefaultsWithVariables() throws Exception {
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
         request.setArchetypeGroupId("archetypeGroupId");
         request.setArchetypeArtifactId("archetypeArtifactId");
