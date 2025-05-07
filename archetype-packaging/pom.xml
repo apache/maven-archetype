@@ -31,4 +31,13 @@
   <name>Maven Archetype Packaging</name>
   <description>'maven-archetype' packaging configuration for archetypes.</description>
 
+  <build>
+    <resources>
+      <resource>
+        <filtering>true</filtering>
+        <directory>src/main/resources</directory>
+      </resource>
+    </resources>
+  </build>
+
 </project>

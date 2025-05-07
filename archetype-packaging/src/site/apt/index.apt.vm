@@ -46,9 +46,7 @@ Usage
 
    Declaring <<<maven-archetype>>> packaging to your pom is not the only step required:
 
-   * to be available from an the archetype project, the packaging must be added as an extension,
-
-   * to ensure a reproducible build, the archetype plugin version needs to be locked down in pluginManagement section.
+   * to be available from the archetype project, the packaging must be added as an extension,
 
    []
 
@@ -67,16 +65,6 @@ Usage
         <version>${project.version}</version>
       </extension>
     </extensions>
-
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-archetype-plugin</artifactId>
-          <version>${project.version}</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
   </build>
 </project>
 +---
