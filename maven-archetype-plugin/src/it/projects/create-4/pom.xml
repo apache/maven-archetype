@@ -33,7 +33,7 @@
     <packaging>pom</packaging>
 
     <modules>
-    	<module>subModuleWar</module>
+        <module>subModuleWar</module>
         <module>subModuleEAR</module>
     </modules>
 </project>

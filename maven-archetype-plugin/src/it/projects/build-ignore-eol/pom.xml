@@ -47,10 +47,6 @@ under the License.
     <pluginManagement>
       <plugins>
         <plugin>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.7.0</version>
-        </plugin>
-        <plugin>
           <artifactId>maven-archetype-plugin</artifactId>
           <version>@project.version@</version>
           <configuration>

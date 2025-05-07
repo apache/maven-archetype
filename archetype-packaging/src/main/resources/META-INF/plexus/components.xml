@@ -26,15 +26,14 @@
       <configuration>
         <!-- START SNIPPET: maven-archetype-lifecycle -->
         <phases>
-          <process-resources>org.apache.maven.plugins:maven-resources-plugin:resources</process-resources>
-          <process-test-resources>org.apache.maven.plugins:maven-resources-plugin:testResources</process-test-resources>
-          <package>org.apache.maven.plugins:maven-archetype-plugin:jar</package>
-          <integration-test>org.apache.maven.plugins:maven-archetype-plugin:integration-test</integration-test>
-          <install>org.apache.maven.plugins:maven-install-plugin:install,
-            org.apache.maven.plugins:maven-archetype-plugin:update-local-catalog
+          <process-resources>org.apache.maven.plugins:maven-resources-plugin:${version.maven-resources-plugin}:resources</process-resources>
+          <process-test-resources>org.apache.maven.plugins:maven-resources-plugin:${version.maven-resources-plugin}:testResources</process-test-resources>
+          <package>org.apache.maven.plugins:maven-archetype-plugin:${project.version}:jar</package>
+          <integration-test>org.apache.maven.plugins:maven-archetype-plugin:${project.version}:integration-test</integration-test>
+          <install>org.apache.maven.plugins:maven-install-plugin:${version.maven-install-plugin}:install,
+            org.apache.maven.plugins:maven-archetype-plugin:${project.version}:update-local-catalog
           </install>
-          <!-- Update the local catalog -->
-          <deploy>org.apache.maven.plugins:maven-deploy-plugin:deploy</deploy>
+          <deploy>org.apache.maven.plugins:maven-deploy-plugin:${version.maven-deploy-plugin}:deploy</deploy>
         </phases>
         <!-- END SNIPPET: maven-archetype-lifecycle -->
       </configuration>
