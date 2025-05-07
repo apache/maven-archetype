@@ -59,7 +59,6 @@ import org.apache.maven.model.IssueManagement;
 import org.apache.maven.model.License;
 import org.apache.maven.model.MailingList;
 import org.apache.maven.model.Model;
-import org.apache.maven.model.ModelBase;
 import org.apache.maven.model.Notifier;
 import org.apache.maven.model.Organization;
 import org.apache.maven.model.Parent;
@@ -127,7 +126,7 @@ public class MavenJDOMWriter {
      */
     @Deprecated
     public void write(Model project, Document document, OutputStream stream) throws java.io.IOException {
-        updateModel(project, "project", new Counter(0), document.getRootElement());
+        updateModel(project, new Counter(0), document.getRootElement());
 
         XMLOutputter outputter = new XMLOutputter();
         outputter.setFormat(Format.getPrettyFormat().setIndent("  ").setLineSeparator(LS));
@@ -155,7 +154,7 @@ public class MavenJDOMWriter {
      * @param document
      */
     public void write(Model project, Document document, Writer writer, Format jdomFormat) throws java.io.IOException {
-        updateModel(project, "project", new Counter(0), document.getRootElement());
+        updateModel(project, new Counter(0), document.getRootElement());
 
         XMLOutputter outputter = new XMLOutputter();
         outputter.setFormat(jdomFormat);
@@ -174,7 +173,7 @@ public class MavenJDOMWriter {
      * @param name
      * @param parent
      */
-    protected Element findAndReplaceProperties(Counter counter, Element parent, String name, Map props) {
+    protected void findAndReplaceProperties(Counter counter, Element parent, String name, Map props) {
         boolean shouldExist = (props != null) && !props.isEmpty();
         Element element = updateElement(counter, parent, name, shouldExist);
         if (shouldExist) {
@@ -195,7 +194,6 @@ public class MavenJDOMWriter {
                 }
             }
         }
-        return element;
     } // -- Element findAndReplaceProperties(Counter, Element, String, Map)
 
     /**
@@ -207,13 +205,13 @@ public class MavenJDOMWriter {
      * @param name
      * @param parent
      */
-    protected Element findAndReplaceSimpleElement(
+    protected void findAndReplaceSimpleElement(
             Counter counter, Element parent, String name, String text, String defaultValue) {
         if ((defaultValue != null) && (text != null) && defaultValue.equals(text)) {
             Element element = parent.getChild(name, parent.getNamespace());
             // if exist and is default value or if doesn't exist.. just keep the way it is..
             if (((element != null) && defaultValue.equals(element.getText())) || (element == null)) {
-                return element;
+                return;
             }
         }
 
@@ -222,7 +220,6 @@ public class MavenJDOMWriter {
         if (shouldExist) {
             element.setText(text);
         }
-        return element;
     } // -- Element findAndReplaceSimpleElement(Counter, Element, String, String, String)
 
     /**
@@ -234,7 +231,7 @@ public class MavenJDOMWriter {
      * @param list
      * @param parent
      */
-    protected Element findAndReplaceSimpleLists(
+    protected void findAndReplaceSimpleLists(
             Counter counter, Element parent, Collection list, String parentName, String childName) {
         boolean shouldExist = (list != null) && (list.size() > 0);
         Element element = updateElement(counter, parent, parentName, shouldExist);
@@ -269,7 +266,6 @@ public class MavenJDOMWriter {
                 }
             }
         }
-        return element;
     } // -- Element findAndReplaceSimpleLists(Counter, Element, Collection, String, String)
 
     /**
@@ -280,13 +276,12 @@ public class MavenJDOMWriter {
      * @param name
      * @param parent
      */
-    protected Element findAndReplaceXpp3DOM(Counter counter, Element parent, String name, Xpp3Dom dom) {
+    protected void findAndReplaceXpp3DOM(Counter counter, Element parent, String name, Xpp3Dom dom) {
         boolean shouldExist = (dom != null) && ((dom.getChildCount() > 0) || (dom.getValue() != null));
         Element element = updateElement(counter, parent, name, shouldExist);
         if (shouldExist) {
             replaceXpp3DOM(element, dom, new Counter(counter.getDepth() + 1));
         }
-        return element;
     } // -- Element findAndReplaceXpp3DOM(Counter, Element, String, Xpp3Dom)
 
     /**
@@ -1022,7 +1017,7 @@ public class MavenJDOMWriter {
                     el = factory.element(childTag, element.getNamespace());
                     insertAtPreferredLocation(element, el, innerCount);
                 }
-                updateResource(value, childTag, innerCount, el);
+                updateResource(value, innerCount, el);
                 innerCount.increaseCount();
             }
             if (elIt != null) {
@@ -1540,9 +1535,8 @@ public class MavenJDOMWriter {
      * @param value
      * @param element
      * @param counter
-     * @param xmlTag
      */
-    protected void updateModel(Model value, String xmlTag, Counter counter, Element element) {
+    protected void updateModel(Model value, Counter counter, Element element) {
         Element root = element;
         Counter innerCount = new Counter(counter.getDepth() + 1);
         updateParent(value.getParent(), "parent", innerCount, root);
@@ -1570,38 +1564,12 @@ public class MavenJDOMWriter {
         iterateRepository(innerCount, root, value.getRepositories(), "repositories", "repository");
         iterateRepository(innerCount, root, value.getPluginRepositories(), "pluginRepositories", "pluginRepository");
         iterateDependency(innerCount, root, value.getDependencies(), "dependencies", "dependency");
-        findAndReplaceXpp3DOM(innerCount, root, "reports", (Xpp3Dom) value.getReports());
+        findAndReplaceXpp3DOM(innerCount, root, "reports", (Xpp3Dom) safeGetReports(value));
         updateReporting(value.getReporting(), "reporting", innerCount, root);
         updateDependencyManagement(value.getDependencyManagement(), "dependencyManagement", innerCount, root);
         updateDistributionManagement(value.getDistributionManagement(), "distributionManagement", innerCount, root);
         findAndReplaceProperties(innerCount, root, "properties", value.getProperties());
     } // -- void updateModel(Model, String, Counter, Element)
-
-    /**
-     * Method updateModelBase.
-     *
-     * @param value
-     * @param element
-     * @param counter
-     * @param xmlTag
-     */
-    protected void updateModelBase(ModelBase value, String xmlTag, Counter counter, Element element) {
-        boolean shouldExist = value != null;
-        Element root = updateElement(counter, element, xmlTag, shouldExist);
-        if (shouldExist) {
-            Counter innerCount = new Counter(counter.getDepth() + 1);
-            findAndReplaceSimpleLists(innerCount, root, value.getModules(), "modules", "module");
-            iterateRepository(innerCount, root, value.getRepositories(), "repositories", "repository");
-            iterateRepository(
-                    innerCount, root, value.getPluginRepositories(), "pluginRepositories", "pluginRepository");
-            iterateDependency(innerCount, root, value.getDependencies(), "dependencies", "dependency");
-            findAndReplaceXpp3DOM(innerCount, root, "reports", (Xpp3Dom) value.getReports());
-            updateReporting(value.getReporting(), "reporting", innerCount, root);
-            updateDependencyManagement(value.getDependencyManagement(), "dependencyManagement", innerCount, root);
-            updateDistributionManagement(value.getDistributionManagement(), "distributionManagement", innerCount, root);
-            findAndReplaceProperties(innerCount, root, "properties", value.getProperties());
-        }
-    } // -- void updateModelBase(ModelBase, String, Counter, Element)
 
     /**
      * Method updateNotifier.
@@ -1721,10 +1689,28 @@ public class MavenJDOMWriter {
                 "false");
         iteratePluginExecution(innerCount, root, value.getExecutions(), "executions", "execution");
         iterateDependency(innerCount, root, value.getDependencies(), "dependencies", "dependency");
-        findAndReplaceXpp3DOM(innerCount, root, "goals", (Xpp3Dom) value.getGoals());
+        findAndReplaceXpp3DOM(innerCount, root, "goals", (Xpp3Dom) safeGetGoals(value));
         findAndReplaceSimpleElement(innerCount, root, "inherited", value.getInherited(), null);
         findAndReplaceXpp3DOM(innerCount, root, "configuration", (Xpp3Dom) value.getConfiguration());
     } // -- void updatePlugin(Plugin, String, Counter, Element)
+
+    // Workaround for Maven 4 dropped methods
+
+    private Object safeGetGoals(Plugin plugin) {
+        try {
+            return plugin.getGoals();
+        } catch (NoSuchMethodError e) {
+            return null;
+        }
+    }
+
+    private Object safeGetReports(Model model) {
+        try {
+            return model.getReports();
+        } catch (NoSuchMethodError e) {
+            return null;
+        }
+    }
 
     /**
      * Method updatePluginConfiguration.
@@ -1988,9 +1974,8 @@ public class MavenJDOMWriter {
      * @param value
      * @param element
      * @param counter
-     * @param xmlTag
      */
-    protected void updateResource(Resource value, String xmlTag, Counter counter, Element element) {
+    protected void updateResource(Resource value, Counter counter, Element element) {
         Element root = element;
         Counter innerCount = new Counter(counter.getDepth() + 1);
         findAndReplaceSimpleElement(innerCount, root, "targetPath", value.getTargetPath(), null);
