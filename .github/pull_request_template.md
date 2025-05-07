@@ -7,9 +7,9 @@ contribution quickly and easily:
   Note that commits might be squashed by a maintainer on merge.
 - [ ] Write unit tests that match behavioral changes, where the tests fail if the changes to the runtime are not applied. 
   This may not always be possible but is a best-practice.
-- [ ] Run `mvn clean verify` to make sure basic checks pass.
+- [ ] Run `mvn verify` to make sure basic checks pass.
   A more thorough check will be performed on your pull request automatically.
-- [ ] You have run the integration tests successfully (`mvn -Prun-its clean verify`).
+- [ ] You have run the integration tests successfully (`mvn -Prun-its verify`).
 
 
 If your pull request is about ~20 lines of code you don't need to sign an
