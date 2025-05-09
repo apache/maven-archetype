@@ -164,7 +164,7 @@
         </field>
         <field xml.attribute="true">
           <name>includeCondition</name>
-          <version>1.1.0+</version>
+          <version>1.2.0+</version>
           <type>String</type>
           <required>false</required>
           <description>A string value that should resolve to a boolean value to conditionally include filesets.
