@@ -18,34 +18,60 @@
  */
 package org.apache.maven.archetype.common;
 
-import java.io.File;
-import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.io.FileUtils;
-import org.junit.Assert;
+import org.apache.maven.archetype.exception.InvalidPackaging;
 import org.junit.Test;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
 public class TestPomManager {
 
     // ref: https://www.baeldung.com/java-pretty-print-xml
     // https://bugs.openjdk.java.net/browse/JDK-8262285?attachmentViewMode=list
     @Test
-    public void testAddModule() throws Exception {
+    public void testAddModulePomPackaging() throws Exception {
         PomManager pomManager = new DefaultPomManager();
 
-        URL pom = getClass().getResource("/projects/generate-9/pom.xml.sample");
-        File pomFileSrc = new File(pom.toURI());
-        File pomFile = new File(pomFileSrc.getAbsolutePath() + "-copied.xml");
-        FileUtils.copyFile(pomFileSrc, pomFile);
+        Path pomPath = Paths.get(
+                getClass().getResource("/projects/pom-manager/pom-sample-1.xml").toURI());
+        Path pomDestPath = pomPath.getParent().resolve("pom-sample-1-copied.xml");
+        Files.copy(pomPath, pomDestPath, StandardCopyOption.REPLACE_EXISTING);
+
         final int moduleNumber = 4;
         for (int i = 0; i < moduleNumber; i++) {
-            pomManager.addModule(pomFile, "test" + i);
+            pomManager.addModule(pomDestPath.toFile(), "test" + i);
         }
-        String fileText = FileUtils.readFileToString(pomFile, "UTF-8");
+
+        String fileText = new String(Files.readAllBytes(pomDestPath), StandardCharsets.UTF_8);
         Pattern pattern = Pattern.compile("(^[ ]+[\\r\\n]+){" + moduleNumber + "}", Pattern.MULTILINE);
         Matcher matcher = pattern.matcher(fileText);
-        Assert.assertFalse(matcher.find());
+        assertFalse(matcher.find());
+    }
+
+    @Test
+    public void testAddModuleNonPomPackaging() throws Exception {
+        PomManager pomManager = new DefaultPomManager();
+
+        Path pomPath = Paths.get(
+                getClass().getResource("/projects/pom-manager/pom-sample-2.xml").toURI());
+        Path pomDestPath = pomPath.getParent().resolve("pom-sample-1-copied.xml");
+        Files.copy(pomPath, pomDestPath, StandardCopyOption.REPLACE_EXISTING);
+
+        Exception expectedException = null;
+        try {
+            pomManager.addModule(pomDestPath.toFile(), "test");
+        } catch (InvalidPackaging e) {
+            expectedException = e;
+        }
+
+        assertNotNull(expectedException);
     }
 }
