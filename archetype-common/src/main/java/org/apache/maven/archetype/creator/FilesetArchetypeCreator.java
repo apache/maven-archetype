@@ -1143,6 +1143,18 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
         return extensions;
     }
 
+    private Set<String> getExtensionlessFiles(List<String> files) {
+        Set<String> extensionlessFiles = new HashSet<>();
+
+        for (String file : files) {
+            if (FileUtils.extension(file).isEmpty()) {
+                extensionlessFiles.add(file);
+            }
+        }
+
+        return extensionlessFiles;
+    }
+
     private Map<String, List<String>> getGroupsMap(final List<String> files, final int level) {
         Map<String, List<String>> groups = new HashMap<>();
 
@@ -1613,12 +1625,18 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
     private FileSet getUnpackagedFileSet(
             final boolean filtered, final String group, final List<String> groupFiles, String defaultEncoding) {
         Set<String> extensions = getExtensions(groupFiles);
+        Set<String> extensionlessFiles = getExtensionlessFiles(groupFiles);
 
         List<String> includes = new ArrayList<>();
         List<String> excludes = new ArrayList<>();
 
         for (String extension : extensions) {
-            includes.add("**/*." + extension);
+            if (!extension.isEmpty()) {
+                includes.add("**/*." + extension);
+            }
+        }
+        for (String extensionlessFile : extensionlessFiles) {
+            includes.add("**/" + extensionlessFile);
         }
 
         return createFileSet(excludes, false, filtered, group, includes, defaultEncoding);
