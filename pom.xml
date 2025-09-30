@@ -72,9 +72,11 @@
   <properties>
     <maven.archetype.scm.devConnection>scm:git:https://gitbox.apache.org/repos/asf/maven-archetype.git</maven.archetype.scm.devConnection>
     <mavenVersion>3.6.3</mavenVersion>
-    <resolverVersion>1.4.1</resolverVersion>
     <!-- provided by Maven core -->
+    <resolverVersion>1.4.1</resolverVersion>
     <javaVersion>8</javaVersion>
+    <!-- TODO remove with next parent version update -->
+    <version.maven-invoker-plugin>3.9.1</version.maven-invoker-plugin>
     <netbeans.hint.useExternalMaven>true</netbeans.hint.useExternalMaven>
     <maven.site.path>archetype-archives/archetype-LATEST</maven.site.path>
     <project.build.outputTimestamp>2025-05-13T20:54:37Z</project.build.outputTimestamp>
