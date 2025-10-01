@@ -24,6 +24,7 @@ github:
     - maven-plugins
     - maven-archetype-plugin
     - maven
+    - hacktoberfest
   protected_branches:
     master: { }
     archetype-1.0.x: { }
