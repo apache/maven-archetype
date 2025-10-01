@@ -21,12 +21,19 @@ package org.apache.maven.archetype.repositorycrawler;
 import java.io.File;
 
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
-import org.apache.maven.plugin.testing.AbstractMojoTestCase;
+import org.codehaus.plexus.ContainerConfiguration;
+import org.codehaus.plexus.PlexusTestCase;
 
 /**
  * @author  rafale
  */
-public class DefaultRepositoryCrawlerTest extends AbstractMojoTestCase {
+public class DefaultRepositoryCrawlerTest extends PlexusTestCase {
+
+    @Override
+    protected void customizeContainerConfiguration(ContainerConfiguration configuration) {
+        configuration.setClassPathScanning("index");
+    }
+
     /**
      * Test of crawl method, of class DefaultRepositoryCrawler.
      */
