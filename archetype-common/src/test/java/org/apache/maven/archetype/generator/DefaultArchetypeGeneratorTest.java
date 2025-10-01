@@ -29,7 +29,8 @@ import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
-import org.apache.maven.plugin.testing.AbstractMojoTestCase;
+import org.codehaus.plexus.ContainerConfiguration;
+import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.xml.XmlStreamReader;
@@ -39,7 +40,7 @@ import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.repository.LocalRepository;
 import org.eclipse.aether.repository.LocalRepositoryManager;
 
-public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
+public class DefaultArchetypeGeneratorTest extends PlexusTestCase {
     // archetypes prepared by antrun execution (see pom.xml) from src/test/archetypes
     private static final Archetype ARCHETYPE_BASIC = new Archetype("archetypes", "basic", "1.0");
 
@@ -471,6 +472,11 @@ public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
     }
 
     @Override
+    protected void customizeContainerConfiguration(ContainerConfiguration configuration) {
+        configuration.setClassPathScanning("index");
+    }
+
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
 
@@ -482,9 +488,6 @@ public class DefaultArchetypeGeneratorTest extends AbstractMojoTestCase {
 
         generator = (ArchetypeGenerator) lookup(ArchetypeGenerator.ROLE);
         assertNotNull(generator);
-        assertNotNull(getVariableValueFromObject(generator, "archetypeArtifactManager"));
-        assertNotNull(getVariableValueFromObject(generator, "oldArchetype"));
-        assertNotNull(getVariableValueFromObject(generator, "filesetGenerator"));
     }
 
     private ArchetypeGenerationRequest createArchetypeGenerationRequest(String project, Archetype archetype)
