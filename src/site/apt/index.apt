@@ -77,7 +77,5 @@ mvn archetype:generate
 *-----------------------------------------------------------+----------------+
 | {{{./archetype-common/}archetype-common}}                 | Core classes,
 *-----------------------------------------------------------+----------------+
-| {{{./archetype-testing/}archetype-testing}}               | Components used internally to test Maven Archetype,
-*-----------------------------------------------------------+----------------+
 
  Some archetypes are also provided by Maven: see {{{/archetypes/}Maven Archetype Bundles}}.
