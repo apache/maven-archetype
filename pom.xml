@@ -149,6 +149,12 @@
         <scope>provided</scope>
       </dependency>
       <dependency>
+        <groupId>org.apache.maven.resolver</groupId>
+        <artifactId>maven-resolver-api</artifactId>
+        <version>${resolverVersion}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
         <groupId>org.apache.maven.shared</groupId>
         <artifactId>maven-invoker</artifactId>
         <version>3.3.0</version>
