@@ -185,13 +185,13 @@ public class ListScanner {
      * Tests whether or not a string matches against a pattern. The pattern may contain two special
      * characters:<br>
      * '*' means zero or more characters<br>
-     * '?' means one and only one character
+     * '?' means one and only one character.
      *
-     * @param pattern The pattern to match against. Must not be <code>null</code>.
-     * @param str     The string which must be matched against the pattern. Must not be <code>
+     * @param pattern the pattern to match against. Must not be <code>null</code>.
+     * @param str     the string which must be matched against the pattern. Must not be <code>
      *                null</code>.
      * @return <code>true</code> if the string matches against the pattern, or <code>false</code>
-     *         otherwise.
+     *         otherwise
      */
     public static boolean match(String pattern, String str) {
         // default matches the SelectorUtils default
@@ -202,14 +202,14 @@ public class ListScanner {
      * Tests whether or not a string matches against a pattern. The pattern may contain two special
      * characters:<br>
      * '*' means zero or more characters<br>
-     * '?' means one and only one character
+     * '?' means one and only one character.
      *
-     * @param pattern         The pattern to match against. Must not be <code>null</code>.
-     * @param str             The string which must be matched against the pattern. Must not be
+     * @param pattern         the pattern to match against. Must not be <code>null</code>.
+     * @param str             the string which must be matched against the pattern. Must not be
      *                        <code>null</code>.
-     * @param isCaseSensitive Whether or not matching should be performed case sensitively.
+     * @param isCaseSensitive whether or not matching should be performed case sensitively
      * @return <code>true</code> if the string matches against the pattern, or <code>false</code>
-     *         otherwise.
+     *         otherwise
      */
     protected static boolean match(String pattern, String str, boolean isCaseSensitive) {
         return SelectorUtils.match(pattern, str, isCaseSensitive);
@@ -218,10 +218,10 @@ public class ListScanner {
     /**
      * Tests whether or not a given path matches a given pattern.
      *
-     * @param pattern The pattern to match against. Must not be <code>null</code>.
-     * @param str     The path to match, as a String. Must not be <code>null</code>.
+     * @param pattern the pattern to match against. Must not be <code>null</code>.
+     * @param str     the path to match, as a String. Must not be <code>null</code>.
      * @return <code>true</code> if the pattern matches against the string, or <code>false</code>
-     *         otherwise.
+     *         otherwise
      */
     protected static boolean matchPath(String pattern, String str) {
         // default matches the SelectorUtils default
@@ -231,11 +231,11 @@ public class ListScanner {
     /**
      * Tests whether or not a given path matches a given pattern.
      *
-     * @param pattern         The pattern to match against. Must not be <code>null</code>.
-     * @param str             The path to match, as a String. Must not be <code>null</code>.
-     * @param isCaseSensitive Whether or not matching should be performed case sensitively.
+     * @param pattern         the pattern to match against. Must not be <code>null</code>.
+     * @param str             the path to match, as a String. Must not be <code>null</code>.
+     * @param isCaseSensitive whether or not matching should be performed case sensitively
      * @return <code>true</code> if the pattern matches against the string, or <code>false</code>
-     *         otherwise.
+     *         otherwise
      */
     protected static boolean matchPath(String pattern, String str, boolean isCaseSensitive) {
         return SelectorUtils.matchPath(
@@ -249,10 +249,10 @@ public class ListScanner {
      * positives. For example, <code>pattern=**\a</code> and <code>str=b</code> will yield <code>
      * true</code>.</p>
      *
-     * @param pattern The pattern to match against. Must not be <code>null</code>.
-     * @param str     The path to match, as a String. Must not be <code>null</code>.
+     * @param pattern the pattern to match against. Must not be <code>null</code>.
+     * @param str     the path to match, as a String. Must not be <code>null</code>.
      * @return whether or not a given path matches the start of a given pattern up to the first
-     *         "**".
+     *         "**"
      */
     protected static boolean matchPatternStart(String pattern, String str) {
         // default matches SelectorUtils default
@@ -266,11 +266,11 @@ public class ListScanner {
      * positives. For example, <code>pattern=**\a</code> and <code>str=b</code> will yield <code>
      * true</code>.</p>
      *
-     * @param pattern         The pattern to match against. Must not be <code>null</code>.
-     * @param str             The path to match, as a String. Must not be <code>null</code>.
-     * @param isCaseSensitive Whether or not matching should be performed case sensitively.
+     * @param pattern         the pattern to match against. Must not be <code>null</code>.
+     * @param str             the path to match, as a String. Must not be <code>null</code>.
+     * @param isCaseSensitive whether or not matching should be performed case sensitively
      * @return whether or not a given path matches the start of a given pattern up to the first
-     *         "**".
+     *         "**"
      */
     protected static boolean matchPatternStart(String pattern, String str, boolean isCaseSensitive) {
         return SelectorUtils.matchPatternStart(
@@ -304,9 +304,9 @@ public class ListScanner {
     /**
      * Sets the base directory to be scanned. This is the directory which is scanned recursively.
      * This directory is normalized for multiple os's (all / and \\ are replaced with
-     * File.separatorChar
+     * File.separatorChar.
      *
-     * @param basedir The base directory for scanning. Should not be <code>null</code>.
+     * @param basedir the base directory for scanning. Should not be <code>null</code>.
      */
     public void setBasedir(String basedir) {
         this.basedir = basedir;
@@ -329,7 +329,7 @@ public class ListScanner {
      *
      * <p>When a pattern ends with a '/' or '\', "**" is appended.</p>
      *
-     * @param excludesList A list of exclude patterns. May be <code>null</code>, indicating that no
+     * @param excludesList a list of exclude patterns. May be <code>null</code>, indicating that no
      *                 files should be excluded. If a non-<code>null</code> list is given, all
      *                 elements must be non-<code>null</code>.
      */
@@ -357,7 +357,7 @@ public class ListScanner {
      *
      * <p>When a pattern ends with a '/' or '\', "**" is appended.</p>
      *
-     * @param includesList A list of include patterns. May be <code>null</code>, indicating that all
+     * @param includesList a list of include patterns. May be <code>null</code>, indicating that all
      *                 files should be included. If a non-<code>null</code> list is given, all
      *                 elements must be non-<code>null</code>.
      */
@@ -412,7 +412,7 @@ public class ListScanner {
     /**
      * Tests whether a name matches at least one exclude pattern.
      *
-     * @param name The name to match. Must not be <code>null</code>
+     * @param name the name to match. Must not be <code>null</code>
      * @return <code>true</code> when the name matches against at least one exclude pattern, or
      *         <code>false</code> otherwise
      */
@@ -423,9 +423,9 @@ public class ListScanner {
     /**
      * Tests whether or not a name matches against at least one include pattern.
      *
-     * @param name The name to match. Must not be <code>null</code>.
+     * @param name the name to match. Must not be <code>null</code>.
      * @return <code>true</code> when the name matches against at least one include pattern, or
-     *         <code>false</code> otherwise.
+     *         <code>false</code> otherwise
      */
     protected boolean isIncluded(String name) {
         return matchesPatterns(name, includes);
@@ -434,10 +434,10 @@ public class ListScanner {
     /**
      * Tests whether or not a name matches against at least one include pattern.
      *
-     * @param name     The name to match. Must not be <code>null</code>.
-     * @param patterns The list of patterns to match.
+     * @param name     the name to match. Must not be <code>null</code>.
+     * @param patterns the list of patterns to match
      * @return <code>true</code> when the name matches against at least one include pattern, or
-     *         <code>false</code> otherwise.
+     *         <code>false</code> otherwise
      */
     protected boolean matchesPatterns(String name, String[] patterns) {
         // avoid extra object creation in the loop

@@ -18,7 +18,9 @@
  */
 package org.apache.maven.archetype.source;
 
-/** @author Jason van Zyl */
+/**
+ * @author Jason van Zyl
+ */
 public class ArchetypeDataSourceException extends Exception {
     public ArchetypeDataSourceException(String message) {
         super(message);

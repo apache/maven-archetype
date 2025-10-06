@@ -24,7 +24,9 @@ import java.util.List;
 
 import org.codehaus.plexus.util.StringUtils;
 
-/** @author rafale */
+/**
+ * @author rafale
+ */
 public class PathUtils {
     /**
      * This method converts all \ or / chars to File.separatorChar.

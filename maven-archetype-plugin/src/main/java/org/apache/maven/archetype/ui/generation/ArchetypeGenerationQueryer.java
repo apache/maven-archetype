@@ -26,7 +26,7 @@ import org.codehaus.plexus.components.interactivity.PrompterException;
 /**
  * <p>User interaction component to query informations necessary for a project generation from an archetype.</p>
  *
- * TODO this interface is bound to its implementation through the prompter exception
+ * TODO this interface is bound to its implementation through the prompter exception.
  */
 public interface ArchetypeGenerationQueryer {
     boolean confirmConfiguration(ArchetypeConfiguration archetypeConfiguration) throws PrompterException;

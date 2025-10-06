@@ -18,7 +18,9 @@
  */
 package org.apache.maven.archetype;
 
-/** @author Jason van Zyl */
+/**
+ * @author Jason van Zyl
+ */
 public class ArchetypeCreationResult {
     private Exception cause;
 

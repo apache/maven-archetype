@@ -168,7 +168,7 @@ public class IntegrationTestMojo extends AbstractMojo {
     private boolean skip = false;
 
     /**
-     * Directory of test projects
+     * Directory of test projects.
      *
      * @since 2.2
      */
@@ -226,7 +226,7 @@ public class IntegrationTestMojo extends AbstractMojo {
     private File localRepositoryPath;
 
     /**
-     * flag to enable show mvn version used for running its (cli option : -V,--show-version )
+     * Flag to enable show mvn version used for running its (cli option : -V,--show-version )
      *
      * @since 2.2
      */
@@ -250,7 +250,7 @@ public class IntegrationTestMojo extends AbstractMojo {
     private boolean debug;
 
     /**
-     * A list of additional properties which will be used to filter tokens in settings.xml
+     * A list of additional properties which will be used to filter tokens in settings.xml.
      *
      * @since 2.2
      */
@@ -710,7 +710,7 @@ public class IntegrationTestMojo extends AbstractMojo {
     /**
      * Returns the map-based value source used to interpolate settings and other stuff.
      *
-     * @return The map-based value source for interpolation, never <code>null</code>.
+     * @return the map-based value source for interpolation, never <code>null</code>
      */
     private Map<String, Object> getInterpolationValueSource() {
         Map<String, Object> props = new HashMap<>();
@@ -768,10 +768,10 @@ public class IntegrationTestMojo extends AbstractMojo {
         /**
          * Creates a new interpolation source backed by the specified Maven project and some user-specified properties.
          *
-         * @param mavenProject The Maven project from which to extract interpolated values, must not be
-         *                     <code>null</code>.
-         * @param properties   The set of additional properties from which to extract interpolated values, may be
-         *                     <code>null</code>.
+         * @param mavenProject the Maven project from which to extract interpolated values, must not be
+         *                     <code>null</code>
+         * @param properties   the set of additional properties from which to extract interpolated values, may be
+         *                     <code>null</code>
          */
         protected CompositeMap(MavenProject mavenProject, Map<String, Object> properties) {
             if (mavenProject == null) {
@@ -942,8 +942,8 @@ public class IntegrationTestMojo extends AbstractMojo {
      * Converts the specified filesystem path to a URL. The resulting URL has no trailing slash regardless whether the
      * path denotes a file or a directory.
      *
-     * @param filename The filesystem path to convert, must not be <code>null</code>.
-     * @return The <code>file:</code> URL for the specified path, never <code>null</code>.
+     * @param filename the filesystem path to convert, must not be <code>null</code>
+     * @return the <code>file:</code> URL for the specified path, never <code>null</code>
      */
     private static String toUrl(String filename) {
         /*

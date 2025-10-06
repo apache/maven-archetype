@@ -121,8 +121,8 @@ public class ArchetypeDescriptorBuilder {
      * attribute or the Java virtual machine's default if it is not defined.
      *
      * @param source     a <code>&lt;source&gt;</code> element from the <code>&lt;sources&gt;</code>
-     * @param descriptor the <code>ArchetypeDescriptor</code> to add the source template to.
-     * @throws XmlPullParserException if the encoding specified is not valid or supported.
+     * @param descriptor the <code>ArchetypeDescriptor</code> to add the source template to
+     * @throws XmlPullParserException if the encoding specified is not valid or supported
      */
     private static void addSourceToDescriptor(Xpp3Dom source, ArchetypeDescriptor descriptor)
             throws XmlPullParserException {
@@ -155,9 +155,9 @@ public class ArchetypeDescriptorBuilder {
      * even if some other encoding is specified in the attribute.
      *
      * @param resource   a <code>&lt;resource&gt;</code> element from the <code>&lt;resources&gt;</code>
-     * @param descriptor the <code>ArchetypeDescriptor</code> to add the resource template to.
+     * @param descriptor the <code>ArchetypeDescriptor</code> to add the resource template to
      * @throws XmlPullParserException if the encoding specified is not valid or supported or if the
-     *                                value of the attribute <code>filtered</code> is no valid.
+     *                                value of the attribute <code>filtered</code> is no valid
      */
     private static void addResourceToDescriptor(Xpp3Dom resource, ArchetypeDescriptor descriptor)
             throws XmlPullParserException {
@@ -199,8 +199,8 @@ public class ArchetypeDescriptorBuilder {
      * attribute or the Java virtual machine's default if it is not defined.
      *
      * @param testSource a <code>&lt;source&gt;</code> element from the <code>&lt;testSources&gt;</code>
-     * @param descriptor the <code>ArchetypeDescriptor</code> to add the test-source template to.
-     * @throws XmlPullParserException if the encoding specified is not valid or supported.
+     * @param descriptor the <code>ArchetypeDescriptor</code> to add the test-source template to
+     * @throws XmlPullParserException if the encoding specified is not valid or supported
      */
     private static void addTestSourceToDescriptor(Xpp3Dom testSource, ArchetypeDescriptor descriptor)
             throws XmlPullParserException {
@@ -230,9 +230,9 @@ public class ArchetypeDescriptorBuilder {
      * even if some other encoding is specified in the attribute.
      *
      * @param testResource a <code>&lt;resource&gt;</code> element from the <code>&lt;testResources&gt;</code>
-     * @param descriptor   the <code>ArchetypeDescriptor</code> to add the test-resource template to.
+     * @param descriptor   the <code>ArchetypeDescriptor</code> to add the test-resource template to
      * @throws XmlPullParserException if the encoding specified is not valid or supported or if the
-     *                                value of the attribute <code>filtered</code> is no valid.
+     *                                value of the attribute <code>filtered</code> is no valid
      */
     private static void addTestResourceToDescriptor(Xpp3Dom testResource, ArchetypeDescriptor descriptor)
             throws XmlPullParserException {
@@ -281,9 +281,9 @@ public class ArchetypeDescriptorBuilder {
      * even if some other encoding is specified in the attribute.
      *
      * @param siteResource a <code>&lt;resource&gt;</code> element from the <code>&lt;siteResources&gt;</code>
-     * @param descriptor   the <code>ArchetypeDescriptor</code> to add the site-resource template to.
+     * @param descriptor   the <code>ArchetypeDescriptor</code> to add the site-resource template to
      * @throws XmlPullParserException if the encoding specified is not valid or supported or if the
-     *                                value of the attribute <code>filtered</code> is no valid.
+     *                                value of the attribute <code>filtered</code> is no valid
      */
     private static void addSiteResourceToDescriptor(Xpp3Dom siteResource, ArchetypeDescriptor descriptor)
             throws XmlPullParserException {

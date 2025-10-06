@@ -53,7 +53,7 @@ public class TemplateDescriptor {
      * Returns the canonical name of the default character encoding of this Java
      * virtual machine.
      *
-     * @return the name of the default character encoding.
+     * @return the name of the default character encoding
      */
     private static String getDefaultEncoding() {
         String name = System.getProperty("file.encoding");
@@ -74,7 +74,7 @@ public class TemplateDescriptor {
      * <code>false</code> otherwise.
      *
      * @return <code>true</code> if the template should be filtered and
-     *         <code>false</code> otherwise.
+     *         <code>false</code> otherwise
      */
     public boolean isFiltered() {
         return this.filtered;
@@ -85,7 +85,7 @@ public class TemplateDescriptor {
      * or not.
      *
      * @param filtered <code>true</code> if it should be processed by Velocity and
-     *                 <code>fales</code> otherwise.
+     *                 <code>fales</code> otherwise
      */
     public void setFiltered(boolean filtered) {
         this.filtered = filtered;
@@ -95,7 +95,7 @@ public class TemplateDescriptor {
      * Returns the name of the  encoding of the template file (e.g.
      * <code>us-ascci</code>, <code>utf-8</code>, <code>iso-8859-1</code>).
      *
-     * @return the name of the  encoding of the template file.
+     * @return the name of the  encoding of the template file
      */
     public String getEncoding() {
         return this.encoding;
@@ -104,7 +104,7 @@ public class TemplateDescriptor {
     /**
      * Sets the name of the encoding of the template file.
      *
-     * @param encoding New value of property encoding.
+     * @param encoding new value of property encoding
      * @throws IllegalCharsetNameException if the given charset name is illegal
      * @throws UnsupportedCharsetException if no support for the named encoding
      *                                     is available in this instance of the Java virtual machine

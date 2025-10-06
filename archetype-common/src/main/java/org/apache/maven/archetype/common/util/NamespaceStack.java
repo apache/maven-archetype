@@ -83,10 +83,10 @@ import org.jdom2.Namespace;
  * @author Brett McLaughlin
  */
 class NamespaceStack {
-    /** The prefixes available */
+    /** The prefixes available. */
     private Stack<String> prefixes;
 
-    /** The URIs available */
+    /** The URIs available. */
     private Stack<String> uris;
 
     /** This creates the needed storage. */
@@ -99,7 +99,7 @@ class NamespaceStack {
      * This will add a new <code>{@link Namespace}</code>
      * to those currently available.
      *
-     * @param ns <code>Namespace</code> to add.
+     * @param ns <code>Namespace</code> to add
      */
     public void push(Namespace ns) {
         prefixes.push(ns.getPrefix());
@@ -110,7 +110,7 @@ class NamespaceStack {
      * This will remove the topmost (most recently added)
      * <code>{@link Namespace}</code>, and return its prefix.
      *
-     * @return <code>String</code> - the popped namespace prefix.
+     * @return <code>String</code> - the popped namespace prefix
      */
     public String pop() {
         String prefix = prefixes.pop();
@@ -122,7 +122,7 @@ class NamespaceStack {
     /**
      * This returns the number of available namespaces.
      *
-     * @return <code>int</code> - size of the namespace stack.
+     * @return <code>int</code> - size of the namespace stack
      */
     public int size() {
         return prefixes.size();
@@ -132,8 +132,8 @@ class NamespaceStack {
      * Given a prefix, this will return the namespace URI most
      * rencently (topmost) associated with that prefix.
      *
-     * @param prefix <code>String</code> namespace prefix.
-     * @return <code>String</code> - the namespace URI for that prefix.
+     * @param prefix <code>String</code> namespace prefix
+     * @return <code>String</code> - the namespace URI for that prefix
      */
     public String getURI(String prefix) {
         int index = prefixes.lastIndexOf(prefix);

@@ -222,9 +222,9 @@ public class XMLOutputter implements Cloneable {
      * The characters are printed using the encoding specified in the
      * constructor, or a default of UTF-8.
      *
-     * @param doc <code>Document</code> to format.
-     * @param out <code>OutputStream</code> to use.
-     * @throws IOException - if there's any problem writing.
+     * @param doc <code>Document</code> to format
+     * @param out <code>OutputStream</code> to use
+     * @throws IOException if there's any problem writing
      */
     public void output(Document doc, OutputStream out) throws IOException {
         Writer writer = makeWriter(out);
@@ -234,8 +234,8 @@ public class XMLOutputter implements Cloneable {
     /**
      * Print out the <code>{@link DocType}</code>.
      *
-     * @param doctype <code>DocType</code> to output.
-     * @param out     <code>OutputStream</code> to use.
+     * @param doctype <code>DocType</code> to output
+     * @param out     <code>OutputStream</code> to use
      */
     public void output(DocType doctype, OutputStream out) throws IOException {
         Writer writer = makeWriter(out);
@@ -247,8 +247,8 @@ public class XMLOutputter implements Cloneable {
      * its <code>{@link Attribute}</code>s, and all
      * contained (child) elements, etc.
      *
-     * @param element <code>Element</code> to output.
-     * @param out     <code>Writer</code> to use.
+     * @param element <code>Element</code> to output
+     * @param out     <code>Writer</code> to use
      */
     public void output(Element element, OutputStream out) throws IOException {
         Writer writer = makeWriter(out);
@@ -262,8 +262,8 @@ public class XMLOutputter implements Cloneable {
      * element that contains HTML, like "&lt;description&gt;JDOM is
      * &lt;b&gt;fun&gt;!&lt;/description&gt;".
      *
-     * @param element <code>Element</code> to output.
-     * @param out     <code>OutputStream</code> to use.
+     * @param element <code>Element</code> to output
+     * @param out     <code>OutputStream</code> to use
      */
     public void outputElementContent(Element element, OutputStream out) throws IOException {
         Writer writer = makeWriter(out);
@@ -276,8 +276,8 @@ public class XMLOutputter implements Cloneable {
      * contains HTML, like "&lt;description&gt;JDOM is
      * &lt;b&gt;fun&gt;!&lt;/description&gt;".
      *
-     * @param list <code>List</code> of nodes.
-     * @param out  <code>OutputStream</code> to use.
+     * @param list <code>List</code> of nodes
+     * @param out  <code>OutputStream</code> to use
      */
     public void output(List<?> list, OutputStream out) throws IOException {
         Writer writer = makeWriter(out);
@@ -287,8 +287,8 @@ public class XMLOutputter implements Cloneable {
     /**
      * Print out a <code>{@link CDATA}</code> node.
      *
-     * @param cdata <code>CDATA</code> to output.
-     * @param out   <code>OutputStream</code> to use.
+     * @param cdata <code>CDATA</code> to output
+     * @param out   <code>OutputStream</code> to use
      */
     public void output(CDATA cdata, OutputStream out) throws IOException {
         Writer writer = makeWriter(out);
@@ -299,8 +299,8 @@ public class XMLOutputter implements Cloneable {
      * Print out a <code>{@link Text}</code> node.  Perfoms
      * the necessary entity escaping and whitespace stripping.
      *
-     * @param text <code>Text</code> to output.
-     * @param out  <code>OutputStream</code> to use.
+     * @param text <code>Text</code> to output
+     * @param out  <code>OutputStream</code> to use
      */
     public void output(Text text, OutputStream out) throws IOException {
         Writer writer = makeWriter(out);
@@ -310,8 +310,8 @@ public class XMLOutputter implements Cloneable {
     /**
      * Print out a <code>{@link Comment}</code>.
      *
-     * @param comment <code>Comment</code> to output.
-     * @param out     <code>OutputStream</code> to use.
+     * @param comment <code>Comment</code> to output
+     * @param out     <code>OutputStream</code> to use
      */
     public void output(Comment comment, OutputStream out) throws IOException {
         Writer writer = makeWriter(out);
@@ -321,8 +321,8 @@ public class XMLOutputter implements Cloneable {
     /**
      * Print out a <code>{@link ProcessingInstruction}</code>.
      *
-     * @param pi  <code>ProcessingInstruction</code> to output.
-     * @param out <code>OutputStream</code> to use.
+     * @param pi  <code>ProcessingInstruction</code> to output
+     * @param out <code>OutputStream</code> to use
      */
     public void output(ProcessingInstruction pi, OutputStream out) throws IOException {
         Writer writer = makeWriter(out);
@@ -332,8 +332,8 @@ public class XMLOutputter implements Cloneable {
     /**
      * Print out a <code>{@link EntityRef}</code>.
      *
-     * @param entity <code>EntityRef</code> to output.
-     * @param out    <code>OutputStream</code> to use.
+     * @param entity <code>EntityRef</code> to output
+     * @param out    <code>OutputStream</code> to use
      */
     public void output(EntityRef entity, OutputStream out) throws IOException {
         Writer writer = makeWriter(out);
@@ -364,9 +364,9 @@ public class XMLOutputter implements Cloneable {
      * encodings other than UTF-8, we recommend using the method that
      * takes an OutputStream instead.</p>
      *
-     * @param doc <code>Document</code> to format.
-     * @param out <code>Writer</code> to use.
-     * @throws IOException - if there's any problem writing.
+     * @param doc <code>Document</code> to format
+     * @param out <code>Writer</code> to use
+     * @throws IOException if there's any problem writing
      */
     public void output(Document doc, Writer out) throws IOException {
 
@@ -408,8 +408,8 @@ public class XMLOutputter implements Cloneable {
     /**
      * Print out the <code>{@link DocType}</code>.
      *
-     * @param doctype <code>DocType</code> to output.
-     * @param out     <code>Writer</code> to use.
+     * @param doctype <code>DocType</code> to output
+     * @param out     <code>Writer</code> to use
      */
     public void output(DocType doctype, Writer out) throws IOException {
         printDocType(out, doctype);
@@ -420,8 +420,8 @@ public class XMLOutputter implements Cloneable {
      * its <code>{@link Attribute}</code>s, and all
      * contained (child) elements, etc.
      *
-     * @param element <code>Element</code> to output.
-     * @param out     <code>Writer</code> to use.
+     * @param element <code>Element</code> to output
+     * @param out     <code>Writer</code> to use
      */
     public void output(Element element, Writer out) throws IOException {
         // If this is the root element we could pre-initialize the
@@ -436,8 +436,8 @@ public class XMLOutputter implements Cloneable {
      * element that contains HTML, like "&lt;description&gt;JDOM is
      * &lt;b&gt;fun&gt;!&lt;/description&gt;".
      *
-     * @param element <code>Element</code> to output.
-     * @param out     <code>Writer</code> to use.
+     * @param element <code>Element</code> to output
+     * @param out     <code>Writer</code> to use
      */
     public void outputElementContent(Element element, Writer out) throws IOException {
         List<?> content = element.getContent();
@@ -450,8 +450,8 @@ public class XMLOutputter implements Cloneable {
      * contains HTML, like "&lt;description&gt;JDOM is
      * &lt;b&gt;fun&gt;!&lt;/description&gt;".
      *
-     * @param list <code>List</code> of nodes.
-     * @param out  <code>Writer</code> to use.
+     * @param list <code>List</code> of nodes
+     * @param out  <code>Writer</code> to use
      */
     public void output(List<?> list, Writer out) throws IOException {
         printContentRange(out, list, 0, list.size(), 0, createNamespaceStack());
@@ -460,8 +460,8 @@ public class XMLOutputter implements Cloneable {
     /**
      * Print out a <code>{@link CDATA}</code> node.
      *
-     * @param cdata <code>CDATA</code> to output.
-     * @param out   <code>Writer</code> to use.
+     * @param cdata <code>CDATA</code> to output
+     * @param out   <code>Writer</code> to use
      */
     public void output(CDATA cdata, Writer out) throws IOException {
         printCDATA(out, cdata);
@@ -471,8 +471,8 @@ public class XMLOutputter implements Cloneable {
      * Print out a <code>{@link Text}</code> node.  Perfoms
      * the necessary entity escaping and whitespace stripping.
      *
-     * @param text <code>Text</code> to output.
-     * @param out  <code>Writer</code> to use.
+     * @param text <code>Text</code> to output
+     * @param out  <code>Writer</code> to use
      */
     public void output(Text text, Writer out) throws IOException {
         printText(out, text);
@@ -481,8 +481,8 @@ public class XMLOutputter implements Cloneable {
     /**
      * Print out a <code>{@link Comment}</code>.
      *
-     * @param comment <code>Comment</code> to output.
-     * @param out     <code>Writer</code> to use.
+     * @param comment <code>Comment</code> to output
+     * @param out     <code>Writer</code> to use
      */
     public void output(Comment comment, Writer out) throws IOException {
         printComment(out, comment);
@@ -491,8 +491,8 @@ public class XMLOutputter implements Cloneable {
     /**
      * Print out a <code>{@link ProcessingInstruction}</code>.
      *
-     * @param pi  <code>ProcessingInstruction</code> to output.
-     * @param out <code>Writer</code> to use.
+     * @param pi  <code>ProcessingInstruction</code> to output
+     * @param out <code>Writer</code> to use
      */
     public void output(ProcessingInstruction pi, Writer out) throws IOException {
         boolean currentEscapingPolicy = currentFormat.ignoreTrAXEscapingPIs;
@@ -506,8 +506,8 @@ public class XMLOutputter implements Cloneable {
     /**
      * Print out a <code>{@link EntityRef}</code>.
      *
-     * @param entity <code>EntityRef</code> to output.
-     * @param out    <code>Writer</code> to use.
+     * @param entity <code>EntityRef</code> to output
+     * @param out    <code>Writer</code> to use
      */
     public void output(EntityRef entity, Writer out) throws IOException {
         printEntityRef(out, entity);
@@ -521,7 +521,7 @@ public class XMLOutputter implements Cloneable {
      * StringWriter. Warning: a String is Unicode, which may not match
      * the outputter's specified encoding.
      *
-     * @param doc <code>Document</code> to format.
+     * @param doc <code>Document</code> to format
      */
     public String outputString(Document doc) {
         StringWriter out = new StringWriter();
@@ -537,7 +537,7 @@ public class XMLOutputter implements Cloneable {
      * Unicode, which may not match the outputter's specified
      * encoding.
      *
-     * @param doctype <code>DocType</code> to format.
+     * @param doctype <code>DocType</code> to format
      */
     public String outputString(DocType doctype) {
         StringWriter out = new StringWriter();
@@ -553,7 +553,7 @@ public class XMLOutputter implements Cloneable {
      * Unicode, which may not match the outputter's specified
      * encoding.
      *
-     * @param element <code>Element</code> to format.
+     * @param element <code>Element</code> to format
      */
     public String outputString(Element element) {
         StringWriter out = new StringWriter();
@@ -568,7 +568,7 @@ public class XMLOutputter implements Cloneable {
      * Return a string representing a list of nodes.  The list is
      * assumed to contain legal JDOM nodes.
      *
-     * @param list <code>List</code> to format.
+     * @param list <code>List</code> to format
      */
     public String outputString(List<?> list) {
         StringWriter out = new StringWriter();
@@ -584,7 +584,7 @@ public class XMLOutputter implements Cloneable {
      * Unicode, which may not match the outputter's specified
      * encoding.
      *
-     * @param cdata <code>CDATA</code> to format.
+     * @param cdata <code>CDATA</code> to format
      */
     public String outputString(CDATA cdata) {
         StringWriter out = new StringWriter();
@@ -600,7 +600,7 @@ public class XMLOutputter implements Cloneable {
      * Unicode, which may not match the outputter's specified
      * encoding.
      *
-     * @param text <code>Text</code> to format.
+     * @param text <code>Text</code> to format
      */
     public String outputString(Text text) {
         StringWriter out = new StringWriter();
@@ -616,7 +616,7 @@ public class XMLOutputter implements Cloneable {
      * Unicode, which may not match the outputter's specified
      * encoding.
      *
-     * @param comment <code>Comment</code> to format.
+     * @param comment <code>Comment</code> to format
      */
     public String outputString(Comment comment) {
         StringWriter out = new StringWriter();
@@ -632,7 +632,7 @@ public class XMLOutputter implements Cloneable {
      * Unicode, which may not match the outputter's specified
      * encoding.
      *
-     * @param pi <code>ProcessingInstruction</code> to format.
+     * @param pi <code>ProcessingInstruction</code> to format
      */
     public String outputString(ProcessingInstruction pi) {
         StringWriter out = new StringWriter();
@@ -648,7 +648,7 @@ public class XMLOutputter implements Cloneable {
      * Unicode, which may not match the outputter's specified
      * encoding.
      *
-     * @param entity <code>EntityRef</code> to format.
+     * @param entity <code>EntityRef</code> to format
      */
     public String outputString(EntityRef entity) {
         StringWriter out = new StringWriter();
@@ -666,9 +666,9 @@ public class XMLOutputter implements Cloneable {
      * This will handle printing of the declaration.
      * Assumes XML version 1.0 since we don't directly know.
      *
-     * @param doc      <code>Document</code> whose declaration to write.
-     * @param out      <code>Writer</code> to use.
-     * @param encoding The encoding to add to the declaration
+     * @param doc      <code>Document</code> whose declaration to write
+     * @param out      <code>Writer</code> to use
+     * @param encoding the encoding to add to the declaration
      */
     protected void printDeclaration(Writer out, Document doc, String encoding) throws IOException {
 
@@ -691,8 +691,8 @@ public class XMLOutputter implements Cloneable {
     /**
      * This handle printing the DOCTYPE declaration if one exists.
      *
-     * @param docType <code>Document</code> whose declaration to write.
-     * @param out     <code>Writer</code> to use.
+     * @param docType <code>Document</code> whose declaration to write
+     * @param out     <code>Writer</code> to use
      */
     protected void printDocType(Writer out, DocType docType) throws IOException {
 
@@ -729,8 +729,8 @@ public class XMLOutputter implements Cloneable {
     /**
      * This will handle printing of comments.
      *
-     * @param comment <code>Comment</code> to write.
-     * @param out     <code>Writer</code> to use.
+     * @param comment <code>Comment</code> to write
+     * @param out     <code>Writer</code> to use
      */
     protected void printComment(Writer out, Comment comment) throws IOException {
         out.write("<!--");
@@ -741,8 +741,8 @@ public class XMLOutputter implements Cloneable {
     /**
      * This will handle printing of processing instructions.
      *
-     * @param pi  <code>ProcessingInstruction</code> to write.
-     * @param out <code>Writer</code> to use.
+     * @param pi  <code>ProcessingInstruction</code> to write
+     * @param out <code>Writer</code> to use
      */
     protected void printProcessingInstruction(Writer out, ProcessingInstruction pi) throws IOException {
         String target = pi.getTarget();
@@ -781,8 +781,8 @@ public class XMLOutputter implements Cloneable {
      * will be printed. However, subclasses are free to override
      * this method to print the contents of the entity instead.
      *
-     * @param entity <code>EntityRef</code> to output.
-     * @param out    <code>Writer</code> to use.
+     * @param entity <code>EntityRef</code> to output
+     * @param out    <code>Writer</code> to use
      */
     protected void printEntityRef(Writer out, EntityRef entity) throws IOException {
         out.write("&");
@@ -793,8 +793,8 @@ public class XMLOutputter implements Cloneable {
     /**
      * This will handle printing of <code>{@link CDATA}</code> text.
      *
-     * @param cdata <code>CDATA</code> to output.
-     * @param out   <code>Writer</code> to use.
+     * @param cdata <code>CDATA</code> to output
+     * @param out   <code>Writer</code> to use
      */
     protected void printCDATA(Writer out, CDATA cdata) throws IOException {
         String str = (currentFormat.mode == Format.TextMode.NORMALIZE)
@@ -810,8 +810,8 @@ public class XMLOutputter implements Cloneable {
     /**
      * This will handle printing of <code>{@link Text}</code> strings.
      *
-     * @param text <code>Text</code> to write.
-     * @param out  <code>Writer</code> to use.
+     * @param text <code>Text</code> to write
+     * @param out  <code>Writer</code> to use
      */
     protected void printText(Writer out, Text text) throws IOException {
         String str = (currentFormat.mode == Format.TextMode.NORMALIZE)
@@ -838,10 +838,10 @@ public class XMLOutputter implements Cloneable {
      * its <code>{@link Attribute}</code>s, and all contained (child)
      * elements, etc.
      *
-     * @param element    <code>Element</code> to output.
-     * @param out        <code>Writer</code> to use.
-     * @param level      <code>int</code> level of indention.
-     * @param namespaces <code>List</code> stack of Namespaces in scope.
+     * @param element    <code>Element</code> to output
+     * @param out        <code>Writer</code> to use
+     * @param level      <code>int</code> level of indention
+     * @param namespaces <code>List</code> stack of Namespaces in scope
      */
     protected void printElement(Writer out, Element element, int level, NamespaceStack namespaces) throws IOException {
 
@@ -935,11 +935,11 @@ public class XMLOutputter implements Cloneable {
      * exclusive.
      *
      * @param content    <code>List</code> of content to output
-     * @param start      index of first content node (inclusive.
-     * @param end        index of last content node (exclusive).
-     * @param out        <code>Writer</code> to use.
-     * @param level      <code>int</code> level of indentation.
-     * @param namespaces <code>List</code> stack of Namespaces in scope.
+     * @param start      index of first content node (inclusive
+     * @param end        index of last content node (exclusive)
+     * @param out        <code>Writer</code> to use
+     * @param level      <code>int</code> level of indentation
+     * @param namespaces <code>List</code> stack of Namespaces in scope
      */
     private void printContentRange(
             Writer out, List<?> content, int start, int end, int level, NamespaceStack namespaces) throws IOException {
@@ -1002,9 +1002,9 @@ public class XMLOutputter implements Cloneable {
      * pass this method any other type of node.
      *
      * @param content <code>List</code> of content to output
-     * @param start   index of first content node (inclusive).
-     * @param end     index of last content node (exclusive).
-     * @param out     <code>Writer</code> to use.
+     * @param start   index of first content node (inclusive)
+     * @param end     index of last content node (exclusive)
+     * @param out     <code>Writer</code> to use
      */
     private void printTextRange(Writer out, List<?> content, int start, int end) throws IOException {
         String previous; // Previous text printed
@@ -1070,7 +1070,7 @@ public class XMLOutputter implements Cloneable {
      * declarations.
      *
      * @param ns  <code>Namespace</code> to print definition of
-     * @param out <code>Writer</code> to use.
+     * @param out <code>Writer</code> to use
      */
     private void printNamespace(Writer out, Namespace ns, NamespaceStack namespaces) throws IOException {
         String prefix = ns.getPrefix();
@@ -1291,8 +1291,8 @@ public class XMLOutputter implements Cloneable {
      * the single quote (') because it's not necessary as the outputter
      * writes attributes surrounded by double-quotes.
      *
-     * @param str <code>String</code> input to escape.
-     * @return <code>String</code> with escaped content.
+     * @param str <code>String</code> input to escape
+     * @return <code>String</code> with escaped content
      */
     public String escapeAttributeEntities(String str) {
         StringBuilder buffer;
@@ -1369,8 +1369,8 @@ public class XMLOutputter implements Cloneable {
      * representation to the appropriate entity reference, suitable for
      * XML element content.
      *
-     * @param str <code>String</code> input to escape.
-     * @return <code>String</code> with escaped content.
+     * @param str <code>String</code> input to escape
+     * @return <code>String</code> with escaped content
      */
     public String escapeElementEntities(String str) {
         if (!escapeOutput) {

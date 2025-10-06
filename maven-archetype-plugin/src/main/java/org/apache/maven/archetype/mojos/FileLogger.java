@@ -51,8 +51,8 @@ class FileLogger extends org.apache.maven.shared.scriptinterpreter.FileLogger im
     /**
      * Creates a new logger that writes to the specified file.
      *
-     * @param outputFile The path to the output file, must not be <code>null</code>.
-     * @throws java.io.IOException If the output file could not be created.
+     * @param outputFile the path to the output file, must not be <code>null</code>
+     * @throws java.io.IOException if the output file could not be created
      */
     FileLogger(File outputFile) throws IOException {
         super(outputFile, null);
@@ -61,9 +61,9 @@ class FileLogger extends org.apache.maven.shared.scriptinterpreter.FileLogger im
     /**
      * Creates a new logger that writes to the specified file and optionally mirrors messages to the given mojo logger.
      *
-     * @param outputFile The path to the output file, must not be <code>null</code>.
-     * @param log The mojo logger to additionally output messages to, may be <code>null</code> if not used.
-     * @throws java.io.IOException If the output file could not be created.
+     * @param outputFile the path to the output file, must not be <code>null</code>
+     * @param log the mojo logger to additionally output messages to, may be <code>null</code> if not used
+     * @throws java.io.IOException if the output file could not be created
      */
     FileLogger(File outputFile, Log log) throws IOException {
         super(outputFile, log::info);

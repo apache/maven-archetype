@@ -35,7 +35,7 @@ import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.StringUtils;
 
 /**
- * Updates the local catalog
+ * Updates the local catalog.
  *
  * @author rafale
  */
