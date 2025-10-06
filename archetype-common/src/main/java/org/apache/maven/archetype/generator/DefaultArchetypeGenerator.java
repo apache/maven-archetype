@@ -109,7 +109,7 @@ public class DefaultArchetypeGenerator implements ArchetypeGenerator {
         }
     }
 
-    /** Common */
+    /** Common. */
     public String getPackageAsDirectory(String packageName) {
         return StringUtils.replace(packageName, ".", "/");
     }
@@ -120,7 +120,7 @@ public class DefaultArchetypeGenerator implements ArchetypeGenerator {
                 && StringUtils.isNotEmpty(request.getArchetypeVersion());
     }
 
-    /** FileSetArchetype */
+    /** FileSetArchetype. */
     private void processFileSetArchetype(ArchetypeGenerationRequest request, File archetypeFile)
             throws ArchetypeException {
         filesetGenerator.generateArchetype(request, archetypeFile);

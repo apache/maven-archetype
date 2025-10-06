@@ -28,7 +28,9 @@ import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.repository.RemoteRepository;
 
-/** @author Jason van Zyl */
+/**
+ * @author Jason van Zyl
+ */
 public interface ArchetypeManager {
     String ROLE = ArchetypeManager.class.getName();
 
@@ -36,7 +38,7 @@ public interface ArchetypeManager {
      * A command to create an archetype from an existing Maven project given the supplied creation request.
      *
      * @param request
-     * @return The result of creating the archetype from the existing project. It contains any errors that might have
+     * @return the result of creating the archetype from the existing project. It contains any errors that might have
      *         occurred.
      */
     ArchetypeCreationResult createArchetypeFromProject(ArchetypeCreationRequest request);
@@ -45,7 +47,7 @@ public interface ArchetypeManager {
      * A command to generate a Maven project from an archetype given the supplied generation request.
      *
      * @param request
-     * @return The result of creating the project from the existing archetype. It contains any errors that might have
+     * @return the result of creating the project from the existing archetype. It contains any errors that might have
      *         occurred.
      */
     ArchetypeGenerationResult generateProjectFromArchetype(ArchetypeGenerationRequest request);
@@ -53,7 +55,7 @@ public interface ArchetypeManager {
     /**
      * Gives the catalog of archetypes internal to the plugin.
      *
-     * @return the catalog.
+     * @return the catalog
      */
     ArchetypeCatalog getInternalCatalog();
 
@@ -63,7 +65,7 @@ public interface ArchetypeManager {
      * if path is a directory, archetype-catalog.xml is appended to it.
      *
      * @param repositorySession
-     * @return the catalog.
+     * @return the catalog
      */
     ArchetypeCatalog getLocalCatalog(RepositorySystemSession repositorySession);
 
@@ -73,7 +75,7 @@ public interface ArchetypeManager {
      *
      * @param repositorySession
      * @param remoteRepositories
-     * @return the catalog.
+     * @return the catalog
      */
     ArchetypeCatalog getRemoteCatalog(
             RepositorySystemSession repositorySession, List<RemoteRepository> remoteRepositories);
@@ -84,9 +86,9 @@ public interface ArchetypeManager {
      * @param archetypeDirectory
      * @param outputDirectory
      * @param finalName
-     * @return The File to the generated jar
-     * @throws org.apache.maven.artifact.DependencyResolutionRequiredException
+     * @return the File to the generated jar
      * @throws java.io.IOException
+     * @throws org.apache.maven.artifact.DependencyResolutionRequiredException
      * @deprecated replaced by archetype plugin's JarMojo using maven-archiver component for Reproducible Builds
      */
     @Deprecated

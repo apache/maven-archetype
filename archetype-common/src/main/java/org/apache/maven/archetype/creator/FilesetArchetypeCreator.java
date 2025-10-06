@@ -1561,7 +1561,6 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
             }
         }
 
-        /**/
         if (!files.isEmpty()) {
             LOGGER.info("Ignored files: " + files);
         }

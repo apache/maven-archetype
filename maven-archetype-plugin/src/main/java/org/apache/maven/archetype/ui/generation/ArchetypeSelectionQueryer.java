@@ -28,7 +28,7 @@ import org.codehaus.plexus.components.interactivity.PrompterException;
 /**
  * <p>User interaction component for archetype selection.</p>
  *
- * TODO this interface is bound to its implementation through the prompter exception
+ * TODO this interface is bound to its implementation through the prompter exception.
  */
 public interface ArchetypeSelectionQueryer {
 
