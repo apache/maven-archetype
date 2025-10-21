@@ -46,8 +46,8 @@ public class ArchetypeSelectorUtils {
     }
 
     /**
-     * apply some filtering on archetypes.
-     * currently only on artifactId contains filter
+     * Apply some filtering on archetypes.
+     * currently only on artifactId contains filter.
      *
      * @param archetypesPerCatalog
      * @return

@@ -25,7 +25,9 @@ import java.util.Properties;
 
 import org.apache.maven.project.MavenProject;
 
-/** @author Jason van Zyl */
+/**
+ * @author Jason van Zyl
+ */
 public class ArchetypeCreationRequest {
 
     private File localRepositoryBasedir;

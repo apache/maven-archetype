@@ -71,7 +71,7 @@ public class ArchetypeGenerationRequest {
     private String archetypeGoals = "";
 
     /**
-     * The URL to the archetype repository
+     * The URL to the archetype repository.
      *
      * @deprecated see ARCHETYPE-439
      */

@@ -134,22 +134,22 @@ public class Format implements Cloneable {
         return f;
     }
 
-    /** standard value to indent by, if we are indenting */
+    /** Standard value to indent by, if we are indenting. */
     private static final String STANDARD_INDENT = "  ";
 
-    /** standard string with which to end a line */
+    /** Standard string with which to end a line. */
     private static final String STANDARD_LINE_SEPARATOR = "\r\n";
 
-    /** standard encoding */
+    /** Standard encoding. */
     private static final String STANDARD_ENCODING = "UTF-8";
 
-    /** The default indent is no spaces (as original document) */
+    /** The default indent is no spaces (as original document). */
     String indent = null;
 
-    /** New line separator */
+    /** New line separator. */
     String lineSeparator = STANDARD_LINE_SEPARATOR;
 
-    /** The encoding format */
+    /** The encoding format. */
     String encoding = STANDARD_ENCODING;
 
     /**
@@ -176,10 +176,10 @@ public class Format implements Cloneable {
      */
     boolean ignoreTrAXEscapingPIs = false;
 
-    /** text handling mode */
+    /** Text handling mode. */
     TextMode mode = TextMode.PRESERVE;
 
-    /** entity escape logic */
+    /** Entity escape logic. */
     EscapeStrategy escapeStrategy = new DefaultEscapeStrategy(encoding);
 
     /** Creates a new Format instance with default (raw) behavior. */
@@ -197,7 +197,7 @@ public class Format implements Cloneable {
     }
 
     /**
-     * Returns the current escape strategy
+     * Returns the current escape strategy.
      *
      * @return the current escape strategy
      */
@@ -224,7 +224,7 @@ public class Format implements Cloneable {
      * verbatim, as "\n" which is how parsers normalize them.
      * </p>
      *
-     * @param separator <code>String</code> line separator to use.
+     * @param separator <code>String</code> line separator to use
      * @return a pointer to this Format for chaining
      * @see #setTextMode
      */
@@ -250,7 +250,7 @@ public class Format implements Cloneable {
      * this in uses such as WML and other wireless device protocols.
      *
      * @param omitEncoding <code>boolean</code> indicating whether or not
-     *                     the XML declaration should indicate the document encoding.
+     *                     the XML declaration should indicate the document encoding
      * @return a pointer to this Format for chaining
      */
     public Format setOmitEncoding(boolean omitEncoding) {
@@ -274,7 +274,7 @@ public class Format implements Cloneable {
      * as SOAP and XML-RPC calls.
      *
      * @param omitDeclaration <code>boolean</code> indicating whether or not
-     *                        the XML declaration should be omitted.
+     *                        the XML declaration should be omitted
      * @return a pointer to this Format for chaining
      */
     public Format setOmitDeclaration(boolean omitDeclaration) {
@@ -297,7 +297,7 @@ public class Format implements Cloneable {
      * <code>&lt;tagName&gt;&lt;/tagName&gt;</code>.
      *
      * @param expandEmptyElements <code>boolean</code> indicating whether or not
-     *                            empty elements should be expanded.
+     *                            empty elements should be expanded
      * @return a pointer to this Format for chaining
      */
     public Format setExpandEmptyElements(boolean expandEmptyElements) {
@@ -336,7 +336,7 @@ public class Format implements Cloneable {
      * Default: <code>false</code>.
      *
      * @param ignoreTrAXEscapingPIs <code>boolean</code> indicating
-     *                              whether or not TrAX ouput escaping PIs are ignored.
+     *                              whether or not TrAX ouput escaping PIs are ignored
      * @see javax.xml.transform.Result#PI_ENABLE_OUTPUT_ESCAPING
      * @see javax.xml.transform.Result#PI_DISABLE_OUTPUT_ESCAPING
      */
@@ -348,7 +348,7 @@ public class Format implements Cloneable {
      * Returns whether JAXP TrAX processing instructions for
      * disabling/enabling output escaping are ignored.
      *
-     * @return whether or not TrAX ouput escaping PIs are ignored.
+     * @return whether or not TrAX ouput escaping PIs are ignored
      */
     public boolean getIgnoreTrAXEscapingPIs() {
         return ignoreTrAXEscapingPIs;
@@ -380,7 +380,7 @@ public class Format implements Cloneable {
      * null, or the empty string (""), then no indentation will
      * happen.  Default: none (null)
      *
-     * @param indent <code>String</code> to use for indentation.
+     * @param indent <code>String</code> to use for indentation
      * @return a pointer to this Format for chaining
      */
     public Format setIndent(String indent) {

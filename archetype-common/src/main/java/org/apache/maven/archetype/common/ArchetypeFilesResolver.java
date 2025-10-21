@@ -24,7 +24,9 @@ import java.util.List;
 
 import org.apache.maven.archetype.metadata.FileSet;
 
-/** @author rafale */
+/**
+ * @author rafale
+ */
 public interface ArchetypeFilesResolver {
 
     List<String> getFilesWithExtension(List<String> files, String extension);

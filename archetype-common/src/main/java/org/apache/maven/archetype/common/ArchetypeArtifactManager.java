@@ -42,20 +42,12 @@ public interface ArchetypeArtifactManager {
             RepositorySystemSession repositorySystemSession)
             throws UnknownArchetype;
 
-    /**
-     */
     ClassLoader getArchetypeJarLoader(File archetypeFile) throws UnknownArchetype;
 
-    /**
-     */
     ZipFile getArchetypeZipFile(File archetypeFile) throws UnknownArchetype;
 
-    /**
-     */
     boolean isFileSetArchetype(File archetypeFile);
 
-    /**
-     */
     boolean isOldArchetype(File archetypeFile);
 
     boolean exists(
@@ -75,16 +67,10 @@ public interface ArchetypeArtifactManager {
      */
     String getPostGenerationScript(File archetypeFile) throws UnknownArchetype;
 
-    /**
-     */
     ArchetypeDescriptor getFileSetArchetypeDescriptor(File archetypeFile) throws UnknownArchetype;
 
-    /**
-     */
     List<String> getFilesetArchetypeResources(File archetypeFile) throws UnknownArchetype;
 
-    /**
-     */
     org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor getOldArchetypeDescriptor(File archetypeFile)
             throws UnknownArchetype;
 }

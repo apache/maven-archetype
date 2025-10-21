@@ -60,10 +60,10 @@ public final class PomUtils {
      * @param fileReader source POM XML
      * @param fileWriter target XML
      * @return {@code true} if modules section in POM is empty or does not exist or {@code artifactId} does not appear
-     * a module in {@code fileReader} XML.
-     * @throws IOException if I/O error
-     * @throws InvalidPackaging if packaging is not "pom" or not exist in POM
+     * a module in {@code fileReader} XML
      * @throws ArchetypeTemplateProcessingException if "project" does not exist or "modules" element is duplicated
+     * @throws InvalidPackaging if packaging is not "pom" or not exist in POM
+     * @throws IOException if I/O error
      * @throws ParserConfigurationException if parser error
      * @throws SAXException if parser error
      * @throws TransformerException if an error writing to {@code fileWriter}
