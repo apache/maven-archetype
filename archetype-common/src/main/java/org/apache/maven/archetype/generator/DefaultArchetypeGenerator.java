@@ -111,7 +111,7 @@ public class DefaultArchetypeGenerator implements ArchetypeGenerator {
 
     /** Common. */
     public String getPackageAsDirectory(String packageName) {
-        return StringUtils.replace(packageName, ".", "/");
+        return packageName == null || packageName.isEmpty() ? packageName : packageName.replace(".", "/");
     }
 
     private boolean isArchetypeDefined(ArchetypeGenerationRequest request) {

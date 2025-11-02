@@ -265,7 +265,7 @@ public class DefaultFilesetArchetypeGenerator implements FilesetArchetypeGenerat
     }
 
     public String getPackageAsDirectory(String packageName) {
-        return StringUtils.replace(packageName, ".", "/");
+        return packageName == null || packageName.isEmpty() ? packageName : packageName.replace(".", "/");
     }
 
     private boolean copyFile(
@@ -391,7 +391,7 @@ public class DefaultFilesetArchetypeGenerator implements FilesetArchetypeGenerat
     }
 
     private String getPackageInPathFormat(String aPackage) {
-        return StringUtils.replace(aPackage, ".", "/");
+        return aPackage == null || aPackage.isEmpty() ? aPackage : aPackage.replace(".", "/");
     }
 
     private boolean isArchetypeConfigured(ArchetypeDescriptor archetypeDescriptor, ArchetypeGenerationRequest request) {
@@ -557,7 +557,7 @@ public class DefaultFilesetArchetypeGenerator implements FilesetArchetypeGenerat
 
         processFilesetProject(
                 archetypeDescriptor,
-                StringUtils.replace(artifactId, "${rootArtifactId}", rootArtifactId),
+                artifactId == null || artifactId.isEmpty() || rootArtifactId == null ? artifactId : artifactId.replace("${rootArtifactId}", rootArtifactId),
                 archetypeResources,
                 pom,
                 archetypeZipFile,
@@ -575,21 +575,21 @@ public class DefaultFilesetArchetypeGenerator implements FilesetArchetypeGenerat
         if (subprojects.hasNext()) {
             LOGGER.debug(artifactId + " has modules (" + archetypeDescriptor.getModules() + ")");
 
-            setParentArtifactId(context, StringUtils.replace(artifactId, "${rootArtifactId}", rootArtifactId));
+            setParentArtifactId(context, artifactId == null || artifactId.isEmpty() || rootArtifactId == null ? artifactId : artifactId.replace("${rootArtifactId}", rootArtifactId));
         }
 
         while (subprojects.hasNext()) {
             ModuleDescriptor project = subprojects.next();
 
-            String modulePath = StringUtils.replace(project.getDir(), "__rootArtifactId__", rootArtifactId);
+            String modulePath = project.getDir() == null || project.getDir().isEmpty() || rootArtifactId == null ? project.getDir() : project.getDir().replace("__rootArtifactId__", rootArtifactId);
             modulePath = replaceFilenameTokens(modulePath, context);
 
             File moduleOutputDirectoryFile = new File(outputDirectoryFile, modulePath);
 
             context.put(
-                    Constants.ARTIFACT_ID, StringUtils.replace(project.getId(), "${rootArtifactId}", rootArtifactId));
+                    Constants.ARTIFACT_ID, project.getId() == null || project.getId().isEmpty() || rootArtifactId == null ? project.getId() : project.getId().replace("${rootArtifactId}", rootArtifactId));
 
-            String moduleArtifactId = StringUtils.replace(project.getDir(), "__rootArtifactId__", rootArtifactId);
+            String moduleArtifactId = project.getDir() == null || project.getDir().isEmpty() || rootArtifactId == null ? project.getDir() : project.getDir().replace("__rootArtifactId__", rootArtifactId);
             moduleArtifactId = replaceFilenameTokens(moduleArtifactId, context);
 
             processFilesetModule(
@@ -599,7 +599,7 @@ public class DefaultFilesetArchetypeGenerator implements FilesetArchetypeGenerat
                     new File(moduleOutputDirectoryFile, Constants.ARCHETYPE_POM),
                     archetypeZipFile,
                     ((moduleOffset == null || moduleOffset.isEmpty()) ? "" : (moduleOffset + "/"))
-                            + StringUtils.replace(project.getDir(), "${rootArtifactId}", rootArtifactId),
+                            + (project.getDir() == null || project.getDir().isEmpty() || rootArtifactId == null ? project.getDir() : project.getDir().replace("${rootArtifactId}", rootArtifactId)),
                     pom,
                     moduleOutputDirectoryFile,
                     packageName,

@@ -430,7 +430,7 @@ public class DefaultOldArchetype implements OldArchetype {
 
             String srcDirectory = build.getSourceDirectory();
 
-            srcDirectory = StringUtils.replace(srcDirectory, "\\", "/");
+            srcDirectory = srcDirectory == null || srcDirectory.isEmpty() ? srcDirectory : srcDirectory.replace("\\", "/");
 
             FileUtils.mkdir(getOutputDirectory(outputDirectory, srcDirectory));
         }
@@ -441,7 +441,7 @@ public class DefaultOldArchetype implements OldArchetype {
 
             String scriptSourceDirectory = build.getScriptSourceDirectory();
 
-            scriptSourceDirectory = StringUtils.replace(scriptSourceDirectory, "\\", "/");
+            scriptSourceDirectory = scriptSourceDirectory == null || scriptSourceDirectory.isEmpty() ? scriptSourceDirectory : scriptSourceDirectory.replace("\\", "/");
 
             FileUtils.mkdir(getOutputDirectory(outputDirectory, scriptSourceDirectory));
         }
@@ -459,7 +459,7 @@ public class DefaultOldArchetype implements OldArchetype {
 
                 String resourceDirectory = resource.getDirectory();
 
-                resourceDirectory = StringUtils.replace(resourceDirectory, "\\", "/");
+                resourceDirectory = resourceDirectory == null || resourceDirectory.isEmpty() ? resourceDirectory : resourceDirectory.replace("\\", "/");
 
                 FileUtils.mkdir(getOutputDirectory(outputDirectory, resourceDirectory));
             }
@@ -472,7 +472,7 @@ public class DefaultOldArchetype implements OldArchetype {
 
             String testDirectory = build.getTestSourceDirectory();
 
-            testDirectory = StringUtils.replace(testDirectory, "\\", "/");
+            testDirectory = testDirectory == null || testDirectory.isEmpty() ? testDirectory : testDirectory.replace("\\", "/");
 
             FileUtils.mkdir(getOutputDirectory(outputDirectory, testDirectory));
         }
@@ -490,7 +490,7 @@ public class DefaultOldArchetype implements OldArchetype {
 
                 String testResourceDirectory = resource.getDirectory();
 
-                testResourceDirectory = StringUtils.replace(testResourceDirectory, "\\", "/");
+                testResourceDirectory = testResourceDirectory == null || testResourceDirectory.isEmpty() ? testResourceDirectory : testResourceDirectory.replace("\\", "/");
 
                 FileUtils.mkdir(getOutputDirectory(outputDirectory, testResourceDirectory));
             }
@@ -654,10 +654,10 @@ public class DefaultOldArchetype implements OldArchetype {
             throws IOException, ArchetypeTemplateProcessingException {
         File f;
 
-        template = StringUtils.replace(template, "\\", "/");
+        template = template == null || template.isEmpty() ? template : template.replace("\\", "/");
 
         if (packageInFileName && packageName != null) {
-            String templateFileName = StringUtils.replace(template, "/", File.separator);
+            String templateFileName = template == null || template.isEmpty() || File.separator == null ? template : template.replace("/", File.separator);
 
             String path = packageName.replace('.', '/');
 

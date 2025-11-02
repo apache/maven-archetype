@@ -35,8 +35,8 @@ public class PathUtils {
      * @return converted path
      */
     public static String convertPathForOS(String path) {
-        path = StringUtils.replace(path, "/", File.separator);
-        return StringUtils.replace(path, "\\", File.separator);
+        path = path == null || path.isEmpty() || File.separator == null ? path : path.replace("/", File.separator);
+        return path == null || path.isEmpty() || File.separator == null ? path : path.replace("\\", File.separator);
     }
 
     public static String getDirectory(String file, int level) {

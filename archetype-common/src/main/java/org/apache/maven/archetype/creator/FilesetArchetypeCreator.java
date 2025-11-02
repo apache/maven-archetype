@@ -221,7 +221,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
                 String moduleIdDirectory = moduleId;
 
                 if (moduleId.indexOf(rootArtifactId) >= 0) {
-                    moduleIdDirectory = StringUtils.replace(moduleId, rootArtifactId, "__rootArtifactId__");
+                    moduleIdDirectory = moduleId == null || moduleId.isEmpty() || rootArtifactId == null || rootArtifactId.isEmpty() ? moduleId : moduleId.replace(rootArtifactId, "__rootArtifactId__");
                 }
 
                 LOGGER.debug("Creating module " + moduleId);
@@ -496,7 +496,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
             String subModuleIdDirectory = subModuleId;
 
             if (subModuleId.indexOf(rootArtifactId) >= 0) {
-                subModuleIdDirectory = StringUtils.replace(subModuleId, rootArtifactId, "__rootArtifactId__");
+                subModuleIdDirectory = subModuleId == null || subModuleId.isEmpty() || rootArtifactId == null || rootArtifactId.isEmpty() ? subModuleId : subModuleId.replace(rootArtifactId, "__rootArtifactId__");
             }
 
             createModulePoms(
@@ -540,7 +540,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
             String moduleIdDirectory = moduleId;
 
             if (moduleId.indexOf(rootArtifactId) >= 0) {
-                moduleIdDirectory = StringUtils.replace(moduleId, rootArtifactId, "__rootArtifactId__");
+                moduleIdDirectory = moduleId == null || moduleId.isEmpty() || rootArtifactId == null || rootArtifactId.isEmpty() ? moduleId : moduleId.replace(rootArtifactId, "__rootArtifactId__");
             }
 
             createModulePoms(
@@ -560,7 +560,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
     }
 
     private String getPackageInPathFormat(String aPackage) {
-        return StringUtils.replace(aPackage, ".", "/");
+        return aPackage == null || aPackage.isEmpty() ? aPackage : aPackage.replace(".", "/");
     }
 
     private void rewriteReferences(Model pom, String rootArtifactId, String groupId) {
@@ -654,7 +654,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
             }
 
             dependency.setArtifactId(
-                    StringUtils.replace(dependency.getArtifactId(), rootArtifactId, "${rootArtifactId}"));
+                    dependency.getArtifactId() == null || dependency.getArtifactId().isEmpty() || rootArtifactId == null || rootArtifactId.isEmpty() ? dependency.getArtifactId() : dependency.getArtifactId().replace(rootArtifactId, "${rootArtifactId}"));
 
             if (dependency.getVersion() != null) {
                 dependency.setVersion("${" + Constants.VERSION + "}");
@@ -669,7 +669,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
                 plugin.setGroupId(g);
             }
 
-            plugin.setArtifactId(StringUtils.replace(plugin.getArtifactId(), rootArtifactId, "${rootArtifactId}"));
+            plugin.setArtifactId(plugin.getArtifactId() == null || plugin.getArtifactId().isEmpty() || rootArtifactId == null || rootArtifactId.isEmpty() ? plugin.getArtifactId() : plugin.getArtifactId().replace(rootArtifactId, "${rootArtifactId}"));
 
             if (plugin.getVersion() != null) {
                 plugin.setVersion("${" + Constants.VERSION + "}");
@@ -701,22 +701,22 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
 
                 if (moduleArtifactId != null) {
                     moduleArtifactId.setValue(
-                            StringUtils.replace(moduleArtifactId.getValue(), rootArtifactId, "${rootArtifactId}"));
+                            moduleArtifactId.getValue() == null || moduleArtifactId.getValue().isEmpty() || rootArtifactId == null || rootArtifactId.isEmpty() ? moduleArtifactId.getValue() : moduleArtifactId.getValue().replace(rootArtifactId, "${rootArtifactId}"));
                 }
 
                 if (moduleBundleFileName != null) {
                     moduleBundleFileName.setValue(
-                            StringUtils.replace(moduleBundleFileName.getValue(), rootArtifactId, "${rootArtifactId}"));
+                            moduleBundleFileName.getValue() == null || moduleBundleFileName.getValue().isEmpty() || rootArtifactId == null || rootArtifactId.isEmpty() ? moduleBundleFileName.getValue() : moduleBundleFileName.getValue().replace(rootArtifactId, "${rootArtifactId}"));
                 }
 
                 if (moduleModuleId != null) {
                     moduleModuleId.setValue(
-                            StringUtils.replace(moduleModuleId.getValue(), rootArtifactId, "${rootArtifactId}"));
+                            moduleModuleId.getValue() == null || moduleModuleId.getValue().isEmpty() || rootArtifactId == null || rootArtifactId.isEmpty() ? moduleModuleId.getValue() : moduleModuleId.getValue().replace(rootArtifactId, "${rootArtifactId}"));
                 }
 
                 if (moduleContextRoot != null) {
                     moduleContextRoot.setValue(
-                            StringUtils.replace(moduleContextRoot.getValue(), rootArtifactId, "${rootArtifactId}"));
+                            moduleContextRoot.getValue() == null || moduleContextRoot.getValue().isEmpty() || rootArtifactId == null || rootArtifactId.isEmpty() ? moduleContextRoot.getValue() : moduleContextRoot.getValue().replace(rootArtifactId, "${rootArtifactId}"));
                 }
             }
         }
@@ -752,7 +752,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
             String packageName,
             Properties reverseProperties)
             throws IOException {
-        String packageAsDirectory = StringUtils.replace(packageName, ".", File.separator);
+        String packageAsDirectory = packageName == null || packageName.isEmpty() || File.separator == null ? packageName : packageName.replace(".", File.separator);
 
         LOGGER.debug("Package as Directory: Package:" + packageName + "->" + packageAsDirectory);
 
@@ -977,12 +977,12 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
         String moduleDirectory = pom.getArtifactId();
 
         if (replacementId.indexOf(rootArtifactId) >= 0) {
-            replacementId = StringUtils.replace(replacementId, rootArtifactId, "${rootArtifactId}");
-            moduleDirectory = StringUtils.replace(moduleId, rootArtifactId, "__rootArtifactId__");
+            replacementId = replacementId == null || replacementId.isEmpty() || rootArtifactId == null || rootArtifactId.isEmpty() ? replacementId : replacementId.replace(rootArtifactId, "${rootArtifactId}");
+            moduleDirectory = moduleId == null || moduleId.isEmpty() || rootArtifactId == null || rootArtifactId.isEmpty() ? moduleId : moduleId.replace(rootArtifactId, "__rootArtifactId__");
         }
 
         if (moduleId.indexOf(rootArtifactId) >= 0) {
-            moduleDirectory = StringUtils.replace(moduleId, rootArtifactId, "__rootArtifactId__");
+            moduleDirectory = moduleId == null || moduleId.isEmpty() || rootArtifactId == null || rootArtifactId.isEmpty() ? moduleId : moduleId.replace(rootArtifactId, "__rootArtifactId__");
         }
 
         archetypeDescriptor.setName(replacementId);
@@ -1018,7 +1018,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
         for (String subModuleId : pom.getModules()) {
             String subModuleIdDirectory = subModuleId;
             if (subModuleId.indexOf(rootArtifactId) >= 0) {
-                subModuleIdDirectory = StringUtils.replace(subModuleId, rootArtifactId, "__rootArtifactId__");
+                subModuleIdDirectory = subModuleId == null || subModuleId.isEmpty() || rootArtifactId == null || rootArtifactId.isEmpty() ? subModuleId : subModuleId.replace(rootArtifactId, "__rootArtifactId__");
             }
 
             LOGGER.debug("Creating module " + subModuleId);
@@ -1161,7 +1161,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
         for (String file : files) {
             String directory = PathUtils.getDirectory(file, level);
             // make all groups have unix style
-            directory = StringUtils.replace(directory, File.separator, "/");
+            directory = directory == null || directory.isEmpty() || File.separator == null || File.separator.isEmpty() ? directory : directory.replace(File.separator, "/");
 
             if (!groups.containsKey(directory)) {
                 groups.put(directory, new ArrayList<>());
@@ -1171,7 +1171,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
 
             String innerPath = file.substring(directory.length() + 1);
             // make all groups have unix style
-            innerPath = StringUtils.replace(innerPath, File.separator, "/");
+            innerPath = innerPath == null || innerPath.isEmpty() || File.separator == null || File.separator.isEmpty() ? innerPath : innerPath.replace(File.separator, "/");
 
             group.add(innerPath);
         }
@@ -1209,7 +1209,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
             final List<String> groupFiles,
             final String packageName,
             String defaultEncoding) {
-        String packageAsDir = StringUtils.replace(packageName, ".", "/");
+        String packageAsDir = packageName == null || packageName.isEmpty() ? packageName : packageName.replace(".", "/");
 
         List<FileSet> packagedFileSets = new ArrayList<>();
         List<String> packagedFiles = archetypeFilesResolver.getPackagedFiles(groupFiles, packageAsDir);
@@ -1253,7 +1253,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
             Properties reverseProperties,
             String defaultEncoding)
             throws IOException {
-        String packageAsDirectory = StringUtils.replace(packageName, ".", File.separator);
+        String packageAsDirectory = packageName == null || packageName.isEmpty() || File.separator == null ? packageName : packageName.replace(".", File.separator);
 
         LOGGER.debug("Package as Directory: Package:" + packageName + "->" + packageAsDirectory);
 
@@ -1586,12 +1586,12 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
 
     private String getReversedContent(String content, Properties properties) {
         String result =
-                StringUtils.replace(StringUtils.replace(content, "$", "${symbol_dollar}"), "\\", "${symbol_escape}");
+                StringUtils.replace(content == null || content.isEmpty() ? content : content.replace("$", "${symbol_dollar}"), "\\", "${symbol_escape}");
         result = getReversedPlainContent(result, properties);
 
         // TODO: Replace velocity to a better engine...
         return "#set( $symbol_pound = '#' )\n" + "#set( $symbol_dollar = '$' )\n" + "#set( $symbol_escape = '\\' )\n"
-                + StringUtils.replace(result, "#", "${symbol_pound}");
+                + (result == null || result.isEmpty() ? result : result.replace("#", "${symbol_pound}"));
     }
 
     private String getReversedPlainContent(String content, Properties properties) {

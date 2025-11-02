@@ -137,7 +137,7 @@ public class DefaultArchetypeFilesResolver implements ArchetypeFilesResolver {
         }
 
         StringBuilder includes = new StringBuilder();
-        String[] languagesAsArray = StringUtils.split(languages);
+        String[] languagesAsArray = languages.split("\\s+");
         for (int i = 0; i < languagesAsArray.length; i++) {
             includes.append(levelDirectory).append(languagesAsArray[i]);
         }
