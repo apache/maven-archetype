@@ -32,9 +32,13 @@ import org.codehaus.plexus.ContainerConfiguration;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.easymock.EasyMock;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.eq;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * TODO probably testing a little deep, could just test ArchetypeConfiguration
@@ -47,7 +51,7 @@ public class DefaultArchetypeGenerationConfiguratorTest extends PlexusTestCase {
         configuration.setClassPathScanning("index");
     }
 
-    @Override
+    @BeforeEach
     public void setUp() throws Exception {
         super.setUp();
 
@@ -79,6 +83,7 @@ public class DefaultArchetypeGenerationConfiguratorTest extends PlexusTestCase {
         configurator.setArchetypeArtifactManager(manager);
     }
 
+    @Test
     public void testOldArchetypeGeneratedFieldsInRequestBatchMode()
             throws PrompterException, ArchetypeGenerationConfigurationFailure, ArchetypeNotConfigured, UnknownArchetype,
                     ArchetypeNotDefined {
@@ -100,6 +105,7 @@ public class DefaultArchetypeGenerationConfiguratorTest extends PlexusTestCase {
         assertEquals("preset-gen-package", request.getPackage());
     }
 
+    @Test
     public void testOldArchetypeGeneratedFieldsDefaultsBatchMode()
             throws PrompterException, UnknownArchetype, ArchetypeNotDefined, ArchetypeGenerationConfigurationFailure,
                     ArchetypeNotConfigured {
@@ -120,6 +126,7 @@ public class DefaultArchetypeGenerationConfiguratorTest extends PlexusTestCase {
     }
 
     // TODO: should test this in interactive mode to check for prompting
+    @Test
     public void testOldArchetypeGeneratedFieldsDefaultsMissingGroupId()
             throws PrompterException, UnknownArchetype, ArchetypeNotDefined, ArchetypeGenerationConfigurationFailure {
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();

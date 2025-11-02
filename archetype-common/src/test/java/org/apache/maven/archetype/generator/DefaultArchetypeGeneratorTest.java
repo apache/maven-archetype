@@ -39,6 +39,16 @@ import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.repository.LocalRepository;
 import org.eclipse.aether.repository.LocalRepositoryManager;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class DefaultArchetypeGeneratorTest extends PlexusTestCase {
     // archetypes prepared by antrun execution (see pom.xml) from src/test/archetypes
@@ -102,6 +112,7 @@ public class DefaultArchetypeGeneratorTest extends PlexusTestCase {
         return result;
     }
 
+    @Test
     public void testArchetypeNotDefined() throws Exception {
         Archetype archetype = new Archetype("archetypes", null, "1.0");
 
@@ -110,11 +121,12 @@ public class DefaultArchetypeGeneratorTest extends PlexusTestCase {
         ArchetypeGenerationResult result = generateProjectFromArchetypeWithFailure(request);
 
         assertEquals(
-                "Exception not correct",
                 "The archetype is not defined",
-                result.getCause().getMessage());
+                result.getCause().getMessage(),
+                "Exception not correct");
     }
 
+    @Test
     public void testGenerateArchetypeCompleteWithoutParent() throws Exception {
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest("generate-4", ARCHETYPE_BASIC);
 
@@ -140,6 +152,7 @@ public class DefaultArchetypeGeneratorTest extends PlexusTestCase {
         assertEquals("file-value", model.getVersion());
     }
 
+    @Test
     public void testGenerateArchetypeCompleteWithParent() throws Exception {
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest("generate-5", ARCHETYPE_BASIC);
 
@@ -163,6 +176,7 @@ public class DefaultArchetypeGeneratorTest extends PlexusTestCase {
         assertTrue(parentModel.getModules().contains("file-value"));
     }
 
+    @Test
     public void testGenerateArchetypePartialOnChild() throws Exception {
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest("generate-8", ARCHETYPE_PARTIAL);
 
@@ -189,6 +203,7 @@ public class DefaultArchetypeGeneratorTest extends PlexusTestCase {
         assertFalse(model.getReporting().getPlugins().isEmpty());
     }
 
+    @Test
     public void testGenerateArchetypePartialOnChildDontOverride() throws Exception {
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest("generate-9", ARCHETYPE_PARTIAL);
 
@@ -214,6 +229,7 @@ public class DefaultArchetypeGeneratorTest extends PlexusTestCase {
         assertEquals("1.0", model.getReporting().getPlugins().get(0).getVersion());
     }
 
+    @Test
     public void testGenerateArchetypePartialOnParent() throws Exception {
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest("generate-7", ARCHETYPE_PARTIAL);
 
@@ -234,6 +250,7 @@ public class DefaultArchetypeGeneratorTest extends PlexusTestCase {
         assertFalse(model.getBuild().getPlugins().isEmpty());
     }
 
+    @Test
     public void testGenerateArchetypePartialWithoutPoms() throws Exception {
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest("generate-6", ARCHETYPE_PARTIAL);
 
@@ -250,6 +267,7 @@ public class DefaultArchetypeGeneratorTest extends PlexusTestCase {
         assertEquals("file-value", model.getVersion());
     }
 
+    @Test
     public void testGenerateArchetypeSite() throws Exception {
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest("generate-10", ARCHETYPE_SITE);
 
@@ -269,6 +287,7 @@ public class DefaultArchetypeGeneratorTest extends PlexusTestCase {
         assertEquals("file-value", model.getVersion());
     }
 
+    @Test
     public void testGenerateFileSetArchetype() throws Exception {
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest("generate-12", ARCHETYPE_FILESET);
 
@@ -351,6 +370,7 @@ public class DefaultArchetypeGeneratorTest extends PlexusTestCase {
         assertEquals("file-value", model.getVersion());
     }
 
+    @Test
     public void testGenerateOldArchetype() throws Exception {
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest("generate-11", ARCHETYPE_OLD);
 
@@ -371,6 +391,7 @@ public class DefaultArchetypeGeneratorTest extends PlexusTestCase {
         assertEquals("file-value", model.getVersion());
     }
 
+    @Test
     public void testPropertiesNotDefined() throws Exception {
         ArchetypeGenerationRequest request = createArchetypeGenerationRequest("generate-3", ARCHETYPE_BASIC);
 
@@ -379,11 +400,12 @@ public class DefaultArchetypeGeneratorTest extends PlexusTestCase {
         ArchetypeGenerationResult result = generateProjectFromArchetypeWithFailure(request);
 
         assertTrue(
-                "Exception not correct",
                 result.getCause().getMessage().startsWith("Archetype archetypes:basic:1.0 is not configured")
-                        && result.getCause().getMessage().endsWith("Property property-without-default-4 is missing."));
+                        && result.getCause().getMessage().endsWith("Property property-without-default-4 is missing."),
+                "Exception not correct");
     }
 
+    @Test
     public void testGenerateArchetypeWithPostScriptIncluded() throws Exception {
         ArchetypeGenerationRequest request =
                 createArchetypeGenerationRequest("generate-13", ARCHETYPE_FILESET_WITH_POSTCREATE_SCRIPT);
@@ -401,7 +423,7 @@ public class DefaultArchetypeGeneratorTest extends PlexusTestCase {
         assertTemplateCopiedWithFileSetArchetype("src/main/java/file/value/package/App.ogg");
 
         File templateFile = new File(projectDirectory, "src/main/java/file/value/package/ToDelete.java");
-        assertFalse(templateFile + " should have been removed (by post-generate.groovy script", templateFile.exists());
+        assertFalse(templateFile.exists(), templateFile + " should have been removed (by post-generate.groovy script");
 
         assertTemplateContentGeneratedWithFileSetArchetype("src/main/resources/App.properties", "file-value");
         assertTemplateContentGeneratedWithFileSetArchetype("src/main/resources/file-value/touch.txt", "file-value");
@@ -464,8 +486,8 @@ public class DefaultArchetypeGeneratorTest extends PlexusTestCase {
         assertEquals("file-value", model.getVersion());
     }
 
-    @Override
-    protected void tearDown() throws Exception {
+    @AfterEach
+    public void tearDown() throws Exception {
         super.tearDown();
 
         outputDirectory = null;
@@ -476,8 +498,8 @@ public class DefaultArchetypeGeneratorTest extends PlexusTestCase {
         configuration.setClassPathScanning("index");
     }
 
-    @Override
-    protected void setUp() throws Exception {
+    @BeforeEach
+    public void setUp() throws Exception {
         super.setUp();
 
         File repositories = new File(getBasedir(), "target/test-classes/repositories");

@@ -33,6 +33,9 @@ import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.repository.LocalRepository;
 import org.eclipse.aether.repository.LocalRepositoryManager;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.fail;
 
 /** @author Jason van Zyl */
 public class ArchetypeGenerationTest extends PlexusTestCase {
@@ -42,6 +45,7 @@ public class ArchetypeGenerationTest extends PlexusTestCase {
         configuration.setClassPathScanning("index");
     }
 
+    @Test
     public void testProjectGenerationFromAnArchetype() throws Exception {
         ArchetypeManager archetype = (ArchetypeManager) lookup(ArchetypeManager.ROLE);
 

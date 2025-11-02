@@ -21,10 +21,13 @@ package org.apache.maven.archetype.common;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.TestCase;
 import org.apache.maven.archetype.metadata.FileSet;
+import org.junit.jupiter.api.Test;
 
-public class TestDefaultArchetypeFilesResolver extends TestCase {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class TestDefaultArchetypeFilesResolver {
+    @Test
     public void testResourceFiltering() throws Exception {
         FileSet fileSet = new FileSet();
 

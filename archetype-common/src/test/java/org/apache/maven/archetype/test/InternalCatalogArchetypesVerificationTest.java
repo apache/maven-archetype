@@ -33,6 +33,9 @@ import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.repository.LocalRepository;
 import org.eclipse.aether.repository.LocalRepositoryManager;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  *
@@ -46,6 +49,7 @@ public class InternalCatalogArchetypesVerificationTest extends PlexusTestCase {
         configuration.setClassPathScanning("index");
     }
 
+    @Test
     public void testInternalCatalog() throws Exception {
 
         File outputDirectory = new File(getBasedir(), "target/internal-archetypes-projects");
@@ -84,8 +88,8 @@ public class InternalCatalogArchetypesVerificationTest extends PlexusTestCase {
             ArchetypeGenerationResult generationResult = archetypeManager.generateProjectFromArchetype(request);
 
             assertNull(
-                    "Archetype wasn't generated successfully: " + generationResult.getCause(),
-                    generationResult.getCause());
+                    generationResult.getCause(),
+                    "Archetype wasn't generated successfully: " + generationResult.getCause());
 
             count++;
         }
