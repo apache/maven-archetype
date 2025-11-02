@@ -21,10 +21,14 @@ package org.apache.maven.archetype.common.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /** @author <a href="mailto:brianf@apache.org">Brian Fox</a> */
-public class TestListScanner extends TestCase {
+public class TestListScanner {
+    @Test
     public void testUnixPaths() {
         List<String> archetypeResources = new ArrayList<>();
 
@@ -53,6 +57,7 @@ public class TestListScanner extends TestCase {
         assertTrue(result.contains("src/main/java/inner/package/App2.java"));
     }
 
+    @Test
     public void testWindowsPaths() {
         List<String> archetypeResources = new ArrayList<>();
 

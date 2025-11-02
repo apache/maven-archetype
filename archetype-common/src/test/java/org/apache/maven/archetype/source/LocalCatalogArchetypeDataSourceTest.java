@@ -49,6 +49,10 @@ import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.repository.LocalRepository;
 import org.eclipse.aether.repository.LocalRepositoryManager;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class LocalCatalogArchetypeDataSourceTest extends PlexusTestCase {
 
@@ -57,8 +61,8 @@ public class LocalCatalogArchetypeDataSourceTest extends PlexusTestCase {
         configuration.setClassPathScanning("index");
     }
 
-    @Override
-    protected void setUp() throws Exception {
+    @BeforeEach
+    public void setUp() throws Exception {
         super.setUp();
 
         File catalogDirectory = getTestFile("target/test-classes/repositories/test-catalog");
@@ -79,6 +83,7 @@ public class LocalCatalogArchetypeDataSourceTest extends PlexusTestCase {
         }
     }
 
+    @Test
     public void testLocalCatalog() throws Exception {
         ArchetypeManager archetype = lookup(ArchetypeManager.class);
         RepositorySystem repositorySystem = lookup(RepositorySystem.class);

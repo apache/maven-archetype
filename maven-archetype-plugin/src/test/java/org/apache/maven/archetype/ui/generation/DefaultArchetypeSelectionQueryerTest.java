@@ -30,6 +30,10 @@ import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.components.interactivity.Prompter;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.easymock.EasyMock;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DefaultArchetypeSelectionQueryerTest extends PlexusTestCase {
     private DefaultArchetypeSelectionQueryer queryer;
@@ -39,13 +43,14 @@ public class DefaultArchetypeSelectionQueryerTest extends PlexusTestCase {
         configuration.setClassPathScanning("index");
     }
 
-    @Override
+    @BeforeEach
     public void setUp() throws Exception {
         super.setUp();
 
         queryer = (DefaultArchetypeSelectionQueryer) lookup(ArchetypeSelectionQueryer.class);
     }
 
+    @Test
     public void testDefaultArchetypeInMapOtherSelection() throws PrompterException {
         Map<String, List<Archetype>> map = createDefaultArchetypeCatalog();
 
@@ -69,6 +74,7 @@ public class DefaultArchetypeSelectionQueryerTest extends PlexusTestCase {
         assertEquals("set-version", archetype.getVersion());
     }
 
+    @Test
     public void testDefaultArchetypeInMapDefaultSelection() throws PrompterException {
         Map<String, List<Archetype>> map = createDefaultArchetypeCatalog();
 
@@ -92,6 +98,7 @@ public class DefaultArchetypeSelectionQueryerTest extends PlexusTestCase {
         assertEquals("default-version", archetype.getVersion());
     }
 
+    @Test
     public void testDefaultArchetypeNotInMap() throws PrompterException {
         Map<String, List<Archetype>> map = createDefaultArchetypeCatalog();
 
@@ -115,6 +122,7 @@ public class DefaultArchetypeSelectionQueryerTest extends PlexusTestCase {
         assertEquals("set-version", archetype.getVersion());
     }
 
+    @Test
     public void testNoDefaultArchetype() throws PrompterException {
         Map<String, List<Archetype>> map = createDefaultArchetypeCatalog();
 
@@ -135,6 +143,7 @@ public class DefaultArchetypeSelectionQueryerTest extends PlexusTestCase {
         assertEquals("set-version", archetype.getVersion());
     }
 
+    @Test
     public void testArchetypeFiltering() throws PrompterException {
         Map<String, List<Archetype>> map = createDefaultArchetypeCatalog();
 

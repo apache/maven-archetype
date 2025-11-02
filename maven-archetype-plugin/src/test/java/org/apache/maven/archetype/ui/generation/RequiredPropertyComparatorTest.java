@@ -22,17 +22,17 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.maven.archetype.ui.ArchetypeConfiguration;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RequiredPropertyComparatorTest {
     private DefaultArchetypeGenerationConfigurator.RequiredPropertyComparator requiredPropertyComparator;
 
     private ArchetypeConfiguration archetypeConfiguration;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         archetypeConfiguration = new ArchetypeConfiguration();
         requiredPropertyComparator =

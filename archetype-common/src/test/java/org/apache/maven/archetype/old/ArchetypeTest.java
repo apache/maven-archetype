@@ -52,8 +52,14 @@ import org.eclipse.aether.repository.RemoteRepository;
 import org.eclipse.aether.repository.RepositoryPolicy;
 import org.eclipse.aether.resolution.ArtifactRequest;
 import org.eclipse.aether.resolution.ArtifactResult;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.xmlunit.matchers.CompareMatcher.isIdenticalTo;
 
 /**
@@ -68,6 +74,7 @@ public class ArchetypeTest extends PlexusTestCase {
         configuration.setClassPathScanning("index");
     }
 
+    @Test
     public void testArchetype() throws Exception {
         FileUtils.deleteDirectory(getTestFile("target/quickstart"));
 
@@ -176,33 +183,33 @@ public class ArchetypeTest extends PlexusTestCase {
             throw new ArchetypeTemplateProcessingException("Error reading generated POM", e);
         }
         assertEquals(
-                "Generated POM ArtifactId is not equivalent to expected result.",
                 generatedModel.getArtifactId(),
-                templateModel.getArtifactId());
+                templateModel.getArtifactId(),
+                "Generated POM ArtifactId is not equivalent to expected result.");
         assertEquals(
-                "Generated POM GroupId is not equivalent to expected result.",
                 generatedModel.getGroupId(),
-                templateModel.getGroupId());
+                templateModel.getGroupId(),
+                "Generated POM GroupId is not equivalent to expected result.");
         assertEquals(
-                "Generated POM Id is not equivalent to expected result.",
                 generatedModel.getId(),
-                templateModel.getId());
+                templateModel.getId(),
+                "Generated POM Id is not equivalent to expected result.");
         assertEquals(
-                "Generated POM Version is not equivalent to expected result.",
                 generatedModel.getVersion(),
-                templateModel.getVersion());
+                templateModel.getVersion(),
+                "Generated POM Version is not equivalent to expected result.");
         assertEquals(
-                "Generated POM Packaging is not equivalent to expected result.",
                 generatedModel.getPackaging(),
-                templateModel.getPackaging());
+                templateModel.getPackaging(),
+                "Generated POM Packaging is not equivalent to expected result.");
         assertEquals(
-                "Generated POM Developers is not equivalent to expected result.",
                 generatedModel.getDevelopers(),
-                templateModel.getDevelopers());
+                templateModel.getDevelopers(),
+                "Generated POM Developers is not equivalent to expected result.");
         assertEquals(
-                "Generated POM Scm is not equivalent to expected result.",
                 generatedModel.getScm(),
-                templateModel.getScm());
+                templateModel.getScm(),
+                "Generated POM Scm is not equivalent to expected result.");
     }
 
     // Gets the classloader for this artifact's file.
@@ -218,6 +225,7 @@ public class ArchetypeTest extends PlexusTestCase {
         return new URLClassLoader(urls);
     }
 
+    @Test
     public void testAddModuleToParentPOM() throws Exception {
         String pom = "<project>\n" + "  <packaging>pom</packaging>\n" + "</project>";
 
@@ -365,6 +373,7 @@ public class ArchetypeTest extends PlexusTestCase {
                         .normalizeWhitespace());
     }
 
+    @Test
     public void testAddModuleToParentPOMNoPackaging() throws Exception {
         try {
             String pom = "<project>\n</project>";
@@ -378,6 +387,7 @@ public class ArchetypeTest extends PlexusTestCase {
         }
     }
 
+    @Test
     public void testAddModuleToParentPOMJarPackaging() throws Exception {
         try {
             String pom = "<project>\n  <packaging>jar</packaging>\n</project>";
@@ -391,8 +401,8 @@ public class ArchetypeTest extends PlexusTestCase {
         }
     }
 
-    @Override
-    protected void setUp() throws Exception {
+    @BeforeEach
+    public void setUp() throws Exception {
         super.setUp();
         archetype = (OldArchetype) lookup(OldArchetype.ROLE);
     }

@@ -29,11 +29,14 @@ import org.codehaus.plexus.ContainerConfiguration;
 import org.codehaus.plexus.PlexusTestCase;
 import org.easymock.EasyMock;
 import org.easymock.IAnswer;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.anyString;
 import static org.easymock.EasyMock.eq;
 import static org.easymock.EasyMock.isNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests the ability to use variables in default fields in batch mode.
@@ -48,7 +51,7 @@ public class DefaultArchetypeGenerationConfigurator2Test extends PlexusTestCase 
         configuration.setClassPathScanning("index");
     }
 
-    @Override
+    @BeforeEach
     public void setUp() throws Exception {
         super.setUp();
 
@@ -105,6 +108,7 @@ public class DefaultArchetypeGenerationConfigurator2Test extends PlexusTestCase 
         configurator.setArchetypeGenerationQueryer(queryer);
     }
 
+    @Test
     public void testJIRA509FileSetArchetypeDefaultsWithVariables() throws Exception {
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
         request.setArchetypeGroupId("archetypeGroupId");
@@ -122,6 +126,7 @@ public class DefaultArchetypeGenerationConfigurator2Test extends PlexusTestCase 
         assertEquals("com.example.myGroupName", request.getPackage());
     }
 
+    @Test
     public void testInteractive() throws Exception {
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
         request.setArchetypeGroupId("archetypeGroupId");
@@ -156,6 +161,7 @@ public class DefaultArchetypeGenerationConfigurator2Test extends PlexusTestCase 
         assertEquals("com.example.myGroupName", request.getPackage());
     }
 
+    @Test
     public void testArchetype406ComplexCustomPropertyValue() throws Exception {
         RequiredProperty custom = new RequiredProperty();
         custom.setKey("serviceUpper");
@@ -192,6 +198,7 @@ public class DefaultArchetypeGenerationConfigurator2Test extends PlexusTestCase 
         assertEquals("MYSERVICENAME", request.getProperties().get("serviceUpper"));
     }
 
+    @Test
     public void testArchetype618() throws Exception {
         RequiredProperty custom = getRequiredProperty("serviceName");
         custom.setKey("camelArtifact");

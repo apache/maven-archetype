@@ -33,6 +33,10 @@ import org.codehaus.plexus.ContainerConfiguration;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.easymock.EasyMock;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DefaultArchetypeSelectorTest extends PlexusTestCase {
     private DefaultArchetypeSelector selector;
@@ -42,13 +46,14 @@ public class DefaultArchetypeSelectorTest extends PlexusTestCase {
         configuration.setClassPathScanning("index");
     }
 
-    @Override
+    @BeforeEach
     public void setUp() throws Exception {
         super.setUp();
 
         selector = (DefaultArchetypeSelector) lookup(ArchetypeSelector.ROLE);
     }
 
+    @Test
     public void testArchetypeCoordinatesInRequest()
             throws PrompterException, IOException, UnknownGroup, ArchetypeSelectionFailure, UnknownArchetype,
                     ArchetypeNotDefined {
@@ -73,6 +78,7 @@ public class DefaultArchetypeSelectorTest extends PlexusTestCase {
         assertEquals("preset-version", request.getArchetypeVersion());
     }
 
+    @Test
     public void testArchetypeArtifactIdInRequest()
             throws PrompterException, IOException, UnknownGroup, ArchetypeSelectionFailure, UnknownArchetype,
                     ArchetypeNotDefined {
@@ -95,6 +101,7 @@ public class DefaultArchetypeSelectorTest extends PlexusTestCase {
         assertEquals(DefaultArchetypeSelector.DEFAULT_ARCHETYPE_VERSION, request.getArchetypeVersion());
     }
 
+    @Test
     public void testArchetypeArtifactIdNotInRequest()
             throws PrompterException, IOException, UnknownGroup, ArchetypeSelectionFailure, UnknownArchetype,
                     ArchetypeNotDefined {
@@ -123,6 +130,7 @@ public class DefaultArchetypeSelectorTest extends PlexusTestCase {
         assertEquals("set-version", request.getArchetypeVersion());
     }
 
+    @Test
     public void testArchetypeNotInRequestDefaultsInBatchMode()
             throws PrompterException, IOException, UnknownGroup, ArchetypeSelectionFailure, UnknownArchetype,
                     ArchetypeNotDefined {
@@ -144,6 +152,7 @@ public class DefaultArchetypeSelectorTest extends PlexusTestCase {
         assertEquals(DefaultArchetypeSelector.DEFAULT_ARCHETYPE_VERSION, request.getArchetypeVersion());
     }
 
+    @Test
     public void testArchetypeNotInRequestDefaults()
             throws PrompterException, IOException, UnknownGroup, ArchetypeSelectionFailure, UnknownArchetype,
                     ArchetypeNotDefined {

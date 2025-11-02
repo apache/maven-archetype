@@ -23,6 +23,9 @@ import java.io.File;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.codehaus.plexus.ContainerConfiguration;
 import org.codehaus.plexus.PlexusTestCase;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author  rafale
@@ -37,15 +40,16 @@ public class DefaultRepositoryCrawlerTest extends PlexusTestCase {
     /**
      * Test of crawl method, of class DefaultRepositoryCrawler.
      */
+    @Test
     public void testCrawl() throws Exception {
         File repository = getTestFile("target/test-classes/repositories/central");
         RepositoryCrawler instance = (RepositoryCrawler) lookup(RepositoryCrawler.class.getName());
 
         ArchetypeCatalog result = instance.crawl(repository);
         assertTrue(
+                (5 <= result.getArchetypes().size()) && (result.getArchetypes().size() <= 8),
                 "result.getArchetypes().size() = " + result.getArchetypes().size() + " should be in [5,8], result = "
-                        + result,
-                (5 <= result.getArchetypes().size()) && (result.getArchetypes().size() <= 8));
+                        + result);
 
         // TODO: should write to another directory
         //        instance.writeCatalog(result, new File(repository, "archetype-catalog.xml"));
