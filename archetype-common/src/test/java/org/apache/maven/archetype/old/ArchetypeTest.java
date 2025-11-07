@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.exception.InvalidPackaging;
 import org.apache.maven.model.Model;
@@ -38,7 +39,6 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.context.Context;
 import org.codehaus.plexus.ContainerConfiguration;
 import org.codehaus.plexus.PlexusTestCase;
-import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.codehaus.plexus.velocity.VelocityComponent;
 import org.eclipse.aether.DefaultRepositorySystemSession;

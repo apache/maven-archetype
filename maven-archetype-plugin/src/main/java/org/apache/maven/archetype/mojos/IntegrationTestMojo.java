@@ -450,7 +450,7 @@ public class IntegrationTestMojo extends AbstractMojo {
 
             File basedir = new File(goalFile.getParentFile(), "project");
 
-            FileUtils.deleteDirectory(basedir);
+            org.apache.commons.io.FileUtils.deleteDirectory(basedir);
 
             FileUtils.mkdir(basedir.toString());
 
@@ -623,7 +623,7 @@ public class IntegrationTestMojo extends AbstractMojo {
 
             File archetypeItDirectory = new File(project.getBuild().getDirectory(), "archetype-it");
             if (archetypeItDirectory.exists()) {
-                FileUtils.deleteDirectory(archetypeItDirectory);
+                org.apache.commons.io.FileUtils.deleteDirectory(archetypeItDirectory);
             }
             archetypeItDirectory.mkdir();
             File userSettings;
