@@ -112,11 +112,6 @@ public class DefaultArchetypeSelector implements ArchetypeSelector {
                 LOGGER.info("Archetype " + archetype + " found in catalog " + catalogKey);
             } else {
                 LOGGER.warn("Specified archetype not found.");
-                if (interactiveMode.booleanValue()) {
-                    definition.setVersion(null);
-                    definition.setGroupId(null);
-                    definition.setArtifactId(null);
-                }
             }
         }
 
