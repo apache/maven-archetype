@@ -417,18 +417,18 @@ public class DefaultFilesetArchetypeGenerator implements FilesetArchetypeGenerat
         final String packageInPathFormat = getPackageInPathFormat(request.getPackage());
         context.put(Constants.PACKAGE_IN_PATH_FORMAT, packageInPathFormat);
 
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("----------------------------------------------------------------------------");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("----------------------------------------------------------------------------");
 
-            LOGGER.info("Using following parameters for creating project from Archetype: "
+            LOGGER.debug("Using following parameters for creating project from Archetype: "
                     + request.getArchetypeArtifactId() + ":" + request.getArchetypeVersion());
 
-            LOGGER.info("----------------------------------------------------------------------------");
-            LOGGER.info("Parameter: " + Constants.GROUP_ID + ", Value: " + request.getGroupId());
-            LOGGER.info("Parameter: " + Constants.ARTIFACT_ID + ", Value: " + request.getArtifactId());
-            LOGGER.info("Parameter: " + Constants.VERSION + ", Value: " + request.getVersion());
-            LOGGER.info("Parameter: " + Constants.PACKAGE + ", Value: " + request.getPackage());
-            LOGGER.info("Parameter: " + Constants.PACKAGE_IN_PATH_FORMAT + ", Value: " + packageInPathFormat);
+            LOGGER.debug("----------------------------------------------------------------------------");
+            LOGGER.debug("Parameter: " + Constants.GROUP_ID + ", Value: " + request.getGroupId());
+            LOGGER.debug("Parameter: " + Constants.ARTIFACT_ID + ", Value: " + request.getArtifactId());
+            LOGGER.debug("Parameter: " + Constants.VERSION + ", Value: " + request.getVersion());
+            LOGGER.debug("Parameter: " + Constants.PACKAGE + ", Value: " + request.getPackage());
+            LOGGER.debug("Parameter: " + Constants.PACKAGE_IN_PATH_FORMAT + ", Value: " + packageInPathFormat);
         }
 
         for (Iterator<?> iterator = request.getProperties().keySet().iterator(); iterator.hasNext(); ) {
@@ -442,8 +442,8 @@ public class DefaultFilesetArchetypeGenerator implements FilesetArchetypeGenerat
 
             context.put(key, value);
 
-            if (LOGGER.isInfoEnabled()) {
-                LOGGER.info("Parameter: " + key + ", Value: " + value);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Parameter: " + key + ", Value: " + value);
             }
         }
         return context;
