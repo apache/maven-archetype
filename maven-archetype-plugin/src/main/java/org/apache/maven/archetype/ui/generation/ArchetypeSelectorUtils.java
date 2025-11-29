@@ -37,12 +37,12 @@ public class ArchetypeSelectorUtils {
     }
 
     private static String extractGroupIdFromFilter(String filter) {
-        return StringUtils.contains(filter, ':') ? StringUtils.substringBefore(filter, ":") : null;
+        return filter.contains(":") ? StringUtils.substringBefore(filter, ":") : null;
     }
 
     private static String extractArtifactIdFromFilter(String filter) {
         // if no : the full text is considered as artifactId content
-        return StringUtils.contains(filter, ':') ? StringUtils.substringAfter(filter, ":") : filter;
+        return filter.contains(":") ? StringUtils.substringAfter(filter, ":") : filter;
     }
 
     /**
@@ -66,8 +66,8 @@ public class ArchetypeSelectorUtils {
                 String groupId = ArchetypeSelectorUtils.extractGroupIdFromFilter(filter);
                 String artifactId = ArchetypeSelectorUtils.extractArtifactIdFromFilter(filter);
 
-                if (((groupId == null) || StringUtils.contains(archetype.getGroupId(), groupId))
-                        && StringUtils.contains(archetype.getArtifactId(), artifactId)) {
+                if (((groupId == null) || archetype.getGroupId().contains(groupId))
+                        && archetype.getArtifactId().contains(artifactId)) {
                     archetypes.add(archetype);
                 }
             }
