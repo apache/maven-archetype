@@ -35,6 +35,8 @@ package org.apache.maven.archetype.source;
  *  under the License.
  */
 
+import javax.inject.Inject;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.Writer;
@@ -43,23 +45,28 @@ import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Writer;
-import org.codehaus.plexus.ContainerConfiguration;
-import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.testing.PlexusTest;
 import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.repository.LocalRepository;
 import org.eclipse.aether.repository.LocalRepositoryManager;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class LocalCatalogArchetypeDataSourceTest extends PlexusTestCase {
+import static org.codehaus.plexus.testing.PlexusExtension.getTestFile;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-    @Override
-    protected void customizeContainerConfiguration(ContainerConfiguration configuration) {
-        configuration.setClassPathScanning("index");
-    }
+@PlexusTest
+public class LocalCatalogArchetypeDataSourceTest {
 
-    @Override
+    @Inject
+    private ArchetypeManager archetype;
+
+    @Inject
+    private RepositorySystem repositorySystem;
+
+    @BeforeEach
     protected void setUp() throws Exception {
-        super.setUp();
 
         File catalogDirectory = getTestFile("target/test-classes/repositories/test-catalog");
         catalogDirectory.mkdirs();
@@ -79,9 +86,8 @@ public class LocalCatalogArchetypeDataSourceTest extends PlexusTestCase {
         }
     }
 
-    public void testLocalCatalog() throws Exception {
-        ArchetypeManager archetype = lookup(ArchetypeManager.class);
-        RepositorySystem repositorySystem = lookup(RepositorySystem.class);
+    @Test
+    public void testLocalCatalog() {
 
         DefaultRepositorySystemSession repositorySession = new DefaultRepositorySystemSession();
         LocalRepositoryManager localRepositoryManager = repositorySystem.newLocalRepositoryManager(

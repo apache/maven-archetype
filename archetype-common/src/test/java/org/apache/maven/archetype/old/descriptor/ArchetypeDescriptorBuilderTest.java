@@ -21,27 +21,19 @@ package org.apache.maven.archetype.old.descriptor;
 import java.io.IOException;
 import java.io.StringReader;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  * @version $Id$
  */
-public class ArchetypeDescriptorBuilderTest extends TestCase {
-    public ArchetypeDescriptorBuilderTest(String str) {
-        super(str);
-    }
+public class ArchetypeDescriptorBuilderTest {
 
-    public static Test suite() {
-        TestSuite suite = new TestSuite();
-        suite.addTest(new ArchetypeDescriptorBuilderTest("testBuilder"));
-        suite.addTest(new ArchetypeDescriptorBuilderTest("testBuild"));
-        return suite;
-    }
-
+    @Test
     public void testBuilder() throws Exception {
         String xml = "<archetype>" + "  <id>standard</id>" + "  <sources>" + "    <source>source0</source>"
                 + "    <source>source1</source>"
@@ -132,6 +124,7 @@ public class ArchetypeDescriptorBuilderTest extends TestCase {
         assertNotNull(descriptor.getTestResourceDescriptor("testResource1").getEncoding());
     }
 
+    @Test
     public void testBuild() throws IOException, XmlPullParserException {
         String xml = "<archetype>" + "  <id>standard</id>" + "  <sources>"
                 + "    <source encoding=\"utf-8\">source0</source>"

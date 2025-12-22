@@ -18,6 +18,8 @@
  */
 package org.apache.maven.archetype.ui.generation;
 
+import javax.inject.Inject;
+
 import java.io.File;
 import java.util.Properties;
 
@@ -28,30 +30,28 @@ import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
 import org.apache.maven.archetype.exception.ArchetypeNotDefined;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.archetype.old.descriptor.ArchetypeDescriptor;
-import org.codehaus.plexus.ContainerConfiguration;
-import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.components.interactivity.PrompterException;
+import org.codehaus.plexus.testing.PlexusTest;
 import org.easymock.EasyMock;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.eq;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * TODO probably testing a little deep, could just test ArchetypeConfiguration
  */
-public class DefaultArchetypeGenerationConfiguratorTest extends PlexusTestCase {
+@PlexusTest
+public class DefaultArchetypeGenerationConfiguratorTest {
+
+    @Inject
     private DefaultArchetypeGenerationConfigurator configurator;
 
-    @Override
-    protected void customizeContainerConfiguration(ContainerConfiguration configuration) {
-        configuration.setClassPathScanning("index");
-    }
-
-    @Override
+    @BeforeEach
     public void setUp() throws Exception {
-        super.setUp();
-
-        configurator = (DefaultArchetypeGenerationConfigurator) lookup(ArchetypeGenerationConfigurator.ROLE);
 
         ArchetypeArtifactManager manager = EasyMock.createMock(ArchetypeArtifactManager.class);
 
@@ -79,6 +79,7 @@ public class DefaultArchetypeGenerationConfiguratorTest extends PlexusTestCase {
         configurator.setArchetypeArtifactManager(manager);
     }
 
+    @Test
     public void testOldArchetypeGeneratedFieldsInRequestBatchMode()
             throws PrompterException, ArchetypeGenerationConfigurationFailure, ArchetypeNotConfigured, UnknownArchetype,
                     ArchetypeNotDefined {
@@ -100,6 +101,7 @@ public class DefaultArchetypeGenerationConfiguratorTest extends PlexusTestCase {
         assertEquals("preset-gen-package", request.getPackage());
     }
 
+    @Test
     public void testOldArchetypeGeneratedFieldsDefaultsBatchMode()
             throws PrompterException, UnknownArchetype, ArchetypeNotDefined, ArchetypeGenerationConfigurationFailure,
                     ArchetypeNotConfigured {
@@ -120,6 +122,7 @@ public class DefaultArchetypeGenerationConfiguratorTest extends PlexusTestCase {
     }
 
     // TODO: should test this in interactive mode to check for prompting
+    @Test
     public void testOldArchetypeGeneratedFieldsDefaultsMissingGroupId()
             throws PrompterException, UnknownArchetype, ArchetypeNotDefined, ArchetypeGenerationConfigurationFailure {
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();

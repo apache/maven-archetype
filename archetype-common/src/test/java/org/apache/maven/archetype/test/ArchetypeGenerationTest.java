@@ -18,6 +18,8 @@
  */
 package org.apache.maven.archetype.test;
 
+import javax.inject.Inject;
+
 import java.io.File;
 import java.util.Properties;
 
@@ -26,27 +28,31 @@ import org.apache.maven.archetype.ArchetypeGenerationResult;
 import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
-import org.codehaus.plexus.ContainerConfiguration;
-import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.testing.PlexusTest;
 import org.codehaus.plexus.util.FileUtils;
 import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.repository.LocalRepository;
 import org.eclipse.aether.repository.LocalRepositoryManager;
+import org.junit.jupiter.api.Test;
+
+import static org.codehaus.plexus.testing.PlexusExtension.getBasedir;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /** @author Jason van Zyl */
-public class ArchetypeGenerationTest extends PlexusTestCase {
+@PlexusTest
+public class ArchetypeGenerationTest {
 
-    @Override
-    protected void customizeContainerConfiguration(ContainerConfiguration configuration) {
-        configuration.setClassPathScanning("index");
-    }
+    @Inject
+    private ArchetypeManager archetype;
 
+    @Inject
+    private RepositorySystem repositorySystem;
+
+    @Test
     public void testProjectGenerationFromAnArchetype() throws Exception {
-        ArchetypeManager archetype = (ArchetypeManager) lookup(ArchetypeManager.ROLE);
 
         DefaultRepositorySystemSession repositorySession = new DefaultRepositorySystemSession();
-        RepositorySystem repositorySystem = lookup(RepositorySystem.class);
         LocalRepositoryManager localRepositoryManager = repositorySystem.newLocalRepositoryManager(
                 repositorySession, new LocalRepository("target/test-classes/repositories/central"));
         repositorySession.setLocalRepositoryManager(localRepositoryManager);

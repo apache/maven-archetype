@@ -18,40 +18,30 @@
  */
 package org.apache.maven.archetype.ui.generation;
 
-import java.io.IOException;
+import javax.inject.Inject;
+
 import java.util.List;
 import java.util.Map;
 
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.catalog.Archetype;
-import org.apache.maven.archetype.exception.ArchetypeNotDefined;
 import org.apache.maven.archetype.exception.ArchetypeSelectionFailure;
-import org.apache.maven.archetype.exception.UnknownArchetype;
-import org.apache.maven.archetype.exception.UnknownGroup;
 import org.apache.maven.archetype.ui.ArchetypeDefinition;
-import org.codehaus.plexus.ContainerConfiguration;
-import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.components.interactivity.PrompterException;
+import org.codehaus.plexus.testing.PlexusTest;
 import org.easymock.EasyMock;
+import org.junit.jupiter.api.Test;
 
-public class DefaultArchetypeSelectorTest extends PlexusTestCase {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+@PlexusTest
+public class DefaultArchetypeSelectorTest {
+
+    @Inject
     private DefaultArchetypeSelector selector;
 
-    @Override
-    protected void customizeContainerConfiguration(ContainerConfiguration configuration) {
-        configuration.setClassPathScanning("index");
-    }
-
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-
-        selector = (DefaultArchetypeSelector) lookup(ArchetypeSelector.ROLE);
-    }
-
-    public void testArchetypeCoordinatesInRequest()
-            throws PrompterException, IOException, UnknownGroup, ArchetypeSelectionFailure, UnknownArchetype,
-                    ArchetypeNotDefined {
+    @Test
+    public void testArchetypeCoordinatesInRequest() throws PrompterException, ArchetypeSelectionFailure {
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
         request.setArchetypeArtifactId("preset-artifactId");
         request.setArchetypeGroupId("preset-groupId");
@@ -73,9 +63,8 @@ public class DefaultArchetypeSelectorTest extends PlexusTestCase {
         assertEquals("preset-version", request.getArchetypeVersion());
     }
 
-    public void testArchetypeArtifactIdInRequest()
-            throws PrompterException, IOException, UnknownGroup, ArchetypeSelectionFailure, UnknownArchetype,
-                    ArchetypeNotDefined {
+    @Test
+    public void testArchetypeArtifactIdInRequest() throws PrompterException, ArchetypeSelectionFailure {
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
         request.setArchetypeArtifactId("preset-artifactId");
 
@@ -95,9 +84,8 @@ public class DefaultArchetypeSelectorTest extends PlexusTestCase {
         assertEquals(DefaultArchetypeSelector.DEFAULT_ARCHETYPE_VERSION, request.getArchetypeVersion());
     }
 
-    public void testArchetypeArtifactIdNotInRequest()
-            throws PrompterException, IOException, UnknownGroup, ArchetypeSelectionFailure, UnknownArchetype,
-                    ArchetypeNotDefined {
+    @Test
+    public void testArchetypeArtifactIdNotInRequest() throws PrompterException, ArchetypeSelectionFailure {
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
 
         ArchetypeSelectionQueryer queryer = EasyMock.createMock(ArchetypeSelectionQueryer.class);
@@ -123,9 +111,8 @@ public class DefaultArchetypeSelectorTest extends PlexusTestCase {
         assertEquals("set-version", request.getArchetypeVersion());
     }
 
-    public void testArchetypeNotInRequestDefaultsInBatchMode()
-            throws PrompterException, IOException, UnknownGroup, ArchetypeSelectionFailure, UnknownArchetype,
-                    ArchetypeNotDefined {
+    @Test
+    public void testArchetypeNotInRequestDefaultsInBatchMode() throws PrompterException, ArchetypeSelectionFailure {
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
 
         ArchetypeSelectionQueryer queryer = EasyMock.createMock(ArchetypeSelectionQueryer.class);
@@ -144,9 +131,8 @@ public class DefaultArchetypeSelectorTest extends PlexusTestCase {
         assertEquals(DefaultArchetypeSelector.DEFAULT_ARCHETYPE_VERSION, request.getArchetypeVersion());
     }
 
-    public void testArchetypeNotInRequestDefaults()
-            throws PrompterException, IOException, UnknownGroup, ArchetypeSelectionFailure, UnknownArchetype,
-                    ArchetypeNotDefined {
+    @Test
+    public void testArchetypeNotInRequestDefaults() throws PrompterException, ArchetypeSelectionFailure {
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest();
 
         ArchetypeSelectionQueryer queryer = EasyMock.createMock(ArchetypeSelectionQueryer.class);

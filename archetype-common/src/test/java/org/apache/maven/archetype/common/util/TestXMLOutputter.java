@@ -22,13 +22,17 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 
-import junit.framework.TestCase;
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /** @author <a href="mailto:jdcasey@apache.org">John Casey</a> */
-public class TestXMLOutputter extends TestCase {
+public class TestXMLOutputter {
+
+    @Test
     public void testOutputDocumentShouldParseAndOutputCDATASectionNoMods() throws JDOMException, IOException {
         String content = "<document>" + "<element1>This is some text</element1>"
                 + "<description>And then,"
