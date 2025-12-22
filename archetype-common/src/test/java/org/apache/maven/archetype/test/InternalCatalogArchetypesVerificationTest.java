@@ -18,6 +18,8 @@
  */
 package org.apache.maven.archetype.test;
 
+import javax.inject.Inject;
+
 import java.io.File;
 import java.util.Properties;
 
@@ -26,33 +28,38 @@ import org.apache.maven.archetype.ArchetypeGenerationResult;
 import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
-import org.codehaus.plexus.ContainerConfiguration;
-import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.testing.PlexusTest;
 import org.codehaus.plexus.util.FileUtils;
 import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.repository.LocalRepository;
 import org.eclipse.aether.repository.LocalRepositoryManager;
+import org.junit.jupiter.api.Test;
+
+import static org.codehaus.plexus.testing.PlexusExtension.getBasedir;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  *
  * @author rafale
  */
-public class InternalCatalogArchetypesVerificationTest extends PlexusTestCase {
+@PlexusTest
+public class InternalCatalogArchetypesVerificationTest {
     private static final String CENTRAL = "https://repo.maven.apache.org/maven2";
 
-    @Override
-    protected void customizeContainerConfiguration(ContainerConfiguration configuration) {
-        configuration.setClassPathScanning("index");
-    }
+    @Inject
+    private ArchetypeManager archetypeManager;
 
+    @Inject
+    private RepositorySystem repositorySystem;
+
+    @Test
     public void testInternalCatalog() throws Exception {
 
         File outputDirectory = new File(getBasedir(), "target/internal-archetypes-projects");
         outputDirectory.mkdirs();
         FileUtils.cleanDirectory(outputDirectory);
 
-        ArchetypeManager archetypeManager = (ArchetypeManager) lookup(ArchetypeManager.class.getName());
         ArchetypeCatalog catalog = archetypeManager.getInternalCatalog();
 
         // quickstart has a parameters with defaults ... so it should not be needed
@@ -67,7 +74,6 @@ public class InternalCatalogArchetypesVerificationTest extends PlexusTestCase {
             archetype.setRepository(CENTRAL);
 
             DefaultRepositorySystemSession repositorySession = new DefaultRepositorySystemSession();
-            RepositorySystem repositorySystem = lookup(RepositorySystem.class);
             LocalRepositoryManager localRepositoryManager = repositorySystem.newLocalRepositoryManager(
                     repositorySession, new LocalRepository("target/test-classes/repositories/local"));
             repositorySession.setLocalRepositoryManager(localRepositoryManager);
@@ -84,8 +90,8 @@ public class InternalCatalogArchetypesVerificationTest extends PlexusTestCase {
             ArchetypeGenerationResult generationResult = archetypeManager.generateProjectFromArchetype(request);
 
             assertNull(
-                    "Archetype wasn't generated successfully: " + generationResult.getCause(),
-                    generationResult.getCause());
+                    generationResult.getCause(),
+                    "Archetype wasn't generated successfully: " + generationResult.getCause());
 
             count++;
         }

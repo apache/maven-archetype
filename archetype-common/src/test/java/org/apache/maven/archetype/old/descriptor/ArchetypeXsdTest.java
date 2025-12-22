@@ -24,15 +24,18 @@ import javax.xml.parsers.SAXParserFactory;
 import java.io.File;
 import java.io.InputStream;
 
-import org.codehaus.plexus.PlexusTestCase;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
-public class ArchetypeXsdTest extends PlexusTestCase {
+import static org.codehaus.plexus.testing.PlexusExtension.getBasedir;
+
+public class ArchetypeXsdTest {
     private static final String ARCHETYPE_XSD = "archetype-1.0.0.xsd";
 
+    @Test
     public void testXsd() throws Exception {
         File archetypeXsd = new File(getBasedir(), "/target/generated-site/resources/xsd/" + ARCHETYPE_XSD);
 

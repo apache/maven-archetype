@@ -18,34 +18,38 @@
  */
 package org.apache.maven.archetype.repositorycrawler;
 
+import javax.inject.Inject;
+
 import java.io.File;
 
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
-import org.codehaus.plexus.ContainerConfiguration;
-import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.testing.PlexusTest;
+import org.junit.jupiter.api.Test;
+
+import static org.codehaus.plexus.testing.PlexusExtension.getTestFile;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * @author  rafale
+ * @author rafale
  */
-public class DefaultRepositoryCrawlerTest extends PlexusTestCase {
+@PlexusTest
+public class DefaultRepositoryCrawlerTest {
 
-    @Override
-    protected void customizeContainerConfiguration(ContainerConfiguration configuration) {
-        configuration.setClassPathScanning("index");
-    }
+    @Inject
+    private RepositoryCrawler instance;
 
     /**
      * Test of crawl method, of class DefaultRepositoryCrawler.
      */
-    public void testCrawl() throws Exception {
+    @Test
+    public void testCrawl() {
         File repository = getTestFile("target/test-classes/repositories/central");
-        RepositoryCrawler instance = (RepositoryCrawler) lookup(RepositoryCrawler.class.getName());
 
         ArchetypeCatalog result = instance.crawl(repository);
         assertTrue(
+                (5 <= result.getArchetypes().size()) && (result.getArchetypes().size() <= 8),
                 "result.getArchetypes().size() = " + result.getArchetypes().size() + " should be in [5,8], result = "
-                        + result,
-                (5 <= result.getArchetypes().size()) && (result.getArchetypes().size() <= 8));
+                        + result);
 
         // TODO: should write to another directory
         //        instance.writeCatalog(result, new File(repository, "archetype-catalog.xml"));

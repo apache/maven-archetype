@@ -18,30 +18,25 @@
  */
 package org.apache.maven.archetype.ui.generation;
 
+import javax.inject.Inject;
+
 import java.util.regex.Pattern;
 
-import org.codehaus.plexus.ContainerConfiguration;
-import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.components.interactivity.Prompter;
 import org.codehaus.plexus.components.interactivity.PrompterException;
+import org.codehaus.plexus.testing.PlexusTest;
 import org.easymock.EasyMock;
+import org.junit.jupiter.api.Test;
 
-public class DefaultArchetypeGenerationQueryerTest extends PlexusTestCase {
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@PlexusTest
+public class DefaultArchetypeGenerationQueryerTest {
+
+    @Inject
     private DefaultArchetypeGenerationQueryer queryer;
 
-    @Override
-    protected void customizeContainerConfiguration(ContainerConfiguration configuration) {
-        configuration.setClassPathScanning("index");
-    }
-
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-
-        queryer = (DefaultArchetypeGenerationQueryer) lookup(ArchetypeGenerationQueryer.class.getName());
-    }
-
+    @Test
     public void testPropertyRegexValidationRetry() throws PrompterException {
         Prompter prompter = EasyMock.createMock(Prompter.class);
 

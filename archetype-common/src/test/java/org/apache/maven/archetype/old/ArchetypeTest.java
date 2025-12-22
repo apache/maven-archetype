@@ -18,6 +18,8 @@
  */
 package org.apache.maven.archetype.old;
 
+import javax.inject.Inject;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -37,8 +39,7 @@ import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.context.Context;
-import org.codehaus.plexus.ContainerConfiguration;
-import org.codehaus.plexus.PlexusTestCase;
+import org.codehaus.plexus.testing.PlexusTest;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.codehaus.plexus.velocity.VelocityComponent;
 import org.eclipse.aether.DefaultRepositorySystemSession;
@@ -52,22 +53,33 @@ import org.eclipse.aether.repository.RemoteRepository;
 import org.eclipse.aether.repository.RepositoryPolicy;
 import org.eclipse.aether.resolution.ArtifactRequest;
 import org.eclipse.aether.resolution.ArtifactResult;
+import org.junit.jupiter.api.Test;
 
+import static org.codehaus.plexus.testing.PlexusExtension.getTestFile;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.xmlunit.matchers.CompareMatcher.isIdenticalTo;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
  * @version $Id$
  */
-public class ArchetypeTest extends PlexusTestCase {
+@PlexusTest
+public class ArchetypeTest {
+
+    @Inject
     private OldArchetype archetype;
 
-    @Override
-    protected void customizeContainerConfiguration(ContainerConfiguration configuration) {
-        configuration.setClassPathScanning("index");
-    }
+    @Inject
+    private RepositorySystem repositorySystem;
 
+    @Inject
+    private VelocityComponent velocity;
+
+    @Test
     public void testArchetype() throws Exception {
         FileUtils.deleteDirectory(getTestFile("target/quickstart"));
 
@@ -90,7 +102,6 @@ public class ArchetypeTest extends PlexusTestCase {
         remoteRepositories.add(remoteRepository);
 
         DefaultRepositorySystemSession repositorySession = new DefaultRepositorySystemSession();
-        RepositorySystem repositorySystem = lookup(RepositorySystem.class);
         LocalRepositoryManager localRepositoryManager =
                 repositorySystem.newLocalRepositoryManager(repositorySession, new LocalRepository(mavenRepoLocal));
         repositorySession.setLocalRepositoryManager(localRepositoryManager);
@@ -142,8 +153,6 @@ public class ArchetypeTest extends PlexusTestCase {
                 .setContextClassLoader(getContextClassloader(archetypeArtifact, repositorySession, remoteRepositories));
 
         try {
-            VelocityComponent velocity = (VelocityComponent) lookup(VelocityComponent.class.getName());
-
             velocity.getEngine()
                     .mergeTemplate(
                             OldArchetype.ARCHETYPE_RESOURCES + "/" + OldArchetype.ARCHETYPE_POM,
@@ -176,33 +185,33 @@ public class ArchetypeTest extends PlexusTestCase {
             throw new ArchetypeTemplateProcessingException("Error reading generated POM", e);
         }
         assertEquals(
-                "Generated POM ArtifactId is not equivalent to expected result.",
                 generatedModel.getArtifactId(),
-                templateModel.getArtifactId());
+                templateModel.getArtifactId(),
+                "Generated POM ArtifactId is not equivalent to expected result.");
         assertEquals(
-                "Generated POM GroupId is not equivalent to expected result.",
                 generatedModel.getGroupId(),
-                templateModel.getGroupId());
+                templateModel.getGroupId(),
+                "Generated POM GroupId is not equivalent to expected result.");
         assertEquals(
-                "Generated POM Id is not equivalent to expected result.",
                 generatedModel.getId(),
-                templateModel.getId());
+                templateModel.getId(),
+                "Generated POM Id is not equivalent to expected result.");
         assertEquals(
-                "Generated POM Version is not equivalent to expected result.",
                 generatedModel.getVersion(),
-                templateModel.getVersion());
+                templateModel.getVersion(),
+                "Generated POM Version is not equivalent to expected result.");
         assertEquals(
-                "Generated POM Packaging is not equivalent to expected result.",
                 generatedModel.getPackaging(),
-                templateModel.getPackaging());
+                templateModel.getPackaging(),
+                "Generated POM Packaging is not equivalent to expected result.");
         assertEquals(
-                "Generated POM Developers is not equivalent to expected result.",
                 generatedModel.getDevelopers(),
-                templateModel.getDevelopers());
+                templateModel.getDevelopers(),
+                "Generated POM Developers is not equivalent to expected result.");
         assertEquals(
-                "Generated POM Scm is not equivalent to expected result.",
                 generatedModel.getScm(),
-                templateModel.getScm());
+                templateModel.getScm(),
+                "Generated POM Scm is not equivalent to expected result.");
     }
 
     // Gets the classloader for this artifact's file.
@@ -211,13 +220,13 @@ public class ArchetypeTest extends PlexusTestCase {
             RepositorySystemSession repositorySystemSession,
             List<RemoteRepository> remoteRepositories)
             throws Exception {
-        RepositorySystem repositorySystem = lookup(RepositorySystem.class);
         ArtifactRequest request = new ArtifactRequest(archetypeArtifact, remoteRepositories, null);
         ArtifactResult artifactResult = repositorySystem.resolveArtifact(repositorySystemSession, request);
         URL[] urls = new URL[] {artifactResult.getArtifact().getFile().toURI().toURL()};
         return new URLClassLoader(urls);
     }
 
+    @Test
     public void testAddModuleToParentPOM() throws Exception {
         String pom = "<project>\n" + "  <packaging>pom</packaging>\n" + "</project>";
 
@@ -365,6 +374,7 @@ public class ArchetypeTest extends PlexusTestCase {
                         .normalizeWhitespace());
     }
 
+    @Test
     public void testAddModuleToParentPOMNoPackaging() throws Exception {
         try {
             String pom = "<project>\n</project>";
@@ -378,6 +388,7 @@ public class ArchetypeTest extends PlexusTestCase {
         }
     }
 
+    @Test
     public void testAddModuleToParentPOMJarPackaging() throws Exception {
         try {
             String pom = "<project>\n  <packaging>jar</packaging>\n</project>";
@@ -389,11 +400,5 @@ public class ArchetypeTest extends PlexusTestCase {
                     "Unable to add module to the current project as it is not of packaging type 'pom'",
                     e.getLocalizedMessage());
         }
-    }
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        archetype = (OldArchetype) lookup(OldArchetype.ROLE);
     }
 }
