@@ -30,7 +30,7 @@ under the License.
   <name>archetype build IT</name>
 
   <properties>
-    <javaVersion>6</javaVersion>
+    <javaVersion>8</javaVersion>
     <maven.compiler.source>1.${javaVersion}</maven.compiler.source>
     <maven.compiler.target>1.${javaVersion}</maven.compiler.target>    
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

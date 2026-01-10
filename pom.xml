@@ -23,7 +23,7 @@
   <parent>
     <groupId>org.apache.maven</groupId>
     <artifactId>maven-parent</artifactId>
-    <version>45</version>
+    <version>46</version>
     <relativePath />
   </parent>
 
@@ -71,12 +71,10 @@
 
   <properties>
     <maven.archetype.scm.devConnection>scm:git:https://gitbox.apache.org/repos/asf/maven-archetype.git</maven.archetype.scm.devConnection>
-    <mavenVersion>3.9.11</mavenVersion>
+    <mavenVersion>3.9.12</mavenVersion>
     <!-- provided by Maven core -->
-    <resolverVersion>1.9.24</resolverVersion>
+    <resolverVersion>1.9.25</resolverVersion>
     <javaVersion>8</javaVersion>
-    <!-- TODO remove with next parent version update -->
-    <version.maven-invoker-plugin>3.9.1</version.maven-invoker-plugin>
     <netbeans.hint.useExternalMaven>true</netbeans.hint.useExternalMaven>
     <maven.site.path>archetype-archives/archetype-LATEST</maven.site.path>
     <project.build.outputTimestamp>2025-10-03T18:48:44Z</project.build.outputTimestamp>
