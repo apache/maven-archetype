@@ -1310,11 +1310,6 @@ public class XMLOutputter implements Cloneable {
                 case '>':
                     entity = "&gt;";
                     break;
-                    /*
-                                    case '\'' :
-                                        entity = "&apos;";
-                                        break;
-                    */
                 case '\"':
                     entity = "&quot;";
                     break;
