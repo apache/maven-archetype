@@ -500,6 +500,7 @@ public class IntegrationTestMojo extends AbstractMojo {
                 .setArtifactId(properties.getProperty(Constants.ARTIFACT_ID))
                 .setVersion(properties.getProperty(Constants.VERSION))
                 .setPackage(properties.getProperty(Constants.PACKAGE))
+                .setMavenSession(session)
                 .setRepositorySession(session.getRepositorySession())
                 .setOutputDirectory(basedir)
                 .setProperties(properties);
