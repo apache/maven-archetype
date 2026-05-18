@@ -23,7 +23,7 @@
   <parent>
     <groupId>org.apache.maven</groupId>
     <artifactId>maven-parent</artifactId>
-    <version>47</version>
+    <version>48</version>
     <relativePath />
   </parent>
 
@@ -71,9 +71,9 @@
 
   <properties>
     <maven.archetype.scm.devConnection>scm:git:https://gitbox.apache.org/repos/asf/maven-archetype.git</maven.archetype.scm.devConnection>
-    <mavenVersion>3.9.12</mavenVersion>
-    <!-- provided by Maven core -->
-    <resolverVersion>1.9.25</resolverVersion>
+    <mavenVersion>3.9.15</mavenVersion>
+    <!-- provided by Maven core. From 3.10.x on it needs to be ported to resolver 2.x -->
+    <resolverVersion>1.9.27</resolverVersion>
     <javaVersion>8</javaVersion>
     <netbeans.hint.useExternalMaven>true</netbeans.hint.useExternalMaven>
     <maven.site.path>archetype-archives/archetype-LATEST</maven.site.path>
