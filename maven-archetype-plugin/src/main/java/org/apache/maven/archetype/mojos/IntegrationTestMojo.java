@@ -502,6 +502,7 @@ public class IntegrationTestMojo extends AbstractMojo {
                 .setPackage(properties.getProperty(Constants.PACKAGE))
                 .setMavenSession(session)
                 .setRepositorySession(session.getRepositorySession())
+                .setRemoteRepositories(project.getRemoteProjectRepositories())
                 .setOutputDirectory(basedir)
                 .setProperties(properties);
         // @formatter:on
