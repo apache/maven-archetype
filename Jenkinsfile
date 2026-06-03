@@ -17,4 +17,6 @@
  * under the License.
  */
 
-asfMavenTlpPlgnBuild(tmpWs: true, archives: ['archetype-plugin-its' : 'maven-archetype-plugin/target/it/projects'])
+asfMavenTlpPlgnBuild(tmpWs: true,
+  archives: ['archetype-plugin-its' : 'maven-archetype-plugin/target/it/projects'],
+  siteWithPackage: true)
