@@ -47,7 +47,6 @@ public class DefaultArchetypeSelectionQueryer implements ArchetypeSelectionQuery
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultArchetypeSelectionQueryer.class);
 
     @Inject
-    @Named("archetype")
     private Prompter prompter;
 
     @Override
