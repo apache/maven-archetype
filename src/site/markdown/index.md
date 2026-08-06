@@ -1,81 +1,51 @@
- ------
- About
- ------
- Jason van Zyl
- ------
- 2009-08-26
- ------
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
 
-~~ Licensed to the Apache Software Foundation (ASF) under one
-~~ or more contributor license agreements.  See the NOTICE file
-~~ distributed with this work for additional information
-~~ regarding copyright ownership.  The ASF licenses this file
-~~ to you under the Apache License, Version 2.0 (the
-~~ "License"); you may not use this file except in compliance
-~~ with the License.  You may obtain a copy of the License at
-~~
-~~   http://www.apache.org/licenses/LICENSE-2.0
-~~
-~~ Unless required by applicable law or agreed to in writing,
-~~ software distributed under the License is distributed on an
-~~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-~~ KIND, either express or implied.  See the License for the
-~~ specific language governing permissions and limitations
-~~ under the License.
+http://www.apache.org/licenses/LICENSE-2.0
 
-~~ NOTE: For help with the syntax of this file, see:
-~~ http://maven.apache.org/guides/mini/guide-apt-format.html
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
 
-Maven Archetype
+# Maven Archetype
 
-* What is Archetype?
+## What is Archetype?
 
- In short, Archetype is a Maven project templating toolkit. An archetype is defined as <an original pattern or model
- from which all other things of the same  kind are made>. The names fits as we are trying to provide a system that
- provides a consistent means of generating Maven projects. Archetype will help authors create
- Maven project templates for users, and provides users with the means to generate parameterized versions
- of those project templates.
+In short, Archetype is a Maven project templating toolkit. An archetype is defined as _an original pattern or model from which all other things of the same kind are made_. The names fits as we are trying to provide a system that provides a consistent means of generating Maven projects. Archetype will help authors create Maven project templates for users, and provides users with the means to generate parameterized versions of those project templates.
 
- Using archetypes provides a great way to enable developers quickly in a way consistent with best practices employed
- by your project or organization. Within the Maven project we use archetypes to try and get our users up and running
- as quickly as possible by providing a sample project that demonstrates many of the features of Maven while introducing
- new users to the best practices employed by Maven. In a matter of seconds a new user can have a working Maven project
- to use as a jumping board for investigating more of the features in Maven. We have also tried to make the Archetype
- mechanism additive and by that we mean allowing portions of a project to be captured in an archetype so that pieces
- or aspects of a project can be added to existing projects. A good example of this is the Maven site archetype.
- If, for example, you have used the quick start archetype to generate a working project you can then quickly
- create a site for that project by using the site archetype within that existing project. You can do anything like
- this with archetypes.
+Using archetypes provides a great way to enable developers quickly in a way consistent with best practices employed by your project or organization. Within the Maven project we use archetypes to try and get our users up and running as quickly as possible by providing a sample project that demonstrates many of the features of Maven while introducing new users to the best practices employed by Maven. In a matter of seconds a new user can have a working Maven project to use as a jumping board for investigating more of the features in Maven. We have also tried to make the Archetype mechanism additive and by that we mean allowing portions of a project to be captured in an archetype so that pieces or aspects of a project can be added to existing projects. A good example of this is the Maven site archetype. If, for example, you have used the quick start archetype to generate a working project you can then quickly create a site for that project by using the site archetype within that existing project. You can do anything like this with archetypes.
 
- You may want to standardize J2EE development within your organization so you may want to provide archetypes
- for EJBs, or WARs, or for your web services. Once these archetypes are created and deployed in your organization's
- repository they are available for use by all developers within your organization.
+You may want to standardize J2EE development within your organization so you may want to provide archetypes for EJBs, or WARs, or for your web services. Once these archetypes are created and deployed in your organization's repository they are available for use by all developers within your organization.
 
-* Using an Archetype
+## Using an Archetype
 
-  To create a new project based on an Archetype, you need to call <<<mvn archetype:generate>>> goal, like the following:
+To create a new project based on an Archetype, you need to call `mvn archetype:generate` goal, like the following:
 
-+---+
+```shell
 mvn archetype:generate
-+---+
+```
 
-  Please refer to {{{http://maven.apache.org/plugins/maven-archetype-plugin/usage.html}Archetype Plugin Page}} for more
-  details.
+Please refer to [Archetype Plugin Page](http://maven.apache.org/plugins/maven-archetype-plugin/usage.html) for more details.
 
-* Content
+## Content
 
- Maven Archetype is composed of several modules:
+Maven Archetype is composed of several modules:
 
-*-----------------------------------------------------------+----------------+
-|| Module                                                   || Description   ||
-*-----------------------------------------------------------+----------------+
-| <<{{{./maven-archetype-plugin/}maven-archetype-plugin}}>> | Archetype Plugin to use archetypes with Maven,
-*-----------------------------------------------------------+----------------+
-| {{{./archetype-packaging/}archetype-packaging}}           | Archetype lifecycle and packaging definition,
-*-----------------------------------------------------------+----------------+
-| {{{./archetype-models/}archetype-models}}                 | Descriptors classes and reference documentation,
-*-----------------------------------------------------------+----------------+
-| {{{./archetype-common/}archetype-common}}                 | Core classes,
-*-----------------------------------------------------------+----------------+
+|Module|Description|
+|:---|:---|
+|**[maven-archetype-plugin](./maven-archetype-plugin/)**|Archetype Plugin to use archetypes with Maven,|
+|[archetype-packaging](./archetype-packaging/)|Archetype lifecycle and packaging definition,|
+|[archetype-models](./archetype-models/)|Descriptors classes and reference documentation,|
+|[archetype-common](./archetype-common/)|Core classes,|
 
- Some archetypes are also provided by Maven: see {{{/archetypes/}Maven Archetype Bundles}}.
+Some archetypes are also provided by Maven: see [Maven Archetype Bundles](/archetypes/).

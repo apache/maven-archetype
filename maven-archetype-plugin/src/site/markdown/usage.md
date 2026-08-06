@@ -1,72 +1,43 @@
- ------
- Usage
- ------
- Raphaël Piéroni
- Olivier Lamy
- Hervé Boutemy
- ------
- 2011-09-30
- ------
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
 
-~~ Licensed to the Apache Software Foundation (ASF) under one
-~~ or more contributor license agreements.  See the NOTICE file
-~~ distributed with this work for additional information
-~~ regarding copyright ownership.  The ASF licenses this file
-~~ to you under the Apache License, Version 2.0 (the
-~~ "License"); you may not use this file except in compliance
-~~ with the License.  You may obtain a copy of the License at
-~~
-~~     http://www.apache.org/licenses/LICENSE-2.0
-~~
-~~ Unless required by applicable law or agreed to in writing,
-~~ software distributed under the License is distributed on an
-~~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-~~ KIND, either express or implied.  See the License for the
-~~ specific language governing permissions and limitations
-~~ under the License.
+http://www.apache.org/licenses/LICENSE-2.0
 
-~~ NOTE: For help with the syntax of this file, see:
-~~ http://maven.apache.org/doxia/references/apt-format.html
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
 
+# Project creation
 
-Project creation
+Creating a project from an archetype involves three steps:
 
-    Creating a project from an archetype involves three steps:
-    
-    * prepare repository reference
+- prepare repository reference
+- the selection of the archetype,
+- the configuration of that archetype,
+- the effective creation of the project from the collected information.
+# Usage
 
-    * the selection of the archetype,
+In general an archetype is coming from a remote repository. If that repository can be reached via the setup of your Maven, you're ready to start. In cases where the repository is not managed and you want to refer to it directly, you have to add the repository to your `settings.xml`. Read the small set of instructions on the [Archetype Repository](./archetype-repository.html)-page.
 
-    * the configuration of that archetype,
+Calling `archetype:generate` the plugin will first ask to choose the archetype from the internal catalog. Just enter the number of the archetype.
 
-    * the effective creation of the project from the collected information.
+It then asks you to enter the values for the groupId, the artifactId and the version of the project to create and the base package for the sources.
 
-    []
+It then asks for confirmation of the configuration and performs the creation of the project.
 
-Usage
+In the following example, we selected the quickstart archetype (default value, which is 15 here but may vary depending on the repository content) and set `groupId` to `com.company`, `artifactId` to `project`, `version` to `1.0` and `package` to `com.company.project`.
 
-   In general an archetype is coming from a remote repository. If that repository can
-   be reached via the setup of your Maven, you're ready to start. In cases where the
-   repository is not managed and you want to refer to it directly, you have to add the
-   repository to your <<<settings.xml>>>. Read the small set of instructions on the
-   {{{./archetype-repository.html}Archetype Repository}}-page.
-
-   Calling <<<archetype:generate>>> the plugin will first ask to choose
-   the archetype from the internal catalog. Just enter the number of the archetype.
-
-   It then asks you to enter the values for the groupId, the artifactId
-   and the version of the project to create and the base package 
-   for the sources.
-
-   It then asks for confirmation of the configuration and performs 
-   the creation of the project.
-
-   In the following example, we selected the quickstart archetype (default value,
-   which is 15 here but may vary depending on the repository content)
-   and set <<<groupId>>> to <<<com.company>>>, <<<artifactId>>> to <<<project>>>,
-   <<<version>>> to <<<1.0>>> and <<<package>>> to <<<com.company.project>>>.
-
-+---
+```shell
 $ mvn archetype:generate
 [INFO] Scanning for projects...
 [INFO] Searching repository for plugin with prefix: 'archetype'.
@@ -141,11 +112,11 @@ package: com.company.project
 [INFO] Finished at: Fri Aug 26 23:01:01 GMT 2011
 [INFO] Final Memory: 10M/25M
 [INFO] ------------------------------------------------------------------------
-+---
+```
 
-   Here's the resulting tree of the created project
+Here's the resulting tree of the created project
 
-+---
+```shell
 $ tree project
 project
 |-- pom.xml
@@ -164,38 +135,32 @@ project
                         `-- AppTest.java
 
 11 directories, 3 files
-+---
+```
 
-Filtering to reduce archetype list
+# Filtering to reduce archetype list
 
-  As of version 2.1, you can reduce the list of displayed archetypes.
-  The filter use the following format: <<<[groupId:]artifactId>>>.
-  If you use single word without <<<:>>>, only artifactId will be checked.
-  The filtering applied is a case sensitive contains on the artifactId (and groupId if set).
+As of version 2.1, you can reduce the list of displayed archetypes. The filter use the following format: `[groupId:]artifactId`. If you use single word without `:`, only artifactId will be checked. The filtering applied is a case sensitive contains on the artifactId (and groupId if set).
 
-  Two options
+Two options
 
-  [[1]] With a mojo parameter:
+1. With a mojo parameter:
 
-+---
-$ mvn archetype:generate -Dfilter=org.apache:struts
-+---
+    ```shell
+    $ mvn archetype:generate -Dfilter=org.apache:struts
+    ```
 
-  The displayed list will contain only archetypes with a groupId containing <<<org.apache>>> AND an artifactId containing <<<struts>>>
+    The displayed list will contain only archetypes with a groupId containing `org.apache` AND an artifactId containing `struts`
 
-  [[2]] Through the prompt:
+1. Through the prompt:
 
-+---
-$ mvn archetype:generate
-+---
+    ```shell
+    $ mvn archetype:generate
+    ```
 
-  The full list is displayed and in the prompt response, you will be able to answer with a filter.
+    The full list is displayed and in the prompt response, you will be able to answer with a filter.
 
-+---
-  Choose a number or apply filter (format: [groupId:]artifactId, case sensitive contains): org.apache:struts
-+---
+    ```unknown
+      Choose a number or apply filter (format: [groupId:]artifactId, case sensitive contains): org.apache:struts
+    ```
 
-  Notice that if your filter doesn't match any archetype, the previous list will be displayed again.
-
-  []
-
+    Notice that if your filter doesn't match any archetype, the previous list will be displayed again.

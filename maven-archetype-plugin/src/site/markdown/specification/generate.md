@@ -1,106 +1,63 @@
- ------
- Create a Project from an Archetype
- ------
- Raphaël Piéroni
- ------
- 2011-09-30
- ------
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
 
-~~ Licensed to the Apache Software Foundation (ASF) under one
-~~ or more contributor license agreements.  See the NOTICE file
-~~ distributed with this work for additional information
-~~ regarding copyright ownership.  The ASF licenses this file
-~~ to you under the Apache License, Version 2.0 (the
-~~ "License"); you may not use this file except in compliance
-~~ with the License.  You may obtain a copy of the License at
-~~
-~~     http://www.apache.org/licenses/LICENSE-2.0
-~~
-~~ Unless required by applicable law or agreed to in writing,
-~~ software distributed under the License is distributed on an
-~~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-~~ KIND, either express or implied.  See the License for the
-~~ specific language governing permissions and limitations
-~~ under the License.
+http://www.apache.org/licenses/LICENSE-2.0
 
-~~ NOTE: For help with the syntax of this file, see:
-~~ http://maven.apache.org/doxia/references/apt-format.html
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
 
+# What is done during the creation of a project?
 
-What is done during the creation of a project?
+## Archetype selection
 
-* Archetype selection
+First, the Archetype Plugin asks the user to select an archetype from a list of known archetypes. Archetypes are found in archetype catalogs.
 
-    First, the Archetype Plugin asks the user to select an archetype from a list
-    of known archetypes. Archetypes are found in archetype catalogs.
+## Archetype configuration
 
-* Archetype configuration
+Then the Archetype Plugin asks the user to provide values for each of the four main required properties, which are the project's groupId, artifactId, version and package.
 
-    Then the Archetype Plugin asks the user to provide values for each of the
-    four main required properties, which are the project's groupId, artifactId,
-    version and package.
+It also asks for values for the additional required properties defined in the archetype's metadata file.
 
-    It also asks for values for the additional required properties defined in the
-    archetype's metadata file.
+## Project generation
 
-* Project generation
+Finally, the Archetype Plugin generates the Maven project from the selected/configured archetype.
 
-    Finally, the Archetype Plugin generates the Maven project from the
-    selected/configured archetype.
+The archetype used to generate the project can be single or multi-module.
 
-    The archetype used to generate the project can be single or multi-module.
+The archetype used to generate the project can be partial, which means it enhances an existing project instead of creating a new one.
 
-    The archetype used to generate the project can be partial, which means it
-    enhances an existing project instead of creating a new one.
+If the Archetype Plugin is called from an existing project, using a complete (not partial) archetype, then it generates a sub module in the existing project.
 
-    If the Archetype Plugin is called from an existing project, using a
-    complete (not partial) archetype, then it generates a sub module in the
-    existing project.
+If the Archetype Plugin is configured to create a project in an existing directory, it first checks for the existence of a `pom.xml` file before failing the generation.
 
-    If the Archetype Plugin is configured to create a project in an existing
-    directory, it first checks for the existence of a <<<pom.xml>>> file before
-    failing the generation.
+## Batch mode
 
-* Batch mode
+It is possible to call the Archetype Plugin to generate a project in batch mode (to get rid of the prompting). This is achieved by providing the Archetype Plugin with all the needed values as system properties.
 
-    It is possible to call the Archetype Plugin to generate a project in batch
-    mode (to get rid of the prompting). This is achieved by providing the
-    Archetype Plugin with all the needed values as system properties.
+- `archetypeCatalog` which specifies the catalog(s). The valid catalogs are: `internal` (the default), `local`, `remote`.
+    - `internal` uses an internal catalog
+    - `local` uses the `archetype-catalog.xml` file from the local repository
+    - `remote` uses the `archetype-catalog.xml` from Maven Central, either direct or via a repository manager file
+- `archetypeGroupId` specifies the groupId of the archetype to use
+- `archetypeArtifactId` specifies the artifactId of the archetype to use
+- `archetypeVersion` specifies the version of the archetype to use
+- `archetypeRepository` specifies the repository in which the archetype resides
+- `groupId` specifies the groupId of the generated project
+- `artifactId` specifies the artifactId of the generated project
+- `version` specifies the version of the generated project
+- `package` specifies the package for the sources of the generated project
+- `anotherVelocityProperty` specifies any other required property
+## Behind a Proxy
 
-    * <<<archetypeCatalog>>> which specifies the catalog(s).
-       The valid catalogs are: <<<internal>>> (the default), <<<local>>>, <<<remote>>>.
-
-       * <<<internal>>> uses an internal catalog
-
-       * <<<local>>> uses the <<<archetype-catalog.xml>>> file from the local repository
-
-       * <<<remote>>> uses the <<<archetype-catalog.xml>>> from Maven Central, either direct or via a repository manager 
-         file
-
-       []
-
-    * <<<archetypeGroupId>>> specifies the groupId of the archetype to use
-
-    * <<<archetypeArtifactId>>> specifies the artifactId of the archetype to use
-
-    * <<<archetypeVersion>>> specifies the version of the archetype to use
-
-    * <<<archetypeRepository>>> specifies the repository in which the archetype
-      resides
-
-    * <<<groupId>>> specifies the groupId of the generated project
-
-    * <<<artifactId>>> specifies the artifactId of the generated project
-
-    * <<<version>>> specifies the version of the generated project
-
-    * <<<package>>> specifies the package for the sources of the generated
-      project
-
-    * <<<anotherVelocityProperty>>> specifies any other required property
-
-    []
-
-* Behind a Proxy
-
-    Being behind a proxy is automatically configured by Maven.
+Being behind a proxy is automatically configured by Maven.

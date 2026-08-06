@@ -1,87 +1,62 @@
- ------
- Create an Archetype from a Project
- ------
- Raphaël Piéroni
- ------
- 2011-09-30
- ------
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
 
-~~ Licensed to the Apache Software Foundation (ASF) under one
-~~ or more contributor license agreements.  See the NOTICE file
-~~ distributed with this work for additional information
-~~ regarding copyright ownership.  The ASF licenses this file
-~~ to you under the Apache License, Version 2.0 (the
-~~ "License"); you may not use this file except in compliance
-~~ with the License.  You may obtain a copy of the License at
-~~
-~~     http://www.apache.org/licenses/LICENSE-2.0
-~~
-~~ Unless required by applicable law or agreed to in writing,
-~~ software distributed under the License is distributed on an
-~~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-~~ KIND, either express or implied.  See the License for the
-~~ specific language governing permissions and limitations
-~~ under the License.
+http://www.apache.org/licenses/LICENSE-2.0
 
-~~ NOTE: For help with the syntax of this file, see:
-~~ http://maven.apache.org/doxia/references/apt-format.html
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
 
+# What is done during the creation of an archetype?
 
-What is done during the creation of an archetype?
+## Property resolution
 
-* Property resolution
+First, the Archetype Plugin asks the user to provide the common properties' values (`archetype.groupId`, `archetype.artifactId`, `archetype.version`, `groupId`, `artifactId`, `version`, `package`).
 
-    First, the Archetype Plugin asks the user to provide the common properties'
-    values (<<<archetype.groupId>>>, <<<archetype.artifactId>>>, <<<archetype.version>>>,
-    <<<groupId>>>, <<<artifactId>>>, <<<version>>>, <<<package>>>).
+Then it asks for additional properties.
 
-    Then it asks for additional properties.
+## Archetype creation
 
-* Archetype creation
+Using the project's directory as sources, `filteredExtensions` and `languages` properties, the module tree; the Archetype Plugin searches for relevant filesets indexed by module.
 
-    Using the project's directory as sources, <<<filteredExtensions>>> and <<<languages>>>
-    properties, the module tree; the Archetype Plugin searches for relevant
-    filesets indexed by module.
+Using the relevant filesets, the module tree, the resolved properties; the Archetype Plugin creates the archetype's resources.
 
-    Using the relevant filesets, the module tree, the resolved properties; the
-    Archetype Plugin creates the archetype's resources.
+Then it creates the archetype's descriptor.
 
-    Then it creates the archetype's descriptor.
+Finishing by creating the POM for the archetype as a project.
 
-    Finishing by creating the POM for the archetype as a project.
+## Archetype testing
 
-* Archetype testing
+If you are creating an archetype from existing project all the tests from src/_it/projects_ folder will be executed at this point.
 
-    If you are creating an archetype from existing project all the tests from src/<it/projects> folder
-    will be executed at this point.
+## Archetype installation
 
-* Archetype installation
+Optionally, after creating the archetype, the Archetype Plugin installs the archetype in the local repository. And it updates the local catalog.
 
-    Optionally, after creating the archetype, the Archetype Plugin installs the
-    archetype in the local repository. And it updates the local catalog.
+## Archetype deployment
 
-* Archetype deployment
+Optionally, after installing the archetype, the Archetype Plugin deploys the archetype to the remote repository.
 
-    Optionally, after installing the archetype, the Archetype Plugin deploys the
-    archetype to the remote repository.
+## Interactive mode
 
-* Interactive mode
+The default behaviour is to operate in batch mode. The interactive mode is optionally used.
 
-    The default behaviour is to operate in batch mode. The interactive mode is
-    optionally used.
+## Advanced batch mode
 
-* Advanced batch mode
+In batch mode, the additional properties can only be defined using a property file. This file can also contain the other properties, both the common and `filteredExtensions` and `languages`.
 
-    In batch mode, the additional properties can only be defined using a property
-    file. This file can also contain the other properties, both the common and
-    <<<filteredExtensions>>> and <<<languages>>>.
+## Fileset resolution
 
-* Fileset resolution
+In each module's directory and excluding submodules trees, the Archetype Plugin sorts the files by languages, filteredExtensions and sensible default base paths (src/main/_languages_, src/main/_siblings_, src/test/_languages_, src/test/_siblings_, ...).
 
-    In each module's directory and excluding submodules trees, the Archetype
-    Plugin sorts the files by languages, filteredExtensions and sensible
-    default base paths (src/main/<languages>, src/main/<siblings>,
-    src/test/<languages>, src/test/<siblings>, ...).
-
-    This defines a three-dimensional matrix. Each sorted group (matrix' cases)
-    becomes a resolved fileset.
+This defines a three-dimensional matrix. Each sorted group (matrix' cases) becomes a resolved fileset.

@@ -1,54 +1,36 @@
- ------
- Advanced Usage
- ------
- Raphaël Piéroni
- ------
- 2008
- ------
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
 
-~~ Licensed to the Apache Software Foundation (ASF) under one
-~~ or more contributor license agreements.  See the NOTICE file
-~~ distributed with this work for additional information
-~~ regarding copyright ownership.  The ASF licenses this file
-~~ to you under the Apache License, Version 2.0 (the
-~~ "License"); you may not use this file except in compliance
-~~ with the License.  You may obtain a copy of the License at
-~~
-~~     http://www.apache.org/licenses/LICENSE-2.0
-~~
-~~ Unless required by applicable law or agreed to in writing,
-~~ software distributed under the License is distributed on an
-~~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-~~ KIND, either express or implied.  See the License for the
-~~ specific language governing permissions and limitations
-~~ under the License.
+http://www.apache.org/licenses/LICENSE-2.0
 
-~~ NOTE: For help with the syntax of this file, see:
-~~ http://maven.apache.org/doxia/references/apt-format.html
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
 
+# Archetype creation
 
-Archetype creation
+Creating an archetype from an existing project involves three steps:
 
-    Creating an archetype from an existing project involves three steps:
+- the archetype resolution
+- the archetype installation:deployment
+- the archetype usage
+# Usage
 
-    * the archetype resolution
+Calling `mvn archetype:create-from-project` the plugin first resolves the package by guessing the project directory.
 
-    * the archetype installation:deployment
+It then generates the directory tree of the archetype in the `target/generated-sources/archetype` directory.
 
-    * the archetype usage
-
-    []
-
-
-Usage
-
-    Calling <<<mvn archetype:create-from-project>>> the plugin first resolves
-    the package by guessing the project directory.
-
-    It then generates the directory tree of the archetype in the
-    <<<target/generated-sources/archetype>>> directory.
-
-+---
+```shell
 mvn archetype:create-from-project
 [INFO] Scanning for projects...
 [INFO] Searching repository for plugin with prefix: 'archetype'.
@@ -78,12 +60,11 @@ mvn archetype:create-from-project
 [INFO] Finished at: Fri Feb 22 21:49:52 GMT 2008
 [INFO] Final Memory: 10M/26M
 [INFO] ------------------------------------------------------------------------
-+---
+```
 
-    Then move to that generated directory and call <<<mvn install>>> on the
-    created archetype.
+Then move to that generated directory and call `mvn install` on the created archetype.
 
-+---
+```shell
 $ cd target/generated-sources/archetype/
 $ mvn install
 [INFO] Scanning for projects...
@@ -112,11 +93,11 @@ $ mvn install
 [INFO] Finished at: Fri Feb 22 21:51:57 GMT 2008
 [INFO] Final Memory: 14M/35M
 [INFO] ------------------------------------------------------------------------
-+---
+```
 
-    Finally move to a fresh directory and use your archetype.
+Finally move to a fresh directory and use your archetype.
 
-+---
+```shell
 $ mkdir /tmp/archetype
 $ cd /tmp/archetype
 $ mvn archetype:generate -DarchetypeCatalog=local
@@ -136,33 +117,20 @@ $ mvn archetype:generate -DarchetypeCatalog=local
 Choose archetype:
 1: local -> project (project)
 Choose a number or apply filter (format: [groupId:]artifactId, case sensitive contains): 1:
-+---
+```
 
-Testing
-	
-	The user can provide archetype test projects by placing them in <<<src/it/projects>>>
-	folder of their project. Upon creating archetype from the existing project all the test
-	projects will be executed to verify the archetype created by this project is good.
-	{{{./integration-test-mojo.html}Read more}} about testing maven archetype.
+# Testing
 
-Configuration
+The user can provide archetype test projects by placing them in `src/it/projects` folder of their project. Upon creating archetype from the existing project all the test projects will be executed to verify the archetype created by this project is good. [Read more](./integration-test-mojo.html) about testing maven archetype.
 
-    The <<<create-from-project>>> goal enable the user to provide some sensible
-    configuration using the system properties or a property file.
+# Configuration
 
-    The system properties permits the user to define the groupId, artifactId,
-    version of the created archetype. They also permits to override the resolved
-    package and to create a partial archetype.
+The `create-from-project` goal enable the user to provide some sensible configuration using the system properties or a property file.
 
-    When used, the property file takes precedence over the system properties.
-    It is also the only way to define additional properties in the archetype.
-    
-Post-generation script
+The system properties permits the user to define the groupId, artifactId, version of the created archetype. They also permits to override the resolved package and to create a partial archetype.
 
-	If the user wants to customize the generated project even further, a groovy script
-	named <<<archetype-post-generate.groovy>>> can be added in <<<src/main/resources/META-INF/>>>.
-	This script will end up in the generated archetype's <<<META-INF>>> folder and will be executed
-	upon creating a project from this archetype. This groovy script has access to the 
-	<<<ArchetypeGenerationRequest>>> object, as well as all the <<<System.getProperties()>>> and all
-	the archetype generation properties the user has specified.
-	
+When used, the property file takes precedence over the system properties. It is also the only way to define additional properties in the archetype.
+
+# Post-generation script
+
+If the user wants to customize the generated project even further, a groovy script named `archetype-post-generate.groovy` can be added in `src/main/resources/META-INF/`. This script will end up in the generated archetype's `META-INF` folder and will be executed upon creating a project from this archetype. This groovy script has access to the `ArchetypeGenerationRequest` object, as well as all the `System.getProperties()` and all the archetype generation properties the user has specified.
