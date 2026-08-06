@@ -1,42 +1,29 @@
- ------
- Create an archetype from a multi-module project
- ------
- Raphaël Piéroni
- ------
- 2011-09-30
- ------
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
 
-~~ Licensed to the Apache Software Foundation (ASF) under one
-~~ or more contributor license agreements.  See the NOTICE file
-~~ distributed with this work for additional information
-~~ regarding copyright ownership.  The ASF licenses this file
-~~ to you under the Apache License, Version 2.0 (the
-~~ "License"); you may not use this file except in compliance
-~~ with the License.  You may obtain a copy of the License at
-~~
-~~     http://www.apache.org/licenses/LICENSE-2.0
-~~
-~~ Unless required by applicable law or agreed to in writing,
-~~ software distributed under the License is distributed on an
-~~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-~~ KIND, either express or implied.  See the License for the
-~~ specific language governing permissions and limitations
-~~ under the License.
+http://www.apache.org/licenses/LICENSE-2.0
 
-~~ NOTE: For help with the syntax of this file, see:
-~~ http://maven.apache.org/doxia/references/apt-format.html
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
 
-Create an archetype from a multi-module project
+# Create an archetype from a multi-module project
 
-   Creating an archetype for a multi-module project is as simple as 
-   {{{../advanced-usage.html}creating one for a single-module project}}.
+Creating an archetype for a multi-module project is as simple as [creating one for a single-module project](../advanced-usage.html).
 
-   Just move to the root directory of a multi-module project and call
-   <<<mvn archetype:create-from-project>>>. In the archetype used as an example,
-   some files need to be non filtered. This is achieved by giving the archetype
-   plugin some values in the <<<archetype.filteredExtensions>>> property.
+Just move to the root directory of a multi-module project and call `mvn archetype:create-from-project`. In the archetype used as an example, some files need to be non filtered. This is achieved by giving the archetype plugin some values in the `archetype.filteredExtensions` property.
 
-+--
+```shell
 $ mvn archetype:create-from-project -Darchetype.filteredExtensions=java
 [INFO] Scanning for projects...
 [INFO] Reactor build order:
@@ -110,11 +97,11 @@ $ mvn archetype:create-from-project -Darchetype.filteredExtensions=java
 [INFO] Finished at: Mon Sep 15 19:11:17 CEST 2008
 [INFO] Final Memory: 19M/36M
 [INFO] ------------------------------------------------------------------------
-+--
+```
 
-   Install the archetype as usual.
+Install the archetype as usual.
 
-+--
+```shell
 $ cd target/generated-sources/archetype/
 $ mvn install
 [INFO] Scanning for projects...
@@ -143,11 +130,11 @@ $ mvn install
 [INFO] Finished at: Mon Sep 15 19:11:54 CEST 2008
 [INFO] Final Memory: 10M/20M
 [INFO] ------------------------------------------------------------------------
-+--
+```
 
-    And use it.
+And use it.
 
-+--
+```shell
 $ cd /tmp/archetype/
 $ mvn archetype:generate -DarchetypeCatalog=local
 [INFO] Scanning for projects...
@@ -235,17 +222,13 @@ package: com.company
 [INFO] Finished at: Mon Sep 15 19:13:54 CEST 2008
 [INFO] Final Memory: 8M/15M
 [INFO] ------------------------------------------------------------------------
-+--
+```
 
-    As one can see, Velocity, the internal processor of archetype files,
-    complains about not finding some properties. One should not worry about that. What is
-    more interesting, is that the archetype plugin has renamed the original
-    project module to "__rootArtifactId__". And during the generation that
-    name is converted to the provided artifactId.
+As one can see, Velocity, the internal processor of archetype files, complains about not finding some properties. One should not worry about that. What is more interesting, is that the archetype plugin has renamed the original project module to "\_\_rootArtifactId\_\_". And during the generation that name is converted to the provided artifactId.
 
-    The resulting directory tree of the project is shown here.
+The resulting directory tree of the project is shown here.
 
-+--
+```shell
 $ tree
 .
 |____project
@@ -409,12 +392,11 @@ $ tree
 | | | | | | | | | |____AbstractWSTestCase.java
 | | | | |____resources
 | | | | | |____log4j.xml
-+--
+```
 
-    This can be compared to the original tree of the project from which the
-    archetype is originating.
+This can be compared to the original tree of the project from which the archetype is originating.
 
-+--
+```shell
 $ tree
 .
 |____archetype-application
@@ -598,4 +580,4 @@ $ tree
 |____src
 | |____env
 | | |____dev
-+--
+```

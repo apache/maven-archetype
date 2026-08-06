@@ -1,41 +1,29 @@
- ------
- Create an archetype with a property file
- ------
- Raphaël Piéroni
- ------
- 2011-09-30
- ------
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
 
-~~ Licensed to the Apache Software Foundation (ASF) under one
-~~ or more contributor license agreements.  See the NOTICE file
-~~ distributed with this work for additional information
-~~ regarding copyright ownership.  The ASF licenses this file
-~~ to you under the Apache License, Version 2.0 (the
-~~ "License"); you may not use this file except in compliance
-~~ with the License.  You may obtain a copy of the License at
-~~
-~~     http://www.apache.org/licenses/LICENSE-2.0
-~~
-~~ Unless required by applicable law or agreed to in writing,
-~~ software distributed under the License is distributed on an
-~~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-~~ KIND, either express or implied.  See the License for the
-~~ specific language governing permissions and limitations
-~~ under the License.
+http://www.apache.org/licenses/LICENSE-2.0
 
-~~ NOTE: For help with the syntax of this file, see:
-~~ http://maven.apache.org/doxia/references/apt-format.html
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
 
-Create an archetype with a property file
+# Create an archetype with a property file
 
-    Creating an archetype using a property file is possible by defining a text
-    file containing the properties that will lead the archetype creation, and by
-    calling the Archetype Plugin with the command line property
-    <<<archetype.properties>>> giving it the path to the property file.
+Creating an archetype using a property file is possible by defining a text file containing the properties that will lead the archetype creation, and by calling the Archetype Plugin with the command line property `archetype.properties` giving it the path to the property file.
 
-    The directory above the would be archetype project:
+The directory above the would be archetype project:
 
-+--
+```shell
 $ tree
 .
 |____archetype.properties
@@ -58,11 +46,11 @@ $ tree
 | | | | | | |____AppTest.java
 | | | |____resources
 | | | | |____App.properties
-+--
+```
 
-    The content of the property file:
+The content of the property file:
 
-+--
+```shell
 $ cat archetype.properties
 archetype.groupId=my.group.id
 archetype.artifactId=archetype-with-properties
@@ -72,11 +60,11 @@ archetype.filteredExtensions=java
 archetype.languages=groovy
 
 an_additional_property=my specific value
-+--
+```
 
-    Creating the archetype:
+Creating the archetype:
 
-+--
+```shell
 $ cd some-project
 $ mvn archetype:create-from-project -Darchetype.properties=../archetype.properties
 [INFO] Scanning for projects...
@@ -136,11 +124,11 @@ $ mvn install
 [INFO] Finished at: Tue Sep 16 19:43:57 CEST 2008
 [INFO] Final Memory: 10M/20M
 [INFO] ------------------------------------------------------------------------
-+--
+```
 
-    Using that archetype:
+Using that archetype:
 
-+--
+```shell
 $ mvn archetype:generate -DarchetypeCatalog=local
 $ mvn archetype:generate -DarchetypeCatalog=local
 [INFO] Scanning for projects...
@@ -191,20 +179,13 @@ package: my.new.group
 [INFO] Finished at: Tue Sep 16 19:51:09 CEST 2008
 [INFO] Final Memory: 8M/15M
 [INFO] ------------------------------------------------------------------------
-+--
+```
 
-    As you can see, the additional property is provided by default. As one want
-    to override the value, one just have to answer <<<N>>> to the first
-    confirmation, then the whole bunch of properties is proposed.
+As you can see, the additional property is provided by default. As one want to override the value, one just have to answer `N` to the first confirmation, then the whole bunch of properties is proposed.
 
-    The tree of the generated project show that the only language recognized as
-    such is groovy. The property <<<archetype.languages>>> gives the list of the
-    languages. The languages are the directories in <<<src/main>>> and
-    <<<src/test>>> that have the capacity to contain a "packaged" directory
-    tree. This means that the <<<package>>> value is used to generate the new
-    directory for that language.
+The tree of the generated project show that the only language recognized as such is groovy. The property `archetype.languages` gives the list of the languages. The languages are the directories in `src/main` and `src/test` that have the capacity to contain a "packaged" directory tree. This means that the `package` value is used to generate the new directory for that language.
 
-+--
+```shell
 $ cd my-new-artifact/
  tree
 .
@@ -227,14 +208,11 @@ $ cd my-new-artifact/
 | | | | | |____AppTest.java
 | | |____resources
 | | | |____App.properties
-+--
+```
 
-    The contents of both App.groovy and App.java shows that the only filtered
-    files are java files. The property <<<archetype.filteredExtensions>>> gives
-    the list of file extensions that permit the filtering. In the example, only
-    the files whose names ending with <<<.java>>> are filtered.
+The contents of both App.groovy and App.java shows that the only filtered files are java files. The property `archetype.filteredExtensions` gives the list of file extensions that permit the filtering. In the example, only the files whose names ending with `.java` are filtered.
 
-+--
+```shell
 $ cat src/main/groovy/my/new/group/App.groovy
 package com.company
 
@@ -258,19 +236,11 @@ public class App
         System.out.println( "Hello World!" );
     }
 }
-+--
+```
 
-    The languages and the filtered extensions are used even if that don't make
-    any sense. All the properties defined in the property file can be used
-    as command line properties.
+The languages and the filtered extensions are used even if that don't make any sense. All the properties defined in the property file can be used as command line properties.
 
-    When undefined, the <<<archetype.languages>>> and <<<archetype.filteredExtensions>>>
-    properties are given sensible default values:
+When undefined, the `archetype.languages` and `archetype.filteredExtensions` properties are given sensible default values:
 
-    * <<<archetype.filteredExtensions>>> have: <<<java, xml, txt, groovy, cs, mdo, aj,
-       jsp, gsp, vm, html, xhtml, properties, .classpath, .project>>>. Notice
-       the dotted filtered extensions that contains the complete file names.
-
-    * <<<archetype.languages>>> have: <<<java, groovy, csharp, aspectj>>>.
-
-    []
+- `archetype.filteredExtensions` have: `java, xml, txt, groovy, cs, mdo, aj, jsp, gsp, vm, html, xhtml, properties, .classpath, .project`. Notice the dotted filtered extensions that contains the complete file names.
+- `archetype.languages` have: `java, groovy, csharp, aspectj`.
