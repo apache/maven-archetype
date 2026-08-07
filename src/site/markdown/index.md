@@ -1,3 +1,10 @@
+---
+title: About
+author: 
+  - Jason van Zyl
+date: 2009-08-26
+---
+
 <!--
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file

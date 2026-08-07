@@ -1,3 +1,10 @@
+---
+title: Generate project using an alternative catalog
+author: 
+  - Raphaël Piéroni
+date: 2010-09-11
+---
+
 <!--
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
