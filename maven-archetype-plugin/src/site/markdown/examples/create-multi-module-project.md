@@ -231,7 +231,7 @@ package: com.company
 [INFO] ------------------------------------------------------------------------
 ```
 
-As one can see, Velocity, the internal processor of archetype files, complains about not finding some properties. One should not worry about that. What is more interesting, is that the archetype plugin has renamed the original project module to "\_\_rootArtifactId\_\_". And during the generation that name is converted to the provided artifactId.
+As one can see, Velocity, the internal processor of archetype files, complains about not finding some properties. One should not worry about that. What is more interesting, is that the archetype plugin has renamed the original project module to "\__rootArtifactId\_\_". And during the generation that name is converted to the provided artifactId.
 
 The resulting directory tree of the project is shown here.
 
