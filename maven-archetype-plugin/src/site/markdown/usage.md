@@ -1,3 +1,12 @@
+---
+title: Usage
+author: 
+  - Raphaël Piéroni
+  - Olivier Lamy
+  - Hervé Boutemy
+date: 2011-09-30
+---
+
 <!--
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file

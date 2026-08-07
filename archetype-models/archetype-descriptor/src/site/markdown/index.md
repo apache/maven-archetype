@@ -1,3 +1,10 @@
+---
+title: Maven Archetype Descriptor Model
+author: 
+  - Hervé Boutemy
+date: 2011-08-21
+---
+
 <!--
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file

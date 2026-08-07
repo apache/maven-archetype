@@ -1,3 +1,10 @@
+---
+title: Archetype Repository
+author: 
+  - Robert Scholte
+date: 2017-04-01
+---
+
 <!--
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
