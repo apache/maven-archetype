@@ -21,16 +21,16 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-<a name="top"></a>
+<a id="top"></a>
 
 # Frequently Asked Questions
 
 1. [What packaging should I use: `maven-archetype` or `jar`? What is the difference?](#packaging)
 1. [How to generate a project from an archetype in a custom (potentially authenticated) repository?](#authentication)
-1. [What is "Old Archetype 1.0.x"?](#old)
+1. [What is &quot;Old Archetype 1.0.x&quot;?](#old)
 1. [How do I get files like `.gitignore` included into my archetype?](#excludes)
 
-<a name="packaging"></a>
+<a id="packaging"></a>
 
 ### What packaging should I use: `maven-archetype` or `jar`? What is the difference?
 
@@ -42,7 +42,7 @@ adds archetype related bindings to build lifecycle: see
 [`maven-archetype` packaging documentation](../archetype-packaging/) for more
 information.
 
-<a name="authentication"></a>
+<a id="authentication"></a>
 
 ### How to generate a project from an archetype in a custom (potentially authenticated) repository?
 
@@ -57,9 +57,9 @@ For resolving the **actual archetype** an artificial repository with id
 contained a repository (leveraging its URL). As fallback all regular remote
 repositories (as defined in the `settings.xml`) are tried.
 
-<a name="old"></a>
+<a id="old"></a>
 
-### What is "Old Archetype 1.0.x"?
+### What is &quot;Old Archetype 1.0.x&quot;?
 
 Old Archetype 1.0.x was using a `archetype` XML descriptor defined in
 `/xsd/archetype-1.0.0.xsd`: see
@@ -73,7 +73,7 @@ For compatibility, old archetypes can still be used to generate new projects, bu
 archetypes should be updated to the new descriptor format: in the future, old format
 will be removed.
 
-<a name="excludes"></a>
+<a id="excludes"></a>
 
 ### How do I get files like `.gitignore` included into my archetype?
 
