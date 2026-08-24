@@ -16,38 +16,59 @@
     <name>Maven Webapp Sample</name>
 
     <profiles>
+        <!--
+          `mvn -Prun` builds the war and serves it on http://localhost:15000/.
+
+          Cargo is container-neutral: swapping the containerId below runs the same
+          war on Jetty, WildFly, Payara and so on without touching the rest of the
+          pom. Tomcat 9 is the default here because this sample's web.xml declares
+          servlet 2.5 in the javax.servlet namespace; Tomcat 10+ and Jetty 11+ moved
+          to jakarta.servlet and would not deploy it unchanged.
+        -->
         <profile>
-            <id>jetty</id>
+            <id>run</id>
             <build>
-                <defaultGoal>jetty:run</defaultGoal>
+                <defaultGoal>cargo:run</defaultGoal>
                 <plugins>
                     <plugin>
-                        <groupId>org.mortbay.jetty</groupId>
-                        <artifactId>maven-jetty-plugin</artifactId>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven3-plugin</artifactId>
+                        <version>1.10.28</version>
                         <configuration>
-                            <connectors>
-                                <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
-                                    <port>15000</port>
-                                    <maxIdleTime>60000</maxIdleTime>
-                                </connector>
-                            </connectors>
+                            <container>
+                                <containerId>tomcat9x</containerId>
+                                <type>embedded</type>
+                            </container>
+                            <configuration>
+                                <properties>
+                                    <cargo.servlet.port>15000</cargo.servlet.port>
+                                </properties>
+                            </configuration>
+                            <deployables>
+                                <deployable>
+                                    <properties>
+                                        <context>/</context>
+                                    </properties>
+                                </deployable>
+                            </deployables>
                         </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>tomcat</id>
-            <build>
-                <defaultGoal>tomcat:run</defaultGoal>
-                <finalName>${pom.artifactId}</finalName>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>tomcat-maven-plugin</artifactId>
-                        <configuration>
-                            <port>15000</port>
-                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.apache.tomcat.embed</groupId>
+                                <artifactId>tomcat-embed-core</artifactId>
+                                <version>9.0.121</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.apache.tomcat.embed</groupId>
+                                <artifactId>tomcat-embed-jasper</artifactId>
+                                <version>9.0.121</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.apache.tomcat</groupId>
+                                <artifactId>tomcat-util-scan</artifactId>
+                                <version>9.0.121</version>
+                            </dependency>
+                        </dependencies>
                     </plugin>
                 </plugins>
             </build>
