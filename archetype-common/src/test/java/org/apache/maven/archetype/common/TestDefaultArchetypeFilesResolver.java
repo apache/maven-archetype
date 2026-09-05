@@ -19,6 +19,7 @@
 package org.apache.maven.archetype.common;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.maven.archetype.metadata.FileSet;
@@ -59,5 +60,26 @@ public class TestDefaultArchetypeFilesResolver {
         List<String> fileSetResources = resolver.filterFiles("", fileSet, archetypeResources);
 
         assertEquals(2, fileSetResources.size());
+    }
+
+    @Test
+    public void testFindOtherResourcesIsRestrictedToTheSourcesDirectories() {
+        List<String> files = new ArrayList<>();
+
+        files.add("src/main/resources/App.properties");
+        files.add("src/test/resources/AppTest.properties");
+        files.add("pom.xml");
+
+        List<String> sourcesFiles = new ArrayList<>();
+
+        sourcesFiles.add("src/main/java/App.java");
+
+        ArchetypeFilesResolver resolver = new DefaultArchetypeFilesResolver();
+
+        // At level 3 the sources file yields the directory "src/main", so only resources below it
+        // belong to this level. The remaining files are left for the level 2 and root passes.
+        List<String> otherResources = resolver.findOtherResources(3, files, sourcesFiles, "java/**");
+
+        assertEquals(Arrays.asList("src/main/resources/App.properties"), otherResources);
     }
 }
