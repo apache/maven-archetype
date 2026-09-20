@@ -62,8 +62,6 @@ import org.apache.maven.shared.invoker.InvocationRequest;
 import org.apache.maven.shared.invoker.InvocationResult;
 import org.apache.maven.shared.invoker.Invoker;
 import org.apache.maven.shared.invoker.MavenInvocationException;
-import org.apache.maven.shared.scriptinterpreter.ScriptException;
-import org.apache.maven.shared.scriptinterpreter.ScriptRunner;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.InterpolationFilterReader;
@@ -179,12 +177,13 @@ public class IntegrationTestMojo extends AbstractMojo {
     private File testProjectsDirectory;
 
     /**
-     * Relative path of a cleanup/verification hook script to run after executing the build. This script may be written
-     * with either BeanShell or Groovy. If the file extension is omitted (e.g. <code>verify</code>), the
-     * plugin searches for the file by trying out the well-known extensions <code>.bsh</code> and <code>.groovy</code>.
-     * BeanShell scripts are deprecated and will stop being supported; write new scripts in Groovy and port existing
-     * <code>.bsh</code> scripts. If this script exists for a particular project but returns any non-null value different from <code>true</code> or
-     * throws an exception, the corresponding build is flagged as a failure.
+     * Relative path of a cleanup/verification hook script to run after executing the build, written in Groovy. If
+     * the file extension is omitted (e.g. <code>verify</code>), the plugin looks for <code>verify.groovy</code>. The
+     * script sees <code>basedir</code>, <code>scriptdir</code> and <code>context</code>. If it exists for a particular
+     * project but returns any non-null value different from <code>true</code> or throws an exception, the
+     * corresponding build is flagged as a failure. BeanShell scripts (<code>.bsh</code>) are no longer supported
+     * since 3.5.0 and fail the test with a message saying so; a <code>verify.groovy</code> next to a
+     * <code>verify.bsh</code> wins.
      *
      * @since 2.2
      */
@@ -586,8 +585,13 @@ public class IntegrationTestMojo extends AbstractMojo {
 
     private void invokePostArchetypeGenerationGoals(String goals, File basedir, File goalFile)
             throws IntegrationTestFailure, IOException, MojoExecutionException {
-        FileLogger logger = setupLogger(basedir);
+        try (BuildLog logger = setupLogger(basedir)) {
+            invokePostArchetypeGenerationGoals(goals, basedir, goalFile, logger);
+        }
+    }
 
+    private void invokePostArchetypeGenerationGoals(String goals, File basedir, File goalFile, BuildLog logger)
+            throws IntegrationTestFailure, IOException, MojoExecutionException {
         if (!StringUtils.isBlank(goals)) {
 
             getLog().info("Invoking post-archetype-generation goals: " + goals);
@@ -662,29 +666,19 @@ public class IntegrationTestMojo extends AbstractMojo {
             getLog().info("No post-archetype-generation goals to invoke.");
         }
         // verify result
-        try (ScriptRunner scriptRunner = new ScriptRunner()) {
-            scriptRunner.setScriptEncoding(encoding);
-
-            Map<String, Object> context = new LinkedHashMap<>();
-            context.put("projectDir", basedir);
-
-            scriptRunner.run("post-build script", goalFile.getParentFile(), postBuildHookScript, context, logger);
-        } catch (ScriptException e) {
-            throw new IntegrationTestFailure("post build script failure failure: " + e.getMessage(), e);
-        }
+        Map<String, Object> context = new LinkedHashMap<>();
+        context.put("projectDir", basedir);
+        // as before, the script's basedir is the test project directory, the generated project is context.projectDir
+        new VerifyScriptRunner(encoding).run(goalFile.getParentFile(), postBuildHookScript, context, logger);
     }
 
-    private FileLogger setupLogger(File basedir) throws IOException {
-        FileLogger logger = null;
+    private BuildLog setupLogger(File basedir) throws IOException {
+        BuildLog logger = null;
 
         if (!noLog) {
             File outputLog = new File(basedir, "build.log");
 
-            if (streamLogs) {
-                logger = new FileLogger(outputLog, getLog());
-            } else {
-                logger = new FileLogger(outputLog);
-            }
+            logger = new BuildLog(outputLog, streamLogs ? getLog() : null);
 
             getLog().debug("build log initialized in: " + outputLog);
         }
