@@ -182,7 +182,8 @@ public class IntegrationTestMojo extends AbstractMojo {
      * Relative path of a cleanup/verification hook script to run after executing the build. This script may be written
      * with either BeanShell or Groovy. If the file extension is omitted (e.g. <code>verify</code>), the
      * plugin searches for the file by trying out the well-known extensions <code>.bsh</code> and <code>.groovy</code>.
-     * If this script exists for a particular project but returns any non-null value different from <code>true</code> or
+     * BeanShell scripts are deprecated and will stop being supported; write new scripts in Groovy and port existing
+     * <code>.bsh</code> scripts. If this script exists for a particular project but returns any non-null value different from <code>true</code> or
      * throws an exception, the corresponding build is flagged as a failure.
      *
      * @since 2.2
