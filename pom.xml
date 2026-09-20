@@ -71,7 +71,7 @@
 
   <properties>
     <maven.archetype.scm.devConnection>scm:git:https://gitbox.apache.org/repos/asf/maven-archetype.git</maven.archetype.scm.devConnection>
-    <mavenVersion>3.9.15</mavenVersion>
+    <mavenVersion>3.9.16</mavenVersion>
     <!-- provided by Maven core. From 3.10.x on it needs to be ported to resolver 2.x -->
     <resolverVersion>1.9.27</resolverVersion>
     <javaVersion>8</javaVersion>
