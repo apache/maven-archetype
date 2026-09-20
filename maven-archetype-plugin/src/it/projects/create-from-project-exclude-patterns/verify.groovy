@@ -23,7 +23,7 @@ import java.io.*;
 File archetype = new File( basedir, "target/generated-sources/archetype/src/main/resources/archetype-resources/" );
 
 // ARCHETYPE-513
-String[] excluded = new String[] { "/", "src/", "src/main/", "src/main/resources/" };
+String[] excluded = [ "/", "src/", "src/main/", "src/main/resources/" ] as String[];
 for ( String exclude : excluded )
 {
     File app = new File( archetype, exclude + "toexclude" );
@@ -33,7 +33,7 @@ for ( String exclude : excluded )
     }
 }
 
-String[] included = new String[] { "file.txt", "file.xml" };
+String[] included = [ "file.txt", "file.xml" ] as String[];
 for ( String include : included )
 {
     File app = new File( archetype, "src/main/resources/" + include );
