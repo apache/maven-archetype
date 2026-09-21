@@ -49,6 +49,7 @@ import org.apache.maven.archetype.ArchetypeCreationRequest;
 import org.apache.maven.archetype.ArchetypeCreationResult;
 import org.apache.maven.archetype.common.ArchetypeFilesResolver;
 import org.apache.maven.archetype.common.Constants;
+import org.apache.maven.archetype.common.MavenBuilds;
 import org.apache.maven.archetype.common.PomManager;
 import org.apache.maven.archetype.common.util.ListScanner;
 import org.apache.maven.archetype.common.util.PathUtils;
@@ -57,6 +58,8 @@ import org.apache.maven.archetype.metadata.FileSet;
 import org.apache.maven.archetype.metadata.ModuleDescriptor;
 import org.apache.maven.archetype.metadata.RequiredProperty;
 import org.apache.maven.archetype.metadata.io.xpp3.ArchetypeDescriptorXpp3Writer;
+import org.apache.maven.executor.ExecutorRequest;
+import org.apache.maven.executor.ExecutorResult;
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Extension;
@@ -65,10 +68,6 @@ import org.apache.maven.model.Plugin;
 import org.apache.maven.model.Profile;
 import org.apache.maven.model.Resource;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.shared.invoker.DefaultInvocationRequest;
-import org.apache.maven.shared.invoker.InvocationRequest;
-import org.apache.maven.shared.invoker.InvocationResult;
-import org.apache.maven.shared.invoker.Invoker;
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
@@ -97,14 +96,10 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
 
     private PomManager pomManager;
 
-    private Invoker invoker;
-
     @Inject
-    public FilesetArchetypeCreator(
-            ArchetypeFilesResolver archetypeFilesResolver, PomManager pomManager, Invoker invoker) {
+    public FilesetArchetypeCreator(ArchetypeFilesResolver archetypeFilesResolver, PomManager pomManager) {
         this.archetypeFilesResolver = archetypeFilesResolver;
         this.pomManager = pomManager;
-        this.invoker = invoker;
     }
 
     @Override
@@ -285,26 +280,33 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
                 FileUtils.copyDirectoryStructure(
                         archetypeIntegrationTestInputFolder, archetypeIntegrationTestOutputFolder);
             }
-            InvocationRequest internalRequest = new DefaultInvocationRequest();
-            internalRequest.setPomFile(archetypePomFile);
-            internalRequest.setUserSettingsFile(request.getSettingsFile());
-            internalRequest.addArg(request.getPostPhase());
-            internalRequest.setLocalRepositoryDirectory(request.getLocalRepositoryBasedir());
-
+            List<String> arguments = new ArrayList<>();
+            arguments.add("-B");
+            arguments.add("-f");
+            arguments.add(archetypePomFile.getAbsolutePath());
+            if (request.getSettingsFile() != null) {
+                arguments.add("-s");
+                arguments.add(request.getSettingsFile().getAbsolutePath());
+            }
+            if (request.getLocalRepositoryBasedir() != null) {
+                arguments.add("-Dmaven.repo.local="
+                        + request.getLocalRepositoryBasedir().getAbsolutePath());
+            }
             String httpsProtocols = System.getProperty("https.protocols");
             if (httpsProtocols != null) {
-                Properties userProperties = new Properties();
-                userProperties.setProperty("https.protocols", httpsProtocols);
-                internalRequest.setProperties(userProperties);
+                arguments.add("-Dhttps.protocols=" + httpsProtocols);
             }
+            arguments.add(request.getPostPhase());
 
-            InvocationResult invokerResult = invoker.execute(internalRequest);
-            if (invokerResult.getExitCode() != 0) {
-                if (invokerResult.getExecutionException() != null) {
-                    throw invokerResult.getExecutionException();
-                } else {
-                    throw new Exception("Invoker process ended with result different than 0!");
-                }
+            ExecutorResult buildResult = MavenBuilds.run(ExecutorRequest.mavenBuilder()
+                    .cwd(archetypePomFile.getAbsoluteFile().getParentFile().toPath())
+                    .arguments(arguments)
+                    .stdOut(MavenBuilds.keepOpen(System.out))
+                    .stdErr(MavenBuilds.keepOpen(System.err))
+                    .build());
+            if (!buildResult.success()) {
+                throw new Exception("Maven process ended with exit code "
+                        + buildResult.exitCode().orElse(-1) + "!");
             }
 
         } catch (Exception e) {

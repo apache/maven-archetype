@@ -26,10 +26,12 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -44,12 +46,16 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
 import org.apache.maven.archetype.common.Constants;
+import org.apache.maven.archetype.common.MavenBuilds;
 import org.apache.maven.archetype.downloader.DownloadException;
 import org.apache.maven.archetype.downloader.Downloader;
 import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
 import org.apache.maven.archetype.generator.ArchetypeGenerator;
 import org.apache.maven.archetype.ui.generation.ArchetypeGenerationConfigurator;
 import org.apache.maven.execution.MavenSession;
+import org.apache.maven.executor.ExecutorException;
+import org.apache.maven.executor.ExecutorRequest;
+import org.apache.maven.executor.ExecutorResult;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -57,11 +63,6 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.settings.Settings;
 import org.apache.maven.settings.io.xpp3.SettingsXpp3Writer;
-import org.apache.maven.shared.invoker.DefaultInvocationRequest;
-import org.apache.maven.shared.invoker.InvocationRequest;
-import org.apache.maven.shared.invoker.InvocationResult;
-import org.apache.maven.shared.invoker.Invoker;
-import org.apache.maven.shared.invoker.MavenInvocationException;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.InterpolationFilterReader;
@@ -134,19 +135,15 @@ public class IntegrationTestMojo extends AbstractMojo {
 
     private Downloader downloader;
 
-    private Invoker invoker;
-
     private ArchetypeGenerationConfigurator archetypeGenerationConfigurator;
 
     @Inject
     public IntegrationTestMojo(
             ArchetypeGenerator archetypeGenerator,
             Downloader downloader,
-            Invoker invoker,
             ArchetypeGenerationConfigurator archetypeGenerationConfigurator) {
         this.archetypeGenerator = archetypeGenerator;
         this.downloader = downloader;
-        this.invoker = invoker;
         this.archetypeGenerationConfigurator = archetypeGenerationConfigurator;
     }
 
@@ -600,32 +597,20 @@ public class IntegrationTestMojo extends AbstractMojo {
                 localRepositoryPath.mkdirs();
             }
 
-            // @formatter:off
-            InvocationRequest request = new DefaultInvocationRequest()
-                    .setBaseDirectory(basedir)
-                    .setGoals(Arrays.asList(StringUtils.split(goals, ",")))
-                    .setLocalRepositoryDirectory(localRepositoryPath)
-                    .setBatchMode(true)
-                    .setShowErrors(true);
-            // @formatter:on
-
-            request.setDebug(debug);
-
-            request.setShowVersion(showVersion);
-
-            if (logger != null) {
-                request.setErrorHandler(logger);
-                request.setOutputHandler(logger);
+            List<String> arguments = new ArrayList<>();
+            arguments.add("-B");
+            arguments.add("-e");
+            if (debug) {
+                arguments.add("-X");
             }
-
-            if (!properties.isEmpty()) {
-                Properties props = new Properties();
-                for (Map.Entry<String, String> entry : properties.entrySet()) {
-                    if (entry.getValue() != null) {
-                        props.setProperty(entry.getKey(), entry.getValue());
-                    }
+            if (showVersion) {
+                arguments.add("-V");
+            }
+            arguments.add("-Dmaven.repo.local=" + localRepositoryPath.getAbsolutePath());
+            for (Map.Entry<String, String> entry : properties.entrySet()) {
+                if (entry.getValue() != null) {
+                    arguments.add("-D" + entry.getKey() + "=" + entry.getValue());
                 }
-                request.setProperties(props);
             }
 
             File archetypeItDirectory = new File(project.getBuild().getDirectory(), "archetype-it");
@@ -648,18 +633,26 @@ public class IntegrationTestMojo extends AbstractMojo {
                     settingsWriter.write(fileWriter, settings);
                 }
             }
-            request.setUserSettingsFile(userSettings);
+            arguments.add("-s");
+            arguments.add(userSettings.getAbsolutePath());
+            arguments.addAll(Arrays.asList(StringUtils.split(goals, ",")));
+
+            ExecutorRequest.Builder request =
+                    ExecutorRequest.mavenBuilder().cwd(basedir.toPath()).arguments(arguments);
+            // the build log stays open for the verify script, so neither stream lets the executor close it
+            OutputStream output = logger != null ? logger.getBuildOutput() : MavenBuilds.keepOpen(System.out);
+            request.stdOut(output).stdErr(output);
 
             try {
-                InvocationResult result = invoker.execute(request);
+                ExecutorResult result = MavenBuilds.run(request.build());
+                int exitCode = result.exitCode().orElse(-1);
 
-                getLog().info("Post-archetype-generation invoker exit code: " + result.getExitCode());
+                getLog().info("Post-archetype-generation build exit code: " + exitCode);
 
-                if (result.getExitCode() != 0) {
-                    throw new IntegrationTestFailure(
-                            "Execution failure: exit code = " + result.getExitCode(), result.getExecutionException());
+                if (!result.success()) {
+                    throw new IntegrationTestFailure("Execution failure: exit code = " + exitCode);
                 }
-            } catch (MavenInvocationException e) {
+            } catch (ExecutorException e) {
                 throw new IntegrationTestFailure("Cannot run additions goals.", e);
             }
         } else {

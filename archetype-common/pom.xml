@@ -102,8 +102,8 @@
       <artifactId>maven-artifact</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.maven.shared</groupId>
-      <artifactId>maven-invoker</artifactId>
+      <groupId>org.apache.maven.executor</groupId>
+      <artifactId>maven-executor</artifactId>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
