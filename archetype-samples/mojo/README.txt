@@ -1,1 +1,0 @@
-One should define org.apache.maven.archetypes as a pluginGroup in its settings.xml in order to run this plugin.

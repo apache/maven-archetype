@@ -238,7 +238,6 @@
           <excludes combine.children="append">
             <exclude>README.txt</exclude>
             <exclude>*.sh</exclude>
-            <exclude>archetype-samples/**</exclude>
             <exclude>**/*.sha1</exclude>
             <!-- exclude template files for generated content -->
             <exclude>src/main/resources/org/apache/maven/archetype/creator/*</exclude>
