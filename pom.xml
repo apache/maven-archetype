@@ -228,34 +228,35 @@
             <preparationGoals>clean install</preparationGoals>
           </configuration>
         </plugin>
+        <plugin>
+          <groupId>org.apache.rat</groupId>
+          <artifactId>apache-rat-plugin</artifactId>
+          <configuration>
+            <inputExcludes combine.children="append">
+              <exclude>**/README.txt</exclude>
+              <exclude>**/*.sh</exclude>
+              <exclude>**/archetype-samples/**</exclude>
+              <exclude>**/*.sha1</exclude>
+              <!-- exclude template files for generated content -->
+              <exclude>**/src/main/resources/org/apache/maven/archetype/creator/*</exclude>
+              <!-- exclude some classes coming from JDOM -->
+              <exclude>**/Format.java</exclude>
+              <exclude>**/NamespaceStack.java</exclude>
+              <exclude>**/XMLOutputter.java</exclude>
+              <!-- disable test directories -->
+              <exclude>**/src/it/**/goal.txt</exclude>
+              <exclude>.repository/**</exclude>
+              <!-- for CI -->
+              <!-- Used by JEnv -->
+              <exclude>.java-version</exclude>
+              <!-- binary images in IT fixtures -->
+              <exclude>**/*.png</exclude>
+            </inputExcludes>
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.rat</groupId>
-        <artifactId>apache-rat-plugin</artifactId>
-        <configuration>
-          <excludes combine.children="append">
-            <exclude>README.txt</exclude>
-            <exclude>*.sh</exclude>
-            <exclude>archetype-samples/**</exclude>
-            <exclude>**/*.sha1</exclude>
-            <!-- exclude template files for generated content -->
-            <exclude>src/main/resources/org/apache/maven/archetype/creator/*</exclude>
-            <!-- exclude some classes coming from JDOM -->
-            <exclude>**/Format.java</exclude>
-            <exclude>**/NamespaceStack.java</exclude>
-            <exclude>**/XMLOutputter.java</exclude>
-            <!-- disable test directories -->
-            <exclude>src/it/**/goal.txt</exclude>
-            <exclude>.repository/**</exclude>
-            <!-- for CI -->
-            <!-- Used by JEnv -->
-            <exclude>.java-version</exclude>
-          </excludes>
-        </configuration>
-      </plugin>
-    </plugins>
+    <plugins />
   </build>
 
 </project>
