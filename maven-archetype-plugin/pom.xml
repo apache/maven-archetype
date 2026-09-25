@@ -190,20 +190,24 @@
   </dependencies>
 
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.rat</groupId>
+          <artifactId>apache-rat-plugin</artifactId>
+          <configuration>
+            <inputExcludes combine.children="append">
+              <exclude>**/src/it/projects/**/.checkstyle</exclude>
+              <exclude>**/src/it/projects/**/.classpath</exclude>
+              <exclude>**/src/it/projects/**/dummy</exclude>
+              <exclude>**/src/it/projects/**/META-INF/MANIFEST.MF</exclude>
+              <exclude>**/src/it/projects/**/*.ogg</exclude>
+            </inputExcludes>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <plugins>
-      <plugin>
-        <groupId>org.apache.rat</groupId>
-        <artifactId>apache-rat-plugin</artifactId>
-        <configuration>
-          <excludes combine.children="append">
-            <exclude>src/it/projects/**/.checkstyle</exclude>
-            <exclude>src/it/projects/**/.classpath</exclude>
-            <exclude>src/it/projects/**/dummy</exclude>
-            <exclude>src/it/projects/**/META-INF/MANIFEST.MF</exclude>
-            <exclude>src/it/projects/**/*.ogg</exclude>
-          </excludes>
-        </configuration>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
