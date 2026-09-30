@@ -35,6 +35,7 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -236,7 +237,7 @@ public class DefaultPomManager implements PomManager {
     }
 
     private Map<String, Dependency> createDependencyMap(List<Dependency> dependencies) {
-        Map<String, Dependency> dependencyMap = new HashMap<>();
+        Map<String, Dependency> dependencyMap = new LinkedHashMap<>();
         for (Dependency dependency : dependencies) {
             dependencyMap.put(dependency.getManagementKey(), dependency);
         }

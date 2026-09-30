@@ -23,12 +23,18 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.maven.archetype.exception.InvalidPackaging;
+import org.apache.maven.model.Dependency;
+import org.apache.maven.model.Model;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -73,5 +79,38 @@ public class TestPomManager {
         }
 
         assertNotNull(expectedException);
+    }
+
+    @Test
+    public void testMergePomsKeepsDeclaredDependencyOrder(@TempDir Path dir) throws Exception {
+        String[] artifactIds = {"zulu", "alpha", "mike", "bravo", "yankee", "charlie", "xray", "delta", "whiskey"};
+
+        StringBuilder generated = new StringBuilder();
+        for (String artifactId : artifactIds) {
+            generated
+                    .append("<dependency><groupId>g</groupId><artifactId>")
+                    .append(artifactId)
+                    .append("</artifactId><version>1</version></dependency>");
+        }
+        Path existing = dir.resolve("pom.xml");
+        Path temporary = dir.resolve("generated.xml");
+        Files.write(existing, pom("<dependencies></dependencies>").getBytes(StandardCharsets.UTF_8));
+        Files.write(
+                temporary, pom("<dependencies>" + generated + "</dependencies>").getBytes(StandardCharsets.UTF_8));
+
+        new DefaultPomManager().mergePoms(existing.toFile(), temporary.toFile());
+
+        Model merged = new org.apache.maven.model.io.xpp3.MavenXpp3Reader()
+                .read(Files.newBufferedReader(existing, StandardCharsets.UTF_8));
+        List<String> actual = new ArrayList<>();
+        for (Dependency dependency : merged.getDependencies()) {
+            actual.add(dependency.getArtifactId());
+        }
+        assertEquals(java.util.Arrays.asList(artifactIds), actual);
+    }
+
+    private static String pom(String body) {
+        return "<project xmlns=\"http://maven.apache.org/POM/4.0.0\"><modelVersion>4.0.0</modelVersion>"
+                + "<groupId>g</groupId><artifactId>a</artifactId><version>1</version>" + body + "</project>";
     }
 }
