@@ -62,9 +62,6 @@ public class ArchetypeVelocityEngine {
         // # No automatic conversion of methods arguments
         properties.put("introspector.conversion_handler.class", "none");
 
-        // # Use backward compatible space gobbling
-        properties.put("parser.space_gobbling", "bc");
-
         // # Have #if($foo) only returns false if $foo is false or null
         properties.put("directive.if.empty_check", false);
 
