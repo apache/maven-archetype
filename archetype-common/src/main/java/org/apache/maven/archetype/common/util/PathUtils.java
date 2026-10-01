@@ -22,7 +22,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.codehaus.plexus.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author rafale
@@ -49,6 +49,6 @@ public class PathUtils {
             directoryAsArray.add(fileAsArray[i]);
         }
 
-        return StringUtils.join(directoryAsArray.iterator(), File.separator);
+        return String.join(File.separator, directoryAsArray);
     }
 }

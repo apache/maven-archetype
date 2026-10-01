@@ -22,8 +22,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.plexus.util.SelectorUtils;
-import org.codehaus.plexus.util.StringUtils;
 
 /**
  * <p>Class for scanning a directory for files/directories which match certain criteria.</p>
@@ -178,7 +178,7 @@ public class ListScanner {
     public ListScanner() {}
 
     public static String getDefaultExcludes() {
-        return StringUtils.join(DEFAULTEXCLUDES, ",");
+        return String.join(",", DEFAULTEXCLUDES);
     }
 
     /**
