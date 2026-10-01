@@ -34,6 +34,7 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
+import org.apache.maven.archetype.ArchetypeVelocityEngine;
 import org.apache.maven.archetype.exception.InvalidPackaging;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
@@ -41,7 +42,6 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.context.Context;
 import org.codehaus.plexus.testing.PlexusTest;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-import org.codehaus.plexus.velocity.VelocityComponent;
 import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.RepositorySystemSession;
@@ -77,7 +77,7 @@ public class ArchetypeTest {
     private RepositorySystem repositorySystem;
 
     @Inject
-    private VelocityComponent velocity;
+    private ArchetypeVelocityEngine velocity;
 
     @Test
     public void testArchetype() throws Exception {

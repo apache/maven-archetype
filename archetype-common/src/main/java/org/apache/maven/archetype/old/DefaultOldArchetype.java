@@ -41,6 +41,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
+import org.apache.maven.archetype.ArchetypeVelocityEngine;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
 import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.common.util.PomUtils;
@@ -63,7 +64,6 @@ import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.XmlStreamReader;
 import org.codehaus.plexus.util.xml.XmlStreamWriter;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-import org.codehaus.plexus.velocity.VelocityComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
@@ -88,12 +88,12 @@ public class DefaultOldArchetype implements OldArchetype {
     // Components
     // ----------------------------------------------------------------------
 
-    private VelocityComponent velocity;
+    private ArchetypeVelocityEngine velocity;
 
     private ArchetypeArtifactManager archetypeArtifactManager;
 
     @Inject
-    public DefaultOldArchetype(VelocityComponent velocity, ArchetypeArtifactManager archetypeArtifactManager) {
+    public DefaultOldArchetype(ArchetypeVelocityEngine velocity, ArchetypeArtifactManager archetypeArtifactManager) {
         this.archetypeArtifactManager = archetypeArtifactManager;
         this.velocity = velocity;
     }
