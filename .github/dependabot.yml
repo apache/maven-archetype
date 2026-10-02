@@ -21,6 +21,13 @@ updates:
     schedule:
       interval: daily
     open-pull-requests-limit: 10
+    ignore:
+      # mrm-maven-plugin 2.x requires Java 17
+      - dependency-name: org.codehaus.mojo:mrm-maven-plugin
+        versions: [">= 2.0.0"]
+      # Groovy 5 requires Java 11 and runs inside the user's Maven JVM on Java 8
+      - dependency-name: "org.apache.groovy:*"
+        versions: [">= 5.0.0"]
 
   - package-ecosystem: github-actions
     directory: "/"

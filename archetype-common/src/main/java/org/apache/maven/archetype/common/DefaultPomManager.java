@@ -35,9 +35,11 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.archetype.common.util.Format;
 import org.apache.maven.archetype.common.util.PomUtils;
 import org.apache.maven.archetype.exception.InvalidPackaging;
@@ -55,7 +57,6 @@ import org.apache.maven.model.Reporting;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
 import org.codehaus.plexus.util.FileUtils;
-import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.XmlStreamReader;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.codehaus.plexus.util.xml.Xpp3DomUtils;
@@ -236,7 +237,7 @@ public class DefaultPomManager implements PomManager {
     }
 
     private Map<String, Dependency> createDependencyMap(List<Dependency> dependencies) {
-        Map<String, Dependency> dependencyMap = new HashMap<>();
+        Map<String, Dependency> dependencyMap = new LinkedHashMap<>();
         for (Dependency dependency : dependencies) {
             dependencyMap.put(dependency.getManagementKey(), dependency);
         }

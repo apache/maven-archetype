@@ -26,10 +26,12 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -44,12 +46,16 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
 import org.apache.maven.archetype.common.Constants;
+import org.apache.maven.archetype.common.MavenBuilds;
 import org.apache.maven.archetype.downloader.DownloadException;
 import org.apache.maven.archetype.downloader.Downloader;
 import org.apache.maven.archetype.exception.ArchetypeNotConfigured;
 import org.apache.maven.archetype.generator.ArchetypeGenerator;
 import org.apache.maven.archetype.ui.generation.ArchetypeGenerationConfigurator;
 import org.apache.maven.execution.MavenSession;
+import org.apache.maven.executor.ExecutorException;
+import org.apache.maven.executor.ExecutorRequest;
+import org.apache.maven.executor.ExecutorResult;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -57,13 +63,6 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.settings.Settings;
 import org.apache.maven.settings.io.xpp3.SettingsXpp3Writer;
-import org.apache.maven.shared.invoker.DefaultInvocationRequest;
-import org.apache.maven.shared.invoker.InvocationRequest;
-import org.apache.maven.shared.invoker.InvocationResult;
-import org.apache.maven.shared.invoker.Invoker;
-import org.apache.maven.shared.invoker.MavenInvocationException;
-import org.apache.maven.shared.scriptinterpreter.ScriptException;
-import org.apache.maven.shared.scriptinterpreter.ScriptRunner;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.InterpolationFilterReader;
@@ -136,19 +135,15 @@ public class IntegrationTestMojo extends AbstractMojo {
 
     private Downloader downloader;
 
-    private Invoker invoker;
-
     private ArchetypeGenerationConfigurator archetypeGenerationConfigurator;
 
     @Inject
     public IntegrationTestMojo(
             ArchetypeGenerator archetypeGenerator,
             Downloader downloader,
-            Invoker invoker,
             ArchetypeGenerationConfigurator archetypeGenerationConfigurator) {
         this.archetypeGenerator = archetypeGenerator;
         this.downloader = downloader;
-        this.invoker = invoker;
         this.archetypeGenerationConfigurator = archetypeGenerationConfigurator;
     }
 
@@ -179,11 +174,13 @@ public class IntegrationTestMojo extends AbstractMojo {
     private File testProjectsDirectory;
 
     /**
-     * Relative path of a cleanup/verification hook script to run after executing the build. This script may be written
-     * with either BeanShell or Groovy. If the file extension is omitted (e.g. <code>verify</code>), the
-     * plugin searches for the file by trying out the well-known extensions <code>.bsh</code> and <code>.groovy</code>.
-     * If this script exists for a particular project but returns any non-null value different from <code>true</code> or
-     * throws an exception, the corresponding build is flagged as a failure.
+     * Relative path of a cleanup/verification hook script to run after executing the build, written in Groovy. If
+     * the file extension is omitted (e.g. <code>verify</code>), the plugin looks for <code>verify.groovy</code>. The
+     * script sees <code>basedir</code>, <code>scriptdir</code> and <code>context</code>. If it exists for a particular
+     * project but returns any non-null value different from <code>true</code> or throws an exception, the
+     * corresponding build is flagged as a failure. BeanShell scripts (<code>.bsh</code>) are no longer supported
+     * since 3.5.0 and fail the test with a message saying so; a <code>verify.groovy</code> next to a
+     * <code>verify.bsh</code> wins.
      *
      * @since 2.2
      */
@@ -585,8 +582,13 @@ public class IntegrationTestMojo extends AbstractMojo {
 
     private void invokePostArchetypeGenerationGoals(String goals, File basedir, File goalFile)
             throws IntegrationTestFailure, IOException, MojoExecutionException {
-        FileLogger logger = setupLogger(basedir);
+        try (BuildLog logger = setupLogger(basedir)) {
+            invokePostArchetypeGenerationGoals(goals, basedir, goalFile, logger);
+        }
+    }
 
+    private void invokePostArchetypeGenerationGoals(String goals, File basedir, File goalFile, BuildLog logger)
+            throws IntegrationTestFailure, IOException, MojoExecutionException {
         if (!StringUtils.isBlank(goals)) {
 
             getLog().info("Invoking post-archetype-generation goals: " + goals);
@@ -595,32 +597,20 @@ public class IntegrationTestMojo extends AbstractMojo {
                 localRepositoryPath.mkdirs();
             }
 
-            // @formatter:off
-            InvocationRequest request = new DefaultInvocationRequest()
-                    .setBaseDirectory(basedir)
-                    .setGoals(Arrays.asList(StringUtils.split(goals, ",")))
-                    .setLocalRepositoryDirectory(localRepositoryPath)
-                    .setBatchMode(true)
-                    .setShowErrors(true);
-            // @formatter:on
-
-            request.setDebug(debug);
-
-            request.setShowVersion(showVersion);
-
-            if (logger != null) {
-                request.setErrorHandler(logger);
-                request.setOutputHandler(logger);
+            List<String> arguments = new ArrayList<>();
+            arguments.add("-B");
+            arguments.add("-e");
+            if (debug) {
+                arguments.add("-X");
             }
-
-            if (!properties.isEmpty()) {
-                Properties props = new Properties();
-                for (Map.Entry<String, String> entry : properties.entrySet()) {
-                    if (entry.getValue() != null) {
-                        props.setProperty(entry.getKey(), entry.getValue());
-                    }
+            if (showVersion) {
+                arguments.add("-V");
+            }
+            arguments.add("-Dmaven.repo.local=" + localRepositoryPath.getAbsolutePath());
+            for (Map.Entry<String, String> entry : properties.entrySet()) {
+                if (entry.getValue() != null) {
+                    arguments.add("-D" + entry.getKey() + "=" + entry.getValue());
                 }
-                request.setProperties(props);
             }
 
             File archetypeItDirectory = new File(project.getBuild().getDirectory(), "archetype-it");
@@ -643,47 +633,45 @@ public class IntegrationTestMojo extends AbstractMojo {
                     settingsWriter.write(fileWriter, settings);
                 }
             }
-            request.setUserSettingsFile(userSettings);
+            arguments.add("-s");
+            arguments.add(userSettings.getAbsolutePath());
+            arguments.addAll(Arrays.asList(StringUtils.split(goals, ",")));
+
+            ExecutorRequest.Builder request =
+                    ExecutorRequest.mavenBuilder().cwd(basedir.toPath()).arguments(arguments);
+            // the build log stays open for the verify script, so neither stream lets the executor close it
+            OutputStream output = logger != null ? logger.getBuildOutput() : MavenBuilds.keepOpen(System.out);
+            request.stdOut(output).stdErr(output);
 
             try {
-                InvocationResult result = invoker.execute(request);
+                ExecutorResult result = MavenBuilds.run(request.build());
+                int exitCode = result.exitCode().orElse(-1);
 
-                getLog().info("Post-archetype-generation invoker exit code: " + result.getExitCode());
+                getLog().info("Post-archetype-generation build exit code: " + exitCode);
 
-                if (result.getExitCode() != 0) {
-                    throw new IntegrationTestFailure(
-                            "Execution failure: exit code = " + result.getExitCode(), result.getExecutionException());
+                if (!result.success()) {
+                    throw new IntegrationTestFailure("Execution failure: exit code = " + exitCode);
                 }
-            } catch (MavenInvocationException e) {
+            } catch (ExecutorException e) {
                 throw new IntegrationTestFailure("Cannot run additions goals.", e);
             }
         } else {
             getLog().info("No post-archetype-generation goals to invoke.");
         }
         // verify result
-        try (ScriptRunner scriptRunner = new ScriptRunner()) {
-            scriptRunner.setScriptEncoding(encoding);
-
-            Map<String, Object> context = new LinkedHashMap<>();
-            context.put("projectDir", basedir);
-
-            scriptRunner.run("post-build script", goalFile.getParentFile(), postBuildHookScript, context, logger);
-        } catch (ScriptException e) {
-            throw new IntegrationTestFailure("post build script failure failure: " + e.getMessage(), e);
-        }
+        Map<String, Object> context = new LinkedHashMap<>();
+        context.put("projectDir", basedir);
+        // as before, the script's basedir is the test project directory, the generated project is context.projectDir
+        new VerifyScriptRunner(encoding).run(goalFile.getParentFile(), postBuildHookScript, context, logger);
     }
 
-    private FileLogger setupLogger(File basedir) throws IOException {
-        FileLogger logger = null;
+    private BuildLog setupLogger(File basedir) throws IOException {
+        BuildLog logger = null;
 
         if (!noLog) {
             File outputLog = new File(basedir, "build.log");
 
-            if (streamLogs) {
-                logger = new FileLogger(outputLog, getLog());
-            } else {
-                logger = new FileLogger(outputLog);
-            }
+            logger = new BuildLog(outputLog, streamLogs ? getLog() : null);
 
             getLog().debug("build log initialized in: " + outputLog);
         }

@@ -24,7 +24,7 @@
   <parent>
     <groupId>org.apache.maven.archetype</groupId>
     <artifactId>maven-archetype</artifactId>
-    <version>3.4.2-SNAPSHOT</version>
+    <version>3.5.0-SNAPSHOT</version>
   </parent>
 
   <!--
@@ -125,11 +125,15 @@
     <dependency>
       <groupId>org.apache.maven.shared</groupId>
       <artifactId>maven-shared-utils</artifactId>
-      <version>3.4.2</version>
+      <version>3.5.0</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.maven.shared</groupId>
-      <artifactId>maven-invoker</artifactId>
+      <groupId>org.apache.groovy</groupId>
+      <artifactId>groovy</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.executor</groupId>
+      <artifactId>maven-executor</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
@@ -147,11 +151,6 @@
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.shared</groupId>
-      <artifactId>maven-script-interpreter</artifactId>
-      <version>1.8</version>
     </dependency>
 
     <dependency>
@@ -191,20 +190,24 @@
   </dependencies>
 
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.rat</groupId>
+          <artifactId>apache-rat-plugin</artifactId>
+          <configuration>
+            <inputExcludes combine.children="append">
+              <exclude>**/src/it/projects/**/.checkstyle</exclude>
+              <exclude>**/src/it/projects/**/.classpath</exclude>
+              <exclude>**/src/it/projects/**/dummy</exclude>
+              <exclude>**/src/it/projects/**/META-INF/MANIFEST.MF</exclude>
+              <exclude>**/src/it/projects/**/*.ogg</exclude>
+            </inputExcludes>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <plugins>
-      <plugin>
-        <groupId>org.apache.rat</groupId>
-        <artifactId>apache-rat-plugin</artifactId>
-        <configuration>
-          <excludes combine.children="append">
-            <exclude>src/it/projects/**/.checkstyle</exclude>
-            <exclude>src/it/projects/**/.classpath</exclude>
-            <exclude>src/it/projects/**/dummy</exclude>
-            <exclude>src/it/projects/**/META-INF/MANIFEST.MF</exclude>
-            <exclude>src/it/projects/**/*.ogg</exclude>
-          </excludes>
-        </configuration>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>

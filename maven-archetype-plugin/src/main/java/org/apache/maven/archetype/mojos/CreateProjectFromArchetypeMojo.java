@@ -28,9 +28,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
 import org.apache.maven.archetype.ArchetypeManager;
+import org.apache.maven.archetype.common.MavenBuilds;
 import org.apache.maven.archetype.ui.generation.ArchetypeGenerationConfigurator;
 import org.apache.maven.archetype.ui.generation.ArchetypeSelector;
 import org.apache.maven.execution.MavenSession;
+import org.apache.maven.executor.ExecutorException;
+import org.apache.maven.executor.ExecutorRequest;
+import org.apache.maven.executor.ExecutorResult;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.ContextEnabled;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -39,11 +43,6 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.shared.invoker.DefaultInvocationRequest;
-import org.apache.maven.shared.invoker.InvocationRequest;
-import org.apache.maven.shared.invoker.InvocationResult;
-import org.apache.maven.shared.invoker.Invoker;
-import org.apache.maven.shared.invoker.MavenInvocationException;
 import org.eclipse.aether.RepositorySystem;
 
 /**
@@ -62,8 +61,6 @@ public class CreateProjectFromArchetypeMojo extends AbstractMojo implements Cont
 
     private ArchetypeGenerationConfigurator configurator;
 
-    private Invoker invoker;
-
     private RepositorySystem repositorySystem;
 
     @Inject
@@ -71,12 +68,10 @@ public class CreateProjectFromArchetypeMojo extends AbstractMojo implements Cont
             ArchetypeManager manager,
             ArchetypeSelector selector,
             ArchetypeGenerationConfigurator configurator,
-            Invoker invoker,
             RepositorySystem repositorySystem) {
         this.manager = manager;
         this.selector = selector;
         this.configurator = configurator;
-        this.invoker = invoker;
         this.repositorySystem = repositorySystem;
     }
 
@@ -240,17 +235,21 @@ public class CreateProjectFromArchetypeMojo extends AbstractMojo implements Cont
         File projectBasedir = new File(outputDirectory, artifactId);
 
         if (projectBasedir.exists()) {
-            InvocationRequest request = new DefaultInvocationRequest()
-                    .setBaseDirectory(projectBasedir)
-                    .setGoals(Arrays.asList(StringUtils.split(goals, ",")));
+            ExecutorRequest.Builder request = ExecutorRequest.mavenBuilder()
+                    .cwd(projectBasedir.toPath())
+                    .argument("-B")
+                    .arguments(Arrays.asList(StringUtils.split(goals, ",")))
+                    .stdOut(MavenBuilds.keepOpen(System.out))
+                    .stdErr(MavenBuilds.keepOpen(System.err));
 
             try {
-                InvocationResult result = invoker.execute(request);
+                ExecutorResult result = MavenBuilds.run(request.build());
 
-                if (result.getExitCode() != 0) {
-                    throw new MojoExecutionException("Failed to invoke goals", result.getExecutionException());
+                if (!result.success()) {
+                    throw new MojoExecutionException("Failed to invoke goals, exit code "
+                            + result.exitCode().orElse(-1));
                 }
-            } catch (MavenInvocationException e) {
+            } catch (ExecutorException e) {
                 throw new MojoExecutionException("Cannot run additions goals.", e);
             }
         } else {

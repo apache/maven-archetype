@@ -23,13 +23,13 @@
   <parent>
     <groupId>org.apache.maven</groupId>
     <artifactId>maven-parent</artifactId>
-    <version>49</version>
+    <version>50</version>
     <relativePath />
   </parent>
 
   <groupId>org.apache.maven.archetype</groupId>
   <artifactId>maven-archetype</artifactId>
-  <version>3.4.2-SNAPSHOT</version>
+  <version>3.5.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Maven Archetype</name>
@@ -71,7 +71,7 @@
 
   <properties>
     <maven.archetype.scm.devConnection>scm:git:https://gitbox.apache.org/repos/asf/maven-archetype.git</maven.archetype.scm.devConnection>
-    <mavenVersion>3.9.15</mavenVersion>
+    <mavenVersion>3.9.16</mavenVersion>
     <!-- provided by Maven core. From 3.10.x on it needs to be ported to resolver 2.x -->
     <resolverVersion>1.9.27</resolverVersion>
     <javaVersion>8</javaVersion>
@@ -153,9 +153,9 @@
         <scope>provided</scope>
       </dependency>
       <dependency>
-        <groupId>org.apache.maven.shared</groupId>
-        <artifactId>maven-invoker</artifactId>
-        <version>3.3.0</version>
+        <groupId>org.apache.maven.executor</groupId>
+        <artifactId>maven-executor</artifactId>
+        <version>1.0.0</version>
       </dependency>
       <dependency>
         <groupId>commons-io</groupId>
@@ -190,12 +190,12 @@
       <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-lang3</artifactId>
-        <version>3.20.0</version>
+        <version>3.21.0</version>
       </dependency>
       <dependency>
         <groupId>org.xmlunit</groupId>
-        <artifactId>xmlunit-matchers</artifactId>
-        <version>2.13.0</version>
+        <artifactId>xmlunit-core</artifactId>
+        <version>2.14.0</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -228,33 +228,34 @@
             <preparationGoals>clean install</preparationGoals>
           </configuration>
         </plugin>
+        <plugin>
+          <groupId>org.apache.rat</groupId>
+          <artifactId>apache-rat-plugin</artifactId>
+          <configuration>
+            <inputExcludes combine.children="append">
+              <exclude>**/README.txt</exclude>
+              <exclude>**/*.sh</exclude>
+              <exclude>**/*.sha1</exclude>
+              <!-- exclude template files for generated content -->
+              <exclude>**/src/main/resources/org/apache/maven/archetype/creator/*</exclude>
+              <!-- exclude some classes coming from JDOM -->
+              <exclude>**/Format.java</exclude>
+              <exclude>**/NamespaceStack.java</exclude>
+              <exclude>**/XMLOutputter.java</exclude>
+              <!-- disable test directories -->
+              <exclude>**/src/it/**/goal.txt</exclude>
+              <exclude>.repository/**</exclude>
+              <!-- for CI -->
+              <!-- Used by JEnv -->
+              <exclude>.java-version</exclude>
+              <!-- binary images in IT fixtures -->
+              <exclude>**/*.png</exclude>
+            </inputExcludes>
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.rat</groupId>
-        <artifactId>apache-rat-plugin</artifactId>
-        <configuration>
-          <excludes combine.children="append">
-            <exclude>README.txt</exclude>
-            <exclude>*.sh</exclude>
-            <exclude>**/*.sha1</exclude>
-            <!-- exclude template files for generated content -->
-            <exclude>src/main/resources/org/apache/maven/archetype/creator/*</exclude>
-            <!-- exclude some classes coming from JDOM -->
-            <exclude>**/Format.java</exclude>
-            <exclude>**/NamespaceStack.java</exclude>
-            <exclude>**/XMLOutputter.java</exclude>
-            <!-- disable test directories -->
-            <exclude>src/it/**/goal.txt</exclude>
-            <exclude>.repository/**</exclude>
-            <!-- for CI -->
-            <!-- Used by JEnv -->
-            <exclude>.java-version</exclude>
-          </excludes>
-        </configuration>
-      </plugin>
-    </plugins>
+    <plugins />
   </build>
 
 </project>

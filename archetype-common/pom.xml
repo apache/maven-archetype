@@ -24,7 +24,7 @@
   <parent>
     <groupId>org.apache.maven.archetype</groupId>
     <artifactId>maven-archetype</artifactId>
-    <version>3.4.2-SNAPSHOT</version>
+    <version>3.5.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>archetype-common</artifactId>
@@ -102,8 +102,8 @@
       <artifactId>maven-artifact</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.maven.shared</groupId>
-      <artifactId>maven-invoker</artifactId>
+      <groupId>org.apache.maven.executor</groupId>
+      <artifactId>maven-executor</artifactId>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
@@ -112,6 +112,10 @@
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
@@ -139,7 +143,7 @@
     <dependency>
       <groupId>org.apache.maven.shared</groupId>
       <artifactId>maven-shared-utils</artifactId>
-      <version>3.4.2</version>
+      <version>3.5.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.velocity</groupId>
@@ -181,7 +185,7 @@
     </dependency>
     <dependency>
       <groupId>org.xmlunit</groupId>
-      <artifactId>xmlunit-matchers</artifactId>
+      <artifactId>xmlunit-core</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -204,18 +208,22 @@
         <directory>src/test/resources</directory>
       </testResource>
     </testResources>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.rat</groupId>
+          <artifactId>apache-rat-plugin</artifactId>
+          <configuration>
+            <inputExcludes combine.children="append">
+              <exclude>**/src/test/archetypes/**</exclude>
+              <exclude>**/src/test/repository/**/*.jar</exclude>
+              <exclude>**/src/test/resources/**/dummy</exclude>
+            </inputExcludes>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <plugins>
-      <plugin>
-        <groupId>org.apache.rat</groupId>
-        <artifactId>apache-rat-plugin</artifactId>
-        <configuration>
-          <excludes combine.children="append">
-            <exclude>src/test/archetypes/**</exclude>
-            <exclude>src/test/repository/**/*.jar</exclude>
-            <exclude>src/test/resources/**/dummy</exclude>
-          </excludes>
-        </configuration>
-      </plugin>
       <plugin>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-maven-plugin</artifactId>
