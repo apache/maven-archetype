@@ -37,6 +37,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
+import org.apache.maven.archetype.ArchetypeVelocityEngine;
 import org.apache.maven.archetype.common.ArchetypeArtifactManager;
 import org.apache.maven.archetype.common.Constants;
 import org.apache.maven.archetype.exception.ArchetypeGenerationConfigurationFailure;
@@ -58,7 +59,6 @@ import org.apache.velocity.runtime.parser.node.SimpleNode;
 import org.apache.velocity.runtime.visitor.BaseVisitor;
 import org.codehaus.plexus.components.interactivity.PrompterException;
 import org.codehaus.plexus.util.StringUtils;
-import org.codehaus.plexus.velocity.VelocityComponent;
 import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.repository.RemoteRepository;
@@ -78,7 +78,7 @@ public class DefaultArchetypeGenerationConfigurator implements ArchetypeGenerati
 
     private ArchetypeGenerationQueryer archetypeGenerationQueryer;
 
-    private VelocityComponent velocity;
+    private ArchetypeVelocityEngine velocity;
 
     private RepositorySystem repositorySystem;
 
@@ -87,7 +87,7 @@ public class DefaultArchetypeGenerationConfigurator implements ArchetypeGenerati
             ArchetypeArtifactManager archetypeArtifactManager,
             ArchetypeFactory archetypeFactory,
             ArchetypeGenerationQueryer archetypeGenerationQueryer,
-            VelocityComponent velocity,
+            ArchetypeVelocityEngine velocity,
             RepositorySystem repositorySystem) {
         this.archetypeArtifactManager = archetypeArtifactManager;
         this.archetypeFactory = archetypeFactory;
