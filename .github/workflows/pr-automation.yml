@@ -17,11 +17,9 @@
 
 name: PR Automation
 on:
-  pull_request_target:
-    types:
-      - closed
-      - unlabeled
-      - review_requested
+  push:
+    branches:
+      - master
 
 jobs:
   pr-automation:
