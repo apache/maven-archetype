@@ -489,8 +489,8 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
             throws IOException, XmlPullParserException {
         Model pom = pomManager.readPom(FileUtils.resolveFile(basedir, Constants.ARCHETYPE_POM));
 
-        String parentArtifactId = pomReversedProperties.getProperty(Constants.PARENT_ARTIFACT_ID);
-        String artifactId = pom.getArtifactId();
+        String previousParentArtifactId = pomReversedProperties.getProperty(Constants.PARENT_ARTIFACT_ID);
+        String previousArtifactId = pomReversedProperties.getProperty(Constants.ARTIFACT_ID);
         setParentArtifactId(pomReversedProperties, pomReversedProperties.getProperty(Constants.ARTIFACT_ID));
         setArtifactId(pomReversedProperties, pom.getArtifactId());
 
@@ -520,8 +520,8 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
                 preserveCData,
                 keepParent);
 
-        restoreParentArtifactId(pomReversedProperties, parentArtifactId);
-        restoreArtifactId(pomReversedProperties, artifactId);
+        restoreParentArtifactId(pomReversedProperties, previousParentArtifactId);
+        restoreArtifactId(pomReversedProperties, previousArtifactId);
     }
 
     @SuppressWarnings("checkstyle:ParameterNumber")
