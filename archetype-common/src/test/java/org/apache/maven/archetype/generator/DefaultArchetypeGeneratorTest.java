@@ -370,6 +370,19 @@ public class DefaultArchetypeGeneratorTest {
         assertEquals("file-value", model.getGroupId());
         assertEquals("subsubproject", model.getArtifactId());
         assertEquals("file-value", model.getVersion());
+
+        // Module "demoapi" has a fileSet directory "api" that is also a substring of the module's own
+        // directory name, e.g. "demoapi" contains "api" (see GitHub issue #274).
+        assertTemplateContentGeneratedWithFileSetArchetype("demoapi/api/Marker.properties", "demoapi");
+
+        model = readPom(new File(projectDirectory, "demoapi/pom.xml"));
+        assertNotNull(model.getParent());
+        assertEquals("file-value", model.getParent().getGroupId());
+        assertEquals("file-value", model.getParent().getArtifactId());
+        assertEquals("file-value", model.getParent().getVersion());
+        assertEquals("file-value", model.getGroupId());
+        assertEquals("demoapi", model.getArtifactId());
+        assertEquals("file-value", model.getVersion());
     }
 
     @Test

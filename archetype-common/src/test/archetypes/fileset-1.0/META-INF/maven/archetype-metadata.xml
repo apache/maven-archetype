@@ -118,6 +118,19 @@
         </module>
       </modules>
     </module>
+
+    <!-- Regression test for a module directory that contains a fileSet directory name as a
+         substring (e.g. "demoapi" contains "api"), see GitHub issue #274. -->
+    <module name="demoapi" id="demoapi" dir="demoapi">
+      <fileSets>
+        <fileSet filtered="true" packaged="false">
+          <directory>api</directory>
+          <includes>
+            <include>**/*.properties</include>
+          </includes>
+        </fileSet>
+      </fileSets>
+    </module>
   </modules>
 
 </archetype-descriptor>

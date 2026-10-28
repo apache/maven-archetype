@@ -342,7 +342,16 @@ public class DefaultFilesetArchetypeGenerator implements FilesetArchetypeGenerat
             String packageName,
             String moduleOffset,
             Context context) {
-        String templateName = StringUtils.replaceOnce(template, directory, "");
+        // directory is only meaningful once the moduleOffset prefix has been accounted for, so the search
+        // for it must not start before that point: a plain replaceOnce can otherwise match directory inside
+        // moduleOffset itself (e.g. fileSet directory "api" found inside module directory "foo-openapi"),
+        // corrupting the computed path or, if the match leaves fewer characters than moduleOffset is long,
+        // throwing a StringIndexOutOfBoundsException below.
+        int searchFrom = moduleOffset == null ? 0 : moduleOffset.length();
+        int directoryIndex = template.indexOf(directory, searchFrom);
+        String templateName = directoryIndex < 0
+                ? template
+                : template.substring(0, directoryIndex) + template.substring(directoryIndex + directory.length());
 
         String outputFileName = directory + "/" + (packaged ? getPackageAsDirectory(packageName) : "") + "/"
                 + templateName.substring(moduleOffset.length());
