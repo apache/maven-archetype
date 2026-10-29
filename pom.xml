@@ -58,8 +58,8 @@
     <url>https://github.com/apache/maven-archetype/issues</url>
   </issueManagement>
   <ciManagement>
-    <system>Jenkins</system>
-    <url>https://ci-maven.apache.org/job/Maven/job/maven-box/job/maven-archetype/</url>
+    <system>GitHub</system>
+    <url>https://github.com/apache/maven-archetype/actions</url>
   </ciManagement>
 
   <distributionManagement>
