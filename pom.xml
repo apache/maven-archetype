@@ -89,6 +89,14 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+      <!-- groovy-yaml 4.0.33 brings in jackson 2.19.2, which has known vulnerabilities -->
+      <dependency>
+        <groupId>com.fasterxml.jackson</groupId>
+        <artifactId>jackson-bom</artifactId>
+        <version>2.21.8</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
       <dependency>
         <groupId>org.apache.maven.archetype</groupId>
         <artifactId>archetype-catalog</artifactId>
