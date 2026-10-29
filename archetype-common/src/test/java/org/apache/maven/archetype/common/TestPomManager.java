@@ -31,6 +31,7 @@ import java.util.regex.Pattern;
 import org.apache.maven.archetype.exception.InvalidPackaging;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
+import org.apache.maven.model.Profile;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -107,6 +108,28 @@ public class TestPomManager {
             actual.add(dependency.getArtifactId());
         }
         assertEquals(java.util.Arrays.asList(artifactIds), actual);
+    }
+
+    @Test
+    public void testMergePomsKeepsProfilePropertiesWithoutDependencies(@TempDir Path dir) throws Exception {
+        Path existing = dir.resolve("pom.xml");
+        Path temporary = dir.resolve("generated.xml");
+        Files.write(
+                existing,
+                pom("<profiles><profile><id>sample</id></profile></profiles>").getBytes(StandardCharsets.UTF_8));
+        Files.write(
+                temporary,
+                pom("<profiles><profile><id>sample</id>"
+                                + "<properties><sample.property>value</sample.property></properties>"
+                                + "</profile></profiles>")
+                        .getBytes(StandardCharsets.UTF_8));
+
+        new DefaultPomManager().mergePoms(existing.toFile(), temporary.toFile());
+
+        Model merged = new org.apache.maven.model.io.xpp3.MavenXpp3Reader()
+                .read(Files.newBufferedReader(existing, StandardCharsets.UTF_8));
+        Profile mergedProfile = merged.getProfiles().get(0);
+        assertEquals("value", mergedProfile.getProperties().getProperty("sample.property"));
     }
 
     private static String pom(String body) {
