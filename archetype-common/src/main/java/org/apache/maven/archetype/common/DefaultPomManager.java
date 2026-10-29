@@ -305,12 +305,12 @@ public class DefaultPomManager implements PomManager {
             } else {
                 LOGGER.warn("Can not override property: " + generatedDependencyId);
             }
-
-            // TODO: maybe warn, if a property key gets overridden?
-            model.getProperties().putAll(generatedModel.getProperties());
-
-            // TODO: maybe merge more than just dependencies and properties...
         }
+
+        // TODO: maybe warn, if a property key gets overridden?
+        model.getProperties().putAll(generatedModel.getProperties());
+
+        // TODO: maybe merge more than just dependencies and properties...
     }
 
     private void mergeReportPlugins(Model model, Model generatedModel) {
