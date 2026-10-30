@@ -342,19 +342,27 @@ public class DefaultFilesetArchetypeGenerator implements FilesetArchetypeGenerat
             String packageName,
             String moduleOffset,
             Context context) {
-        // directory is only meaningful once the moduleOffset prefix has been accounted for, so the search
-        // for it must not start before that point: a plain replaceOnce can otherwise match directory inside
-        // moduleOffset itself (e.g. fileSet directory "api" found inside module directory "foo-openapi"),
-        // corrupting the computed path or, if the match leaves fewer characters than moduleOffset is long,
-        // throwing a StringIndexOutOfBoundsException below.
-        int searchFrom = moduleOffset == null ? 0 : moduleOffset.length();
-        int directoryIndex = template.indexOf(directory, searchFrom);
-        String templateName = directoryIndex < 0
-                ? template
-                : template.substring(0, directoryIndex) + template.substring(directoryIndex + directory.length());
+        // template is one of the archetypeResources matched by filterFiles() against a basedir built the
+        // same way, so it is always prefixed by exactly (moduleOffset + "/", if any) + directory. Stripping
+        // that known prefix - rather than searching for directory as a bare substring - avoids falsely
+        // matching an unrelated earlier path segment that happens to contain directory's text (e.g. a
+        // module dir named "openapi" when directory is "api").
+        String prefix = (moduleOffset == null || moduleOffset.isEmpty()) ? directory : (moduleOffset + "/" + directory);
+        String templateName;
+        if (template.startsWith(prefix)) {
+            templateName = template.substring(prefix.length());
+        } else if (template.equals(moduleOffset)) {
+            // processTemplates() also calls this with template == moduleOffset (no directory/file suffix
+            // at all), purely to pre-create the fileSet's own empty directory; there is no relative file
+            // name to append in that case.
+            templateName = "";
+        } else {
+            LOGGER.warn("Template " + template + " does not start with expected prefix " + prefix);
+            templateName = template;
+        }
 
-        String outputFileName = directory + "/" + (packaged ? getPackageAsDirectory(packageName) : "") + "/"
-                + templateName.substring(moduleOffset.length());
+        String outputFileName =
+                directory + "/" + (packaged ? getPackageAsDirectory(packageName) : "") + "/" + templateName;
 
         outputFileName = replaceFilenameTokens(outputFileName, context);
 

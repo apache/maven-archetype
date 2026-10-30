@@ -89,6 +89,17 @@
   </fileSets>
 
   <modules>
+    <module name="openapi" id="openapi" dir="openapi">
+      <fileSets>
+        <fileSet filtered="false" packaged="false">
+          <directory>api</directory>
+          <includes>
+            <include>**/*.ts</include>
+          </includes>
+        </fileSet>
+      </fileSets>
+    </module>
+
     <module name="subproject" id="subproject" dir="subproject">
       <fileSets>
         <fileSet filtered="true" packaged="true">

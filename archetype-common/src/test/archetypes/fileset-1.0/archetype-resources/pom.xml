@@ -32,6 +32,7 @@
   <packaging>pom</packaging>
 
   <modules>
+    <module>openapi</module>
     <module>subproject</module>
     <module>demoapi</module>
   </modules>
