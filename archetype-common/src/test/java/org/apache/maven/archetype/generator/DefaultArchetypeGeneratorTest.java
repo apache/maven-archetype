@@ -323,7 +323,7 @@ public class DefaultArchetypeGeneratorTest {
         assertEquals("file-value", model.getArtifactId());
         assertEquals("file-value", model.getVersion());
 
-        // ARCHETYPE-? : a module directory name ("openapi") that contains the fileSet directory's own
+        // GH-274: a module directory name ("openapi") that contains the fileSet directory's own
         // name ("api") as a substring must not corrupt the output path of files in that fileSet.
         assertTemplateCopiedWithFileSetArchetype("openapi/api/index.ts");
 
