@@ -56,6 +56,9 @@ public class ArchetypeCreationRequest {
 
     private File settingsFile;
 
+    /**
+     * The phase to build the created archetype up to, or {@code null} or empty to leave it unbuilt.
+     */
     public String getPostPhase() {
         return postPhase;
     }

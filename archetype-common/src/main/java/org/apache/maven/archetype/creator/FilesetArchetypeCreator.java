@@ -277,37 +277,48 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
                 FileUtils.copyDirectoryStructure(
                         archetypeIntegrationTestInputFolder, archetypeIntegrationTestOutputFolder);
             }
-            List<String> arguments = new ArrayList<>();
-            arguments.add("-B");
-            arguments.add("-f");
-            arguments.add(archetypePomFile.getAbsolutePath());
-            if (request.getSettingsFile() != null) {
-                arguments.add("-s");
-                arguments.add(request.getSettingsFile().getAbsolutePath());
-            }
-            if (request.getLocalRepositoryBasedir() != null) {
-                arguments.add("-Dmaven.repo.local="
-                        + request.getLocalRepositoryBasedir().getAbsolutePath());
-            }
-            String httpsProtocols = System.getProperty("https.protocols");
-            if (httpsProtocols != null) {
-                arguments.add("-Dhttps.protocols=" + httpsProtocols);
-            }
-            arguments.add(request.getPostPhase());
-
-            ExecutorResult buildResult = MavenBuilds.run(ExecutorRequest.mavenBuilder()
-                    .cwd(archetypePomFile.getAbsoluteFile().getParentFile().toPath())
-                    .arguments(arguments)
-                    .stdOut(MavenBuilds.keepOpen(System.out))
-                    .stdErr(MavenBuilds.keepOpen(System.err))
-                    .build());
-            if (!buildResult.success()) {
-                throw new Exception("Maven process ended with exit code "
-                        + buildResult.exitCode().orElse(-1) + "!");
+            String postPhase = request.getPostPhase();
+            if (postPhase != null && !postPhase.isEmpty()) {
+                runPostPhase(request, archetypePomFile, postPhase);
             }
 
         } catch (Exception e) {
             result.setCause(e);
+        }
+    }
+
+    /**
+     * Builds the created archetype up to the given phase, in a forked Maven.
+     */
+    private void runPostPhase(ArchetypeCreationRequest request, File archetypePomFile, String postPhase)
+            throws Exception {
+        List<String> arguments = new ArrayList<>();
+        arguments.add("-B");
+        arguments.add("-f");
+        arguments.add(archetypePomFile.getAbsolutePath());
+        if (request.getSettingsFile() != null) {
+            arguments.add("-s");
+            arguments.add(request.getSettingsFile().getAbsolutePath());
+        }
+        if (request.getLocalRepositoryBasedir() != null) {
+            arguments.add(
+                    "-Dmaven.repo.local=" + request.getLocalRepositoryBasedir().getAbsolutePath());
+        }
+        String httpsProtocols = System.getProperty("https.protocols");
+        if (httpsProtocols != null) {
+            arguments.add("-Dhttps.protocols=" + httpsProtocols);
+        }
+        arguments.add(postPhase);
+
+        ExecutorResult buildResult = MavenBuilds.run(ExecutorRequest.mavenBuilder()
+                .cwd(archetypePomFile.getAbsoluteFile().getParentFile().toPath())
+                .arguments(arguments)
+                .stdOut(MavenBuilds.keepOpen(System.out))
+                .stdErr(MavenBuilds.keepOpen(System.err))
+                .build());
+        if (!buildResult.success()) {
+            throw new Exception("Maven process ended with exit code "
+                    + buildResult.exitCode().orElse(-1) + "!");
         }
     }
 
