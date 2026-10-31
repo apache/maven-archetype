@@ -128,7 +128,7 @@ Choose a number or apply filter (format: [groupId:]artifactId, case sensitive co
 
 # Testing
 
-The user can provide archetype test projects by placing them in `src/it/projects` folder of their project. Upon creating archetype from the existing project all the test projects will be executed to verify the archetype created by this project is good. [Read more](./integration-test-mojo.html) about testing maven archetype.
+When you create an archetype from a project, the plugin adds a first test project named `basic` in `src/test/resources/projects`. The `archetype:integration-test` goal, which runs during `mvn verify` or `mvn install` of the archetype, generates a project from the archetype for each test project and can compare it with a reference copy. See [Test an archetype](./examples/test-an-archetype.html).
 
 # Configuration
 

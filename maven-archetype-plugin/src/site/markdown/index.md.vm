@@ -56,8 +56,13 @@ The archetype plugin has four goals for direct use:
 and three goals bound to default lifecycle by ['maven-archetype' packaging](../archetype-packaging/):
 
 - [archetype:jar](./jar-mojo.html) (bound to the `package` phase) is used to build the archetype jar artifact.
-- [archetype:integration-test](./integration-test-mojo.html) (bound to the `integration-test` phase) is used to execute archetype integration tests by generating sample projects from the just built archetype.
+- [archetype:integration-test](./integration-test-mojo.html) (bound to the `integration-test` phase) is used to execute archetype integration tests by generating sample projects from the just built archetype: see [Test an archetype](./examples/test-an-archetype.html).
 - [archetype:update-local-catalog](./update-local-catalog-mojo.html) (bound to the `install` phase) is used to update the local catalog.
+
+Maven 4
+-------
+
+On Apache Maven 4.0.0-rc-7, `archetype:generate` and `archetype:create-from-project` work with version 3.4.1 of this plugin, and so does `mvn verify` on the archetype they create. Releases of Maven 4 other than 4.0.0-rc-7 have not been checked.
 
 Examples
 --------
@@ -68,6 +73,7 @@ The following examples show how to use the Archetype Plugin in more advanced use
 - [Generate project using an alternative catalog](./examples/generate-alternative-catalog.html)
 - [Create an archetype from a multi-module project](./examples/create-multi-module-project.html)
 - [Create an archetype with a property file](./examples/create-with-property-file.html)
+- [Test an archetype](./examples/test-an-archetype.html)
 <!--   * Handcrafting an archetype or features available to an archetype when not created by <<<create-from-project>>> - TBD-->
 <!--   * Generate a sub module from an archetype - TBD-->
 <!--   * Create an archetype in interactive mode - TBD-->
