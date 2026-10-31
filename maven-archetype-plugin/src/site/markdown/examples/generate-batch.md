@@ -32,35 +32,17 @@ It is possible to get rid of the interactivity of the Maven Archetype Plugin by 
 - The groupId, artifactId, version and package are the main properties to be set. Each archetype require these properties. Some archetypes define other properties; refer to the appropriate archetype's documentation if needed.
 
 ```shell
-$ mvn archetype:generate -B -DarchetypeGroupId=org.apache.maven.archetypes -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.1 -DgroupId=com.company -DartifactId=project -Dversion=1.0-SNAPSHOT -Dpackage=com.company.project
-[INFO] Scanning for projects...
-[INFO]                                                                         
-[INFO] ------------------------------------------------------------------------
-[INFO] Building Maven Stub Project (No POM) 1
-[INFO] ------------------------------------------------------------------------
-[INFO] 
-[INFO] >>> maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom >>>
-[INFO] 
-[INFO] <<< maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom <<<
-[INFO] 
-[INFO] --- maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom ---
+$ mvn archetype:generate -B -DarchetypeGroupId=org.apache.maven.archetypes -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.5 -DgroupId=com.company -DartifactId=project -Dversion=1.0-SNAPSHOT -Dpackage=com.company.project
+[INFO] --- archetype:3.4.1:generate (default-cli) @ standalone-pom ---
 [INFO] Generating project in Batch mode
-[INFO] Archetype repository missing. Using the one from [org.apache.maven.archetypes:maven-archetype-quickstart:1.1] found in catalog remote
+[INFO] Archetype repository not defined. Using the one from [org.apache.maven.archetypes:maven-archetype-quickstart:1.5] found in catalog remote
 [INFO] ----------------------------------------------------------------------------
-[INFO] Using following parameters for creating project from Old (1.x) Archetype: maven-archetype-quickstart:1.1
+[INFO] Using following parameters for creating project from Archetype: maven-archetype-quickstart:1.5
 [INFO] ----------------------------------------------------------------------------
 [INFO] Parameter: groupId, Value: com.company
-[INFO] Parameter: packageName, Value: com.company.project
-[INFO] Parameter: package, Value: com.company.project
 [INFO] Parameter: artifactId, Value: project
-[INFO] Parameter: basedir, Value: /Users/maven/dev
 [INFO] Parameter: version, Value: 1.0-SNAPSHOT
-[INFO] project created from Old (1.x) Archetype in dir: /Users/maven/dev/project
-[INFO] ------------------------------------------------------------------------
+[INFO] Parameter: package, Value: com.company.project
+[INFO] Project created from Archetype in dir: /home/user/projects/project
 [INFO] BUILD SUCCESS
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time: 9.184s
-[INFO] Finished at: Mon Feb 04 11:53:24 CET 2013
-[INFO] Final Memory: 9M/265M
-[INFO] ------------------------------------------------------------------------
 ```
