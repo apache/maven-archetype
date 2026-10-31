@@ -181,9 +181,6 @@
             <inputExcludes combine.children="append">
               <exclude>**/src/it/projects/**/.checkstyle</exclude>
               <exclude>**/src/it/projects/**/.classpath</exclude>
-              <exclude>**/src/it/projects/**/dummy</exclude>
-              <exclude>**/src/it/projects/**/META-INF/MANIFEST.MF</exclude>
-              <exclude>**/src/it/projects/**/*.ogg</exclude>
             </inputExcludes>
           </configuration>
         </plugin>

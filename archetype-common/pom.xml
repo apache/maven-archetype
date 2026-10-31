@@ -184,6 +184,15 @@
       <testResource>
         <filtering>true</filtering>
         <directory>src/test/resources</directory>
+        <excludes>
+          <exclude>projects/fileset/**</exclude>
+        </excludes>
+      </testResource>
+      <testResource>
+        <directory>src/test/resources</directory>
+        <includes>
+          <include>projects/fileset/**</include>
+        </includes>
       </testResource>
     </testResources>
     <pluginManagement>
@@ -196,6 +205,7 @@
               <exclude>**/src/test/archetypes/**</exclude>
               <exclude>**/src/test/repository/**/*.jar</exclude>
               <exclude>**/src/test/resources/**/dummy</exclude>
+              <exclude>**/src/test/resources/projects/fileset/**/*.ogg</exclude>
             </inputExcludes>
           </configuration>
         </plugin>
