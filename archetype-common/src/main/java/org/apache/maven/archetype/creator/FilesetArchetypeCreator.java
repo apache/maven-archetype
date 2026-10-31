@@ -79,8 +79,6 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.apache.commons.io.IOUtils.write;
-
 /**
  * Create a 2.x Archetype project from a project. Since 2.0-alpha-5, an integration-test named "basic" is created along
  * the archetype itself to provide immediate test when building the archetype.
@@ -1288,7 +1286,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
             }
 
             try (OutputStream os = Files.newOutputStream(outputFile.toPath())) {
-                write(content, os, fileEncoding);
+                os.write(content.getBytes(fileEncoding));
             }
         }
     }
