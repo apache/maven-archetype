@@ -27,17 +27,13 @@ under the License.
 
 1. [What packaging should I use: `maven-archetype` or `jar`? What is the difference?](#packaging)
 1. [How to generate a project from an archetype in a custom (potentially authenticated) repository?](#authentication)
-1. [What is &quot;Old Archetype 1.0.x&quot;?](#old)
 1. [How do I get files like `.gitignore` included into my archetype?](#excludes)
 
 <a id="packaging"></a>
 
 ### What packaging should I use: `maven-archetype` or `jar`? What is the difference?
 
-`maven-archetype` packaging is available since 2.0-alpha-1: it should be used instead
-of `jar`, which was used for Old Archetype 1.0.x.
-
-Using `maven-archetype` packaging helps identifying archetypes in repositories and
+Use the `maven-archetype` packaging. It helps identify archetypes in repositories and
 adds archetype related bindings to build lifecycle: see
 [`maven-archetype` packaging documentation](../archetype-packaging/) for more
 information.
@@ -56,22 +52,6 @@ For resolving the **actual archetype** an artificial repository with id
 [Archetype Catalog Item](/archetype/archetype-models/archetype-catalog/archetype-catalog.html)
 contained a repository (leveraging its URL). As fallback all regular remote
 repositories (as defined in the `settings.xml`) are tried.
-
-<a id="old"></a>
-
-### What is &quot;Old Archetype 1.0.x&quot;?
-
-Old Archetype 1.0.x was using a `archetype` XML descriptor defined in
-`/xsd/archetype-1.0.0.xsd`: see
-[old descriptor reference](/archetype/archetype-common/archetype.html).
-
-Archetype is now using `archetype-descriptor` XML descriptor defined in
-`/xsd/archetype-descriptor-1.1.0.xsd`: see
-[Archetype descriptor reference](/archetype/archetype-models/archetype-descriptor/archetype-descriptor.html).
-
-For compatibility, old archetypes can still be used to generate new projects, but
-archetypes should be updated to the new descriptor format: in the future, old format
-will be removed.
 
 <a id="excludes"></a>
 

@@ -47,11 +47,11 @@ The Archetype Plugin is embedded in IDEs (Eclipse, NetBeans, IDEA).
 Goals Overview
 --------------
 
-The archetype plugin has four goals for direct use:
+The archetype plugin has three goals for direct use:
 
 - [archetype:generate](./generate-mojo.html) creates a Maven project from an archetype: asks the user to choose an archetype from the archetype catalog, and retrieves it from the remote repository. Once retrieved, it is processed to create a working Maven project.
 - [archetype:create-from-project](./create-from-project-mojo.html) creates an archetype from an existing project.
-- [archetype:crawl](./crawl-mojo.html) search a repository for archetypes and updates a catalog.
+- [archetype:crawl](./crawl-mojo.html) searches a repository for archetypes and updates a catalog.
 
 and three goals bound to default lifecycle by ['maven-archetype' packaging](../archetype-packaging/):
 
