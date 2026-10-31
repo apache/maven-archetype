@@ -216,7 +216,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
                 String moduleIdDirectory = moduleId;
 
                 if (moduleId.indexOf(rootArtifactId) >= 0) {
-                    moduleIdDirectory = StringUtils.replace(moduleId, rootArtifactId, "__rootArtifactId__");
+                    moduleIdDirectory = replace(moduleId, rootArtifactId, "__rootArtifactId__");
                 }
 
                 LOGGER.debug("Creating module " + moduleId);
@@ -498,7 +498,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
             String subModuleIdDirectory = subModuleId;
 
             if (subModuleId.indexOf(rootArtifactId) >= 0) {
-                subModuleIdDirectory = StringUtils.replace(subModuleId, rootArtifactId, "__rootArtifactId__");
+                subModuleIdDirectory = replace(subModuleId, rootArtifactId, "__rootArtifactId__");
             }
 
             createModulePoms(
@@ -542,7 +542,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
             String moduleIdDirectory = moduleId;
 
             if (moduleId.indexOf(rootArtifactId) >= 0) {
-                moduleIdDirectory = StringUtils.replace(moduleId, rootArtifactId, "__rootArtifactId__");
+                moduleIdDirectory = replace(moduleId, rootArtifactId, "__rootArtifactId__");
             }
 
             createModulePoms(
@@ -562,7 +562,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
     }
 
     private String getPackageInPathFormat(String aPackage) {
-        return StringUtils.replace(aPackage, ".", "/");
+        return replace(aPackage, ".", "/");
     }
 
     private void rewriteReferences(Model pom, String rootArtifactId, String groupId) {
@@ -651,12 +651,10 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
     private void rewriteDependencyReferences(Dependency dependency, String rootArtifactId, String groupId) {
         if (dependency.getArtifactId() != null && dependency.getArtifactId().indexOf(rootArtifactId) >= 0) {
             if (dependency.getGroupId() != null) {
-                dependency.setGroupId(
-                        StringUtils.replace(dependency.getGroupId(), groupId, "${" + Constants.GROUP_ID + "}"));
+                dependency.setGroupId(replace(dependency.getGroupId(), groupId, "${" + Constants.GROUP_ID + "}"));
             }
 
-            dependency.setArtifactId(
-                    StringUtils.replace(dependency.getArtifactId(), rootArtifactId, "${rootArtifactId}"));
+            dependency.setArtifactId(replace(dependency.getArtifactId(), rootArtifactId, "${rootArtifactId}"));
 
             if (dependency.getVersion() != null) {
                 dependency.setVersion("${" + Constants.VERSION + "}");
@@ -667,11 +665,11 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
     private void rewritePluginReferences(Plugin plugin, String rootArtifactId, String groupId) {
         if (plugin.getArtifactId() != null && plugin.getArtifactId().indexOf(rootArtifactId) >= 0) {
             if (plugin.getGroupId() != null) {
-                String g = StringUtils.replace(plugin.getGroupId(), groupId, "${" + Constants.GROUP_ID + "}");
+                String g = replace(plugin.getGroupId(), groupId, "${" + Constants.GROUP_ID + "}");
                 plugin.setGroupId(g);
             }
 
-            plugin.setArtifactId(StringUtils.replace(plugin.getArtifactId(), rootArtifactId, "${rootArtifactId}"));
+            plugin.setArtifactId(replace(plugin.getArtifactId(), rootArtifactId, "${rootArtifactId}"));
 
             if (plugin.getVersion() != null) {
                 plugin.setVersion("${" + Constants.VERSION + "}");
@@ -697,28 +695,26 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
                 Xpp3Dom moduleContextRoot = module.getChild("contextRoot");
 
                 if (moduleGroupId != null) {
-                    moduleGroupId.setValue(
-                            StringUtils.replace(moduleGroupId.getValue(), groupId, "${" + Constants.GROUP_ID + "}"));
+                    moduleGroupId.setValue(replace(moduleGroupId.getValue(), groupId, "${" + Constants.GROUP_ID + "}"));
                 }
 
                 if (moduleArtifactId != null) {
                     moduleArtifactId.setValue(
-                            StringUtils.replace(moduleArtifactId.getValue(), rootArtifactId, "${rootArtifactId}"));
+                            replace(moduleArtifactId.getValue(), rootArtifactId, "${rootArtifactId}"));
                 }
 
                 if (moduleBundleFileName != null) {
                     moduleBundleFileName.setValue(
-                            StringUtils.replace(moduleBundleFileName.getValue(), rootArtifactId, "${rootArtifactId}"));
+                            replace(moduleBundleFileName.getValue(), rootArtifactId, "${rootArtifactId}"));
                 }
 
                 if (moduleModuleId != null) {
-                    moduleModuleId.setValue(
-                            StringUtils.replace(moduleModuleId.getValue(), rootArtifactId, "${rootArtifactId}"));
+                    moduleModuleId.setValue(replace(moduleModuleId.getValue(), rootArtifactId, "${rootArtifactId}"));
                 }
 
                 if (moduleContextRoot != null) {
                     moduleContextRoot.setValue(
-                            StringUtils.replace(moduleContextRoot.getValue(), rootArtifactId, "${rootArtifactId}"));
+                            replace(moduleContextRoot.getValue(), rootArtifactId, "${rootArtifactId}"));
                 }
             }
         }
@@ -754,14 +750,13 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
             String packageName,
             Properties reverseProperties)
             throws IOException {
-        String packageAsDirectory = StringUtils.replace(packageName, ".", File.separator);
+        String packageAsDirectory = replace(packageName, ".", File.separator);
 
         LOGGER.debug("Package as Directory: Package:" + packageName + "->" + packageAsDirectory);
 
         for (String inputFileName : fileSetResources) {
-            String outputFileName = packaged
-                    ? StringUtils.replace(inputFileName, packageAsDirectory + File.separator, "")
-                    : inputFileName;
+            String outputFileName =
+                    packaged ? inputFileName.replace(packageAsDirectory + File.separator, "") : inputFileName;
             LOGGER.debug("InputFileName:" + inputFileName);
             LOGGER.debug("OutputFileName:" + outputFileName);
 
@@ -979,12 +974,12 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
         String moduleDirectory = pom.getArtifactId();
 
         if (replacementId.indexOf(rootArtifactId) >= 0) {
-            replacementId = StringUtils.replace(replacementId, rootArtifactId, "${rootArtifactId}");
-            moduleDirectory = StringUtils.replace(moduleId, rootArtifactId, "__rootArtifactId__");
+            replacementId = replace(replacementId, rootArtifactId, "${rootArtifactId}");
+            moduleDirectory = replace(moduleId, rootArtifactId, "__rootArtifactId__");
         }
 
         if (moduleId.indexOf(rootArtifactId) >= 0) {
-            moduleDirectory = StringUtils.replace(moduleId, rootArtifactId, "__rootArtifactId__");
+            moduleDirectory = replace(moduleId, rootArtifactId, "__rootArtifactId__");
         }
 
         archetypeDescriptor.setName(replacementId);
@@ -1020,7 +1015,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
         for (String subModuleId : pom.getModules()) {
             String subModuleIdDirectory = subModuleId;
             if (subModuleId.indexOf(rootArtifactId) >= 0) {
-                subModuleIdDirectory = StringUtils.replace(subModuleId, rootArtifactId, "__rootArtifactId__");
+                subModuleIdDirectory = replace(subModuleId, rootArtifactId, "__rootArtifactId__");
             }
 
             LOGGER.debug("Creating module " + subModuleId);
@@ -1083,15 +1078,15 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
         } else {
             if (pom.getParent() != null) {
                 pom.getParent()
-                        .setGroupId(StringUtils.replace(
+                        .setGroupId(replace(
                                 pom.getParent().getGroupId(),
                                 pomReversedProperties.getProperty(Constants.GROUP_ID),
                                 "${" + Constants.GROUP_ID + "}"));
                 if (pom.getParent().getArtifactId() != null
                         && pom.getParent().getArtifactId().indexOf(rootArtifactId) >= 0) {
                     pom.getParent()
-                            .setArtifactId(StringUtils.replace(
-                                    pom.getParent().getArtifactId(), rootArtifactId, "${rootArtifactId}"));
+                            .setArtifactId(
+                                    replace(pom.getParent().getArtifactId(), rootArtifactId, "${rootArtifactId}"));
                 }
                 if (pom.getParent().getVersion() != null) {
                     pom.getParent().setVersion("${" + Constants.VERSION + "}");
@@ -1100,7 +1095,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
             pom.setModules(null);
 
             if (pom.getGroupId() != null) {
-                pom.setGroupId(StringUtils.replace(
+                pom.setGroupId(replace(
                         pom.getGroupId(),
                         pomReversedProperties.getProperty(Constants.GROUP_ID),
                         "${" + Constants.GROUP_ID + "}"));
@@ -1163,7 +1158,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
         for (String file : files) {
             String directory = PathUtils.getDirectory(file, level);
             // make all groups have unix style
-            directory = StringUtils.replace(directory, File.separator, "/");
+            directory = directory.replace(File.separator, "/");
 
             if (!groups.containsKey(directory)) {
                 groups.put(directory, new ArrayList<>());
@@ -1173,7 +1168,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
 
             String innerPath = file.substring(directory.length() + 1);
             // make all groups have unix style
-            innerPath = StringUtils.replace(innerPath, File.separator, "/");
+            innerPath = innerPath.replace(File.separator, "/");
 
             group.add(innerPath);
         }
@@ -1211,7 +1206,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
             final List<String> groupFiles,
             final String packageName,
             String defaultEncoding) {
-        String packageAsDir = StringUtils.replace(packageName, ".", "/");
+        String packageAsDir = replace(packageName, ".", "/");
 
         List<FileSet> packagedFileSets = new ArrayList<>();
         List<String> packagedFiles = archetypeFilesResolver.getPackagedFiles(groupFiles, packageAsDir);
@@ -1255,14 +1250,13 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
             Properties reverseProperties,
             String defaultEncoding)
             throws IOException {
-        String packageAsDirectory = StringUtils.replace(packageName, ".", File.separator);
+        String packageAsDirectory = replace(packageName, ".", File.separator);
 
         LOGGER.debug("Package as Directory: Package:" + packageName + "->" + packageAsDirectory);
 
         for (String inputFileName : fileSetResources) {
-            String initialFilename = packaged
-                    ? StringUtils.replace(inputFileName, packageAsDirectory + File.separator, "")
-                    : inputFileName;
+            String initialFilename =
+                    packaged ? inputFileName.replace(packageAsDirectory + File.separator, "") : inputFileName;
 
             LOGGER.debug("InputFileName:" + inputFileName);
 
@@ -1586,14 +1580,24 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
         }
     }
 
+    /**
+     * Null-safe variant of {@link String#replace(CharSequence, CharSequence)}: returns {@code text} unchanged when any
+     * argument is {@code null} or {@code search} is empty.
+     */
+    private static String replace(String text, String search, String replacement) {
+        if (text == null || search == null || search.isEmpty() || replacement == null) {
+            return text;
+        }
+        return text.replace(search, replacement);
+    }
+
     private String getReversedContent(String content, Properties properties) {
-        String result =
-                StringUtils.replace(StringUtils.replace(content, "$", "${symbol_dollar}"), "\\", "${symbol_escape}");
+        String result = replace(replace(content, "$", "${symbol_dollar}"), "\\", "${symbol_escape}");
         result = getReversedPlainContent(result, properties);
 
         // TODO: Replace velocity to a better engine...
         return "#set( $symbol_pound = '#' )\n" + "#set( $symbol_dollar = '$' )\n" + "#set( $symbol_escape = '\\' )\n"
-                + StringUtils.replace(result, "#", "${symbol_pound}");
+                + replace(result, "#", "${symbol_pound}");
     }
 
     private String getReversedPlainContent(String content, Properties properties) {
@@ -1602,7 +1606,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
         for (Iterator<?> propertyIterator = properties.keySet().iterator(); propertyIterator.hasNext(); ) {
             String propertyKey = (String) propertyIterator.next();
 
-            result = StringUtils.replace(result, properties.getProperty(propertyKey), "${" + propertyKey + "}");
+            result = replace(result, properties.getProperty(propertyKey), "${" + propertyKey + "}");
         }
         return result;
     }
@@ -1613,7 +1617,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
         for (Iterator<?> propertyIterator = properties.keySet().iterator(); propertyIterator.hasNext(); ) {
             String propertyKey = (String) propertyIterator.next();
 
-            result = StringUtils.replace(result, properties.getProperty(propertyKey), "__" + propertyKey + "__");
+            result = replace(result, properties.getProperty(propertyKey), "__" + propertyKey + "__");
         }
 
         return result;
