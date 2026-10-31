@@ -31,42 +31,22 @@ Creating an archetype from an existing project involves three steps:
 - the archetype resolution
 - the archetype installation:deployment
 - the archetype usage
-# Usage
+
+## Usage
 
 Calling `mvn archetype:create-from-project` the plugin first resolves the package by guessing the project directory.
 
 It then generates the directory tree of the archetype in the `target/generated-sources/archetype` directory.
 
 ```shell
-mvn archetype:create-from-project
-[INFO] Scanning for projects...
-[INFO] Searching repository for plugin with prefix: 'archetype'.
-[INFO] ------------------------------------------------------------------------
-[INFO] Building project
-[INFO]    task-segment: [archetype:create-from-project]
-[INFO] ------------------------------------------------------------------------
-[INFO] Preparing archetype:create-from-project
-[INFO] No goals needed for project - skipping
-[INFO] Setting property: classpath.resource.loader.class => 'org.codehaus.plexus.velocity.ContextClassLoaderResourceLoader'.
-[INFO] Setting property: velocimacro.messages.on => 'false'.
-[INFO] Setting property: resource.loader => 'classpath'.
-[INFO] Setting property: resource.manager.logwhenfound => 'false'.
-[INFO] [archetype:create-from-project]
-[INFO] Setting default archetype's groupId: com.company
-[INFO] Setting default archetype's artifactId: project
-[INFO] Setting default archetype's version: 1.0-SNAPSHOT
+$ mvn archetype:create-from-project
+[INFO] --- archetype:3.4.1:create-from-project (default-cli) @ project ---
 [INFO] Setting default groupId: com.company
 [INFO] Setting default artifactId: project
-[INFO] Setting default version: 1.0-SNAPSHOT
+[INFO] Setting default version: 1.0
 [INFO] Setting default package: com.company.project
-[INFO] Archetype created in target/generated-sources/archetype
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD SUCCESSFUL
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time: 4 seconds
-[INFO] Finished at: Fri Feb 22 21:49:52 GMT 2008
-[INFO] Final Memory: 10M/26M
-[INFO] ------------------------------------------------------------------------
+[INFO] Archetype project created in /home/user/projects/project/target/generated-sources/archetype
+[INFO] BUILD SUCCESS
 ```
 
 Then move to that generated directory and call `mvn install` on the created archetype.
@@ -74,32 +54,15 @@ Then move to that generated directory and call `mvn install` on the created arch
 ```shell
 $ cd target/generated-sources/archetype/
 $ mvn install
-[INFO] Scanning for projects...
-[INFO] ------------------------------------------------------------------------
-[INFO] Building project
-[INFO]    task-segment: [install]
-[INFO] ------------------------------------------------------------------------
-[INFO] [resources:resources]
-[INFO] Using default encoding to copy filtered resources.
-[INFO] [resources:testResources]
-[INFO] Using default encoding to copy filtered resources.
-[INFO] Setting property: classpath.resource.loader.class => 'org.codehaus.plexus.velocity.ContextClassLoaderResourceLoader'.
-[INFO] Setting property: velocimacro.messages.on => 'false'.
-[INFO] Setting property: resource.loader => 'classpath'.
-[INFO] Setting property: resource.manager.logwhenfound => 'false'.
-[INFO] [archetype:jar]
-[INFO] [archetype:add-archetype-metadata]
-[INFO] [archetype:integration-test]
-[INFO] [install:install]
-[INFO] Installing /home/local/rafale/projects/tmp/project/target/generated-sources/archetype/target/project-1.0-SNAPSHOT.jar to /home/rafale/.m2/repository/com/company/project/1.0-SNAPSHOT/project-1.0-SNAPSHOT.jar
-[INFO] [archetype:update-local-catalog]
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD SUCCESSFUL
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time: 10 seconds
-[INFO] Finished at: Fri Feb 22 21:51:57 GMT 2008
-[INFO] Final Memory: 14M/35M
-[INFO] ------------------------------------------------------------------------
+[INFO] --- archetype:3.4.1:jar (default-jar) @ project-archetype ---
+[INFO] Building archetype jar: /home/user/projects/project/target/generated-sources/archetype/target/project-archetype-1.0.jar
+[INFO] --- archetype:3.4.1:integration-test (default-integration-test) @ project-archetype ---
+[INFO] Processing Archetype IT project: basic
+[INFO] --- install:3.1.4:install (default-install) @ project-archetype ---
+[INFO] Installing /home/user/projects/project/target/generated-sources/archetype/target/project-archetype-1.0.jar to /home/user/.m2/repository/com/company/project-archetype/1.0/project-archetype-1.0.jar
+[INFO] --- archetype:3.4.1:update-local-catalog (default-update-local-catalog) @ project-archetype ---
+[INFO] Updated local archetypes catalog /home/user/.m2/repository/archetype-catalog.xml
+[INFO] BUILD SUCCESS
 ```
 
 Finally move to a fresh directory and use your archetype.
@@ -108,29 +71,29 @@ Finally move to a fresh directory and use your archetype.
 $ mkdir /tmp/archetype
 $ cd /tmp/archetype
 $ mvn archetype:generate -DarchetypeCatalog=local
-[INFO] Scanning for projects...
-[INFO] Searching repository for plugin with prefix: 'archetype'.
-[INFO] ------------------------------------------------------------------------
-[INFO] Building Maven Default Project
-[INFO]    task-segment: [archetype:generate] (aggregator-style)
-[INFO] ------------------------------------------------------------------------
-[INFO] Preparing archetype:generate
-[INFO] No goals needed for project - skipping
-[INFO] Setting property: classpath.resource.loader.class => 'org.codehaus.plexus.velocity.ContextClassLoaderResourceLoader'.
-[INFO] Setting property: velocimacro.messages.on => 'false'.
-[INFO] Setting property: resource.loader => 'classpath'.
-[INFO] Setting property: resource.manager.logwhenfound => 'false'.
-[INFO] [archetype:generate]
 Choose archetype:
-1: local -> project (project)
-Choose a number or apply filter (format: [groupId:]artifactId, case sensitive contains): 1:
+1: local -> com.company:project-archetype (project-archetype)
+Choose a number or apply filter (format: [groupId:]artifactId, case sensitive contains): 1: 1
+Define value for property 'groupId': org.example
+Define value for property 'artifactId': my-app
+Define value for property 'version' 1.0-SNAPSHOT: 1.0-SNAPSHOT
+Define value for property 'package' org.example: org.example
+Confirm properties configuration:
+groupId: org.example
+artifactId: my-app
+version: 1.0-SNAPSHOT
+package: org.example
+ Y: 
+[INFO] Using following parameters for creating project from Archetype: project-archetype:1.0
+[INFO] Project created from Archetype in dir: /tmp/archetype/my-app
+[INFO] BUILD SUCCESS
 ```
 
-# Testing
+## Testing
 
 The user can provide archetype test projects by placing them in `src/it/projects` folder of their project. Upon creating archetype from the existing project all the test projects will be executed to verify the archetype created by this project is good. [Read more](./integration-test-mojo.html) about testing maven archetype.
 
-# Configuration
+## Configuration
 
 The `create-from-project` goal enable the user to provide some sensible configuration using the system properties or a property file.
 
@@ -138,6 +101,6 @@ The system properties permits the user to define the groupId, artifactId, versio
 
 When used, the property file takes precedence over the system properties. It is also the only way to define additional properties in the archetype.
 
-# Post-generation script
+## Post-generation script
 
 If the user wants to customize the generated project even further, a groovy script named `archetype-post-generate.groovy` can be added in `src/main/resources/META-INF/`. This script will end up in the generated archetype's `META-INF` folder and will be executed upon creating a project from this archetype. This groovy script has access to the `ArchetypeGenerationRequest` object, as well as all the `System.getProperties()` and all the archetype generation properties the user has specified.
