@@ -28,7 +28,6 @@ import java.io.Writer;
 import java.util.Iterator;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Writer;
@@ -99,13 +98,11 @@ public class DefaultRepositoryCrawler implements RepositoryCrawler {
 
                         String artifactId = jar.getParentFile().getParentFile().getName();
 
-                        String groupIdSep = StringUtils.replace(
-                                jar.getParentFile()
-                                        .getParentFile()
-                                        .getParentFile()
-                                        .getPath(),
-                                repository.getPath(),
-                                "");
+                        String groupIdSep = jar.getParentFile()
+                                .getParentFile()
+                                .getParentFile()
+                                .getPath()
+                                .replace(repository.getPath(), "");
                         String groupId = groupIdSep.replace(File.separatorChar, '.');
                         groupId = groupId.startsWith(".") ? groupId.substring(1) : groupId;
                         groupId = groupId.endsWith(".") ? groupId.substring(0, groupId.length() - 1) : groupId;
