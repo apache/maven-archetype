@@ -32,8 +32,6 @@ import org.codehaus.plexus.testing.PlexusTest;
 import org.codehaus.plexus.util.FileUtils;
 import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.RepositorySystem;
-import org.eclipse.aether.repository.LocalRepository;
-import org.eclipse.aether.repository.LocalRepositoryManager;
 import org.junit.jupiter.api.Test;
 
 import static org.codehaus.plexus.testing.PlexusExtension.getBasedir;
@@ -73,10 +71,8 @@ public class InternalCatalogArchetypesVerificationTest {
             // this should be also default ...
             archetype.setRepository(CENTRAL);
 
-            DefaultRepositorySystemSession repositorySession = new DefaultRepositorySystemSession();
-            LocalRepositoryManager localRepositoryManager = repositorySystem.newLocalRepositoryManager(
-                    repositorySession, new LocalRepository("target/test-classes/repositories/local"));
-            repositorySession.setLocalRepositoryManager(localRepositoryManager);
+            DefaultRepositorySystemSession repositorySession = RepositorySessions.withLocalRepository(
+                    repositorySystem, new File("target/test-classes/repositories/local"));
 
             ArchetypeGenerationRequest request = new ArchetypeGenerationRequest(archetype)
                     .setGroupId("org.apache.maven.archetype.test")

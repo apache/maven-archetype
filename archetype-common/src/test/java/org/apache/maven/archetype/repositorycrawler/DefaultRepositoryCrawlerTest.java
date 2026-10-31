@@ -27,7 +27,7 @@ import org.codehaus.plexus.testing.PlexusTest;
 import org.junit.jupiter.api.Test;
 
 import static org.codehaus.plexus.testing.PlexusExtension.getTestFile;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author rafale
@@ -46,10 +46,8 @@ public class DefaultRepositoryCrawlerTest {
         File repository = getTestFile("target/test-classes/repositories/central");
 
         ArchetypeCatalog result = instance.crawl(repository);
-        assertTrue(
-                (5 <= result.getArchetypes().size()) && (result.getArchetypes().size() <= 8),
-                "result.getArchetypes().size() = " + result.getArchetypes().size() + " should be in [5,8], result = "
-                        + result);
+        // basic, partial, site, old, fileset and fileset_with_postscript, prepared by the antrun executions in pom.xml
+        assertEquals(6, result.getArchetypes().size(), () -> "unexpected catalog: " + result);
 
         // TODO: should write to another directory
         //        instance.writeCatalog(result, new File(repository, "archetype-catalog.xml"));

@@ -25,7 +25,9 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -57,7 +59,7 @@ public class ArchetypeDescriptorBuilderTest {
 
         assertNotNull(descriptor.getSourceDescriptor("source0"));
 
-        assertEquals(true, descriptor.getSourceDescriptor("source0").isFiltered());
+        assertTrue(descriptor.getSourceDescriptor("source0").isFiltered());
 
         assertNotNull(descriptor.getSourceDescriptor("source0").getEncoding());
 
@@ -65,7 +67,7 @@ public class ArchetypeDescriptorBuilderTest {
 
         assertNotNull(descriptor.getSourceDescriptor("source1"));
 
-        assertEquals(true, descriptor.getSourceDescriptor("source1").isFiltered());
+        assertTrue(descriptor.getSourceDescriptor("source1").isFiltered());
 
         assertNotNull(descriptor.getSourceDescriptor("source1").getEncoding());
 
@@ -75,7 +77,7 @@ public class ArchetypeDescriptorBuilderTest {
 
         assertNotNull(descriptor.getResourceDescriptor("resource0"));
 
-        assertEquals(true, descriptor.getResourceDescriptor("resource0").isFiltered());
+        assertTrue(descriptor.getResourceDescriptor("resource0").isFiltered());
 
         assertNotNull(descriptor.getResourceDescriptor("resource0").getEncoding());
 
@@ -83,7 +85,7 @@ public class ArchetypeDescriptorBuilderTest {
 
         assertNotNull(descriptor.getResourceDescriptor("resource1"));
 
-        assertEquals(true, descriptor.getResourceDescriptor("resource1").isFiltered());
+        assertTrue(descriptor.getResourceDescriptor("resource1").isFiltered());
 
         assertNotNull(descriptor.getResourceDescriptor("resource1").getEncoding());
 
@@ -93,7 +95,7 @@ public class ArchetypeDescriptorBuilderTest {
 
         assertNotNull(descriptor.getTestSourceDescriptor("testSource0"));
 
-        assertEquals(true, descriptor.getTestSourceDescriptor("testSource0").isFiltered());
+        assertTrue(descriptor.getTestSourceDescriptor("testSource0").isFiltered());
 
         assertNotNull(descriptor.getTestSourceDescriptor("testSource0").getEncoding());
 
@@ -101,7 +103,7 @@ public class ArchetypeDescriptorBuilderTest {
 
         assertNotNull(descriptor.getTestSourceDescriptor("testSource1"));
 
-        assertEquals(true, descriptor.getTestSourceDescriptor("testSource1").isFiltered());
+        assertTrue(descriptor.getTestSourceDescriptor("testSource1").isFiltered());
 
         assertNotNull(descriptor.getTestSourceDescriptor("testSource1").getEncoding());
 
@@ -111,7 +113,7 @@ public class ArchetypeDescriptorBuilderTest {
 
         assertNotNull(descriptor.getTestResourceDescriptor("testResource0"));
 
-        assertEquals(true, descriptor.getTestResourceDescriptor("testResource0").isFiltered());
+        assertTrue(descriptor.getTestResourceDescriptor("testResource0").isFiltered());
 
         assertNotNull(descriptor.getTestResourceDescriptor("testResource0").getEncoding());
 
@@ -119,7 +121,7 @@ public class ArchetypeDescriptorBuilderTest {
 
         assertNotNull(descriptor.getTestResourceDescriptor("testResource1"));
 
-        assertEquals(true, descriptor.getTestResourceDescriptor("testResource1").isFiltered());
+        assertTrue(descriptor.getTestResourceDescriptor("testResource1").isFiltered());
 
         assertNotNull(descriptor.getTestResourceDescriptor("testResource1").getEncoding());
     }
@@ -153,7 +155,7 @@ public class ArchetypeDescriptorBuilderTest {
 
         assertNotNull(descriptor.getSourceDescriptor("source0"));
 
-        assertEquals(true, descriptor.getSourceDescriptor("source0").isFiltered());
+        assertTrue(descriptor.getSourceDescriptor("source0").isFiltered());
 
         assertEquals("utf-8", descriptor.getSourceDescriptor("source0").getEncoding());
 
@@ -161,7 +163,7 @@ public class ArchetypeDescriptorBuilderTest {
 
         assertNotNull(descriptor.getSourceDescriptor("source1"));
 
-        assertEquals(true, descriptor.getSourceDescriptor("source1").isFiltered());
+        assertTrue(descriptor.getSourceDescriptor("source1").isFiltered());
 
         assertEquals("utf-8", descriptor.getSourceDescriptor("source1").getEncoding());
 
@@ -171,7 +173,7 @@ public class ArchetypeDescriptorBuilderTest {
 
         assertNotNull(descriptor.getResourceDescriptor("resource0"));
 
-        assertEquals(false, descriptor.getResourceDescriptor("resource0").isFiltered());
+        assertFalse(descriptor.getResourceDescriptor("resource0").isFiltered());
 
         assertNotNull(descriptor.getResourceDescriptor("resource0").getEncoding());
 
@@ -179,7 +181,7 @@ public class ArchetypeDescriptorBuilderTest {
 
         assertNotNull(descriptor.getResourceDescriptor("resource1"));
 
-        assertEquals(true, descriptor.getResourceDescriptor("resource1").isFiltered());
+        assertTrue(descriptor.getResourceDescriptor("resource1").isFiltered());
 
         assertEquals("iso-8859-1", descriptor.getResourceDescriptor("resource1").getEncoding());
 
@@ -189,7 +191,7 @@ public class ArchetypeDescriptorBuilderTest {
 
         assertNotNull(descriptor.getTestSourceDescriptor("testSource0"));
 
-        assertEquals(true, descriptor.getTestSourceDescriptor("testSource0").isFiltered());
+        assertTrue(descriptor.getTestSourceDescriptor("testSource0").isFiltered());
 
         assertEquals("utf-8", descriptor.getTestSourceDescriptor("testSource0").getEncoding());
 
@@ -197,7 +199,7 @@ public class ArchetypeDescriptorBuilderTest {
 
         assertNotNull(descriptor.getTestSourceDescriptor("testSource1"));
 
-        assertEquals(true, descriptor.getTestSourceDescriptor("testSource1").isFiltered());
+        assertTrue(descriptor.getTestSourceDescriptor("testSource1").isFiltered());
 
         assertEquals("utf-8", descriptor.getTestSourceDescriptor("testSource1").getEncoding());
 
@@ -207,7 +209,7 @@ public class ArchetypeDescriptorBuilderTest {
 
         assertNotNull(descriptor.getTestResourceDescriptor("testResource0"));
 
-        assertEquals(true, descriptor.getTestResourceDescriptor("testResource0").isFiltered());
+        assertTrue(descriptor.getTestResourceDescriptor("testResource0").isFiltered());
 
         assertEquals(
                 "us-ascii",
@@ -217,8 +219,7 @@ public class ArchetypeDescriptorBuilderTest {
 
         assertNotNull(descriptor.getTestResourceDescriptor("testResource1"));
 
-        assertEquals(
-                false, descriptor.getTestResourceDescriptor("testResource1").isFiltered());
+        assertFalse(descriptor.getTestResourceDescriptor("testResource1").isFiltered());
 
         assertNotNull(descriptor.getTestResourceDescriptor("testResource1").getEncoding());
 
@@ -228,8 +229,7 @@ public class ArchetypeDescriptorBuilderTest {
 
         assertNotNull(descriptor.getSiteResourceDescriptor("siteResource0"));
 
-        assertEquals(
-                false, descriptor.getSiteResourceDescriptor("siteResource0").isFiltered());
+        assertFalse(descriptor.getSiteResourceDescriptor("siteResource0").isFiltered());
 
         assertNotNull(descriptor.getSiteResourceDescriptor("siteResource0").getEncoding());
 
@@ -237,7 +237,7 @@ public class ArchetypeDescriptorBuilderTest {
 
         assertNotNull(descriptor.getSiteResourceDescriptor("siteResource1"));
 
-        assertEquals(true, descriptor.getSiteResourceDescriptor("siteResource1").isFiltered());
+        assertTrue(descriptor.getSiteResourceDescriptor("siteResource1").isFiltered());
 
         assertEquals(
                 "utf-16", descriptor.getSiteResourceDescriptor("siteResource1").getEncoding());

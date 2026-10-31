@@ -32,12 +32,10 @@ import org.codehaus.plexus.testing.PlexusTest;
 import org.codehaus.plexus.util.FileUtils;
 import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.RepositorySystem;
-import org.eclipse.aether.repository.LocalRepository;
-import org.eclipse.aether.repository.LocalRepositoryManager;
 import org.junit.jupiter.api.Test;
 
 import static org.codehaus.plexus.testing.PlexusExtension.getBasedir;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /** @author Jason van Zyl */
 @PlexusTest
@@ -52,10 +50,8 @@ public class ArchetypeGenerationTest {
     @Test
     public void testProjectGenerationFromAnArchetype() throws Exception {
 
-        DefaultRepositorySystemSession repositorySession = new DefaultRepositorySystemSession();
-        LocalRepositoryManager localRepositoryManager = repositorySystem.newLocalRepositoryManager(
-                repositorySession, new LocalRepository("target/test-classes/repositories/central"));
-        repositorySession.setLocalRepositoryManager(localRepositoryManager);
+        DefaultRepositorySystemSession repositorySession = RepositorySessions.withLocalRepository(
+                repositorySystem, new File("target/test-classes/repositories/central"));
 
         ArchetypeCatalog catalog = archetype.getLocalCatalog(repositorySession);
 
@@ -104,9 +100,6 @@ public class ArchetypeGenerationTest {
 
         ArchetypeGenerationResult result = archetype.generateProjectFromArchetype(agr);
 
-        if (result.getCause() != null) {
-            result.getCause().printStackTrace(System.err);
-            fail(result.getCause().getMessage());
-        }
+        assertNull(result.getCause(), () -> "Archetype wasn't generated successfully: " + result.getCause());
     }
 }
