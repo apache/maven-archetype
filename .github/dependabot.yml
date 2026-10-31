@@ -22,6 +22,19 @@ updates:
       interval: daily
     open-pull-requests-limit: 10
     ignore:
+      # 3.x plugins build against the latest Maven 3.9.x
+      - dependency-name: "org.apache.maven:maven-artifact"
+        versions: [">= 3.10.0"]
+      - dependency-name: "org.apache.maven:maven-core"
+        versions: [">= 3.10.0"]
+      - dependency-name: "org.apache.maven:maven-model"
+        versions: [">= 3.10.0"]
+      - dependency-name: "org.apache.maven:maven-plugin-api"
+        versions: [">= 3.10.0"]
+      - dependency-name: "org.apache.maven:maven-settings"
+        versions: [">= 3.10.0"]
+      - dependency-name: "org.apache.maven:maven-settings-builder"
+        versions: [">= 3.10.0"]
       # mrm-maven-plugin 2.x requires Java 17
       - dependency-name: org.codehaus.mojo:mrm-maven-plugin
         versions: [">= 2.0.0"]
