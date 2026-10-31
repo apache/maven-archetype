@@ -91,7 +91,7 @@ package: org.example
 
 ## Testing
 
-When you create an archetype from a project, the plugin adds a first test project named `basic` in `src/test/resources/projects`. The `archetype:integration-test` goal, which runs during `mvn verify` or `mvn install` of the archetype, generates a project from the archetype for each test project and can compare it with a reference copy. See [Test an archetype](./examples/test-an-archetype.html).
+When you create an archetype from a project, the plugin adds a first test project named `basic` in `src/test/resources/projects`. The `archetype:integration-test` goal, which runs during `mvn verify` or `mvn install` of the archetype, generates a project from the archetype for each test project and can compare it with a reference copy. See the [Guide to Testing Archetypes](https://maven.apache.org/guides/mini/guide-testing-archetypes.html).
 
 ## Configuration
 
