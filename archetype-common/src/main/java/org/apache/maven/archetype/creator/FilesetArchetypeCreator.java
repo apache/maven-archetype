@@ -44,7 +44,6 @@ import java.util.Set;
 
 import com.ibm.icu.text.CharsetDetector;
 import com.ibm.icu.text.CharsetMatch;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.archetype.ArchetypeCreationRequest;
 import org.apache.maven.archetype.ArchetypeCreationResult;
@@ -146,8 +145,8 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
             archetypePostGenerationScript.getParentFile().mkdirs();
 
             if (request.getProject().getBuild() != null
-                    && CollectionUtils.isNotEmpty(
-                            request.getProject().getBuild().getResources())) {
+                    && request.getProject().getBuild().getResources() != null
+                    && !request.getProject().getBuild().getResources().isEmpty()) {
                 for (Resource resource : request.getProject().getBuild().getResources()) {
                     File inputFile = new File(
                             resource.getDirectory() + File.separator + Constants.ARCHETYPE_POST_GENERATION_SCRIPT);
