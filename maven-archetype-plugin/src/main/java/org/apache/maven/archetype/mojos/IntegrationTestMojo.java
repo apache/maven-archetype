@@ -34,6 +34,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -42,7 +43,6 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.Set;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeGenerationResult;
 import org.apache.maven.archetype.common.Constants;
@@ -344,7 +344,12 @@ public class IntegrationTestMojo extends AbstractMojo {
         List<String> actualFiles = FileUtils.getFileAndDirectoryNames(actual, "**", null, false, true, true, true);
         getLog().debug("actual content: " + actualFiles);
 
-        boolean fileNamesEquals = CollectionUtils.isEqualCollection(referenceFiles, actualFiles);
+        // same elements with the same cardinalities, regardless of order
+        List<String> sortedReferenceFiles = new ArrayList<>(referenceFiles);
+        Collections.sort(sortedReferenceFiles);
+        List<String> sortedActualFiles = new ArrayList<>(actualFiles);
+        Collections.sort(sortedActualFiles);
+        boolean fileNamesEquals = sortedReferenceFiles.equals(sortedActualFiles);
 
         if (!fileNamesEquals) {
             getLog().debug("Actual list of files is not the same as reference:");
