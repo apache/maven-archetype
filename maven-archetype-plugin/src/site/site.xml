@@ -43,6 +43,7 @@
       <item name="Create an archetype with a property file" href="/examples/create-with-property-file.html"/>
       <item name="Generate project in batch mode" href="/examples/generate-batch.html"/>
       <item name="Generate project using an alternative catalog" href="/examples/generate-alternative-catalog.html"/>
+      <item name="Test an archetype" href="/examples/test-an-archetype.html"/>
     </menu>
 
     <!--menu name="Specification">
