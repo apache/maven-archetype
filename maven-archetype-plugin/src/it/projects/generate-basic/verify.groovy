@@ -18,12 +18,5 @@
  * under the License.
  */
 
-import java.io.*;
-
-File pom = new File( basedir, "project/pom.xml" );
-if ( !pom.isFile() )
-{
-    throw new Exception( "No project created from archetype." );
-}
-
-return true;
+def pom = new File(basedir, "project/pom.xml")
+assert pom.isFile() : "No project created from archetype."

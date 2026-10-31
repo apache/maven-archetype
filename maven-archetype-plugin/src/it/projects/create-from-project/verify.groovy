@@ -18,21 +18,11 @@
  * under the License.
  */
 
-import java.io.*;
+def archetype = new File(basedir, "target/generated-sources/archetype")
 
-File archetype = new File( basedir, "target/generated-sources/archetype" );
-
-File pom = new File( archetype, "pom.xml" );
-if ( !pom.isFile() )
-{
-    throw new Exception( pom + " file is missing or not a file." );
-}
+def pom = new File(archetype, "pom.xml")
+assert pom.isFile() : "${pom} file is missing or not a file."
 
 // ARCHETYPE-462 filter file name with archetype.properties properties
-File app = new File( archetype, "src/main/resources/archetype-resources/src/main/java/__AppName__.java" );
-if ( !app.isFile() )
-{
-    throw new Exception( app + " file is missing or not a file." );
-}
-
-return true;
+def app = new File(archetype, "src/main/resources/archetype-resources/src/main/java/__AppName__.java")
+assert app.isFile() : "${app} file is missing or not a file."

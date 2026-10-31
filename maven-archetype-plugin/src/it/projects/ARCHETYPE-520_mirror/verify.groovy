@@ -17,5 +17,6 @@
  * under the License.
  */
 
-buildLog = new File( basedir, "../../logs/ARCHETYPE-520_mirror/build.log" )
+def buildLog = new File( basedir, "../../logs/ARCHETYPE-520_mirror/build.log" )
 assert !buildLog.text.contains( "://repo.maven.apache.org/maven2/" )
+assert buildLog.text.contains( "Using mirror mrm-maven-plugin" ) : "the mock repository mirror from the settings was not used"
