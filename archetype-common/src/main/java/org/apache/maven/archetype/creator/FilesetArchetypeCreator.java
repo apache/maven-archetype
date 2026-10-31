@@ -44,7 +44,6 @@ import java.util.Set;
 
 import com.ibm.icu.text.CharsetDetector;
 import com.ibm.icu.text.CharsetMatch;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.archetype.ArchetypeCreationRequest;
 import org.apache.maven.archetype.ArchetypeCreationResult;
 import org.apache.maven.archetype.common.ArchetypeFilesResolver;
@@ -71,6 +70,7 @@ import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
+import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.XmlStreamReader;
 import org.codehaus.plexus.util.xml.XmlStreamWriter;
 import org.codehaus.plexus.util.xml.Xpp3Dom;

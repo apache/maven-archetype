@@ -24,7 +24,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.archetype.catalog.Archetype;
 
 /**
@@ -37,12 +36,12 @@ public class ArchetypeSelectorUtils {
     }
 
     private static String extractGroupIdFromFilter(String filter) {
-        return filter.contains(":") ? StringUtils.substringBefore(filter, ":") : null;
+        return filter.contains(":") ? filter.substring(0, filter.indexOf(':')) : null;
     }
 
     private static String extractArtifactIdFromFilter(String filter) {
         // if no : the full text is considered as artifactId content
-        return filter.contains(":") ? StringUtils.substringAfter(filter, ":") : filter;
+        return filter.contains(":") ? filter.substring(filter.indexOf(':') + 1) : filter;
     }
 
     /**
