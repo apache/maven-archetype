@@ -39,7 +39,7 @@
   <name>Maven Archetype Plugin</name>
 
   <prerequisites>
-    <maven>3.6.3</maven>
+    <maven>3.9.0</maven>
   </prerequisites>
 
   <dependencies>
