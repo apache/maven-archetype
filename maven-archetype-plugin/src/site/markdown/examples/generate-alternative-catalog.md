@@ -26,66 +26,16 @@ under the License.
 
 # Generate project using an alternative catalog
 
-It is possible to use an alternative catalog as the internal one by defining the `archetypeCatalog` property to a specific value which can be one of:
+You can choose the catalogs that `archetype:generate` lists by setting the `archetypeCatalog` property to a comma-separated list of the following values:
 
-- `internal` to use the internal catalog only.
-- `local` to use the local catalog only.
-- `remote` to use the maven's remote catalog. No catalog is currently provided.
+- `remote` to use the `archetype-catalog.xml` that Maven Central publishes, or the one from a repository with the id `archetype`. If the remote catalog is empty or cannot be retrieved, the plugin uses the internal catalog instead.
+- `local` to use the `archetype-catalog.xml` in your local repository, which `archetype:create-from-project` updates.
+- `internal` to use the catalog bundled with the plugin.
 
-The default value is `remote,local`. Thus the local catalog is shown just after the remote one.
+The default value is `remote,local`, so the local catalog is listed just after the remote one. Other values are rejected.
+
+To list only the archetypes of your local repository, run the following command:
 
 ```shell
-$ mvn archetype:generate
-[INFO] Scanning for projects...
-[INFO] Searching repository for plugin with prefix: 'archetype'.
-[INFO] ------------------------------------------------------------------------
-[INFO] Building Maven Default Project
-[INFO]    task-segment: [archetype:generate] (aggregator-style)
-[INFO] ------------------------------------------------------------------------
-[INFO] Preparing archetype:generate
-[INFO] No goals needed for project - skipping
-[INFO] Setting property: classpath.resource.loader.class => 'org.codehaus.plexus.velocity.ContextClassLoaderResourceLoader'.
-[INFO] Setting property: velocimacro.messages.on => 'false'.
-[INFO] Setting property: resource.loader => 'classpath'.
-[INFO] Setting property: resource.manager.logwhenfound => 'false'.
-[INFO] [archetype:generate]
-[INFO] Generating project in Interactive mode
-[INFO] No archetype defined. Using maven-archetype-quickstart (org.apache.maven.archetypes:maven-archetype-quickstart:1.0)
-Choose archetype:
-1: http://cocoon.apache.org -> cocoon-22-archetype-block-plain (Creates an empty Cocoon block; useful if you want to add another block to a Cocoon application)
-2: http://cocoon.apache.org -> cocoon-22-archetype-block (Creates a Cocoon block containing some small samples)
-3: http://cocoon.apache.org -> cocoon-22-archetype-webapp (Creates a web application configured to host Cocoon blocks. Just add the block dependencies)
-Choose a number or apply filter (format: [groupId:]artifactId, case sensitive contains): 1
-Downloading: http://localhost:8081/nexus/content/groups/mac/org/apache/cocoon/cocoon-22-archetype-block-plain/1.0.0/cocoon-22-archetype-block-plain-1.0.0.jar
-13K downloaded
-Define value for groupId: : com.company
-Define value for artifactId: : example
-Define value for version:  1.0-SNAPSHOT: :
-Define value for package:  com.company: : com.company.example
-Confirm properties configuration:
-groupId: com.company
-artifactId: example
-version: 1.0-SNAPSHOT
-package: com.company.example
- Y: :
-[INFO] ----------------------------------------------------------------------------
-[INFO] Using following parameters for creating OldArchetype: cocoon-22-archetype-block-plain:1.0.0
-[INFO] ----------------------------------------------------------------------------
-[INFO] Parameter: groupId, Value: com.company
-[INFO] Parameter: packageName, Value: com.company.example
-[INFO] Parameter: package, Value: com.company.example
-[INFO] Parameter: artifactId, Value: example
-[INFO] Parameter: basedir, Value: /private/tmp/archetype
-[INFO] Parameter: version, Value: 1.0-SNAPSHOT
-[WARNING] org.apache.velocity.runtime.exception.ReferenceException: reference : template = archetype-resources/pom.xml [line 20,column 6] : $Id is not a valid reference.
-[WARNING] org.apache.velocity.runtime.exception.ReferenceException: reference : template = archetype-resources/src/main/resources/META-INF/cocoon/spring/block-servlet-service.xml [line 20,column 6] : $Id is not a valid reference.
-[WARNING] org.apache.velocity.runtime.exception.ReferenceException: reference : template = archetype-resources/src/main/resources/META-INF/cocoon/spring/block-application-context.xml [line 18,column 6] : $Id is not a valid reference.
-[INFO] OldArchetype created in dir: /private/tmp/archetype/example
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD SUCCESSFUL
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time: 1 minute 20 seconds
-[INFO] Finished at: Tue Sep 09 19:10:51 CEST 2008
-[INFO] Final Memory: 8M/15M
-[INFO] ------------------------------------------------------------------------
+mvn archetype:generate -DarchetypeCatalog=local
 ```
