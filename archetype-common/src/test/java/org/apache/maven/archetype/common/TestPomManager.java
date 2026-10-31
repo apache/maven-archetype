@@ -22,7 +22,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -37,20 +36,17 @@ import org.junit.jupiter.api.io.TempDir;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TestPomManager {
 
     // ref: https://www.baeldung.com/java-pretty-print-xml
     // https://bugs.openjdk.java.net/browse/JDK-8262285?attachmentViewMode=list
     @Test
-    public void testAddModulePomPackaging() throws Exception {
+    public void testAddModulePomPackaging(@TempDir Path dir) throws Exception {
         PomManager pomManager = new DefaultPomManager();
 
-        Path pomPath = Paths.get(
-                getClass().getResource("/projects/pom-manager/pom-sample-1.xml").toURI());
-        Path pomDestPath = pomPath.getParent().resolve("pom-sample-1-copied.xml");
-        Files.copy(pomPath, pomDestPath, StandardCopyOption.REPLACE_EXISTING);
+        Path pomDestPath = copySample("pom-sample-1.xml", dir);
 
         final int moduleNumber = 4;
         for (int i = 0; i < moduleNumber; i++) {
@@ -64,22 +60,18 @@ public class TestPomManager {
     }
 
     @Test
-    public void testAddModuleNonPomPackaging() throws Exception {
+    public void testAddModuleNonPomPackaging(@TempDir Path dir) throws Exception {
         PomManager pomManager = new DefaultPomManager();
 
-        Path pomPath = Paths.get(
-                getClass().getResource("/projects/pom-manager/pom-sample-2.xml").toURI());
-        Path pomDestPath = pomPath.getParent().resolve("pom-sample-1-copied.xml");
-        Files.copy(pomPath, pomDestPath, StandardCopyOption.REPLACE_EXISTING);
+        Path pomDestPath = copySample("pom-sample-2.xml", dir);
 
-        Exception expectedException = null;
-        try {
-            pomManager.addModule(pomDestPath.toFile(), "test");
-        } catch (InvalidPackaging e) {
-            expectedException = e;
-        }
+        assertThrows(InvalidPackaging.class, () -> pomManager.addModule(pomDestPath.toFile(), "test"));
+    }
 
-        assertNotNull(expectedException);
+    private Path copySample(String name, Path dir) throws Exception {
+        Path source = Paths.get(
+                getClass().getResource("/projects/pom-manager/" + name).toURI());
+        return Files.copy(source, dir.resolve(name));
     }
 
     @Test

@@ -36,6 +36,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.maven.archetype.ArchetypeGenerationRequest;
 import org.apache.maven.archetype.ArchetypeVelocityEngine;
 import org.apache.maven.archetype.exception.InvalidPackaging;
+import org.apache.maven.archetype.test.RepositorySessions;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.velocity.VelocityContext;
@@ -47,8 +48,6 @@ import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.artifact.Artifact;
 import org.eclipse.aether.artifact.DefaultArtifact;
-import org.eclipse.aether.repository.LocalRepository;
-import org.eclipse.aether.repository.LocalRepositoryManager;
 import org.eclipse.aether.repository.RemoteRepository;
 import org.eclipse.aether.repository.RepositoryPolicy;
 import org.eclipse.aether.resolution.ArtifactRequest;
@@ -60,8 +59,8 @@ import org.xmlunit.diff.Diff;
 import static org.codehaus.plexus.testing.PlexusExtension.getTestFile;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * @author <a href="mailto:jason@maven.org">Jason van Zyl</a>
@@ -101,10 +100,8 @@ public class ArchetypeTest {
         List<RemoteRepository> remoteRepositories = new ArrayList<>();
         remoteRepositories.add(remoteRepository);
 
-        DefaultRepositorySystemSession repositorySession = new DefaultRepositorySystemSession();
-        LocalRepositoryManager localRepositoryManager =
-                repositorySystem.newLocalRepositoryManager(repositorySession, new LocalRepository(mavenRepoLocal));
-        repositorySession.setLocalRepositoryManager(localRepositoryManager);
+        DefaultRepositorySystemSession repositorySession =
+                RepositorySessions.withLocalRepository(repositorySystem, new File(mavenRepoLocal));
 
         ArchetypeGenerationRequest request = new ArchetypeGenerationRequest()
                 .setPackage("org.apache.maven.quickstart")
@@ -185,32 +182,32 @@ public class ArchetypeTest {
             throw new ArchetypeTemplateProcessingException("Error reading generated POM", e);
         }
         assertEquals(
-                generatedModel.getArtifactId(),
                 templateModel.getArtifactId(),
+                generatedModel.getArtifactId(),
                 "Generated POM ArtifactId is not equivalent to expected result.");
         assertEquals(
-                generatedModel.getGroupId(),
                 templateModel.getGroupId(),
+                generatedModel.getGroupId(),
                 "Generated POM GroupId is not equivalent to expected result.");
         assertEquals(
-                generatedModel.getId(),
                 templateModel.getId(),
+                generatedModel.getId(),
                 "Generated POM Id is not equivalent to expected result.");
         assertEquals(
-                generatedModel.getVersion(),
                 templateModel.getVersion(),
+                generatedModel.getVersion(),
                 "Generated POM Version is not equivalent to expected result.");
         assertEquals(
-                generatedModel.getPackaging(),
                 templateModel.getPackaging(),
+                generatedModel.getPackaging(),
                 "Generated POM Packaging is not equivalent to expected result.");
         assertEquals(
-                generatedModel.getDevelopers(),
                 templateModel.getDevelopers(),
+                generatedModel.getDevelopers(),
                 "Generated POM Developers is not equivalent to expected result.");
         assertEquals(
-                generatedModel.getScm(),
                 templateModel.getScm(),
+                generatedModel.getScm(),
                 "Generated POM Scm is not equivalent to expected result.");
     }
 
@@ -378,30 +375,26 @@ public class ArchetypeTest {
     }
 
     @Test
-    public void testAddModuleToParentPOMNoPackaging() throws Exception {
-        try {
-            String pom = "<project>\n</project>";
-            DefaultOldArchetype.addModuleToParentPom("myArtifactId1", new StringReader(pom), new StringWriter());
-            fail("Should fail to add a module to a JAR packaged project");
-        } catch (InvalidPackaging e) {
-            // great!
-            assertEquals(
-                    "Unable to add module to the current project as it is not of packaging type 'pom'",
-                    e.getLocalizedMessage());
-        }
+    public void testAddModuleToParentPOMNoPackaging() {
+        String pom = "<project>\n</project>";
+        InvalidPackaging e = assertThrows(
+                InvalidPackaging.class,
+                () -> DefaultOldArchetype.addModuleToParentPom(
+                        "myArtifactId1", new StringReader(pom), new StringWriter()));
+        assertEquals(
+                "Unable to add module to the current project as it is not of packaging type 'pom'",
+                e.getLocalizedMessage());
     }
 
     @Test
-    public void testAddModuleToParentPOMJarPackaging() throws Exception {
-        try {
-            String pom = "<project>\n  <packaging>jar</packaging>\n</project>";
-            DefaultOldArchetype.addModuleToParentPom("myArtifactId1", new StringReader(pom), new StringWriter());
-            fail("Should fail to add a module to a JAR packaged project");
-        } catch (InvalidPackaging e) {
-            // great!
-            assertEquals(
-                    "Unable to add module to the current project as it is not of packaging type 'pom'",
-                    e.getLocalizedMessage());
-        }
+    public void testAddModuleToParentPOMJarPackaging() {
+        String pom = "<project>\n  <packaging>jar</packaging>\n</project>";
+        InvalidPackaging e = assertThrows(
+                InvalidPackaging.class,
+                () -> DefaultOldArchetype.addModuleToParentPom(
+                        "myArtifactId1", new StringReader(pom), new StringWriter()));
+        assertEquals(
+                "Unable to add module to the current project as it is not of packaging type 'pom'",
+                e.getLocalizedMessage());
     }
 }

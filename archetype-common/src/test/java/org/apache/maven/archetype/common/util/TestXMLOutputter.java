@@ -45,6 +45,6 @@ public class TestXMLOutputter {
         StringWriter sw = new StringWriter();
         new XMLOutputter().output(doc, sw);
 
-        assertTrue(sw.toString().indexOf(content) > -1);
+        assertTrue(sw.toString().contains(content));
     }
 }

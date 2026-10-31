@@ -45,11 +45,10 @@ import org.apache.maven.archetype.ArchetypeManager;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Writer;
+import org.apache.maven.archetype.test.RepositorySessions;
 import org.codehaus.plexus.testing.PlexusTest;
 import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.RepositorySystem;
-import org.eclipse.aether.repository.LocalRepository;
-import org.eclipse.aether.repository.LocalRepositoryManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -89,10 +88,8 @@ public class LocalCatalogArchetypeDataSourceTest {
     @Test
     public void testLocalCatalog() {
 
-        DefaultRepositorySystemSession repositorySession = new DefaultRepositorySystemSession();
-        LocalRepositoryManager localRepositoryManager = repositorySystem.newLocalRepositoryManager(
-                repositorySession, new LocalRepository(getTestFile("target/test-classes/repositories/test-catalog")));
-        repositorySession.setLocalRepositoryManager(localRepositoryManager);
+        DefaultRepositorySystemSession repositorySession = RepositorySessions.withLocalRepository(
+                repositorySystem, getTestFile("target/test-classes/repositories/test-catalog"));
 
         ArchetypeCatalog result = archetype.getLocalCatalog(repositorySession);
 
