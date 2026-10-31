@@ -17,7 +17,7 @@
  * under the License.
  */
 
-buildLog = new File( basedir, '../../logs/ARCHETYPE-606_include-gitignore/build.log' ).text
+def buildLog = new File( basedir, '../../logs/ARCHETYPE-606_include-gitignore/build.log' ).text
 assert buildLog.contains( '[INFO] Invoking post-archetype-generation goals: compile' ) : 'post-archetype-generation invocation not recorder in log'
 assert buildLog.contains( '[INFO] [INFO]' ) : 'output of post-archetype-generation should be present in log'
 

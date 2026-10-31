@@ -18,29 +18,12 @@
  * under the License.
  */
 
-import java.io.*;
-import org.codehaus.plexus.util.*;
-
-basedir = new File( basedir, "target/test-classes/projects/basic/project/project/basic" );
-if ( !basedir.exists() ) {
-	throw new Exception( basedir + " is missing." );
-}
-
-File main = new File( basedir, "src/main" );
+def projectDir = new File(basedir, "target/test-classes/projects/basic/project/project/basic")
+assert projectDir.exists() : "${projectDir} is missing."
 
 // check <fileset packaged="true">
-File app = new File( main, "java/build/archetype/App.java" );
-if ( !app.isFile() )
-{
-    throw new Exception( app + " file is missing or not a file." );
-}
+def app = new File(projectDir, "src/main/java/build/archetype/App.java")
+assert app.isFile() : "${app} file is missing or not a file."
 
-File buildLog = new File( basedir, "build.log" );
-
-String content = FileUtils.fileRead( buildLog, "UTF-8" );
-
-int idx = content.indexOf( "Yeah Baby, it rocks!" );
-if ( idx < 0 )
-{
-    throw new Exception( "build.log missing System.out.println from verify.groovy" );
-}
+def buildLog = new File(projectDir, "build.log")
+assert buildLog.getText("UTF-8").contains("Yeah Baby, it rocks!") : "build.log missing System.out.println from verify.groovy"

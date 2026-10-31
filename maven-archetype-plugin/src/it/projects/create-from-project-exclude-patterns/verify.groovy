@@ -18,29 +18,15 @@
  * under the License.
  */
 
-import java.io.*;
-
-File archetype = new File( basedir, "target/generated-sources/archetype/src/main/resources/archetype-resources/" );
+def archetype = new File(basedir, "target/generated-sources/archetype/src/main/resources/archetype-resources/")
 
 // ARCHETYPE-513
-String[] excluded = [ "/", "src/", "src/main/", "src/main/resources/" ] as String[];
-for ( String exclude : excluded )
-{
-    File app = new File( archetype, exclude + "toexclude" );
-    if ( app.exists() )
-    {
-        throw new Exception( app + " folder exists when it should have been excluded." );
-    }
+for (exclude in ["/", "src/", "src/main/", "src/main/resources/"]) {
+    def excluded = new File(archetype, exclude + "toexclude")
+    assert !excluded.exists() : "${excluded} folder exists when it should have been excluded."
 }
 
-String[] included = [ "file.txt", "file.xml" ] as String[];
-for ( String include : included )
-{
-    File app = new File( archetype, "src/main/resources/" + include );
-    if ( !app.isFile() )
-    {
-        throw new Exception( app + " file does not exist when it should have been included." );
-    }
+for (include in ["file.txt", "file.xml"]) {
+    def included = new File(archetype, "src/main/resources/" + include)
+    assert included.isFile() : "${included} file does not exist when it should have been included."
 }
-
-return true;

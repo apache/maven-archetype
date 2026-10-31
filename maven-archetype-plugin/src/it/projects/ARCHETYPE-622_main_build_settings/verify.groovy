@@ -36,7 +36,7 @@ assert buildLog.contains("Archetype tests executed!") :
 // we expect the archetype:integration-test to use the settings.xml from the main Maven build - so downloading should happen
 // also from local.central specified in the test-settings.xml
 assert buildLog.contains("local.central (file://") :
- "test-settings.xml wasn't passed from the main Maven build!: 'local.central (file://' was NOT found in the output! The output was:\n${content}"
+ "test-settings.xml wasn't passed from the main Maven build!: 'local.central (file://' was NOT found in the output! The output was:\n${buildLog}"
 
 def settingsXmlPath = new File("maven-archetype-plugin/target/it/projects/ARCHETYPE-622_main_build_settings/target/archetype-it", "archetype-settings.xml").toPath().toString().replace("\\", "\\\\")
 assert buildLog.matches("(?s).*\\[DEBUG\\] Reading user settings from .*" + settingsXmlPath + ".*") : "test-settings.xml wasn't passed from the main Maven build!: 'Reading user settings from ... archetype-settings.xml' was NOT found in the output! The output was: ${buildLog}"
