@@ -39,7 +39,6 @@ import java.util.TreeMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.maven.archetype.downloader.DownloadException;
 import org.apache.maven.archetype.downloader.Downloader;
 import org.apache.maven.archetype.exception.UnknownArchetype;
@@ -47,6 +46,7 @@ import org.apache.maven.archetype.metadata.ArchetypeDescriptor;
 import org.apache.maven.archetype.metadata.io.xpp3.ArchetypeDescriptorXpp3Reader;
 import org.apache.maven.archetype.old.descriptor.ArchetypeDescriptorBuilder;
 import org.apache.maven.model.Model;
+import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.repository.RemoteRepository;
@@ -196,7 +196,7 @@ public class DefaultArchetypeArtifactManager implements ArchetypeArtifactManager
     public String getPostGenerationScript(File archetypeFile) throws UnknownArchetype {
         try (ZipFile zipFile = getArchetypeZipFile(archetypeFile)) {
             Reader reader = getDescriptorReader(zipFile, Constants.ARCHETYPE_POST_GENERATION_SCRIPT);
-            return reader == null ? null : IOUtils.toString(reader);
+            return reader == null ? null : IOUtil.toString(reader);
         } catch (IOException e) {
             throw new UnknownArchetype(e);
         }

@@ -24,10 +24,16 @@ import javax.inject.Singleton;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.io.Writer;
+import java.nio.file.FileVisitOption;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.catalog.ArchetypeCatalog;
 import org.apache.maven.archetype.catalog.io.xpp3.ArchetypeCatalogXpp3Writer;
@@ -58,9 +64,16 @@ public class DefaultRepositoryCrawler implements RepositoryCrawler {
         }
 
         ArchetypeCatalog catalog = new ArchetypeCatalog();
-        @SuppressWarnings("unchecked")
-        Iterator<File> jars =
-                FileUtils.listFiles(repository, new String[] {"jar"}, true).iterator();
+        List<File> jarFiles;
+        try (Stream<Path> paths = Files.walk(repository.toPath(), FileVisitOption.FOLLOW_LINKS)) {
+            jarFiles = paths.filter(Files::isRegularFile)
+                    .filter(path -> path.getFileName().toString().endsWith(".jar"))
+                    .map(Path::toFile)
+                    .collect(Collectors.toList());
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+        Iterator<File> jars = jarFiles.iterator();
 
         while (jars.hasNext()) {
             File jar = jars.next();
