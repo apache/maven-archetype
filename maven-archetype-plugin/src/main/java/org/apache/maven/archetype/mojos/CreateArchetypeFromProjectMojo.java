@@ -109,6 +109,16 @@ public class CreateArchetypeFromProjectMojo extends AbstractMojo {
     /**
      * File extensions which are checked for project's text files (vs binary files).
      */
+    @Parameter(property = "archetype.filteredExtensions")
+    private String archetypeFilteredExtensions;
+
+    /**
+     * Misspelled alias of <code>archetypeFilteredExtensions</code>, kept so that existing command lines
+     * and POM configurations keep working. <code>archetypeFilteredExtensions</code> wins when both are set.
+     *
+     * @deprecated use <code>archetypeFilteredExtensions</code> (<code>-Darchetype.filteredExtensions</code>)
+     */
+    @Deprecated
     @Parameter(property = "archetype.filteredExtentions")
     private String archetypeFilteredExtentions;
 
@@ -164,7 +174,7 @@ public class CreateArchetypeFromProjectMojo extends AbstractMojo {
      * <dt>version</dt><dd>The default version of the generated project.</dd>
      * <dt>excludePatterns</dt><dd>A comma-separated list of paths that will not be included in the resulting
      * archetype.</dd>
-     * <dt>archetype.filteredExtensions</dt><dd>See the filteredExensions parameter.</dd>
+     * <dt>archetype.filteredExtensions</dt><dd>See the archetypeFilteredExtensions parameter.</dd>
      * </dl>
      * <strong>Custom Properties</strong>
      * <p>
@@ -239,7 +249,8 @@ public class CreateArchetypeFromProjectMojo extends AbstractMojo {
             Properties properties = configurator.configureArchetypeCreation(
                     project, interactive, executionProperties, propertyFile, languages);
 
-            List<String> filtereds = getFilteredExtensions(archetypeFilteredExtentions, propertyFile);
+            List<String> filtereds =
+                    getFilteredExtensions(archetypeFilteredExtensions, archetypeFilteredExtentions, propertyFile);
 
             ArchetypeCreationRequest request = new ArchetypeCreationRequest()
                     .setDefaultEncoding(defaultEncoding)
@@ -282,12 +293,15 @@ public class CreateArchetypeFromProjectMojo extends AbstractMojo {
         }
     }
 
-    private List<String> getFilteredExtensions(String archetypeFilteredExtentions, File propertyFile)
+    List<String> getFilteredExtensions(String commandLineExtensions, String misspelledExtensions, File propertyFile)
             throws IOException {
         List<String> filteredExtensions = new ArrayList<>();
 
-        if (archetypeFilteredExtentions != null && !archetypeFilteredExtentions.isEmpty()) {
-            filteredExtensions.addAll(Arrays.asList(StringUtils.split(archetypeFilteredExtentions, ",")));
+        String fromCommandLine = commandLineExtensions != null && !commandLineExtensions.isEmpty()
+                ? commandLineExtensions
+                : misspelledExtensions;
+        if (fromCommandLine != null && !fromCommandLine.isEmpty()) {
+            filteredExtensions.addAll(Arrays.asList(StringUtils.split(fromCommandLine, ",")));
 
             getLog().debug("Found in command line extensions = " + filteredExtensions);
         }
