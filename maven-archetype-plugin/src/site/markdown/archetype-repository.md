@@ -30,7 +30,7 @@ If you're not using a repository manager and the archetype is available at Maven
 
 If you're using a repository manager and the archetype is available via this manager, there's nothing you have to do.
 
-Only in case of a third party archetype which is not managed by a repository you have to add a repository entry with `archetype>> id to your <<<settings.xml` once:
+Only in case of a third party archetype which is not managed by a repository you have to add a repository entry with the id `archetype` to your `settings.xml` once:
 
 ```xml
 <settings>
@@ -38,7 +38,7 @@ Only in case of a third party archetype which is not managed by a repository you
     <mirror>
       <id>mrm-maven-plugin</id>
       <name>Mock Repository Manager</name>
-      <url>http://www.mycompany.com/maven-repository-manager</url>
+      <url>https://www.mycompany.com/maven-repository-manager</url>
       <mirrorOf>*,!archetype</mirrorOf>
     </mirror>
   </mirrors>
