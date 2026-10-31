@@ -52,10 +52,10 @@ If the Archetype Plugin is configured to create a project in an existing directo
 
 It is possible to call the Archetype Plugin to generate a project in batch mode (to get rid of the prompting). This is achieved by providing the Archetype Plugin with all the needed values as system properties.
 
-- `archetypeCatalog` which specifies the catalog(s). The valid catalogs are: `internal` (the default), `local`, `remote`.
-    - `internal` uses an internal catalog
+- `archetypeCatalog` which specifies the catalog(s) as a comma-separated list. The default is `remote,local`. The valid catalogs are `remote`, `local` and `internal`.
+    - `remote` uses the `archetype-catalog.xml` from Maven Central, or from the repository with the id `archetype`, either direct or through a mirror. If that catalog is empty or cannot be retrieved, the internal catalog is used instead.
     - `local` uses the `archetype-catalog.xml` file from the local repository
-    - `remote` uses the `archetype-catalog.xml` from Maven Central, either direct or via a repository manager file
+    - `internal` uses the catalog bundled with the plugin
 - `archetypeGroupId` specifies the groupId of the archetype to use
 - `archetypeArtifactId` specifies the artifactId of the archetype to use
 - `archetypeVersion` specifies the version of the archetype to use

@@ -30,9 +30,7 @@ Knowledge about archetypes is stored in catalogs.
 
 The catalogs are xml files: see the [reference documentation](../../archetype-models/archetype-catalog/archetype-catalog.html).
 
-The Archetype Plugin comes bundled with an internal catalog. This one is used by default.
-
-The Archetype Plugin can use catalogs from local filesystem and from HTTP connections.
+The Archetype Plugin comes bundled with an [internal catalog](../../archetype-common/internal.html). By default, `archetype:generate` lists the `remote` catalog, which is the `archetype-catalog.xml` that Maven Central publishes, followed by the `local` catalog. It falls back to the internal catalog when the remote one is empty or cannot be retrieved.
 
 ## Catalog file explained
 
@@ -82,10 +80,10 @@ The `crawl-repository` goal is used to create a catalog file by crawling a Maven
 
 ## Location of catalog files
 
-The Archetype Plugin knows by default about its internal catalog. It also knows about the `local` and `remote` catalogs.
+The Archetype Plugin knows three catalogs, selected with the `archetypeCatalog` property of `archetype:generate` (default `remote,local`):
 
-`local` represents the `~/.m2/archetype-catalog.xml` catalog file.
+- `internal` is the catalog bundled with the plugin.
+- `local` represents the `archetype-catalog.xml` file in the root of the local repository (by default `~/.m2/repository/archetype-catalog.xml`).
+- `remote` represents the `archetype-catalog.xml` file of the repository with the id `archetype`, of Maven Central (`https://repo.maven.apache.org/maven2/archetype-catalog.xml`), or of the mirror of either.
 
-`remote` represents the `https://repo.maven.apache.org/maven2/archetype-catalog.xml` catalog file.
-
-The Archetype Plugin can also read catalogs from filesystem/HTTP by providing the path/URL of a catalog file or of a directory containing an `archetype-catalog.xml` file.
+To read the catalog from a different repository, declare it with the id `archetype` in your `settings.xml` and use the `remote` catalog. Other values of `archetypeCatalog`, such as a file path or a URL, are not supported.
