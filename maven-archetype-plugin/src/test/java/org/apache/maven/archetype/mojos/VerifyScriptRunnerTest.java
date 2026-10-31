@@ -91,6 +91,20 @@ class VerifyScriptRunnerTest {
         assertTrue(
                 failure.getMessage().contains("port " + new File(dir, "verify.bsh") + " to Groovy"),
                 failure.getMessage());
+        assertTrue(
+                failure.getMessage().contains("BeanShell verify scripts are no longer supported, port"),
+                failure.getMessage());
+        assertTrue(failure.getMessage().contains("verify.bsh to Groovy"), failure.getMessage());
+    }
+
+    @Test
+    void beanShellScriptNamedWithItsExtensionIsRefusedToo() throws Exception {
+        write("verify.bsh", "return true;");
+        IntegrationTestFailure failure = assertThrows(
+                IntegrationTestFailure.class, () -> runner.run(dir, "verify.bsh", Collections.emptyMap(), null));
+        assertTrue(
+                failure.getMessage().contains("BeanShell verify scripts are no longer supported, port"),
+                failure.getMessage());
     }
 
     @Test
