@@ -118,6 +118,7 @@ public class DefaultArchetypeFilesResolver implements ArchetypeFilesResolver {
             selectedDirectories.add(directory);
         }
 
+        scanner.setIncludes(includes);
         scanner.setExcludes(languages);
 
         List<String> result = scanner.scan(files);
