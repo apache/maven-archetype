@@ -298,6 +298,12 @@ public class DefaultArchetypeGeneratorTest {
         generateProjectFromArchetype(request);
 
         assertFileSetArchetypeGenerated();
+        // Verify the root project POM generated from the fileset archetype.
+        Model rootModel = readPom(new File(projectDirectory, "pom.xml"));
+        assertEquals("file-value", rootModel.getGroupId());
+        assertEquals("file-value", rootModel.getArtifactId());
+        assertEquals("file-value", rootModel.getVersion());
+        assertEquals("pom", rootModel.getPackaging());
 
         // GH-274: a module directory name ("openapi") that contains the fileSet directory's own
         // name ("api") as a substring must not corrupt the output path of files in that fileSet.
