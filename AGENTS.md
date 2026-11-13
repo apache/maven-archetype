@@ -41,7 +41,7 @@ start with the `run-its` profile; `-DskipTests` skips the unit tests, and `-am` 
 the plugin depends on first:
 
 ```
-mvn -B -pl maven-archetype-plugin -am verify -P run-its -DskipTests -Dinvoker.test=create-1
+mvn -B -pl maven-archetype-plugin -am verify -P run-its -DskipTests -Dinvoker.test=generate-basic
 ```
 
 `-Dinvoker.test` takes a comma-separated list of directories under `maven-archetype-plugin/src/it/projects`.
