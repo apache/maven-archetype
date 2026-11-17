@@ -327,11 +327,11 @@ public class DefaultFilesetArchetypeGenerator implements FilesetArchetypeGenerat
     }
 
     private String getEncoding(String archetypeEncoding) {
-        return (archetypeEncoding == null || archetypeEncoding.isEmpty()) ? "UTF-8" : archetypeEncoding;
+        return archetypeEncoding == null || archetypeEncoding.isEmpty() ? "UTF-8" : archetypeEncoding;
     }
 
     private String getOffsetSeparator(String moduleOffset) {
-        return (moduleOffset == null || moduleOffset.isEmpty()) ? "/" : ("/" + moduleOffset + "/");
+        return moduleOffset == null || moduleOffset.isEmpty() ? "/" : ("/" + moduleOffset + "/");
     }
 
     private File getOutputFile(
@@ -607,7 +607,7 @@ public class DefaultFilesetArchetypeGenerator implements FilesetArchetypeGenerat
                     archetypeResources,
                     new File(moduleOutputDirectoryFile, Constants.ARCHETYPE_POM),
                     archetypeZipFile,
-                    ((moduleOffset == null || moduleOffset.isEmpty()) ? "" : (moduleOffset + "/"))
+                    (moduleOffset == null || moduleOffset.isEmpty() ? "" : (moduleOffset + "/"))
                             + StringUtils.replace(project.getDir(), "${rootArtifactId}", rootArtifactId),
                     pom,
                     moduleOutputDirectoryFile,

@@ -212,7 +212,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
                 String rootArtifactId = configurationProperties.getProperty(Constants.ARTIFACT_ID);
                 String moduleIdDirectory = moduleId;
 
-                if (moduleId.indexOf(rootArtifactId) >= 0) {
+                if (moduleId.contains(rootArtifactId)) {
                     moduleIdDirectory = replace(moduleId, rootArtifactId, "__rootArtifactId__");
                 }
 
@@ -505,7 +505,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
         for (String subModuleId : pom.getModules()) {
             String subModuleIdDirectory = subModuleId;
 
-            if (subModuleId.indexOf(rootArtifactId) >= 0) {
+            if (subModuleId.contains(rootArtifactId)) {
                 subModuleIdDirectory = replace(subModuleId, rootArtifactId, "__rootArtifactId__");
             }
 
@@ -549,7 +549,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
         for (String moduleId : pom.getModules()) {
             String moduleIdDirectory = moduleId;
 
-            if (moduleId.indexOf(rootArtifactId) >= 0) {
+            if (moduleId.contains(rootArtifactId)) {
                 moduleIdDirectory = replace(moduleId, rootArtifactId, "__rootArtifactId__");
             }
 
@@ -657,7 +657,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
     }
 
     private void rewriteDependencyReferences(Dependency dependency, String rootArtifactId, String groupId) {
-        if (dependency.getArtifactId() != null && dependency.getArtifactId().indexOf(rootArtifactId) >= 0) {
+        if (dependency.getArtifactId() != null && dependency.getArtifactId().contains(rootArtifactId)) {
             if (dependency.getGroupId() != null) {
                 dependency.setGroupId(replace(dependency.getGroupId(), groupId, "${" + Constants.GROUP_ID + "}"));
             }
@@ -671,7 +671,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
     }
 
     private void rewritePluginReferences(Plugin plugin, String rootArtifactId, String groupId) {
-        if (plugin.getArtifactId() != null && plugin.getArtifactId().indexOf(rootArtifactId) >= 0) {
+        if (plugin.getArtifactId() != null && plugin.getArtifactId().contains(rootArtifactId)) {
             if (plugin.getGroupId() != null) {
                 String g = replace(plugin.getGroupId(), groupId, "${" + Constants.GROUP_ID + "}");
                 plugin.setGroupId(g);
@@ -684,7 +684,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
             }
         }
 
-        if (plugin.getArtifactId() != null && "maven-ear-plugin".equals(plugin.getArtifactId())) {
+        if ("maven-ear-plugin".equals(plugin.getArtifactId())) {
             rewriteEARPluginReferences(plugin, rootArtifactId, groupId);
         }
     }
@@ -736,7 +736,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
         List<String> result = new ArrayList<>(toConcatenate.size());
 
         for (String concatenate : toConcatenate) {
-            result.add(((!with.isEmpty()) ? (with + "/" + concatenate) : concatenate));
+            result.add(with.isEmpty() ? concatenate : (with + "/" + concatenate));
         }
 
         return result;
@@ -981,12 +981,12 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
         String replacementId = pom.getArtifactId();
         String moduleDirectory = pom.getArtifactId();
 
-        if (replacementId.indexOf(rootArtifactId) >= 0) {
+        if (replacementId.contains(rootArtifactId)) {
             replacementId = replace(replacementId, rootArtifactId, "${rootArtifactId}");
             moduleDirectory = replace(moduleId, rootArtifactId, "__rootArtifactId__");
         }
 
-        if (moduleId.indexOf(rootArtifactId) >= 0) {
+        if (moduleId.contains(rootArtifactId)) {
             moduleDirectory = replace(moduleId, rootArtifactId, "__rootArtifactId__");
         }
 
@@ -1022,7 +1022,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
 
         for (String subModuleId : pom.getModules()) {
             String subModuleIdDirectory = subModuleId;
-            if (subModuleId.indexOf(rootArtifactId) >= 0) {
+            if (subModuleId.contains(rootArtifactId)) {
                 subModuleIdDirectory = replace(subModuleId, rootArtifactId, "__rootArtifactId__");
             }
 
@@ -1091,7 +1091,7 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
                                 pomReversedProperties.getProperty(Constants.GROUP_ID),
                                 "${" + Constants.GROUP_ID + "}"));
                 if (pom.getParent().getArtifactId() != null
-                        && pom.getParent().getArtifactId().indexOf(rootArtifactId) >= 0) {
+                        && pom.getParent().getArtifactId().contains(rootArtifactId)) {
                     pom.getParent()
                             .setArtifactId(
                                     replace(pom.getParent().getArtifactId(), rootArtifactId, "${rootArtifactId}"));
@@ -1364,14 +1364,14 @@ public class FilesetArchetypeCreator implements ArchetypeCreator {
         StringBuilder languageIncludes = new StringBuilder();
 
         for (String language : languages) {
-            languageIncludes.append(((languageIncludes.length() == 0) ? "" : ",") + language + "/**");
+            languageIncludes.append((languageIncludes.length() == 0 ? "" : ",") + language + "/**");
         }
 
         LOGGER.debug("Using languages includes " + languageIncludes);
 
         StringBuilder filteredIncludes = new StringBuilder();
         for (String filtered : filtereds) {
-            filteredIncludes.append(((filteredIncludes.length() == 0) ? "" : ",") + "**/"
+            filteredIncludes.append((filteredIncludes.length() == 0 ? "" : ",") + "**/"
                     + (filtered.startsWith(".") ? "" : "*.") + filtered);
         }
 

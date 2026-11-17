@@ -30,7 +30,7 @@ import org.apache.maven.archetype.catalog.Archetype;
  * @author Olivier Lamy
  * @since 2.1
  */
-public class ArchetypeSelectorUtils {
+public final class ArchetypeSelectorUtils {
     private ArchetypeSelectorUtils() {
         // no constructor for utility class
     }

@@ -269,13 +269,13 @@ public class DefaultArchetypeArtifactManager implements ArchetypeArtifactManager
 
     private boolean isFileSetArchetype(ZipFile zipFile) throws IOException {
         try (Reader reader = getArchetypeDescriptorReader(zipFile)) {
-            return (reader != null);
+            return reader != null;
         }
     }
 
     private boolean isOldArchetype(ZipFile zipFile) throws IOException {
         try (Reader reader = getOldArchetypeDescriptorReader(zipFile)) {
-            return (reader != null);
+            return reader != null;
         }
     }
 
@@ -289,8 +289,6 @@ public class DefaultArchetypeArtifactManager implements ArchetypeArtifactManager
 
             ArchetypeDescriptorXpp3Reader archetypeReader = new ArchetypeDescriptorXpp3Reader();
             return archetypeReader.read(reader, false);
-        } catch (IOException | XmlPullParserException e) {
-            throw e;
         }
     }
 

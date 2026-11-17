@@ -69,7 +69,7 @@ public class DefaultArchetypeFilesResolver implements ArchetypeFilesResolver {
     @Override
     public List<String> filterFiles(String moduleOffset, FileSet fileSet, List<String> archetypeResources) {
         ListScanner scanner = new ListScanner();
-        scanner.setBasedir(((moduleOffset == null || moduleOffset.isEmpty()) ? "" : (moduleOffset + File.separatorChar))
+        scanner.setBasedir((moduleOffset == null || moduleOffset.isEmpty() ? "" : (moduleOffset + File.separatorChar))
                 + fileSet.getDirectory());
         scanner.setIncludes(fileSet.getIncludes());
         scanner.setExcludes(fileSet.getExcludes());
@@ -312,7 +312,7 @@ public class DefaultArchetypeFilesResolver implements ArchetypeFilesResolver {
         String packageName = null;
         for (String minusLanguage : files) {
             String filePackage;
-            if (minusLanguage.indexOf("/") >= 0) {
+            if (minusLanguage.contains("/")) {
                 filePackage = StringUtils.replace(minusLanguage.substring(0, minusLanguage.lastIndexOf("/")), "/", ".");
             } else {
                 filePackage = "";

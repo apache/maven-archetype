@@ -797,11 +797,9 @@ public class XMLOutputter implements Cloneable {
      * @param out   <code>Writer</code> to use
      */
     protected void printCDATA(Writer out, CDATA cdata) throws IOException {
-        String str = (currentFormat.mode == Format.TextMode.NORMALIZE)
+        String str = currentFormat.mode == Format.TextMode.NORMALIZE
                 ? cdata.getTextNormalize()
-                : ((currentFormat.mode == Format.TextMode.TRIM)
-                        ? cdata.getText().trim()
-                        : cdata.getText());
+                : (currentFormat.mode == Format.TextMode.TRIM ? cdata.getText().trim() : cdata.getText());
         out.write("<![CDATA[");
         out.write(str);
         out.write("]]>");
@@ -814,9 +812,9 @@ public class XMLOutputter implements Cloneable {
      * @param out  <code>Writer</code> to use
      */
     protected void printText(Writer out, Text text) throws IOException {
-        String str = (currentFormat.mode == Format.TextMode.NORMALIZE)
+        String str = currentFormat.mode == Format.TextMode.NORMALIZE
                 ? text.getTextNormalize()
-                : ((currentFormat.mode == Format.TextMode.TRIM) ? text.getText().trim() : text.getText());
+                : (currentFormat.mode == Format.TextMode.TRIM ? text.getText().trim() : text.getText());
         out.write(escapeElementEntities(str));
     }
 
@@ -1270,18 +1268,18 @@ public class XMLOutputter implements Cloneable {
 
     // Determine if a string starts with a XML whitespace.
     private boolean startsWithWhite(String str) {
-        return ((str != null) && (!str.isEmpty()) && isWhitespace(str.charAt(0)));
+        return (str != null) && (!str.isEmpty()) && isWhitespace(str.charAt(0));
     }
 
     // Determine if a string ends with a XML whitespace.
     private boolean endsWithWhite(String str) {
-        return ((str != null) && (!str.isEmpty()) && isWhitespace(str.charAt(str.length() - 1)));
+        return (str != null) && (!str.isEmpty()) && isWhitespace(str.charAt(str.length() - 1));
     }
 
     // Determine if a character is a XML whitespace.
     // XXX should this method be in Verifier
     private static boolean isWhitespace(char c) {
-        return (c == ' ' || c == '\n' || c == '\t' || c == '\r');
+        return c == ' ' || c == '\n' || c == '\t' || c == '\r';
     }
 
     /**
@@ -1355,7 +1353,7 @@ public class XMLOutputter implements Cloneable {
         // If there were any entities, return the escaped characters
         // that we put in the StringBuilder. Otherwise, just return
         // the unmodified input string.
-        return (buffer == null) ? str : buffer.toString();
+        return buffer == null ? str : buffer.toString();
     }
 
     /**
@@ -1426,7 +1424,7 @@ public class XMLOutputter implements Cloneable {
         // If there were any entities, return the escaped characters
         // that we put in the StringBuilder. Otherwise, just return
         // the unmodified input string.
-        return (buffer == null) ? str : buffer.toString();
+        return buffer == null ? str : buffer.toString();
     }
 
     /** Returns a copy of this XMLOutputter. */
@@ -1475,13 +1473,13 @@ public class XMLOutputter implements Cloneable {
             }
         }
 
-        return ("XMLOutputter[omitDeclaration = " + userFormat.omitDeclaration + ", "
+        return "XMLOutputter[omitDeclaration = " + userFormat.omitDeclaration + ", "
                 + "encoding = " + userFormat.encoding + ", "
                 + "omitEncoding = " + userFormat.omitEncoding + ", "
                 + "indent = '" + userFormat.indent + "'" + ", "
                 + "expandEmptyElements = " + userFormat.expandEmptyElements + ", "
                 + "lineSeparator = '" + buffer + "', "
-                + "textMode = " + userFormat.mode + "]");
+                + "textMode = " + userFormat.mode + "]";
     }
 
     /**

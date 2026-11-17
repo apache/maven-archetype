@@ -87,7 +87,7 @@ import org.jdom2.output.EscapeStrategy;
  *
  * @author Jason Hunter
  */
-public class Format implements Cloneable {
+public final class Format implements Cloneable {
 
     /**
      * Returns a new Format object that performs no whitespace changes, uses
@@ -465,10 +465,10 @@ public class Format implements Cloneable {
                 return false;
             }
             if (bits == 8) {
-                return (ch > 255);
+                return ch > 255;
             }
             if (bits == 7) {
-                return (ch > 127);
+                return ch > 127;
             } else {
                 if (encoder != null) {
                     return !encoder.canEncode(ch);
@@ -548,7 +548,7 @@ public class Format implements Cloneable {
      * for the child element and then off for the remainder of the parent
      * element.</p>
      */
-    public static class TextMode {
+    public static final class TextMode {
         /** Mode for literal text preservation. */
         public static final TextMode PRESERVE = new TextMode("PRESERVE");
 
