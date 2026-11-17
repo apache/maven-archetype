@@ -139,7 +139,7 @@ public class DefaultArchetypeCreationConfigurator implements ArchetypeCreationCo
                         archetypeConfiguration.setProperty(
                                 Constants.PACKAGE,
                                 archetypeCreationQueryer.getPackage(
-                                        (resolvedPackage == null || resolvedPackage.isEmpty())
+                                        resolvedPackage == null || resolvedPackage.isEmpty()
                                                 ? archetypeConfiguration.getDefaultValue(Constants.PACKAGE)
                                                 : resolvedPackage));
                     }

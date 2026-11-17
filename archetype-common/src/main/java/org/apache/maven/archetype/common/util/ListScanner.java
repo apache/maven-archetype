@@ -279,7 +279,7 @@ public class ListScanner {
 
     /** Adds default exclusions to the current exclusions set. */
     public void addDefaultExcludes() {
-        int excludesLength = (excludes == null) ? 0 : excludes.length;
+        int excludesLength = excludes == null ? 0 : excludes.length;
         String[] newExcludes;
         newExcludes = new String[excludesLength + DEFAULTEXCLUDES.length];
         if (excludesLength > 0) {
