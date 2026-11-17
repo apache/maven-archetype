@@ -32,6 +32,7 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,7 +56,6 @@ import org.apache.maven.model.ReportPlugin;
 import org.apache.maven.model.Reporting;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
-import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.XmlStreamReader;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
@@ -79,7 +79,7 @@ public class DefaultPomManager implements PomManager {
         StringWriter out = new StringWriter();
         boolean found = PomUtils.addNewModule(artifactId, new XmlStreamReader(pom), out);
         if (found) {
-            FileUtils.fileWrite(pom.getAbsolutePath(), out.toString());
+            Files.write(pom.toPath(), out.toString().getBytes(StandardCharsets.UTF_8));
         }
     }
 
