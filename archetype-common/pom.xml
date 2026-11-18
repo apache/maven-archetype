@@ -245,7 +245,7 @@
             </goals>
             <phase>pre-site</phase>
             <configuration>
-              <outputDirectory>${basedir}/target/generated-site/resources/xsd</outputDirectory>
+              <outputDirectory>${project.basedir}/target/generated-site/resources/xsd</outputDirectory>
             </configuration>
           </execution>
         </executions>
