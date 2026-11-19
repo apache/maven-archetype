@@ -18,10 +18,11 @@
  */
 package org.apache.maven.archetype.common.util;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -29,61 +30,32 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /** @author <a href="mailto:brianf@apache.org">Brian Fox</a> */
 public class TestListScanner {
 
-    @Test
-    public void testUnixPaths() {
-        List<String> archetypeResources = new ArrayList<>();
-
-        archetypeResources.add("pom.xml");
-        archetypeResources.add("App.java");
-        archetypeResources.add("src/main/c/App.c");
-        archetypeResources.add("src/main/java/App.java");
-        archetypeResources.add("src/main/java/inner/package/App2.java");
-        archetypeResources.add("src/main/mdo/App.mdo");
-        archetypeResources.add("src/main/resources/App.properties");
-        archetypeResources.add("src/main/resources/inner/dir/App2.properties");
-        archetypeResources.add("src/test/c/AppTest.c");
-        archetypeResources.add("src/test/java/AppTest.java");
-        archetypeResources.add("src/test/mdo/AppTest.mdo");
-        archetypeResources.add("src/test/resources/AppTest.properties");
+    @ParameterizedTest
+    @CsvSource({"/", "\\"})
+    public void testPaths(String separator) {
+        List<String> archetypeResources = Arrays.asList(
+                "pom.xml",
+                "App.java",
+                String.join(separator, "src", "main", "c", "App.c"),
+                String.join(separator, "src", "main", "java", "App.java"),
+                String.join(separator, "src", "main", "java", "inner", "package", "App2.java"),
+                String.join(separator, "src", "main", "mdo", "App.mdo"),
+                String.join(separator, "src", "main", "resources", "App.properties"),
+                String.join(separator, "src", "main", "resources", "inner", "dir", "App2.properties"),
+                String.join(separator, "src", "test", "c", "AppTest.c"),
+                String.join(separator, "src", "test", "java", "AppTest.java"),
+                String.join(separator, "src", "test", "mdo", "AppTest.mdo"),
+                String.join(separator, "src", "test", "resources", "AppTest.properties"));
 
         ListScanner scanner = new ListScanner();
-        scanner.setBasedir("src/main/java");
-        scanner.setIncludes("**/*.java");
+        scanner.setBasedir(String.join(separator, "src", "main", "java"));
+        scanner.setIncludes("**" + separator + "*.java");
         scanner.setCaseSensitive(true);
 
         List<String> result = scanner.scan(archetypeResources);
 
         assertEquals(2, result.size());
-        assertTrue(result.contains("src/main/java/App.java"));
-        assertTrue(result.contains("src/main/java/inner/package/App2.java"));
-    }
-
-    @Test
-    public void testWindowsPaths() {
-        List<String> archetypeResources = new ArrayList<>();
-
-        archetypeResources.add("pom.xml");
-        archetypeResources.add("App.java");
-        archetypeResources.add("src\\main\\c\\App.c");
-        archetypeResources.add("src\\main\\java\\App.java");
-        archetypeResources.add("src\\main\\java\\inner\\package\\App2.java");
-        archetypeResources.add("src\\main\\mdo\\App.mdo");
-        archetypeResources.add("src\\main\\resources\\App.properties");
-        archetypeResources.add("src\\main\\resources\\inner\\dir\\App2.properties");
-        archetypeResources.add("src\\test\\c\\AppTest.c");
-        archetypeResources.add("src\\test\\java\\AppTest.java");
-        archetypeResources.add("src\\test\\mdo\\AppTest.mdo");
-        archetypeResources.add("src\\test\\resources\\AppTest.properties");
-
-        ListScanner scanner = new ListScanner();
-        scanner.setBasedir("src\\main\\java");
-        scanner.setIncludes("**\\*.java");
-        scanner.setCaseSensitive(true);
-
-        List<String> result = scanner.scan(archetypeResources);
-
-        assertEquals(2, result.size());
-        assertTrue(result.contains("src\\main\\java\\App.java"));
-        assertTrue(result.contains("src\\main\\java\\inner\\package\\App2.java"));
+        assertTrue(result.contains(String.join(separator, "src", "main", "java", "App.java")));
+        assertTrue(result.contains(String.join(separator, "src", "main", "java", "inner", "package", "App2.java")));
     }
 }
