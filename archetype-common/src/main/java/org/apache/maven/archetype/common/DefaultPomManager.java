@@ -120,67 +120,6 @@ public class DefaultPomManager implements PomManager {
         mergeProfiles(model, generatedModel);
         mergeReportPlugins(model, generatedModel);
 
-        //
-        //        // Potential merging
-        //
-        //        model.getModelEncoding ();
-        //        model.getModelVersion ();
-        //
-        //        model.getGroupId ();
-        //        model.getArtifactId ();
-        //        model.getVersion ();
-        //        model.getParent ();
-        //
-        //        model.getId ();
-        //        model.getName ();
-        //        model.getInceptionYear ();
-        //        model.getDescription ();
-        //        model.getUrl ();
-        //        model.getLicenses ();
-        //        model.getProperties ();
-        //
-        //        model.getOrganization ();
-        //        model.getMailingLists ();
-        //        model.getContributors ();
-        //        model.getDevelopers ();
-        //
-        //        model.getScm ();
-        //        model.getCiManagement ();
-        //        model.getDistributionManagement ();
-        //        model.getIssueManagement ();
-        //
-        //        model.getPackaging ();
-        ////        model.getDependencies (); // done
-        //        model.getDependencyManagement ();
-        //        model.getPrerequisites ().getMaven ();
-        //        model.getPrerequisites ().getModelEncoding ();
-        //
-        //        model.getProfiles ();
-        //        model.getModules ();
-        //        model.getRepositories ();
-        //        model.getPluginRepositories ();
-        //
-        //        model.getBuild ().getDefaultGoal ();
-        //        model.getBuild ().getFinalName ();
-        //        model.getBuild ().getModelEncoding ();
-        //        model.getBuild ().getFilters ();
-        //        model.getBuild ().getDirectory ();
-        //        model.getBuild ().getOutputDirectory ();
-        //        model.getBuild ().getSourceDirectory ();
-        //        model.getBuild ().getResources ();
-        //        model.getBuild ().getScriptSourceDirectory ();
-        //        model.getBuild ().getTestOutputDirectory ();
-        //        model.getBuild ().getTestResources ();
-        //        model.getBuild ().getTestSourceDirectory ();
-        //        model.getBuild ().getPluginManagement ();
-        //        model.getBuild ().getExtensions ();
-        ////        model.getBuild ().getPluginsAsMap (); // done
-        //
-        //        model.getReporting ().getModelEncoding ();
-        //        model.getReporting ().getOutputDirectory ();
-        ////        model.getReporting ().getReportPluginsAsMap (); // done
-        //
-
         writePom(model, pom, pom);
     }
 

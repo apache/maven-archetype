@@ -102,10 +102,6 @@ public class DefaultOldArchetype implements OldArchetype {
     // Implementation
     // ----------------------------------------------------------------------
 
-    // groupId = maven
-    // artifactId = maven-foo-archetype
-    // version = latest
-
     @Override
     public void createArchetype(ArchetypeGenerationRequest request)
             throws UnknownArchetype, ArchetypeDescriptorException, ArchetypeTemplateProcessingException,
