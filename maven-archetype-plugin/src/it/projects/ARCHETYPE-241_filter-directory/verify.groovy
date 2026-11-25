@@ -17,5 +17,5 @@
  * under the License.
  */
 
-assert new File( basedir, "myArtifactId/myName-test2" ).exists()
-assert !new File( basedir, "myArtifactId/__projectName__-test2" ).exists()
+assert new File(basedir, "myArtifactId/myName-test2").exists()
+assert !new File(basedir, "myArtifactId/__projectName__-test2").exists()

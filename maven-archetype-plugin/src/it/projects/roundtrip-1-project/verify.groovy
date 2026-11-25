@@ -17,22 +17,22 @@
  * under the License.
  */
 
- //ASSERT symbol_pound replacement (archetype-180 archetype-183)
+//ASSERT symbol_pound replacement (archetype-180 archetype-183)
 def content = new File(basedir, 'out/myapp/src/main/java/com/mycompany/myapp/App.java').text
-assert content.indexOf( '//A   #\\{some}' ) > 0
-assert content.indexOf( '//B   #{some}' ) > 0
-assert content.indexOf( '//C   #{some other}' ) > 0
-assert content.indexOf( '//D   \\#{some other}' ) > 0
-assert content.indexOf( '//E   #{}' ) > 0
-assert content.indexOf( '//F   {some}' ) > 0
-assert content.indexOf( '//G   ${someOtherProperty}' ) > 0
-assert content.indexOf( '//H   ${someValue}' ) > 0
-assert content.indexOf( '/*' ) > 0
-assert content.indexOf( '  A   #\\{some}' ) > 0
-assert content.indexOf( '  B   #{some}' ) > 0
-assert content.indexOf( '  C   #{some other}' ) > 0
-assert content.indexOf( '  D   \\#{some other}' ) > 0
-assert content.indexOf( '  E   #{}' ) > 0
-assert content.indexOf( '  F   {some}' ) > 0
-assert content.indexOf( '  G   ${someOtherProperty}' ) > 0
-assert content.indexOf( '  H   ${someValue}' ) > 0
+assert content.indexOf('//A   #\\{some}') > 0
+assert content.indexOf('//B   #{some}') > 0
+assert content.indexOf('//C   #{some other}') > 0
+assert content.indexOf('//D   \\#{some other}') > 0
+assert content.indexOf('//E   #{}') > 0
+assert content.indexOf('//F   {some}') > 0
+assert content.indexOf('//G   ${someOtherProperty}') > 0
+assert content.indexOf('//H   ${someValue}') > 0
+assert content.indexOf('/*') > 0
+assert content.indexOf('  A   #\\{some}') > 0
+assert content.indexOf('  B   #{some}') > 0
+assert content.indexOf('  C   #{some other}') > 0
+assert content.indexOf('  D   \\#{some other}') > 0
+assert content.indexOf('  E   #{}') > 0
+assert content.indexOf('  F   {some}') > 0
+assert content.indexOf('  G   ${someOtherProperty}') > 0
+assert content.indexOf('  H   ${someValue}') > 0

@@ -18,11 +18,11 @@
  * under the License.
  */
 
-resources = new File( basedir, "src/main/resources/archetype-resources/src/main/resources" );
-reference = new File( basedir, "src/test/resources/projects/basic/reference/src/main/resources" );
+resources = new File(basedir, "src/main/resources/archetype-resources/src/main/resources")
+reference = new File(basedir, "src/test/resources/projects/basic/reference/src/main/resources")
 
 // empty directories not supported by git: create them when preparing the IT
-new File( resources, "empty-directory" ).mkdir();
-new File( reference, "empty-directory" ).mkdir();
-new File( resources, "__artifactId__-empty-directory" ).mkdir();
-new File( reference, "basic-empty-directory" ).mkdir();
+new File(resources, "empty-directory").mkdir()
+new File(reference, "empty-directory").mkdir()
+new File(resources, "__artifactId__-empty-directory").mkdir()
+new File(reference, "basic-empty-directory").mkdir()
