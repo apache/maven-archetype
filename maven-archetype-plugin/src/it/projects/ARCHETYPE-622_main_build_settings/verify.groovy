@@ -18,9 +18,6 @@
  * under the License.
  */
 
-import java.io.*
-import org.codehaus.plexus.util.*
-
 def basedirTargetProject = new File(basedir, "target/test-classes/projects/basic/project/basic")
 assert basedirTargetProject.exists() : "${basedirTargetProject} is missing."
 
