@@ -18,5 +18,5 @@
  */
 import groovy.xml.XmlSlurper
 
-def project = new XmlSlurper().parse( new File( basedir, "project/pom.xml" ) )
-assert project.description.text()  == 'Generated with org.apache.maven.archetypes.its:3rdparty-archetype:1.0'
+def project = new XmlSlurper().parse(new File(basedir, "project/pom.xml"))
+assert project.description.text() == 'Generated with org.apache.maven.archetypes.its:3rdparty-archetype:1.0'

@@ -17,5 +17,5 @@
  * under the License.
  */
 
-def buildLog = new File( basedir, "../../logs/ARCHETYPE-517_failing-goals/build.log" )
-assert buildLog.text.contains( "Failed to invoke goals" )
+def buildLog = new File(basedir, "../../logs/ARCHETYPE-517_failing-goals/build.log")
+assert buildLog.text.contains("Failed to invoke goals")
