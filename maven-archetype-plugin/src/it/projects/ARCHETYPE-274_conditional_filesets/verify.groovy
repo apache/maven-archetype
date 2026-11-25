@@ -17,8 +17,6 @@
  * under the License.
  */
 
-import java.io.File
-
 def mainJava = new File(basedir, "/myArtifactId/src/main/java")
 def includeFirstResource = new File(basedir, "/myArtifactId/src/main/resources/include-with-filter.txt")
 def includeSecondResource = new File(basedir, "/myArtifactId/src/main/resources/include-without-filter.txt")
