@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.maven.archetype.catalog.Archetype;
-import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.project.ProjectBuildingRequest;
 import org.eclipse.aether.RepositorySystem;
@@ -52,10 +51,6 @@ public class ArchetypeGenerationRequest {
     private boolean askForDefaultPropertyValues;
 
     private String outputDirectory;
-
-    private ArtifactRepository localRepository;
-
-    private List<ArtifactRepository> remoteArtifactRepositories;
 
     private List<RemoteRepository> remoteRepositories = Collections.emptyList();
 
@@ -257,20 +252,6 @@ public class ArchetypeGenerationRequest {
         return this;
     }
 
-    /**
-     * @deprecated please use {@link #getRepositorySession()} and {@link RepositorySystemSession#getLocalRepository()}
-     */
-    @Deprecated
-    public ArtifactRepository getLocalRepository() {
-        return localRepository;
-    }
-
-    public ArchetypeGenerationRequest setLocalRepository(ArtifactRepository localRepository) {
-        this.localRepository = localRepository;
-
-        return this;
-    }
-
     public String getOutputDirectory() {
         return outputDirectory;
     }
@@ -309,21 +290,6 @@ public class ArchetypeGenerationRequest {
 
     public ArchetypeGenerationRequest setOffline(boolean offline) {
         this.offline = offline;
-        return this;
-    }
-
-    /**
-     * @deprecated please use {@link #getRemoteRepositories()}
-     */
-    @Deprecated
-    public List<ArtifactRepository> getRemoteArtifactRepositories() {
-        return remoteArtifactRepositories;
-    }
-
-    public ArchetypeGenerationRequest setRemoteArtifactRepositories(
-            List<ArtifactRepository> remoteArtifactRepositories) {
-        this.remoteArtifactRepositories = remoteArtifactRepositories;
-
         return this;
     }
 
