@@ -181,12 +181,10 @@ public class CreateProjectFromArchetypeMojo extends AbstractMojo implements Cont
                 .setArchetypeVersion(archetypeVersion)
                 .setOutputDirectory(outputDirectory.getAbsolutePath())
                 .setRemoteRepositories(project.getRemoteProjectRepositories())
-                .setRemoteArtifactRepositories(project.getRemoteArtifactRepositories())
                 .setMavenSession(session)
                 .setRepositorySession(session.getRepositorySession())
                 .setRepositorySystem(repositorySystem)
                 .setProjectBuildingRequest(session.getProjectBuildingRequest())
-                .setLocalRepository(session.getLocalRepository())
                 .setOffline(session.isOffline())
                 .setFilter(filter)
                 .setAskForDefaultPropertyValues(askForDefaultPropertyValues);
